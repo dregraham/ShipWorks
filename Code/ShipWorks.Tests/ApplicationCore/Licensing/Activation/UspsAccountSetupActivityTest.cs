@@ -8,6 +8,7 @@ using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -24,7 +25,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>()
                     .Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -48,7 +49,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>()
                     .Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -72,7 +73,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ICarrierAccountRepository<UspsAccountEntity>> repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -94,7 +95,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         {
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<ICarrierAccountRepository<UspsAccountEntity>> repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             {
                 UspsAccountEntity createdAccount = null;
 
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -146,7 +147,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             {
                 UspsAccountEntity createdAccount = null;
 
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -237,7 +238,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 string password = "1234";
                 UspsAccountEntity createdAccount = null;
 
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -265,7 +266,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
                 string password = "1234";
                 UspsAccountEntity createdAccount = null;
 
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -290,7 +291,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new[] { new UspsAccountEntity() });
 
@@ -310,7 +311,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             using (var mock = AutoMock.GetLoose())
             {
                 // No accounts exist
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 
@@ -331,7 +332,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             using (var mock = AutoMock.GetLoose())
             {
                 // No accounts exist
-                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+                var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 repo.Setup(r => r.Accounts)
                     .Returns(new List<UspsAccountEntity>());
 

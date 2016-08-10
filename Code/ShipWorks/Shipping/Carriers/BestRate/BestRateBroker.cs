@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -21,14 +19,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// Defines most of the logic for the carrier specific best rate brokers
     /// </summary>
     /// <typeparam name="TAccount">Type of account</typeparam>
-    public abstract class BestRateBroker<TAccount> : IBestRateShippingBroker where TAccount : ICarrierAccount
+    public abstract class BestRateBroker<TAccount, TAccountInterface> : IBestRateShippingBroker
+        where TAccount : TAccountInterface where TAccountInterface : ICarrierAccount
     {
         private readonly string carrierDescription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount> accountRepository, string carrierDescription)
+        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription)
         {
             this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
@@ -40,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets or sets the account repository.
         /// </summary>
-        protected ICarrierAccountRepository<TAccount> AccountRepository
+        protected ICarrierAccountRepository<TAccount, TAccountInterface> AccountRepository
         {
             get;
             private set;
@@ -107,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
                 ShipmentEntity clonedShipmentEntity = EntityUtility.CloneEntity(shipment);
-                clonedShipmentEntity.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+                clonedShipmentEntity.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
 
                 CreateShipmentChild(clonedShipmentEntity);
                 ShipmentType.ConfigureNewShipment(clonedShipmentEntity);
@@ -256,13 +255,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             accounts = accounts.Where(account =>
             {
                 if (account is NullEntity ||
-                    (shipment.OriginOriginID == (int)ShipmentOriginSource.Account && Equals(account, accountForRating)))
+                    (shipment.OriginOriginID == (int) ShipmentOriginSource.Account && Equals(account, accountForRating)))
                 {
                     return true;
                 }
 
-                PersonAdapter personAdapter = new PersonAdapter(account, "");
-                return personAdapter.AdjustedCountryCode((ShipmentTypeCode)shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
+                return account.Address.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
             });
 
             return accounts.ToList();
@@ -328,7 +326,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
                 ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-                testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+                testRateShipment.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
 
                 //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
                 testRateShipment.BestRate.InsuranceValue = 0;
@@ -390,9 +388,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // Since the list of providers used in best rate settings is independent than the global
                     // list we need to make sure the shipment type is removed from the excluded list if needed
                     ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                    if (settings.ExcludedTypes.Contains(selectedShipment.ShipmentType))
+                    if (settings.ExcludedTypes.Contains(selectedShipment.ShipmentTypeCode))
                     {
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(t => t != selectedShipment.ShipmentType).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(t => t != selectedShipment.ShipmentTypeCode).ToArray();
                         ShippingSettings.Save(settings);
                     }
 
@@ -455,9 +453,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected virtual void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, TAccount account)
         {
             // Set the address of the shipment to either the account, or the address of the original shipment
-            if (!IsCounterRate && currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            if (!IsCounterRate && currentShipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(account, "", currentShipment, "Origin");
+                account.Address.CopyTo(currentShipment, "Origin");
             }
             else
             {
@@ -471,7 +469,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="tag">Service type specified in the rate tag</param>
         protected virtual int GetServiceTypeFromTag(object tag)
         {
-            return (int)tag;
+            return (int) tag;
         }
 
         /// <summary>

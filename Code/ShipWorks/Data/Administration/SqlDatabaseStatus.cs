@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Data.Administration
+﻿namespace ShipWorks.Data.Administration
 {
     /// <summary>
     /// The various status types a SqlDatabaseDetail object can represent about a database
@@ -14,11 +9,6 @@ namespace ShipWorks.Data.Administration
         /// The database is a ShipWorks database (although not necessarily the correct schema version)
         /// </summary>
         ShipWorks,
-
-        /// <summary>
-        /// The database is a  ShipWorks 2 database
-        /// </summary>
-        ShipWorks2x,
 
         /// <summary>
         /// The database is not a ShipWorks database

@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -38,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ICachedRatesService cachedRatesService;
         private readonly IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory;
-        protected ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        protected ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
         private bool shouldRetrieveExpress1Rates;
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ICachedRatesService cachedRatesService,
             IIndex<ShipmentTypeCode, IRatingService> ratingServiceFactory,
             IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory,
-            ICarrierAccountRepository<UspsAccountEntity> accountRepository)
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
             : base(ratingServiceFactory, shipmentTypeFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
@@ -73,8 +74,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // since it should be using a different cache key
             try
             {
-                return accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ? 
-                    GetRatesInternal(shipment) : 
+                return accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
+                    GetRatesInternal(shipment) :
                     GetCounterRates(shipment);
             }
             catch (UspsException ex)
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             // We're going to be temporarily swapping these out to get counter rates, so
             // make a note of the original values
-            ICarrierAccountRepository<UspsAccountEntity> originalAccountRepository = accountRepository;
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> originalAccountRepository = accountRepository;
 
             try
             {
@@ -299,7 +300,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 ILicenseService licenseService = scope.Resolve<ILicenseService>();
                 EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode.Usps);
-                
+
                 return restrictionLevel == EditionRestrictionLevel.Forbidden;
             }
         }
@@ -337,7 +338,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account">The account.</param>
         private void UpdateContractType(UspsAccountEntity account)
         {
-            if (account == null || account.PendingInitialAccount != (int)UspsPendingAccountType.None)
+            if (account == null || account.PendingInitialAccount != (int) UspsPendingAccountType.None)
             {
                 return;
             }

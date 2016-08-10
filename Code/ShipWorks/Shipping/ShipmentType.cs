@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -8,12 +9,14 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
@@ -35,10 +38,10 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping
 {
@@ -221,18 +224,18 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual bool IsAllowedFor(ShipmentEntity shipment)
         {
-            // Amazon prime orders can only be shipped via the Amazon carrier
-            // this is restriction is per Amazon.
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            IAmazonOrder order;
+            if (shipment.Order == null)
             {
-                IOrderManager orderManager = lifetimeScope.Resolve<IOrderManager>();
-                orderManager.PopulateOrderDetails(shipment);
-
-                IAmazonOrder order = shipment.Order as IAmazonOrder;
-
-                // If the order is Amazon Prime return false
-                return !order?.IsPrime ?? true;
+                order = DataProvider.GetEntity(shipment.OrderID) as IAmazonOrder;
             }
+            else
+            {
+                order = shipment.Order as IAmazonOrder;
+            }
+
+            // If the order is Amazon Prime return false
+            return !order?.IsPrime ?? true;
         }
 
         /// <summary>
@@ -533,6 +536,11 @@ namespace ShipWorks.Shipping
                 // First apply the base profile
                 ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfile(this));
 
+                // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
+                // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
+                // LoadCustomsItems is called, saving will be skipped.
+                CustomsManager.GenerateCustomsItems(shipment);
+
                 // Now apply ShipSense
                 ApplyShipSense(shipment);
 
@@ -546,6 +554,14 @@ namespace ShipWorks.Shipping
                     {
                         ApplyProfile(shipment, profile);
                     }
+                }
+
+                // This was brought in from LoadShipmentData.  Since we are no longer using that method for creating a new shipment,
+                // we still needed to do this logic.
+                IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = GetProcessingSynchronizer(lifetimeScope);
+                if (shipmentProcessingSynchronizer != null)
+                {
+                    shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
                 }
             }
         }
@@ -577,15 +593,7 @@ namespace ShipWorks.Shipping
             }
 
             // Populate the order items so we can compute the hash
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
-
-                foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
-                {
-                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
-                }
-            }
+            OrderUtility.PopulateOrderDetails(shipment);
 
             // Get our knowledge base entry for this shipment
             Knowledgebase knowledgebase = new Knowledgebase();
@@ -618,7 +626,8 @@ namespace ShipWorks.Shipping
                         // Make sure the customs items are loaded before applying the knowledge base entry
                         // data to the shipment/packages and customs info otherwise the customs data of
                         // the "before" data will be empty in the first change set
-                        CustomsManager.LoadCustomsItems(shipment, false);
+                        Debug.Assert(shipment.CustomsItems.Any() || shipment.Order.OrderItems.None(), "Customs have not been loaded.  Be sure to load customs prior to calling this method.");
+
                         knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
 
                         if (shipment.CustomsItems.Any())
@@ -778,7 +787,8 @@ namespace ShipWorks.Shipping
                     // We need to use a temporary address so that we only do a single update on the destination address
                     // This is necessary because the source has a null parsed name which causes the destination to
                     // look dirty even if we end up setting the ParsedName to what it originally was.
-                    StoreEntity store = lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment);
+                    StoreEntity store = shipment.Order?.Store ?? lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment.OrderID);
+
                     PersonAdapter storeCopy = new PersonAdapter();
                     PersonAdapter.Copy(store, string.Empty, storeCopy);
                     storeCopy.ParsedName = PersonName.Parse(store.StoreName);
@@ -796,10 +806,10 @@ namespace ShipWorks.Shipping
             }
 
             // Try looking it up as ShippingOriginID
-            ShippingOriginEntity origin = ShippingOriginManager.GetOrigin(originID);
+            IShippingOriginEntity origin = ShippingOriginManager.GetOriginReadOnly(originID);
             if (origin != null)
             {
-                PersonAdapter.Copy(origin, "", person);
+                PersonAdapter.Copy(origin.AsPersonAdapter(), person);
 
                 return true;
             }

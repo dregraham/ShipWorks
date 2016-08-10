@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Loading;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -15,74 +18,71 @@ namespace ShipWorks.Shipping.Tests.Services
 {
     public class ShipmentLoaderServiceTest
     {
-        private readonly ShipmentLoaderService testObject;
+        private readonly AutoMock mock;
+        private readonly OrderLoaderService testObject;
+        private readonly TestMessenger messenger;
 
-        private readonly OrderEntity orderEntity;
-        private readonly ShipmentEntity shipmentEntity;
-
-        private readonly Mock<IShipmentLoader> shipmentLoader;
-        private readonly IMessenger messenger;
-
-        private readonly Mock<ICarrierShipmentAdapterFactory> shipmentAdapterFactory;
-        private readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
-        private LoadedOrderSelection orderSelectionLoaded;
+        ShipmentEntity shipment = new ShipmentEntity
+        {
+            Order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            }
+        };
 
         public ShipmentLoaderServiceTest()
         {
-            orderEntity = new OrderEntity(1006);
-            shipmentEntity = new ShipmentEntity(1031)
-            {
-                ShipmentTypeCode = ShipmentTypeCode.FedEx,
-                Order = orderEntity,
-            };
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
 
-            shipmentAdapter = new Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.Setup(s => s.Shipment).Returns(shipmentEntity);
+            messenger = new TestMessenger();
+            mock.Provide<IMessenger>(messenger);
 
-            shipmentAdapterFactory = new Mock<ICarrierShipmentAdapterFactory>();
-            shipmentAdapterFactory.Setup(s => s.Get(It.IsAny<ShipmentEntity>())).Returns(shipmentAdapter.Object);
+            mock.Override<IOrderLoader>()
+                .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ProgressDisplayOptions>(), It.IsAny<bool>()))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, null, new[] { shipment }.ToList()));
 
-            orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
-                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
-                );
-
-            shipmentLoader = new Mock<IShipmentLoader>();
-            shipmentLoader.Setup(s => s.Load(orderEntity.OrderID)).ReturnsAsync(orderSelectionLoaded);
-
-            messenger = new Messenger();
-
-            testObject = new ShipmentLoaderService(shipmentLoader.Object, messenger, new ImmediateSchedulerProvider());
+            testObject = mock.Create<OrderLoaderService>();
         }
 
         [Fact]
-        public async Task MessageCorrect_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
+        public async Task Load_DelegatesToShipmentAdapterFactory_WhenShipmentsLoaded()
         {
-            LoadedOrderSelection handlededOrderSelectionLoaded = (await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID })).OfType<LoadedOrderSelection>().Single();
+            LoadedOrderSelection handlededOrderSelectionLoaded = (await testObject.Load(new[] { 1L }, false))
+                .OfType<LoadedOrderSelection>().Single();
 
-            Assert.Equal(shipmentEntity.ShipmentID, handlededOrderSelectionLoaded.ShipmentAdapters.FirstOrDefault().Shipment.ShipmentID);
-            Assert.Equal(1, handlededOrderSelectionLoaded.ShipmentAdapters.Count());
-            Assert.Equal(orderEntity, handlededOrderSelectionLoaded.Order);
+            mock.Mock<ICarrierShipmentAdapterFactory>()
+                .Verify(x => x.Get(shipment));
         }
 
         [Fact]
-        public async Task MessageCorrect_WhenOrderHasMoreThanOneShipment_ReturnsFirstShipment_Test()
+        public async Task Load_ReturnsOrderAndCarrierAdapter_WhenShipmentsLoaded()
         {
-            ShipmentEntity secondShipmentEntity = new ShipmentEntity(2031);
-            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, new List<ICarrierShipmentAdapter>()
-                {
-                    shipmentAdapterFactory.Object.Get(shipmentEntity),
-                    shipmentAdapterFactory.Object.Get(secondShipmentEntity)
-                },
-                ShippingAddressEditStateType.Editable);
+            var adapter = mock.Create<ICarrierShipmentAdapter>();
 
-            shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).ReturnsAsync(orderSelectionLoaded);
+            mock.Mock<ICarrierShipmentAdapterFactory>()
+                .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
+                .Returns(adapter);
 
-            await testObject.LoadAndNotify(new List<long> { orderEntity.OrderID });
+            LoadedOrderSelection result = (await testObject.Load(new[] { 1L }, false))
+                .OfType<LoadedOrderSelection>().Single();
 
-            Assert.Equal(shipmentEntity.ShipmentID, orderSelectionLoaded.ShipmentAdapters.FirstOrDefault().Shipment.ShipmentID);
-            Assert.Equal(2, orderSelectionLoaded.ShipmentAdapters.Count());
-            Assert.Equal(orderEntity, orderSelectionLoaded.Order);
+            Assert.Equal(shipment.Order, result.Order);
+            Assert.Contains(adapter, result.ShipmentAdapters);
+        }
+
+        [Fact]
+        public void Initialize_SendsMessage_WhenSelectionIsChanging()
+        {
+            bool wasCalled = false;
+
+            testObject.InitializeForCurrentSession();
+            messenger.OfType<OrderSelectionChangedMessage>()
+                .Subscribe(x => wasCalled = true);
+
+            messenger.Send(new OrderSelectionChangingMessage(this, new[] { 3L }));
+
+            Assert.True(wasCalled);
         }
     }
 }

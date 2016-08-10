@@ -2,7 +2,6 @@
 using System.Text;
 using System.Xml;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {

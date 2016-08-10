@@ -5,6 +5,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
@@ -74,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
@@ -92,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
@@ -110,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
@@ -126,14 +127,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
 
                 labelService.Create(shipment);
 
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>().Verify(x => x.GetAccount(shipment.IParcel.IParcelAccountID), Times.Once);
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>().Verify(x => x.GetAccount(shipment.IParcel.IParcelAccountID), Times.Once);
             }
         }
 
@@ -142,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
@@ -158,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
@@ -174,7 +175,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();
@@ -190,7 +191,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity>>()
+                mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                     .Setup(r => r.GetAccount(It.IsAny<long>())).Returns(new IParcelAccountEntity());
 
                 var labelService = mock.Create<iParcelLabelService>();

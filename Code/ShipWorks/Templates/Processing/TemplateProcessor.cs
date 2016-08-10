@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.Xsl;
-using System.Xml.XPath;
-using ShipWorks.Templates.Processing.TemplateXml;
 using System.Diagnostics;
-using ShipWorks.UI;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using Interapptive.Shared;
+using Interapptive.Shared.Threading;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using System.Text.RegularExpressions;
-using System.Linq;
-using System.IO;
-using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates.Processing.TemplateXml;
 
 namespace ShipWorks.Templates.Processing
 {

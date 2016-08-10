@@ -1,5 +1,11 @@
-﻿using System.Threading.Tasks;
-using Interapptive.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web.Services.Protocols;
+using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
@@ -14,6 +20,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -22,13 +29,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Web.Services.Protocols;
-using System.Xml.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
         private readonly ILog log;
         private readonly ILogEntryFactory logEntryFactory;
-        private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
         }
 
-        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository,
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
             ILogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory,
             UspsResellerType uspsResellerType)
             : this(accountRepository, logEntryFactory, certificateInspectorFactory(string.Empty), uspsResellerType)
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
         /// <param name="uspsResellerType">Type of the USPS reseller.</param>
-        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, UspsResellerType uspsResellerType)
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, UspsResellerType uspsResellerType)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

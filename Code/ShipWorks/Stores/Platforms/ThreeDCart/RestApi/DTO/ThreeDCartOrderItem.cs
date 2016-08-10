@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO
 
         public decimal ItemUnitCost { get; set; }
 
-        public int ItemUnitStock { get; set; }
+        public decimal ItemUnitStock { get; set; }
 
         public string ItemOptions { get; set; }
 

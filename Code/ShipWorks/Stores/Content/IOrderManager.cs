@@ -1,4 +1,5 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Collections.Generic;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Content
@@ -32,5 +33,10 @@ namespace ShipWorks.Stores.Content
         /// Returns the most recent, non-voided, processed shipment for the provided order
         /// </summary>
         ShipmentEntity GetLatestActiveShipment(long orderID);
+
+        /// <summary>
+        /// Load the specified orders using the given prefetch path
+        /// </summary>
+        IEnumerable<OrderEntity> LoadOrders(IEnumerable<long> orderIdList, IPrefetchPath2 prefetchPath);
     }
 }

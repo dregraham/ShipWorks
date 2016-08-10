@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac;
-using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Core.Common.Threading;
@@ -21,7 +20,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     /// </summary>
     public partial class ShippingPanel : UserControl, IDockingPanelContent
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanel));
         ShippingPanelControl shippingPanelControl;
         ShippingPanelViewModel viewModel;
         readonly IMessenger messenger;

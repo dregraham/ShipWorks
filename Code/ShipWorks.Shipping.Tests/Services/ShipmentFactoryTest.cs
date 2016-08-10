@@ -23,10 +23,10 @@ namespace ShipWorks.Shipping.Tests.Services
             var order = new OrderEntity();
 
             var testObject = mock.Create<ShipmentFactory>();
-            testObject.AutoCreateIfNecessary(order);
+            testObject.AutoCreateIfNecessary(order, true);
 
             mock.Mock<IShippingConfiguration>()
-                .Verify(x => x.ShouldAutoCreateShipment(order));
+                .Verify(x => x.ShouldAutoCreateShipment(order, true));
         }
 
         public void Dispose()

@@ -1,12 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using System.Collections.Generic;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -17,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     public static class iParcelAccountManager
     {
         static TableSynchronizer<IParcelAccountEntity> synchronizer;
+        static IEnumerable<IIParcelAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -43,6 +46,25 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     }
 
                     return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return the active list of i-parcel accounts
+        /// </summary>
+        public static IEnumerable<IIParcelAccountEntity> AccountsReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyAccounts;
                 }
             }
         }
@@ -87,8 +109,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int)IParcelAccountFieldIndex.IParcelAccountID, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int) IParcelAccountFieldIndex.IParcelAccountID, ListSortDirection.Ascending);
                 }
+
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
 
                 needCheckForChanges = false;
             }
@@ -100,6 +124,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public static IParcelAccountEntity GetAccount(long accountID)
         {
             return Accounts.FirstOrDefault(a => a.IParcelAccountID == accountID);
+        }
+
+        /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IIParcelAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return AccountsReadOnly.FirstOrDefault(a => a.IParcelAccountID == accountID);
         }
 
         /// <summary>

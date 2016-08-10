@@ -20,6 +20,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
     {
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
+        private readonly SqlAdapter adapter;
 
         public CustomsManagerTest(DatabaseFixture db)
         {
@@ -29,6 +30,20 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 .AsOther()
                 .Set(x => x.ShipCountryCode, "UK")
                 .Save();
+
+            adapter = new SqlAdapter(false);
+        }
+
+        [Fact]
+        public void LoadCustomsItems_ThrowsArgumentNull_WhenShipmentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(null, false, adapter));
+        }
+
+        [Fact]
+        public void LoadCustomsItems_ThrowsArgumentNull_WhenSqlAdapterIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => CustomsManager.LoadCustomsItems(shipment, false, null));
         }
 
         [Fact]
@@ -40,7 +55,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             context.Mock.AddRegistration(x =>
                 x.RegisterInstance(shipmentType.Object).Keyed<ShipmentType>(ShipmentTypeCode.Other));
 
-            CustomsManager.LoadCustomsItems(shipment, false);
+            CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
             shipmentType.Verify(x => x.IsCustomsRequired(shipment));
         }
@@ -51,7 +66,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             Modify.Shipment(shipment).Set(x => x.CustomsGenerated, true).Save();
             Create.Entity<ShipmentCustomsItemEntity>().Set(x => x.ShipmentID, shipment.ShipmentID).Save();
 
-            CustomsManager.LoadCustomsItems(shipment, false);
+            CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
             Assert.NotEmpty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -63,7 +78,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
             Modify.Shipment(shipment).Set(x => x.CustomsGenerated, true).Save();
             Create.Entity<ShipmentCustomsItemEntity>().Set(x => x.ShipmentID, shipment.ShipmentID).Save();
 
-            CustomsManager.LoadCustomsItems(shipment, true);
+            CustomsManager.LoadCustomsItems(shipment, true, adapter);
 
             Assert.NotEmpty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -77,7 +92,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             shipment.CustomsItemsLoaded = true;
 
-            CustomsManager.LoadCustomsItems(shipment, true);
+            CustomsManager.LoadCustomsItems(shipment, true, adapter);
 
             Assert.NotEmpty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -91,7 +106,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             shipment.CustomsItemsLoaded = true;
 
-            CustomsManager.LoadCustomsItems(shipment, false);
+            CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
             Assert.Empty(shipment.CustomsItems);
             Assert.True(shipment.CustomsItemsLoaded);
@@ -102,7 +117,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         {
             shipment.Processed = true;
 
-            CustomsManager.LoadCustomsItems(shipment, false);
+            CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
             Assert.False(shipment.CustomsGenerated);
             Assert.Empty(shipment.CustomsItems);
@@ -111,7 +126,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         [Fact]
         public void LoadCustomsItems_MarksCustomsAsGenerated_WhenShipmentIsNotProcessedAndNotAlreadyGenerated()
         {
-            CustomsManager.LoadCustomsItems(shipment, false);
+            CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
             Assert.True(shipment.CustomsGenerated);
             Assert.Empty(shipment.CustomsItems);
@@ -120,6 +135,76 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         [Fact]
         public void LoadCustomsItems_SavesCustomsItems_FromOrderItems()
         {
+            ModifyOrderToHaveCustoms();
+
+            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
+            {
+                CustomsManager.LoadCustomsItems(shipment, false, transactedAdapter);
+                transactedAdapter.Commit();
+            }
+
+            Assert.Equal(true, shipment.CustomsGenerated);
+
+            var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
+            using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
+            {
+                adapter.FetchEntityCollection(customs, predicate);
+
+                Assert.Equal(2, customs.Count);
+
+                Assert.Equal("US", customs[0].CountryOfOrigin);
+                Assert.Equal("Foo", customs[0].Description);
+                Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal(2.5, customs[0].Weight);
+                Assert.Equal(5.62M, customs[0].UnitValue);
+
+                Assert.Equal("US", customs[1].CountryOfOrigin);
+                Assert.Equal("Bar", customs[1].Description);
+                Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal(0.6, customs[1].Weight);
+                Assert.Equal(12.61M, customs[1].UnitValue);
+            }
+        }
+
+        [Fact]
+        public void GenerateCustomsItems_SavesCustomsItems_FromOrderItems()
+        {
+            ModifyOrderToHaveCustoms();
+
+            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
+            {
+                CustomsManager.GenerateCustomsItems(shipment);
+
+                transactedAdapter.SaveAndRefetch(shipment);
+
+                transactedAdapter.Commit();
+            }
+
+            Assert.Equal(true, shipment.CustomsGenerated);
+
+            var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
+            using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
+            {
+                adapter.FetchEntityCollection(customs, predicate);
+
+                Assert.Equal(2, customs.Count);
+
+                Assert.Equal("US", customs[0].CountryOfOrigin);
+                Assert.Equal("Foo", customs[0].Description);
+                Assert.Equal(3, customs[0].Quantity);
+                Assert.Equal(2.5, customs[0].Weight);
+                Assert.Equal(5.62M, customs[0].UnitValue);
+
+                Assert.Equal("US", customs[1].CountryOfOrigin);
+                Assert.Equal("Bar", customs[1].Description);
+                Assert.Equal(2, customs[1].Quantity);
+                Assert.Equal(0.6, customs[1].Weight);
+                Assert.Equal(12.61M, customs[1].UnitValue);
+            }
+        }
+
+        private void ModifyOrderToHaveCustoms()
+        {
             Modify.Order(context.Order)
                 .WithItem(i =>
                 {
@@ -127,6 +212,16 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                     i.Set(x => x.UnitPrice, 1.8M);
                     i.Set(x => x.Quantity, 3);
                     i.Set(x => x.Weight, 2.5);
+                    i.WithItemAttribute(ia =>
+                    {
+                        ia.Set(x => x.Name, "ItemAttr1.1");
+                        ia.Set(x => x.UnitPrice, 1.23M);
+                    });
+                    i.WithItemAttribute(ia =>
+                    {
+                        ia.Set(x => x.Name, "ItemAttr1.2");
+                        ia.Set(x => x.UnitPrice, 2.59M);
+                    });
                 })
                 .WithItem(i =>
                 {
@@ -134,35 +229,24 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                     i.Set(x => x.UnitPrice, 2.2M);
                     i.Set(x => x.Quantity, 2);
                     i.Set(x => x.Weight, 0.6);
+                    i.WithItemAttribute(ia =>
+                    {
+                        ia.Set(x => x.Name, "ItemAttr2.1");
+                        ia.Set(x => x.UnitPrice, 3.96M);
+                    });
+                    i.WithItemAttribute(ia =>
+                    {
+                        ia.Set(x => x.Name, "ItemAttr2.2");
+                        ia.Set(x => x.UnitPrice, 6.45M);
+                    });
                 })
                 .Set(x => x.ShipCountryCode, "UK").Save();
-
-            CustomsManager.LoadCustomsItems(shipment, false);
-
-            using (SqlAdapter adapter = SqlAdapter.Create(false))
-            {
-                var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
-                using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())
-                {
-                    adapter.FetchEntityCollection(customs, predicate);
-
-                    Assert.Equal(2, customs.Count);
-
-                    Assert.Equal("US", customs[0].CountryOfOrigin);
-                    Assert.Equal("Foo", customs[0].Description);
-                    Assert.Equal(3, customs[0].Quantity);
-                    Assert.Equal(2.5, customs[0].Weight);
-                    Assert.Equal(1.8M, customs[0].UnitValue);
-
-                    Assert.Equal("US", customs[1].CountryOfOrigin);
-                    Assert.Equal("Bar", customs[1].Description);
-                    Assert.Equal(2, customs[1].Quantity);
-                    Assert.Equal(0.6, customs[1].Weight);
-                    Assert.Equal(2.2M, customs[1].UnitValue);
-                }
-            }
         }
 
-        public void Dispose() => context.Dispose();
+        public void Dispose()
+        {
+            adapter.Dispose();
+            context.Dispose();
+        }
     }
 }

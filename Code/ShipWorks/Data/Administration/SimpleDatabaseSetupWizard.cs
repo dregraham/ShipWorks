@@ -224,7 +224,7 @@ namespace ShipWorks.Data.Administration
             // In the process of downloading
             else if (fileInfo.Length < expectedFileSize)
             {
-                progressPreparing.Value = (int) (33.0 * (double) fileInfo.Length / expectedFileSize);
+                progressPreparing.Value = (int) (33.0 * fileInfo.Length / expectedFileSize);
             }
             // Fully downloaded
             else

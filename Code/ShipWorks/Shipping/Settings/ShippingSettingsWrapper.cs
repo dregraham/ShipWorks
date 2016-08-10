@@ -4,6 +4,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Settings
@@ -61,6 +62,11 @@ namespace ShipWorks.Shipping.Settings
         /// Fetch the current shipping settings
         /// </summary>
         public ShippingSettingsEntity Fetch() => ShippingSettings.Fetch();
+
+        /// <summary>
+        /// Fetch the current shipping settings
+        /// </summary>
+        public IShippingSettingsEntity FetchReadOnly() => ShippingSettings.FetchReadOnly();
 
         /// <summary>
         /// Check the database for the latest SystemData

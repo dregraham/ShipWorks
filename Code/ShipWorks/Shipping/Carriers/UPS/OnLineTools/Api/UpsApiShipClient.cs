@@ -720,7 +720,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             if (!ups.Shipment.CustomsItemsLoaded)
             {
-                CustomsManager.LoadCustomsItems(ups.Shipment, false);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    CustomsManager.LoadCustomsItems(ups.Shipment, false, adapter);
+                }
             }
 
             if (!ups.Shipment.CustomsItems.Any())

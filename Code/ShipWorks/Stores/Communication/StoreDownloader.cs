@@ -27,6 +27,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 using System.Data.SqlClient;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Communication
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Communication
         {
             get
             {
-                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType)store.AddressValidationSetting);
+                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType) store.AddressValidationSetting);
                 return storeSetting;
             }
         }
@@ -162,7 +163,7 @@ namespace ShipWorks.Stores.Communication
             this.progress = progress;
             this.downloadLogID = downloadLogID;
             this.connection = connection;
-            
+
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
             {
                 Download(trackedDurationEvent);
@@ -176,7 +177,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected abstract void Download(TrackedDurationEvent trackedDurationEvent);
 
@@ -193,7 +194,7 @@ namespace ShipWorks.Stores.Communication
                     null, AggregateFunction.Max,
                     OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?)result;
+                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
 
                 log.InfoFormat("MAX(OnlineLastModified) = {0:u}", dateTime);
 
@@ -228,7 +229,7 @@ namespace ShipWorks.Stores.Communication
                     null, AggregateFunction.Max,
                     OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?)result;
+                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
 
                 log.InfoFormat("MAX(OrderDate) = {0:u}", dateTime);
 
@@ -354,7 +355,7 @@ namespace ShipWorks.Stores.Communication
                 order.RollupItemTotalWeight = 0;
 
                 order.ShipSenseHashKey = string.Empty;
-                order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
+                order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
             }
 
             return order;
@@ -468,7 +469,7 @@ namespace ShipWorks.Stores.Communication
                 // First see if any of the current (newly downloaded) notes match this note
                 if (order.Notes.Any(n =>
                     string.Compare(n.Text, noteText, true) == 0
-                    && n.Source == (int)NoteSource.Downloaded))
+                    && n.Source == (int) NoteSource.Downloaded))
                 {
                     return null;
                 }
@@ -478,7 +479,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
                     relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
-                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int)NoteSource.Downloaded));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int) NoteSource.Downloaded));
 
                     using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
                     {
@@ -613,7 +614,7 @@ namespace ShipWorks.Stores.Communication
                     }
 
                     // If it's new and LastModified isn't set, use the date
-                    if (order.IsNew && !order.Fields[(int)OrderFieldIndex.OnlineLastModified].IsChanged)
+                    if (order.IsNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
                     {
                         order.OnlineLastModified = order.OrderDate;
                     }
@@ -677,8 +678,8 @@ namespace ShipWorks.Stores.Communication
                         }
 
                         // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
-                        if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy)
-                            || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy))
+                        if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
+                            || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy))
                         {
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
@@ -726,10 +727,10 @@ namespace ShipWorks.Stores.Communication
         {
             AddressAdapter address = new AddressAdapter(order, prefix);
 
-            address.POBox = (int)ValidationDetailStatusType.Unknown;
-            address.MilitaryAddress = (int)ValidationDetailStatusType.Unknown;
-            address.USTerritory = (int)ValidationDetailStatusType.Unknown;
-            address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            address.POBox = (int) ValidationDetailStatusType.Unknown;
+            address.MilitaryAddress = (int) ValidationDetailStatusType.Unknown;
+            address.USTerritory = (int) ValidationDetailStatusType.Unknown;
+            address.ResidentialStatus = (int) ValidationDetailStatusType.Unknown;
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
             address.AddressType = (int) AddressType.NotChecked;
@@ -742,11 +743,11 @@ namespace ShipWorks.Stores.Communication
                      addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
                     prefix == "Ship")
                 {
-                    address.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                    address.AddressValidationStatus = (int) AddressValidationStatusType.Pending;
                 }
                 else
                 {
-                    address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                    address.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                 }
             }
         }
@@ -768,11 +769,11 @@ namespace ShipWorks.Stores.Communication
                     shouldCopy = false;
                     break;
                 case ModifiedOrderCustomerUpdateBehavior.CopyIfBlankOrMatching:
-                    if (IsAddressEmpty(existingCustomer,prefix))
+                    if (IsAddressEmpty(existingCustomer, prefix))
                     {
                         shouldCopy = true;
                     }
-                    else if (originalAddress==null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
+                    else if (originalAddress == null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
                     {
                         shouldCopy = true;
                     }
@@ -845,7 +846,7 @@ namespace ShipWorks.Stores.Communication
             {
                 if (order.Fields[fieldIndex].IsChanged)
                 {
-                    order.SetNewFieldValue(fieldIndex, AddressCasing.Apply((string)order.GetCurrentFieldValue(fieldIndex)));
+                    order.SetNewFieldValue(fieldIndex, AddressCasing.Apply((string) order.GetCurrentFieldValue(fieldIndex)));
                 }
             }
         }
@@ -856,7 +857,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual void VerifyOrderTotal(OrderEntity order)
         {
-            if (order.Fields[(int)OrderFieldIndex.OrderTotal].IsChanged)
+            if (order.Fields[(int) OrderFieldIndex.OrderTotal].IsChanged)
             {
                 decimal total = OrderUtility.CalculateTotal(order);
 

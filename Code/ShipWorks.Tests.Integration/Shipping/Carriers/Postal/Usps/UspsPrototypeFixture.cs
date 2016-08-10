@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -125,7 +126,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             return webClient;
         }
 
-        private ICarrierAccountRepository<UspsAccountEntity> GetAccountRepository(UspsResellerType resellerType)
+        private ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> GetAccountRepository(UspsResellerType resellerType)
         {
             switch (resellerType)
             {

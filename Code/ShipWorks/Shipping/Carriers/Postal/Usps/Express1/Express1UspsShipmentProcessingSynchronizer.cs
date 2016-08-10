@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -9,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
     /// </summary>
     public class Express1UspsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1UspsShipmentProcessingSynchronizer"/> class.
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// Initializes a new instance of the <see cref="Express1UspsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public Express1UspsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
+        public Express1UspsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

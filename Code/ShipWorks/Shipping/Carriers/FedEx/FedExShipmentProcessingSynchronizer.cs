@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -9,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<FedExAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShipmentProcessingSynchronizer"/> class.
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Initializes a new instance of the <see cref="FedExShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public FedExShipmentProcessingSynchronizer(ICarrierAccountRepository<FedExAccountEntity> accountRepository)
+        public FedExShipmentProcessingSynchronizer(ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

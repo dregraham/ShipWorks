@@ -2,6 +2,7 @@
 using Autofac.Core;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,10 +10,10 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .SingleInstance();
 
             builder.RegisterType<UpsAccountRepository>()
-                .Keyed<ICarrierAccountRepository<UpsAccountEntity>>(ShipmentTypeCode.UpsOnLineTools);
+                .Keyed<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>(ShipmentTypeCode.UpsOnLineTools);
 
             builder.RegisterType<UpsOltLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             RegisterRatingServiceFor(ShipmentTypeCode.UpsOnLineTools, builder);
             RegisterRatingServiceFor(ShipmentTypeCode.UpsWorldShip, builder);
-			
+
             builder.RegisterType<UpsClerk>()
                 .AsImplementedInterfaces();
 

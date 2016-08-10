@@ -1,9 +1,11 @@
-﻿namespace Interapptive.Shared.Metrics
+﻿using System;
+
+namespace Interapptive.Shared.Metrics
 {
     /// <summary>
-    /// Interface for tracking the duration of an event, along with other metric info
+    /// Track the duration of an event, along with other metric info
     /// </summary>
-    public interface ITrackedDurationEvent
+    public interface ITrackedDurationEvent : IDisposable
     {
         /// <summary>
         /// Add a metric value to the event

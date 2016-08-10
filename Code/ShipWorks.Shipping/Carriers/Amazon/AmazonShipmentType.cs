@@ -154,6 +154,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.Amazon == null)
+            {
+                shipment.Amazon = new AmazonShipmentEntity(shipment.ShipmentID);
+            }
+
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
 
             IAmazonOrder amazonCredentials = shipment.Order as IAmazonOrder;

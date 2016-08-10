@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -26,10 +25,11 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
 
         /// <summary>
         /// Constructor for errors
-        /// 
+        /// </summary>
+        /// <remarks>
         /// In order to get the OrderSelectionChangedHandler to match orders and allow loading to complete
         /// we need the order id to be passed along in the LoadedOrderSelection
-        /// </summary>
+        /// </remarks>
         public LoadedOrderSelection(Exception ex, OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
         {
             Order = order;

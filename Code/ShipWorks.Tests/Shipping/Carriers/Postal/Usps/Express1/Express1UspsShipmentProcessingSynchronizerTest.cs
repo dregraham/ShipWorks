@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -12,11 +13,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
     {
         private Express1UspsShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepository;
 
         public Express1UspsShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
 
             testObject = new Express1UspsShipmentProcessingSynchronizer(accountRepository.Object);
         }

@@ -98,10 +98,10 @@ namespace ShipWorks.Shipping.Insurance
             switch (source)
             {
                 case InsuranceInitialValueSource.OrderTotal:
-                    return OrderUtility.CalculateTotal(shipment.OrderID, true);
+                    return OrderUtility.CalculateTotal(shipment.Order, true);
 
                 case InsuranceInitialValueSource.ItemSubtotal:
-                    return OrderUtility.CalculateTotal(shipment.OrderID, false);
+                    return OrderUtility.CalculateTotal(shipment.Order, false);
 
                 case InsuranceInitialValueSource.OtherAmount:
                 default:

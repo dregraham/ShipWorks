@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
-using System.Data;
 using log4net;
 
 namespace ShipWorks.Data.Administration
@@ -79,7 +76,7 @@ namespace ShipWorks.Data.Administration
 
             detail.schemaVersion = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
 
-            detail.status = detail.schemaVersion.Major < 3 ? SqlDatabaseStatus.ShipWorks2x : SqlDatabaseStatus.ShipWorks;
+            detail.status = SqlDatabaseStatus.ShipWorks;
         }
 
         /// <summary>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
@@ -48,15 +47,15 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void BindStatuses()
         {
-            EnumList<AddressValidationStatusType> statuses = EnumHelper.GetEnumList<AddressValidationStatusType>();
+            EnumEntry<AddressValidationStatusType>[] statuses = EnumHelper.GetEnumList<AddressValidationStatusType>().ToArray();
 
             // Loop through all the statuses in AddressValidationStatusType.
-            for (int statusIndex = 0; statusIndex < statuses.Count; statusIndex++)
+            for (int statusIndex = 0; statusIndex < statuses.Length; statusIndex++)
             {
                 EnumEntry<AddressValidationStatusType> status = statuses[statusIndex];
 
                 // * 2 makes room for the label buttons.
-                int verticlePosition = 23*(statusIndex + 2);
+                int verticlePosition = 23 * (statusIndex + 2);
 
                 // Build statusList with new checkboxes and related enums.
                 var checkboxAndStatusType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
@@ -112,9 +111,9 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.notValidated = new Label();
             this.statusPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // statusPanel
-            // 
+            //
             this.statusPanel.BackColor = SystemColors.ControlLightLight;
             this.statusPanel.Controls.Add(this.readyToGoLabel);
             this.statusPanel.Controls.Add(this.needsAttentionLabel);
@@ -124,12 +123,12 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.statusPanel.Size = new Size(130, 306);
             this.statusPanel.TabIndex = 7;
             this.statusPanel.Visible = false;
-            // 
+            //
             // readyToGoLabel
-            // 
+            //
             this.readyToGoLabel.AutoSize = true;
             this.readyToGoLabel.Cursor = Cursors.Hand;
-            this.readyToGoLabel.Font = new Font("Tahoma", 8.25F, FontStyle.Underline, GraphicsUnit.Point, ((byte)(0)));
+            this.readyToGoLabel.Font = new Font("Tahoma", 8.25F, FontStyle.Underline, GraphicsUnit.Point, ((byte) (0)));
             this.readyToGoLabel.ForeColor = Color.Blue;
             this.readyToGoLabel.Location = new Point(3, 3);
             this.readyToGoLabel.Name = "readyToGoLabel";
@@ -137,12 +136,12 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.readyToGoLabel.TabIndex = 1;
             this.readyToGoLabel.Text = "Select Ready To Go";
             this.readyToGoLabel.Click += OnReadyToGoLabelClicked;
-            // 
+            //
             // notValidated
-            // 
+            //
             this.notValidated.AutoSize = true;
             this.notValidated.Cursor = Cursors.Hand;
-            this.notValidated.Font = new Font("Tahoma", 8.25F, FontStyle.Underline, GraphicsUnit.Point, ((byte)(0)));
+            this.notValidated.Font = new Font("Tahoma", 8.25F, FontStyle.Underline, GraphicsUnit.Point, ((byte) (0)));
             this.notValidated.ForeColor = Color.Blue;
             this.notValidated.Location = new Point(3, 26);
             this.notValidated.Name = "notValidated";
@@ -150,9 +149,9 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.notValidated.TabIndex = 1;
             this.notValidated.Text = "Select Not Validated";
             this.notValidated.Click += OnNotValidatedClicked;
-            // 
+            //
             // AddressValidationStatusPopup
-            // 
+            //
             this.Controls.Add(this.statusPanel);
             this.Size = new Size(316, 21);
             this.statusPanel.ResumeLayout(false);

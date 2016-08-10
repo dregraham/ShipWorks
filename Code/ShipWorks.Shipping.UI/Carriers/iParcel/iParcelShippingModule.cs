@@ -2,6 +2,7 @@
 using Autofac;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<iParcelAccountRepository>()
-                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity>>(ShipmentTypeCode.iParcel)
+                .Keyed<CarrierAccountRepositoryBase<IParcelAccountEntity, IIParcelAccountEntity>>(ShipmentTypeCode.iParcel)
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.iParcel)
                 .AsImplementedInterfaces();
 

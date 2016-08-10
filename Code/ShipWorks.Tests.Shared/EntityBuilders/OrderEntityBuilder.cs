@@ -9,12 +9,12 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
     /// <summary>
     /// Build an order entity
     /// </summary>
-    public class OrderEntityBuilder : EntityBuilder<OrderEntity>
+    public class OrderEntityBuilder<TOrder> : EntityBuilder<TOrder> where TOrder : OrderEntity, new()
     {
         /// <summary>
         /// Modify an existing order
         /// </summary>
-        public OrderEntityBuilder(OrderEntity order) : base(order)
+        public OrderEntityBuilder(TOrder order) : base(order)
         {
 
         }
@@ -25,13 +25,15 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         public OrderEntityBuilder(StoreEntity store, CustomerEntity customer)
         {
             Set(x => x.Store, store);
+            Set(x => x.StoreID, store.StoreID);
             Set(x => x.Customer, customer);
+            Set(x => x.CustomerID, customer.CustomerID);
         }
 
         /// <summary>
         /// Set the order number
         /// </summary>
-        public OrderEntityBuilder WithOrderNumber(long orderNumber)
+        public OrderEntityBuilder<TOrder> WithOrderNumber(long orderNumber)
         {
             Set(x => x.OrderNumber, orderNumber);
 
@@ -39,20 +41,38 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         }
 
         /// <summary>
-        /// Add a shipment to the order
+        /// Set the order number
         /// </summary>
-        public OrderEntityBuilder WithShipment() => WithShipment(null);
+        public OrderEntityBuilder<TOrder> WithOrderNumber(long orderNumber, string prefix, string postfix)
+        {
+            Set(x => x.OrderNumber, orderNumber);
+            Set(x => x.ApplyOrderNumberPrefix(prefix));
+            Set(x => x.ApplyOrderNumberPostfix(postfix));
+
+            return this;
+        }
+
+        /// <summary>
+        /// Add a charge to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithCharge(Action<EntityBuilder<OrderChargeEntity>> builderConfiguration) =>
+            CreateCollectionEntity(builderConfiguration, x => x.OrderCharges);
 
         /// <summary>
         /// Add a shipment to the order
         /// </summary>
-        public OrderEntityBuilder WithShipment(Action<ShipmentEntityBuilder> builderConfiguration) =>
+        public OrderEntityBuilder<TOrder> WithShipment() => WithShipment(null);
+
+        /// <summary>
+        /// Add a shipment to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithShipment(Action<ShipmentEntityBuilder> builderConfiguration) =>
             CreateCollectionEntity(builderConfiguration, x => x.Shipments);
 
         /// <summary>
         /// Set the shipping address on the order
         /// </summary>
-        public OrderEntityBuilder WithShipAddress(string address1, string address2, string city, string state, string postalCode, string country)
+        public OrderEntityBuilder<TOrder> WithShipAddress(string address1, string address2, string city, string state, string postalCode, string country)
         {
             Set(x => x.ShipPerson = new PersonAdapter
             {
@@ -70,21 +90,40 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Add an item to the order
         /// </summary>
-        public OrderEntityBuilder WithItem() => WithItem(null);
+        public OrderEntityBuilder<TOrder> WithItem() => WithItem(null);
 
         /// <summary>
         /// Add an item to the order
         /// </summary>
-        public OrderEntityBuilder WithItem(Action<EntityBuilder<OrderItemEntity>> builderConfiguration) =>
+        public OrderEntityBuilder<TOrder> WithItem(Action<OrderItemEntityBuilder<OrderItemEntity>> builderConfiguration) =>
             CreateCollectionEntity(builderConfiguration, x => x.OrderItems);
+
+        /// <summary>
+        /// Add an item to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithItem<TOrderItem>(Action<OrderItemEntityBuilder<TOrderItem>> builderConfiguration)
+            where TOrderItem : OrderItemEntity, new() =>
+            CreateCollectionEntity<OrderItemEntity, TOrderItem, OrderItemEntityBuilder<TOrderItem>>(builderConfiguration, x => x.OrderItems);
 
         /// <summary>
         /// Create an entity and add it to a collection
         /// </summary>
-        protected OrderEntityBuilder CreateCollectionEntity<T, TBuilder>(Action<TBuilder> builderConfiguration,
+        protected OrderEntityBuilder<TOrder> CreateCollectionEntity<T, TBuilder>(Action<TBuilder> builderConfiguration,
             Func<OrderEntity, EntityCollection<T>> addAction)
             where T : EntityBase2, new()
             where TBuilder : EntityBuilder<T>, new()
+        {
+            return CreateCollectionEntity<T, T, TBuilder>(builderConfiguration, addAction);
+        }
+
+        /// <summary>
+        /// Create an entity and add it to a collection
+        /// </summary>
+        protected OrderEntityBuilder<TOrder> CreateCollectionEntity<TBase, TSpecific, TBuilder>(Action<TBuilder> builderConfiguration,
+            Func<OrderEntity, EntityCollection<TBase>> addAction)
+            where TBase : EntityBase2, new()
+            where TSpecific : TBase, new()
+            where TBuilder : EntityBuilder<TSpecific>, new()
         {
             TBuilder builder = new TBuilder();
             builderConfiguration?.Invoke(builder);

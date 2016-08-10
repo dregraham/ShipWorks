@@ -63,6 +63,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.orderShippingAddressChanged = new System.Windows.Forms.ComboBox();
             this.orderBillingAddressChanged = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.shipmentEditLimit = new System.Windows.Forms.ComboBox();
+            this.infoTip1 = new ShipWorks.UI.Controls.InfoTip();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -87,9 +90,9 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // labelAddressCasing
             // 
-            this.labelAddressCasing.Location = new System.Drawing.Point(32, 103);
+            this.labelAddressCasing.Location = new System.Drawing.Point(17, 106);
             this.labelAddressCasing.Name = "labelAddressCasing";
-            this.labelAddressCasing.Size = new System.Drawing.Size(340, 41);
+            this.labelAddressCasing.Size = new System.Drawing.Size(350, 41);
             this.labelAddressCasing.TabIndex = 4;
             this.labelAddressCasing.Text = "When downloading orders ShipWorks can cleanup names and addresses entered by the " +
     "customer.  For instance, \"123 elm street\" would become \"123 Elm Street\".";
@@ -361,7 +364,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.sectionShipmentCreation.Name = "sectionShipmentCreation";
             this.sectionShipmentCreation.Size = new System.Drawing.Size(481, 22);
             this.sectionShipmentCreation.TabIndex = 44;
-            this.sectionShipmentCreation.Text = "Shipment Creation";
+            this.sectionShipmentCreation.Text = "Shipment Editing";
             // 
             // label4
             // 
@@ -414,12 +417,46 @@ namespace ShipWorks.ApplicationCore.Options
             this.label6.TabIndex = 51;
             this.label6.Text = "When the shipping address has changed:";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(32, 945);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(299, 13);
+            this.label7.TabIndex = 53;
+            this.label7.Text = "Maximum number of shipments that can be edited in a batch:";
+            // 
+            // shipmentEditLimit
+            // 
+            this.shipmentEditLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.shipmentEditLimit.FormattingEnabled = true;
+            this.shipmentEditLimit.Items.AddRange(new object[] {
+            "Type username",
+            "Select username from dropdown"});
+            this.shipmentEditLimit.Location = new System.Drawing.Point(337, 942);
+            this.shipmentEditLimit.Name = "shipmentEditLimit";
+            this.shipmentEditLimit.Size = new System.Drawing.Size(87, 21);
+            this.shipmentEditLimit.TabIndex = 52;
+            // 
+            // infoTip1
+            // 
+            this.infoTip1.Caption = "Larger batch sizes mean more shipments can be processed at once, but require more" +
+    " system resources.";
+            this.infoTip1.Location = new System.Drawing.Point(430, 946);
+            this.infoTip1.Name = "infoTip1";
+            this.infoTip1.Size = new System.Drawing.Size(12, 12);
+            this.infoTip1.TabIndex = 54;
+            this.infoTip1.Title = "Maximum Batch Size";
+            // 
             // OptionPageAdvanced
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.infoTip1);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.shipmentEditLimit);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.orderBillingAddressChanged);
             this.Controls.Add(this.orderShippingAddressChanged);
@@ -457,7 +494,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.logOnMethod);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageAdvanced";
-            this.Size = new System.Drawing.Size(505, 961);
+            this.Size = new System.Drawing.Size(505, 981);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -501,6 +538,8 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.ComboBox orderShippingAddressChanged;
         private System.Windows.Forms.ComboBox orderBillingAddressChanged;
         private System.Windows.Forms.Label label6;
-
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox shipmentEditLimit;
+        private UI.Controls.InfoTip infoTip1;
     }
 }

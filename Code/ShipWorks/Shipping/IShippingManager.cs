@@ -76,11 +76,6 @@ namespace ShipWorks.Shipping
         bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
-        /// Create a new shipment for the given order
-        /// </summary>
-        ShipmentEntity CreateShipment(OrderEntity order);
-
-        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment);

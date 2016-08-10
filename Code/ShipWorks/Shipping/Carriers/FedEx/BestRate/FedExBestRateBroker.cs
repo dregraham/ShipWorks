@@ -2,20 +2,19 @@
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
     /// <summary>
-    /// An implementation of the IBestRateShippingBroker that Rate broker that 
+    /// An implementation of the IBestRateShippingBroker that Rate broker that
     /// finds the best rates for FedEx accounts.
     /// </summary>
-    public class FedExBestRateBroker : PackageBasedBestRateBroker<FedExAccountEntity, FedExPackageEntity>
+    public class FedExBestRateBroker : PackageBasedBestRateBroker<FedExAccountEntity, IFedExAccountEntity, FedExPackageEntity>
     {
         /// <summary>
         /// Creates a broker with the default shipment type and account repository
@@ -33,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <param name="shipmentType">Instance of a FedEx shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get FedEx accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public FedExBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity> accountRepository) :
+        public FedExBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "FedEx")
         {
 
@@ -56,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, FedExAccountEntity account)
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
-            
+
             currentShipment.FedEx.Packages[0].DimsHeight = originalShipment.BestRate.DimsHeight;
             currentShipment.FedEx.Packages[0].DimsWidth = originalShipment.BestRate.DimsWidth;
             currentShipment.FedEx.Packages[0].DimsLength = originalShipment.BestRate.DimsLength;
@@ -66,11 +65,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.FedEx.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
 
-            // Update total weight 
+            // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
 
-            currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
-            currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
+            currentShipment.FedEx.PackagingType = (int) FedExPackagingType.Custom;
+            currentShipment.FedEx.Service = (int) FedExServiceType.FedExGround;
             SetAccount(currentShipment, account);
 
             currentShipment.FedEx.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
@@ -120,10 +119,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected override string GetResultKey(RateResult rate)
         {
-            // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag;
             // we need to pass the original tag that is a FedEx service type
             object originalTag = rate.OriginalTag;
-            return "FedEx" + EnumHelper.GetDescription((FedExServiceType)GetServiceTypeFromTag(originalTag));
+            return "FedEx" + EnumHelper.GetDescription((FedExServiceType) GetServiceTypeFromTag(originalTag));
         }
 
         /// <summary>
@@ -133,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <returns></returns>
         protected override int GetServiceTypeFromTag(object tag)
         {
-            return (int) ((FedExRateSelection)tag).ServiceType;
+            return (int) ((FedExRateSelection) tag).ServiceType;
         }
 
         /// <summary>

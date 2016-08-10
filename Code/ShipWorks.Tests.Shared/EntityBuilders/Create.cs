@@ -17,8 +17,15 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Create an order
         /// </summary>
-        public static OrderEntityBuilder Order(StoreEntity store, CustomerEntity customer) =>
-            new OrderEntityBuilder(store, customer);
+        public static OrderEntityBuilder<OrderEntity> Order(StoreEntity store, CustomerEntity customer) =>
+            new OrderEntityBuilder<OrderEntity>(store, customer);
+
+        /// <summary>
+        /// Create an order
+        /// </summary>
+        public static OrderEntityBuilder<TOrder> Order<TOrder>(StoreEntity store, CustomerEntity customer)
+            where TOrder : OrderEntity, new() =>
+            new OrderEntityBuilder<TOrder>(store, customer);
 
         /// <summary>
         /// Create a profile
@@ -41,7 +48,9 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Create a carrier account
         /// </summary>
-        public static CarrierAccountEntityBuilder<T> CarrierAccount<T>() where T : EntityBase2, ICarrierAccount, new() =>
-            new CarrierAccountEntityBuilder<T>();
+        public static CarrierAccountEntityBuilder<T, TInterface> CarrierAccount<T, TInterface>()
+            where T : EntityBase2, TInterface, new()
+            where TInterface : ICarrierAccount =>
+            new CarrierAccountEntityBuilder<T, TInterface>();
     }
 }

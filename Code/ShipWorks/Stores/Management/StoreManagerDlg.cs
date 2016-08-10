@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -402,7 +403,7 @@ namespace ShipWorks.Stores.Management
         {
             BackgroundDeleteState state = (BackgroundDeleteState) userData;
 
-            ProgressItem progress = state.ProgressProvider.ProgressItems[0];
+            IProgressReporter progress = state.ProgressProvider.ProgressItems[0];
 
             // Keep checking for updates while the store is still not deleted
             while (!state.ProgressProvider.IsComplete)

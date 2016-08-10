@@ -15,6 +15,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
         private readonly ILog log;
         private readonly ILogEntryFactory logEntryFactory;
-        private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         // Maps USPS usernames to their latest authenticator tokens
         static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
@@ -78,7 +79,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1UspsWebClient" /> class.
         /// </summary>
-        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
+            ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

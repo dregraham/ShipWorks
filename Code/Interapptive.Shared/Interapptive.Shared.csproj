@@ -229,6 +229,7 @@
     <Compile Include="System.ComponentModel.DataAnnotations\MaxLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
+    <Compile Include="Threading\IProgressReporter.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="Net\ApiLogEncryption.cs" />
     <Compile Include="Net\HttpJsonVariableRequestSubmitter.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Security\IEncryptionProviderFactory.cs" />
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
+    <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\FileDialogType.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialog.cs" />
@@ -243,6 +245,7 @@
     <Compile Include="UI\IFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
@@ -477,7 +480,6 @@
     <Compile Include="Utility\CallbackDescriptionAttribute.cs" />
     <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
-    <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
@@ -503,7 +505,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\EnumEntry.cs" />
     <Compile Include="Utility\EnumHelper.cs" />
-    <Compile Include="Utility\EnumList.cs" />
     <Compile Include="Utility\ImageResourceAttribute.cs" />
     <Compile Include="Win32\NativeWindowHandle.cs" />
     <Compile Include="Win32\RegistryHelper.cs" />
@@ -792,8 +793,8 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

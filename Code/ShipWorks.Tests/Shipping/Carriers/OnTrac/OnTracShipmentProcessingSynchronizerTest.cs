@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.OnTrac;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 {
@@ -11,11 +12,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
     {
         private OnTracShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<OnTracAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>> accountRepository;
 
         public OnTracShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<OnTracAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
 
             testObject = new OnTracShipmentProcessingSynchronizer(accountRepository.Object);
         }
@@ -56,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             Assert.Throws<OnTracException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
-        
+
         [Fact]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {

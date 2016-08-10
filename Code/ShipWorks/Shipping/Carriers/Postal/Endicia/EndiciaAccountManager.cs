@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using Autofac;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Collections;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public static class EndiciaAccountManager
     {
         static TableSynchronizer<EndiciaAccountEntity> synchronizer;
+        static IEnumerable<IEndiciaAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges = false;
 
         /// <summary>
@@ -55,8 +56,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int)EndiciaAccountFieldIndex.Description, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int) EndiciaAccountFieldIndex.Description, ListSortDirection.Ascending);
                 }
+
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
 
                 needCheckForChanges = false;
             }
@@ -75,7 +78,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int)reseller)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int) reseller)));
+            }
+        }
+
+        /// <summary>
+        /// Get the endicia accounts in the system.  Optionally include those that have not yet totally completed signup where
+        /// the user is yet to enter the account ID.
+        /// </summary>
+        public static IEnumerable<IEndiciaAccountEntity> GetAccountsReadOnly(EndiciaReseller reseller, bool includeIncomplete)
+        {
+            lock (synchronizer)
+            {
+                if (needCheckForChanges)
+                {
+                    InternalCheckForChanges();
+                }
+
+                return readOnlyAccounts.Where(a => ((includeIncomplete || a.AccountNumber != null) && a.EndiciaReseller == (int) reseller));
             }
         }
 
@@ -99,6 +119,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Return the active list of endicia accounts
+        /// </summary>
+        public static IEnumerable<IEndiciaAccountEntity> EndiciaAccountsReadOnly
+        {
+            get
+            {
+                return GetAccountsReadOnly(EndiciaReseller.None, false);
+            }
+        }
+
+        /// <summary>
         /// Return the active list of Express1 accounts
         /// </summary>
         public static List<EndiciaAccountEntity> Express1Accounts
@@ -110,11 +141,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Return the active list of Express1 accounts
+        /// </summary>
+        public static IEnumerable<IEndiciaAccountEntity> Express1AccountsReadOnly
+        {
+            get
+            {
+                return GetAccountsReadOnly(EndiciaReseller.Express1, false);
+            }
+        }
+
+        /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
         public static EndiciaAccountEntity GetAccount(long accountID)
         {
             EndiciaAccountEntity endiciaAccount = EndiciaAccounts.Where(a => a.EndiciaAccountID == accountID).FirstOrDefault();
+
+            if (endiciaAccount == null)
+            {
+                endiciaAccount = Express1Accounts.Where(a => a.EndiciaAccountID == accountID).FirstOrDefault();
+            }
+
+            return endiciaAccount;
+        }
+
+        /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IEndiciaAccountEntity GetAccountReadOnly(long accountID)
+        {
+            IEndiciaAccountEntity endiciaAccount = EndiciaAccountsReadOnly.Where(a => a.EndiciaAccountID == accountID).FirstOrDefault();
 
             if (endiciaAccount == null)
             {
@@ -150,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public static void DeleteAccount(EndiciaAccountEntity account)
         {
             ShipmentTypeCode shipmentTypeCode = account.ShipmentType;
-            
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.DeleteEntity(account);
@@ -169,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             string descriptionBase = account.AccountNumber;
 
             // Express1 uses terribly long account numbers
-            if (account.EndiciaReseller == (int)EndiciaReseller.Express1)
+            if (account.EndiciaReseller == (int) EndiciaReseller.Express1)
             {
                 // only shorten so long as we know they're still using long account numbers.
                 if (descriptionBase.Length == 36)

@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Interapptive.Shared.Data;
-using Interapptive.Shared.UI;
-using ShipWorks.Common.Threading;
-using System.Diagnostics;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Collections;
+using System.Windows.Forms;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Users.Audit;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
 {
@@ -68,9 +64,9 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
             if (MessageHelper.ShowQuestion(this, String.Format("Are you sure you want to delete print results older than {0}?", deleteDate.Value.ToShortDateString())) == System.Windows.Forms.DialogResult.OK)
             {
                 ProgressProvider progress = new ProgressProvider();
-                progress.ProgressItems.Add("Delete Print Output");
-                progress.ProgressItems.Add("Cleanup Unused Resources");
-                progress.ProgressItems.Add("Reindex and Shrink Database");
+                progress.AddItem("Delete Print Output");
+                progress.AddItem("Cleanup Unused Resources");
+                progress.AddItem("Reindex and Shrink Database");
 
                 ProgressDlg progressDlg = new ProgressDlg(progress);
                 progressDlg.Title = "Delete print output";
@@ -95,10 +91,10 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            ProgressProvider progress = e.Argument as ProgressProvider;
-            ProgressItem progressItem = progress.ProgressItems[0];
-            ProgressItem deOrphanProgressItem = progress.ProgressItems[1];
-            ProgressItem shrinkProgress = progress.ProgressItems[2];
+            IProgressProvider progress = e.Argument as IProgressProvider;
+            IProgressReporter progressItem = progress.ProgressItems[0];
+            IProgressReporter deOrphanProgressItem = progress.ProgressItems[1];
+            IProgressReporter shrinkProgress = progress.ProgressItems[2];
 
             progressItem.Starting();
             progressItem.Detail = "Finding items to delete ...";
@@ -125,7 +121,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
                         // unreference them
                         references.ForEach(referenceID => DataResourceManager.ReleaseResourceReference(referenceID));
 
-                        // delete the print result 
+                        // delete the print result
                         adapter.DeleteEntity(printResult);
 
                         // OK, commit this row
@@ -156,7 +152,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
                     using (SqlCommand cmd = SqlCommandProvider.Create(con))
                     {
                         // this can really take a while
-                        cmd.CommandTimeout = (int)TimeSpan.FromMinutes(60).TotalSeconds;
+                        cmd.CommandTimeout = (int) TimeSpan.FromMinutes(60).TotalSeconds;
 
                         shrinkProgress.Detail = "Rebuilding indexes...";
                         cmd.CommandText = String.Format("DBCC DBREINDEX([Resource])");
@@ -218,7 +214,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
             }
             else
             {
-                MessageBox.Show(this, "Print Jobs were successfully deleted. Elapsed Time: " + ((TimeSpan)e.Result));
+                MessageBox.Show(this, "Print Jobs were successfully deleted. Elapsed Time: " + ((TimeSpan) e.Result));
 
                 DialogResult = DialogResult.OK;
             }
@@ -244,10 +240,10 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
 
             if (InvokeRequired)
             {
-                BeginInvoke((MethodInvoker)delegate { DisplayEstimatedBytesFreed(cutoffDate, byteCount); });
+                BeginInvoke((MethodInvoker) delegate { DisplayEstimatedBytesFreed(cutoffDate, byteCount); });
                 return;
             }
-            
+
             estimateLink.Enabled = true;
             statusPicture.Visible = false;
             okButton.Enabled = true;
@@ -258,17 +254,17 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
             if (byteCount > Math.Pow(2, 30))
             {
                 unit = "GB";
-                result = (decimal)Math.Round(byteCount / Math.Pow(2, 30), 2);
+                result = (decimal) Math.Round(byteCount / Math.Pow(2, 30), 2);
             }
             else if (byteCount > Math.Pow(2, 20))
             {
                 unit = "MB";
-                result = (decimal)Math.Round(byteCount / Math.Pow(2, 20), 2);
+                result = (decimal) Math.Round(byteCount / Math.Pow(2, 20), 2);
             }
             else if (byteCount > Math.Pow(2, 10))
             {
                 unit = "KB";
-                result = (decimal)Math.Round(byteCount / Math.Pow(2, 10), 2);
+                result = (decimal) Math.Round(byteCount / Math.Pow(2, 10), 2);
             }
 
             statusText.Text = String.Format("Deleting older than {0} should free up {1} {2}.", cutoffDate.ToShortDateString(), result, unit);
@@ -279,7 +275,7 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
         /// </summary>
         void CalculateEstimate(object sender, DoWorkEventArgs e)
         {
-            DateTime selectedDate = (DateTime)e.Argument;
+            DateTime selectedDate = (DateTime) e.Argument;
 
             string estimateScript = LoadScript("ShipWorks.ApplicationCore.Options.PrintResultCleanup.Estimate.sql");
 
@@ -289,14 +285,14 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
             {
                 using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
-                    cmd.CommandTimeout = (int)TimeSpan.FromMinutes(5).TotalSeconds;
+                    cmd.CommandTimeout = (int) TimeSpan.FromMinutes(5).TotalSeconds;
                     cmd.CommandText = estimateScript;
 
                     object result = SqlCommandProvider.ExecuteScalar(cmd);
                     long byteCount = 0;
                     if (result != null && result != DBNull.Value)
                     {
-                        byteCount = (long)result;
+                        byteCount = (long) result;
                     }
 
                     e.Result = new object[] { byteCount, selectedDate };
@@ -305,13 +301,13 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
         }
 
         /// <summary>
-        /// Calculating the estimate is complete 
+        /// Calculating the estimate is complete
         /// </summary>
         void CalculateEstimateComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             object[] result = e.Result as object[];
 
-            DisplayEstimatedBytesFreed((DateTime)result[1], (long)result[0]);
+            DisplayEstimatedBytesFreed((DateTime) result[1], (long) result[0]);
 
             // cleanup
             BackgroundWorker worker = sender as BackgroundWorker;

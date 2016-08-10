@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Transactions;
 using Autofac;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
@@ -34,8 +37,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent)
+        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(adapter);
+
             // If custom's aren't required, then forget it
             if (!IsCustomsRequired(shipment))
             {
@@ -47,66 +53,79 @@ namespace ShipWorks.Shipping
             {
                 if (reloadIfPresent || !shipment.CustomsItemsLoaded)
                 {
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        shipment.CustomsItems.Clear();
-                        shipment.CustomsItems.AddRange(DataProvider.GetRelatedEntities(shipment.ShipmentID, EntityType.ShipmentCustomsItemEntity).Cast<ShipmentCustomsItemEntity>());
-                        // Add FedExShipmentCustomsItems from database
-                    }
+                    shipment.CustomsItems.Clear();
+                    shipment.CustomsItems.AddRange(DataProvider.GetRelatedEntities(shipment.ShipmentID, EntityType.ShipmentCustomsItemEntity).Cast<ShipmentCustomsItemEntity>());
 
                     // Set the removed tracker for tracking deletions in the UI until saved
                     shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
                 }
-                // if fedex, check to see if fedex customs items have been loaded. If not, create them
             }
-
             // Not already generated, have to create
             else
             {
-                // If its been processed we don't mess with it
-                if (!shipment.Processed)
+                // Make sure that these new customs items get persisted
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    using (SqlAdapter adapter = SqlAdapter.Create(true))
-                    {
-                        decimal customsValue = 0m;
+                    GenerateCustomsItems(shipment);
 
-                        // By default create one content item representing each item in the order
-                        foreach (OrderItemEntity item in DataProvider.GetRelatedEntities(shipment.OrderID, EntityType.OrderItemEntity))
-                        {
-                            object attributePrice = adapter.GetScalar(OrderItemAttributeFields.UnitPrice, null, AggregateFunction.Sum, OrderItemAttributeFields.OrderItemID == item.OrderItemID);
+                    adapter.SaveAndRefetch(shipment);
 
-                            decimal priceAndValue = item.UnitPrice + ((attributePrice is DBNull) ? 0M : Convert.ToDecimal(attributePrice));
-
-                            ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
-                            {
-                                Shipment = shipment,
-                                Description = item.Name,
-                                Quantity = item.Quantity,
-                                Weight = item.Weight,
-                                UnitValue = priceAndValue,
-                                CountryOfOrigin = "US",
-                                HarmonizedCode = "",
-                                NumberOfPieces = 0,
-                                UnitPriceAmount = priceAndValue
-                            };
-
-                            adapter.SaveAndRefetch(customsItem);
-
-                            customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
-                        }
-
-                        shipment.CustomsValue = customsValue;
-                        shipment.CustomsGenerated = true;
-
-                        adapter.SaveAndRefetch(shipment);
-
-                        adapter.Commit();
-                    }
-
-                    // Set the removed tracker for tracking deletions in the UI until saved
-                    shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+                    scope.Complete();
                 }
             }
+
+            // Consider them loaded.  This is an in-memory field
+            shipment.CustomsItemsLoaded = true;
+        }
+
+        /// <summary>
+        /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,
+        /// or customs have already been generated, nothing will be done.
+        /// 
+        /// Customs items are not persisted to the database, as that is the caller's responsibility.
+        /// </summary>
+        public static void GenerateCustomsItems(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+
+            // If custom's aren't required, then forget it
+            if (shipment.Processed || shipment.CustomsGenerated || !IsCustomsRequired(shipment))
+            {
+                return;
+            }
+
+            shipment.CustomsItems.Clear();
+
+            decimal customsValue = 0m;
+
+            // By default create one content item representing each item in the order
+            foreach (OrderItemEntity item in shipment.Order.OrderItems)
+            {
+                decimal attributePrice = item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+
+                decimal priceAndValue = item.UnitPrice + attributePrice;
+
+                ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                {
+                    Shipment = shipment,
+                    Description = item.Name,
+                    Quantity = item.Quantity,
+                    Weight = item.Weight,
+                    UnitValue = priceAndValue,
+                    CountryOfOrigin = "US",
+                    HarmonizedCode = "",
+                    NumberOfPieces = 0,
+                    UnitPriceAmount = priceAndValue
+                };
+
+                customsValue += ((decimal)customsItem.Quantity * customsItem.UnitValue);
+            }
+
+            shipment.CustomsValue = customsValue;
+            shipment.CustomsGenerated = true;
+
+            // Set the removed tracker for tracking deletions in the UI until saved
+            shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
 
             // Consider them loaded.  This is an in-memory field
             shipment.CustomsItemsLoaded = true;

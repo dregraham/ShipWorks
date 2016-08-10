@@ -8799,6 +8799,8 @@ namespace ShipWorks.Data.Model
 		FedExFimsUsername,
 		///<summary>FedExFimsPassword. </summary>
 		FedExFimsPassword,
+		///<summary>ShipmentEditLimit. </summary>
+		ShipmentEditLimit,
 		/// <summary></summary>
 		AmountOfFields
 	}

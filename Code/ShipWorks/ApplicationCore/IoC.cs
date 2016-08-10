@@ -1,6 +1,9 @@
-﻿using Autofac;
+﻿using System;
+using System.Reflection;
+using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
@@ -8,6 +11,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -31,11 +35,9 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using System;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -107,6 +109,9 @@ namespace ShipWorks.ApplicationCore
             builder.Register((_, p) => new AddressSelector(p.OfType<string>().FirstOrDefault()))
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<TrackedDurationEvent>()
+                .AsImplementedInterfaces();
+
             builder.RegisterType<ShipBillAddressEditorDlg>();
 
             builder.Register(c => Program.MainForm)
@@ -172,7 +177,7 @@ namespace ShipWorks.ApplicationCore
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
                 .AsImplementedInterfaces();
 
-            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
+            ComponentAttribute.Register(builder, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()

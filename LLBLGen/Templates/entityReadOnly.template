@@ -1,0 +1,84 @@
+﻿///////////////////////////////////////////////////////////////
+// This is generated code.
+//////////////////////////////////////////////////////////////
+// Code is generated using LLBLGen Pro version: <[LLBLGenVersion]>
+// Code is generated on: <[Time]>
+// Code is generated using templates: <[TemplateName]>
+// Templates vendor: Solutions Design.
+// Templates version: <[TemplateVersion]>
+//////////////////////////////////////////////////////////////
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using <[RootNamespace]>.EntityInterfaces;
+
+namespace <[RootNamespace]>.ReadOnlyEntityClasses
+{
+    /// <summary>
+    /// Read-only representation of the entity '<[CurrentEntityName]>'. <br/><br/>
+    /// <[Foreach CustomProperty Entity]>
+    /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]>
+    /// </summary>
+    [Serializable]
+    public <[If UsePartialClasses]>partial <[EndIf]>class ReadOnly<[CurrentEntityName]>Entity : <[ If IsSubType ]>ReadOnly<[ SuperTypeName ]>Entity, <[ EndIf ]>I<[CurrentEntityName]>Entity
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        internal ReadOnly<[CurrentEntityName]>Entity(I<[CurrentEntityName]>Entity source, IDictionary<object, object> objectMap)<[ If IsSubType ]> : base(source, objectMap)<[EndIf]>
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+            MethodConditions.EnsureArgumentIsNotNull(objectMap, nameof(objectMap));
+
+            if (objectMap.ContainsKey(source) && objectMap[source] == null)
+            {
+                objectMap[source] = this;
+            }
+            <[Foreach EntityField]><[If Not EntityFieldOverrides]>
+            <[EntityFieldName]> = source.<[EntityFieldName]>;<[EndIf]><[NextForeach]>
+            <[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
+            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
+            <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
+            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
+            <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
+            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<I<[RelationEndPointName]>Entity>();<[EndIf]><[NextForeach]>
+
+            CopyCustom<[CurrentEntityName]>Data(source);
+        }
+
+        <[Foreach EntityField]><[If Not EntityFieldOverrides]>
+        /// <summary> The <[EntityFieldName]> property of the Entity <[CurrentEntityName]><br/><br/>
+        /// <[Foreach CustomProperty EntityField]>
+        /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]></summary>
+        /// <remarks>Mapped on <[ CaseCamel TargetType ]> field: "<[SourceObjectName]>"."<[SourceColumnName]>"<br/>
+        /// <[ TargetType ]> field type characteristics (type, precision, scale, length): <[SourceColumnDbType]>, <[SourceColumnPrecision]>, <[SourceColumnScale]>, <[SourceColumnMaxLength]><br/>
+        /// <[ TargetType ]> field behavior characteristics (is nullable, is PK, is identity): <[SourceColumnIsNullable]>, <[IsPrimaryKey]>, <[IsIdentity]></remarks>
+        public <[If GenerateAsNullableType]>Nullable<<[TypeOfField]>><[Else]><[TypeOfField]><[EndIf]> <[EntityFieldName]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
+        public I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }
+        <[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
+        public I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }
+        <[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
+        public IEnumerable<I<[RelationEndPointName]>Entity> <[MappedFieldNameRelation]> { get; }
+        <[EndIf]><[NextForeach]>
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        /// <summary>
+        /// Copy any custom data
+        /// </summary>
+        partial void CopyCustom<[CurrentEntityName]>Data(I<[CurrentEntityName]>Entity source);
+    }
+}

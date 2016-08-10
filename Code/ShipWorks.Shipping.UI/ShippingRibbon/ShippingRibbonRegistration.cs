@@ -238,14 +238,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         }
 
         /// <summary>
-        /// Get an image resource with the specified name
-        /// </summary>
-        private Image GetImgeResource(string name)
-        {
-            return (Image) resources.GetObject(name);
-        }
-
-        /// <summary>
         /// Dispose held resources
         /// </summary>
         public void Dispose()

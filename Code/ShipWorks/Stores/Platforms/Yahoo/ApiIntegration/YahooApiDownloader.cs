@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="store"></param>
         public YahooApiDownloader(StoreEntity store) :
             this(store,
-                new YahooApiWebClient((YahooStoreEntity)store, LogManager.GetLogger(typeof(YahooApiWebClient))),
+                new YahooApiWebClient((YahooStoreEntity) store, LogManager.GetLogger(typeof(YahooApiWebClient))),
                 new SqlAdapterRetry<SqlException>(5, -5, "YahooApiDownloader.LoadOrder"))
         {
         }
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                     DownloadNewOrders(orderList);
 
-                    ((YahooStoreEntity)Store).BackupOrderNumber = null;
+                    ((YahooStoreEntity) Store).BackupOrderNumber = null;
                     StoreManager.SaveStore(Store);
                 }
             }
@@ -193,7 +193,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
             int statusID = int.Parse(orderEntity.OnlineStatusCode.ToString());
 
-            if (statusID >= 0 && statusID <= EnumHelper.GetEnumList<YahooApiOrderStatus>().Count)
+            if (statusID >= 0 && statusID <= EnumHelper.GetEnumList<YahooApiOrderStatus>().Count())
             {
                 orderEntity.OnlineStatus = EnumHelper.GetDescription((YahooApiOrderStatus) statusID);
             }
@@ -302,7 +302,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             if (order.OrderTotals.GiftWrap != 0 || !order.GiftMessage.IsNullOrWhiteSpace())
             {
-                YahooOrderItemEntity item = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
+                YahooOrderItemEntity item = (YahooOrderItemEntity) InstantiateOrderItem(orderEntity);
 
                 item.YahooProductID = "giftwrap";
                 item.Code = "GIFTWRAP";
@@ -397,7 +397,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="item">The item DTO.</param>
         private void LoadOrderItem(YahooOrderEntity orderEntity, YahooItem item)
         {
-            YahooOrderItemEntity itemEntity = (YahooOrderItemEntity)InstantiateOrderItem(orderEntity);
+            YahooOrderItemEntity itemEntity = (YahooOrderItemEntity) InstantiateOrderItem(orderEntity);
 
             itemEntity.YahooProductID = item.ItemID;
             itemEntity.Code = WebUtility.HtmlDecode(item.ItemCode);

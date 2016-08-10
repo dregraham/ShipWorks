@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Xml;
+using System.Xml.XPath;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Data;
-using System.Xml.XPath;
-using Autofac;
-using Interapptive.Shared;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using log4net;
-using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -31,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// </summary>
     public class UpsApiRateClient
     {
-        private ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly ILog log;
         private ICarrierSettingsRepository settingsRepository;
         private ICertificateInspector certificateInspector;
@@ -46,14 +44,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
-        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
             : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient" /> class.
         /// </summary>
-        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.log = log;
@@ -191,10 +191,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsPackageWeightElementWriter weightElementWriter, UpsPackageServiceOptionsElementWriter serviceOptionsElementWriter)
         {
             UpsShipmentEntity ups = shipment.Ups;
-            UpsRateType accountRateType = (UpsRateType)account.RateType;
-            UpsServiceType serviceType = (UpsServiceType)ups.Service;
+            UpsRateType accountRateType = (UpsRateType) account.RateType;
+            UpsServiceType serviceType = (UpsServiceType) ups.Service;
 
-            if(UpsUtility.IsUpsMiService(serviceType))
+            if (UpsUtility.IsUpsMiService(serviceType))
             {
                 return new List<UpsServiceRate>();
             }
@@ -229,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // ShipTo
             xmlWriter.WriteStartElement("ShipTo");
-            UpsApiCore.WriteAddressXml(xmlWriter, shipTo, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddressIndicator" : (string)null);
+            UpsApiCore.WriteAddressXml(xmlWriter, shipTo, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddressIndicator" : (string) null);
             xmlWriter.WriteEndElement();
 
             // ShipFrom
@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // If they want saturday delivery, and it could be delivered on a saturday, set that flag.
             // Note: we don't usually use the selected service for figuring what the rates are - but we do here, since we only want
             // to use the saturday flag if the user can acutally see the saturday checkbox.
-            if (ups.SaturdayDelivery && UpsUtility.CanDeliverOnSaturday((UpsServiceType)ups.Service, shipment.ShipDate))
+            if (ups.SaturdayDelivery && UpsUtility.CanDeliverOnSaturday((UpsServiceType) ups.Service, shipment.ShipDate))
             {
                 xmlWriter.WriteElementString("SaturdayDelivery", "");
             }
@@ -277,7 +277,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Process the request
             XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector);
 
-            return ProcessApiResponse(shipment, xmlDocument, (UpsRateType)account.RateType);
+            return ProcessApiResponse(shipment, xmlDocument, (UpsRateType) account.RateType);
         }
 
         /// <summary>

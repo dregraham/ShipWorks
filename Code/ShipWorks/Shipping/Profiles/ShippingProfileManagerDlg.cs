@@ -48,9 +48,11 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadShipmentTypeMenuList()
         {
+            List<EnumEntry<ShipmentTypeCode>> shipmentTypes = EnumHelper.GetEnumList<ShipmentTypeCode>(x => true).ToList();
+
             foreach (ShipmentType shipmentType in GetEnabledShipmentTypes())
             {
-                menuList.Items.Add(new EnumEntry<ShipmentTypeCode>(shipmentType.ShipmentTypeCode));
+                menuList.Items.Add(shipmentTypes.First(x => x.Value == shipmentType.ShipmentTypeCode));
             }
 
             if (menuList.Items.Count > 0)

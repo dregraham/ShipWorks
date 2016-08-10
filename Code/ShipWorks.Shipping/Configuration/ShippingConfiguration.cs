@@ -27,9 +27,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Gets whether a new shipment should be auto-created for an order
         /// </summary>
-        public bool ShouldAutoCreateShipment(OrderEntity order) =>
+        public bool ShouldAutoCreateShipment(OrderEntity order, bool createIfNoShipments) =>
             !order.Shipments.Any() &&
-                shippingSettings.AutoCreateShipments &&
+                createIfNoShipments &&
                 securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, order.OrderID);
     }
 }

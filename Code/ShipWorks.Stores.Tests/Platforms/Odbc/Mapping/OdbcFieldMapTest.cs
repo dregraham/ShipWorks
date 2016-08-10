@@ -161,236 +161,209 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         [Fact]
         public void CopyToEntity_SetsFieldToEmptyString_WhenExternalFieldValueIsEmptyString()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcFieldMap>();
+            var testObject = mock.Create<OdbcFieldMap>();
 
-                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.Value).Returns(string.Empty);
-                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
-                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+            var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+            shipworksField.Setup(e => e.Value).Returns(string.Empty);
+            shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+            shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
 
-                var entry = mock.Mock<IOdbcFieldMapEntry>();
-                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+            var entry = mock.Mock<IOdbcFieldMapEntry>();
+            entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
 
-                testObject.AddEntry(entry.Object);
+            testObject.AddEntry(entry.Object);
 
-                OrderEntity order = new OrderEntity {BillFirstName = "bob"};
+            OrderEntity order = new OrderEntity {BillFirstName = "bob"};
 
-                testObject.CopyToEntity(order);
+            testObject.CopyToEntity(order);
 
-                Assert.Empty(order.BillFirstName);
-            }
+            Assert.Empty(order.BillFirstName);
         }
 
         [Fact]
         public void CopyToEntity_DoesNotCopyToEntity_WhenContainingObjectNameNotEntityName()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcFieldMap>();
+            var testObject = mock.Create<OdbcFieldMap>();
 
-                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.Value).Returns("bill");
-                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
-                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderItemEntity");
+            var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+            shipworksField.Setup(e => e.Value).Returns("bill");
+            shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+            shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderItemEntity");
 
-                var entry = mock.Mock<IOdbcFieldMapEntry>();
-                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+            var entry = mock.Mock<IOdbcFieldMapEntry>();
+            entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
 
-                testObject.AddEntry(entry.Object);
+            testObject.AddEntry(entry.Object);
 
-                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
+            OrderEntity order = new OrderEntity { BillFirstName = "bob" };
 
-                testObject.CopyToEntity(order);
+            testObject.CopyToEntity(order);
 
-                Assert.Equal("bob", order.BillFirstName);
-            }
+            Assert.Equal("bob", order.BillFirstName);
         }
 
         [Fact]
         public void CopyToEntity_DoesNotCopyToEntity_WhenIndexDoesNotMatchPassedIndex()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcFieldMap>();
+            var testObject = mock.Create<OdbcFieldMap>();
 
-                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.Value).Returns("joe");
-                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
-                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+            var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+            shipworksField.Setup(e => e.Value).Returns("joe");
+            shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+            shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
 
-                var entry = mock.Mock<IOdbcFieldMapEntry>();
-                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+            var entry = mock.Mock<IOdbcFieldMapEntry>();
+            entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
-                testObject.AddEntry(entry.Object);
+            testObject.AddEntry(entry.Object);
 
-                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
+            OrderEntity order = new OrderEntity { BillFirstName = "bob" };
 
-                testObject.CopyToEntity(order, 1);
+            testObject.CopyToEntity(order, 1);
 
-                Assert.Equal("bob", order.BillFirstName);
-            }
+            Assert.Equal("bob", order.BillFirstName);
         }
 
         [Fact]
         public void CopyToEntity_CopiesToEntity_WhenIndexMatchesPassedIndex()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcFieldMap>();
+            var testObject = mock.Create<OdbcFieldMap>();
 
-                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.Value).Returns("joe");
-                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
-                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+            var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+            shipworksField.Setup(e => e.Value).Returns("joe");
+            shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+            shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
 
-                var entry = mock.Mock<IOdbcFieldMapEntry>();
-                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
-                entry.Setup(e => e.Index).Returns(1);
+            var entry = mock.Mock<IOdbcFieldMapEntry>();
+            entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+            entry.Setup(e => e.Index).Returns(1);
 
-                testObject.AddEntry(entry.Object);
+            testObject.AddEntry(entry.Object);
 
-                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
+            OrderEntity order = new OrderEntity { BillFirstName = "bob" };
 
-                testObject.CopyToEntity(order, 1);
+            testObject.CopyToEntity(order, 1);
 
-                Assert.Equal("joe", order.BillFirstName);
-            }
+            Assert.Equal("joe", order.BillFirstName);
         }
 
         [Fact]
         public void CopyToEntity_CopiesValuesToEntity()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = mock.Create<OdbcFieldMap>();
+            var testObject = mock.Create<OdbcFieldMap>();
 
-                var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
-                shipworksField.Setup(e => e.Value).Returns("joe");
-                shipworksField.Setup(e => e.Name).Returns("BillFirstName");
-                shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
+            var shipworksField = mock.Mock<IShipWorksOdbcMappableField>();
+            shipworksField.Setup(e => e.Value).Returns("joe");
+            shipworksField.Setup(e => e.Name).Returns("BillFirstName");
+            shipworksField.Setup(e => e.ContainingObjectName).Returns("OrderEntity");
 
-                var entry = mock.Mock<IOdbcFieldMapEntry>();
-                entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
+            var entry = mock.Mock<IOdbcFieldMapEntry>();
+            entry.Setup(e => e.ShipWorksField).Returns(shipworksField.Object);
 
-                testObject.AddEntry(entry.Object);
+            testObject.AddEntry(entry.Object);
 
-                OrderEntity order = new OrderEntity { BillFirstName = "bob" };
+            OrderEntity order = new OrderEntity { BillFirstName = "bob" };
 
-                testObject.CopyToEntity(order);
+            testObject.CopyToEntity(order);
 
-                Assert.Equal("joe", order.BillFirstName);
-            }
+            Assert.Equal("joe", order.BillFirstName);
         }
 
         [Fact]
         public void ApplyValues_DelegatesToLoadExternalField()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
-                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
-                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
-                externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
+            var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
+            var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
+            externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
 
-                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
-                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
+            var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+            mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
+            mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
 
-                testObject.AddEntry(mapEntry.Object);
+            testObject.AddEntry(mapEntry.Object);
 
-                OdbcRecord odbcRecord = new OdbcRecord(string.Empty);
+            OdbcRecord odbcRecord = new OdbcRecord(string.Empty);
 
-                testObject.ApplyValues(odbcRecord);
+            testObject.ApplyValues(odbcRecord);
 
-                mapEntry.Verify(m => m.LoadExternalField(It.Is<OdbcRecord>(r => r == odbcRecord)), Times.Once);
-            }
+            mapEntry.Verify(m => m.LoadExternalField(It.Is<OdbcRecord>(r => r == odbcRecord)), Times.Once);
         }
 
         [Fact]
         public void ApplyValues_DelegatesToCopyValueToShipworksField()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
-                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
-                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
-                externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
+            var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
+            var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
+            externalOdbcMappableField.Setup(e => e.Value).Returns("blah");
 
-                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
-                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
+            var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+            mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
+            mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
 
-                testObject.AddEntry(mapEntry.Object);
+            testObject.AddEntry(mapEntry.Object);
 
-                OdbcRecord odbcRecord = new OdbcRecord(string.Empty);
+            OdbcRecord odbcRecord = new OdbcRecord(string.Empty);
 
-                testObject.ApplyValues(odbcRecord);
+            testObject.ApplyValues(odbcRecord);
 
-                mapEntry.Verify(m => m.CopyExternalValueToShipWorksField(), Times.Once);
-            }
+            mapEntry.Verify(m => m.CopyExternalValueToShipWorksField(), Times.Once);
         }
 
         [Fact]
         public void ApplyValues_DelegatesToLoadShipWorksField()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
 
-                Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
-                repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
-                mock.Provide(repo.Object);
+            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+            mock.Provide(repo.Object);
 
-                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
-                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
-                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
+            var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
+            var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
 
-                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
-                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
-                testObject.AddEntry(mapEntry.Object);
+            var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+            mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
+            mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
+            testObject.AddEntry(mapEntry.Object);
 
-                IEnumerable<IEntity2> entities = new List<IEntity2>() {new ShipmentEntity()};
+            IEnumerable<IEntity2> entities = new List<IEntity2>() {new ShipmentEntity()};
 
-                testObject.ApplyValues(entities, repo.Object);
+            testObject.ApplyValues(entities, repo.Object);
 
-                mapEntry.Verify(m => m.LoadShipWorksField(It.Is<IEntity2>(r => r.Equals(entities.FirstOrDefault())), It.IsAny<IOdbcFieldValueResolver>()), Times.Once);
-            }
+            mapEntry.Verify(m => m.LoadShipWorksField(It.Is<IEntity2>(r => r.Equals(entities.FirstOrDefault())), It.IsAny<IOdbcFieldValueResolver>()), Times.Once);
         }
 
         [Fact]
         public void ApplyValues_DoesNotDelegatesToLoadShipWorksField_WhenEntitiesIsNull()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
+            OdbcFieldMap testObject = mock.Create<OdbcFieldMap>();
 
-                Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
+            Mock<IOdbcFieldValueResolver> resolver = mock.Mock<IOdbcFieldValueResolver>();
 
-                Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
-                repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
-                mock.Provide(repo.Object);
+            Mock<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>> repo = mock.MockRepository.Create<IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver>>();
+            repo.Setup(x => x[It.IsAny<OdbcFieldValueResolutionStrategy>()]).Returns(resolver.Object);
+            mock.Provide(repo.Object);
 
-                var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
-                var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
-                var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
-                mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
-                mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
-                testObject.AddEntry(mapEntry.Object);
+            var shipWorksOdbcMappableField = mock.Mock<IShipWorksOdbcMappableField>();
+            var externalOdbcMappableField = mock.Mock<IExternalOdbcMappableField>();
+            var mapEntry = mock.Mock<IOdbcFieldMapEntry>();
+            mapEntry.Setup(e => e.ShipWorksField).Returns(shipWorksOdbcMappableField.Object);
+            mapEntry.Setup(e => e.ExternalField).Returns(externalOdbcMappableField.Object);
+            testObject.AddEntry(mapEntry.Object);
 
-                IEnumerable<IEntity2> entities = null;
+            IEnumerable<IEntity2> entities = null;
 
-                testObject.ApplyValues(entities, repo.Object);
+            testObject.ApplyValues(entities, repo.Object);
 
-                mapEntry.Verify(m => m.LoadShipWorksField(null, It.IsAny<IOdbcFieldValueResolver>()), Times.Never);
-            }
+            mapEntry.Verify(m => m.LoadShipWorksField(null, It.IsAny<IOdbcFieldValueResolver>()), Times.Never);
         }
 
         [Fact]

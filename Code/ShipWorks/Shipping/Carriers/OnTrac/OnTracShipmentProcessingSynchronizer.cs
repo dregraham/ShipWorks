@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     /// <summary>
-    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of an OnTrac shipment 
+    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing
+    /// of an OnTrac shipment
     /// </summary>
     public class OnTracShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<OnTracAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OnTracShipmentProcessingSynchronizer"/> class.
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Initializes a new instance of the <see cref="OnTracShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public OnTracShipmentProcessingSynchronizer(ICarrierAccountRepository<OnTracAccountEntity> accountRepository)
+        public OnTracShipmentProcessingSynchronizer(ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

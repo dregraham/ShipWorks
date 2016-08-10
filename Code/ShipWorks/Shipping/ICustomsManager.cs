@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Shipping
 {
@@ -12,7 +13,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        void LoadCustomsItems(ShipmentEntity shipment, bool v);
+        void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter);
+
+        /// <summary>
+        /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,
+        /// or customs have already been generated, nothing will be done.
+        /// 
+        /// Customs items are not persisted to the database, as that is the caller's responsibility.
+        /// </summary>
+        void GenerateCustomsItems(ShipmentEntity shipment);
 
         /// <summary>
         /// Ensure customs items are loaded if the address or shipment type has changed

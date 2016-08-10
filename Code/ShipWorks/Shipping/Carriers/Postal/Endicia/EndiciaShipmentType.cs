@@ -1,14 +1,24 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using Autofac;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -16,15 +26,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaShipmentType : PostalShipmentType
     {
-        private ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
 
         /// <summary>
         /// Endicia ShipmentType code
@@ -58,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets or sets the repository that should be used for retrieving accounts
         /// </summary>
-        public ICarrierAccountRepository<EndiciaAccountEntity> AccountRepository
+        public ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> AccountRepository
         {
             get
             {
@@ -84,6 +85,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             ShouldRetrieveExpress1Rates = true;
             LogEntryFactory = new LogEntryFactory();
+        }
+
+        /// <summary>
+        /// Apply the configured defaults and profile rule settings to the given shipment
+        /// </summary>
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal == null)
+            {
+                shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
+            }
+
+            if (shipment.Postal.Endicia == null)
+            {
+                shipment.Postal.Endicia = new EndiciaShipmentEntity(shipment.ShipmentID);
+            }
+
+            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
@@ -287,9 +306,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // The Endicia or Postal object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
+            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
             {
-                EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
+                IEndiciaAccountEntity account = EndiciaAccountManager.GetAccountReadOnly(shipment.Postal.Endicia.EndiciaAccountID);
                 if (account == null)
                 {
                     if (Accounts == null)
@@ -297,12 +316,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         throw new NullReferenceException("Account cannot be null.");
                     }
 
-                    account = Accounts.FirstOrDefault();
+                    account = AccountRepository.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
                 return false;
@@ -340,8 +359,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException("Endicia scan based payment returns are only available for domestic shipments.");
                 }
 
-                PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
-                PostalConfirmationType postalConfirmationType = (PostalConfirmationType)shipment.Postal.Confirmation;
+                PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
+                PostalConfirmationType postalConfirmationType = (PostalConfirmationType) shipment.Postal.Confirmation;
 
                 switch (postalServiceType)
                 {
@@ -383,7 +402,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
@@ -522,7 +541,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                 EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
 
-            // If scan based returns is not allowed, show the the default returns control
+                // If scan based returns is not allowed, show the the default returns control
                 if (restrictionLevel != EditionRestrictionLevel.None)
                 {
                     return base.CreateReturnsControl();
@@ -552,7 +571,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (shipment.Postal != null && shipment.Postal.Endicia != null)
             {
-                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.Postal.Endicia.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

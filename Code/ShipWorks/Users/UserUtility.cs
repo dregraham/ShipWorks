@@ -269,44 +269,6 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Determins if we can login using a 2.x schema with the given username and password
-        /// </summary>
-        public static bool IsShipWorks2xAdmin(string username, string password)
-        {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "select count(*) as 'IsAdmin' from users where Username = @Username and Password = @Password and IsAdmin = 1 and Deleted = 0";
-                cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", HashPassword(password));
-
-                bool result = ((int) SqlCommandProvider.ExecuteScalar(cmd)) > 0;
-
-                log.DebugFormat("IsShipWorks2xAdmin: {0}", result);
-
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Determines if there are any admin users in a 2.x versioned database.
-        /// </summary>
-        public static bool Has2xAdminUsers()
-        {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "select count(*) as AdminCount from users where IsAdmin = 1 and Deleted = 0";
-
-                bool result = ((int) SqlCommandProvider.ExecuteScalar(cmd)) > 0;
-
-                log.DebugFormat("Has2xAdminUsers: {0}", result);
-
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Create a hash of a user password.
         /// </summary>
         public static string HashPassword(string password)

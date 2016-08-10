@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using System;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
 {
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// <returns>
         ///   <c>true</c> if [the specified shipment] [is eligible for global shipping program]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsEligibleForGlobalShippingProgram(EbayOrderEntity ebayOrder)
+        public bool IsEligibleForGlobalShippingProgram(IEbayOrderEntity ebayOrder)
         {
             bool isEligible = false;
 
@@ -74,10 +74,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// <param name="shipment">The shipment.</param>
         /// <param name="ebayOrder">The ebay order.</param>
         /// <returns>A List of the ShipmentFieldIndex values denoting the fields that were changed.</returns>
-        public List<ShipmentFieldIndex> ConfigureShipmentForGlobalShippingProgram(ShipmentEntity shipment, EbayOrderEntity ebayOrder)
+        public List<ShipmentFieldIndex> ConfigureShipmentForGlobalShippingProgram(ShipmentEntity shipment, IEbayOrderEntity ebayOrder)
         {
             // Note: according to eBay, the facility address is purposely incomplete and omits
-            // Suite 400 in the sandbox environment as an attempt to prevent inadvertant shipments 
+            // Suite 400 in the sandbox environment as an attempt to prevent inadvertant shipments
             // for sandbox orders. As of 9/6/2012, the full address in production should be:
             // Reference# (which is mocked on sandbox)
             // 1850 Airport Exchange Blvd
@@ -89,12 +89,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
 
             if (shipment != null && IsEligibleForGlobalShippingProgram(ebayOrder))
             {
-                // This is a GSP order, so we'll swap out the address of the shipment so it is the 
+                // This is a GSP order, so we'll swap out the address of the shipment so it is the
                 // address of the facility
 
-                // There is not a company name field in the eBay shipping address for a GSP order, 
-                // so we'll set the ShipCompany property as the reference ID since it must be immediately 
-                // above the address. We can't use the name fields because a few of the carriers require 
+                // There is not a company name field in the eBay shipping address for a GSP order,
+                // so we'll set the ShipCompany property as the reference ID since it must be immediately
+                // above the address. We can't use the name fields because a few of the carriers require
                 // a recipient name.
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipCompany, ebayOrder.GspReferenceID);
 
@@ -105,16 +105,16 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
                 if (shipment.Postal != null && shipment.Postal.Usps != null)
                 {
                     // We don't want USPS to perform address validation on this shipment
-                    shipment.Postal.Usps.RequireFullAddressValidation = false;                    
+                    shipment.Postal.Usps.RequireFullAddressValidation = false;
                 }
 
-                // GSP shipments will always be commercial and we need to set the residential result 
-                // to false otherwise we encounter errors with shipping carriers. We don't add this 
+                // GSP shipments will always be commercial and we need to set the residential result
+                // to false otherwise we encounter errors with shipping carriers. We don't add this
                 // to the modified field list because we want this to be permanent
-                shipment.ResidentialDetermination = (int)ResidentialDeterminationType.Commercial;
+                shipment.ResidentialDetermination = (int) ResidentialDeterminationType.Commercial;
                 shipment.ResidentialResult = false;
             }
-            
+
             return modifiedFieldList;
         }
 
@@ -127,11 +127,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// <param name="value">The value.</param>
         private static void SetShipmentFieldValue(List<ShipmentFieldIndex> changedFields, ShipmentEntity shipment, ShipmentFieldIndex fieldIndex, object value)
         {
-            shipment.SetNewFieldValue((int)fieldIndex, value);
+            shipment.SetNewFieldValue((int) fieldIndex, value);
 
             if (changedFields != null && !changedFields.Contains(fieldIndex))
             {
-                // Only tracking the fields that changed, not the number of times it changes, so only 
+                // Only tracking the fields that changed, not the number of times it changes, so only
                 // add the field index if it hasn't already been noted as being changed.
                 changedFields.Add(fieldIndex);
             }
@@ -144,19 +144,19 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// <param name="ebayOrder">The ebay order.</param>
         /// <param name="gspReferenceID"></param>
         /// <returns>A List of the ShipmentFieldIndex values denoting the fields that were changed.</returns>
-        private static IEnumerable<ShipmentFieldIndex> ConfigureRecipientName(ShipmentEntity shipment, EbayOrderEntity ebayOrder, string gspReferenceID)
+        private static IEnumerable<ShipmentFieldIndex> ConfigureRecipientName(ShipmentEntity shipment, IEbayOrderEntity ebayOrder, string gspReferenceID)
         {
             List<ShipmentFieldIndex> modifiedFieldList = new List<ShipmentFieldIndex>();
 
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia || shipment.ShipmentType == (int)ShipmentTypeCode.Express1Endicia)
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                // These carriers place the company name field above the recipient's name, so we're going to 
+                // These carriers place the company name field above the recipient's name, so we're going to
                 // set the name to empty. (This is okay according to a call with eBay on 8/30/2012)
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipFirstName, string.Empty);
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipMiddleName, string.Empty);
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipLastName, string.Empty);
             }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.UpsOnLineTools && UpsUtility.IsUpsSurePostService((UpsServiceType)shipment.Ups.Service))
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.UpsOnLineTools && UpsUtility.IsUpsSurePostService((UpsServiceType) shipment.Ups.Service))
             {
                 // UPS SurePost does not have a company name, so we'll need to use the name field to hold the GSP reference id
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipFirstName, string.Empty);
@@ -166,9 +166,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
             else
             {
                 // The layout of other carriers have the company name below the recipient's name, so
-                // we can set the first and last name based on the GSP address info. 
+                // we can set the first and last name based on the GSP address info.
 
-                // Note: Postal WebTools and USPS require a recipient name otherwise we could 
+                // Note: Postal WebTools and USPS require a recipient name otherwise we could
                 // just set the name to an empty string for all carriers
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipFirstName, ebayOrder.GspFirstName);
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipMiddleName, string.Empty);
@@ -184,11 +184,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// <param name="shipment">The shipment.</param>
         /// <param name="ebayOrder">The ebay order.</param>
         /// <returns>A List of the ShipmentFieldIndex values denoting the fields that were changed.</returns>
-        private List<ShipmentFieldIndex> ConfigureShippingAddress(ShipmentEntity shipment, EbayOrderEntity ebayOrder)
+        private List<ShipmentFieldIndex> ConfigureShippingAddress(ShipmentEntity shipment, IEbayOrderEntity ebayOrder)
         {
             List<ShipmentFieldIndex> modifiedFieldList = new List<ShipmentFieldIndex>();
 
-            // We only have two lines for the street address for the GSP facility, so make sure the 
+            // We only have two lines for the street address for the GSP facility, so make sure the
             // third line is an empty string
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipStreet1, ebayOrder.GspStreet1);
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipStreet2, ebayOrder.GspStreet2);
@@ -196,9 +196,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
 
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipCity, ebayOrder.GspCity);
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipStateProvCode, ebayOrder.GspStateProvince);
-            
-            // Only grab the first 5 digits of the postal code (there was a problem where eBay was started sending invalid 9 digit 
-            // postal codes such as 41018-319). This is added here in addition to the downloader, so customers that have already 
+
+            // Only grab the first 5 digits of the postal code (there was a problem where eBay was started sending invalid 9 digit
+            // postal codes such as 41018-319). This is added here in addition to the downloader, so customers that have already
             // downloaded orders with the invalid postal code can still ship their orders without having to manually update the data.
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipPostalCode, ebayOrder.GspPostalCode.Substring(0, 5));
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipCountryCode, ebayOrder.GspCountryCode);
@@ -219,9 +219,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
             // Remove any contact information about the recipient
             SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipEmail, string.Empty);
 
-            if (shipment.ShipmentType != (int)ShipmentTypeCode.FedEx)
+            if (shipment.ShipmentType != (int) ShipmentTypeCode.FedEx)
             {
-                // Fedex requires a phone number when printing labels, so only wipe the phone 
+                // Fedex requires a phone number when printing labels, so only wipe the phone
                 // number if it the carrier is not FedEx
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipPhone, string.Empty);
             }

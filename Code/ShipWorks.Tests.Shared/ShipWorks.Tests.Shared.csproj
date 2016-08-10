@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.MSTest.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.MSTest.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -137,6 +137,7 @@
     <Compile Include="EntityBuilders\FedExShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\IParcelProfileEntityBuilder.cs" />
     <Compile Include="EntityBuilders\Modify.cs" />
+    <Compile Include="EntityBuilders\OrderItemEntityBuilder.cs" />
     <Compile Include="EntityBuilders\OrderEntityBuilder.cs" />
     <Compile Include="Database\ShipWorksLocalDb.cs" />
     <Compile Include="EntityBuilders\IParcelShipmentEntityBuilder.cs" />
@@ -166,8 +167,8 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.6.0\analyzers\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

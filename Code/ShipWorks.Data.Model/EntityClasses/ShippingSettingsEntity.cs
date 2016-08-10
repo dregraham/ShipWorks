@@ -584,6 +584,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("FedExFimsPassword", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentEditLimit", fieldHashtable);
 		}
 		#endregion
 
@@ -1208,6 +1211,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExFimsPassword, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExFimsPassword, value); }
+		}
+
+		/// <summary> The ShipmentEditLimit property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentEditLimit"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipmentEditLimit
+		{
+			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentEditLimit, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentEditLimit, value); }
 		}
 
 

@@ -11,6 +11,7 @@ using ShipWorks.Users.Security;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -119,7 +120,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = string.Empty;
 
                 // Let anyone who cares know that enabled carriers may have changed.
-                messenger.Send(new EnabledCarriersChangedMessage(this, new List<int>(), new List<int>()));
+                messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
             }
             catch (Exception ex)
                 when (ex is ShipWorksLicenseException || ex is TangoException)

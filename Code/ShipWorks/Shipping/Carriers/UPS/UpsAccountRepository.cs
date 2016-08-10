@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
-    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity>, IUpsOpenAccountRepository
+    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity, IUpsAccountEntity>, IUpsOpenAccountRepository
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
         public override IEnumerable<UpsAccountEntity> Accounts => UpsAccountManager.Accounts;
+
+        /// <summary>
+        /// Returns a read only list of accounts
+        /// </summary>
+        public override IEnumerable<IUpsAccountEntity> AccountsReadOnly => UpsAccountManager.AccountsReadOnly;
 
         /// <summary>
         /// Force a check for changes
@@ -26,6 +32,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             return UpsAccountManager.GetAccount(accountID);
         }
+
+        /// <summary>
+        /// Gets a read only version of the specified account
+        /// </summary>
+        /// <param name="uspsAccountID"></param>
+        /// <returns></returns>
+        public override IUpsAccountEntity GetAccountReadOnly(long accountID) =>
+            UpsAccountManager.GetAccountReadOnly(accountID);
 
         /// <summary>
         ///  Returns the default account as defined by the primary profile
