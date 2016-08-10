@@ -11,7 +11,7 @@ namespace Interapptive.Shared.Metrics
     /// </summary>
     public class TrackedDurationEvent : IDisposable
     {
-        readonly Stopwatch stopwatch;
+        private readonly Stopwatch stopwatch;
         private readonly EventTelemetry eventTelemetry;
 
         /// <summary>
@@ -68,22 +68,22 @@ namespace Interapptive.Shared.Metrics
                 Telemetry.TrackEvent(eventTelemetry);
             }
             // If for some reason the code throws, we don't want to stop the user from
-            // doing their work, so igoring all exceptions here.
+            // doing their work, so ignoring all exceptions here.
             catch
             {
             }
         }
 
         /// <summary>
-        /// Updates the name of the event.
+        /// Changes the name used to identify this specific event.
         /// </summary>
-        protected void UpdateEventName(string name)
+        protected void ChangeName(string name)
         {
             eventTelemetry.Name = name;
         }
 
         /// <summary>
-        /// Dispose
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {

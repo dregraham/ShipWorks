@@ -8,7 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Stores
 {
     /// <summary>
-    /// Utility class for tracking the duration of a Store Settings event, along with other metric info
+    /// An event for obtaining telemetry on store configuration.
     /// </summary>
     public class StoreSettingsTrackedDurationEvent : TrackedDurationEvent, IDisposable
     {
@@ -19,16 +19,17 @@ namespace ShipWorks.Stores
         /// Initializes a new instance of the <see cref="StoreSettingsTrackedDurationEvent"/> class.
         /// </summary>
         /// <param name="formattedName">Name of the formatted.</param>
-        public StoreSettingsTrackedDurationEvent(string formattedName) : base(formattedName)
+        public StoreSettingsTrackedDurationEvent(string formattedName) 
+            : base(formattedName)
         {
             this.formattedName = formattedName;
         }
 
         /// <summary>
-        /// Adds the metric.
+        /// Records the given store configuration/settings and attaches it to this event.
         /// </summary>
         /// <param name="store">The store.</param>
-        public void AddMetric(StoreEntity store)
+        public void RecordStoreConfiguration(StoreEntity store)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -40,14 +41,14 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Dispose
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public new void Dispose()
         {
             string storeType = string.IsNullOrWhiteSpace(storeTypeCode) ? "Unknown" : storeTypeCode;
             string eventName = string.Format(formattedName, storeType);
 
-            UpdateEventName(eventName);
+            ChangeName(eventName);
             base.Dispose();
         }
     }
