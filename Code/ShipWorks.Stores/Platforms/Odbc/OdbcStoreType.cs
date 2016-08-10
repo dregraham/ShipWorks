@@ -44,7 +44,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Creates the license identifier for the OdbcStoreType
         /// </summary>
-        protected override string InternalLicenseIdentifier => $"{Store.StoreID} {SystemData.Fetch().DatabaseID.ToString("D")}";
+        protected override string InternalLicenseIdentifier
+        {
+            get
+            {
+                OdbcStoreEntity odbcStore = (OdbcStoreEntity) Store;
+                StringHash stringHash = new StringHash();
+
+                return $"{stringHash.Hash(odbcStore.ImportConnectionString, "ODBC")} {SystemData.Fetch().DatabaseID.ToString("D")}";
+            }
+        }
 
         /// <summary>
         /// Create a downloader for the OdbcStoreType
