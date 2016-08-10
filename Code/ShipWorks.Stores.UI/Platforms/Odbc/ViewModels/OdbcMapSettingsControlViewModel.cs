@@ -17,7 +17,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 {
     public abstract class OdbcMapSettingsControlViewModel : INotifyPropertyChanged, IOdbcMapSettingsControlViewModel
     {
-        private const string CustomQueryColumnSourceName = "Custom Import";
         private string mapName = string.Empty;
         private IOdbcColumnSource selectedTable;
         private IEnumerable<IOdbcColumnSource> tables;
@@ -40,7 +39,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         {
             MessageHelper = messageHelper;
             this.columnSourceFactory = columnSourceFactory;
-            customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName);
 
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -99,7 +97,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         [Obfuscation(Exclude = true)]
         public IOdbcColumnSource CustomQueryColumnSource
         {
-            get { return customQueryColumnSource; }
+            get {
+                return customQueryColumnSource ??
+                       (customQueryColumnSource = columnSourceFactory(CustomQueryColumnSourceName));
+            }
             set { Handler.Set(nameof(CustomQueryColumnSource), ref customQueryColumnSource, value); }
         }
 
@@ -273,5 +274,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// Loads the map settings.
         /// </summary>
         public abstract void LoadMapSettings(OdbcStoreEntity store);
+
+        /// <summary>
+        /// The column source name to use for custom query
+        /// </summary>
+        public abstract string CustomQueryColumnSourceName { get; }
     }
 }

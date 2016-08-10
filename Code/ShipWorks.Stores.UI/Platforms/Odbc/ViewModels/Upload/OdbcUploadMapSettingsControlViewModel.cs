@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private IOdbcFieldMap fieldMap;
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IOdbcSettingsFile uploadSettingsFile;
+        private string customQueryColumnSourceName;
 
         private const string InitialQueryComment =
             "/**********************************************************************/\n" +
@@ -147,5 +148,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 
             ColumnSourceIsTable = store.UploadColumnSourceType == (int)OdbcColumnSourceType.Table;
         }
+
+        /// <summary>
+        /// The column source name to use for custom query
+        /// </summary>
+        public override string CustomQueryColumnSourceName => "Custom Upload";
     }
 }
