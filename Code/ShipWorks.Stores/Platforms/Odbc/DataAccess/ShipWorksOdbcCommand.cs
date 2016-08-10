@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             this.apiLogEntryFactory = apiLogEntryFactory;
             command = connection.CreateCommand();
         }
-        
+
         /// <summary>
         /// Sends the System.Data.Odbc.OdbcCommand.CommandText to the System.Data.Odbc.OdbcCommand.Connection
         /// and builds an System.Data.Odbc.OdbcDataReader.
@@ -101,7 +101,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         }
 
         /// <summary>
-        /// Uses the configuration of the ODBC command (command text and any parameters) to build 
+        /// Adds the given parameter to the command
+        /// </summary>
+        public void AddParameter(string name, object value)
+        {
+            command.Parameters.AddWithValue(name, value);
+        }
+
+        /// <summary>
+        /// Uses the configuration of the ODBC command (command text and any parameters) to build
         /// a string that can be used for logging the interaction with the database.
         /// </summary>
         /// <returns>A formatted string containing the command text along with the parameter names/values.</returns>
@@ -112,12 +120,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             commandData.Append(Environment.NewLine);
             commandData.Append("Parameters: ");
 
-            // Write out "(none)" when there aren't any parameters; otherwise turn 
+            // Write out "(none)" when there aren't any parameters; otherwise turn
             // the command's parameters into a comma separated list in the format
             // of [ParameterName] = [Value]. (Sonar Lint prevented compilation if
             // this didn't used the ternary operator.)
-            commandData.Append(command.Parameters.Count == 0 ? 
-                "(none)" : 
+            commandData.Append(command.Parameters.Count == 0 ?
+                "(none)" :
                 string.Join(", ", command.Parameters
                 .Cast<OdbcParameter>()
                 .ToDictionary(parameter => parameter.ParameterName,

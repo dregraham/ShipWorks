@@ -106,11 +106,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
             // this means that we have to add all but the order number first
             foreach (IOdbcFieldMapEntry entry in fieldMap.Entries.Except(new[] { orderNumberField }))
             {
-                command.AddParameter(new OdbcParameter(entry.ExternalField.Column.Name, entry.ShipWorksField.Value));
+                command.AddParameter(entry.ExternalField.Column.Name, entry.ShipWorksField.Value);
             }
 
             // now finally add the order number
-            command.AddParameter(new OdbcParameter(orderNumberField.ExternalField.Column.Name, orderNumberField.ShipWorksField.Value));
+            command.AddParameter(orderNumberField.ExternalField.Column.Name, orderNumberField.ShipWorksField.Value.ToString());
         }
     }
 }
