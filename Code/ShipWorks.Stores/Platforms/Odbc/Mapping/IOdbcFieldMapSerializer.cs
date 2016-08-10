@@ -1,15 +1,13 @@
-using System.IO;
-
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
     /// Writes field map entries
     /// </summary>
-    public interface IOdbcFieldMapWriter
-	{
+    public interface IOdbcFieldMapSerializer
+    {
         /// <summary>
-        /// Write the field map
+        /// Serializes the field map
         /// </summary>
-        void Write(Stream stream);
-	}
+        string Serialize();
+    }
 }

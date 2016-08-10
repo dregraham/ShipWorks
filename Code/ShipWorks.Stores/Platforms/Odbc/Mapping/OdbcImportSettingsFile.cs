@@ -30,19 +30,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcImportStrategy OdbcImportStrategy { get; set; }
 
-        /// <summary>
-        /// Reads the additional paramaters from map.
-        /// </summary>
-        protected override void ReadAdditionalParamatersFromMap(JObject settings)
+        protected override void PopulateOdbcSettingsFrom(JObject settings)
         {
+            base.PopulateOdbcSettingsFrom(settings);
+
             OdbcImportStrategy = EnumHelper.GetEnumByApiValue<OdbcImportStrategy>(settings.GetValue("ImportStrategy").ToString());
         }
 
         /// <summary>
-        /// Writes the additional paramaters to map.
+        /// Saves the settings to the JObject
         /// </summary>
-        protected override void WriteAdditionalParamatersToMap(JObject settings)
+        protected override void SaveOdbcSettingsTo(JObject settings)
         {
+            base.SaveOdbcSettingsTo(settings);
+
             settings.Add("ImportStrategy", EnumHelper.GetApiValue(OdbcImportStrategy));
         }
     }
