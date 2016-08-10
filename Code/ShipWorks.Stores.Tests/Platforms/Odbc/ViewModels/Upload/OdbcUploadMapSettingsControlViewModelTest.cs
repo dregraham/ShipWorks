@@ -1,7 +1,9 @@
 ﻿using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Moq;
+using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -279,6 +281,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 var settingsMock = mock.Mock<IOdbcSettingsFile>();
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
                 settingsMock.Setup(s => s.ColumnSourceType).Returns(sourceType);
+                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
 
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
@@ -307,6 +310,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
                 settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.Table);
                 settingsMock.Setup(s => s.ColumnSource).Returns("a table");
+                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
 
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
@@ -341,6 +345,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapMock.Object);
                 settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
                 settingsMock.Setup(s => s.ColumnSource).Returns("my query");
+                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
 
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
@@ -373,6 +378,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 settingsMock.Setup(s => s.ColumnSourceType).Returns(OdbcColumnSourceType.CustomQuery);
                 settingsMock.Setup(s => s.ColumnSource).Returns("my query");
                 settingsMock.Setup(s => s.OdbcFieldMap).Returns(fieldMapFromDisk.Object);
+                settingsMock.Setup(s => s.Open(It.IsAny<TextReader>())).Returns(GenericResult.FromSuccess(new JObject()));
 
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();

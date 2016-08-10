@@ -1,4 +1,6 @@
-﻿using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+﻿using Interapptive.Shared.Utility;
+using Newtonsoft.Json.Linq;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using System.IO;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
@@ -41,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
-        void Open(TextReader reader);
+        GenericResult<JObject> Open(TextReader reader);
 
         /// <summary>
         /// Opens the save file dialog to save the map

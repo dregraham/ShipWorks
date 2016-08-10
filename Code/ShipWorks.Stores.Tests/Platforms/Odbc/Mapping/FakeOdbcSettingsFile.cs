@@ -1,5 +1,7 @@
 ﻿using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using System;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 {
@@ -12,7 +14,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         /// <summary>
         /// Initializes a new instance of the <see cref="FakeOdbcSettingsFile"/> class.
         /// </summary>
-        public FakeOdbcSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper) : base(fieldMap, messageHelper)
+        public FakeOdbcSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper, Func<Type, ILog> logFactory)
+            : base(fieldMap, messageHelper, logFactory(typeof(FakeOdbcSettingsFile)))
         {
         }
 

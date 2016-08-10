@@ -1,6 +1,8 @@
 ﻿using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
@@ -105,15 +107,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             using (Stream streamToOpen = fileDialog.CreateFileStream())
             using (StreamReader reader = new StreamReader(streamToOpen))
             {
-                uploadSettingsFile.Open(reader);
-                ColumnSourceIsTable = uploadSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
-                LoadAndSetColumnSource(uploadSettingsFile.ColumnSource);
-                MapName = uploadSettingsFile.OdbcFieldMap.Name;
+                GenericResult<JObject> openResult = uploadSettingsFile.Open(reader);
+                if (openResult.Success)
+                {
+                    ColumnSourceIsTable = uploadSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
+                    LoadAndSetColumnSource(uploadSettingsFile.ColumnSource);
+                    MapName = uploadSettingsFile.OdbcFieldMap.Name;
 
-                fieldMap = uploadSettingsFile.OdbcFieldMap;
+                    fieldMap = uploadSettingsFile.OdbcFieldMap;
+                }
             }
-
-            MapName = fieldMap.Name;
         }
 
         /// <summary>

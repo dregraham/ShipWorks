@@ -1,5 +1,7 @@
 ﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using System;
@@ -13,14 +15,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     public abstract class OdbcSettingsFile : IOdbcSettingsFile
     {
         private readonly IMessageHelper messageHelper;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcSettingsFile"/> class.
         /// </summary>
-        protected OdbcSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper)
+        protected OdbcSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper, ILog log)
         {
             this.messageHelper = messageHelper;
             OdbcFieldMap = fieldMap;
+            this.log = log;
         }
 
         /// <summary>
@@ -56,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Opens the load file dialog to load the map
         /// </summary>
-        public virtual void Open(TextReader reader)
+        public GenericResult<JObject> Open(TextReader reader)
         {
             try
             {
@@ -65,18 +69,32 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 JObject settings = JObject.Parse(json);
 
                 PopulateOdbcSettingsFrom(settings);
+
+                return GenericResult.FromSuccess(settings);
+            }
+            catch (JsonReaderException ex)
+            {
+                messageHelper.ShowError("Unable to read file.");
+                log.Error(ex.Message, ex);
+                return GenericResult.FromError<JObject>(ex.Message);
             }
             catch (IOException ex)
             {
                 messageHelper.ShowError(ex.Message);
+                log.Error(ex.Message, ex);
+                return GenericResult.FromError<JObject>(ex.Message);
             }
             catch (UnauthorizedAccessException ex)
             {
                 messageHelper.ShowError(ex.Message);
+                log.Error(ex.Message, ex);
+                return GenericResult.FromError<JObject>(ex.Message);
             }
             catch (ShipWorksOdbcException ex)
             {
                 messageHelper.ShowError(ex.Message);
+                log.Error(ex.Message, ex);
+                return GenericResult.FromError<JObject>(ex.Message);
             }
         }
 
@@ -107,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Opens the save file dialog to save the map
         /// </summary>
-        public virtual void Save(TextWriter textWriter)
+        public void Save(TextWriter textWriter)
         {
             try
             {

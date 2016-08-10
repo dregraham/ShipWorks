@@ -1,6 +1,8 @@
 ﻿using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
@@ -108,16 +110,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             using (Stream streamToOpen = fileDialog.CreateFileStream())
             using (StreamReader reader = new StreamReader(streamToOpen))
             {
-                importSettingsFile.Open(reader);
-                DownloadStrategyIsLastModified = importSettingsFile.OdbcImportStrategy == OdbcImportStrategy.ByModifiedTime;
-                ColumnSourceIsTable = importSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
-                LoadAndSetColumnSource(importSettingsFile.ColumnSource);
-                MapName = importSettingsFile.OdbcFieldMap.Name;
+                GenericResult<JObject> openResults = importSettingsFile.Open(reader);
+                if (openResults.Success)
+                {
+                    DownloadStrategyIsLastModified = importSettingsFile.OdbcImportStrategy ==
+                                                     OdbcImportStrategy.ByModifiedTime;
+                    ColumnSourceIsTable = importSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
+                    LoadAndSetColumnSource(importSettingsFile.ColumnSource);
+                    MapName = importSettingsFile.OdbcFieldMap.Name;
 
-                fieldMap = importSettingsFile.OdbcFieldMap;
+                    fieldMap = importSettingsFile.OdbcFieldMap;
+                }
             }
-
-            MapName = fieldMap.Name;
         }
 
         /// <summary>

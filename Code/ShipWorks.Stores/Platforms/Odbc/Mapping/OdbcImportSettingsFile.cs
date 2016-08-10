@@ -1,7 +1,9 @@
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -11,7 +13,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.OdbcSettingsFile" />
     public class OdbcImportSettingsFile : OdbcSettingsFile, IOdbcImportSettingsFile
     {
-        public OdbcImportSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper) : base(fieldMap, messageHelper)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OdbcImportSettingsFile"/> class.
+        /// </summary>
+        public OdbcImportSettingsFile(IOdbcFieldMap fieldMap, IMessageHelper messageHelper, Func<Type, ILog> logFactory) 
+            : base(fieldMap, messageHelper, logFactory(typeof(OdbcImportSettingsFile)))
         {
         }
 
@@ -30,11 +36,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcImportStrategy OdbcImportStrategy { get; set; }
 
+        /// <summary>
+        /// Populates the ODBC settings from.
+        /// </summary>
         protected override void PopulateOdbcSettingsFrom(JObject settings)
         {
             base.PopulateOdbcSettingsFrom(settings);
 
-            OdbcImportStrategy = EnumHelper.GetEnumByApiValue<OdbcImportStrategy>(settings.GetValue("ImportStrategy").ToString());
+            string importStrategy = settings.GetValue("ImportStrategy")?.ToString();
+            if (!string.IsNullOrWhiteSpace(importStrategy))
+            {
+                OdbcImportStrategy = EnumHelper.GetEnumByApiValue<OdbcImportStrategy>(importStrategy);
+            }
         }
 
         /// <summary>
