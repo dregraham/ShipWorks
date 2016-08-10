@@ -1,14 +1,13 @@
-using System;
-using System.IO;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
+using System;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
     /// <summary>
     /// Facilitates writing the ODBC Field Map in JSON
     /// </summary>
-	public class JsonOdbcFieldMapWriter : IOdbcFieldMapWriter
+	public class JsonOdbcFieldMapSerializer : IOdbcFieldMapSerializer
 	{
         private readonly OdbcFieldMap map;
 
@@ -16,32 +15,26 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Constructor
         /// </summary>
         /// <param name="map"></param>
-        public JsonOdbcFieldMapWriter(OdbcFieldMap map)
+        public JsonOdbcFieldMapSerializer(OdbcFieldMap map)
         {
             MethodConditions.EnsureArgumentIsNotNull(map);
             this.map = map;
         }
 
         /// <summary>
-        /// Serializes and writes the ODBC Field Map to the given stream.
+        /// Serializes the ODBC Field Map
         /// </summary>
-	    public void Write(Stream stream)
-		{
-            MethodConditions.EnsureArgumentIsNotNull(stream);
-
-            StreamWriter streamWriter = new StreamWriter(stream);
+        public string Serialize()
+        {
             try
             {
-                string data = JsonConvert.SerializeObject(map, GetSerializerSettings());
-
-                streamWriter.Write(data);
-                streamWriter.Flush();
+                return JsonConvert.SerializeObject(map, GetSerializerSettings());
             }
             catch (Exception)
             {
                 throw new ShipWorksOdbcException("Failed to save the Odbc import field map");
             }
-		}
+        }
 
         /// <summary>
         /// Gets the serializer settings.

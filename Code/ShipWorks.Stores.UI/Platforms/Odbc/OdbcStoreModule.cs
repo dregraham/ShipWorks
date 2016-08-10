@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .AsImplementedInterfaces()
                 .AsSelf();
 
-            builder.RegisterType<JsonOdbcFieldMapWriter>()
+            builder.RegisterType<JsonOdbcFieldMapSerializer>()
                 .AsImplementedInterfaces()
                 .AsSelf();
 

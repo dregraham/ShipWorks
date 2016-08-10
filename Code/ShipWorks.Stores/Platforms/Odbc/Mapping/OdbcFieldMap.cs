@@ -132,16 +132,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Loads the ODBC Field Map from the given stream
-        /// </summary>
-		public void Load(Stream stream)
-        {
-            IOdbcFieldMapReader reader = ioFactory.CreateReader(stream);
-
-            Load(reader);
-        }
-
-        /// <summary>
         /// Loads the ODBC Field Map from the given string
         /// </summary>
         public void Load(string serializedMap)
@@ -173,15 +163,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         }
 
         /// <summary>
-        /// Writes the ODBC Field Map to the given stream
-        /// </summary>
-		public void Save(Stream stream)
-		{
-		    IOdbcFieldMapWriter writer = ioFactory.CreateWriter(this);
-            writer.Write(stream);
-		}
-
-        /// <summary>
         /// Finds the OdbcFieldMapEntries corresponding to the given field
         /// </summary>
         public IEnumerable<IOdbcFieldMapEntry> FindEntriesBy(EntityField2 field)
@@ -204,14 +185,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public IOdbcFieldMap Clone()
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                Save(stream);
-                OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
-                clonedFieldMap.Load(stream);
+            OdbcFieldMap clonedFieldMap = new OdbcFieldMap(ioFactory);
+            clonedFieldMap.Load(Serialize());
 
-                return clonedFieldMap;
-            }
+            return clonedFieldMap;
         }
 
         /// <summary>
@@ -219,16 +196,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public string Serialize()
         {
-            using (Stream memoryStream = new MemoryStream())
-            {
-                Save(memoryStream);
-
-                memoryStream.Position = 0;
-                using (StreamReader reader = new StreamReader(memoryStream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            IOdbcFieldMapSerializer serializer = ioFactory.CreateWriter(this);
+            return serializer.Serialize();
         }
     }
 }

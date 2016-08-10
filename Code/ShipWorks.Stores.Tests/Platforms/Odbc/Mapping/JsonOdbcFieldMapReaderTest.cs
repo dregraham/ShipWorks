@@ -108,18 +108,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
         private string GetSerializedFieldMap()
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                OdbcFieldMap map =
-                    mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), GetIoFactory()));
+            OdbcFieldMap map =
+                mock.Create<OdbcFieldMap>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), GetIoFactory()));
 
-                map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
-                    GetExternalField("SomeColumnName")));
+            map.AddEntry(GetFieldMapEntry(GetShipWorksField(OrderFields.OrderNumber, "Order Number"),
+                GetExternalField("SomeColumnName")));
 
-                map.Save(stream);
-
-                return stream.ConvertToString();
-            }
+            return map.Serialize();
         }
 
         private OdbcFieldMapEntry GetFieldMapEntry(ShipWorksOdbcMappableField shipworksField, ExternalOdbcMappableField externalField)
@@ -142,8 +137,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             var ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
 
             ioFactory.Setup(f => f.CreateWriter(It.IsAny<OdbcFieldMap>()))
-                .Returns((OdbcFieldMap m) => new JsonOdbcFieldMapWriter(m));
-            ioFactory.Setup(f => f.CreateReader(It.IsAny<Stream>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s.ConvertToString(), log.Object));
+                .Returns((OdbcFieldMap m) => new JsonOdbcFieldMapSerializer(m));
+            ioFactory.Setup(f => f.CreateReader(It.IsAny<string>())).Returns<Stream>(s => new JsonOdbcFieldMapReader(s.ConvertToString(), log.Object));
 
             return ioFactory.Object;
         }

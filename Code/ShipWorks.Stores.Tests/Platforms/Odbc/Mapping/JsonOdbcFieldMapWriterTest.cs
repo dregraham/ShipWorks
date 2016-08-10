@@ -1,13 +1,9 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
-using System.IO;
-using Autofac.Features.Indexed;
-using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -22,18 +18,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
-        public void Write_ThrowsArgumentNullException_WhenStreamIsNull()
-        {
-            OdbcFieldMap map = mock.Create<OdbcFieldMap>();
-            JsonOdbcFieldMapWriter testObject = new JsonOdbcFieldMapWriter(map);
-
-            Assert.Throws<ArgumentNullException>(() => testObject.Write(null));
-        }
-
-        [Fact]
         public void JsonOdbcFieldMapWriter_ThrowsArgumentNullException_WhenMapIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new JsonOdbcFieldMapWriter(null));
+            Assert.Throws<ArgumentNullException>(() => new JsonOdbcFieldMapSerializer(null));
         }
 
         [Fact]
@@ -45,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             Mock <IOdbcFieldMapIOFactory> ioFactory = mock.Mock<IOdbcFieldMapIOFactory>();
             OdbcFieldMap map = mock.Create<OdbcFieldMap>();
 
-            JsonOdbcFieldMapWriter testObject = new JsonOdbcFieldMapWriter(map);
+            JsonOdbcFieldMapSerializer testObject = new JsonOdbcFieldMapSerializer(map);
             ioFactory.Setup(f => f.CreateWriter(map)).Returns(testObject);
 
             OdbcColumn column = new OdbcColumn("OrderNumberColumn");
@@ -58,15 +45,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
 
             map.AddEntry(entry);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                testObject.Write(stream);
-                stream.Position = 0;
-                using (var streamReader = new StreamReader(stream))
-                {
-                    Assert.Equal(expectedResult, streamReader.ReadToEnd());
-                }
-            }
+            Assert.Equal(expectedResult, testObject.Serialize());
         }
 
         public void Dispose()
