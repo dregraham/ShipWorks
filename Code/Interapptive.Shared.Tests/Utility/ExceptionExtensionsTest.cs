@@ -9,22 +9,22 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void IsExceptionType_ReturnsTrue_WhenExceptionIsInListOfExceptions()
         {
-            Assert.True((new FakeException1()).IsExceptionType(typeof(FakeException1), typeof(FakeException2)));
+            Assert.True((new FirstFakeException()).IsExceptionType(typeof(FirstFakeException), typeof(SecondFakeException)));
         }
 
         [Fact]
         public void IsExceptionType_ReturnsFalse_WhenExceptionIsNotInListOfExceptions()
         {
-            Assert.False((new FakeException1()).IsExceptionType(typeof(DerivesFromFakeException1), typeof(FakeException2)));
+            Assert.False((new FirstFakeException()).IsExceptionType(typeof(DerivesFromFirstFakeException), typeof(SecondFakeException)));
         }
 
-        public class FakeException1 : Exception
+        public class FirstFakeException : Exception
         { }
 
-        public class FakeException2 : Exception
+        public class SecondFakeException : Exception
         { }
 
-        public class DerivesFromFakeException1 : FakeException1
+        public class DerivesFromFirstFakeException : FirstFakeException
         { }
     }
 }
