@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -10,7 +9,7 @@ namespace ShipWorks.Stores
     /// <summary>
     /// An event for obtaining telemetry on store configuration.
     /// </summary>
-    public class StoreSettingsTrackedDurationEvent : TrackedDurationEvent, IDisposable
+    public class StoreSettingsTrackedDurationEvent : TrackedDurationEvent, IStoreSettingsTrackedDurationEvent
     {
         private readonly string formattedName;
         private string storeTypeCode;
@@ -20,7 +19,7 @@ namespace ShipWorks.Stores
         /// </summary>
         /// <param name="formattedName">Name of the formatted.</param>
         public StoreSettingsTrackedDurationEvent(string formattedName) 
-            : base(formattedName)
+            : base(string.Empty)
         {
             this.formattedName = formattedName;
         }

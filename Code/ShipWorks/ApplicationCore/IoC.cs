@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
@@ -35,9 +33,11 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using System.Linq;
-using System.Windows.Forms;
 using ShipWorks.Users.Security;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -110,7 +110,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<TrackedDurationEvent>()
-                .AsImplementedInterfaces();
+                .As<ITrackedDurationEvent>();
 
             builder.RegisterType<ShipBillAddressEditorDlg>();
 

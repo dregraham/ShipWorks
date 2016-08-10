@@ -1,5 +1,6 @@
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -106,9 +107,14 @@ namespace ShipWorks.Stores.Management
                 using (new ShipWorksSetupLock())
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
+                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = scope.Resolve<IStoreSettingsTrackedDurationEvent>())
                 {
                     // If it was successful, make sure our local list of stores is refreshed
-                    if (wizard.ShowDialog(owner) == DialogResult.OK)
+                    DialogResult dialogResult = wizard.ShowDialog(owner);
+
+                    CollectTelemetry(wizard.store, storeSettingsEvent, dialogResult);
+
+                    if (dialogResult == DialogResult.OK)
                     {
                         StoreManager.CheckForChanges();
 
@@ -123,6 +129,19 @@ namespace ShipWorks.Stores.Management
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks. This can only be done on one computer at a time.");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Collects the telemetry.
+        /// </summary>
+        private static void CollectTelemetry(StoreEntity store, IStoreSettingsTrackedDurationEvent storeSettingsEvent, DialogResult dialogResult)
+        {
+            if (store != null)
+            {
+                storeSettingsEvent.RecordStoreConfiguration(store);
+            }
+
+            storeSettingsEvent.AddProperty("Abandoned", dialogResult == DialogResult.OK ? "Yes" : "No");
         }
 
         /// <summary>
