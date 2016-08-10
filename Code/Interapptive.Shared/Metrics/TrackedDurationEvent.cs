@@ -23,7 +23,7 @@ namespace Interapptive.Shared.Metrics
 
             stopwatch = Stopwatch.StartNew();
         }
-        
+
         /// <summary>
         /// Add a metric value to the event
         /// </summary>
@@ -67,11 +67,19 @@ namespace Interapptive.Shared.Metrics
 
                 Telemetry.TrackEvent(eventTelemetry);
             }
-            // If for some reason the code throws, we don't want to stop the user from 
+            // If for some reason the code throws, we don't want to stop the user from
             // doing their work, so igoring all exceptions here.
             catch
             {
             }
+        }
+
+        /// <summary>
+        /// Updates the name of the event.
+        /// </summary>
+        protected void UpdateEventName(string name)
+        {
+            eventTelemetry.Name = name;
         }
 
         /// <summary>
