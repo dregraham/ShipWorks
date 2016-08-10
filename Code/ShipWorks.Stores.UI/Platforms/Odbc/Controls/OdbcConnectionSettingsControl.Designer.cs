@@ -63,7 +63,7 @@
             this.openImportSettingsWizard.Name = "openImportSettingsWizard";
             this.openImportSettingsWizard.Size = new System.Drawing.Size(125, 23);
             this.openImportSettingsWizard.TabIndex = 2;
-            this.openImportSettingsWizard.Text = "Edit Import Settings";
+            this.openImportSettingsWizard.Text = "Edit Import Settings...";
             this.openImportSettingsWizard.UseVisualStyleBackColor = true;
             this.openImportSettingsWizard.Click += new System.EventHandler(this.OnEditImportSettingsClick);
             // 
@@ -71,7 +71,7 @@
             // 
             this.uploadSettingsLabel.AutoSize = true;
             this.uploadSettingsLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uploadSettingsLabel.Location = new System.Drawing.Point(5, 51);
+            this.uploadSettingsLabel.Location = new System.Drawing.Point(5, 61);
             this.uploadSettingsLabel.Name = "uploadSettingsLabel";
             this.uploadSettingsLabel.Size = new System.Drawing.Size(96, 13);
             this.uploadSettingsLabel.TabIndex = 3;
@@ -79,18 +79,18 @@
             // 
             // editUploadSettings
             // 
-            this.editUploadSettings.Location = new System.Drawing.Point(228, 66);
+            this.editUploadSettings.Location = new System.Drawing.Point(228, 76);
             this.editUploadSettings.Name = "editUploadSettings";
             this.editUploadSettings.Size = new System.Drawing.Size(125, 23);
             this.editUploadSettings.TabIndex = 30;
-            this.editUploadSettings.Text = "Edit Upload Settings";
+            this.editUploadSettings.Text = "Edit Upload Settings...";
             this.editUploadSettings.UseVisualStyleBackColor = true;
             this.editUploadSettings.Click += new System.EventHandler(this.OnEditUploadSettingsClick);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 71);
+            this.label2.Location = new System.Drawing.Point(24, 81);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(198, 13);
             this.label2.TabIndex = 29;
@@ -102,17 +102,17 @@
             this.exportImportMap.Name = "exportImportMap";
             this.exportImportMap.Size = new System.Drawing.Size(110, 23);
             this.exportImportMap.TabIndex = 31;
-            this.exportImportMap.Text = "Save Import Map";
+            this.exportImportMap.Text = "Save Import Map...";
             this.exportImportMap.UseVisualStyleBackColor = true;
             this.exportImportMap.Click += new System.EventHandler(this.OnSaveImportMapClick);
             // 
             // exportUploadMap
             // 
-            this.exportUploadMap.Location = new System.Drawing.Point(359, 66);
+            this.exportUploadMap.Location = new System.Drawing.Point(359, 76);
             this.exportUploadMap.Name = "exportUploadMap";
             this.exportUploadMap.Size = new System.Drawing.Size(110, 23);
             this.exportUploadMap.TabIndex = 32;
-            this.exportUploadMap.Text = "Save Upload Map";
+            this.exportUploadMap.Text = "Save Upload Map...";
             this.exportUploadMap.UseVisualStyleBackColor = true;
             this.exportUploadMap.Click += new System.EventHandler(this.OnSaveUploadMapClick);
             // 
