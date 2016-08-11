@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Quartz.Util;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -114,14 +115,17 @@ namespace ShipWorks.Stores.Management
                     // Show the wizard and collect report the store configuration/settings
                     // for telemetry purposes
                     DialogResult dialogResult = wizard.ShowDialog(owner);
-                    CollectTelemetry(wizard.store, storeSettingsEvent, dialogResult);
 
                     if (dialogResult == DialogResult.OK)
                     {
+                        CollectTelemetry(wizard.Store, storeSettingsEvent, dialogResult);
                         // The store was added, so make sure our local list of stores is refreshed
                         StoreManager.CheckForChanges();
                         return true;
                     }
+
+                    // If canceling out of the add store wizard, collect telemetry from the AbandonedStore property
+                    CollectTelemetry(wizard.AbandonedStore, storeSettingsEvent, dialogResult);
 
                     return false;
                 }
@@ -1088,12 +1092,16 @@ namespace ShipWorks.Stores.Management
             {
                 if (store != null)
                 {
+                    AbandonedStore = store.DeepClone();
                     DeletionService.DeleteStore(store, UserSession.Security);
+                    store = null;
                 }
             }
         }
 
         #endregion
+
+        public StoreEntity AbandonedStore { get; set; }
 
         /// <summary>
         /// Skip this page if no error has occurred.

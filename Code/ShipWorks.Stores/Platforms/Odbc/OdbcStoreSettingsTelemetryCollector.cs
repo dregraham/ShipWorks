@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -92,12 +93,20 @@ namespace ShipWorks.Stores.Platforms.Odbc
             importMap.Load(odbcStore.ImportMap);
 
             IOdbcFieldMapEntry orderNumberEntry = importMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
-            int numberOfItemsPerOrder = importMap.Entries.Max(e => e.Index) + 1;
+
+            IEnumerable<IOdbcFieldMapEntry> odbcFieldMapEntries = importMap.Entries as IOdbcFieldMapEntry[] ?? importMap.Entries.ToArray();
+
+            if (!odbcFieldMapEntries.Any())
+            {
+                return "None";
+            }
 
             if (orderNumberEntry == null)
             {
                 return "Unknown";
             }
+
+            int numberOfItemsPerOrder = odbcFieldMapEntries.Max(e => e.Index) + 1;
 
             if (numberOfItemsPerOrder == 1 && importMap.RecordIdentifierSource == orderNumberEntry.ExternalField.Column.Name)
             {
