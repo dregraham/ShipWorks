@@ -41,8 +41,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
             trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStore));
             trackedDurationEvent.AddProperty("Import.ColumnSourceType", GetImportColumnSourceTypeName(odbcStore));
             trackedDurationEvent.AddProperty("Import.IsSingleLine", GetImportIsSingleLine(odbcStore));
-            trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStore));
             trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStore));
+            trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStore));
             trackedDurationEvent.AddProperty("Upload.ColumnSourceType", GetUploadColumnSourceTypeName(odbcStore));
         }
 
@@ -54,7 +54,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the name of the import column source.
         /// </summary>
-        private static string GetImportColumnSourceTypeName(OdbcStoreEntity odbcStore) => EnumHelper.GetApiValue((OdbcColumnSourceType)odbcStore.ImportColumnSourceType);
+        private static string GetImportColumnSourceTypeName(OdbcStoreEntity odbcStore) 
+            => EnumHelper.GetApiValue((OdbcColumnSourceType)odbcStore.ImportColumnSourceType);
 
         /// <summary>
         /// Determines if the import map is single line.
@@ -82,20 +83,36 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Gets the name of the upload driver.
-        /// </summary>
-        private string GetUploadDriverName(OdbcStoreEntity odbcStore) => dataSourceService.GetUploadDataSource(odbcStore).Driver;
-
-        /// <summary>
         /// Gets the name of the upload strategy.
         /// </summary>
         private string GetUploadStrategyName(OdbcStoreEntity odbcStore)
             => EnumHelper.GetApiValue((OdbcShipmentUploadStrategy)odbcStore.UploadStrategy);
 
         /// <summary>
+        /// Gets the name of the upload driver.
+        /// </summary>
+        private string GetUploadDriverName(OdbcStoreEntity odbcStore)
+        {
+            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+                return "None";
+            }
+
+            return dataSourceService.GetUploadDataSource(odbcStore)?.Driver ?? "Unknown";
+        }
+
+
+        /// <summary>
         /// Gets the name of the upload column source type.
         /// </summary>
         private string GetUploadColumnSourceTypeName(OdbcStoreEntity odbcStore)
-            => EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStore.UploadColumnSourceType);
+        {
+            if (odbcStore.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+                return "None";
+            }
+
+            return EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStore.UploadColumnSourceType);
+        }
     }
 }
