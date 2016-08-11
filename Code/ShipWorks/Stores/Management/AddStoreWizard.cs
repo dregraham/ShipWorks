@@ -107,7 +107,9 @@ namespace ShipWorks.Stores.Management
                 using (new ShipWorksSetupLock())
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
-                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = scope.Resolve<IStoreSettingsTrackedDurationEvent>(new TypedParameter(typeof(string), "Store.{0}.Setup")))
+                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = 
+                    IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreSettingsTrackedDurationEvent>(
+                        new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
                     // Show the wizard and collect report the store configuration/settings 
                     // for telemetry purposes

@@ -42,7 +42,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public new void Dispose()
+        public override void Dispose()
         {
             string storeType = string.IsNullOrWhiteSpace(storeTypeCode) ? "Unknown" : storeTypeCode;
             string eventName = string.Format(formattedName, storeType);
