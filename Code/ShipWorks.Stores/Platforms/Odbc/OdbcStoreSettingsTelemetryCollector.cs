@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Determines if the import map is single line.
         /// </summary>
-        /// <returns>True, False, or Unknown </returns>
+        /// <returns>Yes, No, or Unknown </returns>
         private string GetImportIsSingleLine(OdbcStoreEntity odbcStore)
         {
             IOdbcFieldMap importMap = odbcFieldMapFactory();
@@ -73,7 +73,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 return "Unknown";
             }
 
-            return (numberOfItemsPerOrder == 1 && importMap.RecordIdentifierSource == orderNumberEntry.ExternalField.Column.Name).ToString();
+            if (numberOfItemsPerOrder == 1 && importMap.RecordIdentifierSource == orderNumberEntry.ExternalField.Column.Name)
+            {
+                return "Yes";
+            }
+
+            return "No";
         }
 
         /// <summary>

@@ -76,33 +76,33 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void CollectTelemetry_IsSingleLineSetToTrue_WhenOneItemPerOrder_AndRecordIdentifierSourceEqualsOrderNumberExternalFieldColumnName()
+        public void CollectTelemetry_IsSingleLineSetToYes_WhenOneItemPerOrder_AndRecordIdentifierSourceEqualsOrderNumberExternalFieldColumnName()
         {
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
-            trackedDurationEventMock.Verify(e => e.AddProperty("Import.IsSingleLine", "True"));
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.IsSingleLine", "Yes"));
         }
 
         [Fact]
-        public void CollectTelemetry_IsSingleLineSetToFalse_WhenTwoItemsPerOrder_AndRecordIdentifierSourceEqualsOrderNumberExternalFieldColumnName()
+        public void CollectTelemetry_IsSingleLineSetToNo_WhenTwoItemsPerOrder_AndRecordIdentifierSourceEqualsOrderNumberExternalFieldColumnName()
         {
             maxEntryIndex = 1;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
-            trackedDurationEventMock.Verify(e => e.AddProperty("Import.IsSingleLine", "False"));
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.IsSingleLine", "No"));
         }
 
         [Fact]
-        public void CollectTelemetry_IsSingleLineSetToFalse_WhenOneItemPerOrder_AndRecordIdentifierSourceNotEqualToOrderNumberExternalFieldColumnName()
+        public void CollectTelemetry_IsSingleLineSetToNo_WhenOneItemPerOrder_AndRecordIdentifierSourceNotEqualToOrderNumberExternalFieldColumnName()
         {
             orderNumberExternalColumnName = "AnotherName";
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
-            trackedDurationEventMock.Verify(e => e.AddProperty("Import.IsSingleLine", "False"));
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.IsSingleLine", "No"));
         }
 
         [Fact]

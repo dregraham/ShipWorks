@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Management
                 using (new ShipWorksSetupLock())
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
-                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = scope.Resolve<IStoreSettingsTrackedDurationEvent>())
+                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = scope.Resolve<IStoreSettingsTrackedDurationEvent>(new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
                     // If it was successful, make sure our local list of stores is refreshed
                     DialogResult dialogResult = wizard.ShowDialog(owner);
@@ -141,7 +141,7 @@ namespace ShipWorks.Stores.Management
                 storeSettingsEvent.RecordStoreConfiguration(store);
             }
 
-            storeSettingsEvent.AddProperty("Abandoned", dialogResult == DialogResult.OK ? "Yes" : "No");
+            storeSettingsEvent.AddProperty("Abandoned", dialogResult == DialogResult.OK ? "No" : "Yes");
         }
 
         /// <summary>

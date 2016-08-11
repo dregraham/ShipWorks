@@ -32,8 +32,8 @@ namespace ShipWorks.Stores
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                IStoreSettingsTelemetryCollector telemetryController = scope.ResolveKeyed<IStoreSettingsTelemetryCollector>(store.StoreTypeCode);
-                telemetryController.CollectTelemetry(store, this);
+                IStoreSettingsTelemetryCollector telemetryController = scope.ResolveOptionalKeyed<IStoreSettingsTelemetryCollector>(store.StoreTypeCode);
+                telemetryController?.CollectTelemetry(store, this);
             }
 
             storeTypeCode = EnumHelper.GetDescription(store.StoreTypeCode);
