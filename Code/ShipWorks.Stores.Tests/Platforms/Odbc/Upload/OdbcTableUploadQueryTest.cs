@@ -155,8 +155,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
             cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns((string c) => c);
 
+            ShipWorksOdbcMappableField orderNumberField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number",
+                OdbcFieldValueResolutionStrategy.Default);
+            orderNumberField.LoadValue(123);
+
             OdbcFieldMapEntry orderNumberEntry = new OdbcFieldMapEntry(
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default),
+                orderNumberField,
                 new ExternalOdbcMappableField(new OdbcColumn("ExternalOrderNumberColumn")));
 
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -199,8 +203,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             Mock<IShipWorksOdbcCommandBuilder> cmdBuilder = mock.Mock<IShipWorksOdbcCommandBuilder>();
             cmdBuilder.Setup(c => c.QuoteIdentifier(It.IsAny<string>())).Returns((string c) => c);
 
+            ShipWorksOdbcMappableField orderNumberField = new ShipWorksOdbcMappableField(OrderFields.OrderNumber,
+                "Order Number", OdbcFieldValueResolutionStrategy.Default);
+            orderNumberField.LoadValue(123);
+
             OdbcFieldMapEntry orderNumberEntry = new OdbcFieldMapEntry(
-                new ShipWorksOdbcMappableField(OrderFields.OrderNumber, "Order Number", OdbcFieldValueResolutionStrategy.Default),
+                orderNumberField,
                 new ExternalOdbcMappableField(new OdbcColumn("ExternalOrderNumberColumn")));
 
             Mock<IOdbcFieldMap> fieldMap = mock.Mock<IOdbcFieldMap>();
@@ -232,7 +240,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             OdbcTableUploadQuery testObject = mock.Create<OdbcTableUploadQuery>(new TypedParameter(typeof(OdbcStoreEntity), store));
             testObject.ConfigureCommand(command.Object);
 
-            command.Verify(c=>c.AddParameter(It.IsAny<OdbcParameter>()), Times.Exactly(2));
+            command.Verify(c=>c.AddParameter(It.IsAny<string>(), It.IsAny<object>()), Times.Exactly(2));
         }
 
         public void Dispose()
