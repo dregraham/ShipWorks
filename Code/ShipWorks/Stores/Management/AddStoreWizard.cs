@@ -253,6 +253,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         public StoreEntity Store => store;
 
+
+        /// <summary>
+        /// The store that was being configured when the wizard is abandoned
+        /// </summary>
+        public StoreEntity AbandonedStore { get; set; }
+
         /// <summary>
         /// Wizard is loading
         /// </summary>
@@ -1100,8 +1106,6 @@ namespace ShipWorks.Stores.Management
         }
 
         #endregion
-
-        public StoreEntity AbandonedStore { get; set; }
 
         /// <summary>
         /// Skip this page if no error has occurred.
