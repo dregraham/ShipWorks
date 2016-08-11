@@ -14,12 +14,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreSettingsTelemetryCollector : IStoreSettingsTelemetryCollector
     {
         private readonly IOdbcDataSourceService dataSourceService;
-        private readonly Func<IOdbcFieldMap> odbcFieldMapFactory;
+        private readonly IOdbcFieldMapFactory odbcFieldMapFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreSettingsTelemetryCollector"/> class.
         /// </summary>
-        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, Func<IOdbcFieldMap> odbcFieldMapFactory)
+        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, IOdbcFieldMapFactory odbcFieldMapFactory)
         {
             this.dataSourceService = dataSourceService;
             this.odbcFieldMapFactory = odbcFieldMapFactory;
@@ -30,20 +30,31 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public void CollectTelemetry(StoreEntity store, ITrackedDurationEvent trackedDurationEvent)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, "store");
-
-            OdbcStoreEntity odbcStore = store as OdbcStoreEntity;
-            if (odbcStore == null)
+            try
             {
-                throw new ArgumentException("Not an Odbc store.");
+                OdbcStoreEntity odbcStore = store as OdbcStoreEntity;
+                if (odbcStore == null)
+                {
+                    // This is invalid, but we don't want to throw an exception here
+                    // that could result in a crash. 
+                    trackedDurationEvent.AddProperty("Error", "An attempt was made to collect ODBC telemetry on a non-ODBC store.");
+                }
+                else
+                {
+                    trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStore));
+                    trackedDurationEvent.AddProperty("Import.QueryType", GetImportColumnSourceTypeName(odbcStore));
+                    trackedDurationEvent.AddProperty("Import.OrderItemDataStructure", OrderItemDataStructure(odbcStore));
+                    trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStore));
+                    trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStore));
+                    trackedDurationEvent.AddProperty("Upload.QueryType", GetUploadColumnSourceTypeName(odbcStore));
+                }
             }
-
-            trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStore));
-            trackedDurationEvent.AddProperty("Import.ColumnSourceType", GetImportColumnSourceTypeName(odbcStore));
-            trackedDurationEvent.AddProperty("Import.IsSingleLine", GetImportIsSingleLine(odbcStore));
-            trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStore));
-            trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStore));
-            trackedDurationEvent.AddProperty("Upload.ColumnSourceType", GetUploadColumnSourceTypeName(odbcStore));
+            catch (Exception exception)
+            {
+                // Just denote this as an invalid operation. We never want telemetry 
+                // to result in a crash.
+                trackedDurationEvent.AddProperty("Error", exception.Message);
+            }
         }
 
         /// <summary>
@@ -60,10 +71,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Determines if the import map is single line.
         /// </summary>
-        /// <returns>Yes, No, or Unknown </returns>
-        private string GetImportIsSingleLine(OdbcStoreEntity odbcStore)
+        /// <returns>Single line, Multi-line, or Unknown</returns>
+        private string OrderItemDataStructure(OdbcStoreEntity odbcStore)
         {
-            IOdbcFieldMap importMap = odbcFieldMapFactory();
+            IOdbcFieldMap importMap = odbcFieldMapFactory.CreateEmptyFieldMap();
             importMap.Load(odbcStore.ImportMap);
 
             IOdbcFieldMapEntry orderNumberEntry = importMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
@@ -76,10 +87,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
 
             if (numberOfItemsPerOrder == 1 && importMap.RecordIdentifierSource == orderNumberEntry.ExternalField.Column.Name)
             {
-                return "Yes";
+                return "Single line";
             }
 
-            return "No";
+            return "Multi-line";
         }
 
         /// <summary>
