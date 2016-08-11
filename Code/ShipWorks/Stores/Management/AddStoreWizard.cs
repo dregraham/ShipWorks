@@ -107,11 +107,11 @@ namespace ShipWorks.Stores.Management
                 using (new ShipWorksSetupLock())
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
-                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = 
+                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent =
                     IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreSettingsTrackedDurationEvent>(
                         new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
-                    // Show the wizard and collect report the store configuration/settings 
+                    // Show the wizard and collect report the store configuration/settings
                     // for telemetry purposes
                     DialogResult dialogResult = wizard.ShowDialog(owner);
                     CollectTelemetry(wizard.store, storeSettingsEvent, dialogResult);
@@ -1089,7 +1089,6 @@ namespace ShipWorks.Stores.Management
                 if (store != null)
                 {
                     DeletionService.DeleteStore(store, UserSession.Security);
-                    store = null;
                 }
             }
         }
