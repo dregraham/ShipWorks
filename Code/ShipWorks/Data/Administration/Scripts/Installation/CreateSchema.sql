@@ -2905,6 +2905,10 @@ PRINT N'Creating index [IX_PrintResult_RelatedObjectID] on [dbo].[PrintResult]'
 GO
 CREATE NONCLUSTERED INDEX [IX_PrintResult_RelatedObjectID] ON [dbo].[PrintResult] ([RelatedObjectID])
 GO
+PRINT N'Creating index [IX_PrintResult_PrintDateRelatedObjectID] on [dbo].[PrintResult]'
+GO
+CREATE NONCLUSTERED INDEX [IX_PrintResult_PrintDateRelatedObjectID] ON [dbo].[PrintResult] ([PrintDate], [RelatedObjectID])
+GO
 ALTER TABLE [dbo].[PrintResult] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[PrintResult]'
