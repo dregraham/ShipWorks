@@ -143,6 +143,7 @@
     <Compile Include="IOrderNote.cs" />
     <Compile Include="IOrderRepository.cs" />
     <Compile Include="IOrderChargeCalculator.cs" />
+    <Compile Include="IStoreSettingsTelemetryCollector.cs" />
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreSettingsTelemetryCollector.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\IOdbcFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcFieldValueResolutionStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolver.cs" />
@@ -290,6 +292,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
+    <Compile Include="StoreSettingsTrackedDurationEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

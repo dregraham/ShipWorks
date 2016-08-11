@@ -199,6 +199,7 @@
     <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcSampleDataCommandTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcSchemaTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreSettingsTelemetryCollectorTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreTypeTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceTest.cs" />
     <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQueryTest.cs" />

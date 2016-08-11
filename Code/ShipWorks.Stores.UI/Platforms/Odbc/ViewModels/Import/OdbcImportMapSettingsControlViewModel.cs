@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private bool isQueryValid;
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
+        private string customQueryColumnSourceName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
@@ -181,7 +182,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             ColumnSourceIsTable = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table;
         }
-        
+
+        /// <summary>
+        /// The column source name to use for custom query
+        /// </summary>
+        public override string CustomQueryColumnSourceName => "Custom Import";
+
         /// <summary>
         /// Executes the query.
         /// </summary>
