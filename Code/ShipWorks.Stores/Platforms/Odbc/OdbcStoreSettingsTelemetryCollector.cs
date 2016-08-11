@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the name of the import column source.
         /// </summary>
-        private static string GetImportColumnSourceTypeName(OdbcStoreEntity odbcStore) => EnumHelper.GetDescription((OdbcColumnSourceType)odbcStore.ImportColumnSourceType);
+        private static string GetImportColumnSourceTypeName(OdbcStoreEntity odbcStore) => EnumHelper.GetApiValue((OdbcColumnSourceType)odbcStore.ImportColumnSourceType);
 
         /// <summary>
         /// Determines if the import map is single line.
@@ -90,12 +90,12 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the name of the upload strategy.
         /// </summary>
         private string GetUploadStrategyName(OdbcStoreEntity odbcStore)
-            => EnumHelper.GetDescription((OdbcShipmentUploadStrategy)odbcStore.UploadStrategy);
+            => EnumHelper.GetApiValue((OdbcShipmentUploadStrategy)odbcStore.UploadStrategy);
 
         /// <summary>
         /// Gets the name of the upload column source type.
         /// </summary>
         private string GetUploadColumnSourceTypeName(OdbcStoreEntity odbcStore)
-            => EnumHelper.GetDescription((OdbcColumnSourceType) odbcStore.UploadColumnSourceType);
+            => EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStore.UploadColumnSourceType);
     }
 }

@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
-            trackedDurationEventMock.Verify(e => e.AddProperty("Import.ColumnSourceType", EnumHelper.GetDescription(sourceType)));
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.ColumnSourceType", EnumHelper.GetApiValue(sourceType)));
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
-            trackedDurationEventMock.Verify(e => e.AddProperty("Upload.Strategy", EnumHelper.GetDescription(sourceType)));
+            trackedDurationEventMock.Verify(e => e.AddProperty("Upload.Strategy", EnumHelper.GetApiValue(sourceType)));
         }
 
         [Theory]
@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
-            trackedDurationEventMock.Verify(e => e.AddProperty("Upload.ColumnSourceType", EnumHelper.GetDescription(sourceType)));
+            trackedDurationEventMock.Verify(e => e.AddProperty("Upload.ColumnSourceType", EnumHelper.GetApiValue(sourceType)));
         }
 
         private void MockDataSourceService()
