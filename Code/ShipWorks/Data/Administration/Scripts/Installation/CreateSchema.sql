@@ -1965,6 +1965,11 @@ PRINT N'Creating index [IX_FilterNode_ParentFilterNodeID] on [dbo].[FilterNode]'
 GO
 CREATE NONCLUSTERED INDEX [IX_FilterNode_ParentFilterNodeID] ON [dbo].[FilterNode] ([ParentFilterNodeID])
 GO
+PRINT N'Creating index [IX_FilterNode_FilterSequenceID_FilterNodeContentID_Purpose] on [dbo].[FilterNode]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNode_FilterSequenceID_FilterNodeContentID_Purpose] ON [dbo].[FilterNode] ([FilterSequenceID], [FilterNodeContentID], [Purpose]) INCLUDE ([FilterNodeID])
+GO
+
 PRINT N'Creating [dbo].[FilterLayout]'
 GO
 CREATE TABLE [dbo].[FilterLayout]
@@ -2023,6 +2028,12 @@ PRINT N'Creating index [IX_FilterChild_ParentFilterID] on [dbo].[FilterSequence]
 GO
 CREATE NONCLUSTERED INDEX [IX_FilterChild_ParentFilterID] ON [dbo].[FilterSequence] ([ParentFilterID])
 GO
+PRINT N'Creating index [IX_FilterSequence_FilterID] on [dbo].[FilterSequence]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterSequence_FilterID] ON [dbo].[FilterSequence] ([FilterID]) INCLUDE ([FilterSequenceID])
+GO
+
+
 PRINT N'Creating [dbo].[FilterNodeColumnSettings]'
 GO
 CREATE TABLE [dbo].[FilterNodeColumnSettings]
@@ -2092,6 +2103,11 @@ PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
 GO
+PRINT N'Creating index [IX_Filter_IsFolder] on [dbo].[Filter]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Filter_IsFolder] ON [dbo].[Filter] ([IsFolder]) INCLUDE ([FilterID])
+GO
+
 PRINT N'Creating [dbo].[GenericModuleStore]'
 GO
 CREATE TABLE [dbo].[GenericModuleStore]
