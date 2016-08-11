@@ -109,15 +109,15 @@ namespace ShipWorks.Stores.Management
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
                 using (IStoreSettingsTrackedDurationEvent storeSettingsEvent = scope.Resolve<IStoreSettingsTrackedDurationEvent>(new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
-                    // If it was successful, make sure our local list of stores is refreshed
+                    // Show the wizard and collect report the store configuration/settings 
+                    // for telemetry purposes
                     DialogResult dialogResult = wizard.ShowDialog(owner);
-
                     CollectTelemetry(wizard.store, storeSettingsEvent, dialogResult);
 
                     if (dialogResult == DialogResult.OK)
                     {
+                        // The store was added, so make sure our local list of stores is refreshed
                         StoreManager.CheckForChanges();
-
                         return true;
                     }
 
