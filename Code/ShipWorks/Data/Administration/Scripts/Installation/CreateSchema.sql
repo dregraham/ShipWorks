@@ -1370,6 +1370,10 @@ PRINT N'Creating index [IX_DownloadDetail_String] on [dbo].[DownloadDetail]'
 GO
 CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1])
 GO
+PRINT N'Creating index [IX_DownloadDetail_OrderID] on [dbo].[DownloadDetail]'
+GO
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderID] ON [dbo].[DownloadDetail] ([OrderID]) INCLUDE ([DownloadID], [InitialDownload])
+GO
 PRINT N'Creating [dbo].[EbayCombinedOrderRelation]'
 GO
 CREATE TABLE [dbo].[EbayCombinedOrderRelation]
