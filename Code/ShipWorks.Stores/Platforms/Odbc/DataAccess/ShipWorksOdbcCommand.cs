@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             IApiLogEntry apiLogger = apiLogEntryFactory(ApiLogSource.Odbc, "Read");
             apiLogger.LogRequest(BuildLoggedCommandText(), "log");
 
-            return command.ExecuteReader();
+            return command.ExecuteReader(commandBehavior);
         }
 
         /// <summary>
