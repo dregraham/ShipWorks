@@ -11,11 +11,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 {
     public class OdbcCustomUploadQueryTest
     {
+        const long OrderID = 42;
+
         [Fact]
         public void GenerateSql_DelegatesToProcessTokens()
         {
             const string uploadColumnSource = "Upload Column Source";
-            const long shipmentId = 42;
+            
 
             using (var mock = AutoMock.GetLoose())
             {
@@ -24,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
                     UploadColumnSource = uploadColumnSource
                 };
 
-                ShipmentEntity shipment = new ShipmentEntity(shipmentId);
+                ShipmentEntity shipment = new ShipmentEntity() {OrderID = OrderID};
 
                 var tokenProcessor = mock.MockRepository.Create<ITemplateTokenProcessor>();
 
@@ -32,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
 
                 testObject.GenerateSql();
 
-                tokenProcessor.Verify(p=>p.ProcessTokens(uploadColumnSource, shipmentId, false), Times.Once);
+                tokenProcessor.Verify(p=>p.ProcessTokens(uploadColumnSource, OrderID, false), Times.Once);
             }
         }
 
@@ -40,7 +42,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
         public void GenerateSql_ThrowsShipworksOdbcException_WhenTemplateProcessorThrowsProcessTokenException()
         {
             const string uploadColumnSource = "Upload Column Source";
-            const long shipmentId = 42;
 
             using (var mock = AutoMock.GetLoose())
             {
@@ -49,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
                     UploadColumnSource = uploadColumnSource
                 };
 
-                ShipmentEntity shipment = new ShipmentEntity(shipmentId);
+                ShipmentEntity shipment = new ShipmentEntity() {OrderID = OrderID};
 
                 var tokenProcessor = mock.MockRepository.Create<ITemplateTokenProcessor>();
                 tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<long>(), false)).Throws<TemplateTokenException>();

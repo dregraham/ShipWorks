@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         {
             try
             {
-                return templateTokenProcessor.ProcessTokens(store.UploadColumnSource, shipment.ShipmentID, false);
+                return templateTokenProcessor.ProcessTokens(store.UploadColumnSource, shipment.OrderID, false);
             }
             catch (TemplateException ex)
             {
