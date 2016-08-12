@@ -24,7 +24,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private IOdbcFieldMap fieldMap;
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IOdbcSettingsFile uploadSettingsFile;
-        private string customQueryColumnSourceName;
 
         private const string InitialQueryComment =
             "/**********************************************************************/\n" +
