@@ -137,8 +137,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private string GetUploadDriverName(OdbcStoreEntity odbcStore)
         {
-            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ||
-                string.IsNullOrWhiteSpace(odbcStore.UploadConnectionString))
+            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return "None";
             }
