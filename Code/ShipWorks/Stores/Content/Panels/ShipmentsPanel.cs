@@ -85,13 +85,9 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(lifetimeScope.Resolve<ISchedulerProvider>().WindowsFormsEventLoop)
-                .Subscribe(x => ReloadContent());
-
-            messenger.OfType<OrderSelectionChangedMessage>()
-                .Where(x => x.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
-                .Select(x => x.LoadedOrderSelection.Single())
-                .OfType<LoadedOrderSelection>()
-                .Subscribe(x => loadedOrder = x.Order);
+                .Do(LoadSelectedOrder)
+                .Do(x => ReloadContent())
+                .Subscribe();
 
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
@@ -104,6 +100,28 @@ namespace ShipWorks.Stores.Content.Panels
                     ratesControl.Visible = true;
                     RefreshSelectedShipments();
                 });
+        }
+
+        /// <summary>
+        /// Loads the order that has been selected
+        /// </summary>
+        /// <remarks>if more than one order is selected, set loaded order to null</remarks>
+        /// <param name="orderSelectionChangedMessage"></param>
+        private void LoadSelectedOrder(OrderSelectionChangedMessage orderSelectionChangedMessage)
+        {
+            // If a single order is selected set loaded order to that order
+            if (orderSelectionChangedMessage.LoadedOrderSelection.Count() == 1)
+            {
+                LoadedOrderSelection orderSelection =
+                    (LoadedOrderSelection) orderSelectionChangedMessage.LoadedOrderSelection.First();
+
+                loadedOrder = orderSelection.Order;
+            }
+            else
+            {
+                // More than one or no order has been selected
+                loadedOrder = null;
+            }
         }
 
         /// <summary>
@@ -315,7 +333,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnCopyTracking(object sender, EventArgs e)
         {
-            if (entityGrid.Selection.Count == 1)
+            if (entityGrid.Selection.Count == 1 && loadedOrder != null)
             {
                 ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
                 if (shipment != null)
@@ -373,9 +391,12 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void EditShipments(IEnumerable<long> shipmentKeys, InitialShippingTabDisplay initialTab)
         {
-            Messenger.Current.Send(new OpenShippingDialogMessage(this,
-                loadedOrder.Shipments.Where(s => shipmentKeys.Contains(s.ShipmentID)),
-                initialTab));
+            if (loadedOrder != null)
+            {
+                Messenger.Current.Send(new OpenShippingDialogMessage(this,
+                    loadedOrder.Shipments.Where(s => shipmentKeys.Contains(s.ShipmentID)),
+                    initialTab));
+            }
         }
 
         /// <summary>
@@ -395,23 +416,26 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void DeleteShipment(long shipmentID)
         {
-            DialogResult result = MessageHelper.ShowQuestion(this, "Delete the selected shipment?");
-
-            if (result == DialogResult.OK)
+            if (loadedOrder != null)
             {
-                ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == shipmentID);
+                DialogResult result = MessageHelper.ShowQuestion(this, "Delete the selected shipment?");
 
-                if (shipment == null)
+                if (result == DialogResult.OK)
                 {
-                    MessageHelper.ShowMessage(this, "The shipment has already been deleted.");
-                }
-                else
-                {
-                    ShippingManager.DeleteShipment(shipment);
-                    Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { loadedOrder.OrderID }));
-                }
+                    ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == shipmentID);
 
-                ReloadContent();
+                    if (shipment == null)
+                    {
+                        MessageHelper.ShowMessage(this, "The shipment has already been deleted.");
+                    }
+                    else
+                    {
+                        ShippingManager.DeleteShipment(EntityUtility.CloneEntity(shipment, false));
+                        Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { loadedOrder.OrderID }));
+                    }
+
+                    ReloadContent();
+                }
             }
         }
 
@@ -439,7 +463,7 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 // If there's multiple, just show edit, even if there all processed.  Probably for no better
                 // reason than I'm being lazy right now.
-                if (entityGrid.Selection.Count == 1)
+                if (entityGrid.Selection.Count == 1 && loadedOrder != null)
                 {
                     ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
                     if (shipment != null)
