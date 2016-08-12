@@ -32,6 +32,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             InitializeComponent();
             SteppingInto += OnSteppingInto;
             StepNext += OnNext;
+            StepBack += OnBack;
         }
 
         /// <summary>
@@ -53,6 +54,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
             {
                 e.NextPage = this;
                 return;
+            }
+
+            viewModel.SaveMapSettings(store);
+        }
+
+        /// <summary>
+        /// Save the map to the ODBC Store
+        /// </summary>
+        private void OnBack(object sender, WizardStepEventArgs e)
+        {
+            if (store == null)
+            {
+                store = GetStore<OdbcStoreEntity>();
             }
 
             viewModel.SaveMapSettings(store);
