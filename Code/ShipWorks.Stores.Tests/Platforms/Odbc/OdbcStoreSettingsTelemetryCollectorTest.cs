@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
                 ImportConnectionString = "not a null string",
                 UploadConnectionString = "also not null"
             };
-            
+
             mock = AutoMock.GetLoose();
 
             trackedDurationEventMock = mock.MockRepository.Create<ITrackedDurationEvent>();
@@ -80,10 +80,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void CollectTelemetry_ImportDriverSetFromDataSourceService()
         {
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            
+
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.Driver", ImportDriverName));
+        }
+
+        [Fact]
+        public void CollectTelemetry_ImportDriverSetToNone_WhenImportConnectionStringIsEmpty()
+        {
+            odbcStore.ImportConnectionString = string.Empty;
+            var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+
+            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.Driver", "None"));
         }
 
         [Theory]
@@ -97,6 +108,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.QueryType", EnumHelper.GetApiValue(sourceType)));
+        }
+
+        [Fact]
+        public void CollectTelemetry_ImportColumnSourceTypeSetToNone_WhenDriveIsNone()
+        {
+            odbcStore.ImportConnectionString = string.Empty;
+
+            var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.QueryType", "None"));
         }
 
         [Fact]
@@ -139,6 +161,27 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "Multi-line"));
+        }
+
+        [Fact]
+        public void CollectTelemetry_OrderItemDataStructure_SetToNone_WhenImportDriveIsNone()
+        {
+            odbcStore.ImportConnectionString = string.Empty;
+            var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "None"));
+        }
+
+        [Fact]
+        public void CollectTelemetry_OrderItemDataStructure_SetToNone_WhenMapHasNoEntries()
+        {
+            MockEmptyFieldMap();
+
+            var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+
+            trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "None"));
         }
 
         [Theory]
@@ -212,6 +255,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             importFieldMapMock.Setup(m => m.RecordIdentifierSource).Returns(() => mapRecordIdentifierSource);
             importFieldMapMock.Setup(m=>m.Entries).Returns(() => new[] { orderNumberFieldMapEntryMock.Object });
 
+
+            fieldMapFactory = mock.MockRepository.Create<IOdbcFieldMapFactory>();
+            fieldMapFactory.Setup(f => f.CreateEmptyFieldMap()).Returns(importFieldMapMock.Object);
+
+            mock.Provide(fieldMapFactory.Object);
+        }
+
+        private void MockEmptyFieldMap()
+        {
+            importFieldMapMock = mock.MockRepository.Create<IOdbcFieldMap>();
 
             fieldMapFactory = mock.MockRepository.Create<IOdbcFieldMapFactory>();
             fieldMapFactory.Setup(f => f.CreateEmptyFieldMap()).Returns(importFieldMapMock.Object);
