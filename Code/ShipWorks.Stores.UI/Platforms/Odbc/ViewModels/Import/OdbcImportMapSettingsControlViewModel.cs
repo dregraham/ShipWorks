@@ -31,7 +31,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private bool isQueryValid;
         private readonly IIndex<FileDialogType, IFileDialog> fileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
-        private string customQueryColumnSourceName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMapSettingsControlViewModel"/> class.
