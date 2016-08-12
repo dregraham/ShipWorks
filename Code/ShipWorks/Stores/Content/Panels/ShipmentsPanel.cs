@@ -110,10 +110,10 @@ namespace ShipWorks.Stores.Content.Panels
         private void LoadSelectedOrder(OrderSelectionChangedMessage orderSelectionChangedMessage)
         {
             // If a single order is selected set loaded order to that order
-            if (orderSelectionChangedMessage.LoadedOrderSelection.Count() == 1)
+            if (orderSelectionChangedMessage.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
             {
                 LoadedOrderSelection orderSelection =
-                    (LoadedOrderSelection) orderSelectionChangedMessage.LoadedOrderSelection.First();
+                    orderSelectionChangedMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().FirstOrDefault();
 
                 loadedOrder = orderSelection.Order;
             }
@@ -333,9 +333,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnCopyTracking(object sender, EventArgs e)
         {
-            if (entityGrid.Selection.Count == 1 && loadedOrder != null)
+            if (entityGrid.Selection.Count == 1)
             {
-                ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
+                ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
                 if (shipment != null)
                 {
                     try
@@ -391,7 +391,10 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void EditShipments(IEnumerable<long> shipmentKeys, InitialShippingTabDisplay initialTab)
         {
-            if (loadedOrder != null)
+            // In case the loaded order changes before we test for null later
+            OrderEntity localOrder = loadedOrder;
+
+            if (localOrder != null)
             {
                 Messenger.Current.Send(new OpenShippingDialogMessage(this,
                     loadedOrder.Shipments.Where(s => shipmentKeys.Contains(s.ShipmentID)),
@@ -422,7 +425,7 @@ namespace ShipWorks.Stores.Content.Panels
 
                 if (result == DialogResult.OK)
                 {
-                    ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == shipmentID);
+                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == shipmentID);
 
                     if (shipment == null)
                     {
@@ -463,9 +466,9 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 // If there's multiple, just show edit, even if there all processed.  Probably for no better
                 // reason than I'm being lazy right now.
-                if (entityGrid.Selection.Count == 1 && loadedOrder != null)
+                if (entityGrid.Selection.Count == 1)
                 {
-                    ShipmentEntity shipment = loadedOrder.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
+                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
                     if (shipment != null)
                     {
                         if (shipment.Processed || shipment.Voided)
