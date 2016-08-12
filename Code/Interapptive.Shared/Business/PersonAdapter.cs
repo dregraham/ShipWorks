@@ -168,6 +168,16 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Create a new person adapter from a copy of the given adapter
+        /// </summary>
+        public PersonAdapter CopyToNew()
+        {
+            PersonAdapter copy = new PersonAdapter();
+            CopyTo(copy);
+            return copy;
+        }
+
+        /// <summary>
         /// Equals
         /// </summary>
         public override bool Equals(object obj)

@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             FilteredRates = filteredRates;
 
-            // Assume the user will opt to use an existing account, so we only have to 
+            // Assume the user will opt to use an existing account, so we only have to
             // change the value in in one spot (when signing up for an account)
             IgnoreAllCounterRates = true;
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             if (shipmentCount <= 1)
             {
-                // There's only one shipment, so it doesn't make sense to show the UI 
+                // There's only one shipment, so it doesn't make sense to show the UI
                 // regarding remaining shipments in the batch
                 useExistingAccountsForRemainingLabel.Visible = false;
             }
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             if (ShipmentTypeManager.IsPostal(initialShipmentType.ShipmentTypeCode))
             {
-                // Use the general USPS logo for all postal types 
+                // Use the general USPS logo for all postal types
                 bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
 
                 // Some service types already contain USPS in the service description, so only add it if
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         }
 
         /// <summary>
-        /// Positions the sign up button in relation to the size of the string contained in the createCarrierAccountDescription 
+        /// Positions the sign up button in relation to the size of the string contained in the createCarrierAccountDescription
         /// label. This prevents a chunk of empty space appearing between the label and the button when there is only a single
         /// line of text in the label.
         /// </summary>
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         {
             using (Graphics g = CreateGraphics())
             {
-                // Use the size of the control hosting the text to find the height and 
+                // Use the size of the control hosting the text to find the height and
                 // adjust the sign-up button accordingly
                 SizeF size = g.MeasureString(createCarrierAccountDescription.Text, createCarrierAccountDescription.Font, createCarrierAccountDescription.Size);
                 signUpButton.Top = createCarrierAccountDescription.Top + (int) size.Height + 3;
@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             if (existingAccountRate != null)
             {
                 // We have a rate that is not a counter rate, so we know the user has an
-                // account setup, so we'll hide the panel for adding an account, adjust 
+                // account setup, so we'll hide the panel for adding an account, adjust
                 // the location of the "use existing" panel, and resize the height of
                 // the wizard accordingly
                 addExistingAccountPanel.Visible = false;
@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
 
-                // Show the actual amount and the difference between the best rate and 
+                // Show the actual amount and the difference between the best rate and
                 // the cheapest available rate
                 existingAccountRateAmount.Text = string.Format("{0:C2}", existingAccountRate.AmountOrDefault);
 
@@ -323,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 }
                 else
                 {
-                    // Give the user a chance to cancel out of the wizard if they accidentally 
+                    // Give the user a chance to cancel out of the wizard if they accidentally
                     // chose the wrong provider type and canceled out of the wizard
                     Show(Owner);
                 }
@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         }
 
         /// <summary>
-        /// Helper method to designate the selected shipment as being configured and 
+        /// Helper method to designate the selected shipment as being configured and
         /// included in the global shipping settings
         /// </summary>
         private void MarkSelectedShipmentTypeAsBeingUsed()
@@ -342,7 +342,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             // We also want to ensure sure that the provider is no longer excluded in
             // the global settings
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int) SelectedShipmentType.ShipmentTypeCode).ToArray();
+            settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != SelectedShipmentType.ShipmentTypeCode).ToArray();
 
             ShippingSettings.Save(settings);
         }

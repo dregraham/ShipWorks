@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -444,7 +443,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             testObject.Save();
 
             shipmentAdapter.VerifySet(sa => sa.ShipDate = testObject.ShipDate, Times.Once());
-            Assert.Equal((int)ServiceLevelType.Anytime, testObject.ServiceLevel);
+            Assert.Equal((int) ServiceLevelType.Anytime, testObject.ServiceLevel);
         }
 
         [Fact]
@@ -734,7 +733,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
             BestRateShipmentViewModel testObject = mock.Create<BestRateShipmentViewModel>();
             testObject.Load(shipmentAdapter.Object);
 
-            EnumList<ServiceLevelType> expectedEnumList = EnumHelper.GetEnumList<ServiceLevelType>();
+            List<EnumEntry<ServiceLevelType>> expectedEnumList = EnumHelper.GetEnumList<ServiceLevelType>().ToList();
 
             expectedEnumList.TrueForAll(slt => testObject.ServiceLevelTypes.ContainsKey((int) slt.Value));
 
@@ -791,7 +790,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
 
             shipmentAdapter = autoMock.Mock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(sa => sa.ShipmentTypeCode).Returns(ShipmentTypeCode.BestRate);
-            shipmentAdapter.Setup(sa => sa.ServiceType).Returns((int)UpsServiceType.UpsGround);
+            shipmentAdapter.Setup(sa => sa.ServiceType).Returns((int) UpsServiceType.UpsGround);
             shipmentAdapter.Setup(sa => sa.ShipDate).Returns(new DateTime(2015, 1, 1, 1, 1, 1));
             shipmentAdapter.Setup(sa => sa.ContentWeight).Returns(0.5);
             shipmentAdapter.Setup(sa => sa.SupportsPackageTypes).Returns(false);

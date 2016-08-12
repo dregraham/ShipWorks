@@ -1,4 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -30,14 +38,6 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -61,10 +61,6 @@ namespace ShipWorks.Shipping
         // it reentrantly.
         private bool loadingSelectedShipments = false;
 
-        // Usually when changing selected shipments if the service control type doesn't change we don't recreate it, we just load the new data into it.
-        // But after changing shipping settings we need to make sure a new one gets initialized to pick up any new settings.
-        private bool forceRecreateServiceControl = false;
-
         // Indicates which tab in the dialog will be initially displayed
         private InitialShippingTabDisplay initialDisplay = InitialShippingTabDisplay.Shipping;
 
@@ -87,6 +83,9 @@ namespace ShipWorks.Shipping
         private RateSelectedEventArgs preSelectedRateEventArgs;
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
+
+        private Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
+        private CustomsControlCache customsControlCache = new CustomsControlCache();
 
         private readonly Timer shipSenseChangedTimer = new Timer();
         private const int shipSenseChangedDebounceTime = 500;
@@ -151,9 +150,12 @@ namespace ShipWorks.Shipping
             ResizeBegin += (sender, args) => ratesSplitContainer.Panel1MinSize = 0;
             ResizeEnd += (sender, args) => SetServiceControlMinimumHeight();
 
-            //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-            shipments.ForEach(OrderUtility.PopulateOrderDetails);
-            shipments.ForEach(x => shippingManager.EnsureShipmentLoaded(x));
+            shipments.ForEach(shipment =>
+            {
+                OrderUtility.PopulateOrderDetails(shipment);
+                shippingManager.EnsureShipmentLoaded(shipment);
+            });
+
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
@@ -286,7 +288,7 @@ namespace ShipWorks.Shipping
 
             if (!multiValued && comboShipmentType.SelectedIndex >= 0)
             {
-                selected = (ShipmentTypeCode)comboShipmentType.SelectedValue;
+                selected = (ShipmentTypeCode) comboShipmentType.SelectedValue;
             }
 
             List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = ShipmentTypeManager.ShipmentTypes
@@ -456,13 +458,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Update the shipment details section to display the data currently in the selected shipments
         /// </summary>
-        [NDependIgnoreLongMethodAttribute]
-        private Task LoadSelectedShipments(bool resortWhenDone, bool getRatesWhenDone)
+        [NDependIgnoreLongMethod]
+        private async Task LoadSelectedShipments(bool resortWhenDone, bool getRatesWhenDone)
         {
             // If we're already in the process of loading shipments, there is no need to process this
             if (loadingSelectedShipments)
             {
-                return TaskUtility.CompletedTask;
+                return;
             }
 
             // We are now in the process of loading shipments
@@ -473,7 +475,7 @@ namespace ShipWorks.Shipping
 
             // Get the list of setup shipment types up front - so in case it changes from another ShipWorks in the middle of loading,
             // all shipments of the same type are loaded in the same way.
-            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode)v).ToList();
+            uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode) v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
@@ -485,65 +487,60 @@ namespace ShipWorks.Shipping
             userState["resortWhenDone"] = resortWhenDone;
             userState["getRatesWhenDone"] = getRatesWhenDone;
 
-            // We need to load a copy of the shipments, since its going to be on the background thread.  Otherwise the UI could try to draw at the exact same
-            // time it was being loaded on the background, and crashes could occur.
-            IEnumerable<ShipmentEntity> shipmentsToLoad = shipmentControl.SelectedRows.Select(r => EntityUtility.CloneEntity(r.Shipment));
+            IEnumerable<ShipmentEntity> shipmentsToLoad = shipmentControl.SelectedShipments;
+            bool canceled = false;
 
-            TaskCompletionSource<object> completionSource = new TaskCompletionSource<object>();
-
-            // Code to execute once background load is complete
-            executor.ExecuteCompleted += (sender, e) =>
+            using (SqlAdapter adapter = new SqlAdapter())
             {
-                LoadSelectedShipmentsCompleted(sender, e);
-                completionSource.SetResult(null);
-            };
-
-            // Code to execute for each shipment
-            executor.ExecuteAsync((shipment, state, issueAdder) =>
-            {
-                // If we already know its deleted, don't bother
-                if (shipment.DeletedFromDatabase)
+                // Code to execute for each shipment
+                BackgroundExecutorCompletedEventArgs<ShipmentEntity> result = await executor.ExecuteAsync((shipment, state, issueAdder) =>
                 {
-                    deleted.Add(shipment);
-                }
-                else
-                {
-                    try
-                    {
-                        shippingManager.EnsureShipmentLoaded(shipment);
-
-                        // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
-                        CustomsManager.LoadCustomsItems(shipment, false);
-
-                        loaded.Add(shipment);
-                    }
-                    catch (ObjectDeletedException)
+                    // If we already know its deleted, don't bother
+                    if (shipment.DeletedFromDatabase)
                     {
                         deleted.Add(shipment);
                     }
-                    catch (SqlForeignKeyException)
+                    else
                     {
-                        deleted.Add(shipment);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
-                        // the New Shipment creation procedure can be initiated.  This can result in
-                        // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
-                        if (ex.Data.Contains("UpdateDynamicData"))
+                        try
+                        {
+                            shippingManager.EnsureShipmentLoaded(shipment);
+
+                            // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
+                            CustomsManager.LoadCustomsItems(shipment, false, adapter);
+
+                            loaded.Add(shipment);
+                        }
+                        catch (ObjectDeletedException)
                         {
                             deleted.Add(shipment);
                         }
-                        else
+                        catch (SqlForeignKeyException)
                         {
-                            // we don't want any other causes of InvalidOperationException to get eaten
-                            throw;
+                            deleted.Add(shipment);
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
+                            // the New Shipment creation procedure can be initiated.  This can result in
+                            // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
+                            if (ex.Data.Contains("UpdateDynamicData"))
+                            {
+                                deleted.Add(shipment);
+                            }
+                            else
+                            {
+                                // we don't want any other causes of InvalidOperationException to get eaten
+                                throw;
+                            }
                         }
                     }
-                }
-            }, shipmentsToLoad, userState); // Execute the code for each shipment
+                }, shipmentsToLoad, userState); // Execute the code for each shipment
 
-            return completionSource.Task;
+                canceled = result.Canceled;
+            }
+
+            LoadSelectedShipmentsCompleted(userState, canceled);
         }
 
         /// <summary>
@@ -581,16 +578,15 @@ namespace ShipWorks.Shipping
         /// The second part of the load selected shipments routine, after we have assured all carrier specific data has been loaded
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void LoadSelectedShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentEntity> e)
+        private void LoadSelectedShipmentsCompleted(Dictionary<string, object> userState, bool canceled)
         {
             loadingSelectedShipments = false;
 
             // Extract userState
-            Dictionary<string, object> userState = (Dictionary<string, object>)e.UserState;
-            loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
-            List<ShipmentEntity> deleted = (List<ShipmentEntity>)userState["deleted"];
-            bool resortWhenDone = (bool)userState["resortWhenDone"];
-            bool getRatesWhenDone = (bool)userState["getRatesWhenDone"];
+            loadedShipmentEntities = (List<ShipmentEntity>) userState["loaded"];
+            List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
+            bool resortWhenDone = (bool) userState["resortWhenDone"];
+            bool getRatesWhenDone = (bool) userState["getRatesWhenDone"];
 
             // Go thread each shipment that we loaded and update the corresponding row in the grid with the latest shipment data
             ApplyShipmentsToGridRows(loadedShipmentEntities);
@@ -604,14 +600,14 @@ namespace ShipWorks.Shipping
             //
             // If they had canceled, then the selection will be bigger than what was loaded obviously - and the rest of this function
             // will take care of unselecting it.
-            if (!e.Canceled && HasSelectionChanged(loadedShipmentEntities))
+            if (!canceled && HasSelectionChanged(loadedShipmentEntities))
             {
                 LoadSelectedShipments(resortWhenDone);
                 return;
             }
 
             resortWhenDone = resortWhenDone ||
-                             DeselectRowsIfCanceled(e.Canceled, resortWhenDone) ||
+                             DeselectRowsIfCanceled(canceled, resortWhenDone) ||
                              deleted.Any();
 
             // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
@@ -754,7 +750,7 @@ namespace ShipWorks.Shipping
                 if (shipmentType != null)
                 {
                     // If the selected type is one that's not currently enabled, add it back in so it can be selected
-                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
+                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
                     if (enabledTypes.All(p => p.Value != shipmentType.ShipmentTypeCode))
                     {
                         enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
@@ -896,7 +892,7 @@ namespace ShipWorks.Shipping
         {
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
-            forceRecreateServiceControl = true;
+            LoadCustomsControl(shipments, shipmentType, enableEditing);
 
             // If there is a service control, load the data into it before making it visible
             if (newServiceControl != null)
@@ -905,9 +901,6 @@ namespace ShipWorks.Shipping
             }
 
             ReplaceServiceControlIfChanged(newServiceControl);
-
-            // Update the custom's control
-            LoadCustomsControl(shipments, shipmentType, enableEditing);
 
             // Update the provider in the shipment grid
             shipmentControl.Refresh();
@@ -935,40 +928,18 @@ namespace ShipWorks.Shipping
                 reduceFlash.Dock = DockStyle.Fill;
                 serviceControlArea.Controls.Add(reduceFlash);
             }
+            else
+            {
+                oldServiceControl.UnloadShipments();
+                UnhookEvents(oldServiceControl);
+            }
 
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
             AddNewServiceControl(newServiceControl);
 
-            RemoveExistingServiceControl(oldServiceControl, reduceFlash);
-        }
-
-        /// <summary>
-        /// Remove existing service control from the dialog if it's not null
-        /// </summary>
-        private void RemoveExistingServiceControl(ServiceControlBase oldServiceControl, Control reduceFlash)
-        {
-            // Finally, remove the old service control, or the blank panel we created
-            if (oldServiceControl != null)
-            {
-                oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
-                oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
-                oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
-                oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
-                oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-                oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
-                oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-                oldServiceControl.ClearRatesAction = x => { };
-                rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
-
-                oldServiceControl.Dispose();
-            }
-            else
-            {
-                reduceFlash.Dispose();
-            }
+            reduceFlash?.Dispose();
         }
 
         /// <summary>
@@ -976,9 +947,13 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void AddNewServiceControl(ServiceControlBase newServiceControl)
         {
+            // Clear the rate control events so that any leftover events don't fire for the new service control.
+            rateControl.ClearEvents();
+
             // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
             if (newServiceControl == null)
             {
+                serviceControlArea.Controls.Clear();
                 return;
             }
 
@@ -990,11 +965,38 @@ namespace ShipWorks.Shipping
             newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
             newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
             newServiceControl.ClearRatesAction = ClearRates;
+
             rateControl.RateSelected += newServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
+            rateControl.ReloadRatesRequired += OnRateReloadRequired;
 
             newServiceControl.Dock = DockStyle.Fill;
+            serviceControlArea.Controls.Clear();
             serviceControlArea.Controls.Add(newServiceControl);
+        }
+
+        /// <summary>
+        /// Add the new service control to the dialog, if it's not null
+        /// </summary>
+        private void UnhookEvents(ServiceControlBase oldServiceControl)
+        {
+            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
+            if (oldServiceControl == null)
+            {
+                return;
+            }
+
+            oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+            oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+            oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+            oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+            oldServiceControl.ClearRatesAction = ClearRates;
+            rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+            rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
+            rateControl.ReloadRatesRequired -= OnRateReloadRequired;
         }
 
         /// <summary>
@@ -1007,29 +1009,19 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            ServiceControlBase newServiceControl = shipmentType == null ?
-                new MultiSelectServiceControl(rateControl) :
-                shipmentType.CreateServiceControl(rateControl, lifetimeScope);
+            int key = shipmentType != null ? (int) shipmentType.ShipmentTypeCode : -1;
 
-            if (newServiceControl == null)
+            if (serviceControlCache.ContainsKey(key))
             {
-                return null;
+                return serviceControlCache[key];
             }
 
-            // If the type we need didn't change, then don't change it
-            if (!forceRecreateServiceControl &&
-                ServiceControl != null &&
-                ServiceControl.GetType() == newServiceControl.GetType() &&
-                ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
-            {
-                // Get rid of the one we just created and use the old one
-                newServiceControl.Dispose();
-                return ServiceControl;
-            }
-
-            newServiceControl.Initialize(lifetimeScope);
-            newServiceControl.Width = serviceControlArea.Width;
-            return newServiceControl;
+            ServiceControlBase serviceControl = shipmentType?.CreateServiceControl(rateControl, lifetimeScope) ??
+                new MultiSelectServiceControl(rateControl);
+            serviceControl.Initialize(lifetimeScope);
+            serviceControl.Width = serviceControlArea.Width;
+            serviceControlCache.Add(key, serviceControl);
+            return serviceControl;
         }
 
         /// <summary>
@@ -1048,7 +1040,7 @@ namespace ShipWorks.Shipping
                 ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
 
                 // Check that the combo box has the shipment type in it
-                List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
+                List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
                 if (dataSource.Select(d => d.Value).All(v => v != shipmentTypeCode))
                 {
                     // The combo box does not have the shipment type in it, so we need to reload
@@ -1268,8 +1260,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-            OrderUtility.PopulateOrderDetails(shipment);
+            Debug.Assert(shipment.Order != null, "Still need to call PopulateOrderDetails.  Order is null.");
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
             shipSenseSynchronizer.SynchronizeWith(shipment);
@@ -1296,66 +1287,53 @@ namespace ShipWorks.Shipping
         private void UpdateInsuranceDisplay() => ServiceControl?.UpdateInsuranceDisplay();
 
         /// <summary>
-        /// Update the custom's control with the given shipments, controlling if it can be edited or not
+        /// Update the customs control with the given shipments, controlling if it can be edited or not
+        /// </summary>
+        private void LoadCustomsControl(IEnumerable<ShipmentEntity> shipments)
+        {
+            ShipmentType shipmentType = shipments.Any() ? GetShipmentType(shipments) : null;
+
+            // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
+            bool enableEditing = shipments.None(s => s.Processed) &&
+                shipments.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
+
+            LoadCustomsControl(shipments, shipmentType, enableEditing);
+        }
+
+        /// <summary>
+        /// Update the customs control with the given shipments, controlling if it can be edited or not
         /// </summary>
         private void LoadCustomsControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing)
         {
             CustomsControlBase newCustomsControl = null;
 
-            if (shipments.Any())
+            if (shipments.Any(CustomsManager.IsCustomsRequired))
             {
                 // If its null, its multi select
-                newCustomsControl = shipmentType == null ? new CustomsControlBase() : shipmentType.CreateCustomsControl();
+                newCustomsControl = customsControlCache.Get(shipmentType);
 
-                // If the type we need didn't change, then don't change it
-                if (CustomsControl != null && CustomsControl.GetType() == newCustomsControl.GetType())
-                {
-                    newCustomsControl = CustomsControl;
-                }
-                else
-                {
-                    newCustomsControl.Initialize();
-                }
-            }
-
-            // If there is a service control, load the data into it before making it visible
-            if (newCustomsControl != null)
-            {
                 newCustomsControl.LoadShipments(shipments, enableEditing);
-                newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-            }
 
-            // See if the customs control has changed
-            if (CustomsControl != newCustomsControl)
-            {
-                CustomsControlBase oldCustomsControl = CustomsControl;
-                Control reduceFlash = null;
+                if (CustomsControl != newCustomsControl)
+                {
+                    if (CustomsControl != null)
+                    {
+                        CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                        CustomsControl.UnloadShipments();
+                    }
 
-                // If there was not an old service control, create a blank panel that will cover our new service control
-                // while it's controls are being positioned
-                if (oldCustomsControl == null)
-                {
-                    reduceFlash = new Panel();
-                    reduceFlash.Dock = DockStyle.Fill;
-                    customsControlArea.Controls.Add(reduceFlash);
-                }
+                    newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
 
-                // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
-                if (newCustomsControl != null)
-                {
-                    newCustomsControl.Dock = DockStyle.Fill;
-                    customsControlArea.Controls.Add(newCustomsControl);
-                }
+                    using (Control reduceFlash = new Panel())
+                    {
+                        reduceFlash.Dock = DockStyle.Fill;
+                        customsControlArea.Controls.Clear();
+                        customsControlArea.Controls.Add(reduceFlash);
 
-                // Finally, remove the old service control, or the blank panel we created
-                if (oldCustomsControl != null)
-                {
-                    oldCustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-                    oldCustomsControl.Dispose();
-                }
-                else
-                {
-                    reduceFlash.Dispose();
+                        customsControlArea.Controls.Add(newCustomsControl);
+
+                        customsControlArea.Controls.Remove(reduceFlash);
+                    }
                 }
             }
 
@@ -1374,10 +1352,18 @@ namespace ShipWorks.Shipping
                 tabControl.TabPages.Remove(tabPageCustoms);
             }
 
-            if (anyNeedCustoms && !tabControl.Contains(tabPageCustoms))
+            if (anyNeedCustoms)
             {
-                // Insert after the main tab, but before Tracking
-                tabControl.TabPages.Insert(1, tabPageCustoms);
+                if (CustomsControl == null)
+                {
+                    LoadCustomsControl(shipments);
+                }
+
+                if (!tabControl.Contains(tabPageCustoms))
+                {
+                    // Insert after the main tab, but before Tracking
+                    tabControl.TabPages.Insert(1, tabPageCustoms);
+                }
             }
         }
 
@@ -1485,7 +1471,7 @@ namespace ShipWorks.Shipping
                         // If the there is a specific shipment type selected, set it
                         if (!comboShipmentType.MultiValued)
                         {
-                            shipment.ShipmentTypeCode = (ShipmentTypeCode)comboShipmentType.SelectedValue;
+                            shipment.ShipmentTypeCode = (ShipmentTypeCode) comboShipmentType.SelectedValue;
                         }
                     }
                 }
@@ -1525,8 +1511,8 @@ namespace ShipWorks.Shipping
         {
             contextMenuProfiles.Items.Clear();
 
-            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?)null :
-                (ShipmentTypeCode)comboShipmentType.SelectedValue;
+            ShipmentTypeCode? shipmentTypeCode = comboShipmentType.MultiValued ? (ShipmentTypeCode?) null :
+                (ShipmentTypeCode) comboShipmentType.SelectedValue;
 
             // Add each relevant profile
             if (shipmentTypeCode != null)
@@ -1568,8 +1554,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
-            ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity)menuItem.Tag;
+            ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
+            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
@@ -1675,31 +1661,13 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Shipments have been added to the grid
-        /// </summary>
-        private void OnShipmentsAdded(object sender, EventArgs e)
-        {
-            UpdateEditControlsSecurity();
-
-            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
-            foreach (ShipmentEntity shipment in eventArgs.ShipmentsAdded)
-            {
-                //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-                OrderUtility.PopulateOrderDetails(shipment);
-                shippingManager.EnsureShipmentLoaded(shipment);
-
-                shipSenseSynchronizer.Add(shipment);
-            }
-        }
-
-        /// <summary>
         /// Shipments have been removed from the grid
         /// </summary>
         private void OnShipmentsRemoved(object sender, EventArgs e)
         {
             UpdateEditControlsSecurity();
 
-            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs) e;
             foreach (ShipmentEntity shipment in eventArgs.ShipmentsRemoved)
             {
                 shipSenseSynchronizer.Remove(shipment);
@@ -1734,7 +1702,7 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            return shipmentTypeManager.Get((ShipmentTypeCode)typeCode);
+            return shipmentTypeManager.Get((ShipmentTypeCode) typeCode);
         }
 
         /// <summary>
@@ -1885,7 +1853,7 @@ namespace ShipWorks.Shipping
             // What to do for each shipment
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
-                ShipmentEntity shipment = (ShipmentEntity)_e.Argument;
+                ShipmentEntity shipment = (ShipmentEntity) _e.Argument;
                 _e.Result = _e.Argument;
 
                 try
@@ -1954,7 +1922,7 @@ namespace ShipWorks.Shipping
                 "Shipment {0} of {1}");
 
             List<string> newErrors = new List<string>();
-            
+
             await executor.ExecuteAsync((shipment, state, issueAdder) => VoidShipment(shipment, newErrors), shipments);
 
             // Apply the edits that were made in the background to the grid rows
@@ -2104,11 +2072,11 @@ namespace ShipWorks.Shipping
         private void CounterRateCarrierConfiguredWhileProcessing()
         {
             // This is for a specific shipment type, so we're always going to need to show the wizard
-            Invoke((MethodInvoker)delegate
-           {
-               ServiceControl.SaveToShipments();
-               ServiceControl.LoadAccounts();
-           });
+            Invoke((MethodInvoker) delegate
+            {
+                ServiceControl.SaveToShipments();
+                ServiceControl.LoadAccounts();
+            });
         }
 
         /// <summary>
@@ -2158,8 +2126,9 @@ namespace ShipWorks.Shipping
 
             LoadShipmentTypeCombo();
 
-            // Reload the selected shipments in case the settings affected their values
-            forceRecreateServiceControl = true;
+            // Dispose each of the service controls and clear the cache.
+            DisposeSerivceControlCache();
+
             LoadSelectedShipments(false);
         }
 
@@ -2256,9 +2225,27 @@ namespace ShipWorks.Shipping
                 components?.Dispose();
 
                 uspsAccountConvertedToken?.Dispose();
+
+                // Dispose each of the service controls and clear the cache.
+                DisposeSerivceControlCache();
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Dispose each service control and clear the cache
+        /// </summary>
+        private void DisposeSerivceControlCache()
+        {
+            foreach (ServiceControlBase serviceControl in serviceControlCache.Values)
+            {
+                serviceControl.Dispose();
+            }
+
+            serviceControlCache.Clear();
+            customsControlCache.Dispose();
+            customsControlCache = new CustomsControlCache();
         }
     }
 }

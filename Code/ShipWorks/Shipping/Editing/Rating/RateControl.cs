@@ -52,6 +52,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Raised when its necessary for the rates to be reloaded
         /// </summary>
         public event EventHandler ReloadRatesRequired;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -79,6 +80,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             footnoteParameters = parameters;
             ThemedBorderProvider.Apply(this);
+        }
+
+        /// <summary>
+        /// Set events to null so the events can be cleared without knowing the currently wired handler.
+        /// </summary>
+        public void ClearEvents()
+        {
+            RateSelected = null;
+            ActionLinkClicked = null;
+            ReloadRatesRequired = null;
         }
 
         /// <summary>

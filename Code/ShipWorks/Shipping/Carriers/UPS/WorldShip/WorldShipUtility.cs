@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 UpsServicePackageTypeSetting.Validate(shipment);
 
-                CustomsManager.LoadCustomsItems(shipment, false);
+                CustomsManager.LoadCustomsItems(shipment, false, adapter);
 
                 bool customsIsRequired = CustomsManager.IsCustomsRequired(shipment);
 

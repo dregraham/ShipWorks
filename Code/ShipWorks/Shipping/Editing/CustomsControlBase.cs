@@ -685,5 +685,13 @@ namespace ShipWorks.Shipping.Editing
         {
             suspendShipSenseFieldEvent--;
         }
+
+        /// <summary>
+        /// Unload shipments
+        /// </summary>
+        internal void UnloadShipments()
+        {
+            loadedShipments.Clear();
+        }
     }
 }

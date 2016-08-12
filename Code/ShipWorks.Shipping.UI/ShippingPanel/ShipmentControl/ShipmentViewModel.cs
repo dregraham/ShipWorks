@@ -1,20 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reflection;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
-using log4net;
+﻿using System.Collections.Generic;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -25,8 +10,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     /// </summary>
     public class ShipmentViewModel : ShipmentViewModelBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentViewModel));
-
         /// <summary>
         /// Constructor for use by tests and WPF designer
         /// </summary>

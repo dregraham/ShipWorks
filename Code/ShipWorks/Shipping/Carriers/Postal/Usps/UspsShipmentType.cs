@@ -1,4 +1,9 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -7,6 +12,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -20,11 +26,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets or sets the repository that should be used when retrieving account information.
         /// </summary>
-        public ICarrierAccountRepository<UspsAccountEntity> AccountRepository { get; set; }
+        public ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> AccountRepository { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
@@ -154,17 +155,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             // The USPS or Postal objects may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Usps != null)
+            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Usps != null)
             {
-                UspsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
+                IUspsAccountEntity account = AccountRepository.GetAccountReadOnly(shipment.Postal.Usps.UspsAccountID);
                 if (account == null)
                 {
-                    account = AccountRepository.Accounts.FirstOrDefault();
+                    account = AccountRepository.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
                 else
@@ -182,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void EnsureAccountsHaveCurrentContractData()
         {
             Task[] tasks = AccountRepository.Accounts
-                .Where(account => account.PendingInitialAccount != (int)UspsPendingAccountType.Create)
+                .Where(account => account.PendingInitialAccount != (int) UspsPendingAccountType.Create)
                 .Select(account => Task.Factory.StartNew(() => UpdateContractType(account)))
                 .ToArray();
 
@@ -225,8 +226,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public bool ShouldTestExpress1Rates(ShipmentEntity shipment)
         {
-            return Express1Utilities.IsPostageSavingService((PostalServiceType)shipment.Postal.Service) &&
-                GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType) != null;
+            return Express1Utilities.IsPostageSavingService((PostalServiceType) shipment.Postal.Service) &&
+                GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType) != null;
         }
 
         /// <summary>
@@ -239,10 +240,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ShippingException("The shipment weight cannot be zero.");
             }
 
-            if (shipment.Postal.Service == (int)PostalServiceType.ExpressMail &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.None &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRestricted &&
-                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
+            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail &&
+                shipment.Postal.Confirmation != (int) PostalConfirmationType.None &&
+                shipment.Postal.Confirmation != (int) PostalConfirmationType.AdultSignatureRestricted &&
+                shipment.Postal.Confirmation != (int) PostalConfirmationType.AdultSignatureRequired)
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
@@ -258,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
             commonDetail.OriginAccount = (account == null) ? "" : account.Username;
 
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Usps && shipment.Postal.Usps.OriginalUspsAccountID != null)
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps && shipment.Postal.Usps.OriginalUspsAccountID != null)
             {
                 commonDetail.OriginalShipmentType = ShipmentTypeCode.Usps;
             }
@@ -279,7 +280,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 shipment.RequestedLabelFormat = shipment.Postal.Usps.RequestedLabelFormat;
             }
 
-            shipment.InsuranceProvider = (int)(UspsUtility.IsStampsInsuranceActive ? InsuranceProvider.Carrier : InsuranceProvider.ShipWorks);
+            shipment.InsuranceProvider = (int) (UspsUtility.IsStampsInsuranceActive ? InsuranceProvider.Carrier : InsuranceProvider.ShipWorks);
         }
 
         /// <summary>
@@ -296,13 +297,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.Postal == null)
+            {
+                shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
+            }
+            if (shipment.Postal.Usps == null)
+            {
+                shipment.Postal.Usps = new UspsShipmentEntity(shipment.ShipmentID);
+            }
+
             // We can be called during the creation of the base Postal shipment, before the USPS one exists
             if (shipment.Postal.Usps != null)
             {
                 // Use the empty guids for now - they'll get set properly during processing
                 shipment.Postal.Usps.IntegratorTransactionID = Guid.Empty;
                 shipment.Postal.Usps.UspsTransactionID = Guid.Empty;
-                shipment.Postal.Usps.RequestedLabelFormat = (int)ThermalLanguage.None;
+                shipment.Postal.Usps.RequestedLabelFormat = (int) ThermalLanguage.None;
                 shipment.Postal.Usps.RateShop = false;
             }
 
@@ -321,22 +331,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the USPS shipment type based on 
+        /// Gets an instance to the best rate shipping broker for the USPS shipment type based on
         /// the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            if (AccountRepository.Accounts.Any(a => a.PendingInitialAccount == (int)UspsPendingAccountType.None))
+            if (AccountRepository.Accounts.Any(a => a.PendingInitialAccount == (int) UspsPendingAccountType.None))
             {
                 // We have an account that is completely setup, so use the normal broker
                 return new UspsBestRateBroker(this, AccountRepository);
             }
 
             // Use the null broker for Best Rate. No accounts are in ShipWorks
-            // or accounts are still in the pending state (i.e. a USPS account 
-            // has been added during activation, but not completely setup) 
+            // or accounts are still in the pending state (i.e. a USPS account
+            // has been added during activation, but not completely setup)
             return new NullShippingBroker();
         }
 
@@ -458,7 +468,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
-            if (shipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            if (shipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
                 PersonAdapter.Copy(account, string.Empty, shipment, "Origin");
             }
@@ -483,12 +493,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         IUspsWebClient webClient = CreateWebClient();
                         UspsAccountContractType contractType = webClient.GetContractType(account);
 
-                        bool hasContractChanged = account.ContractType != (int)contractType;
-                        account.ContractType = (int)contractType;
+                        bool hasContractChanged = account.ContractType != (int) contractType;
+                        account.ContractType = (int) contractType;
 
                         // Save the contract to the DB and update the cache
                         AccountRepository.Save(account);
-                        UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
+                        UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType) account.ContractType);
 
                         if (hasContractChanged)
                         {
@@ -516,7 +526,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
-                shipment.Postal.Usps.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.Postal.Usps.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

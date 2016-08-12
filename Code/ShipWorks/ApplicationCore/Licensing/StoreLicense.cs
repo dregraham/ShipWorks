@@ -10,7 +10,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using ShipWorks.Shipping;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -117,7 +117,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 DisabledReason = string.Empty;
 
                 // Let anyone who cares know that enabled carriers may have changed.
-                messenger.Send(new EnabledCarriersChangedMessage(this, new List<int>(), new List<int>()));
+                messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
             }
             catch (Exception ex)
                 when (ex is ShipWorksLicenseException || ex is TangoException)

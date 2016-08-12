@@ -17,8 +17,8 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// <summary>
         /// Create an order
         /// </summary>
-        public static OrderEntityBuilder Order(OrderEntity order) =>
-            new OrderEntityBuilder(order);
+        public static OrderEntityBuilder<TOrder> Order<TOrder>(TOrder order) where TOrder : OrderEntity, new() =>
+            new OrderEntityBuilder<TOrder>(order);
 
         /// <summary>
         /// Create a shipment

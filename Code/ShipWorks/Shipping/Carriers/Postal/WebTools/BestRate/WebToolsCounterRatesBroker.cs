@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
     /// <summary>
     /// Gets counter rates for USPS
     /// </summary>
-    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullCarrierAccount>
+    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullCarrierAccount, ICarrierAccount>
     {
         private readonly PostalShipmentType actualPostalShipmentType;
 
@@ -35,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullCarrierAccount> accountRepository) :
+        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 
@@ -67,8 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
                 {
                     rateResult.Description = rateResult.Description.Replace("(w/o Postage) ", string.Empty);
 
-                    // We want WebTools account setup wizard to show when a rate is selected so the user 
-                    // can create their own WebTools account since these rates are just counter rates 
+                    // We want WebTools account setup wizard to show when a rate is selected so the user
+                    // can create their own WebTools account since these rates are just counter rates
                     // using a ShipWorks account.
                     BestRateResultTag bestRateResultTag = (BestRateResultTag) rateResult.Tag;
                     bestRateResultTag.SignUpAction = DisplaySetupWizard;
@@ -78,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
             {
                 if (ex.InnerExceptions.Count == 1 && ex.InnerExceptions.OfType<CounterRatesOriginAddressException>().Any())
                 {
-                    // There was a problem with the origin address, so add the invalid store address footer factory 
+                    // There was a problem with the origin address, so add the invalid store address footer factory
                     // to the rate group and eat the exception
                     bestRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType.ShipmentTypeCode));
                 }
@@ -110,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
                         // We also want to ensure sure that the provider is no longer excluded in
                         // the global settings
                         ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int) actualPostalShipmentType.ShipmentTypeCode).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != actualPostalShipmentType.ShipmentTypeCode).ToArray();
 
                         ShippingSettings.Save(settings);
                     }

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
-using ShipWorks.Core.Messaging;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,10 +17,8 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.ApplicationCore;
-using Autofac;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -36,12 +34,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// </summary>
         public GridProviderDisplayType(EnumSortMethod sortMethod)
             : this(sortMethod, Messenger.Current)
-        {}
+        { }
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public GridProviderDisplayType(EnumSortMethod sortMethod, IMessenger messenger) 
+        public GridProviderDisplayType(EnumSortMethod sortMethod, IMessenger messenger)
             : base(sortMethod)
         {
             this.messenger = messenger;
@@ -59,7 +57,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             GridProviderDisplayType gridProviderDisplayType = gridHyperlinkClickEventArgs.Column.DisplayType as GridProviderDisplayType;
             if (gridProviderDisplayType != null)
             {
-                ShipmentEntity shipment = (ShipmentEntity)gridHyperlinkClickEventArgs.Row.Entity;
+                ShipmentEntity shipment = (ShipmentEntity) gridHyperlinkClickEventArgs.Row.Entity;
                 if (shipment == null)
                 {
                     return;
@@ -103,7 +101,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 
             List<ShipmentType> enabledShipmentTypes = ShipmentTypeManager.EnabledShipmentTypes;
 
-            if (UpsAccountManager.Accounts.Count == 0 || !settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.UpsWorldShip))
+            if (UpsAccountManager.Accounts.Count == 0 || !settings.ConfiguredTypes.Contains(ShipmentTypeCode.UpsWorldShip))
             {
                 enabledShipmentTypes.RemoveAll(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
             }
@@ -137,18 +135,18 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// </summary>
         private void SelectProvider(ShipmentEntity shipment, ShipmentType type)
         {
-            shipment.ShipmentType = (int)type.ShipmentTypeCode;
-            shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+            shipment.ShipmentType = (int) type.ShipmentTypeCode;
+            shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
                 sqlAdapter.SaveAndRefetch(shipment);
-            }
 
-            // Perform this after the save otherwise customs items will be duplicated on
-            // international shipments
-            ShippingManager.EnsureShipmentLoaded(shipment);
-            CustomsManager.LoadCustomsItems(shipment, false);
+                // Perform this after the save otherwise customs items will be duplicated on
+                // international shipments
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                CustomsManager.LoadCustomsItems(shipment, false, sqlAdapter);
+            }
 
             Program.MainForm.ForceHeartbeat();
 

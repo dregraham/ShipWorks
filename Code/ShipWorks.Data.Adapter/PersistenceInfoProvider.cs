@@ -339,7 +339,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonOrderEntity's mappings</summary>
 		private void InitAmazonOrderEntityMappings()
 		{
-			base.AddElementMapping( "AmazonOrderEntity", "ShipWorksLocal", @"dbo", "AmazonOrder", 7 );
+			base.AddElementMapping( "AmazonOrderEntity", "ShipWorksLocal", @"dbo", "AmazonOrder", 8 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "AmazonOrderID", "AmazonOrderID", false, (int)SqlDbType.VarChar, 32, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "AmazonCommission", "AmazonCommission", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 2 );
@@ -347,6 +347,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonOrderEntity", "IsPrime", "IsPrime", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "EarliestExpectedDeliveryDate", "EarliestExpectedDeliveryDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
 			base.AddElementFieldMapping( "AmazonOrderEntity", "LatestExpectedDeliveryDate", "LatestExpectedDeliveryDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 6 );
+			base.AddElementFieldMapping( "AmazonOrderEntity", "PurchaseOrderNumber", "PurchaseOrderNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 7 );
 		}
 		/// <summary>Inits AmazonOrderItemEntity's mappings</summary>
 		private void InitAmazonOrderItemEntityMappings()
@@ -379,7 +380,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "CarrierName", "CarrierName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceName", "ShippingServiceName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceID", "ShippingServiceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceOfferID", "ShippingServiceOfferID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "AmazonShipmentEntity", "ShippingServiceOfferID", "ShippingServiceOfferID", false, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "InsuranceValue", "InsuranceValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 5 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsProfileID", "DimsProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
 			base.AddElementFieldMapping( "AmazonShipmentEntity", "DimsLength", "DimsLength", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 7 );
@@ -2421,7 +2422,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShippingSettingsEntity's mappings</summary>
 		private void InitShippingSettingsEntityMappings()
 		{
-			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 51 );
+			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 52 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShippingSettingsID", "ShippingSettingsID", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 0 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalActivated", "Activated", false, (int)SqlDbType.VarChar, 45, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalConfigured", "Configured", false, (int)SqlDbType.VarChar, 45, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2473,6 +2474,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExFimsEnabled", "FedExFimsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 48 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExFimsUsername", "FedExFimsUsername", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 49 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExFimsPassword", "FedExFimsPassword", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 50 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipmentEditLimit", "ShipmentEditLimit", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 51 );
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
 		private void InitShipSenseKnowledgebaseEntityMappings()

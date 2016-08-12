@@ -14,6 +14,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
 
@@ -156,7 +157,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 lastRefreshTimeInUtc = DateTime.UtcNow;
 
                 // Let anyone who cares know that enabled carriers may have changed.
-                messenger.Send(new EnabledCarriersChangedMessage(this, new List<int>(), new List<int>()));
+                messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
             }
             catch (TangoException ex)
             {

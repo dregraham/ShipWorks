@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public FedExSmartPostManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.SmartPost;
             shipmentEntity.FedEx.SmartPostHubID = "5531";
 
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453", SmartPostHubList = "<Root><HubID>5531</HubID></Root>" };
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_ThrowsCarrierException_WhenSmartPostHubIDIsNull()
         {
-            shipmentEntity.FedEx.SmartPostHubID = null;
+            shipmentEntity.FedEx.SmartPostHubID = string.Empty;
 
             Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SmartPostShipmentDetailIsNull_WhenShipmentTypeIsNotSmartPost()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
             testObject.Manipulate(carrierRequest.Object);
@@ -127,31 +127,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_SmartPostIndiciaTypesCorrect_WhenConverted()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.BoundPrintedMatter;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.BoundPrintedMatter;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostIndiciaType.PRESORTED_BOUND_PRINTED_MATTER, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.IndiciaSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.MediaMail;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.MediaMail;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostIndiciaType.MEDIA_MAIL, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.IndiciaSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.ParcelReturn;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.ParcelReturn;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostIndiciaType.PARCEL_RETURN, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.IndiciaSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.ParcelSelect;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.ParcelSelect;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostIndiciaType.PARCEL_SELECT, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.IndiciaSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.PresortedStandard;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.PresortedStandard;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostIndiciaType.PRESORTED_STANDARD, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.IndiciaSpecified);
@@ -161,37 +161,37 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_SmartPostEndorsementsCorrect_WhenConverted()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.AddressCorrection;
+            shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.AddressCorrection;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostAncillaryEndorsementType.ADDRESS_CORRECTION, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ChangeService;
+            shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.ChangeService;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostAncillaryEndorsementType.CHANGE_SERVICE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ForwardingService;
+            shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.ForwardingService;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostAncillaryEndorsementType.FORWARDING_SERVICE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.LeaveIfNoResponse;
+            shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.LeaveIfNoResponse;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostAncillaryEndorsementType.CARRIER_LEAVE_IF_NO_RESPONSE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ReturnService;
+            shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.ReturnService;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(SmartPostAncillaryEndorsementType.RETURN_SERVICE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
             Assert.Equal(true, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.None;
+            shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.None;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(false, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
@@ -200,31 +200,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_SmartPostConfirmationIsCorrectForIndiciaType()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.ParcelSelect;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.ParcelSelect;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(true, shipmentEntity.FedEx.SmartPostConfirmation);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostConfirmation = false;
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.BoundPrintedMatter;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.BoundPrintedMatter;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(false, shipmentEntity.FedEx.SmartPostConfirmation);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostConfirmation = false;
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.MediaMail;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.MediaMail;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(false, shipmentEntity.FedEx.SmartPostConfirmation);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostConfirmation = false;
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.ParcelReturn;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.ParcelReturn;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(false, shipmentEntity.FedEx.SmartPostConfirmation);
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             shipmentEntity.FedEx.SmartPostConfirmation = false;
-            shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.PresortedStandard;
+            shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.PresortedStandard;
             testObject.Manipulate(carrierRequest.Object);
             Assert.Equal(false, shipmentEntity.FedEx.SmartPostConfirmation);
         }

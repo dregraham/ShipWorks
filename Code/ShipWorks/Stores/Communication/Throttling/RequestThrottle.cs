@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using ShipWorks.Common.Threading;
-using ShipWorks.Stores.Platforms.BigCommerce;
+using Interapptive.Shared.Threading;
 using log4net;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Stores.Communication.Throttling
 {
     /// <summary>
     /// Abstract class that handles the throttling and submitting of requests to a store api per their defined limits.
     /// </summary>
-    public abstract class RequestThrottle<TWaitCancelException> : IDisposable where TWaitCancelException: Exception, new()
+    public abstract class RequestThrottle<TWaitCancelException> : IDisposable where TWaitCancelException : Exception, new()
     {
         private readonly ILog logger;
 
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Communication.Throttling
 
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
-        /// If the throttler detects that the number of calls has been reached, the throttler will wait the 
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the
         /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Communication.Throttling
 
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
-        /// If the throttler detects that the number of calls has been reached, the throttler will wait the 
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the
         /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
@@ -199,9 +199,9 @@ namespace ShipWorks.Stores.Communication.Throttling
         protected void AsyncWaitForCancel(object state)
         {
             // unpackage the parameters
-            Dictionary<string, object> stateDict = (Dictionary<string, object>)state;
-            IProgressReporter progress = (IProgressReporter)stateDict["progress"];
-            ManualResetEvent cancelEvent = (ManualResetEvent)stateDict["cancelEvent"];
+            Dictionary<string, object> stateDict = (Dictionary<string, object>) state;
+            IProgressReporter progress = (IProgressReporter) stateDict["progress"];
+            ManualResetEvent cancelEvent = (ManualResetEvent) stateDict["cancelEvent"];
 
             while (!progress.IsCancelRequested && !IsCanceled(cancelEvent))
             {
@@ -212,7 +212,7 @@ namespace ShipWorks.Stores.Communication.Throttling
             // if the user requested the cancel, signal to the calling thread
             if (progress.IsCancelRequested)
             {
-                // The caller could have timeed out waiting and eventually disposed our cancelEvent.  
+                // The caller could have timeed out waiting and eventually disposed our cancelEvent.
                 // so only Set it if it is isn't closed
                 lock (cancelEventDisposeSyncObj)
                 {

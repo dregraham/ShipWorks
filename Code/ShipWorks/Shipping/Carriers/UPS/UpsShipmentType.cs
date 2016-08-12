@@ -14,6 +14,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// have to be done is to assign this property with a repository that contains
         /// the appropriate account information for getting counter rates.
         /// </summary>
-        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
+        public ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> AccountRepository { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
@@ -170,26 +171,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
-            // Let's figure out what is null....
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Order);
 
             if (shipment.Ups == null)
             {
-                throw new NullReferenceException("shipment.Ups cannot be null.");
-            }
-
-            if (shipment.Order == null)
-            {
-                throw new NullReferenceException("shipment.Order cannot be null.");
-            }
-
-            if (shipment.Ups.Packages == null)
-            {
-                throw new NullReferenceException("shipment.Ups.Packages cannot be null.");
+                shipment.Ups = new UpsShipmentEntity(shipment.ShipmentID);
             }
 
             shipment.Ups.CodEnabled = false;
@@ -611,15 +598,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // The Ups object may not yet be set if we are in the middle of creating a new shipment
             if (originID == (int) ShipmentOriginSource.Account && shipment.Ups != null)
             {
-                UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
+                IUpsAccountEntity account = UpsAccountManager.GetAccountReadOnly(shipment.Ups.UpsAccountID);
                 if (account == null)
                 {
-                    account = UpsAccountManager.Accounts.FirstOrDefault();
+                    account = UpsAccountManager.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
                 else

@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void CheckRestriction_ReturnsSuccess_WhenAmazonShippingTokenIsNotTodayAndAccountsExist()
         {
-            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
                 .Setup(x => x.Accounts)
                 .Returns(new[] { new UpsAccountEntity() });
 
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void CheckRestriction_ReturnsEnforcementFailureWithMessage_WhenAmazonShippingTokenIsToday()
         {
-            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
                 .Setup(x => x.Accounts)
                 .Returns(new[] { new UpsAccountEntity() });
 
@@ -131,7 +132,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             shipment.TrackingNumber = "123Tt99223";
 
-            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
                 .Setup(x => x.Accounts)
                 .Returns(new[] { new UpsAccountEntity { AccountNumber = "TT9922" } });
 
@@ -146,7 +147,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             shipment.TrackingNumber = "123TT99223";
 
-            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
                 .Setup(x => x.Accounts)
                 .Returns(new[] { new UpsAccountEntity { AccountNumber = "TT9922" } });
 
@@ -161,7 +162,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             shipment.TrackingNumber = "123TT99223";
 
-            mock.Mock<ICarrierAccountRepository<UpsAccountEntity>>()
+            mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
                 .Setup(x => x.Accounts)
                 .Returns(new[] { new UpsAccountEntity { AccountNumber = "5T9922" } });
 

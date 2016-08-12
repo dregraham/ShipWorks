@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Net;
+using System.Xml.XPath;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Business;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using System.Diagnostics;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Globalization;
-using Interapptive.Shared;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Collections;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -36,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private AmazonStoreEntity AmazonStore
         {
-            get { return (AmazonStoreEntity)Store; }
+            get { return (AmazonStoreEntity) Store; }
         }
 
         /// <summary>
@@ -57,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.Detail = "Connecting to Amazon...";
 
                 // declare upfront which api calls we are going to be using so they will be throttled
-                using (AmazonMwsClient client = new AmazonMwsClient((AmazonStoreEntity)Store, Progress))
+                using (AmazonMwsClient client = new AmazonMwsClient((AmazonStoreEntity) Store, Progress))
                 {
                     // test the local system clock
                     if (!client.ClockInSyncWithMWS())
@@ -158,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
 
             // get the order instance
-            AmazonOrderEntity order = (AmazonOrderEntity)InstantiateOrder(new AmazonOrderIdentifier(amazonOrderID));
+            AmazonOrderEntity order = (AmazonOrderEntity) InstantiateOrder(new AmazonOrderIdentifier(amazonOrderID));
 
             string orderStatus = XPathUtility.Evaluate(xpath, "amz:OrderStatus", "");
 
@@ -185,7 +182,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // IsPrime
             string isPrime = XPathUtility.Evaluate(xpath, "amz:IsPrime", "");
-            order.IsPrime = (int)TranslateIsPrime(isPrime);
+            order.IsPrime = (int) TranslateIsPrime(isPrime);
+
+            // Purchase order number
+            order.PurchaseOrderNumber = WebUtility.HtmlDecode(XPathUtility.Evaluate(xpath, "amz:PurchaseOrderNumber", string.Empty));
 
             // no customer ID in this Api
             order.OnlineCustomerID = null;
@@ -273,7 +273,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(tempXpath, navigator.Namespaces);
 
-                    AmazonOrderItemEntity item = (AmazonOrderItemEntity)InstantiateOrderItem(order);
+                    AmazonOrderItemEntity item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
 
                     // populate the basics
                     item.Name = XPathUtility.Evaluate(xpath, "amz:Title", "");
@@ -425,7 +425,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 order.ShipFirstName = shipFullName.First;
                 order.ShipMiddleName = shipFullName.Middle;
                 order.ShipLastName = shipFullName.LastWithSuffix;
-                order.ShipNameParseStatus = (int)shipFullName.ParseStatus;
+                order.ShipNameParseStatus = (int) shipFullName.ParseStatus;
                 order.ShipUnparsedName = shipFullName.UnparsedName;
                 order.ShipCompany = "";
                 order.ShipPhone = XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:Phone", "");
@@ -469,7 +469,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.BillFirstName = buyerName.First;
             order.BillMiddleName = buyerName.Middle;
             order.BillLastName = buyerName.LastWithSuffix;
-            order.BillNameParseStatus = (int)buyerName.ParseStatus;
+            order.BillNameParseStatus = (int) buyerName.ParseStatus;
             order.BillUnparsedName = buyerName.UnparsedName;
 
             // If first and last name on the buyer are the same as the shipping name, copy the rest of hte address too

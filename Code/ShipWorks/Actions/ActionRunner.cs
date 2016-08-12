@@ -1,37 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Email;
-using System.Windows.Forms;
-using ShipWorks.Users;
-using ShipWorks.Data.Connection;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates;
-using ShipWorks.Templates.Media;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Diagnostics;
-using ShipWorks.Filters;
-using log4net;
-using System.Data.SqlClient;
-using System.Transactions;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores;
-using ShipWorks.Data.Model;
-using ShipWorks.SqlServer.Filters;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Data.Utility;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 using Interapptive.Shared;
-using ShipWorks.Users.Security;
-using ShipWorks.Users.Audit;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Filters;
+using ShipWorks.Stores;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Actions
 {
@@ -211,7 +200,7 @@ namespace ShipWorks.Actions
 
             if (action != null)
             {
-                // Special case for filter content trigger - the store limitation is not detected at the time they are dispatched like the 
+                // Special case for filter content trigger - the store limitation is not detected at the time they are dispatched like the
                 // rest of the actions.
                 if (action.TriggerType == (int) ActionTriggerType.FilterContentChanged)
                 {
@@ -242,7 +231,7 @@ namespace ShipWorks.Actions
             }
             else
             {
-                log.InfoFormat("Action queue item {0} was not ran because action {0} appears to have gone away.", queue.ActionQueueID, action.Name);
+                log.InfoFormat("Action queue item {0} was not ran because action {0} appears to have gone away.", queue.ActionQueueID, queue.ActionName);
 
                 result = ActionRunnerResult.Missing;
                 return false;
@@ -385,7 +374,7 @@ namespace ShipWorks.Actions
                 queue.Status = (int) ActionQueueStatus.Incomplete;
                 RunStepsLoop();
 
-                // If we moved on from a suspended error, and the loop was reconfigured to flow through the unsuspending errors, run the loop again to try them.  It won't retry 
+                // If we moved on from a suspended error, and the loop was reconfigured to flow through the unsuspending errors, run the loop again to try them.  It won't retry
                 // the one we did in the last loop, since the only way one of the nonFlowStopErrors will be active is if the previous one succeeded
                 if (wasSuspended && nonFlowStopErrors.Contains(queue.NextStep))
                 {
@@ -428,7 +417,7 @@ namespace ShipWorks.Actions
                         }
                     }
 
-                    // If any previously postponed stuff was consumed by this last step, and the queues of the previously postponed steps were suspended, we need to stop processing this queue.  
+                    // If any previously postponed stuff was consumed by this last step, and the queues of the previously postponed steps were suspended, we need to stop processing this queue.
                     // This will let the ActionProcessor first go back and finish the queues that used to be postponed before continuing with us.  That way we maintain action processing order.
                     if (stepContext.PostponementActivity == ActionStepPostponementActivity.Consumed)
                     {
@@ -493,13 +482,13 @@ namespace ShipWorks.Actions
                             List<long> inputKeys = GetStepInputKeys(step, actionTask, queue.ObjectID);
 
                             // Run the task.  If it requires input, and there is no input, don't even try to run it
-                            if (step.InputSource != (int)ActionTaskInputSource.Nothing && inputKeys.Count == 0)
+                            if (step.InputSource != (int) ActionTaskInputSource.Nothing && inputKeys.Count == 0)
                             {
                                 log.WarnFormat("ActionStep - Skipping due to no input");
                             }
                             else
                             {
-                                // First we "Run" the task outside of a transaction.  The task should not do anytihng to save to the database here, but it can feel free to 
+                                // First we "Run" the task outside of a transaction.  The task should not do anytihng to save to the database here, but it can feel free to
                                 // do anything it needs with external resources.
                                 log.InfoFormat("ActionStep - Start - Phase1 (Run)");
                                 actionTask.Run(inputKeys, stepContext);
@@ -672,7 +661,7 @@ namespace ShipWorks.Actions
 
         /// <summary>
         /// Determine the next step to run based on the status of the specified step.  If there are no more steps to run
-        /// -1 is returned. 
+        /// -1 is returned.
         /// </summary>
         private static int DetermineNextStep(ActionQueueStepEntity step)
         {

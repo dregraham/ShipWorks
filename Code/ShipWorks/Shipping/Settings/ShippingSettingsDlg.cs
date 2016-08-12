@@ -108,51 +108,9 @@ namespace ShipWorks.Shipping.Settings
             foreach (ShipmentType shipmentType in GetEnabledShipmentTypes().Where(t => t.ShipmentTypeCode != ShipmentTypeCode.None))
             {
                 OptionPage page = new OptionPage(shipmentType.ShipmentTypeName);
-                page.Tag = shipmentType.ShipmentTypeCode;
+                page.Tag = shipmentType;
 
                 optionControl.OptionPages.Add(page);
-
-                Control control;
-
-                if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
-                {
-                    ShipmentTypeSettingsControl settingsControl;
-                    if (!settingsMap.TryGetValue(shipmentType.ShipmentTypeCode, out settingsControl))
-                    {
-                        settingsControl = new ShipmentTypeSettingsControl(shipmentType, lifetimeScope);
-
-                        // Force creation
-                        IntPtr handle = settingsControl.Handle;
-                        settingsControl.LoadSettings();
-
-                        settingsControl.BackColor = Color.Transparent;
-                        settingsControl.Dock = DockStyle.Fill;
-
-                        log.InfoFormat("Adding settings control for {0}.", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
-                        settingsMap[shipmentType.ShipmentTypeCode] = settingsControl;
-                    }
-
-                    control = settingsControl;
-                }
-                else
-                {
-                    ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
-                    setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
-
-                    setupControl.Dock = DockStyle.Fill;
-                    setupControl.BackColor = Color.Transparent;
-
-                    control = setupControl;
-                }
-
-                // Don't use the white background & border for settings where a TabControl takes up the whole thing.
-                if (control.Controls.Count != 1 || !(control.Controls[0] is TabControl))
-                {
-                    page.BorderStyle = BorderStyle.Fixed3D;
-                    page.BackColor = Color.White;
-                }
-
-                page.Controls.Add(control);
             }
         }
 
@@ -169,7 +127,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnShipmentTypeSetupComplete(object sender, EventArgs e)
         {
-            ShipmentTypeCode? selected = optionControl.SelectedPage.Tag != null ? (ShipmentTypeCode) optionControl.SelectedPage.Tag : (ShipmentTypeCode?) null;
+            ShipmentTypeCode? selected = GetShipmentTypeCodeFromPage(optionControl.SelectedPage);
 
             // Reload the providers panel in case a new entry for Express1 needs to be added (in the case
             // where ShipWorks now needs to show both Express1 for Endicia and Express1 for USPS
@@ -178,7 +136,8 @@ namespace ShipWorks.Shipping.Settings
 
             if (selected != null)
             {
-                OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>().FirstOrDefault(p => p.Tag != null && (ShipmentTypeCode) p.Tag == selected.Value);
+                OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>()
+                    .FirstOrDefault(p => GetShipmentTypeCodeFromPage(p) == selected.Value);
                 if (pageToSelect != null)
                 {
                     optionControl.SelectedPage = pageToSelect;
@@ -187,13 +146,22 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Get the shipment type code from the given page
+        /// </summary>
+        private ShipmentTypeCode? GetShipmentTypeCodeFromPage(OptionPage page)
+        {
+            ShipmentType shipmentType = page.Tag as ShipmentType;
+            return shipmentType?.ShipmentTypeCode;
+        }
+
+        /// <summary>
         /// Get the enabled shipment types (enabled in our UI, not necessarily in the database)
         /// </summary>
         private List<ShipmentType> GetEnabledShipmentTypes()
         {
             return panelProviders.SelectedShipmentTypes
-                                 .Concat(new[] { ShipmentTypeManager.GetType(ShipmentTypeCode.None) })
-                                 .ToList();
+                .Concat(new[] { ShipmentTypeManager.GetType(ShipmentTypeCode.None) })
+                .ToList();
         }
 
         /// <summary>
@@ -261,9 +229,11 @@ namespace ShipWorks.Shipping.Settings
 
             ShipmentTypeSettingsControl settingsControl = null;
 
-            if (e.OptionPage != null && e.OptionPage.Controls.Count == 1)
+            if (e.OptionPage != null)
             {
-                settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
+                settingsControl = e.OptionPage.Controls.Count == 1 ?
+                    e.OptionPage.Controls[0] as ShipmentTypeSettingsControl :
+                    settingsControl = BuildPageControl(e.OptionPage);
             }
 
             if (settingsControl != null)
@@ -277,6 +247,67 @@ namespace ShipWorks.Shipping.Settings
                 originControl.Initialize();
                 usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
             }
+        }
+
+        /// <summary>
+        /// Build a control for the given page
+        /// </summary>
+        private ShipmentTypeSettingsControl BuildPageControl(OptionPage page)
+        {
+            ShipmentType shipmentType = page.Tag as ShipmentType;
+
+            Control control = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) ?
+                BuildShippingSettingsControl(shipmentType) :
+                BuildSetupControl(shipmentType);
+
+            // Don't use the white background & border for settings where a TabControl takes up the whole thing.
+            if (control.Controls.Count != 1 || !(control.Controls[0] is TabControl))
+            {
+                page.BorderStyle = BorderStyle.Fixed3D;
+                page.BackColor = Color.White;
+            }
+
+            page.Controls.Add(control);
+
+            return control as ShipmentTypeSettingsControl;
+        }
+
+        /// <summary>
+        /// Build a setup control for the shipment type
+        /// </summary>
+        private Control BuildSetupControl(ShipmentType shipmentType)
+        {
+            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
+            setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
+
+            setupControl.Dock = DockStyle.Fill;
+            setupControl.BackColor = Color.Transparent;
+
+            return setupControl;
+        }
+
+        /// <summary>
+        /// Build the settings control for the shipment type
+        /// </summary>
+        private Control BuildShippingSettingsControl(ShipmentType shipmentType)
+        {
+            ShipmentTypeSettingsControl settingsControl;
+            if (!settingsMap.TryGetValue(shipmentType.ShipmentTypeCode, out settingsControl))
+            {
+                settingsControl = new ShipmentTypeSettingsControl(shipmentType, lifetimeScope);
+
+                // Force creation
+                IntPtr handle = settingsControl.Handle;
+                settingsControl.LoadSettings();
+
+                settingsControl.BackColor = Color.Transparent;
+                settingsControl.Dock = DockStyle.Fill;
+
+                log.InfoFormat("Adding settings control for {0}.", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
+                settingsMap[shipmentType.ShipmentTypeCode] = settingsControl;
+            }
+
+            return settingsControl;
         }
 
         /// <summary>
@@ -310,22 +341,20 @@ namespace ShipWorks.Shipping.Settings
             using (SqlAdapter adapter = SqlAdapter.Create(true))
             {
                 settings = ShippingSettings.Fetch();
-                List<int> existingExcludedTypes = settings.ExcludedTypes.ToList();
-                settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode).ToArray();
+                List<ShipmentTypeCode> existingExcludedTypes = settings.ExcludedTypes.ToList();
+                settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => x.ShipmentTypeCode);
 
-                List<int> typesAdded = existingExcludedTypes.Except(settings.ExcludedTypes).ToList();
-                List<int> typesRemoved = settings.ExcludedTypes.Except(existingExcludedTypes).ToList();
+                List<ShipmentTypeCode> typesAdded = existingExcludedTypes.Except(settings.ExcludedTypes).ToList();
+                List<ShipmentTypeCode> typesRemoved = settings.ExcludedTypes.Except(existingExcludedTypes).ToList();
 
                 if (typesRemoved.Any() || typesAdded.Any())
                 {
                     Messenger.Current.Send(new EnabledCarriersChangedMessage(this, typesAdded, typesRemoved));
                 }
 
-                settings.BlankPhoneOption =
-                    (int)
-                    (radioBlankPhoneUseShipper.Checked
-                         ? ShipmentBlankPhoneOption.ShipperPhone
-                         : ShipmentBlankPhoneOption.SpecifiedPhone);
+                settings.BlankPhoneOption = radioBlankPhoneUseShipper.Checked ?
+                    (int) ShipmentBlankPhoneOption.ShipperPhone :
+                    (int) ShipmentBlankPhoneOption.SpecifiedPhone;
                 settings.BlankPhoneNumber = blankPhone.Text;
 
                 providerRulesControl.SaveSettings(settings);
@@ -379,7 +408,8 @@ namespace ShipWorks.Shipping.Settings
             settingsMap.Clear();
             LoadShipmentTypePages();
 
-            OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>().FirstOrDefault(p => p.Tag != null && (ShipmentTypeCode) p.Tag == ShipmentTypeCode.Usps);
+            OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>()
+                .FirstOrDefault(p => GetShipmentTypeCodeFromPage(p) == ShipmentTypeCode.Usps);
             if (pageToSelect != null)
             {
                 optionControl.SelectedPage = pageToSelect;
@@ -409,9 +439,9 @@ namespace ShipWorks.Shipping.Settings
         private bool AllowDisabledFilterInCarrierRuleToBeSaved(ShipmentTypeSettingsControl settingsControl)
         {
             return settingsControl == null ||
-                   !settingsControl.AreAnyShipRuleFiltersDisabled ||
-                   !settingsControl.AreAnyShipRuleFiltersChanged ||
-                   DoesUserWantToSaveDisabledFilters("shipping");
+                !settingsControl.AreAnyShipRuleFiltersDisabled ||
+                !settingsControl.AreAnyShipRuleFiltersChanged ||
+                DoesUserWantToSaveDisabledFilters("shipping");
         }
 
         /// <summary>
@@ -420,9 +450,9 @@ namespace ShipWorks.Shipping.Settings
         private bool AllowDisabledPrintingFiltersToBeSaved(ShipmentTypeSettingsControl settingsControl)
         {
             return settingsControl == null ||
-                   !settingsControl.AreAnyPrintRuleFiltersDisabled ||
-                   !settingsControl.AreAnyPrintRuleFiltersChanged ||
-                   DoesUserWantToSaveDisabledFilters("printing");
+                !settingsControl.AreAnyPrintRuleFiltersDisabled ||
+                !settingsControl.AreAnyPrintRuleFiltersChanged ||
+                DoesUserWantToSaveDisabledFilters("printing");
         }
 
         /// <summary>
@@ -441,7 +471,7 @@ namespace ShipWorks.Shipping.Settings
         private bool DoesUserWantToSaveDisabledFilters(string filterTypeDescription)
         {
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
-                string.Format("At least one {0} rule uses a disabled filter, and will not match any shipment.\n\nSave anyway?", filterTypeDescription));
+                $"At least one {filterTypeDescription} rule uses a disabled filter, and will not match any shipment.\n\nSave anyway?");
             return result == DialogResult.Yes;
         }
 
@@ -453,10 +483,7 @@ namespace ShipWorks.Shipping.Settings
         {
             if (disposing)
             {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
+                components?.Dispose();
 
                 uspsAccountCreatedToken.Dispose();
 

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
@@ -18,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// <summary>
     /// Rate broker that finds the best rates for UPS accounts
     /// </summary>
-    public class UpsBestRateBroker : PackageBasedBestRateBroker<UpsAccountEntity, UpsPackageEntity>
+    public class UpsBestRateBroker : PackageBasedBestRateBroker<UpsAccountEntity, IUpsAccountEntity, UpsPackageEntity>
     {
         private bool isMailInnovationsAvailable;
         private bool canUseSurePost;
@@ -39,7 +38,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="accountRepository">Instance of an account repository that will get UPS accounts</param>
         /// <param name="upsSettingsRepository">The ups settings repository.</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository upsSettingsRepository) :
+        public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ICarrierSettingsRepository upsSettingsRepository) :
             base(shipmentType, accountRepository, "UPS")
         {
             SettingsRepository = upsSettingsRepository;
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 brokerExceptions.Add(new BrokerException(new ShippingException("UPS doesn't provide rates for Mail Innovations."), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
 
-            if (canUseSurePost && !bestRates.Rates.Any(r => UpsUtility.IsUpsSurePostService((UpsServiceType)(r.OriginalTag))))
+            if (canUseSurePost && !bestRates.Rates.Any(r => UpsUtility.IsUpsSurePostService((UpsServiceType) (r.OriginalTag))))
             {
                 // The account is configured to use SurePost, but there weren't any SurePost rates returned, so
                 // we want to flag this in the from of sending a BrokerException to the exception handler
@@ -83,8 +83,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         [NDependIgnoreComplexMethodAttribute]
         private static string GetServiceTypeDescription(RateResult rateResult)
         {
-            BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;
-            UpsServiceType upsServiceType = (UpsServiceType)bestRateResultTag.OriginalTag;
+            BestRateResultTag bestRateResultTag = (BestRateResultTag) rateResult.Tag;
+            UpsServiceType upsServiceType = (UpsServiceType) bestRateResultTag.OriginalTag;
 
             switch (upsServiceType)
             {
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 case UpsServiceType.UpsStandard:
                     return "International Ground";
 
-               
+
                 case UpsServiceType.UpsSurePostLessThan1Lb:
                     return "Hybrid Mail Less than 1 LB";
 
@@ -168,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
         {
-            return (InsuranceProvider)settings.UpsInsuranceProvider;
+            return (InsuranceProvider) settings.UpsInsuranceProvider;
         }
 
         /// <summary>
@@ -190,11 +190,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             currentShipment.Ups.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.Ups.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
 
-            // Update total weight 
+            // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
 
-            currentShipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Custom;
-            currentShipment.Ups.Service = (int)UpsServiceType.UpsGround;
+            currentShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
+            currentShipment.Ups.Service = (int) UpsServiceType.UpsGround;
             SetAccount(currentShipment, account);
 
             currentShipment.Ups.Packages[0].Insurance = currentShipment.Insurance;
@@ -224,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <returns></returns>
         protected override bool IsExcludedServiceType(object tag)
         {
-            UpsServiceType serviceType = (UpsServiceType)tag;
+            UpsServiceType serviceType = (UpsServiceType) tag;
             return serviceType == UpsServiceType.UpsSurePostBoundPrintedMatter || serviceType == UpsServiceType.UpsSurePostMedia;
         }
 

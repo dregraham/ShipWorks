@@ -1,24 +1,25 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     public class iParcelShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<IParcelAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentProcessingSynchronizer"/> class.
         /// </summary>
         public iParcelShipmentProcessingSynchronizer()
-            :this(new iParcelAccountRepository())
+            : this(new iParcelAccountRepository())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public iParcelShipmentProcessingSynchronizer(ICarrierAccountRepository<IParcelAccountEntity> accountRepository)
+        public iParcelShipmentProcessingSynchronizer(ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

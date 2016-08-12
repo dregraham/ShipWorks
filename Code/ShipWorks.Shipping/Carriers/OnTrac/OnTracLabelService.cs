@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
@@ -12,12 +13,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// </summary>
     public class OnTracLabelService : ILabelService
     {
-        private readonly ICarrierAccountRepository<OnTracAccountEntity> onTracAccountRepository;
+        private readonly ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracLabelService(ICarrierAccountRepository<OnTracAccountEntity> onTracAccountRepository)
+        public OnTracLabelService(ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository)
         {
             this.onTracAccountRepository = onTracAccountRepository;
         }

@@ -706,7 +706,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
 
                 // Added to prepare for Tango2...
-                postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.OrderID, false).ToString());
+                postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.Order, false).ToString());
                 postRequest.Variables.Add("orderTotal", shipment.Order.OrderTotal.ToString());
                 postRequest.Variables.Add("originAccount", shipmentDetail.OriginAccount);
                 postRequest.Variables.Add("originPostalCode", shipment.OriginPostalCode);

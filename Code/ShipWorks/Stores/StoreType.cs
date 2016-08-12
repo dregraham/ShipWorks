@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -35,6 +36,14 @@ namespace ShipWorks.Stores
     {
         // Store this instance is wrapping
         private StoreEntity store;
+
+        /// <summary>
+        /// Construction
+        /// </summary>
+        protected StoreType() : this(null)
+        {
+
+        }
 
         /// <summary>
         /// Construction
@@ -600,5 +609,10 @@ namespace ShipWorks.Stores
             // Just accept whatever the recommendation is by default.
             return customsRequiredRecommendation;
         }
+
+        /// <summary>
+        /// Will calling OverrideShipmentDetails change the specified shipment
+        /// </summary>
+        public virtual bool WillOverrideShipmentDetailsChangeShipment(IShipmentEntity shipment) => false;
     }
 }

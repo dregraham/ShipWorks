@@ -564,7 +564,6 @@
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
     <Compile Include="Shipping\Settings\CarrierServicePickerControlTest.cs" />
-    <Compile Include="Shipping\ShipmentAddressValidatorTest.cs" />
     <Compile Include="Shipping\ShipmentTypeTest.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensionsTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
@@ -808,6 +807,8 @@
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

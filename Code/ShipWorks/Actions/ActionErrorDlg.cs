@@ -1,38 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.UI.Utility;
 using ComponentFactory.Krypton.Toolkit;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.FactoryClasses;
+using Divelements.SandGrid;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Caching;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.Definitions;
-using Divelements.SandGrid;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Actions.Tasks;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Grid;
-using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.Appearance;
-using System.Threading;
-using ShipWorks.Data.Caching;
 
 namespace ShipWorks.Actions
 {
@@ -189,7 +180,7 @@ namespace ShipWorks.Actions
                 "Deleting {0} of {1}");
 
             executor.ExecuteCompleted += (_sender, _e) =>
-            { 
+            {
                 // Update the dashboard to display the updated error info
                 DashboardManager.CheckForActionChanges();
 
@@ -249,7 +240,7 @@ namespace ShipWorks.Actions
             int timesProcessed = 0;
 
             // Create the progress item
-            ProgressItem progressItem = progressProvider.ProgressItems.Add("Processing");
+            IProgressReporter progressItem = progressProvider.AddItem("Processing");
             progressItem.Detail = "Retrying...";
             progressItem.Starting();
             progressItem.CanCancel = false;
@@ -275,9 +266,9 @@ namespace ShipWorks.Actions
                         notRanCount++;
                     }
 
-                    // If it completed, or couldn't be run, then remove it from the list to be processed.  
-                    if ( (e.Result == ActionRunnerResult.Ran && (e.QueueAtFinish.Status == (int) ActionQueueStatus.Success || e.QueueAtFinish.Status == (int) ActionQueueStatus.Error) ||
-                         (e.Result == ActionRunnerResult.WrongComputer || e.Result == ActionRunnerResult.Missing || e.Result == ActionRunnerResult.NoTasks || e.Result == ActionRunnerResult.Locked) ) )
+                    // If it completed, or couldn't be run, then remove it from the list to be processed.
+                    if ((e.Result == ActionRunnerResult.Ran && (e.QueueAtFinish.Status == (int) ActionQueueStatus.Success || e.QueueAtFinish.Status == (int) ActionQueueStatus.Error) ||
+                         (e.Result == ActionRunnerResult.WrongComputer || e.Result == ActionRunnerResult.Missing || e.Result == ActionRunnerResult.NoTasks || e.Result == ActionRunnerResult.Locked)))
                     {
                         queueList.Remove(e.QueueID);
                     }

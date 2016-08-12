@@ -540,7 +540,7 @@ def latest_schema_version
 end
 
 def newest_version(sub_directory, initial_version, version_pattern)
-	Dir.entries("code/ShipWorks/Data/Administration/Scripts/Update/#{sub_directory}")
+	Dir.entries("code/ShipWorks.Res/Data/Administration/Scripts/Update/#{sub_directory}")
 		.map { |item| version_array item, version_pattern }
 		.inject(initial_version) { |latest, version| (version <=> latest) == 1 ? version : latest }
 		.join "."

@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 {
@@ -40,9 +37,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         /// <summary>
         /// This holds a collection of all the shipment objects that were passed into the UpsShipmentType.GetRates method
         /// </summary>
-        private List<ShipmentEntity> getRatesShipments; 
+        private List<ShipmentEntity> getRatesShipments;
 
-        private Mock<ICarrierAccountRepository<UpsAccountEntity>> genericRepositoryMock;
+        private Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> genericRepositoryMock;
         private Mock<WorldShipShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
 
@@ -55,16 +52,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             account2 = new UpsAccountEntity { UpsAccountID = 2, CountryCode = "US" };
             account3 = new UpsAccountEntity { UpsAccountID = 3, CountryCode = "US" };
 
-            account1Rate1 = new RateResult("Account 1a", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays};
+            account1Rate1 = new RateResult("Account 1a", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays };
             account1Rate2 = new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
             account1Rate3 = new RateResult("Account 1c", "1", 15, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
             account2Rate1 = new RateResult("* No rates were returned for the selected Service.", "");
             account3Rate1 = new RateResult("Account 3a", "4", 3, UpsServiceType.UpsExpressSaver) { ServiceLevel = ServiceLevelType.Anytime };
             account3Rate2 = new RateResult("Account 3b", "3", 10, UpsServiceType.Ups2DayAirAM) { ServiceLevel = ServiceLevelType.TwoDays };
 
-            rateGroup1 = new RateGroup(new [] { account1Rate1, account1Rate2, account1Rate3 });
-            rateGroup2 = new RateGroup(new [] { account2Rate1 });
-            rateGroup3 = new RateGroup(new [] { account3Rate1, account3Rate2 });
+            rateGroup1 = new RateGroup(new[] { account1Rate1, account1Rate2, account1Rate3 });
+            rateGroup2 = new RateGroup(new[] { account2Rate1 });
+            rateGroup3 = new RateGroup(new[] { account3Rate1, account3Rate2 });
 
             rateResults = new Dictionary<long, RateGroup>
                 {
@@ -73,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
                     {3, rateGroup3},
                 };
 
-            genericRepositoryMock = new Mock<ICarrierAccountRepository<UpsAccountEntity>>();
+            genericRepositoryMock = new Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
             genericRepositoryMock.Setup(x => x.Accounts)
                                  .Returns(new List<UpsAccountEntity> { account1, account2, account3 });
             genericRepositoryMock.Setup(x => x.DefaultProfileAccount)
@@ -100,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             };
 
 
-            testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity(), OriginCountryCode = "US" };
+            testShipment = new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity(), OriginCountryCode = "US" };
         }
 
         [Fact]
@@ -153,10 +150,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.Equal(expectedNumberOfAccountsReturned, numberOfTimesGetRatesCalled);
-            
+
             foreach (var shipment in getRatesShipments)
             {
-                Assert.Equal(ShipmentTypeCode.UpsWorldShip, (ShipmentTypeCode)shipment.ShipmentType);
+                Assert.Equal(ShipmentTypeCode.UpsWorldShip, (ShipmentTypeCode) shipment.ShipmentType);
                 Assert.Equal(12.1, shipment.ContentWeight);
             }
         }
@@ -260,9 +257,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
                 if (shipment.Ups.UpsAccountID == 2) throw exception;
                 return rateResults[shipment.Ups.UpsAccountID];
             };
-  
+
             testObject.GetBestRates(testShipment, brokerExceptions);
-            
+
             Assert.Equal(exception, brokerExceptions.First().InnerException);
         }
 
@@ -292,15 +289,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
                                    .Callback<ShipmentEntity>(x =>
                                        {
                                            x.Ups.Service = (int) UpsServiceType.UpsMailInnovationsExpedited;
-                                           x.Ups.Packages.Add(new UpsPackageEntity { PackagingType = (int)UpsPackagingType.Tube });
+                                           x.Ups.Packages.Add(new UpsPackageEntity { PackagingType = (int) UpsPackagingType.Tube });
                                        });
 
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.Equal(UpsServiceType.UpsGround, (UpsServiceType)shipment.Ups.Service);
-                Assert.Equal(UpsPackagingType.Custom, (UpsPackagingType)shipment.Ups.Packages[0].PackagingType);
+                Assert.Equal(UpsServiceType.UpsGround, (UpsServiceType) shipment.Ups.Service);
+                Assert.Equal(UpsPackagingType.Custom, (UpsPackagingType) shipment.Ups.Packages[0].PackagingType);
             }
         }
 
@@ -404,6 +401,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             Assert.True(rates.Rates.Select(x => x.Description).Contains("UPS Some Service"));
             Assert.Equal(1, rates.Rates.Count);
         }
-       
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Service for license related tasks
     /// </summary>
-    public class LicenseService : ILicenseService
+    public class LicenseService : ILicenseService, IInitializeForCurrentDatabase
     {
         private readonly Lazy<ICustomerLicenseReader> reader;
         private readonly Func<string, ICustomerLicense> customerLicenseFactory;
@@ -24,6 +25,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly Func<Owned<IUserSession>> getUserSession;
 
         private ICustomerLicense cachedCustomerLicense;
+
+        private bool? isLegacy = null;
 
         /// <summary>
         /// Constructor
@@ -42,14 +45,36 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Customer Key read from the reader.
         /// </summary>
         /// <exception cref="EncryptionException"></exception>
-        private string CustomerKey => reader.Value.Read();
+        private string CustomerKey
+        {
+            get
+            {
+                string customerKey = reader.Value.Read();
+
+                isLegacy = string.IsNullOrWhiteSpace(customerKey);
+
+                return customerKey;
+            }
+        }
 
         /// <summary>
         /// True if Legacy Customer
         /// </summary>
         /// <remarks>True if CustomerKey is null or empty</remarks>
         /// <exception cref="EncryptionException" />
-        private bool IsLegacy => string.IsNullOrEmpty(CustomerKey);
+        private bool IsLegacy
+        {
+            get
+            {
+                if (!isLegacy.HasValue)
+                {
+                    // Yes, this is duplicated code, but needed a way to get the initial value.
+                    isLegacy = string.IsNullOrWhiteSpace(CustomerKey);
+                }
+
+                return isLegacy.Value;
+            }
+        }
 
         /// <summary>
         /// Returns the correct ILicense for the store
@@ -166,6 +191,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             return cachedCustomerLicense;
+        }
+
+        /// <summary>
+        /// Initializes this class for the current database.
+        /// </summary>
+        public void InitializeForCurrentDatabase(ExecutionMode.ExecutionMode executionMode)
+        {
+            // Set isLegacy to null so that we will go to the db to get the new CustomerKey
+            isLegacy = null;
         }
     }
 }

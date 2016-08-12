@@ -392,6 +392,8 @@ namespace ShipWorks.Data.Model
 		EarliestExpectedDeliveryDate,
 		///<summary>LatestExpectedDeliveryDate. </summary>
 		LatestExpectedDeliveryDate,
+		///<summary>PurchaseOrderNumber. </summary>
+		PurchaseOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8704,6 +8706,8 @@ namespace ShipWorks.Data.Model
 		FedExFimsUsername,
 		///<summary>FedExFimsPassword. </summary>
 		FedExFimsPassword,
+		///<summary>ShipmentEditLimit. </summary>
+		ShipmentEditLimit,
 		/// <summary></summary>
 		AmountOfFields
 	}

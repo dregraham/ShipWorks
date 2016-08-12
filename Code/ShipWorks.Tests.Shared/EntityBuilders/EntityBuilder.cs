@@ -174,6 +174,38 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         }
 
         /// <summary>
+        /// Delete an entity
+        /// </summary>
+        public virtual void Delete(IEntity2 entity)
+        {
+            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save()");
+
+            sqlAdapterRetry.ExecuteWithRetry(() =>
+            {
+                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+                {
+                    sqlAdapter.DeleteEntity(entity);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Delete an entity collection
+        /// </summary>
+        public virtual void Delete(IEntityCollection2 entityCollection)
+        {
+            SqlAdapterRetry<Exception> sqlAdapterRetry = new SqlAdapterRetry<Exception>(5, -6, "Integration Test EntityBuilder.Save()");
+
+            sqlAdapterRetry.ExecuteWithRetry(() =>
+            {
+                using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+                {
+                    sqlAdapter.DeleteEntityCollection(entityCollection);
+                }
+            });
+        }
+
+        /// <summary>
         /// Build the entity
         /// </summary>
         public virtual T Build()

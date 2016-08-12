@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -12,12 +13,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonUpsRateFilter : IAmazonRateGroupFilter
     {
         private readonly Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory;
-        private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonUpsRateFilter"/> class.
         /// </summary>
-        public AmazonUpsRateFilter(ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository,
+        public AmazonUpsRateFilter(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             Func<ShipmentTypeCode, IAmazonNotLinkedFootnoteFactory> createFootnoteFactory)
         {
             this.upsAccountRepository = upsAccountRepository;

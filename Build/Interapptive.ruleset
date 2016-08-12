@@ -207,5 +207,11 @@
     <Rule Id="S3241" Action="Info" />
     <Rule Id="S3265" Action="Info" />
     <Rule Id="S3453" Action="Info" />
+    <Rule Id="S2583" Action="Info" />
+    <Rule Id="S2259" Action="Info" />
+    <Rule Id="S3264" Action="Info" />
+    <Rule Id="S3440" Action="Info" />
+    <Rule Id="S3459" Action="Info" />
+    <Rule Id="S3168" Action="Info" />
   </Rules>
 </RuleSet>

@@ -10,12 +10,6 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class EndiciaAccountEntity : ICarrierAccount
     {
         /// <summary>
-        /// Indicates if this account was migrated from ShipWorks2, and has not yet been updated for the new API
-        /// </summary>
-        public bool IsDazzleMigrationPending => 
-            string.IsNullOrEmpty(AccountNumber) && string.IsNullOrEmpty(SignupConfirmation);
-
-        /// <summary>
         /// Gets the account id in a generic way
         /// </summary>
         public long AccountId => EndiciaAccountID;
@@ -34,7 +28,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Applies account to shipment
         /// </summary>
-        public void ApplyTo(ShipmentEntity shipment) => 
+        public void ApplyTo(ShipmentEntity shipment) =>
             shipment.Postal.Endicia.EndiciaAccountID = AccountId;
     }
 }

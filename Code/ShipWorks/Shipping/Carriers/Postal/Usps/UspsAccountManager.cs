@@ -1,20 +1,22 @@
-﻿using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Collections;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -24,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public static class UspsAccountManager
     {
         static TableSynchronizer<UspsAccountEntity> synchronizer;
+        static IEnumerable<IUspsAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -58,6 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     synchronizer.EntityCollection.Sort((int) UspsAccountFieldIndex.Username, ListSortDirection.Ascending);
                 }
 
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
+
                 needCheckForChanges = false;
             }
         }
@@ -83,8 +88,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     filterredAccounts =
                         filterredAccounts.Where(account => account.PendingInitialAccount != (int) UspsPendingAccountType.Create);
                 }
-                
+
                 return EntityUtility.CloneEntityCollection(filterredAccounts);
+            }
+        }
+
+        /// <summary>
+        /// Get the USPS accounts in the system.  Optionally include those that have not yet totally completed signup where
+        /// the user is yet to enter the account ID.
+        /// </summary>
+        private static IEnumerable<IUspsAccountEntity> GetAccountsReadOnly(UspsResellerType uspsResellerType)
+        {
+            lock (synchronizer)
+            {
+                if (needCheckForChanges)
+                {
+                    InternalCheckForChanges();
+                }
+
+                return readOnlyAccounts.Where(account => account.UspsReseller == (int) uspsResellerType);
             }
         }
 
@@ -95,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             List<UspsAccountEntity> uspsAccountEntities = GetAccounts(UspsResellerType.None, true);
 
-            return uspsAccountEntities.FirstOrDefault(account=>account.PendingInitialAccount != (int) UspsPendingAccountType.None);
+            return uspsAccountEntities.FirstOrDefault(account => account.PendingInitialAccount != (int) UspsPendingAccountType.None);
         }
 
         /// <summary>
@@ -117,12 +139,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public static List<UspsAccountEntity> UspsAccounts => GetAccounts(UspsResellerType.None);
 
         /// <summary>
+        /// Return the active list of USPS accounts.
+        /// </summary>
+        public static IEnumerable<IUspsAccountEntity> UspsAccountsReadOnly => GetAccountsReadOnly(UspsResellerType.None);
+
+        /// <summary>
+        /// Return the active list of Express1 accounts
+        /// </summary>
+        public static IEnumerable<IUspsAccountEntity> Express1AccountsReadOnly => GetAccountsReadOnly(UspsResellerType.Express1);
+
+        /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
         public static UspsAccountEntity GetAccount(long accountID)
         {
             return UspsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID) ??
                    Express1Accounts.FirstOrDefault(a => a.UspsAccountID == accountID);
+        }
+
+        /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IUspsAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return UspsAccountsReadOnly.FirstOrDefault(a => a.UspsAccountID == accountID) ??
+                   Express1AccountsReadOnly.FirstOrDefault(a => a.UspsAccountID == accountID);
         }
 
         /// <summary>

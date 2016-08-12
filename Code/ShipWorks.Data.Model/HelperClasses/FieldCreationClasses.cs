@@ -792,6 +792,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.LatestExpectedDeliveryDate);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.PurchaseOrderNumber field instance</summary>
+		public static EntityField2 PurchaseOrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.PurchaseOrderNumber);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonOrderItemEntity</summary>
@@ -18736,6 +18741,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 FedExFimsPassword
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExFimsPassword);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipmentEditLimit field instance</summary>
+		public static EntityField2 ShipmentEditLimit
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentEditLimit);}
 		}
 	}
 

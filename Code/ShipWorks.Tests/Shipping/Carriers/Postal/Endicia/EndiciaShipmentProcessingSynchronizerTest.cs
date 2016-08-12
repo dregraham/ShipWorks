@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 {
@@ -11,11 +12,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
     {
         private EndiciaShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> accountRepository;
 
         public EndiciaShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
 
             testObject = new EndiciaShipmentProcessingSynchronizer(accountRepository.Object);
         }

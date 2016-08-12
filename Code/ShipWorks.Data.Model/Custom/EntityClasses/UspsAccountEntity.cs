@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.Business;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -7,7 +6,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// <summary>
     /// Extra implementation of the UspsAccountEntity
     /// </summary>
-    public partial class UspsAccountEntity : ICarrierAccount
+    public partial class UspsAccountEntity
     {
         /// <summary>
         /// Gets the account id in a generic way

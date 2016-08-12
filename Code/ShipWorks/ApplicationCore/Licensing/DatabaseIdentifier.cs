@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using Interapptive.Shared.Data;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -12,21 +13,11 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class DatabaseIdentifier : IDatabaseIdentifier
     {
         /// <summary>
-        /// Returns DatabaseGuid from database.
+        /// Returns DatabaseGuid of database.
         /// </summary>
         public Guid Get()
         {
-            try
-            {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new DatabaseIdentifierException(ex);
-            }
+            return SqlSession.Current.DatabaseIdentifier;
         }
     }
 }

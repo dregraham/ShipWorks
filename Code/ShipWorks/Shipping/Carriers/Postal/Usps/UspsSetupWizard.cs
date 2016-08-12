@@ -1,4 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -24,10 +28,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 radioNewAccount.Checked = true;
                 radioExistingAccount.Checked = false;
             }
-            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int)UspsPendingAccountType.Existing)
+            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
             {
                 radioNewAccount.Checked = false;
                 radioExistingAccount.Checked = true;
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UspsAccount = new UspsAccountEntity
                 {
                     CountryCode = "US",
-                    ContractType = (int)UspsAccountContractType.Unknown,
+                    ContractType = (int) UspsAccountContractType.Unknown,
                     CreatedDate = DateTime.UtcNow
                 };
 
@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
             // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int)UspsPendingAccountType.Existing;
+            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
 
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -254,7 +254,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (HasAcceptedTermsConditions() && IsContactInfoComplete())
             {
                 // We have the necessary information, so update our USPS registration
-                uspsRegistration.UsageType = ((UspsAccountUsageDropdownItem)uspsUsageType.SelectedItem).AccountType;
+                uspsRegistration.UsageType = ((UspsAccountUsageDropdownItem) uspsUsageType.SelectedItem).AccountType;
 
                 uspsRegistration.PhysicalAddress.FirstName = UspsAccount.FirstName;
                 uspsRegistration.PhysicalAddress.LastName = UspsAccount.LastName;
@@ -465,7 +465,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual void PrepareUspsAccountForSave()
         {
-            UspsAccount.UspsReseller = (int)UspsResellerType.None;
+            UspsAccount.UspsReseller = (int) UspsResellerType.None;
         }
 
         /// <summary>
@@ -486,7 +486,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccountManager.SaveAccount(UspsAccount);
 
             // Update the account contract type
-            UspsShipmentType uspsShipmentType = PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType)UspsAccount.UspsReseller);
+            UspsShipmentType uspsShipmentType = PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType) UspsAccount.UspsReseller);
             uspsShipmentType.UpdateContractType(UspsAccount);
         }
 
@@ -526,16 +526,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (DialogResult != DialogResult.OK &&
                 UspsAccount != null &&
                 !UspsAccount.IsNew &&
-                UspsAccount.PendingInitialAccount == (int)UspsPendingAccountType.None)
+                UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.None)
             {
                 UspsAccountManager.DeleteAccount(UspsAccount);
             }
             else if (DialogResult == DialogResult.OK)
             {
-                if (UspsAccount != null && UspsAccount.PendingInitialAccount != (int)UspsPendingAccountType.None)
+                if (UspsAccount != null && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.None)
                 {
                     // We need to denote that the account is completely configured/initialized
-                    UspsAccount.PendingInitialAccount = (int)UspsPendingAccountType.None;
+                    UspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
                     UspsAccountManager.SaveAccount(UspsAccount);
                 }
 
@@ -543,7 +543,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
-                UspsShipmentType shipmentType = (UspsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+                UspsShipmentType shipmentType = (UspsShipmentType) ShipmentTypeManager.GetType(shipmentTypeCode);
 
                 // If this is the only account, update this shipment type profiles with this account
                 List<UspsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();
@@ -556,7 +556,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // profiles that may be associated with a previous account that has since
                     // been deleted.
                     IEnumerable<ShippingProfileEntity> shippingProfileEntities = ShippingProfileManager.Profiles
-                        .Where(p => p.ShipmentType == (int)shipmentTypeCode)
+                        .Where(p => p.ShipmentType == (int) shipmentTypeCode)
                         .Where(shippingProfileEntity => shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue);
 
                     foreach (ShippingProfileEntity shippingProfileEntity in shippingProfileEntities)
@@ -641,12 +641,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static void ExcludeShipmentType(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeToExclude)
         {
-            if (!settings.ExcludedTypes.Any(t => t == (int)shipmentTypeToExclude))
+            if (!settings.ExcludedTypes.Any(t => t == shipmentTypeToExclude))
             {
-                List<int> excludedTypes = settings.ExcludedTypes.ToList();
-                excludedTypes.Add((int)shipmentTypeToExclude);
+                List<ShipmentTypeCode> excludedTypes = settings.ExcludedTypes.ToList();
+                excludedTypes.Add(shipmentTypeToExclude);
 
-                settings.ExcludedTypes = excludedTypes.ToArray();
+                settings.ExcludedTypes = excludedTypes;
             }
         }
 
@@ -661,7 +661,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 ShippingDefaultsRuleEntity clonedRule = CreateCopy(rule);
 
-                clonedRule.ShipmentType = (int)ShipmentTypeCode.Usps;
+                clonedRule.ShipmentType = (int) ShipmentTypeCode.Usps;
                 clonedRule.ShippingProfileID = GetRuleProfile(rule.ShippingProfileID);
 
                 ShippingDefaultsRuleManager.SaveRule(clonedRule);
@@ -702,8 +702,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
             newProfile.Name =
-                $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode)profile.ShipmentType)})";
-            newProfile.ShipmentType = (int)ShipmentTypeCode.Usps;
+                $"{profile.Name} (from {EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType)})";
+            newProfile.ShipmentType = (int) ShipmentTypeCode.Usps;
             newProfile.ShipmentTypePrimary = false;
 
             newProfile.Postal = CreateCopy(profile.Postal);
@@ -762,7 +762,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            switch ((UspsPendingAccountType)UspsAccount.PendingInitialAccount)
+            switch ((UspsPendingAccountType) UspsAccount.PendingInitialAccount)
             {
                 case UspsPendingAccountType.None:
                     break;
@@ -788,7 +788,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnSteppingIntoNewAccountPaymentAndBilling(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (UspsAccount.PendingInitialAccount != (int)UspsPendingAccountType.Create)
+            if (UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Create)
             {
                 e.Skip = true;
             }
@@ -857,7 +857,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 PersonAdapter meterAddressAdapter = new PersonAdapter();
                 postageMeterAddress.SaveToEntity(meterAddressAdapter);
 
-                if (string.IsNullOrWhiteSpace(meterAddressAdapter.Company) && string.IsNullOrWhiteSpace(meterAddressAdapter.UnparsedName) )
+                if (string.IsNullOrWhiteSpace(meterAddressAdapter.Company) && string.IsNullOrWhiteSpace(meterAddressAdapter.UnparsedName))
                 {
                     MessageHelper.ShowError(this, "Please enter a Full Name or Company Name.");
                     e.NextPage = CurrentPage;
@@ -906,8 +906,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             AssociateShipworksWithItselfRequest request =
                 ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));
-                
-  	        ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
+
+            ICustomerLicense customerLicense = (ICustomerLicense) ioc.Resolve<ILicenseService>().GetLicenses().Single();
 
             request.CardNumber = paymentAndBillingAddress.CardNumber;
             request.CardType = paymentAndBillingAddress.CardType;
@@ -915,7 +915,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             request.CardExpirationMonth = paymentAndBillingAddress.CreditCardExpirationMonth;
             request.CardExpirationYear = paymentAndBillingAddress.CreditCardExpirationYear;
             request.CardBillingAddress = paymentAndBillingAddress.BillingAddress;
-            
+
             request.CustomerKey = customerLicense.Key;
 
             return request;

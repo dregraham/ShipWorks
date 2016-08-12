@@ -1,12 +1,16 @@
-﻿using Autofac;
+﻿using System;
+using System.Reflection;
+using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -29,11 +33,9 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
-using ShipWorks.Users.Security;
-using System;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -98,16 +100,14 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.Register(c => Program.MainForm)
-                .As<Control>()
-                .As<IWin32Window>()
-                .ExternallyOwned();
-
             builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 
             builder.Register((_, p) => new AddressSelector(p.OfType<string>().FirstOrDefault()))
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<TrackedDurationEvent>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipBillAddressEditorDlg>();
@@ -175,7 +175,7 @@ namespace ShipWorks.ApplicationCore
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
                 .AsImplementedInterfaces();
 
-            builder.Register((_, parameters) => LogManager.GetLogger(parameters.TypedAs<Type>()));
+            ComponentAttribute.Register(builder, allAssemblies);
 
             foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
             {
@@ -231,7 +231,7 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<CustomerLicenseReader>()
                 .AsImplementedInterfaces();
-                
+
             builder.RegisterType<StoreLicense>()
                 .AsSelf();
 

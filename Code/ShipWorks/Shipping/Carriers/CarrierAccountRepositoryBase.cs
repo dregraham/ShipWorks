@@ -13,7 +13,8 @@ namespace ShipWorks.Shipping.Carriers
     /// implementations that could be used by other carrier account repositories.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class CarrierAccountRepositoryBase<T> : ICarrierAccountRepository<T> where T : ICarrierAccount
+    public abstract class CarrierAccountRepositoryBase<T, TInterface> : ICarrierAccountRepository<T, TInterface>
+        where T : TInterface where TInterface : ICarrierAccount
     {
         /// <summary>
         /// Force a check for changes
@@ -34,6 +35,11 @@ namespace ShipWorks.Shipping.Carriers
         ///  Returns the default account as defined by the primary profile
         ///  </summary>
         public abstract T DefaultProfileAccount { get; }
+
+        /// <summary>
+        /// Readonly list of accounts
+        /// </summary>
+        public abstract IEnumerable<TInterface> AccountsReadOnly { get; }
 
         /// <summary>
         /// Saves the specified account.
@@ -79,5 +85,10 @@ namespace ShipWorks.Shipping.Carriers
                 return shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
             }
         }
+
+        /// <summary>
+        /// Get a readonly account with the given id
+        /// </summary>
+        public abstract TInterface GetAccountReadOnly(long uspsAccountID);
     }
 }

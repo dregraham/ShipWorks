@@ -8,6 +8,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
 
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Settings
         static bool needCheckForChanges = false;
 
         static object threadLock = new object();
+        private static IShippingSettingsEntity readOnlyEntity;
 
         /// <summary>
         /// Initialize for the currently logged on user
@@ -29,9 +31,8 @@ namespace ShipWorks.Shipping.Settings
         public static void InitializeForCurrentDatabase()
         {
             entity = new ShippingSettingsEntity(true);
-            SqlAdapter.Default.FetchEntity(entity);
 
-            needCheckForChanges = false;
+            RefreshSettingsData();
         }
 
         /// <summary>
@@ -51,12 +52,37 @@ namespace ShipWorks.Shipping.Settings
             {
                 if (needCheckForChanges)
                 {
-                    SqlAdapter.Default.FetchEntity(entity);
-                    needCheckForChanges = false;
+                    RefreshSettingsData();
                 }
 
                 return EntityUtility.CloneEntity(entity);
             }
+        }
+
+        /// <summary>
+        /// Fetch the latest shipping settings
+        /// </summary>
+        public static IShippingSettingsEntity FetchReadOnly()
+        {
+            lock (threadLock)
+            {
+                if (needCheckForChanges)
+                {
+                    RefreshSettingsData();
+                }
+
+                return readOnlyEntity;
+            }
+        }
+
+        /// <summary>
+        /// Load the shipping settings if necessary
+        /// </summary>
+        private static void RefreshSettingsData()
+        {
+            SqlAdapter.Default.FetchEntity(entity);
+            readOnlyEntity = entity.AsReadOnly();
+            needCheckForChanges = false;
         }
 
         /// <summary>
@@ -69,6 +95,7 @@ namespace ShipWorks.Shipping.Settings
                 adapter.SaveAndRefetch(settings);
 
                 Interlocked.Exchange(ref entity, EntityUtility.CloneEntity(settings));
+                readOnlyEntity = entity.AsReadOnly();
             }
 
             needCheckForChanges = false;
@@ -97,9 +124,9 @@ namespace ShipWorks.Shipping.Settings
             CheckForChangesNeeded();
             ShippingSettingsEntity settings = Fetch();
 
-            List<int> configured = new List<int>(settings.ConfiguredTypes);
+            List<ShipmentTypeCode> configured = settings.ConfiguredTypes.ToList();
 
-            bool isConfigured = configured.Contains((int) shipmentTypeCode);
+            bool isConfigured = configured.Contains(shipmentTypeCode);
 
             if (!isConfigured)
             {
@@ -112,8 +139,8 @@ namespace ShipWorks.Shipping.Settings
             // Make sure its marked as configured
             if (!isConfigured)
             {
-                configured.Add((int) shipmentTypeCode);
-                settings.ConfiguredTypes = configured.ToArray();
+                configured.Add(shipmentTypeCode);
+                settings.ConfiguredTypes = configured;
             }
 
             // Save the changes, if any
@@ -134,12 +161,12 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private static void Activate(ShipmentTypeCode shipmentTypeCode, ShippingSettingsEntity settings)
         {
-            List<int> activated = new List<int>(settings.ActivatedTypes);
+            List<ShipmentTypeCode> activated = settings.ActivatedTypes.ToList();
 
             // If its configured, its activated
-            if (!activated.Contains((int) shipmentTypeCode))
+            if (!activated.Contains(shipmentTypeCode))
             {
-                activated.Add((int) shipmentTypeCode);
+                activated.Add(shipmentTypeCode);
                 settings.ActivatedTypes = activated.ToArray();
             }
         }
@@ -163,11 +190,11 @@ namespace ShipWorks.Shipping.Settings
         {
             ShippingSettingsEntity settings = new ShippingSettingsEntity(true);
 
-            settings.ActivatedTypes = new int[0];
-            settings.ConfiguredTypes = new int[0];
+            settings.ActivatedTypes = Enumerable.Empty<ShipmentTypeCode>();
+            settings.ConfiguredTypes = Enumerable.Empty<ShipmentTypeCode>();
 
             // Only want to show the single USPS provider by default
-            settings.ExcludedTypes = new int[] { (int) ShipmentTypeCode.Endicia, (int) ShipmentTypeCode.Express1Endicia, (int) ShipmentTypeCode.Express1Usps, (int) ShipmentTypeCode.PostalWebTools, (int) ShipmentTypeCode.iParcel, (int) ShipmentTypeCode.OnTrac };
+            settings.ExcludedTypes = new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.iParcel, ShipmentTypeCode.OnTrac };
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
@@ -220,13 +247,14 @@ namespace ShipWorks.Shipping.Settings
             settings.UpsMailInnovationsEnabled = false;
             settings.WorldShipMailInnovationsEnabled = false;
 
-            settings.BestRateExcludedTypes = new int[0];
+            settings.BestRateExcludedTypes = Enumerable.Empty<ShipmentTypeCode>();
             settings.ShipSenseEnabled = true;
             settings.ShipSenseUniquenessXml = "<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>";
             settings.ShipSenseProcessedShipmentID = 0;
             settings.ShipSenseEndShipmentID = 0;
 
             settings.AutoCreateShipments = true;
+            settings.ShipmentEditLimit = ShipmentsLoaderConstants.DefaultMaxAllowedOrders;
 
             settings.FedExFimsEnabled = false;
             settings.FedExFimsUsername = string.Empty;

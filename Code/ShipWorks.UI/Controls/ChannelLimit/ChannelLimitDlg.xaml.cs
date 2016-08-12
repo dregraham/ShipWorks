@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Interop;
 using ShipWorks.ApplicationCore.Licensing;
 using IWin32Window = System.Windows.Forms.IWin32Window;
@@ -36,15 +35,6 @@ namespace ShipWorks.UI.Controls.ChannelLimit
             {
                 Owner = owner.Handle
             };
-        }
-
-        /// <summary>
-        /// Updates the enabled state of the dlg based on the controls state
-        /// </summary>
-        private void OnEnabledChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            close.IsEnabled = (bool)dependencyPropertyChangedEventArgs.NewValue;
-            Cursor = (bool)dependencyPropertyChangedEventArgs.NewValue ? Cursors.Arrow : Cursors.Wait;
         }
 
         /// <summary>

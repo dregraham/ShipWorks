@@ -18,6 +18,7 @@ using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Filters;
@@ -1062,6 +1063,28 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
         #endregion
 
+
+        /// <summary>
+        /// Will calling OverrideShipmentDetails change the specified shipment
+        /// </summary>
+        public override bool WillOverrideShipmentDetailsChangeShipment(IShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                return false;
+            }
+
+            // Fetch the eBay order details so we have the latest GSP related data about the order
+            IEbayOrderEntity ebayOrder = shipment.Order as IEbayOrderEntity ??
+                DataProvider.GetEntity(shipment.OrderID) as IEbayOrderEntity;
+
+            // We're going to use the the GSP policy to inspect the order and configure the shipment
+            // to be shipped to the GSP domestic facility if it's eligible
+            Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
+
+            return policy.IsEligibleForGlobalShippingProgram(ebayOrder);
+        }
+
         /// <summary>
         /// Intended to be called during the processing of a shipment to allow the store to the
         /// chance to override the shipment details for any functionality that may be specific
@@ -1073,27 +1096,25 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// of the shipment were changed.</returns>
         public override List<ShipmentFieldIndex> OverrideShipmentDetails(ShipmentEntity shipment)
         {
-            // Overridden so we can change the shipping address if this is a Global Shipping Program order
-            List<ShipmentFieldIndex> modifiedFieldList = new List<ShipmentFieldIndex>();
-
             if (shipment != null)
             {
                 // Fetch the eBay order details so we have the latest GSP related data about the order
-                EbayOrderEntity ebayOrder = DataProvider.GetEntity(shipment.OrderID) as EbayOrderEntity;
+                IEbayOrderEntity ebayOrder = shipment.Order as IEbayOrderEntity ??
+                    DataProvider.GetEntity(shipment.OrderID) as IEbayOrderEntity;
 
                 // We're going to use the the GSP policy to inspect the order and configure the shipment
                 // to be shipped to the GSP domestic facility if it's eligible
-                Ebay.Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
+                Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
 
                 if (policy.IsEligibleForGlobalShippingProgram(ebayOrder))
                 {
                     // The order is an GSP order, so we'll need to change the address on the
                     // shipment to go to the GSP facility address on the eBay order
-                    modifiedFieldList = policy.ConfigureShipmentForGlobalShippingProgram(shipment, ebayOrder);
+                    return policy.ConfigureShipmentForGlobalShippingProgram(shipment, ebayOrder);
                 }
             }
 
-            return modifiedFieldList;
+            return new List<ShipmentFieldIndex>();
         }
 
         /// <summary>
