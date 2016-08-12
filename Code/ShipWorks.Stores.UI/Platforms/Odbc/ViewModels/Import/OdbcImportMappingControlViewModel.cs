@@ -267,8 +267,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             IOdbcFieldMapEntry orderNumberEntry =
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
-            if (orderNumberEntry != null &&
-                numberOfItemsPerOrder == 1 &&
+            int calculatedNumberOfEntries = storeFieldMap.Entries.Select(e=>e.Index).DefaultIfEmpty(0).Max() + 1;
+
+            if (orderNumberEntry != null && 
+                calculatedNumberOfEntries == 1 && 
+                !string.IsNullOrEmpty(RecordIdentifier.Name) && 
                 RecordIdentifier.Name != orderNumberEntry.ExternalField.Column.Name)
             {
                 IsSingleLineOrder = false;
