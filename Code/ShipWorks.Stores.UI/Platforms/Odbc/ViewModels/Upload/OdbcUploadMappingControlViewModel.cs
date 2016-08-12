@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 if (columnsNotFound.Any())
                 {
                     messageHelper.ShowWarning(
-                        $"The column(s) {string.Join(", ", columnsNotFound)} could not be found in the current data source. Any mappings that use these column(s) have been reset. Changes will not be saved until the finish button is clicked.");
+                        $"The column(s) {string.Join(", ", columnsNotFound.Distinct())} could not be found in the current data source. Any mappings that use these column(s) have been reset. Changes will not be saved until the finish button is clicked.");
                 }
             }
         }
