@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
+using ShipWorks.Templates;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
@@ -28,7 +29,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// </summary>
         public string GenerateSql()
         {
-            return templateTokenProcessor.ProcessTokens(store.UploadColumnSource, shipment.ShipmentID, false);
+            try
+            {
+                return templateTokenProcessor.ProcessTokens(store.UploadColumnSource, shipment.ShipmentID, false);
+            }
+            catch (TemplateException ex)
+            {
+                throw new ShipWorksOdbcException(ex);
+            }
         }
 
         /// <summary>
