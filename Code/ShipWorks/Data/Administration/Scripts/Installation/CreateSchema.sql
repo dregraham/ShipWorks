@@ -1,6 +1,7 @@
 
 
 
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -2138,9 +2139,9 @@ CREATE TABLE [dbo].[FilterNodeContentDetail]
 [ObjectID] [bigint] NOT NULL
 )
 GO
-PRINT N'Creating index [IX_FilterNodeCountDetail] on [dbo].[FilterNodeContentDetail]'
+PRINT N'Creating primary key [PK_FilterNodeContentDetail] on [dbo].[FilterNodeContentDetail]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeCountDetail] ON [dbo].[FilterNodeContentDetail] ([FilterNodeContentID], [ObjectID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeContentDetail] ADD CONSTRAINT [PK_FilterNodeContentDetail] PRIMARY KEY CLUSTERED  ([FilterNodeContentID], [ObjectID]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating [dbo].[Filter]'
 GO
@@ -4332,9 +4333,9 @@ CREATE TABLE [dbo].[FilterNodeUpdateCustomer]
 [ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
-PRINT N'Creating index [IX_FilterNodeUpdateCustomer] on [dbo].[FilterNodeUpdateCustomer]'
+PRINT N'Creating primary key [PK_FilterNodeUpdateCustomer] on [dbo].[FilterNodeUpdateCustomer]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateCustomer] ON [dbo].[FilterNodeUpdateCustomer] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeUpdateCustomer] ADD CONSTRAINT [PK_FilterNodeUpdateCustomer] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating [dbo].[FilterNodeUpdateItem]'
 GO
@@ -4345,9 +4346,9 @@ CREATE TABLE [dbo].[FilterNodeUpdateItem]
 [ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
-PRINT N'Creating index [IX_FilterNodeUpdateItem] on [dbo].[FilterNodeUpdateItem]'
+PRINT N'Creating primary key [PK_FilterNodeUpdateItem] on [dbo].[FilterNodeUpdateItem]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateItem] ON [dbo].[FilterNodeUpdateItem] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeUpdateItem] ADD CONSTRAINT [PK_FilterNodeUpdateItem] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating [dbo].[FilterNodeUpdateOrder]'
 GO
@@ -4358,9 +4359,9 @@ CREATE TABLE [dbo].[FilterNodeUpdateOrder]
 [ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
-PRINT N'Creating index [IX_FilterNodeUpdateOrder] on [dbo].[FilterNodeUpdateOrder]'
+PRINT N'Creating primary key [PK_FilterNodeUpdateOrder] on [dbo].[FilterNodeUpdateOrder]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateOrder] ON [dbo].[FilterNodeUpdateOrder] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeUpdateOrder] ADD CONSTRAINT [PK_FilterNodeUpdateOrder] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating [dbo].[FilterNodeUpdatePending]'
 GO
@@ -4382,9 +4383,9 @@ CREATE TABLE [dbo].[FilterNodeUpdateShipment]
 [ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
-PRINT N'Creating index [IX_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateShipment]'
+PRINT N'Creating primary key [PK_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateShipment]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateShipment] ON [dbo].[FilterNodeUpdateShipment] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+ALTER TABLE [dbo].[FilterNodeUpdateShipment] ADD CONSTRAINT [PK_FilterNodeUpdateShipment] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating [dbo].[FtpAccount]'
 GO
