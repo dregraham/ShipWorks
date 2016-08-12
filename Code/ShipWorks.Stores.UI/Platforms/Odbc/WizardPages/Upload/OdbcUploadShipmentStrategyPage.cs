@@ -69,15 +69,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         {
             if (doNotUpload.Checked)
             {
-                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
+                store.UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload;
             }
             else if (useImportDataSource.Checked)
             {
-                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseImportDataSource;
+                store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseImportDataSource;
             }
             else if (useShipmentDataSource.Checked)
             {
-                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseShipmentDataSource;
+                store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource;
             }
         }
     }

@@ -24,6 +24,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels
             // not implemented for testing the abstract class
         }
 
-        public override string CustomQueryColumnSourceName { get; }
+        public override string CustomQueryColumnSourceName => "Test query column source name";
     }
 }
