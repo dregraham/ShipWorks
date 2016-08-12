@@ -61,5 +61,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
                 store.UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource;
             }
         }
+
+        /// <summary>
+        /// Called when [step back].
+        /// </summary>
+        private void OnStepBack(object sender, WizardStepEventArgs e)
+        {
+            if (doNotUpload.Checked)
+            {
+                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.DoNotUpload;
+            }
+            else if (useImportDataSource.Checked)
+            {
+                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseImportDataSource;
+            }
+            else if (useShipmentDataSource.Checked)
+            {
+                store.UploadStrategy = (int)OdbcShipmentUploadStrategy.UseShipmentDataSource;
+            }
+        }
     }
 }

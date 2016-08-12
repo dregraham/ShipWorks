@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -10,7 +9,7 @@ namespace ShipWorks.Stores
     /// <summary>
     /// An event for obtaining telemetry on store configuration.
     /// </summary>
-    public class StoreSettingsTrackedDurationEvent : TrackedDurationEvent, IDisposable
+    public class StoreSettingsTrackedDurationEvent : TrackedDurationEvent, IStoreSettingsTrackedDurationEvent
     {
         private readonly string formattedName;
         private string storeTypeCode;
@@ -20,7 +19,7 @@ namespace ShipWorks.Stores
         /// </summary>
         /// <param name="formattedName">Name of the formatted.</param>
         public StoreSettingsTrackedDurationEvent(string formattedName) 
-            : base(formattedName)
+            : base(string.Empty)
         {
             this.formattedName = formattedName;
         }
@@ -33,8 +32,8 @@ namespace ShipWorks.Stores
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                IStoreSettingsTelemetryCollector telemetryController = scope.ResolveKeyed<IStoreSettingsTelemetryCollector>(store.StoreTypeCode);
-                telemetryController.CollectTelemetry(store, this);
+                IStoreSettingsTelemetryCollector telemetryController = scope.ResolveOptionalKeyed<IStoreSettingsTelemetryCollector>(store.StoreTypeCode);
+                telemetryController?.CollectTelemetry(store, this);
             }
 
             storeTypeCode = EnumHelper.GetDescription(store.StoreTypeCode);
@@ -43,7 +42,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public new void Dispose()
+        public override void Dispose()
         {
             string storeType = string.IsNullOrWhiteSpace(storeTypeCode) ? "Unknown" : storeTypeCode;
             string eventName = string.Format(formattedName, storeType);

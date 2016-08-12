@@ -1144,6 +1144,7 @@
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
+    <Compile Include="Stores\IStoreSettingsTrackedDurationEvent.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

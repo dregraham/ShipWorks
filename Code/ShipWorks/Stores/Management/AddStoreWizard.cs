@@ -1,5 +1,6 @@
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -30,6 +31,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Quartz.Util;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -106,14 +108,24 @@ namespace ShipWorks.Stores.Management
                 using (new ShipWorksSetupLock())
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
                 using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
+                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent =
+                    IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreSettingsTrackedDurationEvent>(
+                        new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
-                    // If it was successful, make sure our local list of stores is refreshed
-                    if (wizard.ShowDialog(owner) == DialogResult.OK)
-                    {
-                        StoreManager.CheckForChanges();
+                    // Show the wizard and collect report the store configuration/settings
+                    // for telemetry purposes
+                    DialogResult dialogResult = wizard.ShowDialog(owner);
 
+                    if (dialogResult == DialogResult.OK)
+                    {
+                        CollectTelemetry(wizard.Store, storeSettingsEvent, dialogResult);
+                        // The store was added, so make sure our local list of stores is refreshed
+                        StoreManager.CheckForChanges();
                         return true;
                     }
+
+                    // If canceling out of the add store wizard, collect telemetry from the AbandonedStore property
+                    CollectTelemetry(wizard.AbandonedStore, storeSettingsEvent, dialogResult);
 
                     return false;
                 }
@@ -123,6 +135,19 @@ namespace ShipWorks.Stores.Management
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks. This can only be done on one computer at a time.");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Collects the telemetry.
+        /// </summary>
+        private static void CollectTelemetry(StoreEntity store, IStoreSettingsTrackedDurationEvent storeSettingsEvent, DialogResult dialogResult)
+        {
+            if (store != null)
+            {
+                storeSettingsEvent.RecordStoreConfiguration(store);
+            }
+
+            storeSettingsEvent.AddProperty("Abandoned", dialogResult == DialogResult.OK ? "No" : "Yes");
         }
 
         /// <summary>
@@ -227,6 +252,12 @@ namespace ShipWorks.Stores.Management
         /// The store currently being configured by the wizard
         /// </summary>
         public StoreEntity Store => store;
+
+
+        /// <summary>
+        /// The store that was being configured when the wizard is abandoned
+        /// </summary>
+        public StoreEntity AbandonedStore { get; set; }
 
         /// <summary>
         /// Wizard is loading
@@ -1082,6 +1113,7 @@ namespace ShipWorks.Stores.Management
             {
                 if (store != null)
                 {
+                    AbandonedStore = store.DeepClone();
                     DeletionService.DeleteStore(store, UserSession.Security);
                     store = null;
                 }
