@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         }
 
         /// <summary>
-        /// Save the map to the ODBC Store
+        /// Save the map settings to the ODBC Store
         /// </summary>
         private void OnBack(object sender, WizardStepEventArgs e)
         {
