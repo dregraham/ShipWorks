@@ -113,6 +113,7 @@
             this.Title = "Upload Options";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
+            this.StepBack += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepBack);
             this.uploadStrategyPanel.ResumeLayout(false);
             this.uploadStrategyPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxShipmentUpdate)).EndInit();
