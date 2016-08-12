@@ -45,6 +45,6 @@
                 Margin="0 0 10 10"
                 HorizontalAlignment="Right"
                 Click="CloseWindow"
-                Content="OK" />
+                Content="OK" IsDefault="True" />
     </Grid>
 </Window>
