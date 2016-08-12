@@ -188,10 +188,14 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0"
+                <ScrollViewer x:Name="ScrollViewer"
+                              Grid.Row="0"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Auto">
-                    <DataGrid IsReadOnly="True" ItemsSource="{Binding QueryResults, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGrid IsReadOnly="True"
+                              ItemsSource="{Binding QueryResults,
+                                                    UpdateSourceTrigger=PropertyChanged}"
+                              PreviewMouseWheel="MouseWheelScrolled" />
                 </ScrollViewer>
 
                 <Label Grid.Row="1"
