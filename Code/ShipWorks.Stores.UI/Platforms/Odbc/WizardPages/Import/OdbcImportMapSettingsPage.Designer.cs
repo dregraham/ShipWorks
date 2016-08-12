@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.mapSettingsControl = new Controls.Import.OdbcImportMapSettingsControl();
+            this.mapSettingsControl = new ShipWorks.Stores.UI.Platforms.Odbc.Controls.Import.OdbcImportMapSettingsControl();
             this.SuspendLayout();
             // 
             // elementHost1
@@ -47,8 +47,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.elementHost1);
+            this.Description = "Setup the ODBC import settings.";
             this.Name = "OdbcImportMapSettingsPage";
             this.Size = new System.Drawing.Size(540, 500);
+            this.Title = "Import Settings";
             this.ResumeLayout(false);
 
         }

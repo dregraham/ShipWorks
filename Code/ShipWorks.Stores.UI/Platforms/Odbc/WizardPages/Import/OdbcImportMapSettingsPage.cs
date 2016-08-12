@@ -1,5 +1,4 @@
 ﻿using Autofac.Features.Indexed;
-using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -14,7 +13,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
 {
     public partial class OdbcImportMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage, IWin32Window
     {
-        private readonly IMessageHelper messageHelper;
         private readonly IOdbcDataSourceService dataSourceService;
         private readonly IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory;
         private readonly IOdbcSchema schema;
@@ -24,12 +22,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportMappingPage"/> class.
         /// </summary>
-        public OdbcImportMapSettingsPage(IMessageHelper messageHelper,
-            IOdbcDataSourceService dataSourceService,
+        public OdbcImportMapSettingsPage(IOdbcDataSourceService dataSourceService,
             IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory,
             IOdbcSchema schema)
         {
-            this.messageHelper = messageHelper;
             this.dataSourceService = dataSourceService;
             this.viewModelFactory = viewModelFactory;
             this.schema = schema;

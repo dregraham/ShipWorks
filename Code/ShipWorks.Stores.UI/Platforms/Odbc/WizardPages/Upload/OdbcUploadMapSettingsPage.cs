@@ -1,5 +1,4 @@
 ﻿using Autofac.Features.Indexed;
-using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -17,7 +16,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
     /// </summary>
     public partial class OdbcUploadMapSettingsPage : AddStoreWizardPage, IOdbcWizardPage
     {
-        private readonly IMessageHelper messageHelper;
         private readonly IOdbcDataSourceService dataSourceService;
         private readonly IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory;
         private readonly IOdbcSchema schema;
@@ -27,12 +25,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcUploadMapSettingsPage"/> class.
         /// </summary>
-        public OdbcUploadMapSettingsPage(IMessageHelper messageHelper,
-            IOdbcDataSourceService dataSourceService,
+        public OdbcUploadMapSettingsPage(IOdbcDataSourceService dataSourceService,
             IIndex<string, IOdbcMapSettingsControlViewModel> viewModelFactory,
             IOdbcSchema schema)
         {
-            this.messageHelper = messageHelper;
             this.dataSourceService = dataSourceService;
             this.viewModelFactory = viewModelFactory;
             this.schema = schema;
