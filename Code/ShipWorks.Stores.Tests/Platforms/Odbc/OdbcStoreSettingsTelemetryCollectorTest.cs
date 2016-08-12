@@ -32,7 +32,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
         public OdbcStoreSettingsTelemetryCollectorTest()
         {
-            odbcStore = new OdbcStoreEntity();
+            odbcStore = new OdbcStoreEntity()
+            {
+                ImportConnectionString = "not a null string",
+                UploadConnectionString = "also not null"
+            };
+            
             mock = AutoMock.GetLoose();
 
             trackedDurationEventMock = mock.MockRepository.Create<ITrackedDurationEvent>();
@@ -75,6 +80,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void CollectTelemetry_ImportDriverSetFromDataSourceService()
         {
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
+            
             testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.Driver", ImportDriverName));
