@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
@@ -25,7 +24,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         bool IAmazonOrder.IsPrime
         {
-            get { return IsPrime == (int)ChannelAdvisorIsAmazonPrime.Yes; }
+            get { return IsPrime == (int) ChannelAdvisorIsAmazonPrime.Yes; }
         }
 
         /// <summary>
@@ -35,5 +34,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return OrderItems.Select(s => s as IAmazonOrderItem); }
         }
+
+        /// <summary>
+        /// Should the order be treated as same day
+        /// </summary>
+        public bool IsSameDay(Func<DateTime> getUtcNow) => false;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
@@ -15,17 +14,14 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// True if the order is an Amazon Prime order, false otherwise
         /// </summary>
-        string IAmazonOrder.AmazonOrderID
-        {
-            get { return this.AmazonOrderID; }
-        }
+        string IAmazonOrder.AmazonOrderID => AmazonOrderID;
 
         /// <summary>
         /// The Amazon Order ID from Amazon
         /// </summary>
         bool IAmazonOrder.IsPrime
         {
-            get { return this.IsPrime == (int) AmazonMwsIsPrime.Yes; }
+            get { return IsPrime == (int) AmazonMwsIsPrime.Yes; }
         }
 
         /// <summary>
@@ -33,7 +29,19 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public IEnumerable<IAmazonOrderItem> AmazonOrderItems
         {
-            get { return OrderItems.Select(s => s as IAmazonOrderItem); }
+            get { return OrderItems.OfType<IAmazonOrderItem>(); }
+        }
+
+        /// <summary>
+        /// Should the order be treated as same day
+        /// </summary>
+        /// <remarks>We have to do the date check here because we won't get rates from Amazon if we treat the shipment
+        /// as same day, but the customer missed the delivery date.</remarks>
+        public bool IsSameDay(Func<DateTime> getUtcNow)
+        {
+            return (RequestedShipping?.StartsWith("sameday", StringComparison.OrdinalIgnoreCase) ?? false) &&
+                LatestExpectedDeliveryDate.HasValue &&
+                LatestExpectedDeliveryDate.Value > getUtcNow();
         }
     }
 }

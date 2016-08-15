@@ -2,17 +2,19 @@
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonShipmentRequestDetailsFactoryTest
     {
-        readonly AmazonOrderEntity order = new AmazonOrderEntity();
+        readonly AutoMock mock;
+        readonly IAmazonOrder order;
         readonly ShipmentEntity shipmentEntity = new ShipmentEntity
         {
             OriginStreet1 = "123",
@@ -29,7 +31,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 DeliveryExperience = 1
             }
         };
-        readonly AmazonShipmentRequestDetailsFactory amazonShipmentRequestDetailsFactory = new AmazonShipmentRequestDetailsFactory();
+
+        readonly AmazonShipmentRequestDetailsFactory amazonShipmentRequestDetailsFactory;
+
+        public AmazonShipmentRequestDetailsFactoryTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            order = mock.Create<IAmazonOrder>();
+            amazonShipmentRequestDetailsFactory = mock.Create<AmazonShipmentRequestDetailsFactory>();
+        }
 
         [Fact]
         public void CreateReturns_ShipmentRequestDetailsWith_DeclaredValue()
@@ -70,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void CreateReturns_NameIsCopied_WhenParseStatusIsUnknown()
         {
-            shipmentEntity.OriginNameParseStatus = (int)PersonNameParseStatus.Unknown;
+            shipmentEntity.OriginNameParseStatus = (int) PersonNameParseStatus.Unknown;
             shipmentEntity.OriginUnparsedName = string.Empty;
             shipmentEntity.OriginFirstName = "Foo";
             shipmentEntity.OriginLastName = "Bar";
@@ -83,7 +93,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void CreateReturns_NameIsCopied_WhenParseStatusIsSimple()
         {
-            shipmentEntity.OriginNameParseStatus = (int)PersonNameParseStatus.Simple;
+            shipmentEntity.OriginNameParseStatus = (int) PersonNameParseStatus.Simple;
             shipmentEntity.OriginUnparsedName = "Foo Bar";
             shipmentEntity.OriginFirstName = "Foo";
             shipmentEntity.OriginLastName = "Bar";
@@ -98,7 +108,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.ShippingServiceOptions.DeliveryExperience, EnumHelper.GetApiValue((AmazonDeliveryExperienceType)1));
+            Assert.Equal(testObject.ShippingServiceOptions.DeliveryExperience, EnumHelper.GetApiValue((AmazonDeliveryExperienceType) 1));
+        }
+
+        [Fact]
+        public void Create_UsesUTCNow_OnDateTimeProvider()
+        {
+            var mockedOrder = mock.Mock<IAmazonOrder>();
+            var mockedDateTimeProvider = mock.Mock<IDateTimeProvider>();
+
+            amazonShipmentRequestDetailsFactory.Create(shipmentEntity, mockedOrder.Object);
+
+            mockedOrder.Verify(x => x.IsSameDay(mockedDateTimeProvider.Object.GetUtcNow));
         }
     }
 }
