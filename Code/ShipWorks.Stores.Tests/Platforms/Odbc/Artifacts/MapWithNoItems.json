@@ -1,0 +1,46 @@
+﻿{
+  "Entries": [
+    {
+      "Index": 0,
+      "ShipWorksField": {
+        "ContainingObjectName": "OrderEntity",
+        "Name": "OrderNumber",
+        "DisplayName": "Order Number",
+        "ResolutionStrategy": 0
+      },
+      "ExternalField": {
+        "Column": {
+          "Name": "OrderId"
+        }
+      }
+    },
+    {
+      "Index": 0,
+      "ShipWorksField": {
+        "ContainingObjectName": "OrderEntity",
+        "Name": "OrderDate",
+        "DisplayName": "Order Date & Time",
+        "ResolutionStrategy": 0
+      },
+      "ExternalField": {
+        "Column": {
+          "Name": "OrderDate"
+        }
+      }
+    },
+    {
+      "Index": 0,
+      "ShipWorksField": {
+        "ContainingObjectName": "OrderEntity",
+        "Name": "OnlineLastModified",
+        "DisplayName": "Last Modified Date & Time",
+        "ResolutionStrategy": 0
+      },
+		"ExternalField": {
+			"Column": {
+				"Name": "OnlineLastModified"
+			}
+		}
+    }],
+  	"RecordIdentifierSource": "OrderNumber"
+}

@@ -17,6 +17,7 @@ using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -43,7 +44,9 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Download orders from the ProStores online store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

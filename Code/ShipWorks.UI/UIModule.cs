@@ -1,5 +1,6 @@
 using System;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Editions;
@@ -87,6 +88,9 @@ namespace ShipWorks.UI
 
             builder.RegisterType<GenericModuleBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.GenericModule);
+
+            builder.RegisterType<OdbcBehavior>()
+                .Keyed<IChannelLimitBehavior>(EditionFeature.Odbc);
 
             builder.RegisterType<ChannelsOutOfSyncBehavior>()
                 .Keyed<IChannelLimitBehavior>(EditionFeature.ClientChannelsAccountedFor);

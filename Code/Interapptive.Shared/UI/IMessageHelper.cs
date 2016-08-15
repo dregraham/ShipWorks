@@ -43,5 +43,20 @@ namespace Interapptive.Shared.UI
         /// Show a dialog and get the results
         /// </summary>
         DialogResult ShowDialog(Func<Form> createDialog);
+
+        /// <summary>
+        /// Show an information message, takes an owner
+        /// </summary>
+        void ShowInformation(IWin32Window owner, string message);
+
+        /// <summary>
+        /// Show a question message box.
+        /// </summary>
+        DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message);
+
+        /// <summary>
+        /// Show a warning message
+        /// </summary>
+        void ShowWarning(string message);
     }
 }

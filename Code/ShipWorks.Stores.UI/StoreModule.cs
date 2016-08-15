@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Stores.Services;
 
 namespace ShipWorks.Stores.UI
@@ -23,6 +24,19 @@ namespace ShipWorks.Stores.UI
             builder.RegisterType<StoreTypeManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<OrderRepository>()
+                .As<IOrderRepository>()
+                .SingleInstance();
+
+            builder.RegisterType<OrderNote>()
+                .As<IOrderNote>();
+
+            builder.RegisterType<OrderChargeCalculator>()
+                .As<IOrderChargeCalculator>();
+
+            builder.RegisterType<StoreSettingsTrackedDurationEvent>()
+                .As<IStoreSettingsTrackedDurationEvent>();
         }
     }
 }

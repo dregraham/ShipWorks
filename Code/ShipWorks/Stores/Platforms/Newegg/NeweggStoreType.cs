@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -119,8 +120,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
+        /// <param name="scope"></param>
         /// <returns></returns>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> wizardPages = new List<WizardPage>()
             {

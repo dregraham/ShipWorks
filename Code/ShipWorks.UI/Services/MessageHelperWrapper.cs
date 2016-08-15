@@ -1,10 +1,11 @@
-﻿using System;
+﻿
+using Interapptive.Shared.UI;
+using ShipWorks.Common.Threading;
+using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.UI;
-using ShipWorks.Common.Threading;
 
 namespace ShipWorks.UI.Services
 {
@@ -28,26 +29,17 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(string message)
-        {
-            ShowError(ownerFactory(), message);
-        }
+        public void ShowError(string message) => MessageHelper.ShowError(ownerFactory(), message);
 
         /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
-        public void ShowError(IWin32Window owner, string message)
-        {
-            ShowNotification(owner, message, MessageHelper.ShowError);
-        }
+        public void ShowError(IWin32Window owner, string message) => MessageHelper.ShowError(owner, message);
 
         /// <summary>
         /// Show an information message
         /// </summary>
-        public void ShowInformation(string message)
-        {
-            ShowNotification(ownerFactory(), message, MessageHelper.ShowInformation);
-        }
+        public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
 
         /// <summary>
         /// Show a yes/no question with the given text
@@ -106,22 +98,20 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
-        /// Show a notification as soon as possible
+        /// Show an information message, takes an owner
         /// </summary>
-        private void ShowNotification(IWin32Window owner, string message,
-            Action<IWin32Window, string> showNotification)
-        {
-            Control schedulerControl = owner as Control ?? ownerFactory();
+        public void ShowInformation(IWin32Window owner, string message) => MessageHelper.ShowInformation(owner, message);
 
-            if (schedulerControl.InvokeRequired)
-            {
-                schedulerControl.Invoke(new Action(() => showNotification(owner, message)));
-            }
-            else
-            {
-                showNotification(owner, message);
-            }
-        }
+        /// <summary>
+        /// Show a question message box.
+        /// </summary>
+        public DialogResult ShowQuestion(MessageBoxIcon icon, MessageBoxButtons buttons, string message)
+            => MessageHelper.ShowQuestion(ownerFactory(), icon, buttons, message);
+
+        /// <summary>
+        /// Show a warning message
+        /// </summary>
+        public void ShowWarning(string message) => MessageHelper.ShowWarning(ownerFactory(), message);
 
         /// <summary>
         /// Close the given progress dialog

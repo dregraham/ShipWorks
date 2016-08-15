@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
+﻿using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
-using ShipWorks.Templates.Tokens;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls.Design;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace ShipWorks.Data.Utility
 {
@@ -372,6 +369,8 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.AmazonShipmentShippingServiceID: return AmazonShipmentFields.ShippingServiceID;
                 case EntityFieldLengthSource.AmazonShipmentShippingServiceName: return AmazonShipmentFields.ShippingServiceName;
                 case EntityFieldLengthSource.AmazonShipmentShippingServiceOfferID: return AmazonShipmentFields.ShippingServiceOfferID;
+
+                case EntityFieldLengthSource.OdbcStoreCustomQuery: return OdbcStoreFields.UploadColumnSource;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);

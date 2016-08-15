@@ -19,6 +19,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Xml;
 
@@ -61,8 +62,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Begin order download
         /// </summary>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
-        protected override void Download()
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

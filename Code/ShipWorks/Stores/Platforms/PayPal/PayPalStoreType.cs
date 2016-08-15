@@ -13,6 +13,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
 using ShipWorks.UI.Wizard;
 using System.Data.SqlTypes;
+using Autofac;
 using ShipWorks.Templates.Processing.TemplateXml;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation.Enums;
@@ -146,7 +147,8 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Create the setup wizard pages
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>()
             {
