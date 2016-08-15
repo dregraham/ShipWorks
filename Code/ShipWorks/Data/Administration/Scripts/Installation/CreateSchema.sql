@@ -741,26 +741,6 @@ PRINT N'Creating index [IX_OrderItem_OrderID] on [dbo].[OrderItem]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID] ASC, [OrderItemID] ASC)
 GO
-PRINT N'Creating index [IX_OrderItem_Name] on [dbo].[OrderItem]'
-GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_Name] ON [dbo].[OrderItem] ([Name]) INCLUDE ([OrderID])
-GO
-PRINT N'Creating index [IX_OrderItem_Quantity] on [dbo].[OrderItem]'
-GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_Quantity] ON [dbo].[OrderItem] ([Quantity]) INCLUDE ([OrderID])
-GO
-PRINT N'Creating index [IX_OrderItem_Sku] on [dbo].[OrderItem]'
-GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_Sku] ON [dbo].[OrderItem] ([SKU]) INCLUDE ([OrderID])
-GO
-PRINT N'Creating index [IX_OrderItem_Code] on [dbo].[OrderItem]'
-GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_Code] ON [dbo].[OrderItem] ([Code]) INCLUDE ([OrderID])
-GO
-PRINT N'Creating index [IX_OrderItem_Weight] on [dbo].[OrderItem]'
-GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_Weight] ON [dbo].[OrderItem] ([Weight]) INCLUDE ([OrderID])
-GO
 ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[OrderItem]'
