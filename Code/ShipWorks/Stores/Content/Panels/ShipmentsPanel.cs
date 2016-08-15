@@ -394,8 +394,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             // Get the entities from the grid because the local loadedOrder
             // shipment entities could be out of sync with whats stored locally
-            IEnumerable<ShipmentEntity> shipments = shipmentKeys.Select(shipmentId => entityGrid.EntityGateway.GetEntityFromKey(shipmentId)).OfType<ShipmentEntity>();
-
+            IEnumerable<ShipmentEntity> shipments = shipmentKeys.Select(entityGrid.EntityGateway.GetEntityFromKey).OfType<ShipmentEntity>();
             Messenger.Current.Send(new OpenShippingDialogMessage(this, shipments, initialTab));
         }
 
