@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 testObject.NumberOfItemsPerOrder = 0;
                 testObject.IsSingleLineOrder = true;
-                var expectedMapNames = new List<string>() {"Order", "Address", "Item 1"};
+                var expectedMapNames = new List<string>() { "Order", "Address", "Item 1" };
                 var actualMapNames = new List<string>()
                 {
                     testObject.Order.DisplayName,
@@ -362,7 +362,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Fact]
-        public void Load_SetsNumberOfItemsToZero_WhenLoadedMapDoesNotContainItemEntries()
+        public void Load_SetsNumberOfItemsToOne_WhenLoadedMapDoesNotContainItemEntries()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -377,7 +377,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
 
-                Assert.Equal(0, testObject.NumberOfItemsPerOrder);
+                Assert.Equal(1, testObject.NumberOfItemsPerOrder);
             }
         }
 
@@ -527,6 +527,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 var testObject = CreateViewModelWithLoadedEntries(mock, columnNames, mapPath);
 
+                testObject.IsSingleLineOrder = false;
                 testObject.ValidateRequiredMappingFields();
 
                 messageHelper.Verify(m => m.ShowError(It.IsAny<string>()), Times.Once);
@@ -589,7 +590,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 ImportMap = EmbeddedResourceHelper.GetEmbeddedResourceString(mapPath),
                 ImportColumnSourceType = (int)OdbcColumnSourceType.Table,
                 ImportColumnSource = "Table",
-                ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime
+                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime
             };
 
             Mock<IOdbcDataSourceService> dataSourceService = mock.Mock<IOdbcDataSourceService>();
