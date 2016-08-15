@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
+﻿using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management
@@ -29,7 +21,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         public T GetStore<T>() where T: StoreEntity
         {
-            return (T) ((AddStoreWizard) Wizard).Store;
+            return (T) ((IStoreWizard) Wizard).Store;
         }
     }
 }

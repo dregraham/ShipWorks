@@ -11,6 +11,7 @@ using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 using Interapptive.Shared.Business;
 using ShipWorks.Stores.Content;
 using System.Globalization;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
@@ -36,7 +37,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Retrieve new orders from NetworkSolutions
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

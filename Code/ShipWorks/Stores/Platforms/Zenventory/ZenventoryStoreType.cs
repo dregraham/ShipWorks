@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -41,7 +42,8 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage> {new ZenventoryAddStoreWizardPage()};
 

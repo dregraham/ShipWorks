@@ -14,6 +14,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 using System.Reflection;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -28,7 +29,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Downloading New Orders...";
 

@@ -16,6 +16,9 @@ namespace ShipWorks.ApplicationCore.Security
         License,
 
         [Description("Stream Context")]
-        Stream
+        Stream,
+
+        [Description("Odbc Store Type Context")]
+        Odbc
     }
 }

@@ -224,6 +224,12 @@ namespace ShipWorks.Editions
         GenericFile,
 
         /// <summary>
+        /// The generic file
+        /// </summary>
+        [Description("Your ShipWorks account does not support the ODBC channel.")]
+        Odbc,
+
+        /// <summary>
         /// All the stores in Shipworks match a store in Tango.
         /// </summary>
         [Description("You must upgrade ShipWorks or delete these channel(s) to use Shipworks.")]

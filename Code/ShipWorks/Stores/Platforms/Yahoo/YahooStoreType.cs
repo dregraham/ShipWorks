@@ -115,7 +115,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Create the wizard pages that are used to create the store
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
                 {

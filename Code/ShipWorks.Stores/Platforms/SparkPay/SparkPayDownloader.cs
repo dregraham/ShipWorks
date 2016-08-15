@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -35,7 +36,9 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Downloads orders for the given store using the newest last modified or store default or 30.
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

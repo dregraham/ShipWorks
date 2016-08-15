@@ -1,11 +1,11 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
+using System;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -129,6 +129,21 @@ namespace ShipWorks.Tests.Shared
             {
                 mock.Container.ComponentRegistry.Register(registration);
             }
+        }
+
+        /// <summary>
+        /// Mocks a LoggerFunc for the specified type T. 
+        /// The Func to create the logger is registered and the actual mocked logger is returned.
+        /// </summary>
+        public static MockedFuncAndOutput<TInput, TOutput> MockFunc<TInput, TOutput>(this AutoMock mock) where TOutput : class
+        {
+            Mock<TOutput> functionOutput = mock.MockRepository.Create<TOutput>();
+
+            Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
+            function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
+            mock.Provide(function.Object);
+            
+            return new MockedFuncAndOutput<TInput, TOutput>(function, functionOutput);
         }
     }
 }

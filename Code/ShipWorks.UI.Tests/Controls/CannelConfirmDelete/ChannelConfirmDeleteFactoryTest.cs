@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.UI;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls.ChannelConfirmDelete;
 using Xunit;

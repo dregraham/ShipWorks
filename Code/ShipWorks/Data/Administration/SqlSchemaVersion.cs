@@ -3,6 +3,7 @@ using ShipWorks.Data.Connection;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Transactions;
 
 namespace ShipWorks.Data.Administration
 {
@@ -16,12 +17,15 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public Version GetInstalledSchemaVersion()
         {
-            SqlConnection con = SqlSession.Current.OpenConnection();
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandText = "GetSchemaVersion";
-            cmd.CommandType = CommandType.StoredProcedure;
+            using (new TransactionScope(TransactionScopeOption.Suppress))
+            {
+                SqlConnection con = SqlSession.Current.OpenConnection();
+                SqlCommand cmd = SqlCommandProvider.Create(con);
+                cmd.CommandText = "GetSchemaVersion";
+                cmd.CommandType = CommandType.StoredProcedure;
 
-            return new Version((string)SqlCommandProvider.ExecuteScalar(cmd));
+                return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+            }
         }
 
         /// <summary>
