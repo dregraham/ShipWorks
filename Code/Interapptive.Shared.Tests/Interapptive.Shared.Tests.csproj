@@ -48,7 +48,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.4\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -102,6 +102,8 @@
     <Compile Include="Utility\EnumHelperTest.cs" />
     <Compile Include="Utility\CaseInsensitiveEqualityComparerTest.cs" />
     <Compile Include="Utility\DoubleExtensionsTest.cs" />
+    <Compile Include="Utility\ExceptionExtensionsTest.cs" />
+    <Compile Include="Utility\StreamUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

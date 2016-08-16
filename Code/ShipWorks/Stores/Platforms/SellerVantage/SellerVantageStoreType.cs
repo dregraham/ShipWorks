@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
@@ -64,7 +65,8 @@ namespace ShipWorks.Stores.Platforms.SellerVantage
         /// <summary>
         /// Creates the SellerVantage setup wizard pages
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
             {

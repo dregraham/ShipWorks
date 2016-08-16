@@ -17,8 +17,8 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 namespace ShipWorks.Data.Model.FactoryClasses
 {
 	
-	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
-	// __LLBLGENPRO_USER_CODE_REGION_END
+    // __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
+    // __LLBLGENPRO_USER_CODE_REGION_END
 	
 	/// <summary>general base class for the generated factories</summary>
 	[Serializable]
@@ -110,8 +110,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ActionEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -130,8 +130,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ActionFilterTriggerEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionFilterTriggerUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionFilterTriggerUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -150,8 +150,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ActionQueueEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -170,8 +170,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ActionQueueSelectionEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueSelectionUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueSelectionUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -190,8 +190,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ActionQueueStepEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueStepUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionQueueStepUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -210,8 +210,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ActionTaskEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionTaskUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewActionTaskUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -230,8 +230,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmazonASINEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonASINUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonASINUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -250,8 +250,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmazonOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -270,8 +270,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmazonOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -290,8 +290,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmazonProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -310,8 +310,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmazonShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -330,8 +330,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmazonStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmazonStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -350,8 +350,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AmeriCommerceStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmeriCommerceStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAmeriCommerceStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -370,8 +370,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AuditEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAuditUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAuditUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -390,8 +390,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AuditChangeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAuditChangeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAuditChangeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -410,8 +410,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new AuditChangeDetailEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAuditChangeDetailUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewAuditChangeDetailUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -430,8 +430,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new BestRateProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -450,8 +450,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new BestRateShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -470,8 +470,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new BigCommerceOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBigCommerceOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewBigCommerceOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -490,8 +490,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new BigCommerceStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBigCommerceStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewBigCommerceStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -510,8 +510,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new BuyDotComOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBuyDotComOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewBuyDotComOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -530,8 +530,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new BuyDotComStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBuyDotComStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewBuyDotComStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -550,8 +550,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ChannelAdvisorOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -570,8 +570,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ChannelAdvisorOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -590,8 +590,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ChannelAdvisorStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewChannelAdvisorStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -610,8 +610,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ClickCartProOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewClickCartProOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewClickCartProOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -630,8 +630,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new CommerceInterfaceOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewCommerceInterfaceOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewCommerceInterfaceOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -650,8 +650,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ComputerEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewComputerUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewComputerUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -670,8 +670,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ConfigurationEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewConfigurationUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewConfigurationUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -690,8 +690,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new CustomerEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewCustomerUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewCustomerUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -710,8 +710,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new DimensionsProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDimensionsProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewDimensionsProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -730,8 +730,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new DownloadEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDownloadUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewDownloadUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -750,8 +750,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new DownloadDetailEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDownloadDetailUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewDownloadDetailUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -770,8 +770,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EbayCombinedOrderRelationEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayCombinedOrderRelationUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayCombinedOrderRelationUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -790,8 +790,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EbayOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -810,8 +810,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EbayOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -830,8 +830,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EbayStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEbayStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -850,8 +850,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EmailAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEmailAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEmailAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -870,8 +870,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EmailOutboundEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEmailOutboundUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEmailOutboundUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -890,8 +890,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EmailOutboundRelationEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEmailOutboundRelationUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEmailOutboundRelationUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -910,8 +910,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EndiciaAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -930,8 +930,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EndiciaProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -950,8 +950,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EndiciaScanFormEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaScanFormUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaScanFormUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -970,8 +970,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EndiciaShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEndiciaShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -990,8 +990,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EtsyOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1010,8 +1010,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new EtsyStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewEtsyStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1030,8 +1030,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ExcludedPackageTypeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewExcludedPackageTypeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewExcludedPackageTypeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1050,8 +1050,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ExcludedServiceTypeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewExcludedServiceTypeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewExcludedServiceTypeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1070,8 +1070,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FedExAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1090,8 +1090,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FedExEndOfDayCloseEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExEndOfDayCloseUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExEndOfDayCloseUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1110,8 +1110,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FedExPackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExPackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExPackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1130,8 +1130,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FedExProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1150,8 +1150,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FedExProfilePackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExProfilePackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExProfilePackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1170,8 +1170,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FedExShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFedExShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1190,8 +1190,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1210,8 +1210,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterLayoutEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterLayoutUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterLayoutUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1230,8 +1230,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterNodeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1250,8 +1250,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterNodeColumnSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeColumnSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeColumnSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1270,8 +1270,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterNodeContentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeContentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeContentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1290,8 +1290,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterNodeContentDetailEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeContentDetailUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterNodeContentDetailUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1310,8 +1310,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FilterSequenceEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterSequenceUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFilterSequenceUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1330,8 +1330,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new FtpAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewFtpAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewFtpAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1350,8 +1350,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GenericFileStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericFileStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericFileStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1370,8 +1370,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GenericModuleStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericModuleStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericModuleStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1390,8 +1390,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GridColumnFormatEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGridColumnFormatUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGridColumnFormatUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1410,8 +1410,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GridColumnLayoutEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGridColumnLayoutUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGridColumnLayoutUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1430,8 +1430,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GridColumnPositionEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGridColumnPositionUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGridColumnPositionUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1450,8 +1450,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GrouponOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1470,8 +1470,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GrouponOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1490,8 +1490,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new GrouponStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1510,8 +1510,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new InfopiaOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewInfopiaOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewInfopiaOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1530,8 +1530,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new InfopiaStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewInfopiaStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewInfopiaStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1550,8 +1550,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new InsurancePolicyEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewInsurancePolicyUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewInsurancePolicyUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1570,8 +1570,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new IParcelAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1590,8 +1590,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new IParcelPackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelPackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelPackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1610,8 +1610,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new IParcelProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1630,8 +1630,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new IParcelProfilePackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelProfilePackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelProfilePackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1650,8 +1650,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new IParcelShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewIParcelShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1670,8 +1670,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new LabelSheetEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLabelSheetUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewLabelSheetUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1690,8 +1690,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new LemonStandOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1710,8 +1710,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new LemonStandOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1730,8 +1730,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new LemonStandStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1750,8 +1750,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new MagentoOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMagentoOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMagentoOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1770,8 +1770,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new MagentoStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMagentoStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMagentoStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1790,8 +1790,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new MarketplaceAdvisorOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMarketplaceAdvisorOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMarketplaceAdvisorOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1810,8 +1810,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new MarketplaceAdvisorStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMarketplaceAdvisorStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMarketplaceAdvisorStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1830,8 +1830,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new MivaOrderItemAttributeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMivaOrderItemAttributeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMivaOrderItemAttributeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1850,8 +1850,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new MivaStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewMivaStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewMivaStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1870,8 +1870,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new NetworkSolutionsOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNetworkSolutionsOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNetworkSolutionsOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1890,8 +1890,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new NetworkSolutionsStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNetworkSolutionsStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNetworkSolutionsStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1910,8 +1910,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new NeweggOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1930,8 +1930,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new NeweggOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1950,8 +1950,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new NeweggStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNeweggStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1970,8 +1970,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new NoteEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewNoteUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewNoteUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -1990,8 +1990,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ObjectLabelEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewObjectLabelUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewObjectLabelUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2010,7 +2010,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ObjectReferenceEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewObjectReferenceUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewObjectReferenceUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty OdbcStoreEntity objects.</summary>
+	[Serializable]
+	public partial class OdbcStoreEntityFactory : EntityFactoryBase2<OdbcStoreEntity> {
+		/// <summary>CTor</summary>
+		public OdbcStoreEntityFactory() : base("OdbcStoreEntity", ShipWorks.Data.Model.EntityType.OdbcStoreEntity, true) { }
+		
+		/// <summary>Creates a new OdbcStoreEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new OdbcStoreEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOdbcStoreUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
@@ -2030,8 +2050,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OnTracAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOnTracAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOnTracAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2050,8 +2070,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OnTracProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOnTracProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOnTracProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2070,8 +2090,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OnTracShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOnTracShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOnTracShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2090,8 +2110,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2110,8 +2130,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderChargeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderChargeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderChargeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2130,8 +2150,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2150,8 +2170,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderItemAttributeEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderItemAttributeUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderItemAttributeUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2170,8 +2190,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderMotionOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderMotionOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderMotionOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2190,8 +2210,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderMotionStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderMotionStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderMotionStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2210,8 +2230,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OrderPaymentDetailEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderPaymentDetailUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOrderPaymentDetailUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2230,8 +2250,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OtherProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOtherProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOtherProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2250,8 +2270,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new OtherShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewOtherShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewOtherShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2270,8 +2290,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new PayPalOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPayPalOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPayPalOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2290,8 +2310,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new PayPalStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPayPalStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPayPalStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2310,8 +2330,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new PermissionEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPermissionUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPermissionUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2330,8 +2350,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new PostalProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPostalProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPostalProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2350,8 +2370,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new PostalShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPostalShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPostalShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2370,8 +2390,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new PrintResultEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewPrintResultUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewPrintResultUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2390,8 +2410,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ProStoresOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProStoresOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewProStoresOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2410,8 +2430,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ProStoresStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewProStoresStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewProStoresStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2430,8 +2450,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ResourceEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewResourceUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewResourceUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2450,8 +2470,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ScanFormBatchEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewScanFormBatchUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewScanFormBatchUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2470,8 +2490,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new SearchEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearchUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearchUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2490,8 +2510,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new SearsOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2510,8 +2530,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new SearsOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2530,8 +2550,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new SearsStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSearsStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2550,8 +2570,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ServerMessageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewServerMessageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewServerMessageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2570,8 +2590,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ServerMessageSignoffEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewServerMessageSignoffUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewServerMessageSignoffUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2590,8 +2610,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ServiceStatusEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewServiceStatusUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewServiceStatusUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2610,8 +2630,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2630,8 +2650,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShipmentCustomsItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipmentCustomsItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipmentCustomsItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2650,8 +2670,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingDefaultsRuleEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingDefaultsRuleUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingDefaultsRuleUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2670,8 +2690,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingOriginEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingOriginUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingOriginUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2690,8 +2710,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingPrintOutputEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingPrintOutputUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingPrintOutputUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2710,8 +2730,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingPrintOutputRuleEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingPrintOutputRuleUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingPrintOutputRuleUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2730,8 +2750,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2750,8 +2770,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingProviderRuleEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingProviderRuleUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingProviderRuleUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2770,8 +2790,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShippingSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShippingSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2790,8 +2810,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShipSenseKnowledgebaseEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipSenseKnowledgebaseUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipSenseKnowledgebaseUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2810,8 +2830,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShopifyOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2830,8 +2850,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShopifyOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2850,8 +2870,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShopifyStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopifyStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2870,8 +2890,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ShopSiteStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopSiteStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewShopSiteStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2890,8 +2910,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new SparkPayStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSparkPayStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSparkPayStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2910,8 +2930,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new StatusPresetEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStatusPresetUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewStatusPresetUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2930,8 +2950,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new StoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2950,8 +2970,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new SystemDataEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewSystemDataUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewSystemDataUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2970,8 +2990,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new TemplateEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -2990,8 +3010,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new TemplateComputerSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateComputerSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateComputerSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3010,8 +3030,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new TemplateFolderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateFolderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateFolderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3030,8 +3050,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new TemplateStoreSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateStoreSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateStoreSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3050,8 +3070,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new TemplateUserSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateUserSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewTemplateUserSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3070,8 +3090,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ThreeDCartOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3090,8 +3110,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ThreeDCartOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3110,8 +3130,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ThreeDCartStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewThreeDCartStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3130,8 +3150,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UpsAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3150,8 +3170,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UpsPackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsPackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsPackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3170,8 +3190,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UpsProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3190,8 +3210,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UpsProfilePackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsProfilePackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsProfilePackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3210,8 +3230,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UpsShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpsShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3230,8 +3250,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UserEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3250,8 +3270,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UserColumnSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserColumnSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserColumnSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3270,8 +3290,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UserSettingsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserSettingsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserSettingsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3290,8 +3310,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UspsAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsAccountUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3310,8 +3330,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UspsProfileEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsProfileUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3330,8 +3350,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UspsScanFormEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsScanFormUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsScanFormUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3350,8 +3370,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new UspsShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3370,8 +3390,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new ValidatedAddressEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewValidatedAddressUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewValidatedAddressUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3390,8 +3410,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new VersionSignoffEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewVersionSignoffUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewVersionSignoffUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3410,8 +3430,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new VolusionStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewVolusionStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewVolusionStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3430,8 +3450,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new WorldShipGoodsEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipGoodsUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipGoodsUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3450,8 +3470,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new WorldShipPackageEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipPackageUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipPackageUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3470,8 +3490,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new WorldShipProcessedEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipProcessedUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipProcessedUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3490,8 +3510,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new WorldShipShipmentEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewWorldShipShipmentUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3510,8 +3530,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new YahooOrderEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooOrderUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooOrderUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3530,8 +3550,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new YahooOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooOrderItemUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3550,8 +3570,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new YahooProductEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooProductUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooProductUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3570,8 +3590,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
 		public override IEntity2 Create(IEntityFields2 fields) {
 			IEntity2 toReturn = new YahooStoreEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooStoreUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START CreateNewYahooStoreUsingFields
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -3878,6 +3898,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ObjectReferenceEntity:
 					factoryToUse = new ObjectReferenceEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.OdbcStoreEntity:
+					factoryToUse = new OdbcStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.OnTracAccountEntity:
 					factoryToUse = new OnTracAccountEntityFactory();

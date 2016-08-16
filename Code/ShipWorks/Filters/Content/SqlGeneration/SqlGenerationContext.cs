@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using System.Collections;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 
 namespace ShipWorks.Filters.Content.SqlGeneration
@@ -196,7 +191,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         }
 
         /// <summary>
-        /// Register the value as a pararmeter in the sql 
+        /// Register the value as a pararmeter in the sql
         /// </summary>
         public string RegisterParameter(object value)
         {
@@ -258,7 +253,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         }
 
         /// <summary>
-        /// Transition to the scope of the given EntityType using the EntityRelation builtin and known by LLBLGen between the EntityType of the 
+        /// Transition to the scope of the given EntityType using the EntityRelation builtin and known by LLBLGen between the EntityType of the
         /// current scope and that of the given scope.
         /// </summary>
         public SqlGenerationScope PushScope(EntityType entityType, SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner = null)
@@ -275,7 +270,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 // Find the relation betwen the target child and the current scope, whic is the parent
                 relation = FindRelation(entityType, CurrentScope.EntityType);
             }
-            
+
             if (relation == null)
             {
                 throw new InvalidOperationException(string.Format("Cannot transition to scope; no such relation exists. {0} -> {1}", CurrentScope.EntityType, entityType));
@@ -285,7 +280,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         }
 
         /// <summary>
-        /// Transition to the scope of the given EntityType using the predicate specified.  The child predicate should contain 
+        /// Transition to the scope of the given EntityType using the predicate specified.  The child predicate should contain
         /// a {0} placeholder for where the child table (of entityType) alias will be inserted.
         /// </summary>
         public SqlGenerationScope PushScope(EntityType entityType, string childPredicate, SqlGenerationScopeType scopeType, Func<string, string> childQuantityAdorner = null)
@@ -435,11 +430,11 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // Replace the placeholder with the alias
             childPredicate = string.Format(childPredicate, tableAlias);
 
-            return string.Format("(SELECT {0}({1}.{2}) FROM [{3}] {4} WHERE {5})", 
+            return string.Format("(SELECT {0}({1}.{2}) FROM [{3}] {4} WHERE {5})",
                 aggregateFunction,
-                tableAlias, 
+                tableAlias,
                 info.SourceColumnName,
-                info.SourceObjectName, 
+                info.SourceObjectName,
                 tableAlias,
                 childPredicate
                 );

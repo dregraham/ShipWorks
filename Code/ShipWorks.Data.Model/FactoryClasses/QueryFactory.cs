@@ -682,6 +682,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ObjectReferenceEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the OdbcStore entity</summary>
+		public EntityQuery<OdbcStoreEntity> OdbcStore
+		{
+			get { return Create<OdbcStoreEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the OnTracAccount entity</summary>
 		public EntityQuery<OnTracAccountEntity> OnTracAccount
 		{

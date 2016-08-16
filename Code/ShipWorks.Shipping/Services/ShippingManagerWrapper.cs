@@ -7,9 +7,9 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// Wraps the ShippingManager
@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="shipmentAdapterFactor"></param>
         public ShippingManagerWrapper(
             ICarrierShipmentAdapterFactory shipmentAdapterFactor,
             IValidatedAddressScope validatedAddressScope,

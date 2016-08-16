@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -18,8 +18,8 @@ namespace ShipWorks.Filters.Search
         static Dictionary<FilterTarget, FilterNodeEntity> searchPlaceholders;
 
         /// <summary>
-        /// Initialize our search stuff 
-        /// </summary> 
+        /// Initialize our search stuff
+        /// </summary>
         public static void InitializeForCurrentSession()
         {
             searchPlaceholders = new Dictionary<FilterTarget, FilterNodeEntity>();

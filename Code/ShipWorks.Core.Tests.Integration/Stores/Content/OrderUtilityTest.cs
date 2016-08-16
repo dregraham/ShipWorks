@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
@@ -27,15 +22,15 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Content
 
             OrderItemAttributeCollection orderItemAttributes = new OrderItemAttributeCollection();
             orderItemAttributes.Add(new OrderItemAttributeEntity
-                {
-                    UnitPrice = 2.00M,
-                    IsManual = false,
-                    Name = "attr1",
-                    Description = "attr1 desc"
-                });
+            {
+                UnitPrice = 2.00M,
+                IsManual = false,
+                Name = "attr1",
+                Description = "attr1 desc"
+            });
             orderItemAttributes.Add(new OrderItemAttributeEntity
-                {
-                    UnitPrice = 0.10M,
+            {
+                UnitPrice = 0.10M,
                 IsManual = false,
                 Name = "attr2",
                 Description = "attr2 desc"

@@ -93,6 +93,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("NeweggOrderEntity", "OrderEntity", new NeweggOrderRelations(), new NeweggOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("NeweggOrderItemEntity", "OrderItemEntity", new NeweggOrderItemRelations(), new NeweggOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("NeweggStoreEntity", "StoreEntity", new NeweggStoreRelations(), new NeweggStoreEntityFactory(), 1-1);
+			this.AddEntityInfo("OdbcStoreEntity", "StoreEntity", new OdbcStoreRelations(), new OdbcStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("OrderEntity", string.Empty, new OrderRelations(), new OrderEntityFactory());
 			this.AddEntityInfo("OrderItemEntity", string.Empty, new OrderItemRelations(), new OrderItemEntityFactory());
 			this.AddEntityInfo("OrderItemAttributeEntity", string.Empty, new OrderItemAttributeRelations(), new OrderItemAttributeEntityFactory());

@@ -120,6 +120,7 @@ namespace ShipWorks.ApplicationCore.Logging
         LemonStand,
         SparkPay,
         [ApiPrivateLogSource]
-        FedExFims
+        FedExFims,
+        Odbc
     }
 }

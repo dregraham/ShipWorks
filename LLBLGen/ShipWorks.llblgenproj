@@ -1527,6 +1527,20 @@
           <Field Name="ReferenceKey" Type="string" MaxLength="250" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="OdbcStore" ObjectID="4de43e5f-9cd5-458c-83e8-68ca7d15dfc1" InheritanceType="2">
+        <Fields>
+          <Field Name="ImportColumnSource" Type="string" MaxLength="2048" FieldIndex="4" />
+          <Field Name="ImportColumnSourceType" Type="int" Precision="10" FieldIndex="3" />
+          <Field Name="ImportConnectionString" Type="string" MaxLength="2048" FieldIndex="0" />
+          <Field Name="ImportMap" Type="string" MaxLength="2147483647" FieldIndex="1" />
+          <Field Name="ImportStrategy" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="UploadColumnSource" Type="string" MaxLength="2048" FieldIndex="8" />
+          <Field Name="UploadColumnSourceType" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="UploadConnectionString" Type="string" MaxLength="2048" FieldIndex="9" />
+          <Field Name="UploadMap" Type="string" MaxLength="2147483647" FieldIndex="6" />
+          <Field Name="UploadStrategy" Type="int" Precision="10" FieldIndex="5" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="OnTracAccount" ObjectID="79269e79-c65c-4a0e-8623-250621f9b71b">
         <Fields>
           <Field Name="AccountNumber" Type="int" FieldIndex="2" />
@@ -3475,6 +3489,7 @@
       <InheritanceHierarchy SuperType=":Order" SubType=":NeweggOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":NeweggOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":NeweggStore" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":OdbcStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":OrderMotionOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":OrderMotionStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":PayPalOrder" />
@@ -3528,7 +3543,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-08-02T16:01:31.051135Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-08-15T21:20:10.8498004Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5839,6 +5854,22 @@
                     <Field Name="ReferenceKey" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="24" Length="250" />
                     <Field Name="ObjectID" Ordinal="4" DbType="0" Precision="19" />
                     <Field Name="Reason" Ordinal="5" IsOptional="true" DbType="12" Length="250" />
+                  </Fields>
+                </Table>
+                <Table Name="OdbcStore">
+                  <PkConstraintName Name="PK_OdbcStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ImportConnectionString" Ordinal="2" DbType="12" Length="2048" />
+                    <Field Name="ImportMap" Ordinal="3" DbType="12" Length="2147483647" />
+                    <Field Name="ImportStrategy" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="ImportColumnSourceType" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="ImportColumnSource" Ordinal="6" DbType="12" Length="2048" />
+                    <Field Name="UploadStrategy" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="UploadMap" Ordinal="8" DbType="12" Length="2147483647" />
+                    <Field Name="UploadColumnSourceType" Ordinal="9" DbType="8" Precision="10" />
+                    <Field Name="UploadColumnSource" Ordinal="10" DbType="12" Length="2048" />
+                    <Field Name="UploadConnectionString" Ordinal="11" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracAccount">
@@ -8269,6 +8300,11 @@
                 <FieldPair PkField="dbo:User:UserID" FkField="dbo:Note:UserID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:OdbcStore:FK_OdbcStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:OdbcStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:OnTracProfile:FK_OnTracProfile_ShippingProfile">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:OnTracProfile:ShippingProfileID" />
@@ -10074,6 +10110,21 @@
             <FieldMapping FieldName="ObjectReferenceID" TargetFieldName="ObjectReferenceID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="Reason" TargetFieldName="Reason" />
             <FieldMapping FieldName="ReferenceKey" TargetFieldName="ReferenceKey" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":OdbcStore" TargetName="ShipWorksLocal:dbo:OdbcStore">
+          <FieldMappings>
+            <FieldMapping FieldName="ImportColumnSource" TargetFieldName="ImportColumnSource" />
+            <FieldMapping FieldName="ImportColumnSourceType" TargetFieldName="ImportColumnSourceType" />
+            <FieldMapping FieldName="ImportConnectionString" TargetFieldName="ImportConnectionString" />
+            <FieldMapping FieldName="ImportMap" TargetFieldName="ImportMap" />
+            <FieldMapping FieldName="ImportStrategy" TargetFieldName="ImportStrategy" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="UploadColumnSource" TargetFieldName="UploadColumnSource" />
+            <FieldMapping FieldName="UploadColumnSourceType" TargetFieldName="UploadColumnSourceType" />
+            <FieldMapping FieldName="UploadConnectionString" TargetFieldName="UploadConnectionString" />
+            <FieldMapping FieldName="UploadMap" TargetFieldName="UploadMap" />
+            <FieldMapping FieldName="UploadStrategy" TargetFieldName="UploadStrategy" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OnTracAccount" TargetName="ShipWorksLocal:dbo:OnTracAccount">

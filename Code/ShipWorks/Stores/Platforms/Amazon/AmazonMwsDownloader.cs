@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -47,7 +48,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Start the download from Amazon.com using the Marketplace Web Service (MWS)
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

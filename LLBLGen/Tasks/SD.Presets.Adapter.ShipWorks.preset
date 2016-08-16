@@ -154,6 +154,15 @@
       </taskPreset>
     </taskGroupPreset>
     <taskGroupPreset name="SD.Tasks.Adapter.DatabaseSpecific" forSpecificDatabase="All" requiresCleanCache="false">
+      <taskGroupPreset name="ShipWorks Custom">
+        <taskGroupPreset name="Directories">
+          <taskPreset name="GeneratedCodeDirectoryCreator" />
+        </taskGroupPreset>
+        <taskGroupPreset name="Code Files ">
+          <taskPreset name="EntityTypeProviderGenerator" />
+          <taskPreset name="EntityCollectionsGenerator" />
+        </taskGroupPreset>
+      </taskGroupPreset>
       <taskPreset name="SD.Tasks.Generic.AssemblyInfoFileGenerator" isEnabled="false" requiresCleanCache="false">
         <parameters>
           <parameter name="destinationFolder" value="[driverShortName]\[dbspecificSubFolder]" />

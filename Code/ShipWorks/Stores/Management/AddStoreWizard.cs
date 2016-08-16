@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -30,6 +26,12 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
+using Quartz.Util;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -38,8 +40,10 @@ namespace ShipWorks.Stores.Management
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
     [NDependIgnoreLongTypes]
-    partial class AddStoreWizard : WizardForm
+    partial class AddStoreWizard : WizardForm, IStoreWizard
     {
+        private readonly ILifetimeScope scope;
+
         // State container for use by wizard pages
         Dictionary<string, object> stateBag = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -64,13 +68,18 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private bool showActivationError = false;
 
-        private readonly ILicenseService licenseService = IoC.UnsafeGlobalLifetimeScope.Resolve<ILicenseService>();
+        private readonly ILicenseService licenseService;
+        private readonly Func<IChannelLimitFactory> channelLimitFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private AddStoreWizard()
+        public AddStoreWizard(ILifetimeScope scope, ILicenseService licenseService, Func<IChannelLimitFactory> channelLimitFactory)
         {
+            this.scope = scope;
+            this.licenseService = licenseService;
+            this.channelLimitFactory = channelLimitFactory;
+
             InitializeComponent();
         }
 
@@ -96,22 +105,29 @@ namespace ShipWorks.Stores.Management
                     return false;
                 }
 
-                using (ShipWorksSetupLock wizardLock = new ShipWorksSetupLock())
+                using (new ShipWorksSetupLock())
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureAddStoreWizardDependencies))
+                using (AddStoreWizard wizard = scope.Resolve<AddStoreWizard>())
+                using (IStoreSettingsTrackedDurationEvent storeSettingsEvent =
+                    IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreSettingsTrackedDurationEvent>(
+                        new TypedParameter(typeof(string), "Store.{0}.Setup")))
                 {
-                    using (AddStoreWizard wizard = new AddStoreWizard())
-                    {
-                        // If it was successful, make sure our local list of stores is refreshed
-                        if (wizard.ShowDialog(owner) == DialogResult.OK)
-                        {
-                            StoreManager.CheckForChanges();
+                    // Show the wizard and collect report the store configuration/settings
+                    // for telemetry purposes
+                    DialogResult dialogResult = wizard.ShowDialog(owner);
 
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                    if (dialogResult == DialogResult.OK)
+                    {
+                        CollectTelemetry(wizard.Store, storeSettingsEvent, dialogResult);
+                        // The store was added, so make sure our local list of stores is refreshed
+                        StoreManager.CheckForChanges();
+                        return true;
                     }
+
+                    // If canceling out of the add store wizard, collect telemetry from the AbandonedStore property
+                    CollectTelemetry(wizard.AbandonedStore, storeSettingsEvent, dialogResult);
+
+                    return false;
                 }
             }
             catch (SqlAppResourceLockException)
@@ -119,6 +135,30 @@ namespace ShipWorks.Stores.Management
                 MessageHelper.ShowInformation(owner, "Another user is already setting up ShipWorks. This can only be done on one computer at a time.");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Collects the telemetry.
+        /// </summary>
+        private static void CollectTelemetry(StoreEntity store, IStoreSettingsTrackedDurationEvent storeSettingsEvent, DialogResult dialogResult)
+        {
+            if (store != null)
+            {
+                storeSettingsEvent.RecordStoreConfiguration(store);
+            }
+
+            storeSettingsEvent.AddProperty("Abandoned", dialogResult == DialogResult.OK ? "No" : "Yes");
+        }
+
+        /// <summary>
+        /// Configures the add store wizard dependencies.
+        /// </summary>
+        private static void ConfigureAddStoreWizardDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterType<AddStoreWizard>()
+                .AsSelf()
+                .As<IWin32Window>()
+                .SingleInstance();
         }
 
         /// <summary>
@@ -172,9 +212,13 @@ namespace ShipWorks.Stores.Management
 
             bool complete = false;
 
-            IUserService userService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUserService>();
+            EnumResult<UserServiceLogonResultType> logonResult;
 
-            EnumResult<UserServiceLogonResultType> logonResult = userService.Logon(new LogonCredentials(username, password, true));
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IUserService userService = scope.Resolve<IUserService>();
+                logonResult = userService.Logon(new LogonCredentials(username, password, true));
+            }
 
             if (logonResult.Value == UserServiceLogonResultType.Success)
             {
@@ -207,10 +251,13 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// The store currently being configured by the wizard
         /// </summary>
-        public StoreEntity Store
-        {
-            get { return store; }
-        }
+        public StoreEntity Store => store;
+
+
+        /// <summary>
+        /// The store that was being configured when the wizard is abandoned
+        /// </summary>
+        public StoreEntity AbandonedStore { get; set; }
 
         /// <summary>
         /// Wizard is loading
@@ -407,7 +454,7 @@ namespace ShipWorks.Stores.Management
                 StoreManager.SaveStore(store);
 
                 // Load the store specific pages
-                storePages = storeType.CreateAddStoreWizardPages();
+                storePages = storeType.CreateAddStoreWizardPages(scope);
 
                 // Add all the pages
                 for (int i = storePages.Count - 1; i >= 0; i--)
@@ -489,12 +536,27 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextAlreadyActive(object sender, WizardStepEventArgs e)
         {
-            if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
+            if (string.IsNullOrWhiteSpace(licenseKey.Text))
             {
-                MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
-
+                MessageHelper.ShowError(this, "Please enter the license key for your store to continue");
                 e.NextPage = CurrentPage;
                 return;
+            }
+
+            LicenseActivationState licenseState = LicenseActivationHelper.ActivateAndSetLicense(store, licenseKey.Text.Trim(), this);
+
+            if (licenseState != LicenseActivationState.Active)
+            {
+                e.NextPage = CurrentPage;
+            }
+            else
+            {
+                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
+                {
+                    MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
+
+                    e.NextPage = CurrentPage;
+                }
             }
         }
 
@@ -563,9 +625,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoSettings(object sender, WizardSteppingIntoEventArgs e)
         {
-            // The generic file store type has no controls to put in the settings page
-            // which results in a blank wizard page, so skip it.
-            if (store.TypeCode == (int) StoreTypeCode.GenericFile)
+            StoreType storeType = StoreTypeManager.GetType(Store);
+            if (!storeType.ShowTaskWizardPage())
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -590,7 +651,9 @@ namespace ShipWorks.Stores.Management
 
             // Only reset the UI if the store has changed.  The only potential issue here is with generic where you could actually
             // be pointing to a totally different capabilities type without changing store types, but thats unlikely, and not catastrophic.
-            if (initialDownloadConfiguredStoreID != store.StoreID || e.FirstTime)
+            // We also want to reset ui for ODBC, since it is possible for them to go back and change the download strategy. We don't want
+            // to show the "Download all of my orders" option for ODBC download by last modified.
+            if (initialDownloadConfiguredStoreID != store.StoreID || e.FirstTime || Store.TypeCode == (int) StoreTypeCode.Odbc)
             {
                 store.InitialDownloadDays = null;
                 store.InitialDownloadOrder = null;
@@ -1010,7 +1073,7 @@ namespace ShipWorks.Stores.Management
                 {
                     if (activateResult.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
-                        IChannelLimitFactory factory = IoC.UnsafeGlobalLifetimeScope.Resolve<IChannelLimitFactory>();
+                        IChannelLimitFactory factory = channelLimitFactory();
                         Control channelLimitControl =
                             (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount, this);
 
@@ -1050,6 +1113,7 @@ namespace ShipWorks.Stores.Management
             {
                 if (store != null)
                 {
+                    AbandonedStore = store.DeepClone();
                     DeletionService.DeleteStore(store, UserSession.Security);
                     store = null;
                 }

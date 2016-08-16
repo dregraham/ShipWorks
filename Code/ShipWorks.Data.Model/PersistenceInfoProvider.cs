@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(174);
+			this.InitClass(175);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -143,6 +143,7 @@ namespace ShipWorks.Data.Model
 			InitNoteEntityMappings();
 			InitObjectLabelEntityMappings();
 			InitObjectReferenceEntityMappings();
+			InitOdbcStoreEntityMappings();
 			InitOnTracAccountEntityMappings();
 			InitOnTracProfileEntityMappings();
 			InitOnTracShipmentEntityMappings();
@@ -1839,6 +1840,23 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ObjectReferenceEntity", "ReferenceKey", "ReferenceKey", false, "VarChar", 250, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("ObjectReferenceEntity", "EntityID", "ObjectID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 			this.AddElementFieldMapping("ObjectReferenceEntity", "Reason", "Reason", true, "NVarChar", 250, 0, 0, false, "", null, typeof(System.String), 4);
+		}
+
+		/// <summary>Inits OdbcStoreEntity's mappings</summary>
+		private void InitOdbcStoreEntityMappings()
+		{
+			this.AddElementMapping("OdbcStoreEntity", @"ShipWorksLocal", @"dbo", "OdbcStore", 11, 0);
+			this.AddElementFieldMapping("OdbcStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("OdbcStoreEntity", "ImportConnectionString", "ImportConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("OdbcStoreEntity", "ImportMap", "ImportMap", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("OdbcStoreEntity", "ImportStrategy", "ImportStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("OdbcStoreEntity", "ImportColumnSourceType", "ImportColumnSourceType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("OdbcStoreEntity", "ImportColumnSource", "ImportColumnSource", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("OdbcStoreEntity", "UploadStrategy", "UploadStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+			this.AddElementFieldMapping("OdbcStoreEntity", "UploadMap", "UploadMap", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSourceType", "UploadColumnSourceType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSource", "UploadColumnSource", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("OdbcStoreEntity", "UploadConnectionString", "UploadConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 10);
 		}
 
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>

@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Quartz;
-using log4net;
 using System.Reflection;
+using log4net;
+using Quartz;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Collections.Generic;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet

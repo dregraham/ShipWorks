@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
@@ -62,7 +63,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         /// <summary>
         /// Download orders for the 3dcart store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -71,17 +74,26 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 restWebClient.LoadProgressReporter(Progress);
                 ordersProcessed = 0;
 
+                // Get the number of days back that we should check for modified orders.
+                int numberOfDaysBack = threeDCartStore.DownloadModifiedNumberOfDaysBack > 0 ? threeDCartStore.DownloadModifiedNumberOfDaysBack : 0;
+
                 DateTime? startDate = GetOrderDateStartingPoint();
                 if (!startDate.HasValue)
                 {
-                    startDate = DateTime.Today;
+                    // There's no orders or the user wanted to download all orders
+                    // Set the start date to a long time ago and set number of days back
+                    // to 0 so that all orders look "new"
+                    startDate = DateTime.Today.AddYears(-20);
+                    numberOfDaysBack = 0;
                 }
 
+                // Set the modified order end date to the current start date so that orders before it look "modified" and after look "new"
                 modifiedOrderEndDate = startDate.Value;
 
-                if (threeDCartStore.DownloadModifiedNumberOfDaysBack > 0)
+                // We aren't supposed to download all orders, so adhere to the number of days back for modified orders.
+                if (numberOfDaysBack > 0)
                 {
-                    startDate = startDate.Value.AddDays(-threeDCartStore.DownloadModifiedNumberOfDaysBack);
+                    startDate = startDate.Value.AddDays(-numberOfDaysBack);
                     Progress.Detail = "Checking for new and modified orders...";
                 }
                 else

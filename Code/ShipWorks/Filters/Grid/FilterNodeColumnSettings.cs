@@ -1,24 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid;
-using ShipWorks.Users;
-using System.Windows.Forms;
-using System.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.ComponentModel;
-using System.Diagnostics;
-using ShipWorks.Data.Adapter;
 using System.Data.SqlClient;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Filters.Grid
 {
@@ -57,7 +45,7 @@ namespace ShipWorks.Filters.Grid
             // Initialize our own layout entity
             EnsureDefaultSettings();
             LoadSettingsEntity();
-            
+
             // Ensure all parent layouts have been created, for when Inherited is used.
             EnsureAncestorSettings();
         }

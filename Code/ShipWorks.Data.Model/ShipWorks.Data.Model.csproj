@@ -111,11 +111,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.DQE.SqlServer.5.0.4\lib\net35\SD.LLBLGen.Pro.DQE.SqlServer.dll</HintPath>
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.DQE.SqlServer.5.0.5\lib\net35\SD.LLBLGen.Pro.DQE.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.4\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
@@ -173,6 +173,7 @@
     <Compile Include="Custom\EntityClasses\NullCarrierAccount.cs" />
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\OrderItemAttributeEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.ReadOnly.cs" />
@@ -206,10 +207,14 @@
     <Compile Include="Custom\EntityClasses\UpsAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\UpsAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\UspsAccountEntity.cs" />
-    <Compile Include="Custom\EntityCollections.cs" />
+    <Compile Include="Custom\EntityCollections.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
     <Compile Include="Custom\EntityPersistedAction.cs" />
     <Compile Include="Custom\EntityPersistedEvent.cs" />
-    <Compile Include="Custom\EntityTypeProvider.cs" />
+    <Compile Include="Custom\EntityTypeProvider.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
     <Compile Include="Custom\ICarrierAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
@@ -1301,6 +1306,12 @@
     <Compile Include=".\RelationClasses\ThreeDCartOrderRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\EntityClasses\OdbcStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\OdbcStoreRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
     <Compile Include=".\EntityClasses\ThreeDCartOrderEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
@@ -2361,6 +2372,12 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RetrievalProcedures.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IOdbcStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyOdbcStoreEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

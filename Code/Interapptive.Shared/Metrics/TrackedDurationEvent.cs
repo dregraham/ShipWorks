@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Web.UI.WebControls.WebParts;
 using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Interapptive.Shared.Metrics
@@ -9,7 +10,7 @@ namespace Interapptive.Shared.Metrics
     /// </summary>
     public class TrackedDurationEvent : ITrackedDurationEvent
     {
-        readonly Stopwatch stopwatch;
+        private readonly Stopwatch stopwatch;
         private readonly EventTelemetry eventTelemetry;
 
         /// <summary>
@@ -38,6 +39,21 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// Adds a property value to the event.
+        /// </summary>
+        public void AddProperty(string propertyName, string propertyValue)
+        {
+            if (eventTelemetry.Properties.ContainsKey(propertyName))
+            {
+                eventTelemetry.Properties[propertyName] = propertyValue;
+            }
+            else
+            {
+                eventTelemetry.Properties.Add(propertyName, propertyValue);
+            }
+        }
+
+        /// <summary>
         /// Stop the stopwatch
         /// </summary>
         private void Stop()
@@ -58,9 +74,17 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
-        /// Dispose
+        /// Changes the name used to identify this specific event.
         /// </summary>
-        public void Dispose()
+        protected void ChangeName(string name)
+        {
+            eventTelemetry.Name = name;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public virtual void Dispose()
         {
             Stop();
         }

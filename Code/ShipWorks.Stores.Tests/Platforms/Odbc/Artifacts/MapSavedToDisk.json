@@ -1,0 +1,34 @@
+﻿{"FieldMap":{
+	"Name": "AnotherSqlServer - Order",
+	"Entries": [{
+		"Index": 0,
+		"ShipWorksField": {
+			"ContainingObjectName": "OrderEntity",
+			"Name": "OrderNumber",
+			"DisplayName": "Order Number",
+			"ResolutionStrategy": 0
+		},
+		"ExternalField": {
+			"Column": {
+				"Name": "OrderID"
+			}
+		}
+	},
+	{
+		"Index": 0,
+		"ShipWorksField": {
+			"ContainingObjectName": "OrderEntity",
+			"Name": "OnlineLastModified",
+			"DisplayName": "Last Modified Date & Time",
+			"ResolutionStrategy": 0
+		},
+		"ExternalField": {
+			"Column": {
+				"Name": "OnlineLastModified"
+			}
+		}
+	}]
+	},
+	"ColumnSourceType": "Table",
+	"ColumnSource" : "Table"
+}

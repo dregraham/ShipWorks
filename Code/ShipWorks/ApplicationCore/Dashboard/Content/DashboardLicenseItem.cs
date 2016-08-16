@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Properties;
 using ShipWorks.UI;

@@ -9,8 +9,8 @@ using System.Text.RegularExpressions;
 using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.SqlServer.General;
 

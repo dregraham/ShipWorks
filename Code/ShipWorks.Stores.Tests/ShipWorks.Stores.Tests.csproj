@@ -69,8 +69,24 @@
       <HintPath>..\..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19038, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=f46ff315b1088208, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -96,8 +112,9 @@
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.4\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -120,6 +137,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -144,18 +165,66 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
-      <Link>Properties\AssemblyInfoCommon.cs</Link>
-    </Compile>
+    <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\EncryptedOdbcDataSourceTest.cs" />
+    <Compile Include="Platforms\Odbc\JsonOdbcFieldMapIOFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcItemAttributeLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderNameAndAddressLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderChargeLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderItemLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderNoteLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Loader\OdbcOrderPaymentLoaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\ExternalOdbcMappableFieldTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\FakeOdbcSettingsFile.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapReaderTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\JsonOdbcFieldMapWriterTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapEntryTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcFieldMapTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFileTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcSettingsFileTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcUploadSettingsFileTest.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\ShipWorksOdbcMappableFieldTest.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnTest.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcDownloadCommandFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\Download\OdbcDownloadCommandTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcFieldMapFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\Download\OdbcLastModifiedDownloadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcRecordTests.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcSampleDataCommandTest.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcSchemaTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreSettingsTelemetryCollectorTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcStoreTypeTest.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\Schema\OdbcColumnSourceTest.cs" />
+    <Compile Include="Platforms\Odbc\Download\TableOdbcDownloadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcDefaultFieldValueResolverTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingCarrierFieldValueResolverTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingServiceFieldValueResolverTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQueryTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommandTest.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcUploaderTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportFieldMappingControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMapSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\TestOdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\OrderStatusResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\DTO\StoresResponseTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayShipmentFactoryTest.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\OdbcDatasourceRepositoryTest.cs" />
+    <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceTest.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactoryTest.cs" />
     <Compile Include="EmbeddedResourceHelper.cs" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderTest.cs" />
@@ -188,9 +257,17 @@
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
+      <Project>{BBF456B8-8182-4FC1-8E59-3AAFAE5BFA53}</Project>
+      <Name>ShipWorks.Stores.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
       <Name>ShipWorks.Stores</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
+      <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
+      <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
@@ -204,6 +281,13 @@
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasNoAttributes.json" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttribute.json" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseItemHasOneAttributeWithoutPrice.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithItemsAndNoAttributes.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithItemsAndWithAttributes.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithItemsAndWithAttributesOutOfOrder.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapWithNoItems.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMap.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMapWithDuplicateEntries.json" />
+    <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapSavedToDisk.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />

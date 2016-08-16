@@ -19,9 +19,9 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 

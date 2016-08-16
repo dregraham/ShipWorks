@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Interapptive.Shared;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.FactoryClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Filters.Content.SqlGeneration
 {
@@ -315,7 +314,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             {
                 // This one is the counter-part to the one we did in the constructor
                 context.IndentLevel--;
-                
+
                 // Don't match anything if there is no filter conditions specified
                 return string.Format("\n{0}0 = 1\n", context.IndentString);
             }

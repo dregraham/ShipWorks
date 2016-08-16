@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -26,6 +22,10 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Stores
 {
@@ -213,11 +213,12 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
-        public virtual List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public virtual List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<WizardPage>(TypeCode))
+            if (scope.IsRegisteredWithKey<WizardPage>(TypeCode))
             {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
+                return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
             }
 
             throw new InvalidOperationException("Invalid store type. " + TypeCode);
@@ -614,5 +615,14 @@ namespace ShipWorks.Stores
         /// Will calling OverrideShipmentDetails change the specified shipment
         /// </summary>
         public virtual bool WillOverrideShipmentDetailsChangeShipment(IShipmentEntity shipment) => false;
+
+        /// <summary>
+        /// Determines whether or not to show the wizard page that configures the upload/download settings for the store
+        /// </summary>
+        /// <remarks>For example Generic File has no upload or download settings so we skip showing the page.</remarks>
+        public virtual bool ShowTaskWizardPage()
+        {
+            return true;
+        }
     }
 }

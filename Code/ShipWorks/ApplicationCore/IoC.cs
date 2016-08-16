@@ -9,6 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -33,6 +34,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -108,7 +110,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<TrackedDurationEvent>()
-                .AsImplementedInterfaces();
+                .As<ITrackedDurationEvent>();
 
             builder.RegisterType<ShipBillAddressEditorDlg>();
 
@@ -178,6 +180,10 @@ namespace ShipWorks.ApplicationCore
             ComponentAttribute.Register(builder, allAssemblies);
             ServiceAttribute.Register(builder, allAssemblies);
 
+            builder.RegisterType<TemplateTokenProcessorWrapper>()
+                .As<ITemplateTokenProcessor>()
+                .SingleInstance();
+
             foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
             {
                 container.ComponentRegistry.Register(registration);
@@ -199,6 +205,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<UspsAccountInfoControl>();
             builder.RegisterType<UspsAccountManagerControl>();
             builder.RegisterType<UspsPurchasePostageDlg>();
+
+            builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<IFileDialog>(FileDialogType.Open);
+            builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<IFileDialog>(FileDialogType.Save);
         }
 
         /// <summary>

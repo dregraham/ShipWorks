@@ -4,8 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ScanForms;
@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
     public class UspsScanFormRepository : IScanFormRepository
     {
         private readonly UspsResellerType uspsResellerType;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsScanFormRepository"/> class.
         /// </summary>
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         {
             ScanFormBatchEntity batchEntity = new ScanFormBatchEntity();
             batchEntity.CreatedDate = batch.CreatedDate;
-            batchEntity.ShipmentType = (int)batch.ShipmentType;
+            batchEntity.ShipmentType = (int) batch.ShipmentType;
             batchEntity.ShipmentCount = batch.ShipmentCount;
 
             foreach (ScanForms.ScanForm scanForm in batch.ScanForms)
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
             }
 
             List<ScanForms.ScanForm> scanForms = new List<ScanForms.ScanForm>();
-            
+
             UspsScanFormCollection uspsForms = UspsScanFormCollection.Fetch(SqlAdapter.Default,
                 UspsScanFormFields.UspsAccountID == accountEntity.UspsAccountID &
                 UspsScanFormFields.CreatedDate > DateTime.UtcNow.Subtract(TimeSpan.FromDays(8)));
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
             resultFields.DefineField(ShipmentFields.ShipmentID, 0, "ShipmentID", "");
 
             // Do the fetch
-            using (SqlDataReader reader = (SqlDataReader)SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
             {
                 List<long> keys = new List<long>();
 

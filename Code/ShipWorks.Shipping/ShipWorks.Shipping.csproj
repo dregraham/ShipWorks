@@ -98,7 +98,7 @@
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.4\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

@@ -79,7 +79,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.4\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -145,6 +145,7 @@
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
     <Compile Include="AttachedProperties\Link.cs" />
     <Compile Include="AttachedProperties\WebBrowserUtility.cs" />
+    <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Controls\ChannelConfirmDelete\IConfirmChannelDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\ChannelsOutOfSyncBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericFileBehavior.cs" />
+    <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OdbcBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\GenericModuleBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitBehavior\OverChannelLimitBehavior.cs" />
     <Compile Include="Controls\ChannelLimit\ChannelLimitControl.xaml.cs">
@@ -223,9 +225,11 @@
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\IsEmptyConverter.cs" />
+    <Compile Include="ValueConverters\RadioButtonCheckedConverter.cs" />
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\StringEmptyWhenEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\HalfCentCurrencyConverter.cs" />
+    <Compile Include="ValueConverters\StringToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />

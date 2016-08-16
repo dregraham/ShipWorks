@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration;
@@ -136,11 +137,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override StoreDownloader CreateDownloader() =>
            new ChannelAdvisorDownloader(Store);
-        
+
         /// <summary>
         /// Create the wizard pages used to set the store up
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages() =>
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope) =>
             new List<WizardPage>
             {
                 new ChannelAdvisorAccountPage()

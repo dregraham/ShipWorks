@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -115,7 +116,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the collection of setup wizard pages for configuring the integration
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             // show the old signup for as long as possible, 10/10/2011
             // if after 10/10/2011, someone needs to signup that has used the old api in the month bofore, allow it via magickeys

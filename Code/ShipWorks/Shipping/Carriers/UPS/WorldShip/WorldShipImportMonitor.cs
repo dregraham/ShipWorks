@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Interaction;
@@ -12,10 +12,10 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
@@ -23,7 +23,6 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Stores;
 using ShipWorks.Users;
-using log4net;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
@@ -53,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         private static Dictionary<string, UpsPackagingType> InitializeWorldShipPackageTypes()
         {
-            // WS returns the names of the packages differently, so create a mapping of WS package type names 
+            // WS returns the names of the packages differently, so create a mapping of WS package type names
             // to our UpsPackagingType
             upsPackageTypeNames = new Dictionary<string, UpsPackagingType>();
             upsPackageTypeNames["BPM FLATS"] = UpsPackagingType.BPMFlats;
@@ -113,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     return;
                 }
 
-                // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it.
                 // We only may not if we are running in the background.
                 if (!ApplicationBusyManager.TryOperationStarting("importing from WorldShip", out busyToken))
                 {
@@ -201,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         // To support the old mappings, include any where the VoidIndicator is null.  And if it is not null, then check that it is "N"
                         var worldShipShipments = toImport.Where(i => (i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
 
-                        List<WorldShipProcessedGrouping> worldShipProcessedGroupings = 
+                        List<WorldShipProcessedGrouping> worldShipProcessedGroupings =
                             worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
                                 (shipmentId, importEntries) =>
                                     new WorldShipProcessedGrouping(shipmentId,
@@ -318,7 +317,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
                     if (shipment == null)
                     {
-                        // The shipment went away...  
+                        // The shipment went away...
                         // Ensure the original exported records are deleted
                         if (worldShipProcessedGrouping.ShipmentID.HasValue)
                         {
@@ -393,7 +392,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
                                     if (upsServiceMapping != null)
                                     {
-                                        upsShipment.Service = (int)upsServiceMapping.UpsServiceType;
+                                        upsShipment.Service = (int) upsServiceMapping.UpsServiceType;
                                     }
                                 }
 
@@ -405,7 +404,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                     if (upsPackageTypeNames.ContainsKey(worldShipPackageType))
                                     {
                                         UpsPackagingType packageType = upsPackageTypeNames[worldShipPackageType];
-                                        upsPackage.PackagingType = (int)packageType;
+                                        upsPackage.PackagingType = (int) packageType;
                                     }
                                     else
                                     {
@@ -420,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                     // Update the declared value
                                     if (import.DeclaredValueAmount.HasValue && SafeTrim(import.DeclaredValueOption).ToUpperInvariant() == "Y")
                                     {
-                                        upsPackage.DeclaredValue = (decimal)import.DeclaredValueAmount.Value;
+                                        upsPackage.DeclaredValue = (decimal) import.DeclaredValueAmount.Value;
                                     }
                                 }
 
@@ -429,14 +428,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                             }
 
                             // Save the published charges
-                            upsShipment.PublishedCharges = (decimal)import.PublishedCharges;
+                            upsShipment.PublishedCharges = (decimal) import.PublishedCharges;
 
                             // Figure out if there was a negotiated rate
                             if (import.NegotiatedCharges > 0)
                             {
                                 upsShipment.NegotiatedRate = true;
 
-                                shipment.ShipmentCost = (decimal)import.NegotiatedCharges;
+                                shipment.ShipmentCost = (decimal) import.NegotiatedCharges;
                             }
                             else
                             {
@@ -456,8 +455,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         }
                         catch (ORMConcurrencyException ormConcurrencyException)
                         {
-                            string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException(import, 
-                                                                                        string.Format("ShipmentID:{0}", import.ShipmentID), 
+                            string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException(import,
+                                                                                        string.Format("ShipmentID:{0}", import.ShipmentID),
                                                                                         ormConcurrencyException);
 
                             throw new UpsException(ormConcurrencyExceptionMessage, ormConcurrencyException);
@@ -465,7 +464,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     }
 
                     // Mark the shipment as completed
-                    upsShipment.WorldShipStatus = (int)WorldShipStatusType.Completed;
+                    upsShipment.WorldShipStatus = (int) WorldShipStatusType.Completed;
 
                     // Save the updated ups world ship status
                     adapter.SaveAndRefetch(shipment);
@@ -484,7 +483,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
             catch (ORMConcurrencyException ormConcurrencyException)
             {
-                string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException((IEntity2)ormConcurrencyException.EntityWhichFailed,
+                string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException((IEntity2) ormConcurrencyException.EntityWhichFailed,
                                                                             string.Format("ShipmentID:{0}", shipmentId),
                                                                             ormConcurrencyException);
                 throw new UpsException(ormConcurrencyExceptionMessage, ormConcurrencyException);
@@ -537,16 +536,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             string uspsTrackingNumber;
             string leadTrackingNumber;
 
-            // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.  
+            // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.
             // But if that is blank, we use ReferenceNumber (1)
             // WS does not provide a LeadTrackingNumber for MI, so we'll use the UspsTrackingNumber
-            if (UpsUtility.IsUpsMiService((UpsServiceType)upsShipment.Service))
+            if (UpsUtility.IsUpsMiService((UpsServiceType) upsShipment.Service))
             {
                 uspsTrackingNumber = !string.IsNullOrWhiteSpace(import.UspsTrackingNumber) ? import.UspsTrackingNumber : (upsShipment.ReferenceNumber ?? string.Empty);
                 leadTrackingNumber = uspsTrackingNumber;
                 trackingNumber = string.Empty;
             }
-            else if (UpsUtility.IsUpsSurePostService((UpsServiceType)upsShipment.Service)) 
+            else if (UpsUtility.IsUpsSurePostService((UpsServiceType) upsShipment.Service))
             {
                 // SurePost provides both UPS and USPS tracking numbers, so we'll use the UPS tracking numbers
                 // so that tracking info is available as soon as possible for customers
@@ -592,7 +591,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     //   WorldShipProcessed entries.
                     //   If we commit the worldship status and ShippingManager.VoidShipment throws, the WorldShipProcessed entries still
                     //   exist and will get deleted on the next run of the importer.
-                    shipment.Ups.WorldShipStatus = (int)WorldShipStatusType.Voided;
+                    shipment.Ups.WorldShipStatus = (int) WorldShipStatusType.Voided;
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
                         adapter.SaveEntity(shipment.Ups);
@@ -613,10 +612,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                             // ShippingManager.VoidShipment translates a SqlAppResourceLockException to a ShippingException, so we check for that type.
                             if (!(ex.InnerException is SqlAppResourceLockException))
                             {
-                                // It wasn't a SqlAppResourceLockException, so re-throw 
+                                // It wasn't a SqlAppResourceLockException, so re-throw
                                 throw;
                             }
-                        }   
+                        }
                     }
                 }
             }
@@ -626,7 +625,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 foreach (WorldShipProcessedEntity import in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
                 {
-                    // Delete the import row 
+                    // Delete the import row
                     adapter.DeleteEntity(new WorldShipProcessedEntity(import.WorldShipProcessedID));
                 }
 
@@ -643,7 +642,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 return stringToTrim.Trim();
             }
-             
+
             return string.Empty;
         }
     }
