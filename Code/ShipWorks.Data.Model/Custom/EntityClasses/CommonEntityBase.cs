@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using log4net;
-using System.Diagnostics;
-using ShipWorks.Data.Model.FactoryClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
+using System;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -73,8 +69,8 @@ namespace ShipWorks.Data.Model.EntityClasses
                         field.CurrentValue = "";
                     }
 
-                    if (field.DataType == typeof(double) || 
-                        field.DataType == typeof(float) || 
+                    if (field.DataType == typeof(double) ||
+                        field.DataType == typeof(float) ||
                         field.DataType == typeof(decimal) ||
                         field.DataType == typeof(int) ||
                         field.DataType == typeof(long) ||

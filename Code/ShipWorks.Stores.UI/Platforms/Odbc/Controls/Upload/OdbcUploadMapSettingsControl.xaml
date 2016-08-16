@@ -1,0 +1,161 @@
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Odbc.Controls.Upload.OdbcUploadMapSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:upload="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload"
+             xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
+             Width="540"
+             Height="500"
+             Background="{x:Static SystemColors.ControlBrush}"
+             FontFamily="Tahoma"
+             FontSize="8.25pt"
+             d:DataContext="{d:DesignInstance upload:OdbcUploadMapSettingsControlViewModel}"
+             mc:Ignorable="d">
+    <Control.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Margin" Value="0 5 0 5" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0 5 0 5" />
+            <Setter Property="Padding" Value="1 4 0 4" />
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5 5 0 5" />
+            <Setter Property="Padding" Value="5 2 5 2" />
+            <Setter Property="Width" Value="85" />
+            <Setter Property="Height" Value="24" />
+        </Style>
+        <Style TargetType="{x:Type ui:ShipWorksComboBox}">
+            <Setter Property="Margin" Value="0 5 0 5" />
+            <Setter Property="Padding" Value="4 4 0 4" />
+            <Setter Property="Height" Value="24" />
+        </Style>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0 0 15 0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
+        <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <system:Boolean x:Key="True">True</system:Boolean>
+        <system:Boolean x:Key="False">False</system:Boolean>
+    </Control.Resources>
+    <Grid Margin="20 10 10 10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="0 0 -20 5"
+                   Content="Upload Settings"
+                   FontWeight="Bold" />
+            <Label Grid.Row="1"
+                   Grid.Column="0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Content="Name:" />
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Height="24"
+                     Margin="5 5 0 5"
+                     VerticalAlignment="Center"
+                     Text="{Binding MapName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Button Grid.Row="1"
+                    Grid.Column="2"
+                    Content="Load Map..."
+                    Command="{Binding OpenMapSettingsFileCommand}"/>
+            <Label Grid.Row="3"
+                   Grid.Column="0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Content="Column Source:" />
+            <StackPanel Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="5 5 0 5"
+                        Orientation="Horizontal">
+                <RadioButton Content="Table"
+                             GroupName="ColumnSource"
+                             IsChecked="{Binding ColumnSourceIsTable,
+                                                 Converter={StaticResource RadioButtonCheckedConverter},
+                                                 ConverterParameter={StaticResource True}}" />
+                <RadioButton Content="Query"
+                             GroupName="ColumnSource"
+                             IsChecked="{Binding ColumnSourceIsTable,
+                                                 Converter={StaticResource RadioButtonCheckedConverter},
+                                                 ConverterParameter={StaticResource False}}" />
+            </StackPanel>
+        </Grid>
+        <DockPanel Grid.Row="1"
+                   VerticalAlignment="Top"
+                   d:IsHidden="true">
+            <DockPanel.Visibility>
+                <Binding Converter="{StaticResource VisibleWhenEqualToParameterConverter}" Path="ColumnSourceIsTable">
+                    <Binding.ConverterParameter>
+                        <system:Boolean>True</system:Boolean>
+                    </Binding.ConverterParameter>
+                </Binding>
+            </DockPanel.Visibility>
+            <Label Width="90"
+                   Margin="0"
+                   VerticalAlignment="Center"
+                   HorizontalContentAlignment="Right"
+                   Content="Table:" />
+            <ui:ShipWorksComboBox Margin="5 5 0 5"
+                                  VerticalAlignment="Center"
+                                  DisplayMemberPath="Name"
+                                  ItemsSource="{Binding Tables,
+                                                        UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedValue="{Binding SelectedTable}" />
+        </DockPanel>
+        <Grid Grid.Row="1" d:IsHidden="false">
+            <Grid.Visibility>
+                <Binding Converter="{StaticResource VisibleWhenEqualToParameterConverter}" Path="ColumnSourceIsTable">
+                    <Binding.ConverterParameter>
+                        <system:Boolean>False</system:Boolean>
+                    </Binding.ConverterParameter>
+                </Binding>
+            </Grid.Visibility>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0"
+                   Margin="0 5 0 5"
+                   Content="Your query for custom upload:" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <TextBox x:Name="Query"
+                         Margin="0 5 0 5"
+                         AcceptsReturn="True"
+                         FontFamily="Courier New"
+                         Text="{Binding CustomQuery,
+                                        UpdateSourceTrigger=LostFocus}"
+                         TextWrapping="Wrap"
+                         ui:EntityFieldLength.FieldName="OdbcStoreCustomQuery" />
+            </ScrollViewer>
+            <TextBlock Grid.Row="2">
+                For help writing your query,
+                <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000085355" RequestNavigate="OpenLink">click here.</Hyperlink>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

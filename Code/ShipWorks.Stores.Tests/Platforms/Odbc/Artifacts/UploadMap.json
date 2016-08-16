@@ -1,0 +1,46 @@
+﻿{
+	"Entries": [{
+		"Index": 0,
+		"ShipWorksField": {
+			"ContainingObjectName": "OrderEntity",
+			"Name": "OrderNumber",
+			"DisplayName": "Order Number",
+			"ResolutionStrategy": 0
+		},
+		"ExternalField": {
+			"Column": {
+				"Name": "OrderNumber"
+			}
+		}
+	},
+    {
+      "Index": 0,
+      "ShipWorksField": {
+        "ContainingObjectName": "ShipmentEntity",
+        "Name": "TrackingNumber",
+        "DisplayName": "Tracking Number",
+        "ResolutionStrategy": 0
+      },
+      "ExternalField": {
+        "Column": {
+          "Name": "TrackingNumber"
+        }
+      }
+    },
+    {
+		"Index": 0,
+		"ShipWorksField": {
+			"ContainingObjectName": "ShipmentEntity",
+			"Name": "ShipDate",
+			"DisplayName": "Ship Date",
+			"ResolutionStrategy": 0
+		},
+		"ExternalField": {
+			"Column": {
+				"Name": "ShipDate"
+			}
+		}
+	}
+	],
+	"RecordIdentifierSource": "OrderID"
+}

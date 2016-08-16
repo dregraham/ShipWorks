@@ -191,6 +191,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
 				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
+				case "OdbcStoreEntity": return EntityType.OdbcStoreEntity;
 				case "SearsStoreEntity": return EntityType.SearsStoreEntity;
 				case "SparkPayStoreEntity": return EntityType.SparkPayStoreEntity;
 				case "ThreeDCartOrderEntity": return EntityType.ThreeDCartOrderEntity;
@@ -301,6 +302,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case EntityType.LemonStandStoreEntity: return new LemonStandStoreRelations();
 				case EntityType.LemonStandOrderEntity: return new LemonStandOrderRelations();
 				case EntityType.LemonStandOrderItemEntity: return new LemonStandOrderItemRelations();
+				case EntityType.OdbcStoreEntity: return new OdbcStoreRelations();
 				case EntityType.SearsStoreEntity: return new SearsStoreRelations();
 				case EntityType.SparkPayStoreEntity: return new SparkPayStoreRelations();
 				case EntityType.ThreeDCartOrderEntity: return new ThreeDCartOrderRelations();

@@ -30,6 +30,11 @@ namespace ShipWorks.Stores.Content
         OrderEntity LoadOrder(long orderID, IPrefetchPath2 prefetchPath);
 
         /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        ShipmentEntity GetLatestActiveShipment(long orderID);
+
+        /// <summary>
         /// Load the specified orders using the given prefetch path
         /// </summary>
         IEnumerable<OrderEntity> LoadOrders(IEnumerable<long> orderIdList, IPrefetchPath2 prefetchPath);

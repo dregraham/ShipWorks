@@ -4,11 +4,17 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Tests
 {
+    /// <summary>
+    /// Helper class for getting embedded resources.
+    /// </summary>
     public static class EmbeddedResourceHelper
     {
+        /// <summary>
+        /// Gets the embedded resource string.
+        /// </summary>
         public static string GetEmbeddedResourceString(string embeddedResourceName)
         {
-            string txt = string.Empty;
+            string txt;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))
             {
                 if (stream == null)
@@ -23,6 +29,21 @@ namespace ShipWorks.Stores.Tests
             }
 
             return txt;
+        }
+
+        /// <summary>
+        /// Gets the embedded resource stream.
+        /// </summary>
+        public static Stream GetEmbeddedResourceStream(string embeddedResourceName)
+        {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName);
+
+            if (stream == null)
+            {
+                throw new InvalidOperationException("Error getting the embedded resource");
+            }
+            
+            return stream;
         }
     }
 }

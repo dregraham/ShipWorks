@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         bool enabled = true;
 
         // The event handler that will be called when the item is invoked
-        MenuCommandExecutor executeEvent;
+        protected MenuCommandExecutor ExecuteEvent;
 
         // User data
         object tag;
@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public MenuCommand(MenuCommandExecutor executeEvent)
         {
-            this.executeEvent = executeEvent;
+            this.ExecuteEvent = executeEvent;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         public MenuCommand(string text, MenuCommandExecutor executeEvent)
         {
             this.text = text;
-            this.executeEvent = executeEvent;
+            this.ExecuteEvent = executeEvent;
         }
 
         /// <summary>
@@ -136,9 +136,9 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public void ExecuteAsync(Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
         {
-            if (executeEvent != null)
+            if (ExecuteEvent != null)
             {
-                executeEvent(new MenuCommandExecutionContext(this, owner, selectedKeys, callback));
+                ExecuteEvent(new MenuCommandExecutionContext(this, owner, selectedKeys, callback));
             }
         }
     }

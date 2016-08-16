@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
         private readonly IConfigurationData configurationData;
-        private readonly IEncryptionProvider encryptionProvider;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private ILog log;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             IConfigurationData configurationData)
         {
             this.configurationData = configurationData;
-            encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
+            this.encryptionProviderFactory = encryptionProviderFactory;
             log = logFactory(typeof(CustomerLicenseReader));
         }
 
@@ -34,11 +34,13 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Read()
         {
+            IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
             ConfigurationEntity config = configurationData.Fetch();
 
             try
             {
-                return encryptionProvider.Decrypt(config.CustomerKey);
+                string customerKey = encryptionProvider.Decrypt(config.CustomerKey);
+                return customerKey;
             }
             catch (ORMEntityOutOfSyncException ex)
             {
@@ -46,22 +48,22 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // keep it from hapenning again... I could also putting some sort of sleep in here (a couple of seconds)
                 // but we'll try this first.
                 log.Error(ex);
-                return RefreshConfigAndRetryRead();
+                return RefreshConfigAndRetryRead(encryptionProvider);
             }
-            catch (EncryptionException ex) when(ex.InnerException is CryptographicException)
+            catch (EncryptionException ex) when (ex.InnerException is CryptographicException)
             {
                 // This was hapenning when the key and the databaseid didn't match. This would happen when switching 
                 // or restoring a database and shouldn't happen.
                 // I don't know if it is hapenning anymore...
                 log.Error(ex);
-                return RefreshConfigAndRetryRead();
+                return RefreshConfigAndRetryRead(encryptionProvider);
             }
         }
 
         /// <summary>
         /// Retries the read.
         /// </summary>
-        private string RefreshConfigAndRetryRead()
+        private string RefreshConfigAndRetryRead(IEncryptionProvider encryptionProvider)
         {
             configurationData.CheckForChangesNeeded();
             ConfigurationEntity config = configurationData.Fetch();

@@ -23,6 +23,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Net;
 using System.Windows.Forms;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -137,7 +138,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
             {
