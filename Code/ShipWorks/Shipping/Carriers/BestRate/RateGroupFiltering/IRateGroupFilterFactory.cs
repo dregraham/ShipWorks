@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
 {

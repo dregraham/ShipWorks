@@ -27,13 +27,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionRequest());
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_SetsServiceIdToGlobalShipAddress_Test()
+        public void Manipulate_SetsServiceIdToGlobalShipAddress()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo1_Test()
+        public void Manipulate_SetsMajorTo1()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_Test()
+        public void Manipulate_SetsMinorTo0()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_Test()
+        public void Manipulate_SetsIntermediateTo0()
         {
             testObject.Manipulate(carrierRequest.Object);
 

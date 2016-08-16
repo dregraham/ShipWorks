@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
-using ShipWorks.Shipping;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -56,6 +52,8 @@ namespace ShipWorks.Stores.Platforms.Sears
                 return;
             }
 
+            ShippingManager.EnsureShipmentLoaded(shipment);
+			
             SearsWebClient webClient = new SearsWebClient(storeEntity);
             webClient.UploadShipmentDetails(shipment);
         }

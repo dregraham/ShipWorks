@@ -1,30 +1,23 @@
-﻿using Interapptive.Shared.Utility;
-using Interapptive.Shared.Win32;
+﻿using System;
+using System.ComponentModel;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
+using System.ServiceProcess;
+using System.Threading;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
+using Interapptive.Shared.UI;
 using log4net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.ApplicationCore.Services.Hosting.Windows;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.ServiceProcess;
-using System.Threading;
-using System.Timers;
-using System.Data.SqlClient;
-using Interapptive.Shared.Data;
-using ShipWorks.Stores;
-using ShipWorks.ApplicationCore.Interaction;
 using ThreadTimer = System.Threading.Timer;
-using Interapptive.Shared.UI;
-using System.IO;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 
 namespace ShipWorks.ApplicationCore.Services
 {
@@ -56,7 +49,7 @@ namespace ShipWorks.ApplicationCore.Services
         Stopwatch lastWarnMessageTime = Stopwatch.StartNew();
 
         /// <summary>
-        /// Consteructor
+        /// Constructor
         /// </summary>
         public ShipWorksServiceBase()
         {
@@ -75,10 +68,10 @@ namespace ShipWorks.ApplicationCore.Services
         /// The ShipWorks Service type
         /// </summary>
         [Description("The ShipWorks service type that this service implements.")]
-        public ShipWorksServiceType ServiceType 
-        { 
-            get; 
-            set; 
+        public ShipWorksServiceType ServiceType
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -166,10 +159,10 @@ namespace ShipWorks.ApplicationCore.Services
                         // Do our core starting initialization
                         OnStartCore();
 
-                        // Start the timer to periodically checkin
+                        // Start the timer to periodically check-in
                         checkInTimer = new ThreadTimer(OnCheckInTimerElapsed, null, ServiceStatusManager.CheckInTimeSpan, ServiceStatusManager.CheckInTimeSpan);
                     }
-                        // It's already running, but the SQL config changed - we need to make sure the scheduler is now pointing to the correct database
+                    // It's already running, but the SQL config changed - we need to make sure the scheduler is now pointing to the correct database
                     else if (hasChanged)
                     {
                         OnSqlConfigurationChanged();
@@ -196,6 +189,7 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// Check SQL Session for changes.  Updates 'lastConfiguration' and 'lastConfigurationSuccess', and returns true if the session has changed.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool CheckSqlSession()
         {
             // Reloading the SQL Session and any other changes that may cause have to be within a connection scope, so we don't try to do it while other things are updating,
@@ -227,7 +221,7 @@ namespace ShipWorks.ApplicationCore.Services
 
                 try
                 {
-                    // If the session hasn't changed, and it was succesful last time, no need to go through all of this again
+                    // If the session hasn't changed, and it was successful last time, no need to go through all of this again
                     if (!hasChanged && lastConfigurationSuccess)
                     {
                         log.DebugFormat("SQL Session has not changed since last check");
@@ -240,7 +234,7 @@ namespace ShipWorks.ApplicationCore.Services
                     // The session has changed.  So first we need to clear the previous session info
                     ClearUserSession();
 
-                    // SQL Sesion isn't configured
+                    // SQL Session isn't configured
                     if (!SqlSession.IsConfigured)
                     {
                         LogThrottledWarn("SqlSession is not configured.");
@@ -268,12 +262,6 @@ namespace ShipWorks.ApplicationCore.Services
                         return hasChanged;
                     }
 
-                    if (MigrationController.IsMigrationInProgress())
-                    {
-                        LogThrottledWarn("A ShipWorks 2 upgrade is in progress.");
-                        return hasChanged;
-                    }
-
                     if (StoreManager.GetDatabaseStoreCount() == 0)
                     {
                         LogThrottledWarn("There are no stores, nothing to do");
@@ -283,7 +271,7 @@ namespace ShipWorks.ApplicationCore.Services
                     UserSession.InitializeForCurrentDatabase();
 
                     UserManager.InitializeForCurrentUser();
-                    UserSession.InitializeForCurrentSession();
+                    UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
                     log.InfoFormat("The user session has been successfully loaded and initialized.");
 
@@ -400,7 +388,7 @@ namespace ShipWorks.ApplicationCore.Services
                 sqlSessionMonitorTimer = null;
             }
 
-            // If the checkin timer is on, that means we were running.
+            // If the check-in timer is on, that means we were running.
             if (checkInTimer != null)
             {
                 // Stop the timer

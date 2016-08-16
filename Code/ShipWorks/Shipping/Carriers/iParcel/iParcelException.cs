@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -34,5 +32,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             : base(message, innerException)
         { }
 
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected iParcelException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
     }
 }

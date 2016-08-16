@@ -2,10 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using Interapptive.Shared.Security;
 using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.FileTransfer
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.FileTransfer
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FtpUtility));
 
-        private static readonly Dictionary<FtpSecurityType, int> defaultPorts = 
+        private static readonly Dictionary<FtpSecurityType, int> defaultPorts =
             new Dictionary<FtpSecurityType, int>
             {
                 {FtpSecurityType.Unsecure, 21},
@@ -50,6 +50,7 @@ namespace ShipWorks.FileTransfer
             account.Passive = true;
 
             account.InternalOwnerID = null;
+            account.ReuseControlConnectionSession = true;
 
             return account;
         }
@@ -76,8 +77,14 @@ namespace ShipWorks.FileTransfer
                 }
             }
 
-            // Excplicit
-            if (CheckFtpSecurityExplicit(portOverride, account))
+            // Explicit with ReuseControlConnectionSession true
+            if (CheckFtpSecurityExplicit(portOverride, account, true))
+            {
+                return account;
+            }
+
+            // Explicit with ReuseControlConnectionSession false
+            if (CheckFtpSecurityExplicit(portOverride, account, false))
             {
                 return account;
             }
@@ -113,7 +120,7 @@ namespace ShipWorks.FileTransfer
             {
                 log.Warn(ex.Message);
             }
-            
+
             // We've tried everything we can, but couldn't connect.  Throw
             throw new FileTransferException("ShipWorks was unable to connect to the FTP site with the information provided.");
         }
@@ -156,7 +163,7 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Check ftp security as explicit
         /// </summary>
-        private static bool CheckFtpSecurityExplicit(int portOverride, FtpAccountEntity account)
+        private static bool CheckFtpSecurityExplicit(int portOverride, FtpAccountEntity account, bool reuseControlConnectionSession)
         {
             log.InfoFormat("Testing Explicit FTP security...");
 
@@ -166,6 +173,7 @@ namespace ShipWorks.FileTransfer
                 account.Port = GetDefaultPort(FtpSecurityType.Explicit);
             }
             account.SecurityType = (int) FtpSecurityType.Explicit;
+            account.ReuseControlConnectionSession = reuseControlConnectionSession;
 
             return TestPassiveActiveModes(account);
         }
@@ -250,12 +258,12 @@ namespace ShipWorks.FileTransfer
             try
             {
                 ftp.Login(account.Username, SecureText.Decrypt(account.Password, account.Username));
-                
+
                 // Apply settings
                 Ftp typedFtp = ftp as Ftp;
                 if (typedFtp != null)
                 {
-                    typedFtp.Passive = account.Passive;   
+                    typedFtp.Passive = account.Passive;
                 }
             }
             catch (NetworkSessionException ex)
@@ -271,8 +279,8 @@ namespace ShipWorks.FileTransfer
         {
             try
             {
-                return account.SecurityType == (int) FtpSecurityType.Sftp ? 
-                    OpenSftpConnection(account) : 
+                return account.SecurityType == (int) FtpSecurityType.Sftp ?
+                    OpenSftpConnection(account) :
                     OpenFtpConnection(account);
             }
             catch (NetworkSessionException ex)
@@ -308,6 +316,8 @@ namespace ShipWorks.FileTransfer
 
             Ftp ftp = new Ftp();
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Settings.ReuseControlConnectionSession = (bool)account.ReuseControlConnectionSession;
+
             ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
 
             return ftp;

@@ -194,6 +194,7 @@ namespace ShipWorks.UI.Controls.Design
         /// <summary>
         /// When the OptionControl is selected, actually create the items in the page
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected override IComponent[] CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
         {
             OptionControl control = (OptionControl) this.Control;

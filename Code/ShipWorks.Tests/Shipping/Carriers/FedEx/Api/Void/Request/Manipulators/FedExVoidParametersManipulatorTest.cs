@@ -26,13 +26,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVoidRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVoidRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new ProcessShipmentRequest());
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnsGroundTrackingType_WhenServiceIsGround_Test()
+        public void Manipulate_ReturnsGroundTrackingType_WhenServiceIsGround()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity();
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnsGroundTrackingType_WhenServiceIsGroundHomeDelivery_Test()
+        public void Manipulate_ReturnsGroundTrackingType_WhenServiceIsGroundHomeDelivery()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity();
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnsUSPSTrackingType_WhenServiceIsSmartPost_Test()
+        public void Manipulate_ReturnsUSPSTrackingType_WhenServiceIsSmartPost()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity();
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnsExpressTrackingType_WhenServiceIsFreight_Test()
+        public void Manipulate_ReturnsExpressTrackingType_WhenServiceIsFreight()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity();
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnsSpecifiedTrackingNumber_Test()
+        public void Manipulate_ReturnsSpecifiedTrackingNumber()
         {
             string trackingNumber = "92xxxxx";
             ShipmentEntity shipmentEntity = new ShipmentEntity();
@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnsSpecifiedDeletionControl_Test()
+        public void Manipulate_ReturnsSpecifiedDeletionControl()
         {
             string trackingNumber = "92xxxxx";
             ShipmentEntity shipmentEntity = new ShipmentEntity();

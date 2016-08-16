@@ -1,8 +1,9 @@
-using System;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <summary>
         /// Determine the API value corresponding to our internal type
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         private PhysicalPackagingType GetApiAdmissibilityPackagingType(FedExPhysicalPackagingType type)
         {
             switch (type)
@@ -75,9 +77,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 case FedExPhysicalPackagingType.Skid: return PhysicalPackagingType.SKID;
                 case FedExPhysicalPackagingType.Tank: return PhysicalPackagingType.TANK;
                 case FedExPhysicalPackagingType.Tube: return PhysicalPackagingType.TUBE;
-            }
+                case FedExPhysicalPackagingType.Hamper: return PhysicalPackagingType.HAMPER;
+                case FedExPhysicalPackagingType.Other: return PhysicalPackagingType.OTHER;
 
-            throw new InvalidOperationException("Invalid FedEx Admissibility Type: " + type);
+                default: throw new InvalidOperationException("Invalid FedEx Admissibility Type: " + type);
+            }
         }
 
         /// <summary>

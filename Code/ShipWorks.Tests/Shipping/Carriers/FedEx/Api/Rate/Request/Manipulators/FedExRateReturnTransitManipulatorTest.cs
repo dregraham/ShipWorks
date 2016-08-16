@@ -25,13 +25,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RateReply());
@@ -49,14 +49,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ReturnTransitAndCommitIsTrue_Test()
+        public void Manipulate_ReturnTransitAndCommitIsTrue()
         {
             testObject.Manipulate(carrierRequest.Object);
             Assert.True(nativeRequest.ReturnTransitAndCommit);
         }
 
         [Fact]
-        public void Manipulate_ReturnTransitAndCommitSpecifiedIsTrue_Test()
+        public void Manipulate_ReturnTransitAndCommitSpecifiedIsTrue()
         {
             testObject.Manipulate(carrierRequest.Object);
             Assert.True(nativeRequest.ReturnTransitAndCommitSpecified);

@@ -49,18 +49,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.localDbProgressTimer = new System.Windows.Forms.Timer(this.components);
-            this.wizardPageUser = new ShipWorks.UI.Wizard.WizardPage();
-            this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.swEmail = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.swPasswordAgain = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.swPassword = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.swUsername = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -72,8 +60,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreparing)).BeginInit();
             this.wizardPageFinishExisting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.wizardPageUser.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -171,7 +157,6 @@
             this.kryptonBorderEdge.Location = new System.Drawing.Point(106, 73);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(342, 1);
-            this.kryptonBorderEdge.TabIndex = 50;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // labelWelcomeGlad
@@ -216,7 +201,7 @@
             this.wizardPagePrepare.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePrepare.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePrepare.Name = "wizardPagePrepare";
-            this.wizardPagePrepare.Size = new System.Drawing.Size(548, 271);
+            this.wizardPagePrepare.Size = new System.Drawing.Size(548, 307);
             this.wizardPagePrepare.TabIndex = 0;
             this.wizardPagePrepare.Title = "ShipWorks Setup";
             this.wizardPagePrepare.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPrepareAutomaticDatabase);
@@ -280,7 +265,7 @@
             this.wizardPageFinishExisting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinishExisting.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinishExisting.Name = "wizardPageFinishExisting";
-            this.wizardPageFinishExisting.Size = new System.Drawing.Size(548, 271);
+            this.wizardPageFinishExisting.Size = new System.Drawing.Size(548, 307);
             this.wizardPageFinishExisting.TabIndex = 0;
             this.wizardPageFinishExisting.Title = "ShipWorks Setup";
             // 
@@ -317,129 +302,11 @@
             // 
             this.localDbProgressTimer.Tick += new System.EventHandler(this.OnLocalDbProgressTimer);
             // 
-            // wizardPageUser
-            // 
-            this.wizardPageUser.Controls.Add(this.helpUserEmail);
-            this.wizardPageUser.Controls.Add(this.pictureBox6);
-            this.wizardPageUser.Controls.Add(this.swEmail);
-            this.wizardPageUser.Controls.Add(this.label7);
-            this.wizardPageUser.Controls.Add(this.swPasswordAgain);
-            this.wizardPageUser.Controls.Add(this.label6);
-            this.wizardPageUser.Controls.Add(this.swPassword);
-            this.wizardPageUser.Controls.Add(this.label8);
-            this.wizardPageUser.Controls.Add(this.swUsername);
-            this.wizardPageUser.Controls.Add(this.label9);
-            this.wizardPageUser.Controls.Add(this.label10);
-            this.wizardPageUser.Description = "Create a user account to log on to ShipWorks.";
-            this.wizardPageUser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageUser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageUser.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageUser.Name = "wizardPageUser";
-            this.wizardPageUser.Size = new System.Drawing.Size(548, 271);
-            this.wizardPageUser.TabIndex = 0;
-            this.wizardPageUser.Title = "ShipWorks Account";
-            this.wizardPageUser.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextCreateUsername);
-            // 
-            // helpUserEmail
-            // 
-            this.helpUserEmail.Caption = "Your email address will be used to send you a new password if its forgotten.";
-            this.helpUserEmail.Location = new System.Drawing.Point(401, 64);
-            this.helpUserEmail.Name = "helpUserEmail";
-            this.helpUserEmail.Size = new System.Drawing.Size(12, 12);
-            this.helpUserEmail.TabIndex = 195;
-            this.helpUserEmail.Title = "Email Address";
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.Image = global::ShipWorks.Properties.Resources.dude31;
-            this.pictureBox6.Location = new System.Drawing.Point(24, 9);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox6.TabIndex = 194;
-            this.pictureBox6.TabStop = false;
-            // 
-            // swEmail
-            // 
-            this.swEmail.Location = new System.Drawing.Point(150, 60);
-            this.swEmail.Name = "swEmail";
-            this.swEmail.Size = new System.Drawing.Size(243, 21);
-            this.swEmail.TabIndex = 186;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(68, 63);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(76, 13);
-            this.label7.TabIndex = 193;
-            this.label7.Text = "Email address:";
-            // 
-            // swPasswordAgain
-            // 
-            this.swPasswordAgain.Location = new System.Drawing.Point(150, 114);
-            this.swPasswordAgain.Name = "swPasswordAgain";
-            this.swPasswordAgain.Size = new System.Drawing.Size(243, 21);
-            this.swPasswordAgain.TabIndex = 188;
-            this.swPasswordAgain.UseSystemPasswordChar = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(49, 117);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(95, 13);
-            this.label6.TabIndex = 192;
-            this.label6.Text = "Retype password:";
-            // 
-            // swPassword
-            // 
-            this.swPassword.Location = new System.Drawing.Point(150, 87);
-            this.swPassword.Name = "swPassword";
-            this.swPassword.Size = new System.Drawing.Size(243, 21);
-            this.swPassword.TabIndex = 187;
-            this.swPassword.UseSystemPasswordChar = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(87, 90);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(57, 13);
-            this.label8.TabIndex = 191;
-            this.label8.Text = "Password:";
-            // 
-            // swUsername
-            // 
-            this.swUsername.Location = new System.Drawing.Point(150, 33);
-            this.swUsername.Name = "swUsername";
-            this.swUsername.Size = new System.Drawing.Size(243, 21);
-            this.swUsername.TabIndex = 185;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(85, 36);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 13);
-            this.label9.TabIndex = 190;
-            this.label9.Text = "Username:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(65, 9);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(172, 13);
-            this.label10.TabIndex = 189;
-            this.label10.Text = "Create your ShipWorks username:";
-            // 
             // SimpleDatabaseSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 414);
+            this.ClientSize = new System.Drawing.Size(548, 413);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximumSize = new System.Drawing.Size(564, 452);
             this.MinimumSize = new System.Drawing.Size(564, 452);
@@ -448,7 +315,6 @@
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageWelcome,
             this.wizardPagePrepare,
-            this.wizardPageUser,
             this.wizardPageFinishExisting});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
@@ -468,9 +334,6 @@
             this.wizardPageFinishExisting.ResumeLayout(false);
             this.wizardPageFinishExisting.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.wizardPageUser.ResumeLayout(false);
-            this.wizardPageUser.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -493,18 +356,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private UI.Wizard.WizardPage wizardPageUser;
-        private UI.Controls.InfoTip helpUserEmail;
-        private System.Windows.Forms.PictureBox pictureBox6;
-        private System.Windows.Forms.TextBox swEmail;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox swPasswordAgain;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox swPassword;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox swUsername;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.PictureBox pictureBox2;
         private UI.Controls.ShieldButton startFromScratch;
         private System.Windows.Forms.Button detailedSetup;

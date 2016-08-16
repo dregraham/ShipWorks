@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -14,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// </summary>
     public class RegistrationPromotionFactory
     {
-        private readonly ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly bool uspsAccountsExist;
         private readonly bool endiciaAccountsExist;
         private readonly bool express1AccountsExist;
@@ -22,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Initializes a new instance of the <see cref="RegistrationPromotionFactory"/> class.
         /// </summary>
-        public RegistrationPromotionFactory() : 
-            this(new UspsAccountRepository(), new Express1UspsAccountRepository(), 
+        public RegistrationPromotionFactory() :
+            this(new UspsAccountRepository(), new Express1UspsAccountRepository(),
                 new EndiciaAccountRepository(), new Express1EndiciaAccountRepository())
         {
         }
@@ -31,10 +32,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Constructor that allows easier testing of the factory
         /// </summary>
-        public RegistrationPromotionFactory(ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository,
-            ICarrierAccountRepository<UspsAccountEntity> uspsExpress1AccountRepository,
-            ICarrierAccountRepository<EndiciaAccountEntity> endiciaAccountRepository,
-            ICarrierAccountRepository<EndiciaAccountEntity> endiciaExpress1AccountRepository)
+        public RegistrationPromotionFactory(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsExpress1AccountRepository,
+            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository,
+            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaExpress1AccountRepository)
         {
             this.uspsAccountRepository = uspsAccountRepository;
 
@@ -49,26 +50,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns>An instance of IRegistrationPromotion.</returns>
         public IRegistrationPromotion CreateRegistrationPromotion()
         {
-            if (!PostalAccountsExist())
+            if (!PostalAccountsExist() || OnlyExpress1AccountsExist())
             {
-                return new NewPostalCustomerRegistrationPromotion();
-            }
-
-            if (OnlyExpress1AccountsExist())
-            {
-                return new Express1OnlyRegistrationPromotion();
+                return new Express1RegistrationPromotion();
             }
 
             if (endiciaAccountsExist)
             {
-                return AnyUspsResellerAccountsExist() ? 
-                    (IRegistrationPromotion) new EndiciaCbpRegistrationPromotion() : 
-                    new EndiciaIntuishipRegistrationPromotion();
+                return AnyUspsResellerAccountsExist() ?
+                    (IRegistrationPromotion) new EndiciaCbpRegistrationPromotion() :
+                    new Express1RegistrationPromotion();
             }
 
             return AnyUspsResellerAccountsExist() ?
                 (IRegistrationPromotion) new UspsCbpRegistrationPromotion() :
-                new UspsIntuishipRegistrationPromotion();
+                new Express1RegistrationPromotion();
         }
 
         /// <summary>
@@ -93,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns></returns>
         private bool AnyUspsResellerAccountsExist()
         {
-            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller);
+            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int) UspsAccountContractType.Reseller);
         }
     }
 }

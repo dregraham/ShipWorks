@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipula
         }
 
         [Fact]
-        public void Manipulate_IPAddressIsSet_Test()
+        public void Manipulate_IPAddressIsSet()
         {
             string ipAddress = "192.168.42.1";
 
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipula
         }
 
         [Fact]
-        public void Manipulate_ThrowsUpsOpenAccountException_Test()
+        public void Manipulate_ThrowsUpsOpenAccountException()
         {
             networkUtility.Setup(n => n.GetIPAddress()).Throws(new NetworkException("oops"));
 

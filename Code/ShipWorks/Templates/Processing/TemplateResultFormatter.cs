@@ -8,6 +8,7 @@ using ShipWorks.Templates.Media;
 using System.Diagnostics;
 using ShipWorks.UI.Controls.Html;
 using System.IO;
+using Interapptive.Shared;
 using ShipWorks.Templates.Printing;
 
 namespace ShipWorks.Templates.Processing
@@ -92,6 +93,7 @@ namespace ShipWorks.Templates.Processing
         /// <summary>
         /// Format the given error using the specified output format.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static string FormatError(TemplateException ex, TemplateOutputFormat format)
         {
             if (ex == null)
@@ -179,6 +181,7 @@ namespace ShipWorks.Templates.Processing
         /// Format the given results as a single html output, using the specified page break as the break between result pages.  The first result use
         /// is that given by resultIndex, and when the function resturns resultIndex is set to the next result that would be used.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static string FormatStandardHtml(IList<TemplateResult> results, TemplateResultUsage usage, TemplateResultFormatSettings settings)
         {
             int startIndex = settings.NextResultIndex;

@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
 using System.Drawing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates;
 using System.Windows.Forms;
-using ShipWorks.UI.Controls.Html;
 using ShipWorks.Common.Threading;
-using ShipWorks.Templates.Processing;
 using System.Diagnostics;
-using ShipWorks.UI.Controls.Html.Core;
-using Interapptive.Shared;
-using Interapptive.Shared.Utility;
 using System.Threading;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Connection;
@@ -28,7 +19,7 @@ namespace ShipWorks.Data.Grid.DetailView
     /// <summary>
     /// Responsible for rendering the details view of a GridRow based on grid settings
     /// </summary>
-    public partial class DetailViewRenderer : IDisposable
+    public class DetailViewRenderer : IDisposable
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DetailViewRenderer));
@@ -46,7 +37,7 @@ namespace ShipWorks.Data.Grid.DetailView
         // This is non-null when there is data to be rendered, and keeps the connection from being messed with while we are fetching data.
         ApplicationBusyToken busyToken;
 
-        // Maximum number of items that can be pending at time 
+        // Maximum number of items that can be pending at time
         const int maxPendingItems = 50;
 
         class PendingItem
@@ -101,7 +92,7 @@ namespace ShipWorks.Data.Grid.DetailView
             // Draw a line at the top
             if (settings.DetailViewMode == DetailViewMode.NormalWithDetail)
             {
-                // The line has to be within our allowed bounds.  This would not be the case when auto-sizing and the auto-size determined there 
+                // The line has to be within our allowed bounds.  This would not be the case when auto-sizing and the auto-size determined there
                 // was zero content.  In that case there would be no detail area - and thus no spot to draw this line.
                 if (rowBounds.Contains(rowBounds.Left, detailBounds.Top - 1))
                 {

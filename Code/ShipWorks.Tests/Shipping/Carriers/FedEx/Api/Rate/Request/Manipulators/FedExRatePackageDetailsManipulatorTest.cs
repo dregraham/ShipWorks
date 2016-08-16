@@ -73,13 +73,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
 
         [Fact]
-        public void Manipulate_SetsPackageCount_BasedOnFedExPackageCount_Test()
+        public void Manipulate_SetsPackageCount_BasedOnFedExPackageCount()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_PackageCountIsTwo_TwoPacakgesInShipment_Test()
+        public void Manipulate_PackageCountIsTwo_TwoPacakgesInShipment()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsLB_Test()
+        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsLB()
         {
             shipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Pounds;
 
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsWeightValueToZeroPointOne_WhenValueIsZero_Test()
+        public void Manipulate_SetsWeightValueToZeroPointOne_WhenValueIsZero()
         {
             foreach (FedExPackageEntity package in shipmentEntity.FedEx.Packages)
             {
@@ -168,7 +168,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsKG_Test()
+        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsKG()
         {
             shipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Kilograms;
             testObject.Manipulate(carrierRequest.Object);
@@ -177,7 +177,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_InsuredValueSetProperly_TwoPacakgesWithInsuredValue_Test()
+        public void Manipulate_InsuredValueSetProperly_TwoPacakgesWithInsuredValue()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -185,7 +185,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_InsuredValueAmountSpecifiedIsTrue_Test()
+        public void Manipulate_InsuredValueAmountSpecifiedIsTrue()
         {
             testObject.Manipulate(carrierRequest.Object);
 

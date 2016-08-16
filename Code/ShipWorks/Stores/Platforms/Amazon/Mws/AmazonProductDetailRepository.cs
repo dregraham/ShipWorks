@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
 using System.Globalization;
+using Interapptive.Shared;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
@@ -79,6 +80,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         /// <param name="items">The items we need to get product details for.</param>
         /// <returns>XPathNamspaceNavigator objects containing the product details.</returns>
+        [NDependIgnoreLongMethod]
         private IEnumerable<XPathNamespaceNavigator> FetchProductDetailsFromAmazon(List<AmazonOrderItemEntity> items)
         {
             // We are going to get the product details for the list of items provided, but we are restricted

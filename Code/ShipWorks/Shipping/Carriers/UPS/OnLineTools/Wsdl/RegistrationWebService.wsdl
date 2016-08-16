@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- UPS Register Service WSDL Release Date Jan, 2012 -->
-<wsdl:definitions name="RegistrationNAccountMgr" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:tns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0">
+<wsdl:definitions name="RegistrationNAccountMgr" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" xmlns:tns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0">
 	<wsdl:types>
 		<xsd:schema>
 			<!-- This schema defines the UPS Security header used for authorization purposes -->
@@ -8,7 +8,7 @@
 			<!--  This schema defines the error detail data types returned within SOAPFaults to provide more specific information pertaining to the problem. -->
 			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" schemaLocation="Error1.1.xsd"/>
 			<!-- ################## Start Registration Specific schema  ################### -->
-			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" schemaLocation="RegisterNAccountMgrSchema.xsd"/>
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" schemaLocation="RegisterNAccountMgrSchema.xsd"/>
 			<!-- ################## End Registration specific schema ##################### -->
 		</xsd:schema>
 	</wsdl:types>

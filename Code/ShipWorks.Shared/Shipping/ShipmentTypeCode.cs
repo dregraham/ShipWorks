@@ -62,6 +62,10 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIconAttribute("usps")]
         Usps = 15,
 
+        [Description("Amazon")]
+        [ShipmentTypeIconAttribute("amazon")]
+        Amazon = 16,
+
         [Description("None")]
         None = 99
     }

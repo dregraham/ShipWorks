@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
     /// <summary>
     /// A repository for FedEx counter rate accounts
     /// </summary>
-    public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity>
+    public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
     {
         private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<FedExAccountEntity>> lazyAccounts;
@@ -29,12 +29,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public IEnumerable<FedExAccountEntity> Accounts 
+        public IEnumerable<FedExAccountEntity> Accounts => lazyAccounts.Value;
+
+        /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public IEnumerable<IFedExAccountEntity> AccountsReadOnly => lazyAccounts.Value;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public void CheckForChangesNeeded()
         {
-            get
-            {
-                return lazyAccounts.Value;
-            }
+            // We don't need to check for changes for counter rates
         }
 
         /// <summary>
@@ -76,10 +83,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         }
 
         /// <summary>
-        /// Gets the default profile account. This will always return the same account that is 
+        /// Returns a carrier counter rate account.
+        /// </summary>
+        /// <returns>Returns the first counter rate.</returns>
+        public IFedExAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return Accounts.First();
+        }
+
+        /// <summary>
+        /// Gets the default profile account. This will always return the same account that is
         /// used to get counter rates.
         /// </summary>
-        public FedExAccountEntity DefaultProfileAccount 
+        public FedExAccountEntity DefaultProfileAccount
         {
             get
             {

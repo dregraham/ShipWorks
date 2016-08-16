@@ -223,6 +223,7 @@ namespace ShipWorks.UI.Controls.Colors
         /// <summary>
         /// Build the color panels
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void BuildPalette()
         {
             int rows = colorEntries.GetLength(0);

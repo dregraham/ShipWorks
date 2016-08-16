@@ -1,13 +1,10 @@
-﻿using Interapptive.Shared.Data;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using Interapptive.Shared.Data;
 using log4net;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
-using ShipWorks.SqlServer.Common.Data;
-using System;
-using System.Data;
-using System.Data.SqlClient;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -25,7 +22,7 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             get
             {
-                return SqlSession.Current.GetUtcDate();
+                return SqlDateTimeProvider.Current.GetUtcDate();
             }
         }
 
@@ -59,7 +56,7 @@ namespace ShipWorks.Actions.Tasks.Common
                                 // Disable the command timeout since the scripts should take care of timing themselves out
                                 command.CommandTimeout = 0;
                                 command.Parameters.AddWithValue("@olderThan", olderThanInUtc);
-                                command.Parameters.AddWithValue("@runUntil", (object)runUntilInUtc ?? DBNull.Value);
+                                command.Parameters.AddWithValue("@runUntil", (object) runUntilInUtc ?? DBNull.Value);
 
                                 command.ExecuteNonQuery();
                             }
@@ -74,7 +71,7 @@ namespace ShipWorks.Actions.Tasks.Common
                         }
                         catch (SqlException exception)
                         {
-                            // Number = 1205 is a deadlock.  If we aren't a deadlock, rethrow.  
+                            // Number = 1205 is a deadlock.  If we aren't a deadlock, rethrow.
                             // Otherwise, log and try again if appropriate.
                             if (exception.Number != 1205)
                             {

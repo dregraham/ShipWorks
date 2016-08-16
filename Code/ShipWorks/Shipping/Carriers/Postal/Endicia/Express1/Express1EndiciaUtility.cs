@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     {
         // Express1
         public const string Express1ProductionUrl = "https://service.express1.com/Services/EwsLabelService.svc";
-        public const string Express1DevelopmentUrl = "http://www.express1dev.com/Services/EwsLabelService.svc";
+        public const string Express1DevelopmentUrl = "https://www.express1dev.com/Services/EwsLabelService.svc";
         
         /// <summary>
         /// Gets the API Key, "partnerid" in Endicia parlance

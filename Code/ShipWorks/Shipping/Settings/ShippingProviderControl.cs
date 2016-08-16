@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
+using System.Reactive.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
-using ShipWorks.UI.Utility;
+using Autofac;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -17,8 +19,11 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public partial class ShippingProviderControl : UserControl
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ShippingProviderControl));
+
         List<ShipmentType> activeShipmentTypes;
-        private MessengerToken carrierConfiguredToken;
+        private IDisposable carrierConfiguredToken;
+        private readonly IShippingProviderRuleManager shippingProviderRuleManager;
 
         /// <summary>
         /// Constructor
@@ -30,9 +35,13 @@ namespace ShipWorks.Shipping.Settings
             toolStripFakeDelete.Renderer = new NoBorderToolStripRenderer();
             toolStripAddRule.Renderer = new NoBorderToolStripRenderer();
 
-            carrierConfiguredToken = Messenger.Current.Handle<CarrierConfiguredMessage>(this, HandleCarrierConfigured);
+            shippingProviderRuleManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingProviderRuleManager>();
+            carrierConfiguredToken = Messenger.Current.OfType<CarrierConfiguredMessage>().Subscribe(HandleCarrierConfigured);
         }
 
+        /// <summary>
+        /// Handle when a carrier is configured
+        /// </summary>
         private void HandleCarrierConfigured(CarrierConfiguredMessage message)
         {
             SetDefaultShipmentType();
@@ -96,7 +105,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void LoadRules()
         {
-            foreach (ShippingProviderRuleEntity rule in ShippingProviderRuleManager.GetRules())
+            foreach (ShippingProviderRuleEntity rule in shippingProviderRuleManager.GetRules())
             {
                 AddRuleControl(rule);
             }
@@ -127,7 +136,7 @@ namespace ShipWorks.Shipping.Settings
             rule.FilterNodeID = 0;
             rule.ShipmentType = (int) ShipmentTypeCode.None;
 
-            ShippingProviderRuleManager.SaveRule(rule);
+            shippingProviderRuleManager.SaveRule(rule);
 
             AddRuleControl(rule);
 
@@ -142,7 +151,7 @@ namespace ShipWorks.Shipping.Settings
             ShippingProviderRuleControl ruleControl = (ShippingProviderRuleControl) sender;
             ShippingProviderRuleEntity rule = ruleControl.Rule;
 
-            ShippingProviderRuleManager.DeleteRule(rule);
+            shippingProviderRuleManager.DeleteRule(rule);
 
             ruleControl.DeleteClicked -= this.OnDeleteRule;
 
@@ -175,12 +184,16 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
+            log.Info("Saving provider rules");
+
             settings.DefaultType = (int) (ShipmentTypeCode) shipmentTypeCombo.SelectedValue;
 
             foreach (ShippingProviderRuleControl ruleControl in panelMain.Controls)
             {
                 ruleControl.SaveSettings();
             }
+
+            log.Info("Provider rules saved");
         }
 
         /// <summary>

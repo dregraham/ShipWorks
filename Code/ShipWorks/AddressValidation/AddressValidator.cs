@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using log4net;
-using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
 using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.AddressValidation
@@ -14,7 +16,7 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Validates and updates addresses
     /// </summary>
-    public class AddressValidator
+    public class AddressValidator : IAddressValidator
     {
         private readonly IAddressValidationWebClient webClient;
         static readonly ILog log = LogManager.GetLogger(typeof(AddressValidator));
@@ -43,9 +45,42 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressPrefix"></param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        public Task ValidateAsync(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
-            Validate(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
+            return ValidateAsync(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
+        }
+
+        /// <summary>
+        /// Can suggestions be shown for the given validation status
+        /// </summary>
+        public bool CanShowSuggestions(AddressValidationStatusType status)
+        {
+            switch(status)
+            {
+                case AddressValidationStatusType.Fixed:
+                case AddressValidationStatusType.HasSuggestions:
+                case AddressValidationStatusType.SuggestionIgnored:
+                case AddressValidationStatusType.SuggestionSelected:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Can a message be shown fo the given validation status
+        /// </summary>
+        public bool CanShowMessage(AddressValidationStatusType status)
+        {
+            switch(status)
+            {
+                case AddressValidationStatusType.BadAddress:
+                case AddressValidationStatusType.WillNotValidate:
+                case AddressValidationStatusType.Error:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
@@ -54,7 +89,8 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressAdapter">Address that should be validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        [NDependIgnoreLongMethod]
+        public async Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address
             if (!ShouldValidateAddress(addressAdapter))
@@ -71,8 +107,7 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-
-                AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter);
+                AddressValidationWebClientValidateAddressResult validationResult = await webClient.ValidateAddressAsync(addressAdapter);
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
@@ -85,12 +120,12 @@ namespace ShipWorks.AddressValidation
                 // Set the validation status based on the settings of the store
                 if (canAdjustAddress)
                 {
-                    SetValidationStatus(validationResult.AddressValidationResults, addressAdapter);
+                    SetValidationStatus(validationResult, addressAdapter);
                     UpdateAddressIfAdjusted(addressAdapter, validationResult.AddressValidationResults);
                 }
                 else
                 {
-                    SetValidationStatusForNotify(validationResult.AddressValidationResults, addressAdapter);
+                    SetValidationStatusForNotify(validationResult, addressAdapter);
 
                     AddressValidationResult validatedAddress = validationResult.AddressValidationResults.FirstOrDefault(x => x.IsValid);
                     if (validatedAddress != null)
@@ -104,7 +139,7 @@ namespace ShipWorks.AddressValidation
 
                 addressAdapter.AddressValidationSuggestionCount = validationResult.AddressValidationResults.Count;
 
-                if (validationResult.AddressValidationResults.Count > 0)
+                if (validationResult.AddressValidationResults.Any())
                 {
                     saveAction(originalAddress, validationResult.AddressValidationResults.Select(address => CreateEntityFromValidationResult(address, "Ship")));
                 }
@@ -112,35 +147,67 @@ namespace ShipWorks.AddressValidation
                 {
                     saveAction(null, new List<ValidatedAddressEntity>());
                 }
-
             }
             catch (AddressValidationException ex)
             {
                 log.Warn("Error communicating with Address Validation Server.", ex);
                 addressAdapter.AddressValidationError = string.Format("Error communicating with Address Validation Server.\r\n{0}", ex.Message);
                 addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
+                addressAdapter.AddressType = (int) AddressType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
         }
 
         /// <summary>
+        /// Validates an address with no prefix on the specified entity
+        /// </summary>
+        public async Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress)
+        {
+            ValidatedAddressData data = ValidatedAddressData.NotSet;
+
+            await ValidateAsync(addressAdapter, canAdjustAddress, (original, suggestions) =>
+            {
+                data = original == null ?
+                    ValidatedAddressData.Empty :
+                    new ValidatedAddressData(original, suggestions);
+            });
+
+            return data;
+        }
+
+        /// <summary>
+        /// Can the given status be validated
+        /// </summary>
+        public bool CanValidate(AddressValidationStatusType status) => ShouldValidateAddress(status);
+
+        /// <summary>
         /// Should the specified address be validated
         /// </summary>
-        public static bool ShouldValidateAddress(AddressAdapter adapter)
+        public static bool ShouldValidateAddress(AddressAdapter adapter) =>
+            ShouldValidateAddress((AddressValidationStatusType)adapter.AddressValidationStatus);
+
+        /// <summary>
+        /// Can the given status be validated
+        /// </summary>
+        private static bool ShouldValidateAddress(AddressValidationStatusType status)
         {
-            return adapter.AddressValidationStatus == (int) AddressValidationStatusType.NotChecked ||
-                   adapter.AddressValidationStatus == (int) AddressValidationStatusType.Pending ||
-                   adapter.AddressValidationStatus == (int) AddressValidationStatusType.Error;
+            return status == AddressValidationStatusType.NotChecked ||
+                   status == AddressValidationStatusType.Pending ||
+                   status == AddressValidationStatusType.Error;
         }
 
         /// <summary>
         /// Set the validation status on the entity when we should only notify instead of update
         /// </summary>
-        private static void SetValidationStatusForNotify(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        private static void SetValidationStatusForNotify(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
+            List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
+
+            adapter.AddressType = (int)validationResult.AddressType;
+
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;    
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid && suggestedAddresses[0].IsEqualTo(adapter))
             {
@@ -155,8 +222,12 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Set the validation status on the entity
         /// </summary>
-        private static void SetValidationStatus(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        private static void SetValidationStatus(AddressValidationWebClientValidateAddressResult validationResult, AddressAdapter adapter)
         {
+            List<AddressValidationResult> suggestedAddresses = validationResult.AddressValidationResults;
+
+            adapter.AddressType = (int)validationResult.AddressType;
+            
             if (!suggestedAddresses.Any())
             {
                 adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;

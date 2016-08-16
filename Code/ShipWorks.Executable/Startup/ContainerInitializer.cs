@@ -1,6 +1,9 @@
-﻿using ShipWorks.ApplicationCore;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
 using ShipWorks.Stores.UI.Platforms.LemonStand;
+using ShipWorks.UI.ValueConverters;
 
 namespace ShipWorks.Startup
 {
@@ -14,7 +17,17 @@ namespace ShipWorks.Startup
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
-        public static void Initialize() =>
-            IoC.Initialize(typeof(ShippingModule).Assembly, typeof(LemonStandStoreModule).Assembly);
+        public static IContainer Initialize() =>
+            Initialize(new ContainerBuilder().Build());
+
+        /// <summary>
+        /// Initialize the IoC container
+        /// </summary>
+        public static IContainer Initialize(IContainer container) =>
+            IoC.Initialize(container,
+                typeof(ShippingDialogService).Assembly,
+                typeof(ShippingModule).Assembly,
+                typeof(LemonStandStoreModule).Assembly,
+                typeof(EnumImageConverter).Assembly);
     }
 }

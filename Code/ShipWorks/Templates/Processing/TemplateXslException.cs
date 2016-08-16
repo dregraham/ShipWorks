@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Templates.Processing
 {
     /// <summary>
-    /// Exception thrown due to xsl processing
+    /// Exception thrown due to XSL processing
     /// </summary>
+    [Serializable]
     public class TemplateXslException : TemplateException
     {
         int lineNumber;
@@ -33,6 +33,15 @@ namespace ShipWorks.Templates.Processing
         }
 
         /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected TemplateXslException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
+        {
+
+        }
+
+        /// <summary>
         /// Custom message processing
         /// </summary>
         public override string Message
@@ -41,7 +50,7 @@ namespace ShipWorks.Templates.Processing
             {
                 string message = base.Message;
 
-                // Our InnerException already is the Exception.  It's message was extacted to create the base.Message.
+                // Our InnerException already is the Exception.  It's message was extracted to create the base.Message.
                 if (message.Contains("InnerException") && InnerException != null && InnerException.InnerException != null)
                 {
                     message = message.Replace("See InnerException for a complete description of the error.", "\n\n" + InnerException.InnerException.Message);
@@ -68,7 +77,7 @@ namespace ShipWorks.Templates.Processing
         }
 
         /// <summary>
-        /// The source XSL of the error.  If the error came from the same top-level tempalte that was being compiled\executed, then this is null.  If the error
+        /// The source XSL of the error.  If the error came from the same top-level template that was being compiled\executed, then this is null.  If the error
         /// came from an imported template, this will be the full name of the template.  If an error came from an external file, this will be the full URI to the file.
         /// </summary>
         public override string Source

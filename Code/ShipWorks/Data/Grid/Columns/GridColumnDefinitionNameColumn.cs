@@ -5,6 +5,7 @@ using System.Text;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
 using System.Drawing;
+using Interapptive.Shared;
 using ShipWorks.UI.Controls.SandGrid;
 using Interapptive.Shared.Utility;
 
@@ -23,6 +24,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// <summary>
         /// Draw the colunm cell
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected override void DrawCell(RenderingContext context, GridRow row, object value, Font cellFont, Image image, Rectangle bounds, bool selected, TextFormattingInformation textFormat, Color cellForeColor)
         {
             base.DrawCell(context, row, value, cellFont, image, bounds, selected, textFormat, cellForeColor);

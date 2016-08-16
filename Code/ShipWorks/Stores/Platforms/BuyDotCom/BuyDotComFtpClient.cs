@@ -12,6 +12,7 @@ using System.IO;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
 using System.Xml.Linq;
+using Interapptive.Shared.Net;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom

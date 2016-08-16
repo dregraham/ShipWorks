@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.Threading;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Data;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Filters
@@ -38,7 +39,7 @@ namespace ShipWorks.Filters
     /// <summary>
     /// Utility class for filters
     /// </summary>
-    public static class FilterHelper
+    public static class FilterHelper 
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
 

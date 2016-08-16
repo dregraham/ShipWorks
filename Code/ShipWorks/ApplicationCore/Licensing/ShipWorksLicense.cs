@@ -1,22 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Stores;
 using ShipWorks.ApplicationCore.Licensing.Decoding;
-using ShipWorks.Stores.Platforms;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Represents a license in ShipWorks
     /// </summary>
-    public class ShipWorksLicense
+    public class ShipWorksLicense : IShipWorksLicense
     {
         StoreTypeCode typeCode = StoreTypeCode.Invalid;
 
         string key;
 
-		bool isMetered = false;
+        bool isMetered = false;
         bool isTrial = false;
 
         /// <summary>
@@ -25,43 +21,43 @@ namespace ShipWorks.ApplicationCore.Licensing
         public ShipWorksLicense(string key)
         {
             this.key = key;
-			
+
             ReadLicense(key);
         }
 
         /// <summary>
         /// The store type the license represents
         /// </summary>
-        public StoreTypeCode StoreTypeCode 
-        { 
-            get 
+        public StoreTypeCode StoreTypeCode
+        {
+            get
             {
                 return typeCode;
-            } 
+            }
         }
 
         /// <summary>
         /// The actual license key
         /// </summary>
-        public string Key 
-        { 
-            get 
+        public string Key
+        {
+            get
             {
                 return key;
-            } 
+            }
         }
 
-		/// <summary>
-		/// Indiciates if this is a metered license that is billed monthly, as opposed
-		/// to our old legacy licenses.
-		/// </summary>
-		public bool IsMetered
-		{
-			get
-			{
-				return isMetered;
-			}
-		}
+        /// <summary>
+        /// Indiciates if this is a metered license that is billed monthly, as opposed
+        /// to our old legacy licenses.
+        /// </summary>
+        public bool IsMetered
+        {
+            get
+            {
+                return isMetered;
+            }
+        }
 
         /// <summary>
         /// Indiciates if this is a trial license.
@@ -74,16 +70,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
-		/// <summary>
-		/// Indicates if this instance represents a valid license.
-		/// </summary>
-		public bool IsValid
-		{
-			get
-			{
+        /// <summary>
+        /// Indicates if this instance represents a valid license.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
                 return StoreTypeCode != StoreTypeCode.Invalid;
-			}
-		}
+            }
+        }
 
         /// <summary>
         /// Gets a user-presentable string description of the license.
@@ -110,25 +106,25 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             typeCode = StoreTypeCode.Invalid;
 
-			if (key.Length == 0)
-			{
-				return;
-			}
+            if (key.Length == 0)
+            {
+                return;
+            }
 
-			// Try to decode it as the new metered version first.
-			RawLicense license = LicenseDecoder.Decode(key, "3.m");
+            // Try to decode it as the new metered version first.
+            RawLicense license = LicenseDecoder.Decode(key, "3.m");
 
             // Then try the old ShipWorks 2 version
             if (license == null)
             {
                 license = LicenseDecoder.Decode(key, "2.m");
             }
-			
-	        // Now see if its a freemium license
-			if (license == null)
-			{
-				license = LicenseDecoder.Decode(key, "2.f");
-			}
+
+            // Now see if its a freemium license
+            if (license == null)
+            {
+                license = LicenseDecoder.Decode(key, "2.f");
+            }
 
             // Try the new UPS Only salt
             if (license == null)
@@ -136,20 +132,20 @@ namespace ShipWorks.ApplicationCore.Licensing
                 license = LicenseDecoder.Decode(key, "3.u");
             }
 
-			// Now try to decode as using the old legacy salt
-			if (license == null)
-			{
-				license = LicenseDecoder.Decode(key, "2.x");
-			}
+            // Now try to decode as using the old legacy salt
+            if (license == null)
+            {
+                license = LicenseDecoder.Decode(key, "2.x");
+            }
 
-			// If it fails for any reason, its invalid
-			if (license == null)
-			{
-				return;
-			}
+            // If it fails for any reason, its invalid
+            if (license == null)
+            {
+                return;
+            }
 
-			// For our new metered licenses, there is always an M in the 4th location.
-			isMetered = license.Data1[3] == 'M';
+            // For our new metered licenses, there is always an M in the 4th location.
+            isMetered = license.Data1[3] == 'M';
 
             // See if its a trial
             if (isMetered && license.Data2[0] == 'T')

@@ -12,7 +12,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
     /// </summary>
     public class InsuranceOutline : ElementOutline
     {
-        InsuranceChoice insuranceChoice;
+        IInsuranceChoice insuranceChoice;
 
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Get the name of the selected insurance provider
         /// </summary>
-        private static string GetInsuranceProviderName(InsuranceChoice insuranceChoice)
+        private static string GetInsuranceProviderName(IInsuranceChoice insuranceChoice)
         {
             if (!insuranceChoice.Insured)
             {
@@ -47,7 +47,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         public override ElementOutline CreateDataBoundClone(object data)
         {
-            return new InsuranceOutline(Context) { insuranceChoice = (InsuranceChoice) data };
+            return new InsuranceOutline(Context) { insuranceChoice = (IInsuranceChoice) data };
         }
     }
 }

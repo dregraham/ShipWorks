@@ -1,6 +1,6 @@
 namespace ShipWorks.Stores.Management
 {
-    partial class AddStoreWizard
+    public partial class AddStoreWizard
     {
         /// <summary>
         /// Required designer variable.
@@ -86,6 +86,7 @@ namespace ShipWorks.Stores.Management
             this.pictureBoxDownloadRange = new System.Windows.Forms.PictureBox();
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
+            this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -124,7 +125,7 @@ namespace ShipWorks.Stores.Management
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageStoreType);
+            this.mainPanel.Controls.Add(this.wizardPageActivationError);
             this.mainPanel.Size = new System.Drawing.Size(548, 500);
             // 
             // etchBottom
@@ -248,7 +249,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageContactInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageContactInfo.Location = new System.Drawing.Point(0, 0);
             this.wizardPageContactInfo.Name = "wizardPageContactInfo";
-            this.wizardPageContactInfo.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageContactInfo.Size = new System.Drawing.Size(548, 500);
             this.wizardPageContactInfo.TabIndex = 0;
             this.wizardPageContactInfo.Title = "Contact Information";
             this.wizardPageContactInfo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextContactInfo);
@@ -282,7 +283,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageFinished.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinished.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinished.Name = "wizardPageFinished";
-            this.wizardPageFinished.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageFinished.Size = new System.Drawing.Size(548, 500);
             this.wizardPageFinished.TabIndex = 0;
             this.wizardPageFinished.Title = "Setup Complete";
             this.wizardPageFinished.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoComplete);
@@ -763,7 +764,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAddress.Name = "wizardPageAddress";
-            this.wizardPageAddress.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageAddress.Size = new System.Drawing.Size(548, 500);
             this.wizardPageAddress.TabIndex = 0;
             this.wizardPageAddress.Title = "Store Information";
             this.wizardPageAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAddress);
@@ -776,6 +777,19 @@ namespace ShipWorks.Stores.Management
             this.storeAddressControl.Name = "storeAddressControl";
             this.storeAddressControl.Size = new System.Drawing.Size(360, 300);
             this.storeAddressControl.TabIndex = 0;
+            // 
+            // wizardPageActivationError
+            // 
+            this.wizardPageActivationError.Description = "Enter the following information about your online store.";
+            this.wizardPageActivationError.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageActivationError.ErrorMessage = "An error has occurred";
+            this.wizardPageActivationError.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageActivationError.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageActivationError.Name = "wizardPageActivationError";
+            this.wizardPageActivationError.Size = new System.Drawing.Size(548, 500);
+            this.wizardPageActivationError.TabIndex = 0;
+            this.wizardPageActivationError.Title = "Store Setup";
+            this.wizardPageActivationError.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWizardPageActivationError);
             // 
             // AddStoreWizard
             // 
@@ -793,6 +807,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress,
             this.wizardPageContactInfo,
             this.wizardPageSettings,
+            this.wizardPageActivationError,
             this.wizardPageFinished});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ShipWorks Setup";
@@ -894,5 +909,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
+        private ActivationErrorWizardPage wizardPageActivationError;
     }
 }

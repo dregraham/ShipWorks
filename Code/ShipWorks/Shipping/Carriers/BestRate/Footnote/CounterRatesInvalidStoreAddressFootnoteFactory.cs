@@ -1,5 +1,7 @@
-﻿using ShipWorks.Shipping.Editing;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
@@ -11,15 +13,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// Construct a new CounterRatesInvalidStoreAddressFootnoteControl object
         /// </summary>
-        public CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentType shipmentType)
+        public CounterRatesInvalidStoreAddressFootnoteFactory(ShipmentTypeCode shipmentTypeCode)
         {
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
         /// Gets and sets the shipment type
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Notes that this factory should be used in BestRate
@@ -35,6 +37,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new CounterRatesInvalidStoreAddressFootnoteControl(parameters);
+        }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ICounterRatesInvalidStoreAddressFootnoteViewModel viewModel =
+                    lifetimeScope.Resolve<ICounterRatesInvalidStoreAddressFootnoteViewModel>();
+                viewModel.ShipmentAdapter = shipmentAdapter;
+                return viewModel;
+            }
         }
     }
 }

@@ -3,7 +3,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
@@ -16,18 +15,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
         private readonly IFedExServiceGateway serviceGateway;
         private readonly ICarrierResponseFactory responseFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRateRequest" /> class using the
-        /// the settings repository that is provided and the "live" implementations for the 
-        /// service gateway, response factory.
-        /// </summary>
-        /// <param name="manipulators">The manipulators.</param>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="settingsRepository">Repository that should be used for settings</param>
-        public FedExRateRequest(IEnumerable<ICarrierRequestManipulator> manipulators, ShipmentEntity shipmentEntity, ICarrierSettingsRepository settingsRepository)
-            : this(manipulators, shipmentEntity, new FedExServiceGateway(settingsRepository), new FedExResponseFactory(), settingsRepository)
-        {}
+
+        ///// <summary>
+        ///// Initializes a new instance of the <see cref="FedExRateRequest" /> class using the
+        ///// the settings repository that is provided and the "live" implementations for the
+        ///// service gateway, response factory.
+        ///// </summary>
+        ///// <param name="manipulators">The manipulators.</param>
+        ///// <param name="shipmentEntity">The shipment entity.</param>
+        ///// <param name="settingsRepository">Repository that should be used for settings</param>
+        //public FedExRateRequest(IEnumerable<ICarrierRequestManipulator> manipulators, ShipmentEntity shipmentEntity, ICarrierSettingsRepository settingsRepository)
+        //    : this(manipulators, shipmentEntity, new FedExServiceGateway(settingsRepository), new FedExResponseFactory(new FedExLabelRepository()), settingsRepository)
+        //{ }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRateRequest" /> class.
@@ -65,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
             // Allow the manipulators to build the raw request for the FedEx service
             ApplyManipulators();
 
-            // The request is ready to be sent to FedEx; we're sure the native request will be a RateRequest 
+            // The request is ready to be sent to FedEx; we're sure the native request will be a RateRequest
             // (since we assigned it as such in the constructor) so we can safely cast it here
             RateReply nativeResponse = serviceGateway.GetRates(NativeRequest as RateRequest, ShipmentEntity);
             return responseFactory.CreateRateResponse(nativeResponse, this);

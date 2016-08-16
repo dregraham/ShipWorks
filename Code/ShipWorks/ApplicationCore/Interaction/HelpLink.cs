@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.Net;
 
@@ -12,7 +7,7 @@ namespace ShipWorks.ApplicationCore.Interaction
     /// <summary>
     /// A specialized link for taking the user to associated help content
     /// </summary>
-    public partial class HelpLink : LinkControl
+    public class HelpLink : LinkControl
     {
         /// <summary>
         /// Constructor

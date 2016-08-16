@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
@@ -14,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// UserControl for editing the OnTrac service settings
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>
@@ -30,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Initialize the combo boxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 
@@ -124,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
                     // Sets service type only if it is available
                     var onTracServiceType = (OnTracServiceType) shipment.OnTrac.Service;
-                    if (((EnumList<OnTracServiceType>) service.DataSource).Any(x => x.Value == onTracServiceType))
+                    if (((IEnumerable<EnumEntry<OnTracServiceType>>) service.DataSource).Any(x => x.Value == onTracServiceType))
                     {
                         service.ApplyMultiValue(onTracServiceType);
                     }
@@ -148,25 +152,29 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         private void UpdatePackageTypes(IEnumerable<ShipmentEntity> shipments)
         {
-            List<OnTracPackagingType> availablePackages = GetAvailablePackages(shipments);
+            Dictionary<int, string> availablePackages = (new OnTracShipmentType()).BuildPackageTypeDictionary(shipments.ToList());
 
-            packagingType.BindToEnumAndPreserveSelection<OnTracPackagingType>(availablePackages.Contains);
+            packagingType.BindToEnumAndPreserveSelection<OnTracPackagingType>(p => availablePackages.ContainsKey((int) p));
         }
 
         /// <summary>
         /// Update the available choices for services
         /// </summary>
-        private void UpdateServiceTypes(IList<ShipmentEntity> shipments)
+        private void UpdateServiceTypes(List<ShipmentEntity> shipments)
         {
             // Are there any international shipments? - This is outside of the next loop because allInternational is needed for UpdateServiceTypes and service
             // type needs to be updated for the loop to loop correctly
-            bool anyDomestic = shipments.Any(shipment => shipment.ShipPerson.IsDomesticCountry());
+            bool anyDomestic = shipments.Any(shipment => Geography.GetCountryCode(shipment.ShipPerson.CountryCode) == "US");
 
             if (anyDomestic)
             {
-                List<OnTracServiceType> availableServices = GetAvailableServices(shipments);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.OnTrac)
+                        .BuildServiceTypeDictionary(shipments);
 
-                service.BindToEnumAndPreserveSelection<OnTracServiceType>(availableServices.Contains);
+                    service.BindToEnumAndPreserveSelection<OnTracServiceType>(x => availableServices.ContainsKey((int) x));
+                }
             }
             else
             {
@@ -175,35 +183,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Disable it if its "None"
             service.Enabled = anyDomestic;
-        }
-
-        /// <summary>
-        /// Gets available packages
-        /// </summary>
-        private static List<OnTracPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
-        {
-            return new OnTracShipmentType()
-                .GetAvailablePackageTypes()
-                .Cast<OnTracPackagingType>()
-                .Union(shipments.Select(x => x.OnTrac)
-                    .Where(x => x != null)
-                    .Select(x => (OnTracPackagingType) x.PackagingType))
-                .ToList();
-        }
-
-        /// <summary>
-        /// Gets available services
-        /// </summary>
-        private static List<OnTracServiceType> GetAvailableServices(IEnumerable<ShipmentEntity> shipments)
-        {
-            return new OnTracShipmentType()
-                .GetAvailableServiceTypes()
-                .Cast<OnTracServiceType>()
-                .Union(shipments.Select(x => x.OnTrac)
-                    .Where(x => x != null)
-                    .Select(x => (OnTracServiceType)x.Service))
-                .Where(x => x != OnTracServiceType.None)
-                .ToList();
         }
 
         /// <summary>
@@ -219,8 +198,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
             else
             {
-                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0 ? 
-                    OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue) : 
+                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0 ?
+                    OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue) :
                     null;
 
                 if (account != null)
@@ -257,6 +236,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
@@ -305,7 +285,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
-            OnTracServiceType servicetype = (OnTracServiceType)e.Rate.OriginalTag;
+            OnTracServiceType servicetype = (OnTracServiceType) e.Rate.OriginalTag;
 
             service.SelectedValue = servicetype;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -366,7 +346,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
+                OnTracServiceType serviceType = (OnTracServiceType) service.SelectedValue;
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
                     if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.OnTrac)
@@ -374,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                         return false;
                     }
 
-                    return (OnTracServiceType)r.OriginalTag == serviceType;
+                    return (OnTracServiceType) r.OriginalTag == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -403,6 +383,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public override void FlushChanges()
+        {
+            base.FlushChanges();
+
+            dimensionsControl.FlushChanges();
+            weight.FlushChanges();
         }
     }
 }

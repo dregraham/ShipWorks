@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         private readonly DateOfMonthComboFormatter testObject = new DateOfMonthComboFormatter();
 
         [Fact]
-        public void FormatDays_WorksWithNonConsecutiveDays_Test()
+        public void FormatDays_WorksWithNonConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith2ConsecutiveDays_Test()
+        public void FormatDays_WorksWith2ConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith3ConsecutiveDays_Test()
+        public void FormatDays_WorksWith3ConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith3ConsecutiveDaysFollowedByNonConsecutiveDays_Test()
+        public void FormatDays_WorksWith3ConsecutiveDaysFollowedByNonConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith2GroupsOf3ConsecutiveDays_Test()
+        public void FormatDays_WorksWith2GroupsOf3ConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith2GroupsOfConsecutiveDaysFollowedByNonConsecutiveDays_Test()
+        public void FormatDays_WorksWith2GroupsOfConsecutiveDaysFollowedByNonConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith2GroupsOfConsecutiveDaysSeperatedByNonConsecutiveDays_Test()
+        public void FormatDays_WorksWith2GroupsOfConsecutiveDaysSeperatedByNonConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FormatDays_WorksWith2GroupsOfConsecutiveDaysPrefacedkSeperatedByNonConsecutiveDays_Test()
+        public void FormatDays_WorksWith2GroupsOfConsecutiveDaysPrefacedkSeperatedByNonConsecutiveDays()
         {
             string formattedDays = testObject.FormatDays(new List<int>
             {

@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         [Fact]
-        public void GetUspsEndorsementTypeCode_ReturnsCorrectValue_Test()
+        public void GetUspsEndorsementTypeCode_ReturnsCorrectValue()
         {
             Dictionary<UspsEndorsementType, string> testList = new Dictionary<UspsEndorsementType, string>();
             testList.Add(UspsEndorsementType.ReturnServiceRequested, "1");
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         [Fact]
-        public void WritePackagesXml_WritesAdditionalHandlingIndicator_Test()
+        public void WritePackagesXml_WritesAdditionalHandlingIndicator()
         {
             var shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
             var package = shipment.Packages.AddNew();
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         [Fact]
-        public void WritePackagesXml_DoesNotWriteAdditionalHandlingIndicator_WhenNotSelectedOnPackage_Test()
+        public void WritePackagesXml_DoesNotWriteAdditionalHandlingIndicator_WhenNotSelectedOnPackage()
         {
             var shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
             var package = shipment.Packages.AddNew();

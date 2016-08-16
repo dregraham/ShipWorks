@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.UI.Controls;
+using System.Reactive.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// Customized customs control for FedEx
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExCustomsControl : CustomsControlBase
     {
-        private MessengerToken fedExServiceChangedToken;
+        private IDisposable fedExServiceChangedToken;
 
         /// <summary>
         /// Constructor
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
 
-            fedExServiceChangedToken = Messenger.Current.Handle<FedExServiceTypeChangedMessage>(this, OnServiceChanged);
+            fedExServiceChangedToken = Messenger.Current.OfType<FedExServiceTypeChangedMessage>().Subscribe(OnServiceChanged);
         }
 
         /// <summary>
@@ -54,6 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the shipment data into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
         {
             base.LoadShipments(shipments, enableEditing);
@@ -105,8 +105,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                     naftaEnabled.ApplyMultiCheck(shipment.FedEx.CustomsNaftaEnabled);
                     naftaPreference.ApplyMultiValue((FedExNaftaPreferenceCriteria) shipment.FedEx.CustomsNaftaPreferenceType);
-                    naftaProducerDetermination.ApplyMultiValue((FedExNaftaDeterminationCode)shipment.FedEx.CustomsNaftaDeterminationCode);
-                    naftaNetCostMethod.ApplyMultiValue((FedExNaftaNetCostMethod)shipment.FedEx.CustomsNaftaNetCostMethod);
+                    naftaProducerDetermination.ApplyMultiValue((FedExNaftaDeterminationCode) shipment.FedEx.CustomsNaftaDeterminationCode);
+                    naftaNetCostMethod.ApplyMultiValue((FedExNaftaNetCostMethod) shipment.FedEx.CustomsNaftaNetCostMethod);
                     naftaProducerId.ApplyMultiText(shipment.FedEx.CustomsNaftaProducerId);
                 }
             }
@@ -209,6 +209,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save the data in the control to the shipments
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             base.SaveToShipments();

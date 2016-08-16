@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:tns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" name="RegistrationNAccountMgr" targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:tns="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:reg="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" name="RegistrationNAccountMgr" targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema>
       <xsd:import schemaLocation="UPSSecurity.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" />
       <xsd:import schemaLocation="Error1.1.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" />
-      <xsd:import schemaLocation="RegisterNAccountMgrSchema.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v1.0" />
+      <xsd:import schemaLocation="RegisterNAccountMgrSchema.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/Registration/v2.0" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="RegisterRequestMessage">

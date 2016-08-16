@@ -5,6 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.UI.Controls.Colors;
 
 namespace ShipWorks.UI.Controls.Html.Tables
@@ -58,11 +59,12 @@ namespace ShipWorks.UI.Controls.Html.Tables
 			base.Dispose( disposing );
 		}
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        private void InitializeComponent()
 		{
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();

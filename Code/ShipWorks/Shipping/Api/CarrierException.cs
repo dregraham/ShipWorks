@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.Api
 {
@@ -11,7 +9,6 @@ namespace ShipWorks.Shipping.Carriers.Api
     [Serializable]
     public class CarrierException : Exception
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CarrierException" /> class.
         /// </summary>
@@ -33,6 +30,13 @@ namespace ShipWorks.Shipping.Carriers.Api
        /// <param name="innerException">The inner exception.</param>
         public CarrierException(string message, Exception innerException)
             : base(message, innerException)
+        { }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected CarrierException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         { }
     }
 }

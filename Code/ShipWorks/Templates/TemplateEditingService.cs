@@ -12,6 +12,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Xml.Linq;
 using ShipWorks.Data;
 using System.IO;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
@@ -451,6 +452,7 @@ namespace ShipWorks.Templates
         /// <summary>
         /// Update the resource usage of the template by replacing local image references with images save in the database.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void UpdateTemplateResources(TemplateEntity template)
         {
             // Load the XML into a document

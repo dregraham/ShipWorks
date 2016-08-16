@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.OkButton = new System.Windows.Forms.Button();
+            this.okButton = new System.Windows.Forms.Button();
             this.labelInstructions = new System.Windows.Forms.Label();
             this.addressLine1 = new System.Windows.Forms.Label();
             this.addressLine2 = new System.Windows.Forms.Label();
@@ -39,14 +39,14 @@
             // 
             // OkButton
             // 
-            this.OkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OkButton.Location = new System.Drawing.Point(268, 141);
-            this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(75, 23);
-            this.OkButton.TabIndex = 0;
-            this.OkButton.Text = "OK";
-            this.OkButton.UseVisualStyleBackColor = true;
-            this.OkButton.Click += new System.EventHandler(this.ClickOkButton);
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Location = new System.Drawing.Point(268, 141);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 0;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
             // 
             // labelInstructions
             // 
@@ -93,7 +93,6 @@
             this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.ClickCancelButton);
             // 
             // labelButtonInstructions
             // 
@@ -106,7 +105,7 @@
             // 
             // UpsOpenAccountInvalidAddressDlg
             // 
-            this.AcceptButton = this.OkButton;
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
@@ -117,7 +116,7 @@
             this.Controls.Add(this.addressLine2);
             this.Controls.Add(this.addressLine1);
             this.Controls.Add(this.labelInstructions);
-            this.Controls.Add(this.OkButton);
+            this.Controls.Add(this.okButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -134,7 +133,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button OkButton;
+        private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label labelInstructions;
         private System.Windows.Forms.Label addressLine1;
         private System.Windows.Forms.Label addressLine2;

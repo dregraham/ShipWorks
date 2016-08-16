@@ -6,16 +6,19 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.ThreeDCart.AdvancedApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart;
 using ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -31,11 +34,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         static readonly LruCache<string, ThreeDCartProductDTO> productCache = new LruCache<string, ThreeDCartProductDTO>(1000);
         static readonly LruCache<string, XmlNode> getProductsCache = new LruCache<string, XmlNode>(500);
         static readonly List<string> productNotFoundCache = new List<string>();
+        static readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
+        readonly IProgressReporter progressReporter;
 
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
-        public ThreeDCartWebClient(ThreeDCartStoreEntity store)
+        public ThreeDCartWebClient(ThreeDCartStoreEntity store, IProgressReporter progressReporter)
         {
             if (store == null)
             {
@@ -46,21 +51,22 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // that in the exception.
             if (string.IsNullOrWhiteSpace(store.StoreUrl) || string.IsNullOrWhiteSpace(store.StoreDomain))
             {
-                throw new ThreeDCartException("The 3D Cart Store Url is missing or invalid.");
+                throw new ThreeDCartException("The 3dcart Store Url is missing or invalid.");
             }
 
             if (string.IsNullOrWhiteSpace(store.ApiUserKey))
             {
-                throw new ThreeDCartException(string.Format("The 3D Cart Store API User Key is missing.  Please enter your API User Key by going to Manage > Stores > {0} > Edit > Store Connection.  You will find instructions on how to find the API User Key there. ", store.StoreName));
+                throw new ThreeDCartException(string.Format("The 3dcart Store API User Key is missing. Please enter your API User Key by going to Manage > Stores > {0} > Edit > Store Connection.  You will find instructions on how to find the API User Key there. ", store.StoreName));
             }
 
             this.store = store;
+            this.progressReporter = progressReporter;
 
             orderStatuses = new List<ThreeDCartOrderStatus>();
         }
 
         /// <summary>
-        /// Create a 3D Cart advanced api web service object with ApiLogEntry
+        /// Create a 3dcart advanced api web service object with ApiLogEntry
         /// </summary>
         private static cartAPIAdvanced CreateAdvancedApiWebService(string logName)
         {
@@ -71,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Create a 3D Cart api web service object with ApiLogEntry
+        /// Create a 3dcart api web service object with ApiLogEntry
         /// </summary>
         private static cartAPI CreateApiWebService(string logName)
         {
@@ -82,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Makes calls to 3D Cart to determine the type of database the site is running against.
+        /// Makes calls to 3dcart to determine the type of database the site is running against.
         /// The sql statements should be ones that will not result in an error for it's database type.
         /// </summary>
         /// <returns>
@@ -98,8 +104,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 {
                     IApiQueryProvider dBQuery = new SqlServerQueryProvider();
                     string determineDbVersionSql = dBQuery.ValidSqlStatementForThisDatabaseTypeOnly;
-                    
-                    XmlNode determineDbVersionResultXml;
+                    RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrderCount, null, progressReporter);
+
+                    XmlNode determineDbVersionResultXml = null;
                     using (cartAPIAdvanced advancedCartApiWebService = CreateAdvancedApiWebService("Determine Database Version - SQL Server"))
                     {
                         // Not using the MakeAdvancedCartApiQuery method here because it will throw if there's an error xml node.  So instead of
@@ -107,7 +114,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                         // See if the database is sql server
                         try
                         {
-                            determineDbVersionResultXml = advancedCartApiWebService.runQuery(store.StoreDomain, store.ApiUserKey, determineDbVersionSql, string.Empty);
+                            throttler.ExecuteRequest(requestThrottleArgs, () =>
+                            {
+                                determineDbVersionResultXml = advancedCartApiWebService.runQuery(store.StoreDomain, store.ApiUserKey, determineDbVersionSql, string.Empty);
+                            });
                         }
                         catch (Exception ex)
                         {
@@ -128,7 +138,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                         {
                             try
                             {
-                                determineDbVersionResultXml = advancedCartApiWebService.runQuery(store.StoreDomain, store.ApiUserKey, determineDbVersionSql, string.Empty);
+                                throttler.ExecuteRequest(requestThrottleArgs, () =>
+                                {
+                                    determineDbVersionResultXml = advancedCartApiWebService.runQuery(store.StoreDomain, store.ApiUserKey, determineDbVersionSql, string.Empty);
+                                });
                             }
                             catch (Exception ex)
                             {
@@ -140,8 +153,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                         if (errorNode != null)
                         {
                             // We couldn't connect via SQL server or MS Access...log and throw
-                            log.Error("ShipWorks was unable to determine database type for 3d Cart website.  See log for response.");
-                            throw new ThreeDCartException("ShipWorks was unable to contact your 3D Cart store.", errorNode);
+                            log.Error("ShipWorks was unable to determine database type for 3dcart website.  See log for response.");
+                            throw new ThreeDCartException("ShipWorks was unable to contact your 3dcart store.", errorNode);
                         }
                     }
 
@@ -170,15 +183,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 // Find the first order item that is a ThreeDCartOrderItemEntity
                 ThreeDCartOrderItemEntity threeDCartOrderItem = order.OrderItems.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
 
-                // Get the 3D Cart shipment id from the first 3D Cart order item
+                // Get the 3dcart shipment id from the first 3dcart order item
                 if (order.OrderItems == null || !order.OrderItems.Any() || threeDCartOrderItem == null)
                 {
-                    throw new ThreeDCartException("No items were found on the order.  ShipWorks cannot upload tracking information without items from 3D Cart.");
+                    throw new ThreeDCartException("No items were found on the order.  ShipWorks cannot upload tracking information without items from 3dcart.");
                 }
 
                 long threeDCartShipmentID = threeDCartOrderItem.ThreeDCartShipmentID;
 
-                // Create a 3D Cart fulfillment
+                // Create a 3dcart fulfillment
                 CreateFulfillment(order, shipment.TrackingNumber, threeDCartShipmentID);
             }
             catch (Exception ex)
@@ -192,19 +205,25 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         /// <param name="order">The threeDCart order for the shipment</param>
         /// <param name="trackingNumber">Tracking number for this shipment</param>
-        /// <param name="threeDCartShipmentID">The 3D Cart shipment ID to ship</param>
+        /// <param name="threeDCartShipmentID">The 3dcart shipment ID to ship</param>
         private void CreateFulfillment(OrderEntity order, string trackingNumber, long threeDCartShipmentID)
         {
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.CreateFulfillment, null, progressReporter);
+            XmlNode response = null;
+
             using (cartAPI apiWebService = CreateApiWebService("CreateFulfillment"))
             {
                 // Fix the invoice number to send for the fulfillment
                 string fixedInvoiceNum = FixInvoiceNumberForFulfillment(order.OrderNumber, order.OrderNumberComplete);
 
                 // Make the api call to update the order shipment
-                XmlNode response = apiWebService.updateOrderShipment(store.StoreDomain, store.ApiUserKey, fixedInvoiceNum,
-                    threeDCartShipmentID.ToString(CultureInfo.InvariantCulture), trackingNumber,
-                    store.ConvertToStoreDateTime(DateTime.Now, TimeZoneInfo.Local.Id).ToString(CultureInfo.InvariantCulture), 
-                    string.Empty);
+                throttler.ExecuteRequest(requestThrottleArgs, () =>
+                {
+                    response = apiWebService.updateOrderShipment(store.StoreDomain, store.ApiUserKey, fixedInvoiceNum,
+                        threeDCartShipmentID.ToString(CultureInfo.InvariantCulture), trackingNumber,
+                        store.ConvertToStoreDateTime(DateTime.Now, TimeZoneInfo.Local.Id).ToString(CultureInfo.InvariantCulture),
+                        string.Empty);
+                });
 
                 // Check to see if there was an error in the response
                 XmlNode errorNode = GetErrorFromResponse(response);
@@ -220,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Remove the ending post fix for split orders
         /// </summary>
         /// <param name="invoiceNumber">The numberic invoice number</param>
-        /// <param name="orderNumberComplete">The order number complete with 3D Cart's prefix, if applicable, and SW's post fix for multiple orders, if applicable.</param>
+        /// <param name="orderNumberComplete">The order number complete with 3dcart's prefix, if applicable, and SW's post fix for multiple orders, if applicable.</param>
         private static string FixInvoiceNumberForFulfillment(long invoiceNumber, string orderNumberComplete)
         {
             string invoiceNum = invoiceNumber.ToString();
@@ -244,8 +263,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         /// <param name="responseToCheck">The api xml response to check</param>
         /// <returns>
-        /// If there is an error node, the error node is returned.  Otherwise, null.  
-        /// If responseToCheck is null, a new error node is returned nothing that an error communicating with 3D Cart occurred. </returns>
+        /// If there is an error node, the error node is returned.  Otherwise, null.
+        /// If responseToCheck is null, a new error node is returned nothing that an error communicating with 3dcart occurred. </returns>
         private static XmlNode GetErrorFromResponse(XmlNode responseToCheck)
         {
             XmlDocument doc;
@@ -255,7 +274,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 doc = new XmlDocument();
                 errorNode = doc.CreateElement("Error");
-                errorNode.InnerText = "ShipWorks received an error communicating with 3D Cart.";
+                errorNode.InnerText = "ShipWorks received an error communicating with 3dcart.";
                 doc.AppendChild(errorNode);
             }
             else
@@ -286,7 +305,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public void UpdateOrderStatus(long invoiceNumber, string orderNumberComplete, int statusCode)
         {
-            XmlNode response;
+            XmlNode response = null;
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.UpdateOrderStatus, null, progressReporter);
+
             try
             {
                 // Fix the invoice number to send for the fulfillment
@@ -299,7 +320,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     string statusText = statusProvider.GetCodeName(statusCode);
 
                     // Update the order status online
-                    response = api.updateOrderStatus(store.StoreDomain, store.ApiUserKey, fixedInvoiceNum, statusText, string.Empty);
+                    throttler.ExecuteRequest(requestThrottleArgs, () =>
+                    {
+                        response = api.updateOrderStatus(store.StoreDomain, store.ApiUserKey, fixedInvoiceNum, statusText, string.Empty);
+                    });
                 }
             }
             catch (Exception ex)
@@ -315,34 +339,38 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 throw new ThreeDCartException(string.Format("ShipWorks was unable to update the order status for order number {0}.", invoiceNumber), errorNode);
             }
         }
-        
+
         /// <summary>
         /// Make a call to ThreeDCart requesting a count of orders matching criteria.
         /// </summary>
         /// <param name="orderSearchCriteria">Filter by ThreeDCartWebClientOrderSearchCriteria.</param>
         /// <returns>Number of orders matching criteria</returns>
-        public int GetOrderCount(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria) 
+        public int GetOrderCount(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
             int orderCount = 0;
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrderCount, null, progressReporter);
+            XmlNode orderCountResultXml = null;
 
-            XmlNode orderCountResultXml;
             using (cartAPIAdvanced advancedCartApiWebService = CreateAdvancedApiWebService("GetOrderCount"))
             {
                 string orderCountSqlQuery = ApiQueryProvider.QueryOrderCount(orderSearchCriteria);
 
-                // Make the call and get the response. 
-                orderCountResultXml = MakeAdvancedCartApiQuery(advancedCartApiWebService, orderCountSqlQuery, "Get order count");
+                // Make the call and get the response.
+                throttler.ExecuteRequest(requestThrottleArgs, () =>
+                {
+                    orderCountResultXml = MakeAdvancedCartApiQuery(advancedCartApiWebService, orderCountSqlQuery, "Get order count");
+                });
             }
 
             if (!int.TryParse(orderCountResultXml.InnerText, out orderCount))
             {
-                log.Error("ShipWorks received an invalid order count from 3D Cart.  See the log response for more detail.");
-                throw new ThreeDCartException("ShipWorks received an invalid order count from 3D Cart.");
+                log.Error("ShipWorks received an invalid order count from 3dcart.  See the log response for more detail.");
+                throw new ThreeDCartException("ShipWorks received an invalid order count from 3dcart.");
             }
 
             return orderCount;
         }
-        
+
         /// <summary>
         /// Make the call to ThreeDCart to get a list of orders matching criteria
         /// </summary>
@@ -351,44 +379,81 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         public List<XmlNode> GetOrders(ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
         {
             List<XmlNode> ordersToReturn = new List<XmlNode>();
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrders, null, progressReporter);
 
-            // 3d Cart's regular api doesn't let you query by modified date, but the advanced api does.
+            // 3dcart's regular api doesn't let you query by modified date, but the advanced api does.
             // So we'll ask the advanced api for modified order numbers, then download them one by one
-            XmlNode ordersResultXml;
+            XmlNode ordersResultXml = null;
             using (cartAPIAdvanced apiAdvancedWebService = CreateAdvancedApiWebService("GetOrders"))
             {
                 string sqlQuery;
                 if (orderSearchCriteria.OrderDateSearchType == ThreeDCartWebClientOrderDateSearchType.CreatedDate)
                 {
-                    sqlQuery = ApiQueryProvider.QueryByOrderCreateDate(orderSearchCriteria);   
+                    sqlQuery = ApiQueryProvider.QueryByOrderCreateDate(orderSearchCriteria);
                 }
                 else
                 {
-                    sqlQuery = ApiQueryProvider.QueryByOrderModifiedDate(orderSearchCriteria); 
+                    sqlQuery = ApiQueryProvider.QueryByOrderModifiedDate(orderSearchCriteria);
                 }
 
-                ordersResultXml = MakeAdvancedCartApiQuery(apiAdvancedWebService, sqlQuery, "QueryByLastOrderDateFormat"); 
+                throttler.ExecuteRequest(requestThrottleArgs, () =>
+                {
+                    ordersResultXml = MakeAdvancedCartApiQuery(apiAdvancedWebService, sqlQuery, "QueryByLastOrderDateFormat");
+                });
             }
 
             XmlNodeList ordersToGet = ordersResultXml.SelectNodes("//runQueryRecord");
 
+            FetchOrders(ordersToGet, ordersToReturn);
+
+            return SortOrders(ordersToReturn, orderSearchCriteria).ToList();
+        }
+
+        /// <summary>
+        /// Get all of the order info from 3dcart
+        /// </summary>
+        private void FetchOrders(XmlNodeList ordersToGet, List<XmlNode> ordersToReturn)
+        {
+            // Track if we should send the invoice number prefix
+            bool sendPrefix = false;
+
+            RequestThrottleParameters requestThrottleArgs;
             foreach (XmlNode orderNode in ordersToGet)
             {
                 // Get the invoice number (without prefix).  We'll be using this for the async user state unique id
                 string invoiceNumber = orderNode["invoicenum"].InnerText;
                 string invoiceNumberPrefix = orderNode["invoicenum_prefix"].InnerText;
-                XmlNode orderResultXml;
+                XmlNode orderResultXml = null;
+                requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrder, null, progressReporter);
 
-                using (cartAPI api = CreateApiWebService(string.Format("GetOrder ({0})", invoiceNumber)))
+                // Sometimes 3dcart wants the invoice number prefix included in the request
+                string invoiceNumberToSend = sendPrefix ? $"{invoiceNumberPrefix}{invoiceNumber}" : invoiceNumber;
+
+                using (cartAPI api = CreateApiWebService($"GetOrder ({invoiceNumber})"))
                 {
-                    orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, invoiceNumber, string.Empty, string.Empty, string.Empty, string.Empty);
+                    throttler.ExecuteRequest(requestThrottleArgs, () =>
+                    {
+                        orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, invoiceNumberToSend, string.Empty, string.Empty, string.Empty, string.Empty);
+                    });
+
+                    // Check to see if orders were returned, if they returned an error
+                    // Call getOrders again with the prefix and then set sendPrefix to true
+                    // see FD#603416
+                    if (orderResultXml.Name == "Error")
+                    {
+                        throttler.ExecuteRequest(requestThrottleArgs, () =>
+                        {
+                            orderResultXml = api.getOrder(store.StoreDomain, store.ApiUserKey, 1, 1, false, $"{invoiceNumberPrefix}{invoiceNumber}", string.Empty, string.Empty, string.Empty, string.Empty);
+                        });
+                        sendPrefix = true;
+                    }
                 }
 
                 ValidateCartApiQueryResponse(orderResultXml, "GetOrder");
 
                 orderResultXml = orderResultXml.FirstChild;
 
-                // 3d Cart orders can have an invoice number prefix.  
+                // 3dcart orders can have an invoice number prefix.
                 // So we'll get the InvoiceNumber that doesn't have the prefix from the advanced api query,
                 // then add the InvoiceNumberPrefix node so that the downloader can work with both values
                 XmlNode invoiceNumberPrefixNode = orderResultXml.OwnerDocument.CreateNode(XmlNodeType.Element, "InvoiceNumberPrefix", orderResultXml.NamespaceURI);
@@ -397,7 +462,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 ordersToReturn.Add(orderResultXml);
             }
+        }
 
+        /// <summary>
+        /// Returns a list of sorted orders
+        /// </summary>
+        private IEnumerable<XmlNode> SortOrders(List<XmlNode> ordersToReturn, ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria)
+        {
             // Now sort the list so that the oldest orders are first
             IOrderedEnumerable<XmlNode> sortedOrders;
             if (orderSearchCriteria.OrderDateSearchType == ThreeDCartWebClientOrderDateSearchType.ModifiedDate)
@@ -409,7 +480,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             else
             {
                 sortedOrders = from XmlNode node in ordersToReturn
-                               orderby DateTime.Parse(node["Date"].InnerText).Date +  
+                               orderby DateTime.Parse(node["Date"].InnerText).Date +
                                        (node["Time"] != null ? DateTime.Parse(node["Time"].InnerText).TimeOfDay : DateTime.MinValue.TimeOfDay)
                                select node;
             }
@@ -417,7 +488,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Get the list of 3D Cart online order statuses
+        /// Get the list of 3dcart online order statuses
         /// </summary>
         public List<ThreeDCartOrderStatus> OrderStatuses
         {
@@ -426,14 +497,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 // If we don't have any order statuses, retrieve them
                 if (orderStatuses.Count == 0)
                 {
-                    XmlNode queryOrderStatusesResultXml;
+                    XmlNode queryOrderStatusesResultXml = null;
+                    RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrderStatuses, null, progressReporter);
 
                     try
                     {
-                        // Make the call to 3d Cart to get the statuses
+                        // Make the call to 3dcart to get the statuses
                         using (cartAPIAdvanced apiAdvancedWebService = CreateAdvancedApiWebService("OrderStatuses"))
                         {
-                            queryOrderStatusesResultXml = MakeAdvancedCartApiQuery(apiAdvancedWebService, ApiQueryProvider.QueryOrderStatuses, "Order Statuses");
+                            throttler.ExecuteRequest(requestThrottleArgs, () =>
+                            {
+                                queryOrderStatusesResultXml = MakeAdvancedCartApiQuery(apiAdvancedWebService, ApiQueryProvider.QueryOrderStatuses, "Order Statuses");
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -450,8 +525,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                             string orderStatusText = orderStatusNode["StatusText"].InnerText;
                             if (!int.TryParse(orderStatusNode["id"].InnerText, out orderStatusID))
                             {
-                                log.Error("ShipWorks was unable to retrieve order statuses from 3d Cart.");
-                                throw new ThreeDCartException("ShipWorks was unable to retrieve order statuses from 3d Cart.");
+                                log.Error("ShipWorks was unable to retrieve order statuses from 3dcart.");
+                                throw new ThreeDCartException("ShipWorks was unable to retrieve order statuses from 3dcart.");
                             }
 
                             ThreeDCartOrderStatus threeDCartOrderStatus = new ThreeDCartOrderStatus(orderStatusID, orderStatusText);
@@ -459,8 +534,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                         }
                         else
                         {
-                            log.Error("ShipWorks was unable to retrieve order statuses from 3d Cart.  StatusText and/or StatusID was null.");
-                            throw new ThreeDCartException("ShipWorks was unable to retrieve order statuses from 3d Cart.");
+                            log.Error("ShipWorks was unable to retrieve order statuses from 3dcart.  StatusText and/or StatusID was null.");
+                            throw new ThreeDCartException("ShipWorks was unable to retrieve order statuses from 3dcart.");
                         }
                     }
                 }
@@ -474,9 +549,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// online, and store it in the cache if found.  If it can't be found online, null is returned.
         /// </summary>
         /// <param name="invoiceNumber">The invoice number for the order </param>
-        /// <param name="threeDCartOrderItemProductId">The 3D Cart order item product ID</param>
-        /// <param name="threeDCartOrderItemName">The 3D Cart order item option value text</param>
+        /// <param name="threeDCartOrderItemProductId">The 3dcart order item product ID</param>
+        /// <param name="threeDCartOrderItemName">The 3dcart order item option value text</param>
         /// <returns>ThreeDCartProductDTO representing the cart product.  Null if an online product can't be found.</returns>
+        [NDependIgnoreLongMethod]
         public ThreeDCartProductDTO GetProduct(long invoiceNumber, string threeDCartOrderItemProductId, string threeDCartOrderItemName)
         {
             // If we got a blank product name, just return
@@ -506,11 +582,17 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // The regular cart api does not return the actual product id; it returns the item id, but calls it ProductID.
             // A call to getProduct using the item id yields no results
             // So, we'll do an adavanced sql query to find the real product id based on the order item id.
-            XmlNode productQueryResultXml;
+            XmlNode productQueryResultXml = null;
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetProduct, null, progressReporter);
+
             using (cartAPIAdvanced advancedApiWebService = CreateAdvancedApiWebService(string.Format("GetProduct ({0})", threeDCartOrderItemProductId)))
             {
                 string queryProductSql = ApiQueryProvider.QueryProductsByItemID(invoiceNumber, threeDCartOrderItemProductId);
-                productQueryResultXml = MakeAdvancedCartApiQuery(advancedApiWebService, queryProductSql, "QueryProduct");
+
+                throttler.ExecuteRequest(requestThrottleArgs, () =>
+                {
+                    productQueryResultXml = MakeAdvancedCartApiQuery(advancedApiWebService, queryProductSql, "QueryProduct");
+                });
             }
 
             // Get a list of products matching that order item id
@@ -527,8 +609,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 XmlNode errorNode = GetErrorFromResponse(getProductResponseXml);
                 if (errorNode != null)
                 {
-                    log.ErrorFormat("ShipWorks was unable to get product information from 3D Cart.  Error Message: {0}.", errorNode.OuterXml);
-                    string errorMessage = string.Format("ShipWorks was unable to get product information from 3D Cart for product ID/Sku '{0}'", productId);
+                    log.ErrorFormat("ShipWorks was unable to get product information from 3dcart.  Error Message: {0}.", errorNode.OuterXml);
+                    string errorMessage = string.Format("ShipWorks was unable to get product information from 3dcart for product ID/Sku '{0}'", productId);
                     throw new ThreeDCartException(errorMessage, errorNode);
                 }
 
@@ -552,10 +634,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 {
                     // Create our product dto to return, setting the properties we know
                     ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
-                        {
-                            ItemName = threeDCartOrderItemProductId,
-                            WarehouseBin = warehouseBin
-                        };
+                    {
+                        ItemName = threeDCartOrderItemProductId,
+                        WarehouseBin = warehouseBin
+                    };
 
                     LoadProductImages(productDto, apiProduct);
 
@@ -566,7 +648,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 }
                 else
                 {
-                    // 3D Cart joins the attribute and value by a : in the item product name, so use that format to 
+                    // 3dcart joins the attribute and value by a : in the item product name, so use that format to
                     // create a string to check based on the store's products, removing spaces to get an accurate search.
                     // The attribute/value combination could be anywhere in the product name, so just see if it's in there anywhere
                     // If so, set the product, option, and value.
@@ -597,13 +679,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                         // Create the product dto to return
                         ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
-                            {
-                                ItemName = threeDCartOrderItemName,
-                                OptionDescription = optionTypeValue.OptionValueNode.XPathSelectElement("Name").Value,
-                                OptionName = optionTypeValue.OptionTypeNode.Value,
-                                OptionPrice = optionPrice,
-                                WarehouseBin = warehouseBin
-                            };
+                        {
+                            ItemName = threeDCartOrderItemName,
+                            OptionDescription = optionTypeValue.OptionValueNode.XPathSelectElement("Name").Value,
+                            OptionName = optionTypeValue.OptionTypeNode.Value,
+                            OptionPrice = optionPrice,
+                            WarehouseBin = warehouseBin
+                        };
 
                         LoadProductImages(productDto, apiProduct);
 
@@ -659,7 +741,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         }
 
         /// <summary>
-        /// Get a batch of products for the 3D Cart store
+        /// Get a batch of products for the 3dcart store
         /// </summary>
         /// <param name="batchSize">Number of products to return</param>
         /// <param name="startNumber">Index of page in total number of products from which to start</param>
@@ -667,7 +749,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <returns>Xml Node containing product nodes in the batch, matching criteria</returns>
         private XmlNode GetProducts(int batchSize, int startNumber, string productId)
         {
-            XmlNode productsXml;
+            XmlNode productsXml = null;
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetProducts, null, progressReporter);
 
             string cacheProductId = productId.ToUpperInvariant().Replace(" ", string.Empty);
             string productCacheKey = string.Format("GetProducts:{0}-{1}-{2}", store.StoreID, productId, cacheProductId);
@@ -691,13 +774,19 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 // Make the call to get the products by criteria
                 using (cartAPI api = CreateApiWebService(string.Format("GetProducts ({0},{1},{2})", batchSize, startNumber, productId)))
                 {
-                    productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, productId, string.Empty);
-                    
+                    throttler.ExecuteRequest(requestThrottleArgs, () =>
+                    {
+                        productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, productId, string.Empty);
+                    });
+
                     // 3dcart seems to be double decoding the xml requests, so if we get back a not well-formed error, try the request again
                     // but double encode the product id.  We end up sending &lt;![CDATA[foo&amp;bar]]&gt; instead of foo&amp;bar, which is what it should be
                     if (ResponseIsNotWellFormedError(productsXml))
                     {
-                        productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, string.Format("<![CDATA[{0}]]>", productId), string.Empty);
+                        throttler.ExecuteRequest(requestThrottleArgs, () =>
+                        {
+                            productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, string.Format("<![CDATA[{0}]]>", productId), string.Empty);
+                        });
                     }
                 }
             }
@@ -710,8 +799,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             if (productsXml == null)
             {
                 productNotFoundCache.Add(productCacheKey);
-                log.Error("A null response was received from 3D Cart when calling getProduce from the api.");
-                throw new ThreeDCartException("ShipWorks encountered an error requesting products from your 3D Cart.");
+                log.Error("A null response was received from 3dcart when calling getProduce from the api.");
+                throw new ThreeDCartException("ShipWorks encountered an error requesting products from your 3dcart.");
             }
 
             getProductsCache[productCacheKey] = productsXml;
@@ -751,7 +840,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 // error message.
                 if (ex.InnerException != null && ex.InnerException is XmlException)
                 {
-                    throw new ThreeDCartException("An invalid response was returned from the 3D Cart store.  Please try again later.", ex);
+                    throw new ThreeDCartException("An invalid response was returned from the 3dcart store.  Please try again later.", ex);
                 }
 
                 // If it's not an inner exception of XmlException type, translate and throw.
@@ -759,7 +848,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof (ThreeDCartException));
+                throw WebHelper.TranslateWebException(ex, typeof(ThreeDCartException));
             }
 
             // Return the result xml
@@ -777,8 +866,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Check to see if their api returned a null object
             if (apiRunQueryResultXml == null)
             {
-                log.Error("ShipWorks did not receive an xml response from 3D Cart advanced api call.  See ApiLog Request for more detail.");
-                throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3D Cart.");
+                log.Error("ShipWorks did not receive an xml response from 3dcart advanced api call.  See ApiLog Request for more detail.");
+                throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3dcart.");
             }
 
             // Check to see if there is an error node
@@ -798,8 +887,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     string logErrorMessage = string.Format("ShipWorks encountered an error while making an advanced api query of type '{0}'.", queryType);
                     log.Error(logErrorMessage, threeDCartException);
 
-                    // Throw a new 3D Cart exception for the user
-                    throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3D Cart.", errorNode);
+                    // Throw a new 3dcart exception for the user
+                    throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3dcart.", errorNode);
                 }
             }
         }
@@ -815,8 +904,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Check to see if their api returned a null object
             if (apiResponse == null)
             {
-                log.Error("ShipWorks did not receive an xml response from 3D Cart api call.  See ApiLog Request for more detail.");
-                throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3D Cart.");
+                log.Error("ShipWorks did not receive an xml response from 3dcart api call.  See ApiLog Request for more detail.");
+                throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3dcart.");
             }
 
             // Check to see if there is an error node
@@ -836,8 +925,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     string logErrorMessage = string.Format("ShipWorks encountered an error while making an api query of type '{0}'.", queryType);
                     log.Error(logErrorMessage, threeDCartException);
 
-                    // Throw a new 3D Cart exception for the user
-                    throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3D Cart.", errorNode);
+                    // Throw a new 3dcart exception for the user
+                    throw new ThreeDCartException("ShipWorks encountered an error while attempting to contact 3dcart.", errorNode);
                 }
             }
         }
@@ -847,6 +936,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public void TestConnection()
         {
+            XmlNode orderCountResultNode = null;
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.TestConnection, null, progressReporter);
+
             // See if we can successfully call getOrderCount, if we throw, we can't connect or login
             try
             {
@@ -854,13 +946,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 using (cartAPI api = CreateApiWebService("TestConnection"))
                 {
                     // Ask for invoice number 1, so we only get a max of 1 order coming back.  If there is no invoice number 1, it's still a successful call.
-                    XmlNode orderCountResultNode = api.getOrderCount(store.StoreDomain, store.ApiUserKey, false, "1", string.Empty, string.Empty, string.Empty, string.Empty);
+                    throttler.ExecuteRequest(requestThrottleArgs, () =>
+                    {
+                        orderCountResultNode = api.getOrderCount(store.StoreDomain, store.ApiUserKey, false, "1", string.Empty, string.Empty, string.Empty, string.Empty);
+                    });
 
                     // If there was an error, an Error node will be returned.
                     XmlNode errorNode = GetErrorFromResponse(orderCountResultNode);
                     if (errorNode != null)
                     {
-                        throw new ThreeDCartException("ShipWorks was unable to connect to 3D Cart with the Store Url and API User Key provided.",  errorNode);
+                        throw new ThreeDCartException("ShipWorks was unable to connect to 3dcart with the Store Url and API User Key provided.", errorNode);
                     }
                 }
             }

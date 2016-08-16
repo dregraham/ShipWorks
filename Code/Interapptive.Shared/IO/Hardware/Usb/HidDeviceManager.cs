@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using log4net;
-using Interapptive.Shared.Business;
 
 namespace Interapptive.Shared.Usb
 {
@@ -88,44 +84,6 @@ namespace Interapptive.Shared.Usb
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Registers a window to receive windows messages when a device is inserted/removed. Need to call this
-        /// from a form when its handle has been created, not in the form constructor. Use form's OnHandleCreated override.
-        /// </summary>
-        /// <param name="hWnd">Handle to window that will receive messages</param>
-        /// <param name="gClass">Class of devices to get messages for</param>
-        /// <returns>A handle used when unregistering</returns>
-        public static IntPtr RegisterForUsbEvents(IntPtr hWnd, Guid gClass)
-        {
-            NativeUsb.DeviceBroadcastInterface oInterfaceIn = new NativeUsb.DeviceBroadcastInterface();
-            oInterfaceIn.Size = Marshal.SizeOf(oInterfaceIn);
-            oInterfaceIn.ClassGuid = gClass;
-            oInterfaceIn.DeviceType = NativeUsb.DEVTYP_DEVICEINTERFACE;
-            oInterfaceIn.Reserved = 0;
-            return NativeUsb.RegisterDeviceNotification(hWnd, oInterfaceIn, NativeUsb.DEVICE_NOTIFY_WINDOW_HANDLE);
-        }
-
-        /// <summary>
-        /// Unregisters notifications. Can be used in form dispose
-        /// </summary>
-        /// <param name="hHandle">Handle returned from RegisterForUSBEvents</param>
-        /// <returns>True if successful</returns>
-        public static bool UnregisterForUsbEvents(IntPtr hHandle)
-        {
-            return NativeUsb.UnregisterDeviceNotification(hHandle);
-        }
-
-        /// <summary>
-        /// Helper to get the HID guid.
-        /// </summary>
-        public static Guid HidGuid
-        {
-            get
-            {
-                return hidGuid;
-            }
         }
     }
 }

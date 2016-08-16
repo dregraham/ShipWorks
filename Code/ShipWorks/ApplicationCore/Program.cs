@@ -1,25 +1,21 @@
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using System.Windows.Forms;
-using Interapptive.Shared.Win32;
-using System.Diagnostics;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.ApplicationCore.Services;
-using NDesk.Options;
-using System.Collections.Generic;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks
@@ -34,6 +30,8 @@ namespace ShipWorks
 
         // Require at least 100 MB of free space to run ShipWorks successfully
         const long minDriveSpace = 1024 * 1024 * 100;
+
+        private static ExecutionMode executionMode;
 
         /// <summary>
         /// Single instance of the running application
@@ -55,11 +53,7 @@ namespace ShipWorks
         /// <summary>
         /// Gets the execution mode for this instance.  (with UI, command line, etc.)
         /// </summary>
-        public static ExecutionMode ExecutionMode 
-        { 
-            get; 
-            private set; 
-        }
+        public static ExecutionMode ExecutionMode => ExecutionModeScope.Current ?? executionMode;
 
         /// <summary>
         /// Indicates if the application is in the middle of crashing
@@ -89,7 +83,7 @@ namespace ShipWorks
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static void Main()
+        public static async Task Main()
         {
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
             Application.SetCompatibleTextRenderingDefault(false);
@@ -119,8 +113,8 @@ namespace ShipWorks
                     ShipWorksSession.Initialize(commandLine);
                 }
 
-                // Load the execution mode, which is command-line dependant
-                ExecutionMode = new ExecutionModeFactory(commandLine).Create();
+                // Load the execution mode, which is command-line dependent
+                executionMode = new ExecutionModeFactory(commandLine).Create();
 
                 TrySetUsEnglish();
 
@@ -160,15 +154,16 @@ namespace ShipWorks
             }
             catch (Exception ex)
             {
-                HandleUnhandledException(ex, false);
+                await HandleUnhandledException(ex, false);
             }
 
             Environment.Exit(Environment.ExitCode);
-        }       
+        }
 
         /// <summary>
         /// Check that all system requirements for running are met
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static bool CheckSystemRequirements()
         {
             // Verify native, which won't be caught by CLR since its not .net
@@ -229,7 +224,7 @@ namespace ShipWorks
             // Make sure the user has a minimum amount of disk space.
             try
             {
-                List<string> pathsToCheck = new List<string>() {DataPath.InstanceRoot, DataPath.ShipWorksTemp};
+                List<string> pathsToCheck = new List<string>() { DataPath.InstanceRoot, DataPath.ShipWorksTemp };
                 foreach (string pathToCheck in pathsToCheck)
                 {
                     if (!CheckHardDiskSpaceOk(pathToCheck))
@@ -280,7 +275,7 @@ namespace ShipWorks
         private static void TrySetCulture(CultureInfo defaultEnglishCulture, string setCultureMethodName)
         {
             // Attempt to set the culture of ShipWorks to us-EN, since we rely on certain settings
-            PropertyInfo member = typeof (CultureInfo).GetProperty(setCultureMethodName,
+            PropertyInfo member = typeof(CultureInfo).GetProperty(setCultureMethodName,
                 BindingFlags.Static | BindingFlags.Public | BindingFlags.SetProperty);
             if (member == null)
             {
@@ -335,7 +330,7 @@ namespace ShipWorks
         private static void SetupUnhandledExceptionHandling()
         {
             // Handle non-gui thread exceptions.  These should never happen if we do things right.
-            AppDomain.CurrentDomain.UnhandledException += new System.UnhandledExceptionEventHandler(OnAppDomainException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnAppDomainException);
 
             // Handle exceptions from GUI threads.
             Application.ThreadException += new ThreadExceptionEventHandler(OnApplicationException);
@@ -343,27 +338,27 @@ namespace ShipWorks
             // Make sure app exceptions route to the "ThreadException" event
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         }
-        
+
         /// <summary>
         /// An unhandled exception occurred in the AppDomain, outside of a GUI thread.
         /// </summary>
-        private static void OnAppDomainException(object sender, System.UnhandledExceptionEventArgs e)
+        private static async void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
         {
-            HandleUnhandledException((Exception) e.ExceptionObject, false);
+            await HandleUnhandledException((Exception) e.ExceptionObject, false);
         }
 
         /// <summary>
         /// An unhandled exception occurred in a GUI thread.
         /// </summary>
-        private static void OnApplicationException(object sender, ThreadExceptionEventArgs e)
+        private static async void OnApplicationException(object sender, ThreadExceptionEventArgs e)
         {
-            HandleUnhandledException(e.Exception, true);
+            await HandleUnhandledException(e.Exception, true);
         }
 
         /// <summary>
         /// Handles an unhandled exception.
         /// </summary>
-        private static void HandleUnhandledException(Exception ex, bool guiThread)
+        private async static Task HandleUnhandledException(Exception ex, bool guiThread)
         {
             // No executionMode, so default to the original exception handling.
             if (isCrashing)
@@ -386,7 +381,7 @@ namespace ShipWorks
             // If executionMode exists, use it's HandleException method.  Otherwise we'll use the default.
             if (ExecutionMode != null)
             {
-                ExecutionMode.HandleException(ex, guiThread, userEmail);
+                await ExecutionMode.HandleException(ex, guiThread, userEmail);
             }
             else
             {

@@ -40,27 +40,27 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <summary>
 		/// Contains the message that describes the error.
 		/// </summary>
-		private string _message;
+		private string message;
 
 		/// <summary>
 		/// Contains the raw data when the error occured.
 		/// </summary>
-		private string _rawData;
+		private string rawData;
 
 		/// <summary>
 		/// Contains the current field index.
 		/// </summary>
-		private int _currentFieldIndex;
+		private int currentFieldIndex;
 
 		/// <summary>
 		/// Contains the current record index.
 		/// </summary>
-		private long _currentRecordIndex;
+		private long currentRecordIndex;
 
 		/// <summary>
 		/// Contains the current position in the raw data.
 		/// </summary>
-		private int _currentPosition;
+		private int currentPosition;
 
 		#endregion
 
@@ -91,12 +91,12 @@ namespace Interapptive.Shared.IO.Text.Csv
 		public MalformedCsvException(string message, Exception innerException)
 			: base(String.Empty, innerException)
 		{
-			_message = (message == null ? string.Empty : message);
+			this.message = (message == null ? string.Empty : message);
 
-			_rawData = string.Empty;
-			_currentPosition = -1;
-			_currentRecordIndex = -1;
-			_currentFieldIndex = -1;
+			rawData = string.Empty;
+			currentPosition = -1;
+			currentRecordIndex = -1;
+			currentFieldIndex = -1;
 		}
 
 		/// <summary>
@@ -122,12 +122,12 @@ namespace Interapptive.Shared.IO.Text.Csv
 		public MalformedCsvException(string rawData, int currentPosition, long currentRecordIndex, int currentFieldIndex, Exception innerException)
 			: base(String.Empty, innerException)
 		{
-			_rawData = (rawData == null ? string.Empty : rawData);
-			_currentPosition = currentPosition;
-			_currentRecordIndex = currentRecordIndex;
-			_currentFieldIndex = currentFieldIndex;
+			this.rawData = (rawData == null ? string.Empty : rawData);
+			this.currentPosition = currentPosition;
+			this.currentRecordIndex = currentRecordIndex;
+			this.currentFieldIndex = currentFieldIndex;
 
-			_message = String.Format(CultureInfo.InvariantCulture, ExceptionMessage.MalformedCsvException, _currentRecordIndex, _currentFieldIndex, _currentPosition, _rawData);
+            message = string.Format(CultureInfo.InvariantCulture, ExceptionMessage.MalformedCsvException, this.currentRecordIndex, this.currentFieldIndex, this.currentPosition, this.rawData);
 		}
 
 		/// <summary>
@@ -138,12 +138,12 @@ namespace Interapptive.Shared.IO.Text.Csv
 		protected MalformedCsvException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
-			_message = info.GetString("MyMessage");
+			message = info.GetString("MyMessage");
 
-			_rawData = info.GetString("RawData");
-			_currentPosition = info.GetInt32("CurrentPosition");
-			_currentRecordIndex = info.GetInt64("CurrentRecordIndex");
-			_currentFieldIndex = info.GetInt32("CurrentFieldIndex");
+			rawData = info.GetString("RawData");
+			currentPosition = info.GetInt32("CurrentPosition");
+			currentRecordIndex = info.GetInt64("CurrentRecordIndex");
+			currentFieldIndex = info.GetInt32("CurrentFieldIndex");
 		}
 
 		#endregion
@@ -156,7 +156,7 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <value>The raw data when the error occured.</value>
 		public string RawData
 		{
-			get { return _rawData; }
+			get { return rawData; }
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <value>The current position in the raw data.</value>
 		public int CurrentPosition
 		{
-			get { return _currentPosition; }
+			get { return currentPosition; }
 		}
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <value>The current record index.</value>
 		public long CurrentRecordIndex
 		{
-			get { return _currentRecordIndex; }
+			get { return currentRecordIndex; }
 		}
 
 		/// <summary>
@@ -183,7 +183,7 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <value>The current record index.</value>
 		public int CurrentFieldIndex
 		{
-			get { return _currentFieldIndex; }
+			get { return currentFieldIndex; }
 		}
 
 		#endregion
@@ -196,7 +196,7 @@ namespace Interapptive.Shared.IO.Text.Csv
 		/// <value>A message that describes the current exception.</value>
 		public override string Message
 		{
-			get { return _message; }
+			get { return message; }
 		}
 
 		/// <summary>
@@ -208,12 +208,12 @@ namespace Interapptive.Shared.IO.Text.Csv
 		{
 			base.GetObjectData(info, context);
 
-			info.AddValue("MyMessage", _message);
+			info.AddValue("MyMessage", message);
 
-			info.AddValue("RawData", _rawData);
-			info.AddValue("CurrentPosition", _currentPosition);
-			info.AddValue("CurrentRecordIndex", _currentRecordIndex);
-			info.AddValue("CurrentFieldIndex", _currentFieldIndex);
+			info.AddValue("RawData", rawData);
+			info.AddValue("CurrentPosition", currentPosition);
+			info.AddValue("CurrentRecordIndex", currentRecordIndex);
+			info.AddValue("CurrentFieldIndex", currentFieldIndex);
 		}
 
 		#endregion

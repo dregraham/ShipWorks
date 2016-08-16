@@ -24,13 +24,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackingRequestOrTrackingRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackingRequestOrTrackingRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new TrackReply());
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsServiceIdToTrck_ForTracking_Test()
+        public void Manipulate_SetsServiceIdToTrck_ForTracking()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo10_ForTracking_Test()
+        public void Manipulate_SetsMajorTo10_ForTracking()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_ForTracking_Test()
+        public void Manipulate_SetsMinorTo0_ForTracking()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_ForTracking_Test()
+        public void Manipulate_SetsIntermediateTo0_ForTracking()
         {
             testObject.Manipulate(carrierRequest.Object);
 

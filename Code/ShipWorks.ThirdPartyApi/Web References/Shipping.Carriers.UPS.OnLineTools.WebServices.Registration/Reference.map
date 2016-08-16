@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Trunk/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/Error1.1.xsd" filename="Error1.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///D:/Development/Applications/ShipWorks3x/Trunk/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/RegistrationWebService.wsdl" filename="RegistrationNAccountMgr.wsdl" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Trunk/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/RegisterNAccountMgrSchema.xsd" filename="RegisterNAccountMgrSchema.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Trunk/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/UPSSecurity.xsd" filename="UPSSecurity.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Trunk/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/common.xsd" filename="common.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/work/ShipWorks/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/common.xsd" filename="common.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/work/ShipWorks/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/RegisterNAccountMgrSchema.xsd" filename="RegisterNAccountMgrSchema.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/work/ShipWorks/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/UPSSecurity.xsd" filename="UPSSecurity.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/work/ShipWorks/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/RegistrationWebService.wsdl" filename="RegistrationNAccountMgr.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/work/ShipWorks/Code/ShipWorks/Shipping/Carriers/UPS/OnLineTools/Wsdl/Error1.1.xsd" filename="Error1.xsd" />
   </Results>
 </DiscoveryClientResultsFile>

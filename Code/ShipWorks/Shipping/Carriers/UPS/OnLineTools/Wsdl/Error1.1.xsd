@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XML Spy v4.1 U (http://www.xmlspy.com) by Rajendra Upadhya K (UPS GACOR850393,) -->
 <xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" elementFormDefault="qualified">
 	<xsd:element name="Errors">
 		<xsd:complexType>

@@ -30,7 +30,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
         /// Initializes a new instance of the <see cref="QuartzSchedulingEngine"/> class.
         /// </summary>
         public QuartzSchedulingEngine()
-            : this(new SqlSchedulerFactory(), new ReflectingActionScheduleAdapter(), LogManager.GetLogger(typeof(QuartzSchedulingEngine))) 
+            : this(new SqlSchedulerFactory(), new ReflectingActionScheduleAdapter(), LogManager.GetLogger(typeof(QuartzSchedulingEngine)))
         { }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             {
                 if (quartzScheduler != null)
                 {
-                    // The scheduler needs to be explicitly shutdown(even though it was never actually started) 
+                    // The scheduler needs to be explicitly shutdown(even though it was never actually started)
                     // otherwise the process will continue to run after exiting the ShipWorks UI
                     quartzScheduler.Shutdown(true);
                 }
@@ -151,7 +151,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             }
             finally
             {
-                // The scheduler needs to be explicitly shutdown(even though it was never actually started) 
+                // The scheduler needs to be explicitly shutdown(even though it was never actually started)
                 // otherwise the process will continue to run after exiting the ShipWorks UI
                 quartzScheduler.Shutdown(true);
             }
@@ -187,7 +187,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
             {
                 if (quartzScheduler != null)
                 {
-                    // The scheduler needs to be explicitly shutdown(even though it was never actually started) 
+                    // The scheduler needs to be explicitly shutdown(even though it was never actually started)
                     // otherwise the process will continue to run after exiting the ShipWorks UI
                     quartzScheduler.Shutdown(true);
                 }

@@ -38,13 +38,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVersionCaptureRequest_AndNotRegisterWebCspUserRequest_AndNotSubscriptionRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVersionCaptureRequest_AndNotRegisterWebCspUserRequest_AndNotSubscriptionRequest()
         {
             // Setup the native request to be an unexpected type
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionReply());
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         #region Version Capture Request Tests
 
         [Fact]
-        public void Manipulate_SetsServiceIdToFcas_AndRequestIsVersionCapture_Test()
+        public void Manipulate_SetsServiceIdToFcas_AndRequestIsVersionCapture()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo7_AndRequestIsVersionCapture_Test()
+        public void Manipulate_SetsMajorTo7_AndRequestIsVersionCapture()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_AndRequestIsVersionCapture_Test()
+        public void Manipulate_SetsMinorTo0_AndRequestIsVersionCapture()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_AndRequestIsVersionCapture_Test()
+        public void Manipulate_SetsIntermediateTo0_AndRequestIsVersionCapture()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         #region Registration Request Tests
 
         [Fact]
-        public void Manipulate_SetsServiceIdToFcas_AndRequestIsRegistration_Test()
+        public void Manipulate_SetsServiceIdToFcas_AndRequestIsRegistration()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo7_AndRequestIsRegistration_Test()
+        public void Manipulate_SetsMajorTo7_AndRequestIsRegistration()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_AndRequestIsRegistration_Test()
+        public void Manipulate_SetsMinorTo0_AndRequestIsRegistration()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_AndRequestIsRegistration_Test()
+        public void Manipulate_SetsIntermediateTo0_AndRequestIsRegistration()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         #region Registration Request Tests
 
         [Fact]
-        public void Manipulate_SetsServiceIdToFcas_AndRequestIsSubscription_Test()
+        public void Manipulate_SetsServiceIdToFcas_AndRequestIsSubscription()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo7_AndRequestIsSubscription_Test()
+        public void Manipulate_SetsMajorTo7_AndRequestIsSubscription()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
@@ -164,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_AndRequestIsSubscription_Test()
+        public void Manipulate_SetsMinorTo0_AndRequestIsSubscription()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
@@ -173,7 +173,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_AndRequestIsSubscription_Test()
+        public void Manipulate_SetsIntermediateTo0_AndRequestIsSubscription()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 

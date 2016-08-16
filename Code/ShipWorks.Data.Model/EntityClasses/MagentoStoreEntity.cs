@@ -478,7 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MagentoTrackingEmails", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("MagentoConnect", fieldHashtable);
+			_fieldsCustomProperties.Add("MagentoVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -563,15 +563,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)MagentoStoreFieldIndex.MagentoTrackingEmails, value); }
 		}
 
-		/// <summary> The MagentoConnect property of the Entity MagentoStore<br/><br/>
+		/// <summary> The MagentoVersion property of the Entity MagentoStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "MagentoStore"."MagentoConnect"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "MagentoStore"."MagentoVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean MagentoConnect
+		public virtual System.Int32 MagentoVersion
 		{
-			get { return (System.Boolean)GetValue((int)MagentoStoreFieldIndex.MagentoConnect, true); }
-			set	{ SetValue((int)MagentoStoreFieldIndex.MagentoConnect, value); }
+			get { return (System.Int32)GetValue((int)MagentoStoreFieldIndex.MagentoVersion, true); }
+			set	{ SetValue((int)MagentoStoreFieldIndex.MagentoVersion, value); }
 		}
 
 

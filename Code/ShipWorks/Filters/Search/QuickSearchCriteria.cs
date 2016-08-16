@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content.Conditions;
@@ -25,6 +26,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Create the basic search definition for the given search and target
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static FilterDefinition CreateDefinition(FilterTarget target, string search)
         {
             FilterDefinition definition = new FilterDefinition(target);

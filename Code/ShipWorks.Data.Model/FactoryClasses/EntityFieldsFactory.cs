@@ -59,6 +59,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonOrderItemEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonProfileEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonShipmentEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonStoreEntity");
 					break;
@@ -314,6 +320,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ObjectReferenceEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ObjectReferenceEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.OdbcStoreEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "OdbcStoreEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.OnTracAccountEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "OnTracAccountEntity");
 					break;
@@ -443,6 +452,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShopSiteStoreEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "SparkPayStoreEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StatusPresetEntity");
 					break;
@@ -466,6 +478,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.TemplateUserSettingsEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "TemplateUserSettingsEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ThreeDCartOrderEntity");
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderItemEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ThreeDCartOrderItemEntity");

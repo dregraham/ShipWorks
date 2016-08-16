@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 {
@@ -11,24 +12,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
     {
         private FedExShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<FedExAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>> accountRepository;
 
         public FedExShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>();
 
             testObject = new FedExShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToRepository_Test()
+        public void HasAccounts_DelegatesToRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
         [Fact]
-        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
+        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
             {
@@ -50,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         }
 
         [Fact]
-        public void SaveAccountToShipment_ThrowsFedExException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsFedExException_WhenNoAccounts()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<FedExAccountEntity>());
 
@@ -59,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
             {
@@ -79,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
             {

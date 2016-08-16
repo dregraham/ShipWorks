@@ -12,9 +12,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Creates all of the best rate shipping brokers available in the system.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="createCounterRateBrokers">Should counter rate brokers be created</param>
-        /// <returns>The shipping broker for all activated and configured shipment types that have not 
-        /// been excluded.</returns>
-        IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment, bool createCounterRateBrokers);
+        IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment);
     }
 }

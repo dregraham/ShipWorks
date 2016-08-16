@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
+using System.Transactions;
+using Autofac;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Stores;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
 {
@@ -25,7 +26,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            // Defer to the shipment type to inspect the shipment to determine whether 
+            OrderUtility.PopulateOrderDetails(shipment);
+
+            // Defer to the shipment type to inspect the shipment to determine whether
             // customs is required based on any carrier-specific logic (i.e. best-rate)
             ShipmentType shipmpentType = ShipmentTypeManager.GetType(shipment);
             return shipmpentType.IsCustomsRequired(shipment);
@@ -34,8 +37,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensure custom's contents for the given shipment have been created
         /// </summary>
-        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent)
+        public static void LoadCustomsItems(ShipmentEntity shipment, bool reloadIfPresent, SqlAdapter adapter)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(adapter);
+
             // If custom's aren't required, then forget it
             if (!IsCustomsRequired(shipment))
             {
@@ -47,67 +53,80 @@ namespace ShipWorks.Shipping
             {
                 if (reloadIfPresent || !shipment.CustomsItemsLoaded)
                 {
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        shipment.CustomsItems.Clear();
-                        shipment.CustomsItems.AddRange(DataProvider.GetRelatedEntities(shipment.ShipmentID, EntityType.ShipmentCustomsItemEntity).Cast<ShipmentCustomsItemEntity>());
-                        // Add FedExShipmentCustomsItems from database
-                    }
+                    shipment.CustomsItems.Clear();
+                    shipment.CustomsItems.AddRange(DataProvider.GetRelatedEntities(shipment.ShipmentID, EntityType.ShipmentCustomsItemEntity).Cast<ShipmentCustomsItemEntity>());
 
                     // Set the removed tracker for tracking deletions in the UI until saved
                     shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
                 }
-                // if fedex, check to see if fedex customs items have been loaded. If not, create them
             }
-
             // Not already generated, have to create
             else
             {
-                // If its been processed we don't mess with it
-                if (!shipment.Processed)
+                // Make sure that these new customs items get persisted
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                 {
-                    using (SqlAdapter adapter = new SqlAdapter(true))
-                    {
-                        decimal customsValue = 0m;
+                    GenerateCustomsItems(shipment);
 
-                        // By default create one content item representing each item in the order
-                        foreach (OrderItemEntity item in DataProvider.GetRelatedEntities(shipment.OrderID, EntityType.OrderItemEntity))
-                        {
+                    adapter.SaveAndRefetch(shipment);
 
-                            object attributePrice = adapter.GetScalar(OrderItemAttributeFields.UnitPrice, null, AggregateFunction.Sum, OrderItemAttributeFields.OrderItemID == item.OrderItemID);
-
-                            decimal priceAndValue = item.UnitPrice + ((attributePrice is DBNull) ? 0M : Convert.ToDecimal(attributePrice));
-
-                            ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
-                            {
-                                Shipment = shipment,
-                                Description = item.Name,
-                                Quantity = item.Quantity,
-                                Weight = item.Weight,
-                                UnitValue = priceAndValue,
-                                CountryOfOrigin = "US",
-                                HarmonizedCode = "",
-                                NumberOfPieces = 0,
-                                UnitPriceAmount = priceAndValue
-                            };
-
-                            adapter.SaveAndRefetch(customsItem);
-
-                            customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
-                        }
-
-                        shipment.CustomsValue = customsValue;
-                        shipment.CustomsGenerated = true;
-
-                        adapter.SaveAndRefetch(shipment);
-
-                        adapter.Commit();
-                    }
-
-                    // Set the removed tracker for tracking deletions in the UI until saved
-                    shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+                    scope.Complete();
                 }
             }
+
+            // Consider them loaded.  This is an in-memory field
+            shipment.CustomsItemsLoaded = true;
+        }
+
+        /// <summary>
+        /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,
+        /// or customs have already been generated, nothing will be done.
+        /// 
+        /// Customs items are not persisted to the database, as that is the caller's responsibility.
+        /// </summary>
+        public static void GenerateCustomsItems(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+
+            // If custom's aren't required, then forget it
+            if (shipment.Processed || shipment.CustomsGenerated || !IsCustomsRequired(shipment))
+            {
+                return;
+            }
+
+            shipment.CustomsItems.Clear();
+
+            decimal customsValue = 0m;
+
+            // By default create one content item representing each item in the order
+            foreach (OrderItemEntity item in shipment.Order.OrderItems)
+            {
+                decimal attributePrice = item.OrderItemAttributes.Sum(oia => oia.UnitPrice);
+
+                decimal priceAndValue = item.UnitPrice + attributePrice;
+
+                ShipmentCustomsItemEntity customsItem = new ShipmentCustomsItemEntity
+                {
+                    Shipment = shipment,
+                    Description = item.Name,
+                    Quantity = item.Quantity,
+                    Weight = item.Weight,
+                    UnitValue = priceAndValue,
+                    CountryOfOrigin = "US",
+                    HarmonizedCode = "",
+                    NumberOfPieces = 0,
+                    UnitPriceAmount = priceAndValue
+                };
+
+                customsValue += ((decimal)customsItem.Quantity * customsItem.UnitValue);
+            }
+
+            shipment.CustomsValue = customsValue;
+            shipment.CustomsGenerated = true;
+
+            // Set the removed tracker for tracking deletions in the UI until saved
+            shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+
             // Consider them loaded.  This is an in-memory field
             shipment.CustomsItemsLoaded = true;
         }
@@ -128,7 +147,7 @@ namespace ShipWorks.Shipping
             customsItem.HarmonizedCode = "";
             customsItem.UnitPriceAmount = 0;
             customsItem.NumberOfPieces = 0;
-            
+
             return customsItem;
         }
     }

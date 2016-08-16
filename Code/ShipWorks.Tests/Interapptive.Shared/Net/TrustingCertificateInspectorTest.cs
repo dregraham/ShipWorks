@@ -15,13 +15,13 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         }
 
         [Fact]
-        public void Inspect_ReturnsTrusted_WhenRequestIsNull_Test()
+        public void Inspect_ReturnsTrusted_WhenRequestIsNull()
         {
             Assert.Equal(CertificateSecurityLevel.Trusted, testObject.Inspect(null));
         }
 
         [Fact]
-        public void Inspect_ReturnsTrusted_WhenRequestIsNotNull_Test()
+        public void Inspect_ReturnsTrusted_WhenRequestIsNotNull()
         {
             Mock<ICertificateRequest> request = new Mock<ICertificateRequest>();
 

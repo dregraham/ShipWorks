@@ -118,6 +118,8 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Execute the request
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public virtual IHttpResponseReader GetResponse()
         {
             // Get the request Uri

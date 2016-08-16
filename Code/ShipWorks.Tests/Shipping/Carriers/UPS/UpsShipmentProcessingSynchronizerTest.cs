@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
@@ -11,24 +12,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
     {
         private UpsShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<UpsAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> accountRepository;
 
         public UpsShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
 
             testObject = new UpsShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToRepository_Test()
+        public void HasAccounts_DelegatesToRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
         [Fact]
-        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
+        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount()
         {
             List<UpsAccountEntity> UpsAccounts = new List<UpsAccountEntity>()
             {
@@ -50,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void SaveAccountToShipment_ThrowsUpsException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsUpsException_WhenNoAccounts()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity>());
 
@@ -58,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {
             List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()
             {
@@ -78,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts()
         {
             List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()
             {

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,6 +36,7 @@ namespace ShipWorks.Actions
     /// <summary>
     /// Window for editing the properties of an individual action
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class ActionEditorDlg : Form
     {
         ActionEntity action;
@@ -572,6 +574,8 @@ namespace ShipWorks.Actions
         /// <summary>
         /// User is accepting changes to the action
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void OnOK(object sender, EventArgs e)
         {
             if (name.Text.Trim().Length == 0)

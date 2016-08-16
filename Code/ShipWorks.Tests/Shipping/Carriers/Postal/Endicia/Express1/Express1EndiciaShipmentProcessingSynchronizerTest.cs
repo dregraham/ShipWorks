@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -12,24 +12,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1
     {
         private Express1EndiciaShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> accountRepository;
 
         public Express1EndiciaShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
 
             testObject = new Express1EndiciaShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToRepository_Test()
+        public void HasAccounts_DelegatesToRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
         [Fact]
-        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
+        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount()
         {
             List<EndiciaAccountEntity> EndiciaAccounts = new List<EndiciaAccountEntity>()
             {
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         [Fact]
-        public void SaveAccountToShipment_ThrowsEndiciaException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsEndiciaException_WhenNoAccounts()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>());
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {
             List<EndiciaAccountEntity> accounts = new List<EndiciaAccountEntity>()
             {
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts()
         {
             List<EndiciaAccountEntity> accounts = new List<EndiciaAccountEntity>()
             {

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Audit;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Users;
-using System.Transactions;
-using ShipWorks.ApplicationCore.Logging;
-using log4net;
 using System.Diagnostics;
+using System.Transactions;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Tests
 {
@@ -31,7 +28,7 @@ namespace ShipWorks.Tests
         static Stopwatch timer;
 
         /// <summary>
-        /// Initialize UnitTests as if ShipWorks was active 
+        /// Initialize UnitTests as if ShipWorks was active
         /// </summary>
         public static void Initialize(string server, string database)
         {
@@ -50,7 +47,7 @@ namespace ShipWorks.Tests
 
             UserSession.InitializeForCurrentDatabase();
             UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentSession();
+            UserSession.InitializeForCurrentSession(Program.ExecutionMode);
 
             transactionScope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.FromMinutes(5));
 

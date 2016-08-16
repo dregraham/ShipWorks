@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void BuildMemoField_StartsWithMultilineChar_WhenOneMemoFieldHasContent_Test()
+        public void BuildMemoField_StartsWithMultilineChar_WhenOneMemoFieldHasContent()
         {
             postalShipment.Memo1 = "";
             postalShipment.Memo2 = "";
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void BuildMemoField_StartsWithMultilineChar_WhenTwoMemoFieldsHaveContent_Test()
+        public void BuildMemoField_StartsWithMultilineChar_WhenTwoMemoFieldsHaveContent()
         {
             postalShipment.Memo1 = "";
             string apiMemoText = UspsUtility.BuildMemoField(postalShipment);
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void BuildMemoField_StartsWithMultilineChar_WhenThreeMemoFieldsHaveContent_Test()
+        public void BuildMemoField_StartsWithMultilineChar_WhenThreeMemoFieldsHaveContent()
         {
             string apiMemoText = UspsUtility.BuildMemoField(postalShipment);
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void BuildMemoField_ReturnsTwoWrapChars_WhenThreeMemoFieldsHaveContent_Test()
+        public void BuildMemoField_ReturnsTwoWrapChars_WhenThreeMemoFieldsHaveContent()
         {
             string apiMemoText = UspsUtility.BuildMemoField(postalShipment);
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void BuildMemoField_ReturnsTwoWrapChars_WhenOnlyMemo3FieldHasContent_Test()
+        public void BuildMemoField_ReturnsTwoWrapChars_WhenOnlyMemo3FieldHasContent()
         {
             postalShipment.Memo1 = "";
             postalShipment.Memo2 = "";
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void BuildMemoField_ReturnsOnlyUpTo200Chars_WhenMemoFieldsGreaterThan200CharsEach_Test()
+        public void BuildMemoField_ReturnsOnlyUpTo200Chars_WhenMemoFieldsGreaterThan200CharsEach()
         {
             postalShipment.Memo1 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789_____";
             postalShipment.Memo2 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789_____";

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 namespace ShipWorks.ApplicationCore.Logging
@@ -121,7 +118,9 @@ namespace ShipWorks.ApplicationCore.Logging
         Choxi,
         InstanteStore,
         LemonStand,
+        SparkPay,
         [ApiPrivateLogSource]
-        FedExFims
+        FedExFims,
+        Odbc
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 using System.Net;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Dime

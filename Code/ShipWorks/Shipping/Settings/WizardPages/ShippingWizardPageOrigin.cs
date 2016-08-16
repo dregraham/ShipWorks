@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Settings.WizardPages
 {
@@ -50,16 +47,20 @@ namespace ShipWorks.Shipping.Settings.WizardPages
         {
             long originID = ShippingOriginManager.Origins.Max(s => s.ShippingOriginID);
 
-            ShippingProfileEntity defaultProfile = shipmentType.GetPrimaryProfile();
-
-            if (defaultProfile.OriginID == (int) ShipmentOriginSource.Store ||
-                defaultProfile.OriginID == (int) ShipmentOriginSource.Other)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                defaultProfile.OriginID = originID;
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+                ShippingProfileEntity defaultProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
 
-                using (SqlAdapter adapter = new SqlAdapter())
+                if (defaultProfile.OriginID == (int) ShipmentOriginSource.Store ||
+                    defaultProfile.OriginID == (int) ShipmentOriginSource.Other)
                 {
-                    adapter.SaveAndRefetch(defaultProfile);
+                    defaultProfile.OriginID = originID;
+
+                    using (SqlAdapter adapter = new SqlAdapter())
+                    {
+                        adapter.SaveAndRefetch(defaultProfile);
+                    }
                 }
             }
         }

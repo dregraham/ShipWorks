@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         string argumentName;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
         public CommandLineCommandArgumentException(string commandName, string argumentName, string message)
             : base(message)

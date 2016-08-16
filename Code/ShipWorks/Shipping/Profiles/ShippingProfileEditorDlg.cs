@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Filters;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.UI;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -24,14 +16,16 @@ namespace ShipWorks.Shipping.Profiles
     public partial class ShippingProfileEditorDlg : Form
     {
         ShippingProfileEntity profile;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingProfileEditorDlg(ShippingProfileEntity profile)
+        public ShippingProfileEditorDlg(ShippingProfileEntity profile, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
+            this.lifetimeScope = lifetimeScope;
             this.profile = profile;
 
             WindowStateSaver.Manage(this);
@@ -69,7 +63,7 @@ namespace ShipWorks.Shipping.Profiles
             // Create the new profile control
             if (shipmentType.ShipmentTypeCode != ShipmentTypeCode.None)
             {
-                newControl = shipmentType.CreateProfileControl();
+                newControl = shipmentType.CreateProfileControl(lifetimeScope);
 
                 if (newControl != null)
                 {

@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenThereIsOneManipulator_Test()
+        public void Process_DelegatesToManipulators_WhenThereIsOneManipulator()
         {
             testObject.Process();
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         }
 
         [Fact]
-        public void Process_UpsApiException_WhenResponseStatusIsFailure_Test()
+        public void Process_UpsApiException_WhenResponseStatusIsFailure()
         {
             nativeResponse.Response.ResponseStatus.Code = EnumHelper.GetApiValue(UpsInvoiceRegistrationResponseStatusCode.Failed);
 

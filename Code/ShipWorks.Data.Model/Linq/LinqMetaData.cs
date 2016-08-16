@@ -88,6 +88,12 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					toReturn = this.AmazonOrderItem;
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonProfileEntity:
+					toReturn = this.AmazonProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
+					toReturn = this.AmazonShipment;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					toReturn = this.AmazonStore;
 					break;
@@ -343,6 +349,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ObjectReferenceEntity:
 					toReturn = this.ObjectReference;
 					break;
+				case ShipWorks.Data.Model.EntityType.OdbcStoreEntity:
+					toReturn = this.OdbcStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.OnTracAccountEntity:
 					toReturn = this.OnTracAccount;
 					break;
@@ -472,6 +481,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					toReturn = this.ShopSiteStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.SparkPayStoreEntity:
+					toReturn = this.SparkPayStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					toReturn = this.StatusPreset;
 					break;
@@ -495,6 +507,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.TemplateUserSettingsEntity:
 					toReturn = this.TemplateUserSettings;
+					break;
+				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderEntity:
+					toReturn = this.ThreeDCartOrder;
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartOrderItemEntity:
 					toReturn = this.ThreeDCartOrderItem;
@@ -630,6 +645,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AmazonOrderItemEntity> AmazonOrderItem
 		{
 			get { return new DataSource2<AmazonOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonProfileEntity instances in the database.</summary>
+		public DataSource2<AmazonProfileEntity> AmazonProfile
+		{
+			get { return new DataSource2<AmazonProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AmazonShipmentEntity instances in the database.</summary>
+		public DataSource2<AmazonShipmentEntity> AmazonShipment
+		{
+			get { return new DataSource2<AmazonShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonStoreEntity instances in the database.</summary>
@@ -1142,6 +1169,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ObjectReferenceEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting OdbcStoreEntity instances in the database.</summary>
+		public DataSource2<OdbcStoreEntity> OdbcStore
+		{
+			get { return new DataSource2<OdbcStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting OnTracAccountEntity instances in the database.</summary>
 		public DataSource2<OnTracAccountEntity> OnTracAccount
 		{
@@ -1400,6 +1433,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ShopSiteStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting SparkPayStoreEntity instances in the database.</summary>
+		public DataSource2<SparkPayStoreEntity> SparkPayStore
+		{
+			get { return new DataSource2<SparkPayStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting StatusPresetEntity instances in the database.</summary>
 		public DataSource2<StatusPresetEntity> StatusPreset
 		{
@@ -1446,6 +1485,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<TemplateUserSettingsEntity> TemplateUserSettings
 		{
 			get { return new DataSource2<TemplateUserSettingsEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ThreeDCartOrderEntity instances in the database.</summary>
+		public DataSource2<ThreeDCartOrderEntity> ThreeDCartOrder
+		{
+			get { return new DataSource2<ThreeDCartOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ThreeDCartOrderItemEntity instances in the database.</summary>

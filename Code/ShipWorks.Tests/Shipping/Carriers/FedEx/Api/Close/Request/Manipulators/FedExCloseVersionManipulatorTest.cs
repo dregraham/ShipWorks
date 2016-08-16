@@ -31,13 +31,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             groundCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSmartPostCloseRequestOrGroundCloseRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSmartPostCloseRequestOrGroundCloseRequest()
         {
             // Setup the native request to be an unexpected type
             groundCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SmartPostCloseReply());
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsServiceIdToClos_ForGroundClose_Test()
+        public void Manipulate_SetsServiceIdToClos_ForGroundClose()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo4_ForGroundClose_Test()
+        public void Manipulate_SetsMajorTo4_ForGroundClose()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_ForGroundClose_Test()
+        public void Manipulate_SetsMinorTo0_ForGroundClose()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_ForGroundClose_Test()
+        public void Manipulate_SetsIntermediateTo0_ForGroundClose()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 
 
         [Fact]
-        public void Manipulate_SetsServiceIdToClos_ForSmartPostClose_Test()
+        public void Manipulate_SetsServiceIdToClos_ForSmartPostClose()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo4_ForSmartPostClose_Test()
+        public void Manipulate_SetsMajorTo4_ForSmartPostClose()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsMinorTo0_ForSmartPostClose_Test()
+        public void Manipulate_SetsMinorTo0_ForSmartPostClose()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsIntermediateTo0_ForSmartPostClose_Test()
+        public void Manipulate_SetsIntermediateTo0_ForSmartPostClose()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
 

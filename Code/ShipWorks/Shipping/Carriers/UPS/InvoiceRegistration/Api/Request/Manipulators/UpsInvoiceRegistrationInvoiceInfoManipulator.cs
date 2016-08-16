@@ -39,14 +39,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipu
                 registerRequest.ShipperAccount= new ShipperAccountType();
             }
 
-            registerRequest.ShipperAccount.InvoiceInfo = new InvoiceInfoType()
+            // Ups allows for registration without the invoice info
+            // if the account is new and has never been invoiced before
+            if (invoiceAuthorization != null && !string.IsNullOrWhiteSpace(invoiceAuthorization.InvoiceNumber))
             {
-                CurrencyCode = UpsUtility.GetCurrency((UpsAccountEntity) request.CarrierAccountEntity),
-                InvoiceNumber = invoiceAuthorization.InvoiceNumber,
-                InvoiceDate = invoiceAuthorization.InvoiceDate.ToString("yyyMMdd"),
-                InvoiceAmount = invoiceAuthorization.InvoiceAmount.ToString("0.00"),
-                ControlID = invoiceAuthorization.ControlID
-            };
+                registerRequest.ShipperAccount.InvoiceInfo = new InvoiceInfoType
+                {
+                    CurrencyCode = UpsUtility.GetCurrency((UpsAccountEntity)request.CarrierAccountEntity),
+                    InvoiceNumber = invoiceAuthorization.InvoiceNumber,
+                    InvoiceDate = invoiceAuthorization.InvoiceDate.ToString("yyyMMdd"),
+                    InvoiceAmount = invoiceAuthorization.InvoiceAmount.ToString("0.00"),
+                    ControlID = invoiceAuthorization.ControlID
+                };
+            }
         }
     }
 }

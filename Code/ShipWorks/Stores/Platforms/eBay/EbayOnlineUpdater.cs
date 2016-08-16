@@ -15,6 +15,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Shipping;
 using System.Net;
+using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -232,6 +233,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Push the online status for an order.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void UpdateOnlineStatus(long orderID, bool? paid, bool? shipped, UnitOfWork2 unitOfWork)
         {
             EbayOrderEntity order = DataProvider.GetEntity(orderID) as EbayOrderEntity;
@@ -415,6 +418,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 case ShipmentTypeCode.FedEx:
                     carrierType = ShippingCarrierCodeType.FedEx;
+                    break;
+
+                case ShipmentTypeCode.OnTrac:
+                    carrierType = ShippingCarrierCodeType.ONTRACK;
                     break;
 
                 case ShipmentTypeCode.Other:

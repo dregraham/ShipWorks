@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using System.Web.Services.Protocols;
 using System.Xml;
 
@@ -10,6 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// <summary>
     /// Exception based on a SoapException thrown by UPS
     /// </summary>
+    [Serializable]
     public class UpsWebServiceException : UpsException
     {
         private string severity = "";
@@ -32,6 +32,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             base(ex.Message, ex)
         {
             ExtractResult(ex.Detail);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected UpsWebServiceException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
+        {
+
         }
 
         /// <summary>

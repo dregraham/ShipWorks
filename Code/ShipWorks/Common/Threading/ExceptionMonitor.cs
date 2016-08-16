@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
-using ShipWorks.Data.Connection;
 using System.Windows.Forms;
 using log4net;
-using System.Diagnostics;
-using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Common.Threading
 {
@@ -96,7 +92,7 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         private static bool HandleException(Exception ex, StackTrace invokingThreadTrace)
         {
-            if (!Program.ExecutionMode.IsUIDisplayed)
+            if (Program.ExecutionMode?.IsUIDisplayed != true)
             {
                 return false;
             }

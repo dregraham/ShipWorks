@@ -1,36 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Common.Threading;
-using ShipWorks.Templates.Processing;
-using System.ComponentModel;
 using System.Threading;
-using ShipWorks.UI.Controls.Html;
 using System.Windows.Forms;
-using System.IO;
-using ShipWorks.UI.Controls.Html.Core;
-using ShipWorks.ApplicationCore;
-using System.Diagnostics;
 using Interapptive.Shared;
-using System.Drawing;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Win32;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
 using ShipWorks.Templates.Media;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Drawing.Printing;
-using ShipWorks.ApplicationCore.Interaction;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
-using log4net;
-using System.Xml.Linq;
-using System.Xml;
-using Interapptive.Shared.Win32;
-using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Templates.Processing;
+using ShipWorks.UI.Controls.Html;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -43,7 +32,7 @@ namespace ShipWorks.Templates.Printing
 
         // The template to use.  This is a cloned snapshot of the template at the time the job was created.
         TemplateEntity template;
-        
+
         // The entities used in template processing.  Can be null if constructed with the final results directly
         List<long> entityKeys;
 
@@ -266,11 +255,11 @@ namespace ShipWorks.Templates.Printing
 
             progressProvider.ProgressItems.Clear();
 
-            ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(PrintRequestCallback), 
-                new PrintRequest 
+            ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(PrintRequestCallback),
+                new PrintRequest
                 {
-                    Action = action, 
-                    HtmlOwner = htmlOwner, 
+                    Action = action,
+                    HtmlOwner = htmlOwner,
                     UserState = userState,
                     BusyToken = ApplicationBusyManager.OperationStarting("printing")
                 });
@@ -334,6 +323,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// The worker thread that executes a print job.  Returns true if the worker completed, or false if it was cancelled.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool PrintWorker(PrintRequest printRequest)
         {
             // Add a progress item for the actual printing
@@ -715,7 +705,7 @@ namespace ShipWorks.Templates.Printing
                 showjobSettings = true;
             }
 
-            // Have to present the user with 
+            // Have to present the user with
             if (showjobSettings)
             {
                 IntPtr ieHandle = FindIEPreviewWindowHandle();
@@ -860,7 +850,7 @@ namespace ShipWorks.Templates.Printing
                 }
             }
 
-            // Continue search 
+            // Continue search
             return true;
         }
 
@@ -885,7 +875,7 @@ namespace ShipWorks.Templates.Printing
             get
             {
                 BrowserPageSettings effectiveSettings = (template.Type == (int) TemplateType.Label) ?
-                    new BrowserPageSettings(Settings.LabelSettings, PrinterCalibration.Load(Settings.PrinterName, Settings.PaperSource)) : 
+                    new BrowserPageSettings(Settings.LabelSettings, PrinterCalibration.Load(Settings.PrinterName, Settings.PaperSource)) :
                     new BrowserPageSettings(Settings.PageSettings);
 
                 return effectiveSettings;

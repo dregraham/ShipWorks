@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExRecipientManipulator_ReturnsRequestedShipment_Test()
+        public void Manipulate_FedExRecipientManipulator_ReturnsRequestedShipment()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExRecipientManipulator_ReturnsValidRequestedShipmentRecipient_Test()
+        public void Manipulate_FedExRecipientManipulator_ReturnsValidRequestedShipmentRecipient()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AddressAddedToSender_RequestedShipmentIsReturn_Test()
+        public void Manipulate_AddressAddedToSender_RequestedShipmentIsReturn()
         {
             shipmentEntity.ReturnShipment = true;
 

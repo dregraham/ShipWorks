@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public TimeZoneInfo StoreTimeZone
         {
-            get 
+            get
             {
                 if (string.IsNullOrWhiteSpace(TimeZoneID))
                 {
@@ -49,6 +49,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
                 return storeTimeZone;
             }
+            set
+            {
+                storeTimeZone = value;
+            }
         }
 
         /// <summary>
@@ -56,7 +60,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Defaults to use UTC as the fromTimeZoneInfoId's time zone
         /// </summary>
         /// <returns>
-        /// Returns the date time converted to the store's time zone if the store has a time zone specified, 
+        /// Returns the date time converted to the store's time zone if the store has a time zone specified,
         /// otherwise, the passed in date time is returned.
         /// </returns>
         public DateTime ConvertToStoreDateTime(DateTime fromTimeZoneInfoId)
@@ -70,7 +74,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <param name="dateTimeToConvert">DateTime to convert to the store's time zone</param>
         /// <param name="fromTimeZoneInfoId">Time Zone Info ID to use as the dateTimeToConvert's time zone</param>
         /// <returns>
-        /// Returns the date time converted to the store's time zone if the store has a time zone specified, 
+        /// Returns the date time converted to the store's time zone if the store has a time zone specified,
         /// otherwise, the passed in date time is returned.
         /// </returns>
         public DateTime ConvertToStoreDateTime(DateTime dateTimeToConvert, string fromTimeZoneInfoId)

@@ -6,6 +6,7 @@ using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
@@ -29,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void CreateFilters_ReturnsFiveFilters_Test()
+        public void CreateFilters_ReturnsFiveFilters()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
@@ -37,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
         
         [Fact]
-        public void CreateFilters_ContainsExpress1PromotionFootnoteFilter_Test()
+        public void CreateFilters_ContainsExpress1PromotionFootnoteFilter()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
@@ -45,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void CreateFilters_ContainsBestRateNonExistentShipmentTypeFootnoteFilter_Test()
+        public void CreateFilters_ContainsBestRateNonExistentShipmentTypeFootnoteFilter()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
@@ -53,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void CreateFilters_Express1PromoFilter_IsAfterNonExistentFootnoteFilter_Test()
+        public void CreateFilters_Express1PromoFilter_IsAfterNonExistentFootnoteFilter()
         {
             List<IRateGroupFilter> filters = testObject.CreateFilters(shipment).ToList();
             int nonExistentFilterIndex = 0;
@@ -75,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void CreateFilters_ContainsCounterRatesInvalidStoreAddressFootnoteFilter_Test()
+        public void CreateFilters_ContainsCounterRatesInvalidStoreAddressFootnoteFilter()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 

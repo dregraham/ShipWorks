@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_ResultDeserializedProperly_WhenParametersAndResultsAreValid_Test()
+        public void RequestTracking_ResultDeserializedProperly_WhenParametersAndResultsAreValid()
         {
             var trackingResult = RunSuccessfullRequestTracking();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_RequestLogged_WhenParametersAndResultsAreValid_Test()
+        public void RequestTracking_RequestLogged_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullRequestTracking();
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_ResponseLogged_WhenParametersAndResultsAreValid_Test()
+        public void RequestTracking_ResponseLogged_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullRequestTracking();
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_UriInCorrectFormat_WhenParametersAndResultsAreValid_Test()
+        public void RequestTracking_UriInCorrectFormat_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullRequestTracking();
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_RequestUsingHttpVerbGet_WhenParametersAndResultsAreValid_Test()
+        public void RequestTracking_RequestUsingHttpVerbGet_WhenParametersAndResultsAreValid()
         {
             RunSuccessfullRequestTracking();
 
@@ -137,7 +137,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_ThrowsException_WhenReturnedXmlIsInvalid_Test()
+        public void RequestTracking_ThrowsException_WhenReturnedXmlIsInvalid()
         {
             //fake string response from OnTrac
             const string invalidFakedResponseXml = "blah";
@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void RequestTracking_GetsTrackingInfo_WhenPackageNotDelivered_Test()
+        public void RequestTracking_GetsTrackingInfo_WhenPackageNotDelivered()
         {
             validOnTracResponse.Shipments[0].Delivered = false;
 
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void TrackShipment_GetsTrackingInfoWithSignature_WhenPackageSignedAndDelivered_Test()
+        public void TrackShipment_GetsTrackingInfoWithSignature_WhenPackageSignedAndDelivered()
         {
             validOnTracResponse.Shipments[0].POD = "Bob";
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void TrackShipment_ThrowsException_WhenError_Test()
+        public void TrackShipment_ThrowsException_WhenError()
         {
             validOnTracResponse.Error = "Error!";
             string validOnTracResponseString = SerializationUtility.SerializeToXml(validOnTracResponse);
@@ -200,7 +200,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void TrackShipment_ThrowsException_WhenNoShipments_Test()
+        public void TrackShipment_ThrowsException_WhenNoShipments()
         {
             validOnTracResponse.Shipments = new TrackingShipment[0];
             string validOnTracResponseString = SerializationUtility.SerializeToXml(validOnTracResponse);
@@ -212,7 +212,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         }
 
         [Fact]
-        public void TrackShipment_ThrowsException_WhenNoEvents_Test()
+        public void TrackShipment_ThrowsException_WhenNoEvents()
         {
             validOnTracResponse.Shipments.First().Events = new Event[0];
             string validOnTracResponseString = SerializationUtility.SerializeToXml(validOnTracResponse);

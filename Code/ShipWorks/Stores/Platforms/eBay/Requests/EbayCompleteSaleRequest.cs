@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
@@ -17,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayCompleteSaleRequest"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public EbayCompleteSaleRequest(EbayToken token, long itemID, long transactionID, bool? isPaid, bool? isShipped, string trackingNumber, string shippingCarrier)
             : base(token, "CompleteSale")
         {

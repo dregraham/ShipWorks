@@ -16,6 +16,7 @@ using ShipWorks.Filters.Content.Conditions.OrderItems;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.OrderCharges;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.UI.Utility;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Filters.Content.Conditions.Notes;
@@ -156,6 +157,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Load the given filter definition for editing
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadDefinition(FilterDefinition definition)
         {
             if (definition == null)
@@ -419,6 +421,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Create a new condition
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnAddCondition(object sender, EventArgs e)
         {
             // The line that the Add button was clicked for
@@ -597,6 +600,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// A condition line is being deleted
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnDeleteLine(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;

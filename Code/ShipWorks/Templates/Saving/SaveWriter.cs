@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using System.ComponentModel;
-using ShipWorks.Common.Threading;
-using System.Threading;
-using ShipWorks.Templates.Processing;
-using ShipWorks.UI.Controls.Html;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI;
 using System.IO;
-using log4net;
-using ShipWorks.ApplicationCore;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
+using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.IO.Text.HtmlAgilityPack;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.UI.Controls.Html;
 
 namespace ShipWorks.Templates.Saving
 {
@@ -24,7 +23,7 @@ namespace ShipWorks.Templates.Saving
     /// Encapsulates the writing out of a template save file request.
     /// </summary>
     public class SaveWriter
-    {        
+    {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(SaveWriter));
 
@@ -44,7 +43,7 @@ namespace ShipWorks.Templates.Saving
         /// Raised when a file name or folder name is needed to continue the save process.  Must be handled.
         /// </summary>
         public event SavePromptForFileEventHandler PromptForFile;
-        
+
         /// <summary>
         /// Raised when saving is complete.
         /// </summary>
@@ -242,6 +241,7 @@ namespace ShipWorks.Templates.Saving
         /// <summary>
         /// Do the actual work of the save. Returns false if canceled, true otherwise.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool SaveWorker()
         {
             // Create the html control that will be used
@@ -316,7 +316,7 @@ namespace ShipWorks.Templates.Saving
                         savedFiles.Add(filename);
 
                         // Update how much we are done
-                        saveProgress.PercentComplete = (100 * settings.NextResultIndex)  / templateResults.Count;
+                        saveProgress.PercentComplete = (100 * settings.NextResultIndex) / templateResults.Count;
                     }
                 }
             }
@@ -346,6 +346,7 @@ namespace ShipWorks.Templates.Saving
         /// Acquire the filename based on the given results, and given that there were the given number of total results from the selection.
         /// Returns null if the user is prompted but cancels.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string AcquireFilename(IEnumerable<TemplateResult> results, int totalResults)
         {
             List<long> entityKeys = new List<long>();
@@ -469,6 +470,7 @@ namespace ShipWorks.Templates.Saving
         /// <summary>
         /// Raise the event that must be handled to ask the user for the filename.  Returns null if the user cancels.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string RaisePromptForFile(string name, string folder, SaveFileNamePart part)
         {
             SavePromptForFileEventHandler handler = PromptForFile;
@@ -644,7 +646,7 @@ namespace ShipWorks.Templates.Saving
             else
             {
                 // Windows knows how to manage html files and folders with the filename and a _files as a single unit
-                string resourceSubDirectory  = Path.GetFileNameWithoutExtension(filename) + "_files";
+                string resourceSubDirectory = Path.GetFileNameWithoutExtension(filename) + "_files";
                 string resourceFolder = Path.Combine(Path.GetDirectoryName(filename), resourceSubDirectory);
 
                 TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor();

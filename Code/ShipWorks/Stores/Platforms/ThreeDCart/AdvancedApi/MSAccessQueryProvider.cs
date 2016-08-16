@@ -7,7 +7,7 @@ using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 namespace ShipWorks.Stores.Platforms.ThreeDCart.AdvancedApi
 {
     /// <summary>
-    /// 3d Cart sites can run against a sql server database or an MS Access database.
+    /// 3dcart sites can run against a sql server database or an MS Access database.
     /// The advanced api takes sql statements to return results.  These sql statements
     /// must be correct for the type of database the site is running.
     /// 
@@ -106,8 +106,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.AdvancedApi
         }
 
         /// <summary>
-        /// Query to get product info by 3D Cart item id.
-        /// NOTE: 3D Cart item id is actually referred to as ProductID when using the regular cart api
+        /// Query to get product info by 3dcart item id.
+        /// NOTE: 3dcart item id is actually referred to as ProductID when using the regular cart api
         /// </summary>
         /// <param name="invoiceNumber"> </param>
         /// <param name="threeDCartProductID">ThreeDCartWebClientOrderSearchCriteria from which to build the sql statement</param>

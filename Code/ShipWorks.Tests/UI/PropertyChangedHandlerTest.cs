@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.UI
             bool wasCalled = false;
             TestEventHandler += (s, e) => wasCalled = true;
 
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
 
             handler.Set("Foo", ref testField, "Value");
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.UI
         public void Set_RaisesEvent_WhenPropertyChangesAndEventIsRegisteredAfterConstructor()
         {
             bool wasCalled = false;
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
 
             TestEventHandler += (s, e) => wasCalled = true;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.UI
             bool wasCalled = false;
             testField = "Value";
 
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
 
             TestEventHandler += (s, e) => wasCalled = true;
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.UI
         [Fact]
         public void Set_DoesNotThrow_WhenNoEventHandlerIsRegistered()
         {
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
             
             handler.Set("Foo", ref testField, "Value");
         }
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.UI
         [Fact]
         public void Set_ChangesFieldValue()
         {
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
 
             handler.Set("Foo", ref testField, "Bar");
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.UI
         [Fact]
         public void Set_ReturnsTrue_WhenFieldIsChanged()
         {
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
 
             bool result = handler.Set("Foo", ref testField, "Bar");
 
@@ -82,11 +82,38 @@ namespace ShipWorks.Tests.UI
         public void Set_ReturnsFalse_WhenFieldIsNotChanged()
         {
             testField = "Bar";
-            var handler = new PropertyChangedHandler(() => TestEventHandler);
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
 
             bool result = handler.Set("Foo", ref testField, "Bar");
 
             Assert.False(result);
+        }
+
+        [Fact]
+        public void Set_SendsSourceObject_AsSender()
+        {
+            object source = new object();
+            object sender = null;
+            var handler = new PropertyChangedHandler(source, () => TestEventHandler);
+
+            TestEventHandler += (s, e) => sender = s;
+
+            handler.Set("Foo", ref testField, "Value");
+
+            Assert.Equal(source, sender);
+        }
+
+        [Fact]
+        public void Set_SendsPropertyName_InEventArgs()
+        {
+            string propertyName = null;
+            var handler = new PropertyChangedHandler(this, () => TestEventHandler);
+
+            TestEventHandler += (s, e) => propertyName = e.PropertyName;
+
+            handler.Set("Foo", ref testField, "Value");
+
+            Assert.Equal("Foo", propertyName);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.UI;
 using ShipWorks.UI.Utility;
 using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
@@ -97,6 +98,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Create the menu's to use for the filtering
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void CreateFilterMenus()
         {
             ///////////////

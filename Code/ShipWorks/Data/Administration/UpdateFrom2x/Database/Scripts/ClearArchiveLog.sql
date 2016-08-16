@@ -1,1 +1,0 @@
-﻿TRUNCATE TABLE ArchiveLogs

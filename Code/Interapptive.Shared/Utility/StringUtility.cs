@@ -2,14 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Linq;
 using log4net;
-using System.Windows.Forms;
-using System.Diagnostics;
-using Interapptive.Shared;
-using Interapptive.Shared.Win32;
 
 namespace Interapptive.Shared.Utility
 {
@@ -38,10 +31,44 @@ namespace Interapptive.Shared.Utility
 
             if (Math.Abs(bytes) < 1024 * 1024 * 1024)
             {
-                return string.Format("{0:#,##0.0} MB", bytes / (double) (1024 * 1024));
+                return string.Format("{0:#,##0.0} MB", bytes / (double)(1024 * 1024));
             }
 
-            return string.Format("{0:#,##0.00} GB", bytes / (double) (1024 * 1024 * 1024));
+            return string.Format("{0:#,##0.00} GB", bytes / (double)(1024 * 1024 * 1024));
+        }
+
+        /// <summary>
+        /// Intelligently format the byte count in bytes, kb, or mb
+        /// </summary>
+        /// <param name="bytes">Number to format</param>
+        /// <param name="decimalFormat">Decimal format, i.e. {0:#,##0}</param>
+        public static string FormatByteCount(long bytes, string decimalFormat)
+        {
+            string format = string.Empty;
+            double value = 0;
+
+            if (Math.Abs(bytes) < 1024)
+            {
+                format = $"{decimalFormat} Bytes";
+                value = bytes;
+            }
+            else if (Math.Abs(bytes) < 1024 * 1024 * 20)
+            {
+                format = $"{decimalFormat} KB";
+                value = (double) bytes / 1024;
+            }
+            else if (Math.Abs(bytes) < 1024 * 1024 * 1024)
+            {
+                format = $"{decimalFormat} MB";
+                value = (double) bytes/(1024 * 1024);
+            }
+            else
+            {
+                format = $"{decimalFormat} GB";
+                value = (double) bytes/(1024 * 1024 * 1024);
+            }
+
+            return string.Format(format, value);
         }
 
         /// <summary>
@@ -53,6 +80,35 @@ namespace Interapptive.Shared.Utility
             {
                 return Encoding.GetEncoding("ISO-8859-1");
             }
+        }
+
+        /// <summary>
+        /// Return a friendly formatted date
+        /// </summary>
+        public static string FormatFriendlyDate(this DateTime dateTime) =>
+            FormatFriendlyDate(dateTime, "d");
+
+        /// <summary>
+        /// Return a friendly formatted date
+        /// </summary>
+        public static string FormatFriendlyDate(this DateTime dateTime, string defaultFormat)
+        {
+            if (dateTime.Date == DateTime.Now.Date)
+            {
+                return "Today";
+            }
+
+            if (dateTime.Date == DateTime.Now.AddDays(-1).Date)
+            {
+                return "Yesterday";
+            }
+
+            if (dateTime.Date == DateTime.Now.AddDays(1).Date)
+            {
+                return "Tomorrow";
+            }
+
+            return dateTime.ToString(defaultFormat);
         }
 
         /// <summary>
@@ -84,7 +140,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Formats amount to a currency amount with support for a half penny.
         /// </summary>
-        public static string FormatFriendlyCurrency(decimal amount)
+        public static string FormatFriendlyCurrency(this decimal amount)
         {
             string formattedAmount = amount.ToString("c");
             decimal truncatedAmount = decimal.Parse(formattedAmount, NumberStyles.Currency);
@@ -118,6 +174,7 @@ namespace Interapptive.Shared.Utility
         /// Split the given text into as many lines of ideal length of idealLineLength.  If the text is too long to fit in maxLines with lines of length idealLineLength,
         /// then each line will be longer.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static string[] SplitLines(string text, int idealLineLength, int maxLines = Int32.MaxValue)
         {
             if (idealLineLength <= 0)

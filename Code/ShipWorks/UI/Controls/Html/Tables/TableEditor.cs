@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.UI.Controls.Html.Core;
 
 namespace ShipWorks.UI.Controls.Html.Tables
@@ -223,6 +224,7 @@ namespace ShipWorks.UI.Controls.Html.Tables
         /// <summary>
         /// Inserts a row into the active table
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void InsertRow(bool after)
         {
             if (!CanInsertRow)
@@ -460,6 +462,7 @@ namespace ShipWorks.UI.Controls.Html.Tables
         /// <summary>
         /// Get all table cells that are siblings and are topmost in the current element selection.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private ArrayList GetTopMostSelectedCells()
         {
             ArrayList selectedCells = new ArrayList();

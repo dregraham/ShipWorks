@@ -47,14 +47,30 @@ namespace :build do
 		msb.targets :Clean
 	end
 
+	desc "Zip the layout files"
+	zip :layout do |zip|
+		zip.dirs = ["./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault"]
+		zip.output_path = "./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault.swl"
+	end
+
+	desc "Zip the layout into an importable environment file"
+	zip :environment, [:environment_path] => "build:layout" do |zip, args|
+		dir = Dir.mktmpdir
+		window_path = dir + "/windows.swl"
+		FileUtils.cp "./Code/ShipWorks/ApplicationCore/Appearance/WindowLayoutDefault.swl", window_path
+
+		zip.files = [window_path]
+		zip.output_path = args.environment_path
+	end
+
 	desc "Build ShipWorks in the Debug configuration"
 	msbuild :debug, [:forCI] => "build:restore" do |msb, args|
-		if args != nil and args.forCI != nil and args.forCI == 'true'			
+		if args != nil and args.forCI != nil and args.forCI == 'true'
 			puts 'Updating config file for integration tests to run on CI server...'
 
 			# Read in the app settings for the integration test project
 			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration/App.config"
-			
+
 			replace_instance_guid appConfigFilePath, shipworks_instance_guid
 
 			puts 'config file has been updated'
@@ -66,6 +82,18 @@ namespace :build do
 		msb.targets :Build
 	end
 
+	desc "Build Shipworks in the Debug configuration and set to 32 bit"
+	task :debug32 => "build:debug" do |msb|
+		puts "Setting to 32-bit...\r\n\r\n"
+		corFlags = 'C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.6.1 Tools\\CorFlags.exe'
+		if File.exists? corFlags
+			command = '"' + corFlags + '" .\\Artifacts\\Application\\ShipWorks.exe /32bit+ /Force'
+			sh command
+		else
+			puts "Error: could not find CorFlags.exe at #{corFlags}"
+		end
+	end
+
 	desc "Build ShipWorks in the Release configuration"
 	msbuild :release => ["build:clean", "build:restore"] do |msb|
 		print "Building solution with the release config...\r\n\r\n"
@@ -73,7 +101,7 @@ namespace :build do
 		msb.properties :configuration => :Release, TreatWarningsAsErrors: true
 		msb.targets :Build
 	end
-		
+
 	desc "Build an unsigned Debug installer for local testing"
 	task :debug_installer => :debug do
 		print "Building unsigned debug installer package...\r\n\r\n"
@@ -92,20 +120,20 @@ namespace :build do
 		revisionFile = File.open(@revisionFilePath)
 		revisionNumber = revisionFile.readline
 		revisionFile.close
-		
+
 		print "Running INNO compiler... "
 		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup.Debug" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
 		FileUtils.rm_f "InnoSetup.iss"
 		print "done.\r\n"
 	end
-	
+
 	desc "Build ShipWorks and generate an MSI for internal testing. Usage: internal_installer[3.5.2] to label with a specific major/minor/patch number; otherwise 0.0.0 will be used"
 	msbuild :internal_installer, :versionLabel do |msb, args|
 		print "Building internal release installer...\r\n\r\n"
 
 		# Default the build label to 0.0.0
 		labelForBuild = nil_if_empty(args[:versionLabel]) || "0.0.0"
-		
+
 		# Use the MSBuild project when building the installer
 		msb.solution = "./Build/shipworks.proj"
 		msb.properties :configuration => :Release
@@ -115,25 +143,25 @@ namespace :build do
 		revisionNumber = revisionFile.readline
 		revisionFile.close
 
-		# Append the revision number to the label 
+		# Append the revision number to the label
 		labelForBuild = labelForBuild + "." + revisionNumber
 		print "Building with label " + labelForBuild + "\r\n\r\n"
-		
+
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
-		
-		# NOTE: The ReleaseType=Internal parameter will cause the assemblies/installer to 
+
+		# NOTE: The ReleaseType=Internal parameter will cause the assemblies/installer to
 		# be signed; this will fail without the correct certificate
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
 	end
-	
+
 	desc "Build ShipWorks and generate a public installer"
 	msbuild :public_installer, [:versionLabel] => "build:restore" do |msb, args|
 		print "Building an installer for the public release...\r\n\r\n"
 
 		# Default the build label to 0.0.0
 		labelForBuild = nil_if_empty(args[:versionLabel]) || "0.0.0"
-		
+
 		# Use the MSBuild project when building the installer
 		msb.solution = "./Build/shipworks.proj"
 		msb.properties :configuration => :Release
@@ -143,10 +171,15 @@ namespace :build do
 		revisionNumber = revisionFile.readline
 		revisionFile.close
 
-		# Append the revision number to the label 
+		# Append the revision number to the label
 		labelForBuild = labelForBuild + "." + revisionNumber
 		print "Building with label #{labelForBuild}\r\n\r\n"
-		
+
+		# Write the label for the build out to a file, so CI (Jenkins) can pick it up for tagging purposes
+		labelFile = ".build-label"
+		delete_if_exists(labelFile)
+		File.open(labelFile, "w") {|file| file.puts labelForBuild}
+
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
 		msb.parameters = "/p:CreateInstaller=True /p:PackageModules=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=#{@revisionFilePath} /p:CCNetLabel=#{labelForBuild}"
@@ -165,10 +198,11 @@ namespace :test do
 	msbuild :units do |msbuild|
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("units")
-		
+
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 
+		msbuild.parameters = "/m:4"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
 		msbuild.targets :Units
@@ -178,15 +212,18 @@ namespace :test do
 	msbuild :integration, [:categoryFilter] do |msbuild, args|
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("integration")
-		
+
+		# We need the integration tests to run in parallel so that the correct synchronization context gets set.
+		# If they are not run in parallel, some async tests will deadlock
+		msbuild.parameters = "/m:4"
+
 		unless args.categoryFilter.nil? or args.categoryFilter.empty?
 			# We need to filter the tests based on the categories provided
-			#categoryParameter = "/category:" + args.categoryFilter
-			msbuild.parameters = "/p:IncludeTraits=\"Category=#{args.categoryFilter}\""
+			msbuild.parameters += " /p:IncludeTraits=\"Category=#{args.categoryFilter}\""
 			print "Category Parameter #{args.categoryFilter}"
 		
 		end
-		
+
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
 
 		#msbuild.parameters = "/m:1"
@@ -197,7 +234,7 @@ namespace :test do
 end
 
 ########################################################################
-## Tasks for creating and seeding the database 
+## Tasks for creating and seeding the database
 ########################################################################
 namespace :db do
 
@@ -206,7 +243,7 @@ namespace :db do
 
 	desc "Create and populate a new ShipWorks database with seed data. Intended to be executed in a build"
 	task :populate, [:schemaVersion, :instance, :targetDatabase, :filePath] => [:create, :schema, :seed]
-	
+
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create, [:instance, :targetDatabase] do |t, args|
 		full_instance = get_instance_from_arguments args
@@ -216,11 +253,13 @@ namespace :db do
 		dropSqlText = "
 			USE master;
 			go
-			ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
+				ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 			go
-			ALTER DATABASE [{DBNAME}] SET MULTI_USER;
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
+				ALTER DATABASE [{DBNAME}] SET MULTI_USER;
 			go
-			
+
 			-- Now it's safe to drop the database without any open connections
 			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
 				DROP DATABASE [{DBNAME}] "
@@ -228,13 +267,13 @@ namespace :db do
 		dropSqlText = dropSqlText.gsub(/{DBNAME}/, database_name)
 		execute_sql full_instance, dropSqlText, "Drop seed database"
 
-		# Use the create database in the ShipWorks project, to guarantee it is the same as the one used 
+		# Use the create database in the ShipWorks project, to guarantee it is the same as the one used
 		# by the ShipWorks application
 		sqlText = File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateDatabase.sql")
 			.gsub(/{DBNAME}/, database_name)
 			.gsub(/{FILEPATH}/, file_path)
 			.gsub(/{FILENAME}/, database_name)
-		
+
 		execute_sql full_instance, sqlText, "Create seed database"
 	end
 
@@ -250,13 +289,13 @@ namespace :db do
 		USE #{database_name}
 		GO
 		"
-		
+
 		sqlText.concat(File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateSchema.sql"))
 
 		sqlText.concat("
-		        CREATE PROCEDURE [dbo].[GetSchemaVersion] 
-                
-                AS 
+		        CREATE PROCEDURE [dbo].[GetSchemaVersion]
+
+                AS
                 SELECT '#{schema_version}' AS 'SchemaVersion'
 				GO
 		")
@@ -268,33 +307,33 @@ namespace :db do
 	task :seed, [:instance, :targetDatabase] do |t, args|
 		full_instance = get_instance_from_arguments args
 		database_name = get_database_name_from_arguments args
-		
-		# We're going to write the static seed data to a temporary file, so we can tell prefix the script 
+
+		# We're going to write the static seed data to a temporary file, so we can tell prefix the script
 		# to use our seed database
 		sqlText = "
 		USE {DBNAME}
 		GO
 		"
 		sqlText = sqlText.sub(/{DBNAME}/, database_name)
-		
+
 		# Concatenate the script containing our seed data to the string
 		sqlText.concat(File.read("./SeedData.sql"))
 
 		execute_sql full_instance, sqlText, "Seed data"
 	end
-	
+
 	desc "Switch the ShipWorks settings to point to a given database"
 	task :switch, [:instance, :targetDatabase] do |t, args|
 		full_instance = get_instance_from_arguments args
 		database_name = get_database_name_from_arguments args
-		
+
 		guid = shipworks_instance_guid
 
 		if guid != ""
 			puts "Found an instance GUID: #{guid}"
 			fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\#{guid}\\Settings\\sqlsession.xml"
-			
-			puts "Updating SQL session file..."	
+
+			puts "Updating SQL session file..."
 			modify_xml fileName do |xml|
 				# Get the connection string we'll be using from the test config file
 				xml.xpath("//SqlSession/Server/Instance")[0].content = full_instance[:server]
@@ -304,7 +343,7 @@ namespace :db do
 			end
 		end
 	end
-	
+
 	desc "Deploy assemblies to the given database"
 	task :deploy do |t, args|
 		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:redeployassemblies"
@@ -316,41 +355,58 @@ namespace :db do
 		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:regenerateallfilters"
 		sh command
 	end
+
+	desc "Show database information"
+	task :show do |t, args|
+		guid = shipworks_instance_guid
+
+		if guid != ""
+			puts "Found an instance GUID: #{guid}"
+			fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\#{guid}\\Settings\\sqlsession.xml"
+
+			puts "Updating SQL session file..."
+			modify_xml fileName do |xml|
+				# Get the connection string we'll be using from the test config file
+				puts "server:   " + xml.xpath("//SqlSession/Server/Instance")[0].content
+				puts "database: " + xml.xpath("//SqlSession/Server/Database")[0].content
+			end
+		end
+	end
 end
 
 namespace :setup do
 
 	desc "Creates ShipWorks entry in the registry based on the path to the ShipWorks.exe provided"
 	task :registry, :instancePath do |t, args|
-	
+
 		instanceGuid = shipworks_instance_guid
 		puts instanceGuid
-		
-		if (instanceGuid == nil || instanceGuid == "")			
-			# No instance GUID was found in the registry, so we need to create an entry for this path provided			
+
+		if (instanceGuid == nil || instanceGuid == "")
+			# No instance GUID was found in the registry, so we need to create an entry for this path provided
 			instanceGuid = SecureRandom.uuid
 			puts instanceGuid
-			
-			if args != nil and args[:instancePath] != nil and args[:instancePath] != ""			
+
+			if args != nil and args[:instancePath] != nil and args[:instancePath] != ""
 				# Create the ShipWorks instance value based on the registryKey name provided
-				keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
+				keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"
 				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
 					reg[args.instancePath] = '{' + instanceGuid + '}'
 				end
-			end		
+			end
 		end
 	end
-	
+
 	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"
 	task :sqlSession, :instancePath, :targetDatabase do |t, args|
 		puts "In sqlSession task"
-		
+
 		instanceGuid = shipworks_instance_guid(args.instancePath)
 		puts "Instance GUID is " + instanceGuid
-				
+
 		instanceName = "(local)\\Development"
 		if args[:instanceName] != nil and args[:instanceName] != ""
-			# Default the instance name to run on the local machine's Development instance if 
+			# Default the instance name to run on the local machine's Development instance if
 			# none is provided
 			instanceName = args[:instanceName]
 			puts "Changed instance name to " + instanceName
@@ -369,17 +425,17 @@ namespace :setup do
     <WindowsAuth>True</WindowsAuth>
   </Credentials>
 </SqlSession>"
-		
+
 		boilerPlateXml = boilerPlateXml.gsub(/<Instance>@@INSTANCE_NAME@@<\/Instance>/, '<Instance>' + instanceName + '</Instance>')
 		boilerPlateXml = boilerPlateXml.gsub(/<Database>@@DATABASE_NAME@@<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
-		
+
 		puts "Creating ProgramData directories for " + instanceGuid
 		# Make sure the directories are created before writing to the sqlsession file
 		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid) if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid)
 		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings") if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings")
-		
+
 		# Create/write the SQL Session file
-		fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings\\sqlsession.xml"	
+		fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings\\sqlsession.xml"
 		sessionFile = File.new(fileName, 'w')
 		sessionFile.puts(boilerPlateXml)
 		sessionFile.close
@@ -389,17 +445,14 @@ end
 namespace :launch do
 	desc "Launches Shipworks"
 
-	task :shipworks do 
-		puts "Building Shipworks in debug mode...\r\n\r\n"
-		Rake::Task['build:debug'].execute
-
+	task :shipworks => "build:debug" do
 		puts "Launching Shipworks...\r\n\r\n"
 		command = "start .\\Artifacts\\Application\\ShipWorks.exe"
 		sh command
 	end
 end
 
-private 
+private
 
 def modify_xml(file)
 	destination_xml = File.open file do |f|
@@ -407,7 +460,7 @@ def modify_xml(file)
 	end
 
 	yield destination_xml
-	
+
 	File.open file, "w" do |f|
 		f << destination_xml.to_s
 	end
@@ -424,7 +477,7 @@ def shipworks_instance_guid(instancePath = "")
 	# Assume we're in the directory containing the ShipWorks solution - we need to get
 	# the registry key name based on the directory to the ShipWorks.exe to figure out
 	# which GUID to use in our path to the SQL session file.
-	
+
 	# Use the instancePath for cases where we need to find the GUID for a specific directory
 	# (such as when configuring the SQL Session file during setup)
 	app_directory = instancePath
@@ -432,12 +485,12 @@ def shipworks_instance_guid(instancePath = "")
 		# No path was provided, so use the current directory
 		app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
 	end
-	
+
 	puts "Checking for instance GUID for " + app_directory
-	
-	# Read the GUID from the registry, so we know which directory to look in; pass in 
-	# 0x100 to read from 64-bit registry otherwise the key will not be found			
-	keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+
+	# Read the GUID from the registry, so we know which directory to look in; pass in
+	# 0x100 to read from 64-bit registry otherwise the key will not be found
+	keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"
 	Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
 		begin
 			reg[app_directory]
@@ -458,7 +511,7 @@ end
 
 def get_instance_from_arguments(args)
 	host_and_instance_name = nil_if_empty(args[:instance]) ||  HOST_AND_INSTANCE_NAME
-	
+
 	pieces = host_and_instance_name.split "\\"
 	server = host = pieces[0]
 	instance = pieces[1]
@@ -472,7 +525,7 @@ end
 def get_database_name_from_arguments(args)
 	database_name = nil_if_empty(args[:targetDatabase]) || DATABASE_NAME
 	trace_output "*** Database: #{database_name}"
-	
+
 	database_name
 end
 
@@ -496,7 +549,7 @@ def latest_schema_version
 end
 
 def newest_version(sub_directory, initial_version, version_pattern)
-	Dir.entries("code/ShipWorks/Data/Administration/Scripts/Update/#{sub_directory}")
+	Dir.entries("code/ShipWorks.Res/Data/Administration/Scripts/Update/#{sub_directory}")
 		.map { |item| version_array item, version_pattern }
 		.inject(initial_version) { |latest, version| (version <=> latest) == 1 ? version : latest }
 		.join "."
@@ -530,10 +583,10 @@ def execute_sql(full_instance, sql, info)
 
 	path = "./#{name}.sql"
 	delete_if_exists path
-	
+
 	File.open(path, "w") {|file| file.puts sql}
-	
-	# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+
+	# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the
 	# exit code and $?.success which is checked later
 	command = "sqlcmd -S #{full_instance[:server]} -i #{path} -b"
 	system(command)
@@ -549,16 +602,16 @@ def DeleteOldTestRuns(testType)
 	Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 	delete_if_exists "TestResults/#{testType}-results.trx"
 	delete_if_exists "TestResults/#{testType}.xml"
-		
+
 	# Delete previous test result directories to keep disk space under control otherwise
-	# there could be GBs of test result files hanging around since each test run contains 
-	# the ShipWorks binaries (this results in 100+ MB of space being # reclaimed for each 
+	# there could be GBs of test result files hanging around since each test run contains
+	# the ShipWorks binaries (this results in 100+ MB of space being # reclaimed for each
 	# test run that gets deleted)
 	print "Deleting test results older than 4 days...\r\n"
 	deletedCount = 0
 	Dir["TestResults/*/"].map do |d|
 		if (File.stat(d).mtime < (DateTime.now - 4).to_time)
-			puts "Deleting " + d + "\r\n" 
+			puts "Deleting " + d + "\r\n"
 			FileUtils.rm_r d
 			deletedCount = deletedCount + 1
 		end

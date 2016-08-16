@@ -11,7 +11,7 @@ using ShipWorks.Shipping.Editing.Rating;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A UserControl that allows a customer to convert an existing USPS account to an Intuiship
+    /// A UserControl that allows a customer to convert an existing USPS account to an Express1
     /// USPS account via the Stamps.com API.
     /// </summary>
     public partial class UspsConvertAccountToExpeditedControl : UserControl
@@ -77,12 +77,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     AccountConverting(this, EventArgs.Empty);
                 }
 
-                // Convert the account with the USPS API and update the account entity's 
-                // contract type to reflect the conversion, so the Activate discount dialog is 
+                // Convert the account with the USPS API and update the account entity's
+                // contract type to reflect the conversion, so the Activate discount dialog is
                 // not displayed again
                 ConvertAccountToExpedited();
 
-                // Set the ContractType to Unknown so that we rely on USPS to correctly tell us 
+                // Set the ContractType to Unknown so that we rely on USPS to correctly tell us
                 // the contract type the next time we get rates or process.
                 accountToConvert.ContractType = (int)UspsAccountContractType.Unknown;
 
@@ -118,16 +118,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Need to convert the account to get discounted rates via the expedited contract/plan
                 log.InfoFormat("Converting USPS account ({0}) to get discounted postage.", accountToConvert.Username);
 
-                // ShipWorks3 must be used when converting an account, so always use the Intuiship promotion when converting an account. 
-                IRegistrationPromotion promotion = new UspsIntuishipRegistrationPromotion();
-                new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
+                // ShipWorks667 must be used when converting an account, so always use the Express1 promotion when converting an account.
+                IRegistrationPromotion promotion = new Express1RegistrationPromotion();
+                new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode());
             }
             catch (UspsApiException exception)
             {
                 if (exception.Code == 0x005f0302)
                 {
                     // The account is already converted, so there's nothing to do here
-                    log.WarnFormat("The USPS account ({0}) has already been converted.", accountToConvert.Username);                    
+                    log.WarnFormat("The USPS account ({0}) has already been converted.", accountToConvert.Username);
                 }
                 else
                 {
@@ -145,9 +145,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnLearnMore(object sender, LinkLabelLinkClickedEventArgs e)
         {
             MessageHelper.ShowInformation(this,
-                                          "With IntuiShip you get some of the best postal rates available, saving you significant money on each of your domestic and " +
-                                          "international Priority and Express shipments." + Environment.NewLine + Environment.NewLine + "Just add these rates to your " +
-                                          "USPS account and ShipWorks will automatically utilize it for discounted rates from IntuiShip when creating postage labels." +
+                                          "With ShipWorks you get some of the best postal rates available, saving you significant money on each of your domestic and " + 
+                                          "international Priority and Express shipments." + Environment.NewLine + Environment.NewLine + "Simply create a USPS account " + 
+                                          "in ShipWorks and you will have access to discounted rates when creating postage labels." +
                                           Environment.NewLine + Environment.NewLine + "For more information, please contact us at www.interapptive.com/company/contact.html.");
         }
     }

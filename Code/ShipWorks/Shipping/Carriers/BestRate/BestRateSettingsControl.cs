@@ -11,15 +11,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public partial class BestRateSettingsControl : SettingsControlBase
     {
-        private static readonly List<ShipmentTypeCode> nonCarrierShipmentTypes = new List<ShipmentTypeCode>
+        private static readonly List<ShipmentTypeCode> ExcludedShipmentTypes = new List<ShipmentTypeCode>
         {
             ShipmentTypeCode.None,
             ShipmentTypeCode.BestRate,
             ShipmentTypeCode.Other,
             ShipmentTypeCode.PostalWebTools,
-            ShipmentTypeCode.Endicia,
             ShipmentTypeCode.Express1Endicia,
-            ShipmentTypeCode.Express1Usps
+            ShipmentTypeCode.Express1Usps,
+            ShipmentTypeCode.UpsOnLineTools,
+            ShipmentTypeCode.UpsWorldShip,
+            ShipmentTypeCode.Amazon,
+            ShipmentTypeCode.iParcel
         };
 
         private bool isDirty;
@@ -67,10 +70,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Include previously excluded types to handle a situation where the type was excluded from best rates then hidden globally
             // Include non carrier shipment types (other, none, etc.), since we never want to do anything with those
             // Finally, remove explicitly included shipment types to remove previously excluded types that are now shown globally
-            settings.BestRateExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode)
+            settings.BestRateExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => x.ShipmentTypeCode)
                 .Union(settings.BestRateExcludedTypes)
-                .Union(nonCarrierShipmentTypes.Cast<int>())
-                .Except(panelProviders.SelectedShipmentTypes.Select(x => (int) x.ShipmentTypeCode))
+                .Union(ExcludedShipmentTypes)
+                .Except(panelProviders.SelectedShipmentTypes.Select(x => x.ShipmentTypeCode))
                 .ToArray();
 
             isDirty = false;
@@ -90,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes
                 .Where(c => !carriersHiddenByShipmentPolicy.Contains(c.ShipmentTypeCode) && IsCarrierShippingType(c)),
-                typeCode => !settings.BestRateExcludedTypes.Contains((int)typeCode));
+                typeCode => !settings.BestRateExcludedTypes.Contains(typeCode));
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipmentType">The shipment type to test</param>
         private static bool IsCarrierShippingType(ShipmentType shipmentType)
         {
-            return !nonCarrierShipmentTypes.Contains(shipmentType.ShipmentTypeCode);
+            return !ExcludedShipmentTypes.Contains(shipmentType.ShipmentTypeCode);
         }
     }
 }

@@ -1,0 +1,28 @@
+﻿<ystorewsResponse>
+  <Version>1.0</Version>
+  <ResponseResourceList>
+    <Catalog>
+      <ItemList>
+        <Item>
+          <ID>hubbabubbagum</ID>
+          <Name>Test Product 3</Name>
+          <Code>
+            <Value>hubbabubba</Value>
+          </Code>
+          <Price>1.75 </Price>
+          <SalePrice>0.10 </SalePrice>
+          <ShipWeight>0.25 </ShipWeight>
+          <Orderable>Yes</Orderable>
+          <Taxable>Yes</Taxable>
+          <GiftCert>No</GiftCert>
+          <Headline>Chewy and flexible - tastes great, less filling.</Headline>
+          <Caption>Yum, this stuff is great!</Caption>
+          <Abstract></Abstract>
+          <Label></Label>
+          <ProductURL></ProductURL>
+          <Condition>New</Condition>
+        </Item>
+      </ItemList>
+    </Catalog>
+  </ResponseResourceList>
+</ystorewsResponse>

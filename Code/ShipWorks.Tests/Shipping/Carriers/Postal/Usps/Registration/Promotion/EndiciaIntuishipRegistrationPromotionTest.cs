@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         [Fact]
-        public void GetPromoCode_ReturnsShipWorks5_WhenRegistrationTypeIsExpedited_Test()
+        public void GetPromoCode_ReturnsShipWorks5_WhenRegistrationTypeIsExpedited()
         {
             string promo = testObject.GetPromoCode();
 

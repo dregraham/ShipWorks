@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -26,24 +24,12 @@ namespace ShipWorks.Stores.Platforms.StageBloc
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.StageBloc;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.StageBloc;
 
         /// <summary>
         /// Log request/responses as StageBloc
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.StageBloc;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.StageBloc;
 
         /// <summary>
         /// Identifies this store type
@@ -77,9 +63,6 @@ namespace ShipWorks.Stores.Platforms.StageBloc
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/support/solutions/articles/4000045732-connecting-stagebloc-with-shipworks"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000045732";
     }
 }

@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -77,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 priorityAlertEnhancementType.ReadMultiValue(v => package.PriorityAlertEnhancementType = (int) v);
 
                 // Slightly backwards logic, but will still work if a new enhancement type is added in a newer version of the API
-                package.PriorityAlert = EnhancementType != FedExPriorityAlertEnhancementType.None;
+                priorityAlertEnhancementType.ReadMultiValue(v => package.PriorityAlert = ((FedExPriorityAlertEnhancementType)v != FedExPriorityAlertEnhancementType.None));
             }
         }
     }

@@ -6,12 +6,15 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
@@ -57,15 +60,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             // Check if Mi is enabled
             bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
 
-            // Check if SurePost is enabled
-            bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
 
-            List<UpsServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType)exclusion).ToList();
+                // Check if SurePost is enabled
+                bool isSurePostAvailable = restrictionLevel == EditionRestrictionLevel.None;
 
-            List<UpsServiceType> upsServices = Enum.GetValues(typeof(UpsServiceType)).Cast<UpsServiceType>()
-                .Where(t => ShowService(t, isMIAvailable, isSurePostAvailable)).ToList();
+                List<UpsServiceType> excludedServices =
+                    shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType) exclusion).ToList();
 
-            servicePicker.Initialize(upsServices, excludedServices);
+                List<UpsServiceType> upsServices = Enum.GetValues(typeof (UpsServiceType)).Cast<UpsServiceType>()
+                    .Where(t => ShowService(t, isMIAvailable, isSurePostAvailable)).ToList();
+
+                servicePicker.Initialize(upsServices, excludedServices);
+            }
         }
 
         /// <summary>
@@ -89,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         }
 
         /// <summary>
-        /// Save the settings 
+        /// Save the settings
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {

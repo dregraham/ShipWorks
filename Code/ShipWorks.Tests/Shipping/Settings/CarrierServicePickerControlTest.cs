@@ -22,13 +22,13 @@ namespace ShipWorks.Tests.Shipping.Settings
         }
 
         [Fact]
-        public void Constructor_ThrowsInvalidOperationException_WhenTypeProvidedIsNotEnum_Test()
+        public void Constructor_ThrowsInvalidOperationException_WhenTypeProvidedIsNotEnum()
         {
             Assert.Throws<InvalidOperationException>(() => new EnumCheckBoxControl<int>());
         }
 
         [Fact]
-        public void Initialize_ExcludesSpecificServicesDefinedInExcludedList_Test()
+        public void Initialize_ExcludesSpecificServicesDefinedInExcludedList()
         {
             testObject.Initialize(fedExServiceTypes, new List<FedExServiceType> { FedExServiceType.FedEx1DayFreight, FedExServiceType.FedEx2DayFreight });
 

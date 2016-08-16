@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
-using System.Net;
 using System.Xml.XPath;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Api;
 using log4net;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
@@ -186,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 AppendAccessRequest(xmlWriter, account, settingsRepository);
             }
-            
+
             // Open
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement(tooInfo.XmlRootNode);
@@ -242,6 +238,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
         /// or
         /// </exception>
+        [NDependIgnoreLongMethod]
         public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType, ICertificateInspector certificateInspector)
         {
             // Close out the XML
@@ -310,8 +307,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         // Extract the error code
                         int errorCode = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorCode", 0);
 
-                        // Extract the offending request XML element that may be the cause 
-                        string errorLocation = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorLocation/ErrorLocationElementName", "");
+                        // Extract the offending request XML element that may be the cause
+                        string errorLocation = XPathUtility.Evaluate(xpath,
+                            "//Response/Error/ErrorLocation/ErrorLocationElementName", "");
 
                         // Extract the error description (may not be there)
                         string errorDescription = XPathUtility.Evaluate(xpath, "//Response/Error/ErrorDescription", "");
@@ -325,7 +323,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         }
                         else if (errorCode == UpsApiConstants.ErrorNoShipmentFoundForVoid)
                         {
-                            throw new UpsApiException(status, errorCode.ToString(), "UPS does not have a record for this shipment, and therefore cannot void the shipment.", errorLocation); 
+                            throw new UpsApiException(status, errorCode.ToString(),
+                                "UPS does not have a record for this shipment, and therefore cannot void the shipment.",
+                                errorLocation);
                         }
                         else
                         {
@@ -336,12 +336,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     return xmlResponse;
                 }
             }
+            catch (XmlException ex)
+            {
+                throw new UpsException("UPS did not provide valid rates for this shipment.", ex);
+            }
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(UpsException));
             }
         }
-        
+
         /// <summary>
         /// Determine the online tool based on the request data
         /// </summary>

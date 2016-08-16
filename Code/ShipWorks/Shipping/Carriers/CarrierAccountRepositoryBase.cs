@@ -1,16 +1,26 @@
 ﻿using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers
 {
     /// <summary>
-    /// An abstract base class that implements the ICarrierAccountRepository interface with common method 
+    /// An abstract base class that implements the ICarrierAccountRepository interface with common method
     /// implementations that could be used by other carrier account repositories.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class CarrierAccountRepositoryBase<T> : ICarrierAccountRepository<T> where T : IEntity2
+    public abstract class CarrierAccountRepositoryBase<T, TInterface> : ICarrierAccountRepository<T, TInterface>
+        where T : TInterface where TInterface : ICarrierAccount
     {
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public abstract void CheckForChangesNeeded();
+
         /// <summary>
         ///  Returns a list of accounts for the carrier.
         ///  </summary>
@@ -25,6 +35,11 @@ namespace ShipWorks.Shipping.Carriers
         ///  Returns the default account as defined by the primary profile
         ///  </summary>
         public abstract T DefaultProfileAccount { get; }
+
+        /// <summary>
+        /// Readonly list of accounts
+        /// </summary>
+        public abstract IEnumerable<TInterface> AccountsReadOnly { get; }
 
         /// <summary>
         /// Saves the specified account.
@@ -56,5 +71,24 @@ namespace ShipWorks.Shipping.Carriers
 
             return account;
         }
+
+        /// <summary>
+        /// Get the primary profile
+        /// </summary>
+        protected ShippingProfileEntity GetPrimaryProfile(ShipmentTypeCode shipmentTypeCode)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ShipmentType shipmentType = lifetimeScope.ResolveKeyed<ShipmentType>(shipmentTypeCode);
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
+                return shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+            }
+        }
+
+        /// <summary>
+        /// Get a readonly account with the given id
+        /// </summary>
+        public abstract TInterface GetAccountReadOnly(long uspsAccountID);
     }
 }

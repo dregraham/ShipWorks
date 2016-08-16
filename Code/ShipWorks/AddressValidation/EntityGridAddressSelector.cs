@@ -9,7 +9,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
-using SpreadsheetGear.Windows.Forms;
 
 namespace ShipWorks.AddressValidation
 {

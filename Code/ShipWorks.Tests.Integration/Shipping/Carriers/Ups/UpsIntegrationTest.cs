@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using Xunit;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 {
@@ -7,7 +7,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
     {
         // [DataSource("DataSource_Ship_UPSRecert")]
         // [DeploymentItem("DataSources\\UPSRecert.xlsx")]
-        
+
         public void Ship_UPSRecert(DataRow row)
         {
             System.Diagnostics.Debug.WriteLine(row["TestID"].ToString());
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
         // [DataSource("DataSource_Ship_UPSRecert_MI")]
         // [DeploymentItem("DataSources\\UPSRecert.xlsx")]
-        
+
         public void Ship_UPSRecert_MI(DataRow row)
         {
             System.Diagnostics.Debug.WriteLine(row["TestID"].ToString());

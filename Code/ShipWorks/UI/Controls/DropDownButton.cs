@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Drawing;
 using System.ComponentModel;
+using Interapptive.Shared;
 using SandContextPopup = Divelements.SandRibbon.ContextPopup;
 
 //Original: http://blogs.msdn.com/jfoscoding/articles/491523.aspx
@@ -459,6 +460,8 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Paint the button.  The heart of the control.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);

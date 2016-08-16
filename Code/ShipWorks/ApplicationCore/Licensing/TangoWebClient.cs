@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml;
-using System.Xml.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Connection;
@@ -23,23 +17,61 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.Services.Protocols;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
     /// <summary>
     /// Interface for working with the interapptive license server
     /// </summary>
+    [NDependIgnoreLongTypesAttribute]
     public static class TangoWebClient
     {
+        private const string ActivationUrl = "https://interapptive.com/ShipWorksNet/ActivationV1.svc";
+
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
 
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
+
+        private static Version version;
+
+        /// <summary>
+        /// Gets the version - If version is under 5.0.0.0, return 5.0.0.0
+        /// </summary>
+        private static string Version
+        {
+            get
+            {
+                if (version == null)
+                {
+                    // Tango requires a specific version in order to know when to return
+                    // legacy responses or new response for the customer license. This is
+                    // primarily for debug/internal versions of ShipWorks that have 0.0.0.x
+                    // version number.
+                    Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                    Version minimumVersion = new Version(5, 0, 0, 0);
+
+                    version = assemblyVersion.Major == 0 ? minimumVersion : assemblyVersion;
+                }
+
+                return version.ToString(4);
+            }
+        }
 
         /// <summary>
         /// Activate the given license key to the specified store identifier
@@ -65,9 +97,55 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
+        /// </summary>
+        internal static AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest request)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "associateshipworkswithitself");
+            postRequest.Variables.Add("customerlicense", request.CustomerKey);
+
+            postRequest.Variables.Add("cc_holder", request.CardHolderName);
+            postRequest.Variables.Add("cc_cardType", ((int) request.CardType).ToString());
+            postRequest.Variables.Add("cc_account_number", request.CardNumber);
+            postRequest.Variables.Add("cc_cvn", request.CardCvn);
+            postRequest.Variables.Add("cc_expiration_month", request.CardExpirationMonth.ToString());
+            postRequest.Variables.Add("cc_expiration_year", request.CardExpirationYear.ToString());
+            postRequest.Variables.Add("cc_billing_street_1", request.CardBillingAddress.Street1);
+            postRequest.Variables.Add("cc_billing_city", request.CardBillingAddress.City);
+            postRequest.Variables.Add("cc_billing_state", request.CardBillingAddress.StateProvCode);
+            postRequest.Variables.Add("cc_billing_zipcode", request.CardBillingAddress.PostalCode.Truncate(5));
+            postRequest.Variables.Add("sendMarketingInfo", "false");
+            postRequest.Variables.Add("version", Version);
+
+            if (request.MatchedPhysicalAddress != null)
+            {
+                Address matchedAddress = request.MatchedPhysicalAddress;
+                postRequest.Variables.Add("pStreet", matchedAddress.Address1);
+                postRequest.Variables.Add("pCity", matchedAddress.City);
+                postRequest.Variables.Add("pState", matchedAddress.State);
+                postRequest.Variables.Add("pZipcode", matchedAddress.ZIPCode);
+                postRequest.Variables.Add("pAddOn", matchedAddress.ZIPCodeAddOn);
+                postRequest.Variables.Add("pDPCode", matchedAddress.DPB);
+                postRequest.Variables.Add("pChkDigit", matchedAddress.CheckDigit);
+                postRequest.Variables.Add("pZipStandard", "zip_standardized");
+            }
+            try
+            {
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "associateshipworkswithitself");
+                return new AssociateShipWorksWithItselfResponse(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                return new AssociateShipWorksWithItselfResponse(AssociateShipWorksWithItselfResponseType.UnknownError, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public static LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
+        public static ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
             ShipWorksLicense license = new ShipWorksLicense(licenseKey);
 
@@ -80,6 +158,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             insureShipAffiliateProvider.Add(store.StoreID, insureShipAffiliate);
 
             return licenseAccountDetail;
+        }
+
+        /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        public static string GetTangoCustomerId()
+        {
+            StoreEntity store = StoreManager.GetEnabledStores().FirstOrDefault() ??
+                                StoreManager.GetAllStores().FirstOrDefault();
+
+            return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
         }
 
         /// <summary>
@@ -139,7 +228,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Logs the nudge option back to Tango to indicate that the option was selected 
+        /// Logs the nudge option back to Tango to indicate that the option was selected
         /// by the user.
         /// </summary>
         public static void LogNudgeOption(NudgeOption option)
@@ -269,7 +358,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCredentialStore.UpsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Stamps", TangoCredentialStore.UspsCertificateVerificationDataKeyName, results);
-            
+
             return results;
         }
 
@@ -336,7 +425,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Process the request
             TrialDetail trialDetail = ProcessTrialRequest(postRequest, store);
 
-            // This will happen when the user changes the identifier of the store, and the identifier they 
+            // This will happen when the user changes the identifier of the store, and the identifier they
             // change to is one that is already used by an existing trial.  We update the store to use
             // the license from the trial of the identifier they changed to.
             if (trialDetail.License.Key != store.License)
@@ -403,7 +492,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Log the given insurance claim to Tango.  
+        /// Log the given insurance claim to Tango.
         /// </summary>
         public static void LogSubmitInsuranceClaim(ShipmentEntity shipment)
         {
@@ -449,10 +538,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             ProcessXmlRequest(postRequest, "SubmitInsuranceClaim");
         }
 
-		/// <summary>
+        /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        public static void LogPostageEvent(LicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        public static void LogPostageEvent(ILicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -460,7 +549,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("purchaseamount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("swtype", ((int) shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "CarrierBalance");
@@ -476,15 +565,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends USPS contract type to Tango.
         /// </summary>
-        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
+        public static void LogStampsAccount(ILicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "logstampsaccount");
             postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
-            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("stampscontracttype", ((int)uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("swtype", ((int) shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("stampscontracttype", ((int) uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
 
@@ -495,7 +584,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new TangoException(errorNode.InnerText);
             }
         }
-		
+
         /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
@@ -503,6 +592,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <returns>OnlineShipmentID from Tango.</returns>
         /// <exception cref="System.ArgumentNullException">store</exception>
         /// <exception cref="TangoException"></exception>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethod]
         public static string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
@@ -547,7 +638,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     tracking = "";
                 }
 
-                List<InsuranceChoice> insuredPackages = 
+                List<IInsuranceChoice> insuredPackages =
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0)
@@ -560,7 +651,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 if (insuredPackages.Count > 0)
                 {
-                    InsuranceChoice insuranceChoice = insuredPackages[0];
+                    IInsuranceChoice insuranceChoice = insuredPackages[0];
 
                     shipWorksInsured = true;
                     pennyOne = insuranceChoice.InsurancePennyOne ?? false;
@@ -598,7 +689,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ? InsuredWith.SuccessfullyInsuredViaApi : InsuredWith.FailedToInsureViaApi;
                     postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
                 }
-                
+
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
                 postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));
@@ -609,13 +700,13 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("email", shipment.ShipEmail);
 
                 // Send best rate usage data to Tango
-                BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes)shipment.BestRateEvents);
+                BestRateEventsDescription bestRateEventsDescription = new BestRateEventsDescription((BestRateEventTypes) shipment.BestRateEvents);
                 postRequest.Variables.Add("bestrateevents", bestRateEventsDescription.ToString());
 
                 ShipmentCommonDetail shipmentDetail = shipmentType.GetShipmentCommonDetail(shipment);
 
                 // Added to prepare for Tango2...
-                postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.OrderID, false).ToString());
+                postRequest.Variables.Add("orderSubTotal", OrderUtility.CalculateTotal(shipment.Order, false).ToString());
                 postRequest.Variables.Add("orderTotal", shipment.Order.OrderTotal.ToString());
                 postRequest.Variables.Add("originAccount", shipmentDetail.OriginAccount);
                 postRequest.Variables.Add("originPostalCode", shipment.OriginPostalCode);
@@ -644,7 +735,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     throw new TangoException(errorNode.InnerText);
                 }
-                
+
                 XmlNode shipmentIDNode = xmlResponse.SelectSingleNode("//OnlineShipmentID");
                 if (shipmentIDNode != null)
                 {
@@ -737,6 +828,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Create a new freemium store in tango
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static void CreateFreemiumStore(StoreEntity store, PersonAdapter accountAddress, EndiciaPaymentInfo paymentInfo, string dazzleAccount, bool validateOnly)
         {
             EbayStoreEntity ebayStore = store as EbayStoreEntity;
@@ -839,12 +931,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Update the license for the store to be what it is in the given account detail
         /// </summary>
-        private static void UpdateLicense(StoreEntity store, LicenseAccountDetail accountDetail)
+        private static void UpdateLicense(StoreEntity store, ILicenseAccountDetail accountDetail)
         {
             bool wasDirty = store.IsDirty;
 
-            store.License = accountDetail.License.Key;
-            store.Edition = EditionSerializer.Serialize(accountDetail.Edition);
+            store.License = accountDetail.Key;
+            store.Edition = accountDetail.Edition.Serialize();
 
             if (!wasDirty)
             {
@@ -981,12 +1073,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             logEntry.LogRequest(postRequest);
 
             // Setup parameters
-            postRequest.RequestSubmitting += delegate(object sender, HttpRequestSubmittingEventArgs e)
+            postRequest.RequestSubmitting += delegate (object sender, HttpRequestSubmittingEventArgs e)
             {
                 e.HttpWebRequest.KeepAlive = false;
 
                 e.HttpWebRequest.UserAgent = "shipworks";
-                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString(4));
+                e.HttpWebRequest.Headers.Add("X-SHIPWORKS-VERSION", Version);
 
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-USER", SecureText.Decrypt("C5NOiKdNaM/324R7sIjFUA==", "interapptive"));
                 e.HttpWebRequest.Headers.Add("X-SHIPWORKS-PASS", SecureText.Decrypt("lavEgsQoKGM=", "interapptive"));
@@ -1026,6 +1118,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static void ValidateSecureConnection(Uri uri)
         {
+#if !DEBUG
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
             request.KeepAlive = false;
             request.UserAgent = "shipworks";
@@ -1034,6 +1127,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 ValidateInterapptiveCertificate(request);
             }
+#endif
         }
 
         /// <summary>
@@ -1041,12 +1135,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         private static void ValidateInterapptiveCertificate(HttpWebRequest httpWebRequest)
         {
+#pragma warning disable 168
+            X509Certificate certificate;
+#pragma warning restore 168
+
+#if !DEBUG
             if (httpWebRequest.ServicePoint == null)
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
 
-            X509Certificate certificate = httpWebRequest.ServicePoint.Certificate;
+            certificate = httpWebRequest.ServicePoint.Certificate;
 
             if (certificate == null)
             {
@@ -1058,6 +1157,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
+#endif
         }
 
 
@@ -1068,6 +1168,200 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             get { return InterapptiveOnly.Registry.GetValue("TangoTestServer", false); }
             set { InterapptiveOnly.Registry.SetValue("TangoTestServer", value); }
+        }
+
+        /// <summary>
+        /// Gets license information for the given email and password
+        /// </summary>
+        public static GenericResult<IActivationResponse> ActivateLicense(string email, string password)
+        {
+            try
+            {
+                Activation.WebServices.Activation activationService = new Activation.WebServices.Activation(new ApiLogEntry(ApiLogSource.ShipWorks, "Activation")) { Url = ActivationUrl };
+                CustomerLicenseInfoV1 customerLicenseInfo = activationService.GetCustomerLicenseInfo(email, password);
+
+                return GenericResult.FromSuccess<IActivationResponse>(new ActivationResponse(customerLicenseInfo));
+            }
+            catch (SoapException ex)
+            {
+                return GenericResult.FromError<IActivationResponse>(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        public static ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license)
+        {
+            XmlDocument xmlResponse = GetLicenseCapabilitiesXmlDocument(license);
+
+            try
+            {
+                return new LicenseCapabilities(xmlResponse);
+            }
+            catch (ShipWorksLicenseException ex)
+            {
+                throw new TangoException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        private static XmlDocument GetLicenseCapabilitiesXmlDocument(ICustomerLicense license)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "login");
+            postRequest.Variables.Add("customerlicense", license.Key);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetLicenseCapabilities");
+
+            return xmlResponse;
+        }
+
+        /// <summary>
+        /// Makes a request to Tango to add a store
+        /// </summary>
+        public static IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            postRequest.Variables.Add("action", "createstore");
+            postRequest.Variables.Add("customerlicense", license.Key);
+            postRequest.Variables.Add("storecode", storeType.TangoCode);
+            postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            postRequest.Variables.Add("version", Version);
+            postRequest.Variables.Add("storeinfo", store.StoreName);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AddStore");
+
+            try
+            {
+                return new AddStoreResponse(xmlResponse);
+            }
+            catch (ShipWorksLicenseException ex)
+            {
+                throw new TangoException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the active stores from Tango
+        /// </summary>
+        public static IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "getactivestores");
+            postRequest.Variables.Add("customerlicense", license.Key);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "GetActiveStores");
+
+            CheckResponseForErrors(xmlResponse);
+            List<ActiveStore> activeStores = new GetActiveStoresResponse(xmlResponse).ActiveStores;
+
+            return activeStores;
+        }
+
+        /// <summary>
+        /// Deletes a store from Tango
+        /// </summary>
+        public static void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "deletestore");
+            postRequest.Variables.Add("customerlicense", customerLicense.Key);
+            postRequest.Variables.Add("storelicensekey[]", storeLicenseKey);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStore");
+
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                // Tango returned an error while deleting the store
+                // at this point the store has been removed from
+                // the shipworks database, log the error and move on
+                log.Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a stores from Tango
+        /// </summary>
+        public static void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys)
+        {
+            string licenseKeyParam = string.Join(",", storeLicenseKeys);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "deletestore");
+            postRequest.Variables.Add("customerlicense", customerLicense.Key);
+            postRequest.Variables.Add("storelicensekey[]", licenseKeyParam);
+            postRequest.Variables.Add("version", Version);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "DeleteStores");
+
+            try
+            {
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                // Tango returned an error while deleting the store
+                // at this point the store has been removed from
+                // the shipworks database, log the error and move on
+                log.Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Associates a free Stamps.com account with a customer license.
+        /// </summary>
+        public static void AssociateStampsUsernameWithLicense(string licenseKey, string stampsUsername, string stampsPassword)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "associateexistingstampswithshipworks");
+            postRequest.Variables.Add("customerlicense", licenseKey);
+            postRequest.Variables.Add("version", Version);
+            postRequest.Variables.Add("stampsusername", stampsUsername);
+            postRequest.Variables.Add("stampspassword", stampsPassword);
+
+            try
+            {
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AssociateStampsUsernameWithLicense");
+
+                CheckResponseForErrors(xmlResponse);
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Checks the response for errors.
+        /// </summary>
+        private static void CheckResponseForErrors(XmlDocument xmlResponse)
+        {
+            XPathNamespaceNavigator navigator = new XPathNamespaceNavigator(xmlResponse);
+
+            string error = XPathUtility.Evaluate(navigator, "//Error", string.Empty);
+
+            if (!error.Equals(string.Empty))
+            {
+                throw new TangoException(error);
+            }
         }
     }
 }

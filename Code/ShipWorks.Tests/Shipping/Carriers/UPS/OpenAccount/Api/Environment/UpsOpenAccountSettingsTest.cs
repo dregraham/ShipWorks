@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
         }
 
         [Fact]
-        public void EndpointUrl_ReturnsTestingUrl_WhenUsingTestServer_Test()
+        public void EndpointUrl_ReturnsTestingUrl_WhenUsingTestServer()
         {
             // We've setup the repository in the initialize method to indicate we should use the 
             // test server, so there's no additional setup needed
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
         }
 
         [Fact]
-        public void EndpointUrl_ReturnsProductionUrl_WhenNotUsingTestServer_Test()
+        public void EndpointUrl_ReturnsProductionUrl_WhenNotUsingTestServer()
         {
             // setup the repository to indicate we should be using the production server
             settingsRepository.Setup(r => r.UseTestServer).Returns(false);

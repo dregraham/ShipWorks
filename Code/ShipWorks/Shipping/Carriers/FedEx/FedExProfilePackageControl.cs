@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -9,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// User control for editing the package properties of a fedex shipment
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExProfilePackageControl : ShippingProfileControlCore
     {
         private FedExProfilePackageEntity package;

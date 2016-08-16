@@ -1,10 +1,9 @@
-﻿using System;
+﻿using ShipWorks.Tests.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Xunit;
-using ShipWorks.Shipping;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Core
@@ -19,9 +18,9 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
-        public void Verify_EnumObfuscation_IsSet_Test()
+        public void Verify_EnumObfuscation_IsSet()
         {
-            IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("ShipWorks")).OrderBy(a => a.FullName);
+            IEnumerable<Assembly> assemblies = AssemblyProvider.GetAssemblies();
             IEnumerable<Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
                 .Where(t => t.Namespace != null &&
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Core
                         var memberInfos = type.GetMember(enumValueName);
 
                         var descriptionAttributes = memberInfos[0].GetCustomAttributes(typeof(System.ComponentModel.DescriptionAttribute), false);
-                        
+
                         if (!descriptionAttributes.Any())
                         {
                             missingObfuscationAttribute += string.Format("{0}.{1} is missing the DescriptionAttribute.{2}", type.FullName, enumValueName, Environment.NewLine);
@@ -78,7 +77,8 @@ namespace ShipWorks.Tests.Core
                 "ChannelAdvisor.WebServices".ToUpperInvariant(),
                 "MarketplaceAdvisor.WebServices".ToUpperInvariant(),
                 "PayPal.WebServices".ToUpperInvariant(),
-                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant()
+                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant(),
+                "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant()
             };
 
         /// <summary>
@@ -126,6 +126,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.ApplicationCore.Interaction.StartupAction".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Licensing.Decoding.LicenseKeyPatternType".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Licensing.LicenseActivationState".ToUpperInvariant(),
+                "ShipWorks.ApplicationCore.Licensing.LogOnRestrictionLevel".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.ApiLogCategory".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.ApiLogEncryption".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Logging.LogActionType".ToUpperInvariant(),
@@ -140,17 +141,6 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Data.Administration.SqlDatabaseStatus".ToUpperInvariant(),
                 "ShipWorks.Data.Administration.SqlServerSetup.SqlServerInstallerPurpose".ToUpperInvariant(),
                 "ShipWorks.Data.Administration.SqlServerSetup.WindowsInstallerInstaller+InstallerPlatformTarget".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Configuration.ConfigurationMigrationAction".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Configuration.ConfigurationMigrationSource".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Configuration.ShipWorks2xApplicationDataSourceType".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.MigrationState".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.MigrationRowKeyType".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.MigrationTaskExecutionPhase".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.MigrationTaskInstancing".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.MigrationTaskRunPattern".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.MigrationTaskTypeCode".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.Post2xMigrationStep".ToUpperInvariant(),
-                "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized.UpsNotificationUpgradeMigrationTask+NotificationTarget".ToUpperInvariant(),
                 "ShipWorks.Data.Connection.ConnectionMonitorStatus".ToUpperInvariant(),
                 "ShipWorks.Data.Connection.ReconnectResult".ToUpperInvariant(),
                 "ShipWorks.Data.Connection.SqlSessionPermissionSet".ToUpperInvariant(),
@@ -244,6 +234,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Templates.Saving.SavePromptWhen".ToUpperInvariant(),
                 "ShipWorks.Templates.Tokens.TokenSelectionMode".ToUpperInvariant(),
                 "ShipWorks.Templates.Tokens.TokenUsage".ToUpperInvariant(),
+                "ShipWorks.UI.AttachedProperties.LimitScrollSizeMode".ToUpperInvariant(),
                 "ShipWorks.UI.Controls.Colors.ColorChooser+ChangeStyle".ToUpperInvariant(),
                 "ShipWorks.UI.Controls.Colors.ColorWheel+MouseState".ToUpperInvariant(),
                 "ShipWorks.UI.Controls.Html.Core.HtmlApi+CARET_DIRECTION".ToUpperInvariant(),
@@ -273,10 +264,12 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.UI.PopupSizerLocation".ToUpperInvariant(),
                 "ShipWorks.UI.PopupSizerStyle".ToUpperInvariant(),
                 "ShipWorks.UI.Wizard.WizardStepReason".ToUpperInvariant(),
+                "ShipWorks.Shipping.ShipmentStatus".ToUpperInvariant(),
                 "ShipWorks.Users.Audit.AuditBehaviorUser".ToUpperInvariant(),
                 "ShipWorks.Users.Audit.AuditChangeGroup".ToUpperInvariant(),
                 "ShipWorks.Users.Security.PermissionScope".ToUpperInvariant(),
                 "ShipWorks.Users.Security.StorePermissionCoverage".ToUpperInvariant(),
+                "ShipWorks.Users.UserServiceLogonResultType".ToUpperInvariant(),
                 "ShipWorks.Users.UserSettingsDlg+Section".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterState".ToUpperInvariant(),
             };

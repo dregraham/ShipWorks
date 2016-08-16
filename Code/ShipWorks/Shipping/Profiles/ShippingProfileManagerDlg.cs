@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using Divelements.SandGrid;
-using ShipWorks.Data.Connection;
-using Divelements.SandGrid.Specialized;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -52,9 +48,11 @@ namespace ShipWorks.Shipping.Profiles
         /// </summary>
         private void LoadShipmentTypeMenuList()
         {
+            List<EnumEntry<ShipmentTypeCode>> shipmentTypes = EnumHelper.GetEnumList<ShipmentTypeCode>(x => true).ToList();
+
             foreach (ShipmentType shipmentType in GetEnabledShipmentTypes())
             {
-                menuList.Items.Add(new EnumEntry<ShipmentTypeCode>(shipmentType.ShipmentTypeCode));
+                menuList.Items.Add(shipmentTypes.First(x => x.Value == shipmentType.ShipmentTypeCode));
             }
 
             if (menuList.Items.Count > 0)
@@ -107,11 +105,11 @@ namespace ShipWorks.Shipping.Profiles
             {
                 if (profile.ShipmentType == (int) shipmentTypeCode)
                 {
-                    GridRow row = new GridRow(new GridCell[] 
-                    { 
+                    GridRow row = new GridRow(new GridCell[]
+                    {
                         new GridCell(profile.Name),
                         new GridCell((profile.ShipmentType == (int) ShipmentTypeCode.None)
-                            ? "Any" 
+                            ? "Any"
                             : ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType).ShipmentTypeName)
                     });
 
@@ -178,12 +176,7 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileEntity profile = (ShippingProfileEntity) sandGrid.SelectedElements[0].Tag;
             initialProfileID = profile.ShippingProfileID;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
-            {
-                dlg.ShowDialog(this);
-
-                LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
-            }
+            EditProfile(profile);
         }
 
         /// <summary>
@@ -204,14 +197,9 @@ namespace ShipWorks.Shipping.Profiles
             profile.ShipmentType = (int) SelectedShipmentType;
             profile.ShipmentTypePrimary = false;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
+            if (EditProfile(profile))
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    initialProfileID = profile.ShippingProfileID;
-
-                    LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
-                }
+                initialProfileID = profile.ShippingProfileID;
             }
         }
 
@@ -227,7 +215,7 @@ namespace ShipWorks.Shipping.Profiles
             string question = string.Format("Delete the profile '{0}'?", profile.Name);
 
             // Profiles can be referenced by shipping rules
-            using (DeleteObjectReferenceDlg dlg = new DeleteObjectReferenceDlg(question, new List<long> { profile.ShippingProfileID } ))
+            using (DeleteObjectReferenceDlg dlg = new DeleteObjectReferenceDlg(question, new List<long> { profile.ShippingProfileID }))
             {
                 if (dlg.ShowDialog(this) == DialogResult.Cancel)
                 {
@@ -242,6 +230,27 @@ namespace ShipWorks.Shipping.Profiles
 
             ShippingProfileManager.CheckForChangesNeeded();
             LoadProfiles();
+        }
+
+        /// <summary>
+        /// Edit the specified profile
+        /// </summary>
+        private bool EditProfile(ShippingProfileEntity profile)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), profile)
+                );
+
+                if (profileEditor.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }

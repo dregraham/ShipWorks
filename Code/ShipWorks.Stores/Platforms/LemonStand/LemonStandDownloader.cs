@@ -5,6 +5,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Quartz.Util;
@@ -13,6 +14,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -24,6 +26,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private const int itemsPerPage = 50;
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
+
+        LemonStandStatusCodeProvider statusProvider;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
@@ -42,20 +46,37 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
-        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
-            : base(store, new LemonStandStoreType(store))
+        /// <param name="storeType">The storetype, used for tests</param>
+        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter, StoreType storeType)
+            : base(store, storeType)
         {
             client = webClient;
             this.sqlAdapter = sqlAdapter;
         }
 
         /// <summary>
-        ///     Download orders from LemonStand
+        ///     Initializes a new instance of the <see cref="LemonStandDownloader" /> class.
         /// </summary>
-        /// <exception cref="DownloadException">
-        /// </exception>
-        protected override void Download()
+        /// <param name="store">The store.</param>
+        /// <param name="webClient">The web client.</param>
+        /// <param name="sqlAdapter">The SQL adapter.</param>
+        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
+            : base(store, (LemonStandStoreType) StoreTypeManager.GetType(store))
         {
+            client = webClient;
+            this.sqlAdapter = sqlAdapter;
+        }
+
+        /// <summary>
+        /// Download orders from LemonStand
+        /// </summary>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        /// <exception cref="DownloadException"></exception>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        {
+            UpdateOrderStatuses();
+
             Progress.Detail = "Downloading new orders...";
 
             try
@@ -78,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         return;
                     }
 
-                    // Get orders from LemonStand 
+                    // Get orders from LemonStand
                     JToken result = client.GetOrders(currentPage, start);
 
                     // Get JSON result objects into a list
@@ -95,20 +116,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 int expectedCount = jsonOrders.Count;
 
-                // Load orders 
-                foreach (JToken jsonOrder in jsonOrders)
+                if (ProcessOrders(jsonOrders, expectedCount))
                 {
-                    // check for cancellation
-                    if (Progress.IsCancelRequested)
-                    {
-                        return;
-                    }
-
-                    // Set the progress detail
-                    Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
-                    Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
-
-                    LoadOrder(jsonOrder);
+                    return;
                 }
 
                 Progress.Detail = "Done";
@@ -122,6 +132,26 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        private bool ProcessOrders(List<JToken> jsonOrders, int expectedCount)
+        {
+            // Load orders
+            foreach (JToken jsonOrder in jsonOrders)
+            {
+                // check for cancellation
+                if (Progress.IsCancelRequested)
+                {
+                    return true;
+                }
+
+                // Set the progress detail
+                Progress.Detail = "Processing order " + (QuantitySaved + 1) + " of " + expectedCount + "...";
+                Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+
+                LoadOrder(jsonOrder);
+            }
+            return false;
         }
 
         /// <summary>
@@ -144,18 +174,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             //                              order
             //                          /     |      \
-            //                    invoices  customer  items 
+            //                    invoices  customer  items
             //                      /         |          \
-            //                shipment  billing_address  product 
+            //                shipment  billing_address  product
             //                  /
             //          shipment_address
 
             try
             {
-                if (jsonOrder == null)
-                {
-                    throw new ArgumentNullException(nameof(jsonOrder));
-                }
+                MethodConditions.EnsureArgumentIsNotNull(jsonOrder, nameof(jsonOrder));
 
                 //Deserialize Json Order into order DTO
                 LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());
@@ -166,6 +193,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
                 order.LemonStandOrderID = lsOrder.ID;
                 order.OnlineStatus = lsOrder.Status;
+                order.OnlineStatusCode = lsOrder.ShopOrderStatusID;
 
                 // Only load new orders
                 if (order.IsNew)
@@ -345,6 +373,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             shipAdapter.FirstName = shipAddress.FirstName;
             shipAdapter.LastName = shipAddress.LastName;
             shipAdapter.Street1 = shipAddress.StreetAddress;
+            shipAdapter.Street2 = shipAddress.StreetAddress2;
             shipAdapter.City = shipAddress.City;
             shipAdapter.StateProvCode = Geography.GetStateProvCode(shipAddress.State);
             shipAdapter.PostalCode = shipAddress.PostalCode;
@@ -355,6 +384,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             billAdapter.FirstName = billAddress.FirstName;
             billAdapter.LastName = billAddress.LastName;
             billAdapter.Street1 = billAddress.StreetAddress;
+            billAdapter.Street2 = billAddress.StreetAddress2;
             billAdapter.City = billAddress.City;
             billAdapter.StateProvCode = Geography.GetStateProvCode(billAddress.State);
             billAdapter.PostalCode = billAddress.PostalCode;
@@ -389,7 +419,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 {
                     // Item is not in the cache, so get the information from LemonStand
                     product = GetProductFromLemonStand(productID);
-                    
+
                     // Since it was not in the cache, let's add it
                     storeProductCache[int.Parse(productID)] = product;
                 }
@@ -469,6 +499,18 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             }
 
             return product;
+        }
+
+        /// <summary>
+        /// Update the local order status provider
+        /// </summary>
+        private void UpdateOrderStatuses()
+        {
+            Progress.Detail = "Updating status codes...";
+
+            // refresh the status codes from LemonStand
+            statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)Store);
+            statusProvider.UpdateFromOnlineStore();
         }
     }
 }

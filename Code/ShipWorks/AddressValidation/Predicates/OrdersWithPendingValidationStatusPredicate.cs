@@ -1,4 +1,5 @@
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.AddressValidation.Predicates
@@ -19,12 +20,6 @@ namespace ShipWorks.AddressValidation.Predicates
         /// <summary>
         /// Maximum rows that this predicate should return; 0 returns all rows
         /// </summary>
-        public int MaximumRows
-        {
-            get
-            {
-                return 50;
-            }
-        }
+        public int MaximumRows => AddressValidationQueue.GetBatchSize();
     }
 }

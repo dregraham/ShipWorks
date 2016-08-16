@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.XPath;
 using System.Xml;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Users;
@@ -50,6 +51,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Create the outline for the legacy "Reference" element
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static ElementOutline CreateLegacy2xReferenceOutline(TemplateTranslationContext context)
         {
             ElementOutline outline = new ElementOutline(context);

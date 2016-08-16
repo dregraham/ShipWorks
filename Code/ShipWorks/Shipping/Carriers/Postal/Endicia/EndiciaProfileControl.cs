@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -64,9 +67,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (IsScanBasedReturnsEnabled())
             {
-                AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);    
+                AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);
             }
-            
+
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);
             AddValueMapping(profile.Postal, PostalProfileFields.EntryFacility, stateEntryFacility, entryFacility, labelEntryFacility);
 
@@ -95,11 +98,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Determines if endicia scan-based returns are enabled.
+        /// Determines if Endicia scan-based returns are enabled.
         /// </summary>
         private static bool IsScanBasedReturnsEnabled()
         {
-            return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
+
+                return restrictionLevel == EditionRestrictionLevel.None;
+            }
         }
     }
 }

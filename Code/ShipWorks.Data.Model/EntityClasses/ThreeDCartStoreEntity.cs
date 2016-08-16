@@ -488,6 +488,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RestUser", fieldHashtable);
 		}
 		#endregion
 
@@ -614,6 +617,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
 			set	{ SetValue((int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, value); }
+		}
+
+		/// <summary> The RestUser property of the Entity ThreeDCartStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ThreeDCartStore"."RestUser"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean RestUser
+		{
+			get { return (System.Boolean)GetValue((int)ThreeDCartStoreFieldIndex.RestUser, true); }
+			set	{ SetValue((int)ThreeDCartStoreFieldIndex.RestUser, value); }
 		}
 
 

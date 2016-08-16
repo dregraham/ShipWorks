@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_UsesRawResponse_FromRequest_Test()
+        public void Process_UsesRawResponse_FromRequest()
         {
             testObject.Process();
 
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
+        public void Process_LogsMessage_WhenStatusCodeIsNotRecognized()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
+        public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
+        public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        public void Process_SuccessfulResponse_Test()
+        public void Process_SuccessfulResponse()
         {
             // Response code of 204 is success
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.NoContent);

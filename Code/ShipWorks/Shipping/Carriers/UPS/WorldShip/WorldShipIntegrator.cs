@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Text.Ini;
 using Interapptive.Shared.UI;
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// - Checks WorldShip ini files and adds settings for DSN and dat files.  Does not modify if settings have values.
         /// </summary>
         /// <exception cref="WorldShipIntegratorException" />
+        [NDependIgnoreLongMethod]
         public static bool IntegrateWithWorldShip(IWin32Window owner)
         {
             // Check to see if there are any WorldShipShipment entries in the db.

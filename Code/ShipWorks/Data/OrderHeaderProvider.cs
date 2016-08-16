@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
 using System.Threading;
-using ShipWorks.Data.Caching;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Caching;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data
 {
@@ -115,8 +112,8 @@ namespace ShipWorks.Data
                 return header;
             }
 
-            // Even if it was loading before when we waited, it could be that this OrderID came in so recently in a race condition such that 
-            // it wasn't picked up by the previous load attempt.  Kick off another load attempt that will get the very latest, and we know 
+            // Even if it was loading before when we waited, it could be that this OrderID came in so recently in a race condition such that
+            // it wasn't picked up by the previous load attempt.  Kick off another load attempt that will get the very latest, and we know
             // if it exists we'd get it this time.
             InitiateHeaderLoading();
 
@@ -128,7 +125,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Returns the header that is curretnly cached if any, or null if its not
+        /// Returns the header that is currently cached if any, or null if its not
         /// </summary>
         private OrderHeader GetHeaderFromCache(long orderID)
         {
@@ -152,7 +149,7 @@ namespace ShipWorks.Data
                     return;
                 }
 
-                // Kick off the async loading.  If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                // Kick off the async loading.  If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it.
                 // We only may not if we are running in the background.
                 if (!ApplicationBusyManager.TryOperationStarting("loading data", out busyToken))
                 {
@@ -172,21 +169,21 @@ namespace ShipWorks.Data
         {
             List<OrderHeader> newHeaders = new List<OrderHeader>();
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            ResultsetFields resultFields = new ResultsetFields(3);
+            resultFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
+            resultFields.DefineField(OrderFields.StoreID, 1, "StoreID", "");
+            resultFields.DefineField(OrderFields.IsManual, 2, "IsManual", "");
+
+            RelationPredicateBucket bucket = null;
+
+            if (lastOrderID > 0)
             {
-                ResultsetFields resultFields = new ResultsetFields(3);
-                resultFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
-                resultFields.DefineField(OrderFields.StoreID, 1, "StoreID", "");
-                resultFields.DefineField(OrderFields.IsManual, 2, "IsManual", "");
+                bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
+            }
 
-                RelationPredicateBucket bucket = null;
-
-                if (lastOrderID > 0)
-                {
-                    bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
-                }
-
-                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
                 {
                     while (reader.Read())
                     {

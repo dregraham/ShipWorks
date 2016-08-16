@@ -5,6 +5,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
@@ -184,9 +185,9 @@ namespace ShipWorks.Shipping.ShipSense
             if (ConsolidateMultiplePackagesIntoSinglePackage && packageAdapters.Count() == 1)
             {
                 // We need to consolidate all of the packages of this entry into a single package
-                packageAdapters.ElementAt(0).Height = packages[0].Height;
-                packageAdapters.ElementAt(0).Length = packages[0].Length;
-                packageAdapters.ElementAt(0).Width = packages[0].Width;
+                packageAdapters.ElementAt(0).DimsHeight = packages[0].Height;
+                packageAdapters.ElementAt(0).DimsLength = packages[0].Length;
+                packageAdapters.ElementAt(0).DimsWidth = packages[0].Width;
                 packageAdapters.ElementAt(0).ApplyAdditionalWeight = packages[0].ApplyAdditionalWeight;
 
                 // Sum the package weights 
@@ -205,10 +206,10 @@ namespace ShipWorks.Shipping.ShipSense
                 for (int i = 0; i < Packages.Count(); i++)
                 {
                     packageAdapters.ElementAt(i).AdditionalWeight = packages[i].AdditionalWeight;
-                    packageAdapters.ElementAt(i).Height = packages[i].Height;
-                    packageAdapters.ElementAt(i).Length = packages[i].Length;
+                    packageAdapters.ElementAt(i).DimsHeight = packages[i].Height;
+                    packageAdapters.ElementAt(i).DimsLength = packages[i].Length;
                     packageAdapters.ElementAt(i).Weight = packages[i].Weight;
-                    packageAdapters.ElementAt(i).Width = packages[i].Width;
+                    packageAdapters.ElementAt(i).DimsWidth = packages[i].Width;
                     packageAdapters.ElementAt(i).ApplyAdditionalWeight = packages[i].ApplyAdditionalWeight;
                 }
             }
@@ -292,10 +293,10 @@ namespace ShipWorks.Shipping.ShipSense
                 KnowledgebasePackage package = new KnowledgebasePackage
                 {
                     AdditionalWeight = adapter.AdditionalWeight,
-                    Height = adapter.Height,
-                    Length = adapter.Length,
+                    Height = adapter.DimsHeight,
+                    Length = adapter.DimsLength,
                     Weight = adapter.Weight,
-                    Width = adapter.Width,
+                    Width = adapter.DimsWidth,
                     ApplyAdditionalWeight = adapter.ApplyAdditionalWeight,
                     Hash = adapter.HashCode()
                 };

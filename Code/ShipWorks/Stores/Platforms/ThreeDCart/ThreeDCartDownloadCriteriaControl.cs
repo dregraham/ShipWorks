@@ -16,7 +16,7 @@ using Interapptive.Shared.UI;
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// Control for configuring non-credential settings for 3D cArt
+    /// Control for configuring non-credential settings for 3dcart
     /// </summary>
     public partial class ThreeDCartDownloadCriteriaControl: StoreSettingsControlBase
     {

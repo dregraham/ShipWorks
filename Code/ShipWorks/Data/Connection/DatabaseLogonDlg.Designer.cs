@@ -66,31 +66,33 @@ namespace ShipWorks.Data.Connection
             // labelWindowsAuthDescription
             // 
             this.labelWindowsAuthDescription.ForeColor = System.Drawing.Color.DimGray;
-            this.labelWindowsAuthDescription.Location = new System.Drawing.Point(65, 280);
+            this.labelWindowsAuthDescription.Location = new System.Drawing.Point(72, 280);
             this.labelWindowsAuthDescription.Name = "labelWindowsAuthDescription";
-            this.labelWindowsAuthDescription.Size = new System.Drawing.Size(336, 28);
+            this.labelWindowsAuthDescription.Size = new System.Drawing.Size(305, 28);
             this.labelWindowsAuthDescription.TabIndex = 15;
             this.labelWindowsAuthDescription.Text = "You must be currently logged in to Windows as a user that has access to SQL Serve" +
     "r.";
             // 
             // username
             // 
-            this.username.Location = new System.Drawing.Point(123, 199);
+            this.username.Location = new System.Drawing.Point(130, 199);
+            this.username.MaxLength = 128;
             this.username.Name = "username";
-            this.username.Size = new System.Drawing.Size(217, 21);
+            this.username.Size = new System.Drawing.Size(210, 21);
             this.username.TabIndex = 10;
             // 
             // password
             // 
-            this.password.Location = new System.Drawing.Point(123, 225);
+            this.password.Location = new System.Drawing.Point(130, 225);
+            this.password.MaxLength = 128;
             this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(217, 21);
+            this.password.Size = new System.Drawing.Size(210, 21);
             this.password.TabIndex = 12;
             this.password.UseSystemPasswordChar = true;
             // 
             // sqlServerAuth
             // 
-            this.sqlServerAuth.Location = new System.Drawing.Point(47, 171);
+            this.sqlServerAuth.Location = new System.Drawing.Point(54, 171);
             this.sqlServerAuth.Name = "sqlServerAuth";
             this.sqlServerAuth.Size = new System.Drawing.Size(236, 24);
             this.sqlServerAuth.TabIndex = 8;
@@ -99,7 +101,7 @@ namespace ShipWorks.Data.Connection
             // 
             // windowsAuth
             // 
-            this.windowsAuth.Location = new System.Drawing.Point(47, 258);
+            this.windowsAuth.Location = new System.Drawing.Point(54, 258);
             this.windowsAuth.Name = "windowsAuth";
             this.windowsAuth.Size = new System.Drawing.Size(228, 24);
             this.windowsAuth.TabIndex = 14;
@@ -109,7 +111,7 @@ namespace ShipWorks.Data.Connection
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(63, 202);
+            this.label7.Location = new System.Drawing.Point(70, 202);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(59, 13);
             this.label7.TabIndex = 9;
@@ -118,7 +120,7 @@ namespace ShipWorks.Data.Connection
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(65, 228);
+            this.label8.Location = new System.Drawing.Point(72, 228);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(57, 13);
             this.label8.TabIndex = 11;
@@ -229,7 +231,7 @@ namespace ShipWorks.Data.Connection
             this.subtitle.Name = "subtitle";
             this.subtitle.Size = new System.Drawing.Size(386, 14);
             this.subtitle.TabIndex = 1;
-            this.subtitle.Text = "ShipWorks needs to connect to SQL Server.";
+            this.subtitle.Text = "ShipWorks needs to connect to a SQL Server database.";
             // 
             // title
             // 

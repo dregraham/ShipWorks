@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Text;
+using Interapptive.Shared;
 
 namespace ShipWorks.UI.Controls.Html.Glyphs
 {
@@ -56,6 +57,7 @@ namespace ShipWorks.UI.Controls.Html.Glyphs
         /// <summary>
         /// Get all of the Glyph objects to be displayed
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static ArrayList GetGlyphs()
         {
             ArrayList list = new ArrayList();

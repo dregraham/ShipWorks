@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using Xunit;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
@@ -18,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         [Fact]
-        public void GetPromoCode_ReturnsShipWorks2_Test()
+        public void GetPromoCode_ReturnsShipWorks2()
         {
             string promo = testObject.GetPromoCode();
 
@@ -26,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         [Fact]
-        public void IsMonthlyFeeWaived_ReturnsFalse_Test()
+        public void IsMonthlyFeeWaived_ReturnsFalse()
         {
             Assert.Equal(false, testObject.IsMonthlyFeeWaived);
         }

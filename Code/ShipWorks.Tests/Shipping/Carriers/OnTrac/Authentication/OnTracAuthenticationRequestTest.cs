@@ -42,14 +42,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         }
 
         [Fact]
-        public void IsValidUser_RequestIsLogged_ReceiveValidResponseFromOnTrac_Test()
+        public void IsValidUser_RequestIsLogged_ReceiveValidResponseFromOnTrac()
         {
             SuccessfullyValidateUser();
 
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
         [Fact]
-        public void IsValidUser_ResponseIsLogged_ReceiveValidResponseFromOnTrac_Test()
+        public void IsValidUser_ResponseIsLogged_ReceiveValidResponseFromOnTrac()
         {
             SuccessfullyValidateUser();
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         }
 
         [Fact]
-        public void IsValidUser_RequestVerbIsGet_ReceiveValidResponseFromOnTrac_Test()
+        public void IsValidUser_RequestVerbIsGet_ReceiveValidResponseFromOnTrac()
         {
             SuccessfullyValidateUser();
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         }
 
         [Fact]
-        public void IsValidUser_ValidUrl_ReceiveValidResponseFromOnTrac_Test()
+        public void IsValidUser_ValidUrl_ReceiveValidResponseFromOnTrac()
         {
             SuccessfullyValidateUser();
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         }
 
         [Fact]
-        public void AuthenticateUser_AuthenticationFail_ReceiveInvalidResponseFromOnTrac_Test()
+        public void AuthenticateUser_AuthenticationFail_ReceiveInvalidResponseFromOnTrac()
         {
             const string invalidResponse =
                 "<OnTracZXXXipResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><Zips/><Error>No Zip Updates Available</Error></OnTracZipResponse>";

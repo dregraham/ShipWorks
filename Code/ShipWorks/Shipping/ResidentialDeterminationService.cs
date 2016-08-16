@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using log4net;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.Shipping
 {

@@ -50,13 +50,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateShipRequest Tests
 
         [Fact]
-        public void CreateShipRequest_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
+        public void CreateShipRequest_ThrowsArgumentNullException_WhenShipmentEntityIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.CreateShipRequest(null));
         }
 
         [Fact]
-        public void CreateShipRequest_ReturnsFedexShipRequest_Test()
+        public void CreateShipRequest_ReturnsFedexShipRequest()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment);
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_PopulatesManipulators_Test()
+        public void CreateShipRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsShipperManipulator_Test()
+        public void CreateShipRequest_AddsShipperManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsRecipientManipulator_Test()
+        public void CreateShipRequest_AddsRecipientManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsShipmentSpecialServiceTypeManipulator_Test()
+        public void CreateShipRequest_AddsShipmentSpecialServiceTypeManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsRateTypeManipulator_Test()
+        public void CreateShipRequest_AddsRateTypeManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsLabelSpecificationManipulator_Test()
+        public void CreateShipRequest_AddsLabelSpecificationManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsTotalWeightManipulator_Test()
+        public void CreateShipRequest_AddsTotalWeightManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsTotalInsuredValueManipulator_Test()
+        public void CreateShipRequest_AddsTotalInsuredValueManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsFedExShippingChargesManipulator_Test()
+        public void CreateShipRequest_AddsFedExShippingChargesManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_AddsFedExCertificationManipulator_Test()
+        public void CreateShipRequest_AddsFedExCertificationManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExPackagingTypeManipulator_Test()
+        public void CreateShipRequest_FedExPackagingTypeManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExPickupManipulator_Test()
+        public void CreateShipRequest_FedExPickupManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -162,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExServiceTypeManipulator_Test()
+        public void CreateShipRequest_FedExServiceTypeManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExPackageSpecialServicesManipulator_Test()
+        public void CreateShipRequest_FedExPackageSpecialServicesManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -178,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_WebAuthenticationDetailManipulator_Test()
+        public void CreateShipRequest_WebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -186,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExShippingClientDetailManipulator_Test()
+        public void CreateShipRequest_FedExShippingClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExShippingVersionManipulator_Test()
+        public void CreateShipRequest_FedExShippingVersionManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -202,7 +202,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExReferenceManipulator_Test()
+        public void CreateShipRequest_FedExReferenceManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -210,7 +210,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExPackageDetailsManipulator_Test()
+        public void CreateShipRequest_FedExPackageDetailsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -218,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExEmailNotificationsManipulator_Test()
+        public void CreateShipRequest_FedExEmailNotificationsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -226,7 +226,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExDryIceManipulator_Test()
+        public void CreateShipRequest_FedExDryIceManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -234,7 +234,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExPriorityAlertManipulator_Test()
+        public void CreateShipRequest_FedExPriorityAlertManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -242,7 +242,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExMasterTrackingManipulator_Test()
+        public void CreateShipRequest_FedExMasterTrackingManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -250,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExCodOptionsManipulator_Test()
+        public void CreateShipRequest_FedExCodOptionsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -258,7 +258,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExCustomsManipulator_Test()
+        public void CreateShipRequest_FedExCustomsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -266,7 +266,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExAdmissibilityManipulator_Test()
+        public void CreateShipRequest_FedExAdmissibilityManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -274,7 +274,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExBrokerManipulator_Test()
+        public void CreateShipRequest_FedExBrokerManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -282,7 +282,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExCommercialInvoiceManipulator_Test()
+        public void CreateShipRequest_FedExCommercialInvoiceManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -290,7 +290,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExHomeDeliveryManipulator_Test()
+        public void CreateShipRequest_FedExHomeDeliveryManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -298,7 +298,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExHoldAtLocationManipulator_Test()
+        public void CreateShipRequest_FedExHoldAtLocationManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -306,7 +306,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExFreightManipulator_Test()
+        public void CreateShipRequest_FedExFreightManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -314,7 +314,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExDangerousGoodsManipulator_Test()
+        public void CreateShipRequest_FedExDangerousGoodsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -322,7 +322,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExReturnsManipulator_Test()
+        public void CreateShipRequest_FedExReturnsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -330,7 +330,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExTrafficInArmsManipulator_Test()
+        public void CreateShipRequest_FedExTrafficInArmsManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -338,7 +338,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShipRequest_FedExOneRateManipulator_Test()
+        public void CreateShipRequest_FedExOneRateManipulator()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
 
@@ -350,7 +350,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateVersionCaptureRequest Tests
 
         [Fact]
-        public void CreateVersionCaptureRequest_PopulatesManipulators_Test()
+        public void CreateVersionCaptureRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
 
@@ -360,7 +360,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateVersionCaptureRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
+        public void CreateVersionCaptureRequest_FedExRegistrationWebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
 
@@ -368,7 +368,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateVersionCaptureRequest_FedExRegistrationClientDetailManipulator_Test()
+        public void CreateVersionCaptureRequest_FedExRegistrationClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
 
@@ -376,7 +376,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateVersionCaptureRequest_FedExRegistrationVersionManipulator_Test()
+        public void CreateVersionCaptureRequest_FedExRegistrationVersionManipulator()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
 
@@ -388,7 +388,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreatePackageMovementRequest Tests
 
         [Fact]
-        public void CreatePackageMovementRequest_PopulatesManipulators_Test()
+        public void CreatePackageMovementRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(fedExShipment, new FedExAccountEntity());
 
@@ -398,7 +398,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementRequest_WebAuthenticationDetailManipulator_Test()
+        public void CreatePackageMovementRequest_WebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(fedExShipment, new FedExAccountEntity());
 
@@ -406,7 +406,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementRequest_FedExPackageMovementClientDetailManipulator_Test()
+        public void CreatePackageMovementRequest_FedExPackageMovementClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(fedExShipment, new FedExAccountEntity());
 
@@ -414,7 +414,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementRequest_FedExPackageMovementVersionManipulator_Test()
+        public void CreatePackageMovementRequest_FedExPackageMovementVersionManipulator()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(new ShipmentEntity(), new FedExAccountEntity());
 
@@ -426,7 +426,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateGroundCloseRequest Tests
 
         [Fact]
-        public void CreateGroundCloseRequest_PopulatesManipulators_Test()
+        public void CreateGroundCloseRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
 
@@ -436,7 +436,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseRequest_WebAuthenticationDetailManipulator_Test()
+        public void CreateGroundCloseRequest_WebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
 
@@ -444,7 +444,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseRequest_FedExPackageMovementClientDetailManipulator_Test()
+        public void CreateGroundCloseRequest_FedExPackageMovementClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
 
@@ -452,7 +452,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseRequest_FedExPackageMovementVersionManipulator_Test()
+        public void CreateGroundCloseRequest_FedExPackageMovementVersionManipulator()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
 
@@ -460,7 +460,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateGroundCloseRequest_FedExCloseDateManipulator_Test()
+        public void CreateGroundCloseRequest_FedExCloseDateManipulator()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
 
@@ -472,7 +472,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateSmartPostCloseRequest Tests
 
         [Fact]
-        public void CreateSmartPostCloseRequest_PopulatesManipulators_Test()
+        public void CreateSmartPostCloseRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
 
@@ -482,7 +482,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseRequest_WebAuthenticationDetailManipulator_Test()
+        public void CreateSmartPostCloseRequest_WebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
 
@@ -490,7 +490,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseRequest_FedExPackageMovementClientDetailManipulator_Test()
+        public void CreateSmartPostCloseRequest_FedExPackageMovementClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
 
@@ -498,7 +498,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseRequest_FedExPackageMovementVersionManipulator_Test()
+        public void CreateSmartPostCloseRequest_FedExPackageMovementVersionManipulator()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
 
@@ -506,7 +506,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSmartPostCloseRequest_FedExCloseDateManipulator_Test()
+        public void CreateSmartPostCloseRequest_FedExCloseDateManipulator()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
 
@@ -518,7 +518,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateRegisterCspUserRequest Tests
 
         [Fact]
-        public void CreateRegisterCspUserRequest_PopulatesManipulators_Test()
+        public void CreateRegisterCspUserRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
 
@@ -528,7 +528,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegisterCspUserRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
+        public void CreateRegisterCspUserRequest_FedExRegistrationWebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
 
@@ -536,7 +536,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegisterCspUserRequest_FedExRegistrationClientDetailManipulator_Test()
+        public void CreateRegisterCspUserRequest_FedExRegistrationClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
 
@@ -544,7 +544,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegisterCspUserRequest_FedExRegistrationVersionManipulator_Test()
+        public void CreateRegisterCspUserRequest_FedExRegistrationVersionManipulator()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
 
@@ -552,7 +552,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegisterCspUserRequest_FedExCspContactManipulator_Test()
+        public void CreateRegisterCspUserRequest_FedExCspContactManipulator()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
 
@@ -564,7 +564,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateSubscriptionRequest Tests
 
         [Fact]
-        public void CreateSubscriptionRequest_PopulatesManipulators_Test()
+        public void CreateSubscriptionRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
 
@@ -574,7 +574,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSubscriptionRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
+        public void CreateSubscriptionRequest_FedExRegistrationWebAuthenticationDetailManipulator()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
 
@@ -582,7 +582,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSubscriptionRequest_FedExRegistrationClientDetailManipulator_Test()
+        public void CreateSubscriptionRequest_FedExRegistrationClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
 
@@ -590,7 +590,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSubscriptionRequest_FedExRegistrationVersionManipulator_Test()
+        public void CreateSubscriptionRequest_FedExRegistrationVersionManipulator()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
 
@@ -598,7 +598,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateSubscriptionRequest_FedExSubscriberManipulator_Test()
+        public void CreateSubscriptionRequest_FedExSubscriberManipulator()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
 
@@ -610,7 +610,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateRateRequest Tests
 
         [Fact]
-        public void CreateRateRequest_PopulatesManipulators_Test()
+        public void CreateRateRequest_PopulatesManipulators()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -618,7 +618,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_PopulatesManipulators_WithSpecializedManipulators_Test()
+        public void CreateRateRequest_PopulatesManipulators_WithSpecializedManipulators()
         {
             var specializedManipulator1 = new Mock<ICarrierRequestManipulator>();
             var specializedManipulator2 = new Mock<ICarrierRequestManipulator>();
@@ -635,7 +635,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_PopulatesManipulators_WhenSpecializedManipulatorsIsEmpty_Test()
+        public void CreateRateRequest_PopulatesManipulators_WhenSpecializedManipulatorsIsEmpty()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), new List<ICarrierRequestManipulator>());
 
@@ -643,7 +643,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_ReturnsFedExRateRequest_Test()
+        public void CreateRateRequest_ReturnsFedExRateRequest()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -651,7 +651,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExReturnTransitManipulator_Test()
+        public void CreateRateRequest_FedExReturnTransitManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -659,7 +659,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExShipperManipulator_Test()
+        public void CreateRateRequest_FedExShipperManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -667,7 +667,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExRecipientManipulator_Test()
+        public void CreateRateRequest_FedExRecipientManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -675,7 +675,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExShipmentSpecialServiceTypeManipulator_Test()
+        public void CreateRateRequest_FedExShipmentSpecialServiceTypeManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -683,7 +683,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExTotalInsuredValueManipulator_Test()
+        public void CreateRateRequest_FedExTotalInsuredValueManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -691,7 +691,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExTotalWeightManipulator_Test()
+        public void CreateRateRequest_FedExTotalWeightManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -699,7 +699,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExRateTypeManipulator_Test()
+        public void CreateRateRequest_FedExRateTypeManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -707,7 +707,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExPickupManipulator_Test()
+        public void CreateRateRequest_FedExPickupManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -715,7 +715,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExPackageDetailsManipulator_Test()
+        public void CreateRateRequest_FedExPackageDetailsManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -723,7 +723,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExPackageSpecialServicesManipulator_Test()
+        public void CreateRateRequest_FedExPackageSpecialServicesManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -731,7 +731,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExPackagingTypeManipulator_Test()
+        public void CreateRateRequest_FedExPackagingTypeManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -739,7 +739,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExRateClientDetailManipulator_Test()
+        public void CreateRateRequest_FedExRateClientDetailManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -747,7 +747,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExRateWebAuthenticationManipulator_Test()
+        public void CreateRateRequest_FedExRateWebAuthenticationManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -755,7 +755,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRateRequest_FedExRateVersionManipulator_Test()
+        public void CreateRateRequest_FedExRateVersionManipulator()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
@@ -767,7 +767,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region CreateCertificateRequest Tests
 
         [Fact]
-        public void CreateCertificateRequest_ReturnsCertficateReqeust_Test()
+        public void CreateCertificateRequest_ReturnsCertficateReqeust()
         {
             Mock<ICertificateInspector> inspector = new Mock<ICertificateInspector>();
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared;
 
 namespace ShipWorks.Filters
 {
@@ -16,11 +17,12 @@ namespace ShipWorks.Filters
         int count;
         long countVersion;
         long rowVersion;
-        int cost; 
+        int cost;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public FilterCount(long nodeID, long countID, FilterNodePurpose purpose, FilterCountStatus status, int count, long countVersion, long rowVersion, int cost)
         {
             this.nodeID = nodeID;

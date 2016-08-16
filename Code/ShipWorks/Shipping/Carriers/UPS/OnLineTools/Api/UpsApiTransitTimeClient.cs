@@ -2,38 +2,64 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using log4net;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
-using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
     /// <summary>
     /// API for getting time in transit for a shipment
     /// </summary>
-    public static class UpsApiTransitTimeClient
+    public class UpsApiTransitTimeClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UpsApiTransitTimeClient));
 
         /// <summary>
-        /// Static constructor
+        /// Get transit times for the given shipment
+        /// Uses counter rates if sepecified
         /// </summary>
-        static UpsApiTransitTimeClient()
-        { }
+        public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, bool useCounterRates)
+        {
+            ICarrierSettingsRepository settingsRepository = null;
+            ICertificateInspector certificateInspector = null;
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository = null;
+
+            // Create the appropriate settings, certificate inspector
+            if (useCounterRates)
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
+
+            return GetTransitTimes(shipment, accountRepository, settingsRepository, certificateInspector);
+        }
 
         /// <summary>
         /// Get transit times for the given shipment
         /// </summary>
-        public static List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             List<UpsTransitTime> upsTransitTimes = new List<UpsTransitTime>();
 
@@ -66,7 +92,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Prepares the transit request.
         /// </summary>
-        private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
+        [NDependIgnoreLongMethod]
+        private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ICarrierSettingsRepository settingsRepository)
         {
             // Create the client for connecting to the UPS server
             XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.TimeInTransit, UpsApiCore.GetUpsAccount(shipment, accountRepository), settingsRepository);
@@ -103,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("PickupDate", DateTime.Today.ToString("yyyyMMdd"));
 
             // Shipment Weight. UPS currently does not allow this to be over 150, even though thats wrong, since
-            // a shipment can be - its the packages the can't.  We limit the weight to 150 to get around this, it 
+            // a shipment can be - its the packages the can't.  We limit the weight to 150 to get around this, it
             // does not affect the transit times.
             xmlWriter.WriteStartElement("ShipmentWeight");
             xmlWriter.WriteStartElement("UnitOfMeasurement");
@@ -162,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 try
                 {
                     // Use the service manager to try to identify the service by the transit code
-                    ICarrierServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
+                    IUpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                     IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);
                     UpsServiceType service = serviceManager.GetServiceByTransitCode(serviceCode, shipment.AdjustedShipCountryCode()).UpsServiceType;
 
@@ -174,14 +203,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 }
                 catch (UpsException)
                 {
-                    // There are some codes we don't account for (i.e. codes for freight services), so just log 
+                    // There are some codes we don't account for (i.e. codes for freight services), so just log
                     // these and continue
                     log.WarnFormat("Could not lookup service for TNT code {0}", serviceCode);
                 }
             }
 
             return transitTimes;
-        }       
-    
-}
+        }
+
+    }
 }

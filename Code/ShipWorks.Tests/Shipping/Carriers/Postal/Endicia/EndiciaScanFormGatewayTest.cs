@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         }
 
         [Fact]
-        public void CreateScanForms_ThrowsEndiciaException_WhenAccountEntityIsNull_Test()
+        public void CreateScanForms_ThrowsEndiciaException_WhenAccountEntityIsNull()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
@@ -35,13 +35,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         }
 
         [Fact]
-        public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsNull_Test()
+        public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsNull()
         {
             Assert.Throws<EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, null));
         }
 
         [Fact]
-        public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsEmpty_Test()
+        public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsEmpty()
         {
             Assert.Throws<EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }

@@ -14,6 +14,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using System.Xml.Linq;
 using System.Xml;
+using Interapptive.Shared;
 using ShipWorks.Common.Threading;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Templates.Processing.TemplateXml;
@@ -120,6 +121,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Execute the specified print request
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ExecuteRequest()
         {
             // Ensure all the resources (images) needed are loaded

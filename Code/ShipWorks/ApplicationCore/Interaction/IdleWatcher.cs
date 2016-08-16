@@ -248,7 +248,7 @@ namespace ShipWorks.ApplicationCore.Interaction
                         return;
                     }
 
-                    // If somethign changed that makes it so we can't run (like the user is now logged out), then get out
+                    // If something changed that makes it so we can't run (like the user is now logged out), then get out
                     if (!CanRun)
                     {
                         Finish(operationToken);

@@ -1,31 +1,22 @@
 ﻿using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
 {
-    public class iParcelBestRateBroker : PackageBasedBestRateBroker<IParcelAccountEntity, IParcelPackageEntity>
+    public class iParcelBestRateBroker : PackageBasedBestRateBroker<IParcelAccountEntity, IIParcelAccountEntity, IParcelPackageEntity>
     {
-        /// <summary>
-        /// Creates a broker with the default shipment type and account repository
-        /// </summary>
-        /// <remarks>This is designed to be used within ShipWorks</remarks>
-        public iParcelBestRateBroker()
-            : this(new iParcelShipmentType(), new iParcelAccountRepository())
-        {
-
-        }
-
         /// <summary>
         /// Creates a broker with the specified shipment type and account repository
         /// </summary>
         /// <param name="shipmentType">Instance of a IParcel shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get IParcel accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public iParcelBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<IParcelAccountEntity> accountRepository) :
+        public iParcelBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "iParcel")
         {
 
@@ -36,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
         {
-            return (InsuranceProvider)settings.IParcelInsuranceProvider;
+            return (InsuranceProvider) settings.IParcelInsuranceProvider;
         }
 
         /// <summary>
@@ -58,7 +49,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             currentShipment.IParcel.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.IParcel.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
 
-            currentShipment.IParcel.Service = (int)iParcelServiceType.Saver;
+            // Update total weight
+            ShipmentType.UpdateTotalWeight(currentShipment);
+
+            currentShipment.IParcel.Service = (int) iParcelServiceType.Saver;
             currentShipment.IParcel.IParcelAccountID = account.IParcelAccountID;
 
             currentShipment.IParcel.Packages[0].Insurance = currentShipment.Insurance;

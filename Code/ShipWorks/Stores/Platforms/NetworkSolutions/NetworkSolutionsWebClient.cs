@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Web.Services.Protocols;
-using System.Net;
 using System.Windows.Forms;
 using System.IO;
 using Interapptive.Shared.UI;
 using System.Xml;
 using log4net;
-using Interapptive.Shared.Utility;
 using System.Xml.XPath;
-using Interapptive.Shared.Win32;
 using ShipWorks.Shipping;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
@@ -29,9 +23,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     /// </summary>
     public class NetworkSolutionsWebClient
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(NetworkSolutionsWebClient));
-						  
+
         // Communication requirements
         private static string application = "Interapptive";
         private static string certificate = "NoeE8IbA1ne9OhnEX2w872Lp";
@@ -49,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         bool hasMoreOrders = true;
 
         /// <summary>
-        /// Gets whether or not orders exist to be downloaded 
+        /// Gets whether or not orders exist to be downloaded
         /// </summary>
         public bool HasMoreOrders
         {
@@ -182,8 +176,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 List<NetworkSolutionsError> nsErrors = new List<NetworkSolutionsError>();
                 errors.ForEach(e =>
                 {
-                    nsErrors.Add(new NetworkSolutionsError { Number = e.NumberSpecified ? e.Number : -1, 
-                                                             Message = e.Message, 
+                    nsErrors.Add(new NetworkSolutionsError { Number = e.NumberSpecified ? e.Number : -1,
+                                                             Message = e.Message,
                                                              FieldInError = e.FieldInfo == null ? "" : e.FieldInfo.Field });
                 });
 
@@ -389,7 +383,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                         },
 
                         // select only orders of a certain type
-                        FilterList = filters.ToArray() 
+                        FilterList = filters.ToArray()
                     };
 
                     // execute the request, and response to errors in the response
@@ -417,7 +411,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 throw WebHelper.TranslateWebException(ex, typeof(NetworkSolutionsException));
             }
         }
-        
+
         /// <summary>
         /// Returns the possible status codes in NetworkSolutions
         /// </summary>

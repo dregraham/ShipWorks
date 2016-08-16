@@ -5,8 +5,8 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
     /// <summary>
-    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of a Postal WebTools shipment 
+    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing
+    /// of a Postal WebTools shipment
     /// </summary>
     public class WebToolsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 // Since there aren't any actual accounts for web tools, we'll just check
                 // whether the shipment type has been configured
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                return settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.PostalWebTools);
+                return settings.ConfiguredTypes.Contains(ShipmentTypeCode.PostalWebTools);
             }
         }
 

@@ -479,6 +479,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("StoreURL", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("StatusCodes", fieldHashtable);
 		}
 		#endregion
 
@@ -572,6 +575,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.StoreURL, true); }
 			set	{ SetValue((int)LemonStandStoreFieldIndex.StoreURL, value); }
+		}
+
+		/// <summary> The StatusCodes property of the Entity LemonStandStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "LemonStandStore"."StatusCodes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String StatusCodes
+		{
+			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.StatusCodes, true); }
+			set	{ SetValue((int)LemonStandStoreFieldIndex.StatusCodes, value); }
 		}
 
 

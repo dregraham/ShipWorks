@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on an order and returns the new order status
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public string ExecuteAction(long orderNumber, string action, string comments, string carrier, string trackingNumber, bool magentoEmails)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();

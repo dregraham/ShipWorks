@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 

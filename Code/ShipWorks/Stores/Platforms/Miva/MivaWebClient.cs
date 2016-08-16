@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
-using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using ShipWorks.Shipping;
 using ShipWorks.ApplicationCore.Logging;
 using System.Text.RegularExpressions;
 using System.Net;
+using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using log4net;
 using ShipWorks.Data.Connection;
 
@@ -51,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                 return;
             }
 
-            // allow standard validation 
+            // allow standard validation
             base.ValidateSchema(resultXml, action);
         }
 
@@ -261,7 +260,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         }
 
         /// <summary>
-        /// Create the xml to use to push to the sebenza module 
+        /// Create the xml to use to push to the sebenza module
         /// </summary>
         private string CreateSebenzaOnlineUpdateXml(OrderEntity order, object statusCode, string statusComment, ShipmentEntity shipment)
         {
@@ -336,6 +335,7 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Execute the Sebenza online update request
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ExecuteSebenzaOnlineUpdate(string xml)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();

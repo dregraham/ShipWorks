@@ -33,5 +33,15 @@ namespace ShipWorks.Properties {
                     "ice"]));
             }
         }
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://shpwrk003.qasc.stamps.com/ShipWorksNet/ActivationV1.svc")]
+        public string ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_WebServices_Activation {
+            get {
+                return ((string)(this["ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_WebServices_Activati" +
+                    "on"]));
+            }
+        }
     }
 }

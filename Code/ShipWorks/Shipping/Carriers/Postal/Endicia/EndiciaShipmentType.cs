@@ -1,19 +1,24 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using Autofac;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -21,12 +26,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Runtime.InteropServices;
-using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -35,23 +34,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaShipmentType : PostalShipmentType
     {
-        private ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
 
         /// <summary>
         /// Endicia ShipmentType code
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.Endicia; }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Endicia;
 
         /// <summary>
-        /// Reller of Endicia services.  
+        /// Reseller of Endicia services.
         /// </summary>
-        public virtual EndiciaReseller EndiciaReseller
-        {
-            get { return EndiciaReseller.None; }
-        }
+        public virtual EndiciaReseller EndiciaReseller => EndiciaReseller.None;
 
         /// <summary>
         /// Should Express1 rates be checked when getting Endicia rates?
@@ -66,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets or sets the repository that should be used for retrieving accounts
         /// </summary>
-        public ICarrierAccountRepository<EndiciaAccountEntity> AccountRepository
+        public ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> AccountRepository
         {
             get
             {
@@ -83,10 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts
-        {
-            get { return Accounts.Any(); }
-        }
+        public override bool HasAccounts => Accounts.Any();
 
         /// <summary>
         /// Create an EndiciaShipmentType object
@@ -95,6 +85,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             ShouldRetrieveExpress1Rates = true;
             LogEntryFactory = new LogEntryFactory();
+        }
+
+        /// <summary>
+        /// Apply the configured defaults and profile rule settings to the given shipment
+        /// </summary>
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal == null)
+            {
+                shipment.Postal = new PostalShipmentEntity(shipment.ShipmentID);
+            }
+
+            if (shipment.Postal.Endicia == null)
+            {
+                shipment.Postal.Endicia = new EndiciaShipmentEntity(shipment.ShipmentID);
+            }
+
+            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
@@ -109,22 +117,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 return "Consolidator";
             }
-            else
-            {
-                // The shipment is an Endicia shipment, check to see if it's DHL
-                if (ShipmentTypeManager.IsEndiciaDhl(service))
-                {
-                    // The DHL carrier for Endicia is:
-                    carrier = "DHL Global Mail";
-                }
-                else
-                {
-                    // Use the default carrier for other Endicia types
-                    carrier = "USPS";
-                }
+            // The shipment is an Endicia shipment, check to see if it's DHL
+            carrier = ShipmentTypeManager.IsEndiciaDhl(service) ? "DHL Global Mail" : "USPS";
 
-                return string.Format("{0} {1}", carrier, EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service));
-            }
+            return $"{carrier} {EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service)}";
         }
 
         /// <summary>
@@ -148,15 +144,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the UserControl used to handle Endicia profiles
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }
-        
+
         /// <summary>
         /// Create the settings control for Endicia
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
             settingsControl.Initialize(ShipmentTypeCode);
@@ -167,42 +163,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets the configured accounts for this Endicia reseller
         /// </summary>
-        public virtual List<EndiciaAccountEntity> Accounts
-        {
-            get { return AccountRepository.Accounts.ToList(); }
-        }
+        public virtual List<EndiciaAccountEntity> Accounts => AccountRepository.Accounts.ToList();
 
         /// <summary>
         /// Endicia supports getting postal service rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Supports getting counter rates.
         /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return false; }
-        }
+        public override bool SupportsCounterRates => false;
 
         /// <summary>
         /// Endicia accounts can be used as origin addresses
         /// </summary>
-        public override bool SupportsAccountAsOrigin
-        {
-            get { return true; }
-        }
+        public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
         /// Endicia supports returns
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get { return true; }
-        }
+        public override bool SupportsReturns => true;
 
         /// <summary>
         /// Ensures that the USPS specific data for the shipment is loaded.  If the data already exists, nothing is done.  It is not refreshed.
@@ -227,7 +208,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
@@ -269,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
-                if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
+                if (IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
                     availablePostalConfirmationTypes.Add(PostalConfirmationType.Delivery);
                     return availablePostalConfirmationTypes;
@@ -311,8 +292,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
-            
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
+
+            // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....
             if (shipment == null)
             {
@@ -325,9 +306,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // The Endicia or Postal object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
+            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
             {
-                EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
+                IEndiciaAccountEntity account = EndiciaAccountManager.GetAccountReadOnly(shipment.Postal.Endicia.EndiciaAccountID);
                 if (account == null)
                 {
                     if (Accounts == null)
@@ -335,18 +316,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         throw new NullReferenceException("Account cannot be null.");
                     }
 
-                    account = Accounts.FirstOrDefault();
+                    account = AccountRepository.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
 
             return base.UpdatePersonAddress(shipment, person, originID);
@@ -357,10 +335,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public static bool IsScanBasedReturnsAllowed(ShipmentEntity shipment)
         {
-            return shipment.ReturnShipment &&
-                   shipment.Postal.Endicia.ScanBasedReturn &&
-                   shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
-                   EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
+
+                return shipment.ReturnShipment &&
+                       shipment.Postal.Endicia.ScanBasedReturn &&
+                       shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
+                       restrictionLevel == EditionRestrictionLevel.None;
+            }
         }
 
         /// <summary>
@@ -375,8 +359,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException("Endicia scan based payment returns are only available for domestic shipments.");
                 }
 
-                PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
-                PostalConfirmationType postalConfirmationType = (PostalConfirmationType)shipment.Postal.Confirmation;
+                PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
+                PostalConfirmationType postalConfirmationType = (PostalConfirmationType) shipment.Postal.Confirmation;
 
                 switch (postalServiceType)
                 {
@@ -420,187 +404,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            // Get the rates, letting the Postal shipment type take care of caching
-            // since it should be using a different cache key
-            if (AccountRepository.Accounts.Any())
-            {
-                return GetCachedRates<EndiciaException>(shipment, GetRatesFromApi);
-            }
-
-            // We don't have any Endicia accounts, so let the user know they need an account.
-            string shipmentTypeName = EnumHelper.GetDescription(ShipmentTypeCode);
-            EndiciaException endiciaException = new EndiciaException(string.Format("An account is required to view {0} rates.", shipmentTypeName));
-            RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, endiciaException);
-            InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, endiciaException.Message, endiciaException);
-
-            throw shippingException;
-        }
-
-        /// <summary>
-        /// Get postal rates for the given shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            List<RateResult> express1Rates = null;
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            
-            // See if this shipment should really go through Express1
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
-                && !IsRateDiscountMessagingRestricted
-                && Express1Utilities.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
-                && settings.EndiciaAutomaticExpress1)
-            {
-                var express1Account = EndiciaAccountManager.GetAccount(settings.EndiciaAutomaticExpress1Account);
-
-                if (express1Account == null)
-                {
-                    throw new EndiciaException("The Express1 account to automatically use when processing with Endicia has not been selected.");
-                }
-
-                // We temporarily turn this into an Exprss1 shipment to get rated
-                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
-                shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-                shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-
-                try
-                {
-                    // Currently this actually recurses into this same method
-                    express1Rates = (ShouldRetrieveExpress1Rates) ?
-                                        ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() :
-                                        new List<RateResult>();
-                }
-                catch (ShippingException)
-                {
-                    // Eat the exception; we don't want to stop someone from using Endicia if Express1 can't get rates
-                }
-                finally
-                {
-                    shipment.ShipmentType = (int) ShipmentTypeCode.Endicia;
-                    shipment.Postal.Endicia.EndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID.Value;
-                    shipment.Postal.Endicia.OriginalEndiciaAccountID = null;
-                }
-            }
-
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector);
-
-            List<RateResult> allEndiciaRates = (InterapptiveOnly.MagicKeysDown) ?
-                                                endiciaApiClient.GetRatesSlow(shipment, this) :
-                                                endiciaApiClient.GetRatesFast(shipment, this);
-
-            // Filter out any excluded services, but always include the service that the shipment is configured with
-            List<RateResult> endiciaRates = FilterRatesByExcludedServices(shipment, allEndiciaRates);
-
-
-            // For endicia, we want to either promote Express1 or show the Express1 savings
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
-            {
-                if (ShouldRetrieveExpress1Rates && !IsRateDiscountMessagingRestricted)
-                {
-                    List<RateResult> finalRates = new List<RateResult>();
-
-                    // Go through each Endicia rate
-                    foreach (RateResult endiciaRate in endiciaRates)
-                    {
-                        PostalRateSelection endiciaRateDetail = (PostalRateSelection) endiciaRate.OriginalTag;
-
-                        // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (endiciaRate.Selectable &&
-                            endiciaRateDetail != null &&
-                            Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
-                        {
-                            // See if Express1 returned a rate for this servie
-                            RateResult express1Rate = null;
-                            if (express1Rates != null)
-                            {
-                                express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                                                                                         ((PostalRateSelection) e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType && ((PostalRateSelection) e1r.OriginalTag).ConfirmationType == endiciaRateDetail.ConfirmationType);
-                            }
-
-                            // If Express1 returned a rate, check to make sure it is a lower amount
-                            if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
-                            {
-                                // If the logo is currently set, make sure it's set to Endicia
-                                if (express1Rate.ProviderLogo != null)
-                                {
-                                    express1Rate.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia);
-                                }
-
-                                finalRates.Add(express1Rate);
-                                //hasExpress1Savings = true;
-                            }
-                            else
-                            {
-                                finalRates.Add(endiciaRate);
-                            }
-                        }
-                        else
-                        {
-                            finalRates.Add(endiciaRate);
-                        }
-                    }
-
-                    // Filter out any excluded services, but always include the service that the shipment is configured with
-                    List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, finalRates.Select(e =>
-                    {
-                        e.ShipmentType = ShipmentTypeCode.Endicia;
-                        return e;
-                    }).ToList());
-
-                    RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
-
-                    // As it pertains to Endicia, restricting discounted rate messaging means we're no longer obligated to promote
-                    // Express1 with Endicia and can show promotion for USPS shipping. So when discount rate
-                    // messaging is restricted on Endicia, we want to show the Usps promo
-                    if (IsRateDiscountMessagingRestricted)
-                    {
-                        // Always show the USPS promotion when Express 1 is restricted - show the
-                        // single account dialog if Endicia has Express1 accounts and is not using USPS
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
-                        finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
-                    }
-
-                    return finalGroup;
-                }
-                else
-                {
-                    // Express1 wasn't used, so we want to promote USPS
-
-                    // Filter out any excluded services, but always include the service that the shipment is configured with
-                    RateGroup finalEndiciaOnlyRates = new RateGroup(FilterRatesByExcludedServices(shipment, endiciaRates));
-
-                    if (IsRateDiscountMessagingRestricted)
-                    {
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
-                        finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
-                    }
-
-                    return finalEndiciaOnlyRates;
-                }
-
-            }
-            else
-            {
-                // Express1 rates - return rates filtered by what is available to the user
-                RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
-                if (IsRateDiscountMessagingRestricted)
-                {
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
-                    // poromo footnote to show single account marketing dialog
-                    express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
-                }
-
-                return express1Group;
-            }
-        }
-
-        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
@@ -609,109 +412,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Process the label server shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            ValidateShipment(shipment);
-
-            bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) && !IsRateDiscountMessagingRestricted &&
-                Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
-                ShippingSettings.Fetch().EndiciaAutomaticExpress1;
-
-            EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(ShippingSettings.Fetch().EndiciaAutomaticExpress1Account);
-
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector);
-
-            if (useExpress1)
-            {
-                if (express1Account == null)
-                {
-                    throw new ShippingException("The Express1 account to automatically use when processing with Endicia has not been selected.");
-                }
-
-                int originalShipmentType = shipment.ShipmentType;
-                long? originalEndiciaAccountID = shipment.Postal.Endicia.OriginalEndiciaAccountID;
-                long endiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-
-                try
-                {
-                    // Check Endicia amount
-                    List<RateResult> endiciaRates = endiciaApiClient.GetRatesFast(shipment, this);
-                    RateResult endiciaRate = endiciaRates.Where(er => er.Selectable).FirstOrDefault(er =>
-                                                                                                    ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
-                                                                                                    && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
-
-                    // Check Express1 amount
-                    shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
-                    shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-                    shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-
-                    // Instantiate the Express1 shipment type, so the correct account repository is used when getting rates
-                    ShipmentType express1Type = ShipmentTypeManager.GetType(shipment);
-                    RateGroup express1Rates = express1Type.GetRates(shipment); 
-                    RateResult express1Rate = express1Rates.Rates.Where(er => er.Selectable).FirstOrDefault(er =>
-                                                                                                      ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
-                                                                                                      && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
-
-                    // Now set useExpress1 to true only if the express 1 rate is less than the endicia amount
-                    if (endiciaRate != null && express1Rate != null)
-                    {
-                        useExpress1 = express1Rate.Amount <= endiciaRate.Amount;
-                    }
-                    else
-                    {
-                        // If we can't figure it out for sure, don't use it
-                        useExpress1 = false;
-                    }
-                }
-                catch (EndiciaApiException apiException)
-                {
-                    throw new ShippingException(apiException.Message, apiException);
-                }
-                finally
-                {
-                    // Reset back to the original values
-                    shipment.ShipmentType = originalShipmentType;
-                    shipment.Postal.Endicia.OriginalEndiciaAccountID = originalEndiciaAccountID;
-                    shipment.Postal.Endicia.EndiciaAccountID = endiciaAccountID;
-                }
-            }
-
-            // See if this shipment should really go through Express1
-            if (useExpress1)
-            {
-                // Now we turn this into an Express1 shipment...
-                shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
-                shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
-                shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
-
-                Express1EndiciaShipmentType shipmentType = (Express1EndiciaShipmentType) ShipmentTypeManager.GetType(shipment);
-
-                // Process via Express1
-                shipmentType.UpdateDynamicShipmentData(shipment);
-                shipmentType.ProcessShipment(shipment);
-            }
-            else
-            {
-                // This would be set if they have tried to process as Express1 but it failed... make sure its clear since we are not using it.
-                shipment.Postal.Endicia.OriginalEndiciaAccountID = null;
-
-                try
-                {
-                    endiciaApiClient.ProcessShipment(shipment, this);
-                }
-                catch (EndiciaException ex)
-                {
-                    throw new ShippingException(ex.Message, ex);
-                }
-            }
-        }
-
-        /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
-        protected void ValidateShipment(ShipmentEntity shipment)
+        public void ValidateShipment(ShipmentEntity shipment)
         {
             if (shipment.TotalWeight == 0)
             {
@@ -721,21 +424,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Validate that scan based payment returns is allowed.
             // This method throws if not allowed.
             ValidateScanBasedReturns(shipment);
-        }
-
-        /// <summary>
-        /// Void the given endicia shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                EndiciaApiAccount.RequestRefund(shipment);
-            }
-            catch (EndiciaException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
         }
 
         /// <summary>
@@ -840,17 +528,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return EnumHelper.GetApiValue(serviceType);
             }
 
-            throw new EndiciaException(string.Format("{0} is not supported when shipping with Endicia.", PostalUtility.GetPostalServiceTypeDescription(serviceType)));
-        }
-
-        /// <summary>
-        /// Gets an instance to the best rate shipping broker for Endicia based on the shipment configuration.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>An instance of an EndiciaBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
-        {
-            return new NullShippingBroker();
+            throw new EndiciaException($"{PostalUtility.GetPostalServiceTypeDescription(serviceType)} is not supported when shipping with Endicia.");
         }
 
         /// <summary>
@@ -858,14 +536,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override ReturnsControlBase CreateReturnsControl()
         {
-            // If scan based returns is not allowed, show the the default returns control
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return base.CreateReturnsControl();
-            }
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaScanBasedReturns, null);
 
-            // It's allowed, so show the scan based returns control.
-            return new EndiciaReturnsControl();
+                // If scan based returns is not allowed, show the the default returns control
+                if (restrictionLevel != EditionRestrictionLevel.None)
+                {
+                    return base.CreateReturnsControl();
+                }
+
+                return new EndiciaReturnsControl();
+            }
         }
 
         /// <summary>
@@ -882,37 +565,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(EndiciaShipmentFields.EndiciaAccountID);
-                ratingField.ShipmentFields.Add(EndiciaShipmentFields.OriginalEndiciaAccountID);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.SortType);
-                ratingField.ShipmentFields.Add(PostalShipmentFields.EntryFacility);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
             if (shipment.Postal != null && shipment.Postal.Endicia != null)
             {
-                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;                
+                shipment.Postal.Endicia.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 
@@ -925,6 +584,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             bucket.Relations.Add(PostalShipmentEntity.Relations.EndiciaShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new EndiciaShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Endicia shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        {
+            if (AccountRepository.Accounts.Any())
+            {
+                return new EndiciaBestRateBroker(this, AccountRepository);
+            }
+
+            // We want to be able to show counter rates to users that don't have
+            return new NullShippingBroker();
         }
     }
 }

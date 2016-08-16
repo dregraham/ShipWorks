@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WizardPages
             this.accountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accountSettingsControl.Location = new System.Drawing.Point(16, 10);
             this.accountSettingsControl.Name = "accountSettingsControl";
-            this.accountSettingsControl.Size = new System.Drawing.Size(482, 294);
+            this.accountSettingsControl.Size = new System.Drawing.Size(482, 329);
             this.accountSettingsControl.TabIndex = 0;
             // 
             // MagentoAccountPage
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WizardPages
             this.Controls.Add(this.accountSettingsControl);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "MagentoAccountPage";
-            this.Size = new System.Drawing.Size(522, 313);
+            this.Size = new System.Drawing.Size(522, 364);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
 

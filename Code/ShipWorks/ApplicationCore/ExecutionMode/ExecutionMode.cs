@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Common.Logging;
 using Interapptive.Shared;
@@ -24,13 +23,20 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         private const int SecurityProtocolTypeTls12 = 3072;
         private const int SecurityProtocolTypeTls11 = 768;
         private static readonly ILog log = LogManager.GetLogger(typeof(ExecutionMode));
+        private SynchronizationContext synchronizationContext;
+
+        public ExecutionMode()
+        {
+        }
+
+        public virtual SynchronizationContext BaseSynchronizationContext => synchronizationContext;
 
         /// <summary>
         /// Name of this execution mode (User interface, command line, service)
         /// </summary>
         public abstract string Name
         {
-            get; 
+            get;
         }
 
         /// <summary>
@@ -64,13 +70,15 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// just before the app terminates.
         /// </summary>
         /// <param name="exception">The exception that has bubbled up the entire stack.</param>
-        public abstract void HandleException(Exception exception, bool guiThread, string userEmail);
+        public abstract Task HandleException(Exception exception, bool guiThread, string userEmail);
 
         /// <summary>
         /// Provides common initialization and an extension point for additional initialization
         /// </summary>
         protected virtual void Initialize()
         {
+            synchronizationContext = SynchronizationContext.Current;
+
             MyComputer.LogEnvironmentProperties();
 
             // Looking for all types in this assembly that have the LLBLGen DependencyInjection attribute
@@ -131,7 +139,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 }
             }
             catch (NotSupportedException ex)
-            { 
+            {
                 log.Info("Could not add TLS1.1 and 1.2 protocols: ", ex);
             }
 

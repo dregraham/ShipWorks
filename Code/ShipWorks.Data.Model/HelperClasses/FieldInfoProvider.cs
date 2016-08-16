@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (170 + 0));
+			base.InitClass( (175 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -66,6 +66,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonASINEntityInfos();
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
+			InitAmazonProfileEntityInfos();
+			InitAmazonShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
 			InitAuditEntityInfos();
@@ -151,6 +153,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitNoteEntityInfos();
 			InitObjectLabelEntityInfos();
 			InitObjectReferenceEntityInfos();
+			InitOdbcStoreEntityInfos();
 			InitOnTracAccountEntityInfos();
 			InitOnTracProfileEntityInfos();
 			InitOnTracShipmentEntityInfos();
@@ -194,6 +197,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShopifyOrderItemEntityInfos();
 			InitShopifyStoreEntityInfos();
 			InitShopSiteStoreEntityInfos();
+			InitSparkPayStoreEntityInfos();
 			InitStatusPresetEntityInfos();
 			InitStoreEntityInfos();
 			InitSystemDataEntityInfos();
@@ -202,6 +206,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitTemplateFolderEntityInfos();
 			InitTemplateStoreSettingsEntityInfos();
 			InitTemplateUserSettingsEntityInfos();
+			InitThreeDCartOrderEntityInfos();
 			InitThreeDCartOrderItemEntityInfos();
 			InitThreeDCartStoreEntityInfos();
 			InitUpsAccountEntityInfos();
@@ -336,6 +341,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)AmazonOrderFieldIndex.IsPrime, 0, 0, 10);
 			base.AddElementFieldInfo("AmazonOrderEntity", "EarliestExpectedDeliveryDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AmazonOrderFieldIndex.EarliestExpectedDeliveryDate, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderEntity", "LatestExpectedDeliveryDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonOrderEntity", "PurchaseOrderNumber", typeof(System.String), false, false, false, false,  (int)AmazonOrderFieldIndex.PurchaseOrderNumber, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonOrderItemEntity's FieldInfo objects</summary>
 		private void InitAmazonOrderItemEntityInfos()
@@ -344,6 +350,38 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "AmazonOrderItemCode", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.AmazonOrderItemCode, 64, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "ASIN", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.ASIN, 255, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderItemEntity", "ConditionNote", typeof(System.String), false, false, false, false,  (int)AmazonOrderItemFieldIndex.ConditionNote, 255, 0, 0);
+		}
+		/// <summary>Inits AmazonProfileEntity's FieldInfo objects</summary>
+		private void InitAmazonProfileEntityInfos()
+		{
+			base.AddElementFieldInfo("AmazonProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AmazonProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
+		}
+		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
+		private void InitAmazonShipmentEntityInfos()
+		{
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AmazonShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceOfferID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceOfferID, 250, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsLength, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWidth, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsHeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsWeight, 0, 0, 38);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DeliveryExperience", typeof(System.Int32), false, false, false, false,  (int)AmazonShipmentFieldIndex.DeliveryExperience, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)AmazonShipmentFieldIndex.DeclaredValue, 0, 4, 19);
+			base.AddElementFieldInfo("AmazonShipmentEntity", "AmazonUniqueShipmentID", typeof(System.String), false, false, false, true,  (int)AmazonShipmentFieldIndex.AmazonUniqueShipmentID, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonStoreEntity's FieldInfo objects</summary>
 		private void InitAmazonStoreEntityInfos()
@@ -366,6 +404,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonStoreEntity", "MarketplaceID", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MarketplaceID, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)AmazonStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "DomainName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.DomainName, 50, 0, 0);
+			base.AddElementFieldInfo("AmazonStoreEntity", "AmazonShippingToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonShippingToken, 500, 0, 0);
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's FieldInfo objects</summary>
 		private void InitAmeriCommerceStoreEntityInfos()
@@ -493,6 +532,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "FlagDescription", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.FlagDescription, 80, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "FlagType", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.FlagType, 0, 0, 10);
 			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "MarketplaceNames", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.MarketplaceNames, 1024, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorOrderFieldIndex.IsPrime, 0, 0, 10);
 		}
 		/// <summary>Inits ChannelAdvisorOrderItemEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorOrderItemEntityInfos()
@@ -516,6 +556,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ProfileID", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ProfileID, 0, 0, 10);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AttributesToDownload", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ConsolidatorAsUsps", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, 0, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonMerchantID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, 50, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonShippingToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonShippingToken, 500, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -552,6 +596,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ConfigurationEntity", "CustomerUpdateModifiedShipping", typeof(System.Int32), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerUpdateModifiedShipping, 0, 0, 10);
 			base.AddElementFieldInfo("ConfigurationEntity", "AuditNewOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditNewOrders, 0, 0, 0);
 			base.AddElementFieldInfo("ConfigurationEntity", "AuditDeletedOrders", typeof(System.Boolean), false, false, false, false,  (int)ConfigurationFieldIndex.AuditDeletedOrders, 0, 0, 0);
+			base.AddElementFieldInfo("ConfigurationEntity", "CustomerKey", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.CustomerKey, 2147483647, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -1246,6 +1291,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FtpAccountEntity", "SecurityType", typeof(System.Int32), false, false, false, false,  (int)FtpAccountFieldIndex.SecurityType, 0, 0, 10);
 			base.AddElementFieldInfo("FtpAccountEntity", "Passive", typeof(System.Boolean), false, false, false, false,  (int)FtpAccountFieldIndex.Passive, 0, 0, 0);
 			base.AddElementFieldInfo("FtpAccountEntity", "InternalOwnerID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)FtpAccountFieldIndex.InternalOwnerID, 0, 0, 19);
+			base.AddElementFieldInfo("FtpAccountEntity", "ReuseControlConnectionSession", typeof(System.Boolean), false, false, false, false,  (int)FtpAccountFieldIndex.ReuseControlConnectionSession, 0, 0, 0);
 		}
 		/// <summary>Inits GenericFileStoreEntity's FieldInfo objects</summary>
 		private void InitGenericFileStoreEntityInfos()
@@ -1491,6 +1537,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("LemonStandStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)LemonStandStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("LemonStandStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)LemonStandStoreFieldIndex.Token, 100, 0, 0);
 			base.AddElementFieldInfo("LemonStandStoreEntity", "StoreURL", typeof(System.String), false, false, false, false,  (int)LemonStandStoreFieldIndex.StoreURL, 255, 0, 0);
+			base.AddElementFieldInfo("LemonStandStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)LemonStandStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 		}
 		/// <summary>Inits MagentoOrderEntity's FieldInfo objects</summary>
 		private void InitMagentoOrderEntityInfos()
@@ -1503,7 +1550,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("MagentoStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)MagentoStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("MagentoStoreEntity", "MagentoTrackingEmails", typeof(System.Boolean), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoTrackingEmails, 0, 0, 0);
-			base.AddElementFieldInfo("MagentoStoreEntity", "MagentoConnect", typeof(System.Boolean), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoConnect, 0, 0, 0);
+			base.AddElementFieldInfo("MagentoStoreEntity", "MagentoVersion", typeof(System.Int32), false, false, false, false,  (int)MagentoStoreFieldIndex.MagentoVersion, 0, 0, 10);
 		}
 		/// <summary>Inits MarketplaceAdvisorOrderEntity's FieldInfo objects</summary>
 		private void InitMarketplaceAdvisorOrderEntityInfos()
@@ -1614,6 +1661,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ObjectReferenceEntity", "ReferenceKey", typeof(System.String), false, false, false, false,  (int)ObjectReferenceFieldIndex.ReferenceKey, 250, 0, 0);
 			base.AddElementFieldInfo("ObjectReferenceEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)ObjectReferenceFieldIndex.ObjectID, 0, 0, 19);
 			base.AddElementFieldInfo("ObjectReferenceEntity", "Reason", typeof(System.String), false, false, false, true,  (int)ObjectReferenceFieldIndex.Reason, 250, 0, 0);
+		}
+		/// <summary>Inits OdbcStoreEntity's FieldInfo objects</summary>
+		private void InitOdbcStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("OdbcStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)OdbcStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportConnectionString, 2048, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportMap, 2147483647, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportStrategy, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportColumnSourceType, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "ImportColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportColumnSource, 2048, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadStrategy, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadMap", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadMap, 2147483647, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSourceType, 0, 0, 10);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2048, 0, 0);
+			base.AddElementFieldInfo("OdbcStoreEntity", "UploadConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadConnectionString, 2048, 0, 0);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()
@@ -1758,6 +1820,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderEntity", "ShipUnparsedName", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipUnparsedName, 100, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipSenseHashKey", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipSenseHashKey, 64, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipSenseRecognitionStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipSenseRecognitionStatus, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "ShipAddressType", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressType, 0, 0, 10);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2029,8 +2092,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitSearsStoreEntityInfos()
 		{
 			base.AddElementFieldInfo("SearsStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SearsStoreFieldIndex.StoreID, 0, 0, 19);
-			base.AddElementFieldInfo("SearsStoreEntity", "Email", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Email, 75, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SearsEmail", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SearsEmail, 75, 0, 0);
 			base.AddElementFieldInfo("SearsStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.Password, 75, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SecretKey", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SecretKey, 255, 0, 0);
+			base.AddElementFieldInfo("SearsStoreEntity", "SellerID", typeof(System.String), false, false, false, false,  (int)SearsStoreFieldIndex.SellerID, 15, 0, 0);
 		}
 		/// <summary>Inits ServerMessageEntity's FieldInfo objects</summary>
 		private void InitServerMessageEntityInfos()
@@ -2292,6 +2357,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsUsername", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsUsername, 50, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "FedExFimsPassword", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.FedExFimsPassword, 50, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentEditLimit", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentEditLimit, 0, 0, 10);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()
@@ -2333,6 +2399,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequireSSL", typeof(System.Boolean), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequireSSL, 0, 0, 0);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequestTimeout", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequestTimeout, 0, 0, 10);
+		}
+		/// <summary>Inits SparkPayStoreEntity's FieldInfo objects</summary>
+		private void InitSparkPayStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)SparkPayStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)SparkPayStoreFieldIndex.Token, 70, 0, 0);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)SparkPayStoreFieldIndex.StoreUrl, 350, 0, 0);
+			base.AddElementFieldInfo("SparkPayStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)SparkPayStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()
@@ -2455,6 +2529,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("TemplateUserSettingsEntity", "PreviewFilterNodeID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)TemplateUserSettingsFieldIndex.PreviewFilterNodeID, 0, 0, 19);
 			base.AddElementFieldInfo("TemplateUserSettingsEntity", "PreviewZoom", typeof(System.String), false, false, false, false,  (int)TemplateUserSettingsFieldIndex.PreviewZoom, 10, 0, 0);
 		}
+		/// <summary>Inits ThreeDCartOrderEntity's FieldInfo objects</summary>
+		private void InitThreeDCartOrderEntityInfos()
+		{
+			base.AddElementFieldInfo("ThreeDCartOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)ThreeDCartOrderFieldIndex.OrderID, 0, 0, 19);
+			base.AddElementFieldInfo("ThreeDCartOrderEntity", "ThreeDCartOrderID", typeof(System.Int64), false, false, false, false,  (int)ThreeDCartOrderFieldIndex.ThreeDCartOrderID, 0, 0, 19);
+		}
 		/// <summary>Inits ThreeDCartOrderItemEntity's FieldInfo objects</summary>
 		private void InitThreeDCartOrderItemEntityInfos()
 		{
@@ -2470,6 +2550,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "TimeZoneID", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.TimeZoneID, 100, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
+			base.AddElementFieldInfo("ThreeDCartStoreEntity", "RestUser", typeof(System.Boolean), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.RestUser, 0, 0, 0);
 		}
 		/// <summary>Inits UpsAccountEntity's FieldInfo objects</summary>
 		private void InitUpsAccountEntityInfos()
@@ -2710,6 +2791,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UspsAccountEntity", "UspsReseller", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.UspsReseller, 0, 0, 10);
 			base.AddElementFieldInfo("UspsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.ContractType, 0, 0, 10);
 			base.AddElementFieldInfo("UspsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)UspsAccountFieldIndex.CreatedDate, 0, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "PendingInitialAccount", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.PendingInitialAccount, 0, 0, 10);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()
@@ -2951,6 +3033,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("YahooOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)YahooOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooOrderItemEntity", "YahooProductID", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.YahooProductID, 255, 0, 0);
+			base.AddElementFieldInfo("YahooOrderItemEntity", "Url", typeof(System.String), false, false, false, false,  (int)YahooOrderItemFieldIndex.Url, 255, 0, 0);
 		}
 		/// <summary>Inits YahooProductEntity's FieldInfo objects</summary>
 		private void InitYahooProductEntityInfos()
@@ -2965,6 +3048,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("YahooStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)YahooStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooStoreEntity", "YahooEmailAccountID", typeof(System.Int64), false, true, false, false,  (int)YahooStoreFieldIndex.YahooEmailAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("YahooStoreEntity", "TrackingUpdatePassword", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.TrackingUpdatePassword, 100, 0, 0);
+			base.AddElementFieldInfo("YahooStoreEntity", "YahooStoreID", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.YahooStoreID, 50, 0, 0);
+			base.AddElementFieldInfo("YahooStoreEntity", "AccessToken", typeof(System.String), false, false, false, false,  (int)YahooStoreFieldIndex.AccessToken, 200, 0, 0);
+			base.AddElementFieldInfo("YahooStoreEntity", "BackupOrderNumber", typeof(Nullable<System.Int64>), false, false, false, true,  (int)YahooStoreFieldIndex.BackupOrderNumber, 0, 0, 19);
 		}
 		
 	}

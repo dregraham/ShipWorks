@@ -1,20 +1,25 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
-    public class iParcelAccountRepository : CarrierAccountRepositoryBase<IParcelAccountEntity>, ICarrierAccountRepository<IParcelAccountEntity>
+    public class iParcelAccountRepository : CarrierAccountRepositoryBase<IParcelAccountEntity, IIParcelAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<IParcelAccountEntity> Accounts
-        {
-            get
-            {
-                return iParcelAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<IParcelAccountEntity> Accounts => iParcelAccountManager.Accounts;
+
+        /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public override IEnumerable<IIParcelAccountEntity> AccountsReadOnly => iParcelAccountManager.AccountsReadOnly;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => iParcelAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -24,6 +29,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override IParcelAccountEntity GetAccount(long accountID)
         {
             return iParcelAccountManager.GetAccount(accountID);
+        }
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        /// <param name="accountID">The account ID for which to return an account.</param>
+        /// <returns>The matching account as IEntity2.</returns>
+        public override IIParcelAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return iParcelAccountManager.GetAccountReadOnly(accountID);
         }
 
         /// <summary>
@@ -37,8 +52,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             get
             {
-                long? accountID = new iParcelShipmentType().GetPrimaryProfile().IParcel.IParcelAccountID;
-
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.iParcel).IParcel.IParcelAccountID;
                 return GetProfileAccount(ShipmentTypeCode.iParcel, accountID);
             }
         }

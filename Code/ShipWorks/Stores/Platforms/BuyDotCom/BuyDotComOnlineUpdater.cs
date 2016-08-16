@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
 using ShipWorks.Shipping.Carriers.UPS;

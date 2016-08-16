@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ystorewsResponse>
+  <Version>1.0</Version>
+  <RequestID>RequestID-1449174894356854</RequestID>
+  <ResponseResourceList>
+    <OrderList>
+      <Order>
+        <OrderID>1001</OrderID>
+        <CreationTime>Mon Nov 23 14:51:08 2015 GMT</CreationTime>
+        <StatusList>
+          <OrderStatus>
+            <StatusID>0</StatusID>
+          </OrderStatus>
+          <OrderStatus>
+            <StatusID>8</StatusID>
+          </OrderStatus>
+        </StatusList>
+        <CartShipmentInfo>
+          <TrackingNumber>1ZYA95390399033973</TrackingNumber>
+          <Shipper>ups</Shipper>
+          <ShipState>OK</ShipState>
+        </CartShipmentInfo>
+        <ShipMethod>Ground</ShipMethod>
+        <ShipToInfo>
+          <GeneralInfo>
+            <FirstName>chris</FirstName>
+            <LastName>hicks</LastName>
+            <PhoneNumber>1234567897</PhoneNumber>
+            <Company></Company>
+            <Email>c.hicks@shipworks.com</Email>
+          </GeneralInfo>
+          <AddressInfo>
+            <Address1>1 memorial dr</Address1>
+            <Address2></Address2>
+            <City>St Louis</City>
+            <Country>US United States</Country>
+            <State>MO</State>
+            <Zip>63102</Zip>
+          </AddressInfo>
+        </ShipToInfo>
+        <BillToInfo>
+          <GeneralInfo>
+            <FirstName>chris</FirstName>
+            <LastName>hicks</LastName>
+            <PhoneNumber>1234567897</PhoneNumber>
+            <Company></Company>
+            <Email>c.hicks@shipworks.com</Email>
+          </GeneralInfo>
+          <AddressInfo>
+            <Address1>1 memorial dr</Address1>
+            <Address2></Address2>
+            <City>St Louis</City>
+            <Country>US United States</Country>
+            <State>MO</State>
+            <Zip>63102</Zip>
+          </AddressInfo>
+        </BillToInfo>
+        <BuyerEmail>c.hicks@shipworks.com</BuyerEmail>
+        <ItemList>
+          <Item>
+            <LineNumber>0</LineNumber>
+            <ItemID>hubbabubbagum</ItemID>
+            <ItemCode>hubbabubba</ItemCode>
+            <Quantity>1</Quantity>
+            <UnitPrice>0.1</UnitPrice>
+            <Description>Test Product 3</Description>
+            <URL>http://store.powershipper.net/hubbabubbagum.html</URL>
+            <Taxable>true</Taxable>
+            <ThumbnailURL></ThumbnailURL>
+            <SelectedOptionList>
+              <Option>
+                <Name>Size</Name>
+                <Value>Large</Value>
+              </Option>
+            </SelectedOptionList>
+          </Item>
+        </ItemList>
+        <OrderTotals>
+          <Subtotal>0.10</Subtotal>
+          <Shipping>0.00</Shipping>
+          <Tax>0.00</Tax>
+          <GiftWrap>0.10</GiftWrap>
+          <Total>0.20</Total>
+        </OrderTotals>
+        <Referer></Referer>
+        <MerchantNotes>> 2007 Aug 22 03:16: This will be a private note</MerchantNotes>
+        <EntryPoint></EntryPoint>
+        <BuyerComments>This will be a public note</BuyerComments>
+        <PaymentProcessor></PaymentProcessor>
+        <Currency>USD</Currency>
+        <GiftMessage>Enjoy</GiftMessage>
+        <PaymentType>Purchase Order</PaymentType>
+        <LastUpdatedTime>Mon Nov 23 17:33:55 2015 GMT</LastUpdatedTime>
+        <BuyerIP>66.128.118.226</BuyerIP>
+        <Vwoidc>091cee6c992a468e3ede</Vwoidc>
+      </Order>
+    </OrderList>
+  </ResponseResourceList>
+</ystorewsResponse>

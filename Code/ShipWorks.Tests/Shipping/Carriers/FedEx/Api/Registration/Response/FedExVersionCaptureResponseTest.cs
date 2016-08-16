@@ -34,13 +34,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_NoErrorThrown_NoErrorInReply_Test()
+        public void Process_NoErrorThrown_NoErrorInReply()
         {
             testObject.Process();
         }
 
         [Fact]
-        public void Process_ErrorThrown_ErrorInReply_Test()
+        public void Process_ErrorThrown_ErrorInReply()
         {
             reply.HighestSeverity = NotificationSeverityType.FAILURE;
 

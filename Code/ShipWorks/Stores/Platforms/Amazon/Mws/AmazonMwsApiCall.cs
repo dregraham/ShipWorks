@@ -28,5 +28,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
         // Fulfilment Api
         GetEligibleShippingServices = 9,
+        CreateShipment = 10,
+        CancelShipment = 11,
     }
 }

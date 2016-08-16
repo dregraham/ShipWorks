@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -229,6 +230,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create a new package entity that has default values
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static FedExPackageEntity CreateDefaultPackage()
         {
             FedExPackageEntity package = new FedExPackageEntity();

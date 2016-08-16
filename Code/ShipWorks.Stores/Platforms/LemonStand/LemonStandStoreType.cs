@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using Interapptive.Shared.Net;
 using log4net;
+using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
@@ -17,9 +20,8 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.LemonStand.DTO;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -29,33 +31,30 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     public class LemonStandStoreType : StoreType
     {
-        // Logger 
         private readonly ILog log;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
-        public LemonStandStoreType(StoreEntity store)
-            : this(store, LogManager.GetLogger(typeof (LemonStandStoreType)))
+        public LemonStandStoreType(StoreEntity store) : base(store)
         {
+            log = LogManager.GetLogger(typeof(LemonStandStoreType));
         }
-
-        public LemonStandStoreType(StoreEntity store, ILog log)
-            : base(store)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LemonStandStoreType(StoreEntity store, Func<Type, ILog> logFactory) : base(store)
         {
-            this.log = log;
+            log = logFactory(typeof(LemonStandStoreType));
         }
 
         /// <summary>
-        ///     Indentifying type code
+        /// Identifying type code
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.LemonStand; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.LemonStand;
 
         /// <summary>
-        ///     Gets the license identifier for this store
+        /// Gets the license identifier for this store
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
@@ -70,27 +69,48 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Gets the help URL to use in the account settings.
+        /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static Uri AccountSettingsHelpUrl
-        {
-            get { return new Uri("http://support.shipworks.com/support/solutions/articles/4000062623"); }
-        }
+        public static Uri AccountSettingsHelpUrl => new Uri("http://support.shipworks.com/support/solutions/articles/4000062623");
 
         /// <summary>
-        ///     The initial download policy
+        /// The initial download policy
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
-            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) {DefaultDaysBack = 7, MaxDaysBack = 30};
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 7, MaxDaysBack = 30 };
 
         /// <summary>
-        ///     Create menu commands for upload shipment details
+        /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
-            MenuCommand command = new MenuCommand("Upload Shipment Details", OnUploadDetails);
-            commands.Add(command);
+
+            // get possible status codes from the provider
+            LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity) Store);
+
+            // create a menu item for each status
+            List<string> statusCodeNames = GetCurrentOrderStatuses().ToList();
+
+            bool isOne = false;
+            foreach (string codeName in statusCodeNames)
+            {
+                isOne = true;
+
+                MenuCommand command = new MenuCommand(codeName, OnSetOnlineStatus)
+                {
+                    Tag = codeProvider.GetCodeValue(codeName)
+                };
+
+                commands.Add(command);
+            }
+
+            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", OnUploadDetails)
+            {
+                BreakBefore = isOne
+            };
+
+            commands.Add(uploadCommand);
 
             return commands;
         }
@@ -103,12 +123,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
                 "Upload Shipment Details",
                 "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
+                $"Updating {context.SelectedKeys.Count()} orders...");
 
             executor.ExecuteCompleted += (o, e) => { context.Complete(e.Issues, MenuCommandResult.Error); };
 
             // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new[] {context.SelectedKeys}, null);
+            executor.ExecuteAsync(ShipmentUploadCallback, new[] { context.SelectedKeys }, null);
         }
 
         /// <summary>
@@ -131,14 +151,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 // add the error to issues for the user
                 issueAdder.Add(headers, ex);
             }
-        }
-
-        /// <summary>
-        ///     Create the control for generating the online update shipment tasks
-        /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new OnlineUpdateShipmentUpdateActionControl(typeof (LemonStandShipmentUploadTask));
         }
 
         /// <summary>
@@ -191,11 +203,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity();
-
-            entity.UrlName = "";
-            entity.ShortDescription = "";
-            entity.Category = "";
+            LemonStandOrderItemEntity entity = new LemonStandOrderItemEntity
+            {
+                UrlName = "",
+                ShortDescription = "",
+                Category = ""
+            };
 
             return entity;
         }
@@ -241,7 +254,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
         }
@@ -262,17 +275,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         /// <summary>
         ///     Get any filters that should be created as an initial filter set when the store is first created.  If the list is
-        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test 
+        ///     non-empty they will be automatically put in a folder that is filtered on the store... so there is no need to test
         ///     for that in the generated filter conditions.
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            return new List<FilterEntity>
-            {
-                CreateFilterPaid(),
-                CreateFilterShipped(),
-                CreateFilterCancelled()
-            };
+            List<string> statuses = GetOnlineStatusChoices().ToList();
+
+            return statuses.Select(status => string.Equals(status, "shipped", StringComparison.InvariantCultureIgnoreCase) ?
+                CreateFilterShipped() :
+                (CreateOrderStatusFilter(status))).ToList();
         }
 
         /// <summary>
@@ -285,9 +297,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
 
             //      [Store] == this store
-            StoreCondition storeCondition = new StoreCondition();
-            storeCondition.Operator = EqualityOperator.Equals;
-            storeCondition.Value = Store.StoreID;
+            StoreCondition storeCondition = new StoreCondition
+            {
+                Operator = EqualityOperator.Equals,
+                Value = Store.StoreID
+            };
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // [AND]
@@ -296,13 +310,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup();
-            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+            shippedDefinition.FirstGroup = new ConditionGroup { JoinType = ConditionJoinType.Any };
 
             // LemonStand Shipping Status == Shipped
-            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
-            onlineStatus.Operator = StringOperator.Equals;
-            onlineStatus.TargetValue = "Shipped";
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition
+            {
+                Operator = StringOperator.Equals,
+                TargetValue = "Shipped"
+            };
             shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
 
             // [OR]
@@ -320,48 +335,18 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             };
         }
 
-        /// <summary>
-        ///     Creates the filter ready to ship.
-        /// </summary>
-        /// <returns></returns>
-        private FilterEntity CreateFilterPaid()
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
-            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
-
-            // For this store
-            StoreCondition storeCondition = new StoreCondition();
-            storeCondition.Operator = EqualityOperator.Equals;
-            storeCondition.Value = Store.StoreID;
-            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
-
-            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
-            onlineStatus.Operator = StringOperator.Equals;
-            onlineStatus.TargetValue = "Paid";
-            definition.RootContainer.FirstGroup.Conditions.Add(onlineStatus);
-
-            definition.RootContainer.SecondGroup = InitialDataLoader.CreateDefinitionNotShipped().RootContainer;
-
-            return new FilterEntity
-            {
-                Name = "Paid",
-                Definition = definition.GetXml(),
-                IsFolder = false,
-                FilterTarget = (int) FilterTarget.Orders
-            };
-        }
-
-        private FilterEntity CreateFilterCancelled()
+        private FilterEntity CreateOrderStatusFilter(string orderStatus)
         {
             // [All]
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
 
             //      [Store] == this store
-            StoreCondition storeCondition = new StoreCondition();
-            storeCondition.Operator = EqualityOperator.Equals;
-            storeCondition.Value = Store.StoreID;
+            StoreCondition storeCondition = new StoreCondition
+            {
+                Operator = EqualityOperator.Equals,
+                Value = Store.StoreID
+            };
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // [AND]
@@ -370,17 +355,18 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
-            shippedDefinition.FirstGroup = new ConditionGroup();
-            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+            shippedDefinition.FirstGroup = new ConditionGroup { JoinType = ConditionJoinType.Any };
 
-            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
-            onlineStatus.Operator = StringOperator.Equals;
-            onlineStatus.TargetValue = "Cancelled";
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition
+            {
+                Operator = StringOperator.Equals,
+                TargetValue = orderStatus
+            };
             shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
 
             return new FilterEntity
             {
-                Name = "Cancelled",
+                Name = orderStatus,
                 Definition = definition.GetXml(),
                 IsFolder = false,
                 FilterTarget = (int) FilterTarget.Orders
@@ -394,12 +380,92 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
             ConditionGroup group = new ConditionGroup();
 
-            LemonStandOrderIdCondition condition = new LemonStandOrderIdCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
+            LemonStandOrderIdCondition condition = new LemonStandOrderIdCondition
+            {
+                TargetValue = search,
+                Operator = StringOperator.BeginsWith
+            };
             group.Conditions.Add(condition);
 
             return group;
+        }
+
+        public override ICollection<string> GetOnlineStatusChoices()
+        {
+            LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity) Store);
+
+            List<JToken> statuses = client.GetOrderStatuses().SelectToken("data").Children().ToList();
+
+            List<string> list = statuses.Select(status => status.SelectToken("name").ToString()).ToList();
+
+            list.Sort();
+
+            return list;
+        }
+
+        /// <summary>
+        /// Command handler for setting online order status
+        /// </summary>
+        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
+        {
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
+               "Set Status",
+               "ShipWorks is setting the online status.",
+               "Updating order {0} of {1}...");
+
+            MenuCommand command = context.MenuCommand;
+            int statusCode = (int) command.Tag;
+
+            executor.ExecuteCompleted += (o, e) =>
+            {
+                context.Complete(e.Issues, MenuCommandResult.Error);
+            };
+            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
+        }
+
+        /// <summary>
+        /// Worker thread method for updating online order status
+        /// </summary>
+        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
+        {
+            log.Debug(Store.StoreName);
+
+            int statusCode = (int) userState;
+            try
+            {
+                LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater((LemonStandStoreEntity) Store);
+                updater.UpdateOrderStatus(orderID, statusCode);
+            }
+            catch (LemonStandException ex)
+            {
+                // log it
+                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
+
+                // add the error to issues so we can react later
+                issueAdder.Add(orderID, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current order statuses.
+        /// </summary>
+        /// <returns></returns>
+        private List<string> GetCurrentOrderStatuses()
+        {
+            XmlSerializer deserializer = new XmlSerializer(typeof(LemonStandStatusCodes));
+            List<string> statusList = new List<string>();
+
+            LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
+            using (TextReader reader = new StringReader(store.StatusCodes))
+            {
+                LemonStandStatusCodes codes = (LemonStandStatusCodes) deserializer.Deserialize(reader);
+
+                statusList = codes.StatusCode.Select(code => code.Name).ToList();
+
+                statusList.Sort();
+            }
+
+            return statusList;
         }
     }
 }

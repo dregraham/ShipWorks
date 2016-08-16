@@ -1,33 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
+using Divelements.SandGrid;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.AddressValidation;
-using Interapptive.Shared.IO.Text.Sgml;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
-using ShipWorks.Filters;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Diagnostics;
-using ShipWorks.Data.Grid;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Shipping;
-using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.UI;
-using System.Runtime.InteropServices;
-using log4net;
-using System.Threading.Tasks;
-using Divelements.SandGrid;
-using ShipWorks.ApplicationCore;
-using Autofac;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -58,6 +63,36 @@ namespace ShipWorks.Stores.Content.Panels
 
             // Load the copy menu
             menuCopy.DropDownItems.AddRange(entityGrid.CreateCopyMenuItems(false));
+
+            ILifetimeScope lifetimeScope = IoC.UnsafeGlobalLifetimeScope;
+            IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
+
+            messenger.Where(x => x.Sender is ShippingDlg)
+                .Subscribe(_ => ReloadContent());
+
+            // Update the shipment when the provider changes. This keeps things in sync, updates the displayed rates
+            // immediately. This means we no longer need to hide rates when the shipping pane is shown because they
+            // should not get out of sync.
+            messenger.OfType<ShipmentChangedMessage>()
+                .Where(x => x.ChangedField == ShipmentFields.ShipmentType.Name)
+                .Do(_ => Program.MainForm.ForceHeartbeat())
+                .Subscribe(_ => ReloadContent());
+
+            messenger.OfType<OrderSelectionChangedMessage>()
+                .ObserveOn(lifetimeScope.Resolve<ISchedulerProvider>().WindowsFormsEventLoop)
+                .Subscribe(x => ReloadContent());
+
+            messenger.OfType<PanelShownMessage>()
+                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Subscribe(_ => ratesControl.Visible = false);
+
+            messenger.OfType<PanelHiddenMessage>()
+                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Subscribe(_ =>
+                {
+                    ratesControl.Visible = true;
+                    RefreshSelectedShipments();
+                });
         }
 
         /// <summary>
@@ -95,10 +130,10 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             // Can't add shipments directly to a customer
-            addLink.Visible = 
+            addLink.Visible =
                 (type == EntityType.OrderEntity) &&
-                UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);            
-            
+                UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);
+
             return gateway;
         }
 
@@ -116,11 +151,12 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// When the content is called to be updated, we need to make sure our rates are up to date as well
         /// </summary>
-        public override void UpdateContent()
+        public override Task UpdateContent()
         {
-            base.UpdateContent();
+            Task task = base.UpdateContent();
 
             RefreshSelectedShipments();
+            return task;
         }
 
         /// <summary>
@@ -128,52 +164,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnShipmentGridLoaded(object sender, EventArgs e)
         {
-            if (EntityID == null)
+            if (EntityID == null || entityGrid.Rows.Count == 0)
             {
                 ratesControl.ChangeShipment(null);
-            }
-
-            if (entityGrid.Rows.Count == 0)
-            {
-                ratesControl.ChangeShipment(null);
-
-                long orderID = EntityID.Value;
-
-                // Don't auto create for a customer, only for an order
-                if (EntityUtility.GetEntityType(orderID) == EntityType.OrderEntity && 
-                    ShippingSettings.Fetch().AutoCreateShipments &&
-                    UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID))
-                {
-                    // Don't do it if we are already in the middle of doing it
-                    if (!autoCreatingShipments.Contains(orderID))
-                    {
-                        autoCreatingShipments.Add(orderID);
-
-                        // Do it in the background so creating the shipment doesn't make the UI feel sluggish
-                        Task.Factory.StartNew(() =>
-                            {
-                                return ShippingManager.CreateShipment(orderID);
-                            })
-                            .ContinueWith(
-                                ant =>
-                                {
-                                    // If there was a problem creating the shipment, just give up.  This is to handle a situation
-                                    // where ShipWorks would lock in an endless loop on an exception
-                                    if (ant.IsFaulted)
-                                    {
-                                        log.Warn("Could not create shipment", ant.Exception);
-                                        return;
-                                    }
-
-                                    autoCreatingShipments.Remove(orderID);
-
-                                    if (orderID == EntityID)
-                                    {
-                                        entityGrid.ReloadGridRows();
-                                    }
-                                }, TaskScheduler.FromCurrentSynchronizationContext());
-                    }
-                }
             }
             else
             {
@@ -195,13 +188,18 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void RefreshSelectedShipments()
         {
+            if (!ratesControl.Visible)
+            {
+                return;
+            }
+
             int shipmentSelectionCount = entityGrid.Selection.Count;
 
             if (entityGrid.Rows.Count == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.EntityGateway.GetKeyFromRow(0));
-
-            } else if (shipmentSelectionCount == 1)
+            }
+            else if (shipmentSelectionCount == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
             }
@@ -218,7 +216,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Add a new shipment
         /// </summary>
-        private void OnAddShipment(object sender, EventArgs e)
+        private async void OnAddShipment(object sender, EventArgs e)
         {
             Debug.Assert(EntityID != null);
             if (EntityID == null)
@@ -229,22 +227,15 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
-                ValidatedAddressManager.ValidateShipment(shipment, new AddressValidator());
+                await ValidatedAddressManager.ValidateShipmentAsync(shipment, new AddressValidator());
 
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, lifetimeScope))
-                    {
-                        dlg.ShowDialog(this);
-                    }
-                }
+                Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
+                Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { shipment.OrderID }));
             }
             catch (SqlForeignKeyException)
             {
                 MessageHelper.ShowMessage(this, "The order of the shipment has been deleted.");
             }
-
-            ReloadContent();
         }
 
         /// <summary>
@@ -280,7 +271,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             if (action == GridLinkAction.Edit)
             {
-                EditShipments( new List<long> { entityID } );
+                EditShipments(new List<long> { entityID });
             }
         }
 
@@ -350,22 +341,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnTrackShipment(object sender, EventArgs e)
         {
-            if (entityGrid.Selection.Count == 1)
-            {
-                ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
-                if (shipment != null)
-                {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope()) { 
-                        // Show the shipping window
-                        using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Tracking, lifetimeScope))
-                        {
-                            dlg.ShowDialog(this);
-                        }
-                    }
-
-                    ReloadContent();
-                }
-            }
+            OpenSingleShipmentInDialog(InitialShippingTabDisplay.Tracking);
         }
 
         /// <summary>
@@ -373,21 +349,20 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnSubmitClaim(object sender, EventArgs e)
         {
+            OpenSingleShipmentInDialog(InitialShippingTabDisplay.Insurance);
+        }
+
+        /// <summary>
+        /// Open a single shipment in the dialog
+        /// </summary>
+        private void OpenSingleShipmentInDialog(InitialShippingTabDisplay initialTab)
+        {
             if (entityGrid.Selection.Count == 1)
             {
                 ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
                 if (shipment != null)
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        // Show the shipping window
-                        using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Insurance, lifetimeScope))
-                        {
-                            dlg.ShowDialog(this);
-                        }
-                    }
-
-                    ReloadContent();
+                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, initialTab));
                 }
             }
         }
@@ -397,53 +372,19 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void EditShipments(IEnumerable<long> shipmentKeys)
         {
-            if (shipmentKeys.Count() > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
-
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(shipmentKeys);
+            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, shipmentKeys));
         }
 
         /// <summary>
-        /// The async loading of shipments for shipping has completed
-        /// </summary>
-        void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
-        {
-            if (IsDisposed)
-            {
-                return;
-            }
-
-            if (e.Cancelled)
-            {
-                return;
-            }
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                // Show the shipping window
-                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, lifetimeScope))
-                {
-                    dlg.ShowDialog(this);
-                }
-            }
-
-            ReloadContent();
-        }
-
-        /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// Refresh the existing selected content by re-querying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public override void ReloadContent()
+        public override Task ReloadContent()
         {
-            base.ReloadContent();
+            Task task = base.ReloadContent();
 
             RefreshSelectedShipments();
+            return task;
         }
 
         /// <summary>
@@ -456,6 +397,7 @@ namespace ShipWorks.Stores.Content.Panels
             if (result == DialogResult.OK)
             {
                 ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+                long orderID = shipment.OrderID;
 
                 if (shipment == null)
                 {
@@ -464,6 +406,7 @@ namespace ShipWorks.Stores.Content.Panels
                 else
                 {
                     ShippingManager.DeleteShipment(shipment);
+                    Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { orderID }));
                 }
 
                 ReloadContent();

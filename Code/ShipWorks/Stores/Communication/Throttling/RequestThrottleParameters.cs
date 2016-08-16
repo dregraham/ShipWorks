@@ -1,6 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using ShipWorks.Common.Threading;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Stores.Communication.Throttling
 {
@@ -20,8 +19,8 @@ namespace ShipWorks.Stores.Communication.Throttling
             ApiCall = apiCall;
             Request = request;
             Progress = progress;
-			
-			// Default to 10 seconds
+
+            // Default to 10 seconds
             RetryInterval = new TimeSpan(0, 0, 10);
         }
 
@@ -29,22 +28,22 @@ namespace ShipWorks.Stores.Communication.Throttling
         /// Enum that represents the type of call to be throttled.  Used for logging and determining retry interval.
         /// </summary>
         public Enum ApiCall { get; set; }
-        
+
         /// <summary>
         /// The request to be made.
         /// </summary>
         public object Request { get; set; }
-        
+
         /// <summary>
         /// IProgressReporter for detecting cancel and updating status.
         /// </summary>
         public IProgressReporter Progress { get; set; }
-        
+
         /// <summary>
         /// The response that was returned from the throttled call
         /// </summary>
         public object Response { get; set; }
-        
+
         /// <summary>
         /// The timespn
         /// </summary>

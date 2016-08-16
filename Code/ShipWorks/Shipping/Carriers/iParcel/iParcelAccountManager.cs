@@ -1,11 +1,15 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using System.Collections.Generic;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Utility;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -15,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     public static class iParcelAccountManager
     {
         static TableSynchronizer<IParcelAccountEntity> synchronizer;
+        static IEnumerable<IIParcelAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -46,16 +51,42 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Return the active list of i-parcel accounts
+        /// </summary>
+        public static IEnumerable<IIParcelAccountEntity> AccountsReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyAccounts;
+                }
+            }
+        }
+
+        /// <summary>
         /// Save the given i-parcel account
         /// </summary>
         public static void SaveAccount(IParcelAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (var adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -78,8 +109,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int)IParcelAccountFieldIndex.IParcelAccountID, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int) IParcelAccountFieldIndex.IParcelAccountID, ListSortDirection.Ascending);
                 }
+
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
 
                 needCheckForChanges = false;
             }
@@ -94,6 +127,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IIParcelAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return AccountsReadOnly.FirstOrDefault(a => a.IParcelAccountID == accountID);
+        }
+
+        /// <summary>
         /// Delete the given i-parcel account
         /// </summary>
         public static void DeleteAccount(IParcelAccountEntity account)
@@ -104,6 +145,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.iParcel));
         }
 
         /// <summary>

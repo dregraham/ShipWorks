@@ -117,4 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="invoiceAuthNeededLabel.Text" xml:space="preserve">
+    <value>Negotiated rates are not available without authenticating your account, using information from your invoice. When you recieve an invoice from UPS, please go to your UPS account settings and enter your invoice information to enable negotiated rates in ShipWorks.</value>
+  </data>
 </root>

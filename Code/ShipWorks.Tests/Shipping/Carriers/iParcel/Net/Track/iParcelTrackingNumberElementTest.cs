@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         }
 
         [Fact]
-        public void Build_AddsTrackingNumberElement_Test()
+        public void Build_AddsTrackingNumberElement()
         {
             XElement element = testObject.Build();
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         }
 
         [Fact]
-        public void Build_AddsTrackingNumber_Test()
+        public void Build_AddsTrackingNumber()
         {
             XElement element = testObject.Build();
 

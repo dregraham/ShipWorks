@@ -21,9 +21,15 @@ namespace ShipWorks.Stores.Platforms.Magento.WizardPages
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoOnlineUpdateActionControl()
+        public MagentoOnlineUpdateActionControl(bool hideEmail)
         {
             InitializeComponent();
+
+            if (hideEmail)
+            {
+                sendEmail.Hide();
+                labelEmail.Hide();
+            }
         }
 
         /// <summary>

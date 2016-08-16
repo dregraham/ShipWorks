@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using ShipWorks.Stores;
 using ShipWorks.Shipping;
 using System.Xml;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
@@ -110,6 +111,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Read and process the given server message feed content.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void ProcessServerMessageFeed(string feedXml)
         {
             try
@@ -194,6 +196,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Process the incoming newly recieved and not yet saved server message
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void ProcessIncomingServerMessage(ServerMessageEntity message)
         {
             // Start out assuming its not active

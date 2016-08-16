@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExServiceTypeManipulator_ReturnsServiceType_Test()
+        public void Manipulate_FedExServiceTypeManipulator_ReturnsServiceType()
         {
             testObject.Manipulate(carrierRequest.Object);
 

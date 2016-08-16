@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [Fact]
-        public void Execute_DeletesJob_WhenJobDataMapDoesNotContainActionJobKey_Test()
+        public void Execute_DeletesJob_WhenJobDataMapDoesNotContainActionJobKey()
         {
             jobDataMap.Clear();
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [Fact]
-        public void Execute_LogsError_WhenJobDataMapDoesNotContainActionJobKey_Test()
+        public void Execute_LogsError_WhenJobDataMapDoesNotContainActionJobKey()
         {
             jobDataMap.Clear();
 
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [Fact]
-        public void Execute_DeletesJob_WhenActionIdInJobDataMapIsNull_Test()
+        public void Execute_DeletesJob_WhenActionIdInJobDataMapIsNull()
         {
             // Set action ID to a null value
             jobDataMap.Add("ActionID", null);
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [Fact]
-        public void Execute_LogsError_WhenActionIdInJobDataMapIsNull_Test()
+        public void Execute_LogsError_WhenActionIdInJobDataMapIsNull()
         {
             // Set action ID to a null value
             jobDataMap.Add("ActionID", null);
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
         [Fact]
-        public void Execute_DeletesJob_WhenActionIdInJobDataMapIsAlphaNumeric_Test()
+        public void Execute_DeletesJob_WhenActionIdInJobDataMapIsAlphaNumeric()
         {
             // Set action ID to an alpha value
             jobDataMap.Add("ActionID", "abc123");
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
         
         [Fact]
-        public void Execute_LogsError_WhenActionIdInJobDataMapIsAlphaNumeric_Test()
+        public void Execute_LogsError_WhenActionIdInJobDataMapIsAlphaNumeric()
         {
             // Set action ID to an alpha value
             jobDataMap.Add("ActionID", "abc123");

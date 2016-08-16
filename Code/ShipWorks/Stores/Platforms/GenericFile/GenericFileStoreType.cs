@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
@@ -141,7 +142,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// Create the wizard pages for adding a new store
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
                 {
@@ -205,6 +207,16 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             {
                 adapter.DeleteEntity(new FtpAccountEntity(generic.FtpAccountID.Value));
             }
+        }
+
+        /// <summary>
+        /// Generic file does not support uploading tracking or downloading by ordernumber
+        /// or days back so we return false to skip this page
+        /// </summary>
+        /// <returns></returns>
+        public override bool ShowTaskWizardPage()
+        {
+            return false;
         }
     }
 }

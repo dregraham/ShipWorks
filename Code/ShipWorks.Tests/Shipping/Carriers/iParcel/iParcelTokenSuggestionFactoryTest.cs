@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Data.Model.EntityClasses;
 using Moq;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
@@ -17,11 +18,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
         private List<ShipmentEntity> shipments;
         private Mock<IiParcelRepository> repository;
+        private Mock<IOrderManager> orderManager;
 
         public iParcelTokenSuggestionFactoryTest()
         {
             repository = new Mock<IiParcelRepository>();
-            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
+            
+            orderManager = new Mock<IOrderManager>();
+            orderManager.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
             shipments = new List<ShipmentEntity>
             {
@@ -64,11 +68,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipments[0].Order.OrderItems.Add(new OrderItemEntity { Description = "some description", Quantity = 2, Weight = 1.54, UnitPrice = 3.40M, SKU = "12345678" });
             shipments[0].Order.OrderItems.Add(new OrderItemEntity { Description = "another description", Quantity = 1, Weight = 5.54, UnitPrice = 4.90M, SKU = "987654321" });
 
-            testObject = new iParcelTokenSuggestionFactory(shipments, repository.Object);
+            testObject = new iParcelTokenSuggestionFactory(shipments, orderManager.Object);
         }
 
         [Fact]
-        public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsOne_Test()
+        public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsOne()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
@@ -76,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsGreaterThanOne_Test()
+        public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsGreaterThanOne()
         {
             shipments.Add(new ShipmentEntity());
 
@@ -86,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsZero_Test()
+        public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsZero()
         {
             shipments.RemoveAt(0);
 
@@ -96,35 +100,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetSuggestions_DelegatesToRepository_WhenShipmentCountIsOne_Test()
+        public void GetSuggestions_DelegatesToRepository_WhenShipmentCountIsOne()
         {
             testObject.GetSuggestions(TokenUsage.Generic);
 
-            repository.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Once());
+            orderManager.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Once());
         }
 
         [Fact]
-        public void GetSuggestions_DoesNotDelegateToRepository_WhenShipmentCountIsGreaterThanOne_Test()
+        public void GetSuggestions_DoesNotDelegateToRepository_WhenShipmentCountIsGreaterThanOne()
         {
             shipments.Add(new ShipmentEntity());
 
             testObject.GetSuggestions(TokenUsage.Generic);
 
-            repository.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Never());
+            orderManager.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Never());
         }
 
         [Fact]
-        public void GetSuggestions_DoesNotDelegateToRepository_WhenShipmentCountIsZero_Test()
+        public void GetSuggestions_DoesNotDelegateToRepository_WhenShipmentCountIsZero()
         {
             shipments.RemoveAt(0);
 
             testObject.GetSuggestions(TokenUsage.Generic);
 
-            repository.Verify(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()), Times.Never());
+            orderManager.Verify(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()), Times.Never());
         }
 
         [Fact]
-        public void GetSuggestions_AddsSuggestionForEachOrderItem_WhenShipmentCountIsOne_Test()
+        public void GetSuggestions_AddsSuggestionForEachOrderItem_WhenShipmentCountIsOne()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
@@ -135,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetSuggestions_OrderItemSuggestionsIsCommaDelimited_WhenShipmentCountIsOne_Test()
+        public void GetSuggestions_OrderItemSuggestionsIsCommaDelimited_WhenShipmentCountIsOne()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
@@ -150,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetSuggestions_OrderItemSuggestionsXSL_WhenShipmentCountIsOne_Test()
+        public void GetSuggestions_OrderItemSuggestionsXSL_WhenShipmentCountIsOne()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
@@ -165,10 +169,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void GetSuggestions_ThrowsiParcelException_WhenExceptionOccurs_Test()
+        public void GetSuggestions_ThrowsiParcelException_WhenExceptionOccurs()
         {
             // Setup the repository to throw an exception to trigger the exception handling
-            repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>())).Throws(new NullReferenceException());
+            orderManager.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>())).Throws(new NullReferenceException());
 
             Assert.Throws<iParcelException>(() => testObject.GetSuggestions(TokenUsage.Generic));
         }

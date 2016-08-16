@@ -1,34 +1,31 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Windows.Forms;
-using log4net;
-using System.Threading;
-using ShipWorks.UI;
-using System.Diagnostics;
-using ShipWorks.ApplicationCore.Licensing;
 using System.Data.SqlClient;
-using ShipWorks.Data;
-using ShipWorks.Common.Threading;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Columns.Definitions;
+using System.Threading;
+using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Threading;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Utility;
-using ShipWorks.Users.Security;
-using ShipWorks.Users.Audit;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Users;
+using ShipWorks.Users.Audit;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -276,7 +273,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     Debug.Assert(busyToken == null);
 
-                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it.
                     // We only may not if we are running in the background.
                     if (!ApplicationBusyManager.TryOperationStarting("downloading", out busyToken))
                     {
@@ -298,10 +295,12 @@ namespace ShipWorks.Stores.Communication
                 }
             }
         }
-        
+
         /// <summary>
         /// Entry point function for downloading
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static void DownloadWorkerThread()
         {
             log.InfoFormat("Download starting.");
@@ -389,31 +388,37 @@ namespace ShipWorks.Stores.Communication
 
                     log.InfoFormat("Starting download for store '{0}' ({1})", store.StoreName, store.StoreID);
 
-                    // We open a lock that will stay open for the duration of the store download,
-                    // which will serve to lock out any other running instance of ShipWorks from downloading
-                    // for this store.
-                    using (SqlEntityLock storeLock = new SqlEntityLock(store.StoreID, "Download"))
+                    // Connection to use during the download cycle, if it disconnects we
+                    // show the user an error, this ensures that if the lock taken below
+                    // is broken we stop downloading
+                    using (SqlConnection con = SqlSession.Current.OpenConnection())
                     {
-                        // We create the log entry right when we start
-                        downloadLog = CreateDownloadLog(store, initiatedBy);
-
-                        // Create the downloader
-                        downloader = StoreTypeManager.GetType(store).CreateDownloader();
-
-                        // Verify the license
-                        progressItem.Detail = "Connecting...";
-                        LicenseActivationHelper.EnsureActive(store);
-
-                        // Do the download.  Operates as the super user.
-                        using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
-                            AuditBehaviorUser.SuperUser, 
-                            new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
+                        // We open a lock that will stay open for the duration of the store download,
+                        // which will serve to lock out any other running instance of ShipWorks from downloading
+                        // for this store.
+                        using (SqlEntityLock storeLock = new SqlEntityLock(con, store.StoreID, "Download"))
                         {
-                            downloader.Download(progressItem, downloadLog.DownloadID);
-                        }
+                            // We create the log entry right when we start
+                            downloadLog = CreateDownloadLog(store, initiatedBy);
 
-                        // Item is complete
-                        progressItem.Completed();
+                            // Create the downloader
+                            downloader = StoreTypeManager.GetType(store).CreateDownloader();
+
+                            // Verify the license
+                            progressItem.Detail = "Connecting...";
+                            CheckLicense(store);
+
+                            // Do the download.  Operates as the super user.
+                            using (AuditBehaviorScope auditScope = new AuditBehaviorScope(
+                                AuditBehaviorUser.SuperUser,
+                                new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
+                            {
+                                downloader.Download(progressItem, downloadLog.DownloadID, con);
+                            }
+
+                            // Item is complete
+                            progressItem.Completed();
+                        }
                     }
                 }
                 catch (SqlAppResourceLockException ex)
@@ -468,6 +473,18 @@ namespace ShipWorks.Stores.Communication
                         throw;
                     }
                 }
+                catch (InvalidOperationException ex) when (ex.Message == "ExecuteNonQuery requires an open and available Connection. The connection's current state is closed.")
+                {
+                    log.Error("Download error", ex);
+
+                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("Download error", ex);
+
+                    progressItem.Failed(new DownloadException("ShipWorks was unable to maintain a connection to the database. Please try downloading again."));
+                }
 
                 // This would only be null if the store had been deleted before we tried to log the download
                 if (downloadLog != null)
@@ -519,6 +536,27 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Check the store's license.
+        /// </summary>
+        private static void CheckLicense(StoreEntity store)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                ILicense license = licenseService.GetLicense(store);
+                license.Refresh();
+
+                if (license.IsDisabled)
+                {
+                    throw new ShipWorksLicenseException(license.DisabledReason);
+                }
+
+                // Possible license exception is caught upstream
+                license.EnforceCapabilities(EnforcementContext.Download);
             }
         }
 

@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private BestRateEventTypes testObject;
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsNone_WhenOnlyEventIsNone_Test()
+        public void GetLatestBestRateEvent_ReturnsNone_WhenOnlyEventIsNone()
         {
             testObject = BestRateEventTypes.None;
 
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRatesCompared_WhenOnlyEventIsRatesCompared_Test()
+        public void GetLatestBestRateEvent_ReturnsRatesCompared_WhenOnlyEventIsRatesCompared()
         {
             testObject = BestRateEventTypes.RatesCompared;
 
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRatesCompared_NoneAndRatesComparedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRatesCompared_NoneAndRatesComparedAreSet()
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared;
 
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateSelected_WhenOnlyEventIsRateSelected_Test()
+        public void GetLatestBestRateEvent_ReturnsRateSelected_WhenOnlyEventIsRateSelected()
         {
             testObject = BestRateEventTypes.RateSelected;
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateSelected_NoneAndRateSelectedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRateSelected_NoneAndRateSelectedAreSet()
         {
             testObject = BestRateEventTypes.None |BestRateEventTypes.RateSelected;
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateSelected_NoneAndRatesComparedAndRateSelectedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRateSelected_NoneAndRatesComparedAndRateSelectedAreSet()
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared | BestRateEventTypes.RateSelected;
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_WhenOnlyEventIsRateAutoSelectedAndProcessed_Test()
+        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_WhenOnlyEventIsRateAutoSelectedAndProcessed()
         {
             testObject = BestRateEventTypes.RateAutoSelectedAndProcessed;
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndAutoSelectedAndProcessedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndAutoSelectedAndProcessedAreSet()
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndRatesComparedAndAutoSelectedAndProcessedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndRatesComparedAndAutoSelectedAndProcessedAreSet()
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndRateSelectedAndRateAutoSelectedAndProcessedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndRateSelectedAndRateAutoSelectedAndProcessedAreSet()
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RateSelected | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndRatesComparedAndRateSelectedAndRateAutoSelectedAndProcessedAreSet_Test()
+        public void GetLatestBestRateEvent_ReturnsRateAutoSelectedAndProcessed_NoneAndRatesComparedAndRateSelectedAndRateAutoSelectedAndProcessedAreSet()
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared | BestRateEventTypes.RateSelected | BestRateEventTypes.RateAutoSelectedAndProcessed;
 

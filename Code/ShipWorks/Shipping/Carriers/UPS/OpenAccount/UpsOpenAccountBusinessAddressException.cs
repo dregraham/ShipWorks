@@ -1,5 +1,6 @@
 ﻿using System;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
@@ -37,6 +38,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             SuggestedAddress = addressCandidate;
         }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected UpsOpenAccountBusinessAddressException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
 
         /// <summary>
         /// Gets the address suggested by UPS.

@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Xml;
+using System.Xml.XPath;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Data;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using log4net;
-using Interapptive.Shared.Business;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -27,10 +29,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     /// </summary>
     public class UpsApiRateClient
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly ILog log;
-        private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly ICertificateInspector certificateInspector;
+        private ICarrierSettingsRepository settingsRepository;
+        private ICertificateInspector certificateInspector;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
@@ -42,19 +44,33 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
-        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
             : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient" /> class.
         /// </summary>
-        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.log = log;
             this.settingsRepository = settingsRepository;
             this.certificateInspector = certificateInspector;
+        }
+
+        /// <summary>
+        /// Gets the sure post restriction level.
+        /// </summary>
+        private EditionRestrictionLevel GetSurePostRestrictionLevel()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                return licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+            }
         }
 
         /// <summary>
@@ -87,13 +103,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // from SurePost either
                 firstExceptionEncountered = e;
             }
-            
 
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
+            if (GetSurePostRestrictionLevel() == EditionRestrictionLevel.None)
             {
+                // Get SurePost rates since SurePost is not restricted
                 UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                 IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
-                IEnumerable<UpsServiceType> surePostServiceTypes = upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
+                IEnumerable<UpsServiceType> surePostServiceTypes =
+                    upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
 
                 foreach (UpsServiceType serviceType in surePostServiceTypes)
                 {
@@ -106,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         // Log and eat the exception, so that some rates are returned in the event there's an error obtaining SurePost rates
                         // for one or all of the SurePost service types
                         log.WarnFormat("An error was received trying to get the SurePost rates: {0}", e.Message);
-                        
+
                         if (firstExceptionEncountered == null)
                         {
                             firstExceptionEncountered = e;
@@ -117,13 +134,35 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             if (!rates.Any() && firstExceptionEncountered != null)
             {
-                // There weren't any rates found for the given shipment, but there was an exception 
+                // There weren't any rates found for the given shipment, but there was an exception
                 // encountered. Throw the exception to give the user feedback as to why there aren't
                 // any rates
                 throw firstExceptionEncountered;
             }
 
             return rates;
+        }
+
+        /// <summary>
+        /// Gets rates for the shipment using counter rates if useCounterRates is true
+        /// </summary>
+        public List<UpsServiceRate> GetRates(ShipmentEntity shipment, bool useCounterRates)
+        {
+            // Create the appropriate settings, certificate inspector
+            if (useCounterRates)
+            {
+                settingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                accountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            }
+            else
+            {
+                settingsRepository = new UpsSettingsRepository();
+                certificateInspector = new TrustingCertificateInspector();
+                accountRepository = new UpsAccountRepository();
+            }
+
+            return GetRates(shipment);
         }
 
         /// <summary>
@@ -146,14 +185,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get the rates for the given shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreTooManyParams]
         private List<UpsServiceRate> GetRates(ShipmentEntity shipment, UpsAccountEntity account, XmlTextWriter xmlWriter, UpsRateServiceElementWriter serviceElementWriter,
             UpsPackageWeightElementWriter weightElementWriter, UpsPackageServiceOptionsElementWriter serviceOptionsElementWriter)
         {
             UpsShipmentEntity ups = shipment.Ups;
-            UpsRateType accountRateType = (UpsRateType)account.RateType;
-            UpsServiceType serviceType = (UpsServiceType)ups.Service;
+            UpsRateType accountRateType = (UpsRateType) account.RateType;
+            UpsServiceType serviceType = (UpsServiceType) ups.Service;
 
-            if(UpsUtility.IsUpsMiService(serviceType))
+            if (UpsUtility.IsUpsMiService(serviceType))
             {
                 return new List<UpsServiceRate>();
             }
@@ -188,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // ShipTo
             xmlWriter.WriteStartElement("ShipTo");
-            UpsApiCore.WriteAddressXml(xmlWriter, shipTo, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddressIndicator" : (string)null);
+            UpsApiCore.WriteAddressXml(xmlWriter, shipTo, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddressIndicator" : (string) null);
             xmlWriter.WriteEndElement();
 
             // ShipFrom
@@ -202,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // If they want saturday delivery, and it could be delivered on a saturday, set that flag.
             // Note: we don't usually use the selected service for figuring what the rates are - but we do here, since we only want
             // to use the saturday flag if the user can acutally see the saturday checkbox.
-            if (ups.SaturdayDelivery && UpsUtility.CanDeliverOnSaturday((UpsServiceType)ups.Service, shipment.ShipDate))
+            if (ups.SaturdayDelivery && UpsUtility.CanDeliverOnSaturday((UpsServiceType) ups.Service, shipment.ShipDate))
             {
                 xmlWriter.WriteElementString("SaturdayDelivery", "");
             }
@@ -214,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Close element
             xmlWriter.WriteEndElement();
-           
+
             UpsApiCore.WritePackagesXml(ups, xmlWriter, false, weightElementWriter, serviceOptionsElementWriter);
 
             // Write the element containing any specific UPS service codes that may be needed
@@ -226,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Rate Information
                 xmlWriter.WriteStartElement("RateInformation");
 
-                // Requesting Negotiated Rates 
+                // Requesting Negotiated Rates
                 xmlWriter.WriteElementString("NegotiatedRatesIndicator", "");
 
                 // Close element
@@ -236,7 +277,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Process the request
             XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector);
 
-            return ProcessApiResponse(shipment, xmlDocument, (UpsRateType)account.RateType);
+            return ProcessApiResponse(shipment, xmlDocument, (UpsRateType) account.RateType);
         }
 
         /// <summary>
@@ -261,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 string warning = XPathUtility.Evaluate(shipmentNode, "RatedShipmentWarning", "");
                 decimal totalCharge = XPathUtility.Evaluate(shipmentNode, "TotalCharges/MonetaryValue", (decimal) 0.0);
                 decimal negotiatedTotal = XPathUtility.Evaluate(shipmentNode, "NegotiatedRates/NetSummaryCharges/GrandTotal/MonetaryValue", (decimal) -1.0);
-                
+
                 int? guaranteedDaysToDelivery = XPathUtility.Evaluate(shipmentNode, "GuaranteedDaysToDelivery", -1);
                 if (guaranteedDaysToDelivery == -1)
                 {
@@ -285,7 +326,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     log.Error("UPSError in ProcessApiResponse", ex);
                 }
 
- 
+
                 // If an unknown service type is returned from GetRates, don't display that rate.
                 if (!serviceType.HasValue)
                 {

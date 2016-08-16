@@ -3,6 +3,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
@@ -17,13 +18,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
         private readonly ICarrierResponseFactory responseFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRegisterCspUserRequest" /> class using 
-        /// the "live" implementations for the FedExServiceGateway and FedExResponseFactory. 
+        /// Initializes a new instance of the <see cref="FedExRegisterCspUserRequest" /> class using
+        /// the "live" implementations for the FedExServiceGateway and FedExResponseFactory.
         /// </summary>
         /// <param name="requestManipulators">The request manipulators.</param>
         /// <param name="accountEntity">The account entity.</param>
         public FedExRegisterCspUserRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, FedExAccountEntity accountEntity)
-            : this(requestManipulators, new FedExServiceGateway(new FedExSettingsRepository()), new FedExResponseFactory(), accountEntity)
+            : this(requestManipulators, new FedExServiceGateway(new FedExSettingsRepository()), new FedExResponseFactory(new FedExLabelRepository()), accountEntity)
         { }
 
 
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
             // Allow the manipulators to build the raw request for the FedEx service
             ApplyManipulators();
 
-            // The request is ready to be sent to FedEx; we're sure the native request will be a RegisterWebCspUserRequest 
+            // The request is ready to be sent to FedEx; we're sure the native request will be a RegisterWebCspUserRequest
             // (since we assigned it as such in the constructor) so we can safely cast it here
             RegisterWebUserReply nativeResponse = serviceGateway.RegisterCspUser(this.NativeRequest as RegisterWebUserRequest);
             return responseFactory.CreateRegisterUserResponse(nativeResponse, this);

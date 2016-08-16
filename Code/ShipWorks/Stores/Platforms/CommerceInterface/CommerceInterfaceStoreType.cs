@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
@@ -10,12 +8,10 @@ using Interapptive.Shared.Net;
 using System.Net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Stores.Content;
 using log4net;
 using System.Windows.Forms;
 using ShipWorks.Stores.Platforms.CommerceInterface.WizardPages;
-using ShipWorks.Data.Grid;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 using ShipWorks.Filters.Content.Conditions;
@@ -34,24 +30,12 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Identifying code for CommerceInterface
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.CommerceInterface;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.CommerceInterface;
 
         /// <summary>
         /// Logging source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.CommerceInterface;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.CommerceInterface;
 
         /// <summary>
         /// Constructor
@@ -189,6 +173,8 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
             outline.AddElement("OverstockNumber", () => order.Value.CommerceInterfaceOrderNumber);
             outline.AddElement("ChannelOrderNumber", () => order.Value.CommerceInterfaceOrderNumber);
         }
+
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065045";
 
         #region Online Update Commands
 

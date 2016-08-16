@@ -29,7 +29,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
             SearchLocationsRequest nativeRequest = request.NativeRequest as SearchLocationsRequest;
 
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
-            
+
+            if (nativeRequest == null || account == null)
+            {
+                throw new CarrierException("A FedEx account is required to select a Hold at location.");
+            }
+
             nativeRequest.ClientDetail = new ClientDetail()
             {
                 AccountNumber = account.AccountNumber,

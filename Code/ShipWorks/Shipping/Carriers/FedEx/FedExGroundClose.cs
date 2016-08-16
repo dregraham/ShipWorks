@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 using Divelements.SandRibbon;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -26,17 +26,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public static List<FedExEndOfDayCloseEntity> ProcessClose()
         {
             List<FedExEndOfDayCloseEntity> closings = new List<FedExEndOfDayCloseEntity>();
-            
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
 
-            if (FedExAccountManager.Accounts.Count > 0 && FedExAccountManager.Accounts.All(a => a.Is2xMigrationPending))
-            {
-                throw new FedExException(string.Format("Your FedEx {0} migrated from ShipWorks 2, but have not yet been configured for ShipWorks 3.", 
-                    FedExAccountManager.Accounts.Count > 1 ? "accounts were" : "account was"));
-            }
+            IFedExShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
 
-            
-            foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => !a.Is2xMigrationPending))
+            foreach (FedExAccountEntity account in FedExAccountManager.Accounts)
             {
                 FedExEndOfDayCloseEntity closing = shippingClerk.CloseGround(account);
                 if (closing != null)
@@ -61,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
             else
             {
-                foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => !a.Is2xMigrationPending))
+                foreach (FedExAccountEntity account in FedExAccountManager.Accounts)
                 {
                     MenuItem accountItem = new MenuItem(account.Description);
                     parentMenu.Items.Add(accountItem);
@@ -109,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             FedExEndOfDayCloseCollection closings = FedExEndOfDayCloseCollection.Fetch(SqlAdapter.Default,
                 FedExEndOfDayCloseFields.FedExAccountID == account.FedExAccountID &
-                FedExEndOfDayCloseFields.CloseDate >= DateTime.UtcNow.AddDays(-5).Date & 
+                FedExEndOfDayCloseFields.CloseDate >= DateTime.UtcNow.AddDays(-5).Date &
                 FedExEndOfDayCloseFields.IsSmartPost == false);
 
             return closings.OrderByDescending(c => c.CloseDate);
@@ -134,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             PrintCloseReports(new FedExEndOfDayCloseEntity[] { closing });
         }
 
-         /// <summary>
+        /// <summary>
         /// Print the close reports for all of the given closings.  The user will be prompted for print settings.
         /// </summary>
         public static void PrintCloseReports(IEnumerable<FedExEndOfDayCloseEntity> closings)

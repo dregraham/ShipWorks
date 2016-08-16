@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_UsernameIsPopulated_Test()
+        public void Manipulate_UsernameIsPopulated()
         {
             testObject.Manipulate(request);
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_PasswordIsPopulated_Test()
+        public void Manipulate_PasswordIsPopulated()
         {
             testObject.Manipulate(request);
 
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_SuggestUserNameIndicatorCorrect_Test()
+        public void Manipulate_SuggestUserNameIndicatorCorrect()
         {
             testObject.Manipulate(request);
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_NotificationCodeCorrect_Test()
+        public void Manipulate_NotificationCodeCorrect()
         {
             testObject.Manipulate(request);
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_UsernameIsDifferentAfterSecondCall_Test()
+        public void Manipulate_UsernameIsDifferentAfterSecondCall()
         {
             testObject.Manipulate(request);
 

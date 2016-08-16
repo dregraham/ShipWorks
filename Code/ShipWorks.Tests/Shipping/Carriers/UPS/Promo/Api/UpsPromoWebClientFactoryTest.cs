@@ -1,5 +1,6 @@
 ﻿using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
@@ -10,13 +11,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
     public class UpsPromoWebClientFactoryTest
     {
         private readonly UpsPromoWebClientFactory testObject;
-        private Mock<ICarrierAccountRepository<UpsAccountEntity>> upsAccountRepository;
-        private Mock<ICarrierSettingsRepository> upsSettingsRepository;
+        private readonly Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>> upsAccountRepository;
+        private readonly Mock<ICarrierSettingsRepository> upsSettingsRepository;
 
         public UpsPromoWebClientFactoryTest()
         {
             testObject = new UpsPromoWebClientFactory();
-            upsAccountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity>>();
+            upsAccountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
             upsAccountRepository
                 .Setup(r => r.GetAccount(It.IsAny<long>()))
                 .Returns(new UpsAccountEntity()

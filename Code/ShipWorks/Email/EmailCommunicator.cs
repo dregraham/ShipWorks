@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using System.Windows.Forms;
+using System.Data;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Email.Accounts;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using Rebex.Net;
+using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.IO.Text.HtmlAgilityPack;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
+using log4net;
 using Rebex.Mail;
 using Rebex.Mime.Headers;
+using Rebex.Net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using System.IO;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Templates.Processing;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
-using System.Data;
-using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
-using System.Net.Sockets;
+using ShipWorks.Email.Accounts;
+using ShipWorks.Templates.Processing;
 using ShipWorks.Users;
 
 namespace ShipWorks.Email
@@ -202,10 +201,9 @@ namespace ShipWorks.Email
         }
 
         /// <summary>
-        /// Initiate the emailing of the given messages.  If skipDontSendBefore is true messages whose DontSendUntil date has not yet come will be skipped.  Otherwise they will be tried, but if its
-        /// still too early, an error will be displayed. Either way they dont actually get sent.
+        /// Initiate the emailing of the given messages.
         /// </summary>
-        public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages, bool skipDontSendBefore = true)
+        public static void StartEmailingMessages(IEnumerable<EmailOutboundEntity> messages)
         {
             Debug.Assert(!Program.ExecutionMode.IsUIDisplayed || !Program.MainForm.InvokeRequired);
 
@@ -215,12 +213,7 @@ namespace ShipWorks.Email
                 return;
             }
 
-            IEnumerable<EmailOutboundEntity> messagesToSend = messages;
-
-            if (skipDontSendBefore)
-            {
-                messagesToSend = messages.Where(m => m.DontSendBefore == null || m.DontSendBefore <= DateTime.UtcNow);
-            }
+            IEnumerable<EmailOutboundEntity> messagesToSend = messages.Where(m => m.DontSendBefore == null || m.DontSendBefore <= DateTime.UtcNow);
 
             // We have to split up the messages by account
             foreach (IGrouping<long, EmailOutboundEntity> accountGroup in messagesToSend.GroupBy(m => m.AccountID))
@@ -277,7 +270,7 @@ namespace ShipWorks.Email
                 {
                     Debug.Assert(busyToken == null);
 
-                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it. 
+                    // If we are in a context sensitive scope, we have to wait until next time.  If we are on the UI, we'll always get it.
                     // We only may not if we are running in the background.
                     if (!ApplicationBusyManager.TryOperationStarting("emailing", out busyToken))
                     {
@@ -334,7 +327,7 @@ namespace ShipWorks.Email
                         if (EmailCommunicationComplete != null)
                         {
                             EmailCommunicationComplete(null, new EmailCommunicationCompleteEventArgs(progressProvider.HasErrors));
-                        }           
+                        }
 
                         // Escape, we are all done.
                         return;
@@ -376,6 +369,8 @@ namespace ShipWorks.Email
         /// <summary>
         /// Send all the messages for the given throttler
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static bool SendMessagesForThrottler(EmailOutboundThrottler throttler, ProgressItem progress)
         {
             bool errors = false;
@@ -404,7 +399,7 @@ namespace ShipWorks.Email
                         {
                             EmailOutboundEntity outboxItem = new EmailOutboundEntity(outboxItemID.Value);
                             SqlAdapter.Default.FetchEntity(outboxItem);
-                            
+
                             // If its null, its been deleted.  Or if its already send, just ignore it either way.
                             if (outboxItem.Fields.State != EntityState.Fetched || outboxItem.SendStatus == (int) EmailOutboundStatus.Sent)
                             {
@@ -490,7 +485,7 @@ namespace ShipWorks.Email
                                 {
                                     log.Error("Failed sending mail message", ex);
 
-                                    outboxItem.SendStatus = (int)EmailOutboundStatus.Retry;
+                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
                                     outboxItem.SendAttemptLastError = ex.Message;
 
                                     // Go ahead and stop
@@ -506,7 +501,7 @@ namespace ShipWorks.Email
                                     // Go ahead and stop
                                     progress.Failed(ex);
                                 }
- 
+
                                 // See if we need to the errors flag
                                 if (outboxItem.SendStatus != (int) EmailOutboundStatus.Sent)
                                 {
@@ -611,7 +606,7 @@ namespace ShipWorks.Email
             imageProcessor.OnlineImages = false;
 
             // Maps the data resources to the ContentID's we have given them.  We want to give them ID's that match the actual name
-            // of the file they came from.  But since the files could come from different paths - and have the exact same filename - 
+            // of the file they came from.  But since the files could come from different paths - and have the exact same filename -
             // we have to make sure we don't create duplicates.
             Dictionary<long, string> contentIDs = new Dictionary<long, string>();
 
@@ -629,10 +624,10 @@ namespace ShipWorks.Email
 
             // We have to convert all the local image references to cid's for inline html images
             string htmlContent = imageProcessor.Process(
-                htmlText, 
+                htmlText,
                 (HtmlAttribute attribute, Uri srcUri, string imageName) =>
                 {
-                    // See if we can find the matching resource.  Could be more than one: If they had two images that were exactly the same, yet named different filenames, 
+                    // See if we can find the matching resource.  Could be more than one: If they had two images that were exactly the same, yet named different filenames,
                     // they'd each be logged as a unique reference, but would reference the same resource.
                     DataResourceReference resourceReference = resourceReferences.Where(r => string.Compare(r.Filename, attribute.Value, true) == 0).FirstOrDefault();
 
@@ -644,8 +639,8 @@ namespace ShipWorks.Email
                         string contentID;
                         if (!contentIDs.TryGetValue(resourceReference.ResourceID, out contentID))
                         {
-                            contentID = string.Format("{0}_{1}{2}", 
-                                Path.GetFileNameWithoutExtension(resourceReference.Label), 
+                            contentID = string.Format("{0}_{1}{2}",
+                                Path.GetFileNameWithoutExtension(resourceReference.Label),
                                 mailMessage.Resources.Count,
                                 Path.GetExtension(resourceReference.Label));
 
@@ -674,7 +669,7 @@ namespace ShipWorks.Email
         /// <summary>
         /// Attempts to read all text for the desired data resource reference
         /// </summary>
-        /// <exception cref="EmailException">If an UnauthorizedAccessException or IOException (only when the file is currently being used) is thrown, 
+        /// <exception cref="EmailException">If an UnauthorizedAccessException or IOException (only when the file is currently being used) is thrown,
         /// an EmailException will be thrown with the inner exception being the originally thrown exception.  If an IOException is thrown and it is not a "being used by another process" exception,
         /// the original IOException will be rethrown.</exception>
         private static string LoadDataResourceReferenceText(DataResourceReference dataResourceReference, long emailOutboundID)

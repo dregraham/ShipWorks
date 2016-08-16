@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Caching;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Data.Grid.Paging
 {
     /// <summary>
-    /// IEntityProvider implementation that used an EntityChangeTrackingMonitor to determine when to entities need ejected from the cache and to raise 
+    /// IEntityProvider implementation that used an EntityChangeTrackingMonitor to determine when to entities need ejected from the cache and to raise
     /// events to help consumers know then the grid needs refreshed.
     /// </summary>
     public sealed class EntityCacheEntityProvider : IEntityProvider, IDisposable
@@ -28,7 +26,7 @@ namespace ShipWorks.Data.Grid.Paging
         public event EntityCacheChangeMonitoredChangedEventHandler EntityChangesDetected;
 
         /// <summary>
-        /// Create an EntityProvider that updates itself based on change tracking monitored changes.  Prefetch should really only 
+        /// Create an EntityProvider that updates itself based on change tracking monitored changes.  Prefetch should really only
         /// be used for child data that is not change monitored, otherwise the standard cache approach should be used.
         /// </summary>
         public EntityCacheEntityProvider(EntityType entityType, PrefetchPath2 prefetch = null, bool monitorForChanges = true)
@@ -79,7 +77,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Fetch the entity with the given ID.  If it is not in cache, and fetchIfMissing is true, it will be retrieved from the database.
         /// </summary>
-        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing)
+        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
         {
             return entityCache.GetEntity(entityID, fetchIfMissing);
         }

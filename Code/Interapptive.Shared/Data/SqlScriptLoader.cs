@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Data
 {
@@ -11,24 +12,20 @@ namespace Interapptive.Shared.Data
     /// </summary>
     public class SqlScriptLoader
     {
-        string resourcePath;
-        DirectoryInfo folder;
+        private readonly string resourcePath;
+        private readonly DirectoryInfo folder;
 
-        // The assembly to load from
-        Assembly assembly;
+        // The assemblies from which to load
+        private readonly IEnumerable<Assembly> assemblies;
 
         /// <summary>
         /// Initializes the loader to load scripts from the given resource path
         /// </summary>
         public SqlScriptLoader(string resourcePath)
         {
-            if (resourcePath == null)
-            {
-                throw new ArgumentNullException("resourcePath");
-            }
+            this.resourcePath = MethodConditions.EnsureArgumentIsNotNull(resourcePath, nameof(resourcePath));
 
-            this.assembly = Assembly.GetCallingAssembly();
-            this.resourcePath = resourcePath;
+            assemblies = LoadAssemblies();
         }
 
         /// <summary>
@@ -36,21 +33,29 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public SqlScriptLoader(DirectoryInfo folder)
         {
-            if (folder == null)
-            {
-                throw new ArgumentNullException("folder");
-            }
+            this.folder = MethodConditions.EnsureArgumentIsNotNull(folder, nameof(folder));
 
-            this.assembly = Assembly.GetCallingAssembly();
-            this.folder = folder;
+            assemblies = LoadAssemblies();
         }
 
         /// <summary>
-        /// The resource path configured for this loader
+        /// Load needed assemblies and ManifestResourceNames
         /// </summary>
-        public string ResourcePath
+        private static IEnumerable<Assembly> LoadAssemblies()
         {
-            get { return resourcePath; }
+            return new[] { Assembly.Load("ShipWorks.Core"), Assembly.Load("ShipWorks.Res") };
+        }
+
+        /// <summary>
+        /// List of script resources in the resource path
+        /// </summary>
+        public IEnumerable<string> ScriptResources
+        {
+            get
+            {
+                return assemblies.SelectMany(x => x.GetManifestResourceNames())
+                    .Where(r => r.StartsWith(resourcePath));
+            }
         }
 
         /// <summary>
@@ -86,11 +91,14 @@ namespace Interapptive.Shared.Data
 
                 // Open the embedded stream
                 string resourceToLoad = resourcePath + "." + name;
+
+                Assembly assembly = assemblies.First(a => a.GetManifestResourceNames().Contains(resourceToLoad));
+
                 using (Stream stream = assembly.GetManifestResourceStream(resourceToLoad))
                 {
                     if (stream == null)
                     {
-                        throw new SqlScriptException(String.Format("SqlScriptLoader cannot locate resource '{0}'", resourceToLoad));
+                        throw new SqlScriptException(string.Format("SqlScriptLoader cannot locate resource '{0}'", resourceToLoad));
                     }
 
                     // Return the contents

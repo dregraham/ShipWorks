@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
+        public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
+        public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker_Test()
+        public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker_Test()
+        public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {

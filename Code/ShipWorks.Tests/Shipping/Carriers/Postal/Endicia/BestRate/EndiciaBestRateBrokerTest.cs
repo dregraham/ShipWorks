@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Xunit;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 {
@@ -43,10 +43,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         private List<ShipmentEntity> getRatesShipments;
 
-        private Mock<ICarrierAccountRepository<EndiciaAccountEntity>> genericRepositoryMock;
+        private Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> genericRepositoryMock;
         private Mock<EndiciaShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
-        
+
+        private int timesGetRatesCalled = 0;
+
         public EndiciaBestRateBrokerTest()
         {
             account1 = new EndiciaAccountEntity { EndiciaAccountID = 1, CountryCode = "US" };
@@ -71,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
                     {3, rateGroup3},
                 };
 
-            genericRepositoryMock = new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>();
+            genericRepositoryMock = new Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity> { account1, account2, account3 });
             genericRepositoryMock.Setup(r => r.DefaultProfileAccount).Returns(account1);
 
@@ -80,9 +82,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<EndiciaShipmentType>();
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Endicia);
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                            .Returns((ShipmentEntity s) => rateResults[s.Postal.Endicia.EndiciaAccountID])
-                            .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
 
             // Mimic the bare minimum of what the configure method is doing
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -90,18 +89,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject = new EndiciaBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) =>
+                {
+                    var rateResult = rateResults[shipment.Postal.Endicia.EndiciaAccountID];
+                    getRatesShipments.Add(EntityUtility.CloneEntity(shipment));
+                    timesGetRatesCalled++;
+                    return rateResult;
+                }
             };
 
-
-            testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate,
-                ContentWeight = 12.1, 
+            testShipment = new ShipmentEntity
+            {
+                ShipmentType = (int) ShipmentTypeCode.BestRate,
+                ContentWeight = 12.1,
                 BestRate = new BestRateShipmentEntity
                 {
                     DimsWeight = 3.4,
                     DimsAddWeight = true
                 },
-                OriginCountryCode = "US"};
+                OriginCountryCode = "US"
+            };
 
             bestRateBrokerSettings = new Mock<IBestRateBrokerSettings>();
 
@@ -109,12 +116,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
                                   .Returns(false);
             bestRateBrokerSettings.Setup(b => b.IsEndiciaConsolidatorEnabled())
                                   .Returns(false);
-            
+
             testObject.Configure(bestRateBrokerSettings.Object);
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToAccountRepository_Test()
+        public void HasAccounts_DelegatesToAccountRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
 
@@ -122,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts_Test()
+        public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
 
@@ -132,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts_Test()
+        public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>());
 
@@ -142,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_RetrievesDefaultProfileAccount_Test()
+        public void GetBestRates_RetrievesDefaultProfileAccount()
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
@@ -150,7 +157,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_CallsConfigureNewShipmentForOneAccount_Test()
+        public void GetBestRates_CallsConfigureNewShipmentForOneAccount()
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
@@ -158,21 +165,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_CallsGetRatesForOneAccount_Test()
+        public void GetBestRates_CallsGetRatesForOneAccount()
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Once());
+            Assert.Equal(1, timesGetRatesCalled);
 
             foreach (var shipment in getRatesShipments)
             {
-                Assert.Equal(ShipmentTypeCode.Endicia, (ShipmentTypeCode)shipment.ShipmentType);
+                Assert.Equal(ShipmentTypeCode.Endicia, (ShipmentTypeCode) shipment.ShipmentType);
                 Assert.Equal(12.1, shipment.ContentWeight);
             }
         }
 
         [Fact]
-        public void GetBestRates_ReturnsAllRates_WithNoFilter_ForDefaultProfileAccount_Test()
+        public void GetBestRates_ReturnsAllRates_WithNoFilter_ForDefaultProfileAccount()
         {
             RateGroup rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
@@ -183,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevelAndPrice_Test()
+        public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevelAndPrice()
         {
             rateGroup1.Rates.Clear();
 
@@ -200,7 +207,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevel_Test()
+        public void GetBestRates_ReturnsTwoRates_WhenTwoRatesHaveSameTypeLevel()
         {
             rateGroup1.Rates.Clear();
 
@@ -217,7 +224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_ReturnsBothRates_WhenTwoRatesHaveSameTypeAndPriceButDifferentLevels_Test()
+        public void GetBestRates_ReturnsBothRates_WhenTwoRatesHaveSameTypeAndPriceButDifferentLevels()
         {
             rateGroup1.Rates.Clear();
 
@@ -235,7 +242,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_DoesNotReturnNonSelectableRates_Test()
+        public void GetBestRates_DoesNotReturnNonSelectableRates()
         {
             rateGroup1.Rates.Clear();
 
@@ -270,25 +277,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         //{
         //    TestServiceTypeIsExcluded(PostalServiceType.BoundPrintedMatter);
         //}
-        
+
         [CsvData(@"Shipping\Carriers\Postal\Endicia\BestRate", "Endicia_GetBestRates_DoesNotIncludeTypes")]
         [Theory]
-        public void GetBestRates_ExcludesVariousTypes_Test(DataRow row)
+        public void GetBestRates_ExcludesVariousTypes(DataRow row)
         {
-            PostalServiceType excludedServiceType = (PostalServiceType)Enum.Parse(typeof (PostalServiceType), row[0].ToString());
+            PostalServiceType excludedServiceType = (PostalServiceType) Enum.Parse(typeof(PostalServiceType), row[0].ToString());
 
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
 
             RateResult result1 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(excludedServiceType, PostalConfirmationType.None))
-                {
-                    ServiceLevel = ServiceLevelType.TwoDays
-                };
+            {
+                ServiceLevel = ServiceLevelType.TwoDays
+            };
 
             RateResult result2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None))
-                {
-                    ServiceLevel = ServiceLevelType.OneDay
-                };
+            {
+                ServiceLevel = ServiceLevelType.OneDay
+            };
 
             rateGroup1.Rates.Add(result1);
             rateGroup1.Rates.Add(result2);
@@ -301,7 +308,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_UpdatesDescriptionWhenPartOfRateGroup_Test()
+        public void GetBestRates_UpdatesDescriptionWhenPartOfRateGroup()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -326,7 +333,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OriginalEndiciaShipmentDetailsAreRestoredAfterCall_Test()
+        public void GetBestRates_OriginalEndiciaShipmentDetailsAreRestoredAfterCall()
         {
             PostalShipmentEntity EndiciaShipment = new PostalShipmentEntity();
             testShipment.Postal = EndiciaShipment;
@@ -334,7 +341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             Assert.Equal(EndiciaShipment, testShipment.Postal);
         }
-        
+
         [Fact]
         public void GetBestRates_CallsHandlerWithInformationError_WhenCustomerEligibleForDhl()
         {
@@ -360,7 +367,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForDhl_Test()
+        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForDhl()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -380,7 +387,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
 
         [Fact]
-        public void GetBestRates_CallsHandlerWithInformationError_WhenCustomerEligibleForConsolidator_Test()
+        public void GetBestRates_CallsHandlerWithInformationError_WhenCustomerEligibleForConsolidator()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -404,7 +411,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForConsolidator_Test()
+        public void GetBestRates_DoesNotCallHandlerWithInformationError_WhenCustomerNotEligibleForConsolidator()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -423,7 +430,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_SetsPackageDetails_Test()
+        public void GetBestRates_SetsPackageDetails()
         {
             testShipment.BestRate.DimsHeight = 3;
             testShipment.BestRate.DimsWidth = 5;
@@ -442,12 +449,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OverridesProfileServiceAndPackagingType_Test()
+        public void GetBestRates_OverridesProfileServiceAndPackagingType()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
                                    {
-                                       x.Postal.Service = (int)PostalServiceType.ConsolidatorDomestic;
+                                       x.Postal.Service = (int) PostalServiceType.ConsolidatorDomestic;
                                        x.Postal.PackagingType = (int) PostalPackagingType.FlatRateSmallBox;
                                    });
 
@@ -455,13 +462,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.Equal(PostalServiceType.PriorityMail, (PostalServiceType)shipment.Postal.Service);
-                Assert.Equal(PostalPackagingType.Package, (PostalPackagingType)shipment.Postal.PackagingType);
+                Assert.Equal(PostalServiceType.PriorityMail, (PostalServiceType) shipment.Postal.Service);
+                Assert.Equal(PostalPackagingType.Package, (PostalPackagingType) shipment.Postal.PackagingType);
             }
         }
 
         [Fact]
-        public void GetBestRates_OverridesProfileAccount_Test()
+        public void GetBestRates_OverridesProfileAccount()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
@@ -476,7 +483,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OverridesProfileWeight_Test()
+        public void GetBestRates_OverridesProfileWeight()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
@@ -493,7 +500,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OverridesDimsAddWeight_Test()
+        public void GetBestRates_OverridesDimsAddWeight()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
@@ -530,7 +537,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_SetsTagResultKeyToPostalAndServiceType_Test()
+        public void GetBestRates_SetsTagResultKeyToPostalAndServiceType()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -550,7 +557,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetBestRates_AddsEndiciaToDescription_WhenItDoesNotAlreadyExist_Test()
+        public void GetBestRates_AddsEndiciaToDescription_WhenItDoesNotAlreadyExist()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -568,19 +575,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsShipWorks_Test()
+        public void GetInsuranceProvider_ReturnsShipWorks()
         {
-            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() {EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks}));
+            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks }));
         }
 
         [Fact]
-        public void GetInsuranceProvider_ReturnsCarrier_Test()
+        public void GetInsuranceProvider_ReturnsCarrier()
         {
-            Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { EndiciaInsuranceProvider = (int)InsuranceProvider.Carrier }));
+            Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { EndiciaInsuranceProvider = (int) InsuranceProvider.Carrier }));
         }
 
         [Fact]
-        public void Configure_ShouldCallCheckExpress1RatesOnSettings_WithShipmentType_Test()
+        public void Configure_ShouldCallCheckExpress1RatesOnSettings_WithShipmentType()
         {
             var brokerSettings = new Mock<IBestRateBrokerSettings>();
 
@@ -590,13 +597,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [Fact]
-        public void Configure_SetsRetrieveExpress1RatesToTrue_WhenConfigurationIsTrue_Test()
+        public void Configure_SetsRetrieveExpress1RatesToTrue_WhenConfigurationIsTrue()
         {
             Configure_ShouldRetrieveExpress1RatesTest(true);
         }
 
         [Fact]
-        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsFalse_Test()
+        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsFalse()
         {
             Configure_ShouldRetrieveExpress1RatesTest(false);
         }
@@ -608,11 +615,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject.Configure(brokerSettings.Object);
 
-            Assert.Equal(checkExpress1, ((EndiciaShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
+            Assert.Equal(checkExpress1, ((EndiciaShipmentType) testObject.ShipmentType).ShouldRetrieveExpress1Rates);
         }
 
         [Fact]
-        public void GetBestRates_ReturnsNoRates_WhenShipmentTotalWeightTooHeavy_Test()
+        public void GetBestRates_ReturnsNoRates_WhenShipmentTotalWeightTooHeavy()
         {
             testShipment.TotalWeight = 70.1;
             RateGroup rates = testObject.GetBestRates(testShipment, new List<BrokerException>());

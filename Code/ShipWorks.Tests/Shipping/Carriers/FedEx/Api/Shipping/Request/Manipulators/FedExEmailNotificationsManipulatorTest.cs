@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoNotifications_NotifyIsFalseForAllWithBlankEmails_Test()
+        public void Manipulate_NoNotifications_NotifyIsFalseForAllWithBlankEmails()
         {
             shipmentEntity.ShipEmail = "";
             shipmentEntity.OriginEmail = "";
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoNotifications_NotifyIsFalseForAllWithNotBlankEmails_Test()
+        public void Manipulate_NoNotifications_NotifyIsFalseForAllWithNotBlankEmails()
         {
             testObject.Manipulate(shipRequest);
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoNotifications_NotifyIsTrueForAllAndEmailsAreBlank_Test()
+        public void Manipulate_NoNotifications_NotifyIsTrueForAllAndEmailsAreBlank()
         {
             shipmentEntity.FedEx.EmailNotifySender = 1;
             shipmentEntity.FedEx.EmailNotifyRecipient = 1;
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FourNotifications_NotifyIsTrueForAllAndEmailsAreValid_Test()
+        public void Manipulate_FourNotifications_NotifyIsTrueForAllAndEmailsAreValid()
         {
             shipmentEntity.FedEx.EmailNotifySender = 1;
             shipmentEntity.FedEx.EmailNotifyRecipient = 1;
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
         //Sender
         [Fact]
-        public void Manipulate_GetsExceptionNotifications_NotifyIsTrueForSenderForExceptions_Test()
+        public void Manipulate_GetsExceptionNotifications_NotifyIsTrueForSenderForExceptions()
         {
             shipmentEntity.FedEx.EmailNotifySender = 2;
             testObject.Manipulate(shipRequest);
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_GetsAllNotifications_NotifyIsTrueForSenderForAll_Test()
+        public void Manipulate_GetsAllNotifications_NotifyIsTrueForSenderForAll()
         {
             shipmentEntity.FedEx.EmailNotifySender = 7;
             testObject.Manipulate(shipRequest);
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_GetsShipNotifications_NotifyIsTrueForSenderForAll_Test()
+        public void Manipulate_GetsShipNotifications_NotifyIsTrueForSenderForAll()
         {
             shipmentEntity.FedEx.EmailNotifySender = 7;
             testObject.Manipulate(shipRequest);
@@ -132,7 +132,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_GetsExceptionNotifications_NotifyIsTrueForSenderForAll_Test()
+        public void Manipulate_GetsExceptionNotifications_NotifyIsTrueForSenderForAll()
         {
             shipmentEntity.FedEx.EmailNotifySender = 7;
             testObject.Manipulate(shipRequest);
@@ -143,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_GetsDeliveryNotifications_NotifyIsTrueForSenderForAll_Test()
+        public void Manipulate_GetsDeliveryNotifications_NotifyIsTrueForSenderForAll()
         {
             shipmentEntity.FedEx.EmailNotifySender = 7;
             testObject.Manipulate(shipRequest);
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SenderNotificationFormatCorrect_NotifySenderIsTrueForSenderAndOriginIsNotBlank_Test()
+        public void Manipulate_SenderNotificationFormatCorrect_NotifySenderIsTrueForSenderAndOriginIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifySender = 1;
             testObject.Manipulate(shipRequest);
@@ -165,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SenderNotificationLocationCorrect_NotifyIsTrueForSenderAndOriginIsNotBlank_Test()
+        public void Manipulate_SenderNotificationLocationCorrect_NotifyIsTrueForSenderAndOriginIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifySender = 1;
             testObject.Manipulate(shipRequest);
@@ -176,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SenderNotificationNotificationTypeCorrect_NotifyIsTrueForSenderAndSenderIsNotBlank_Test()
+        public void Manipulate_SenderNotificationNotificationTypeCorrect_NotifyIsTrueForSenderAndSenderIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifySender = 1;
             testObject.Manipulate(shipRequest);
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SenderNotificationEmailCorrect_NotifyIsTrueForSenderAndSenderIsNotBlank_Test()
+        public void Manipulate_SenderNotificationEmailCorrect_NotifyIsTrueForSenderAndSenderIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifySender = 1;
             testObject.Manipulate(shipRequest);
@@ -200,7 +200,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         //Recipient
 
         [Fact]
-        public void Manipulate_RecipientNotificationNotificationTypeCorrect_NotifyIsTrueForRecipientAndShipToIsNotBlank_Test()
+        public void Manipulate_RecipientNotificationNotificationTypeCorrect_NotifyIsTrueForRecipientAndShipToIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifyRecipient = 1;
             testObject.Manipulate(shipRequest);
@@ -211,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_RecipientNotificationEmailCorrect_NotifyIsTrueForRecipientAndShipToEmailIsNotBlank_Test()
+        public void Manipulate_RecipientNotificationEmailCorrect_NotifyIsTrueForRecipientAndShipToEmailIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifyRecipient = 1;
             testObject.Manipulate(shipRequest);
@@ -224,7 +224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         //Other
 
         [Fact]
-        public void Manipulate_OtherNotificationNotificationTypeCorrect_NotifyIsTrueForOtherAndOtherEmailIsNotBlank_Test()
+        public void Manipulate_OtherNotificationNotificationTypeCorrect_NotifyIsTrueForOtherAndOtherEmailIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifyOther = 1;
             testObject.Manipulate(shipRequest);
@@ -235,7 +235,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OtherNotificationEmailCorrect_NotifyIsTrueForOtherAndOtherEmailIsNotBlank_Test()
+        public void Manipulate_OtherNotificationEmailCorrect_NotifyIsTrueForOtherAndOtherEmailIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifyOther = 1;
             testObject.Manipulate(shipRequest);
@@ -248,7 +248,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         //Broker
 
         [Fact]
-        public void Manipulate_BrokerNotificationNotificationTypeCorrect_NotifyIsTrueForBrokerAndBrokerEmailIsNotBlank_Test()
+        public void Manipulate_BrokerNotificationNotificationTypeCorrect_NotifyIsTrueForBrokerAndBrokerEmailIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifyBroker = 1;
             testObject.Manipulate(shipRequest);
@@ -259,7 +259,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerNotificationEmailCorrect_NotifyIsTrueForBrokerAndBrokerEmailIsNotBlank_Test()
+        public void Manipulate_BrokerNotificationEmailCorrect_NotifyIsTrueForBrokerAndBrokerEmailIsNotBlank()
         {
             shipmentEntity.FedEx.EmailNotifyBroker = 1;
             testObject.Manipulate(shipRequest);
@@ -270,7 +270,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_NoSpecialServicesRequested_NotifyIsTrueForBrokerAndBrokerEmailIsNotBlankButEmailNotifyBrokerIsFalse_Test()
+        public void Manipulate_NoSpecialServicesRequested_NotifyIsTrueForBrokerAndBrokerEmailIsNotBlankButEmailNotifyBrokerIsFalse()
         {
             shipmentEntity.FedEx.EmailNotifyBroker = 1;
             shipmentEntity.FedEx.BrokerEnabled = false;

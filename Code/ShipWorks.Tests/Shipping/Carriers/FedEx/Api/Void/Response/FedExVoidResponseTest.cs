@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void Request_ReturnsCarrierRequest_Test()
+        public void Request_ReturnsCarrierRequest()
         {
             CarrierRequest request = testObject.Request;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void NativeResponse_ReturnsVoidReply_Test()
+        public void NativeResponse_ReturnsVoidReply()
         {
             object nativeRespose = testObject.NativeResponse;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
+        public void Process_ThrowsFedExApiException_WhenReplyContainsError()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
+        public void Process_ThrowsFedExApiException_WhenReplyContainsFailure()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenNotificationsIsNull_Test()
+        public void Process_DelegatesToManipulators_WhenNotificationsIsNull()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeResponse.Notifications = null;
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void Process_DelegatesToManipulators_WhenNotificationsDoesNotContainCode9804_Test()
+        public void Process_DelegatesToManipulators_WhenNotificationsDoesNotContainCode9804()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeResponse.Notifications = new Notification[] { new Notification { Code = "8" } };
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         }
 
         [Fact]
-        public void Process_DoesNotDelegatesToManipulators_WhenNotificationsContainsCode9804_Test()
+        public void Process_DoesNotDelegatesToManipulators_WhenNotificationsContainsCode9804()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
             nativeResponse.Notifications = new Notification[] { new Notification { Code = "9804" } };

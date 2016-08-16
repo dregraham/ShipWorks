@@ -45,6 +45,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new ArgumentNullException("downloadDetail");
             }
+
             downloadDetail.ExtraStringData1 = lemonStandStoreOrderID;
         }
 
@@ -53,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override string ToString()
         {
-            return string.Format("LemonStandStoreOrderID:{0}", lemonStandStoreOrderID);
+            return $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
         }
     }
 }

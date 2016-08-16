@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Apitron.PDF.Rasterizer;
 using Apitron.PDF.Rasterizer.Configuration;
 
@@ -14,89 +12,60 @@ namespace Interapptive.Shared.Pdf
     /// <summary>
     /// Implementation of IPdfDocument that uses Apitron to convert a PDF to an image (TIFF) .
     /// </summary>
-    public class PdfDocument : IPdfDocument, IDisposable
+    public class PdfDocument : IPdfDocument
     {
-        private Document pdfDocument;
-        private readonly List<Stream> images = new List<Stream>();
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="PdfDocument"/> class.
+        /// Save the pages of a PDF by calling the save function per page
         /// </summary>
-        /// <param name="pdf">Stream representation of the PDF.</param>
-        public PdfDocument(Stream pdf)
+        public IEnumerable<T> SavePages<T>(Stream inputPdfStream, Func<MemoryStream, int, T> savePageFunction)
         {
-            pdfDocument = new Document(pdf);
-        }
+            TiffRenderingSettings tiffRenderingSettings = new TiffRenderingSettings(TiffCompressionMethod.CCIT4, 300, 300);
+            tiffRenderingSettings.PrinterMode = true;
+            tiffRenderingSettings.RenderMode = RenderMode.HighQuality;
 
-        /// <summary>
-        /// Iterates through each page of the PDF and converts each page to a PNG image.
-        /// </summary>
-        /// <returns>List of streams for each page image.</returns>
-        public IEnumerable<Stream> ToImages()
-        {
             using (MemoryStream stream = new MemoryStream())
             {
-                TiffRenderingSettings tiffRenderingSettings = new TiffRenderingSettings(TiffCompressionMethod.CCIT4, 300, 300);
-                tiffRenderingSettings.PrinterMode = true;
-                tiffRenderingSettings.RenderMode = RenderMode.HighQuality;
+                using (Document doc = new Document(inputPdfStream))
+                {
+                    // Use the Apitron component to convert to a TIFF then convert that
+                    // to a PNG image that can be used in ShipWorks
+                    doc.SaveToTiff(stream, tiffRenderingSettings, false);
+                }
 
-                // Use the Apitron component to convert to a TIFF then convert that 
-                // to a PNG image that can be used in ShipWorks
-                pdfDocument.SaveToTiff(stream, tiffRenderingSettings);                
-                images.Add(ConvertToPng(stream.ToArray()));
+                Image tiff = Image.FromStream(stream);
+
+                Guid objGuid = tiff.FrameDimensionsList[0];
+                FrameDimension dimension = new FrameDimension(objGuid);
+                int pageCount = tiff.GetFrameCount(dimension);
+
+                return Enumerable.Range(0, pageCount)
+                    .Select(i => SavePage(i, tiff, dimension, savePageFunction))
+                    .ToList();
             }
-
-            return images;
         }
 
         /// <summary>
-        /// Converts the TIFF image to a PNG image.
+        /// Save an individual page
         /// </summary>
-        /// <param name="tiffBytes">The bytes of the tiff image.</param>
-        /// <returns>A Stream containing the PNG image data.</returns>
-        private Stream ConvertToPng(byte[] tiffBytes)
+        private T SavePage<T>(int pageNumber, Image tiff, FrameDimension dimension,
+            Func<MemoryStream, int, T> savePageFunction)
         {
-            using (MemoryStream tiffStream = new MemoryStream(tiffBytes))
+            tiff.SelectActiveFrame(dimension, pageNumber);
+            T result;
+
+            using (MemoryStream pngStream = new MemoryStream())
             {
-                using (Bitmap bitmap = new Bitmap(tiffStream))
-                {
-                    using (MemoryStream pngStream = new MemoryStream())
-                    {
-                        bitmap.Save(pngStream, ImageFormat.Png);
-                        return new MemoryStream(pngStream.ToArray());
-                    }
-                }
+                tiff.Save(pngStream, ImageFormat.Png);
+
+                result = savePageFunction(pngStream, pageNumber);
             }
-        }
 
-        /// <summary>
-        /// Dispose of managed resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            // Saving labels from PDFs use a lot of memory because of multiple memory streams and bitmaps
+            // being created. Calling collect after each label is saved lets us clean up all these temporary
+            // bitmaps before moving on to the next one.
+            GC.Collect();
 
-        /// <summary>
-        /// Dispose of managed resources if disposing.
-        /// </summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // free managed resources
-                if (pdfDocument != null)
-                {
-                    pdfDocument.Dispose();
-                    pdfDocument = null;
-                }
-
-                if (images != null && images.Any())
-                {
-                    images.ForEach(image => image.Dispose());
-                }
-            }
+            return result;
         }
     }
 }

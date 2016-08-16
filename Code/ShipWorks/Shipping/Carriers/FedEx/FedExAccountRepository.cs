@@ -1,20 +1,24 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
-    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity>, ICarrierAccountRepository<FedExAccountEntity>
+    /// <summary>
+    /// FedEx account repository
+    /// </summary>
+    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>,
+        ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<FedExAccountEntity> Accounts
-        {
-            get
-            {
-                return FedExAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<FedExAccountEntity> Accounts => FedExAccountManager.Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => FedExAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -31,14 +35,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// if there is not an account associated with the default profile.
         /// </summary>
         /// <exception cref="ShippingException">An account that no longer exists is associated with the default FedEx profile.</exception>
-        public override FedExAccountEntity DefaultProfileAccount 
+        public override FedExAccountEntity DefaultProfileAccount
         {
             get
             {
-                long? accountID = new FedExShipmentType().GetPrimaryProfile().FedEx.FedExAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.FedEx).FedEx.FedExAccountID;
                 return GetProfileAccount(ShipmentTypeCode.FedEx, accountID);
             }
         }
+
+        /// <summary>
+        /// Get a collection of readonly accounts
+        /// </summary>
+        public override IEnumerable<IFedExAccountEntity> AccountsReadOnly => FedExAccountManager.AccountsReadOnly;
 
         /// <summary>
         /// Saves the specified account.
@@ -48,5 +57,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             FedExAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get a readonly version of the specified account
+        /// </summary>
+        public override IFedExAccountEntity GetAccountReadOnly(long accountID) =>
+            FedExAccountManager.GetAccountReadOnly(accountID);
     }
 }

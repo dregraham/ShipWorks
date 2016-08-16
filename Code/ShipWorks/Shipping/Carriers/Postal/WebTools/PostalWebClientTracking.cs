@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -52,6 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Get the tracking result for the given tracking number
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static TrackingResult TrackShipment(string trackingNumber)
         {
             if (InterapptiveOnly.MagicKeysDown)

@@ -25,13 +25,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotGroundCloseRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotGroundCloseRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SmartPostCloseRequest());
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 
 
         [Fact]
-        public void Manipulate_SetsCloseDate_Test()
+        public void Manipulate_SetsCloseDate()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_CloseDateIsSpecified_Test()
+        public void Manipulate_CloseDateIsSpecified()
         {
             testObject.Manipulate(carrierRequest.Object);
 

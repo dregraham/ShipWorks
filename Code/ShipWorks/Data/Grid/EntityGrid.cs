@@ -1,34 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Divelements.SandGrid.Rendering;
-using System.Drawing;
 using System.ComponentModel;
-using ShipWorks.Data.Grid.DetailView;
-using Divelements.SandGrid;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.UI.Controls.SandGrid;
-using System.Windows.Forms;
-using ShipWorks.UI;
 using System.Diagnostics;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared;
-using ShipWorks.Templates.Controls;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Common.Threading;
+using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
-using ShipWorks.Data.Grid.Paging;
-using System.Threading;
-using ShipWorks.Templates.Processing;
-using ShipWorks.UI.Controls.Html;
-using Interapptive.Shared.Utility;
-using ShipWorks.Templates;
-using System.Collections;
-using Interapptive.Shared.Win32;
+using System.Text;
+using System.Windows.Forms;
+using Divelements.SandGrid;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
+using Interapptive.Shared.Win32;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.DetailView;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates;
+using ShipWorks.Templates.Controls;
+using ShipWorks.Templates.Processing;
+using ShipWorks.UI;
+using ShipWorks.UI.Controls.Html;
+using ShipWorks.UI.Controls.SandGrid;
 
 namespace ShipWorks.Data.Grid
 {
@@ -385,7 +380,7 @@ namespace ShipWorks.Data.Grid
         private void ApplyDetailViewSettings()
         {
             /* BN: LiveResize is always off now.
-             * 
+             *
             DetailViewMode effectiveMode = (viewSettings == null) ? DetailViewMode.Normal : viewSettings.DetailViewMode;
 
             // Turn off LiveResize if not in normal mode
@@ -711,7 +706,7 @@ namespace ShipWorks.Data.Grid
 
                     // Determine the ideal height of the bitmap
                     // GDI+ does... but GDI, and thus the clipboard, does not support bitmap heights
-                    // greater than 
+                    // greater than
                     int idealHeight = Math.Min(32767, htmlControl.DetermineIdealRenderedBitmapHeight());
 
                     htmlControl.Height = idealHeight + 10;
@@ -796,7 +791,7 @@ namespace ShipWorks.Data.Grid
                 }
             }
 
-            // This is kind of cheating - but there likely won't be any other derived types of EntityGrid, and this makes 
+            // This is kind of cheating - but there likely won't be any other derived types of EntityGrid, and this makes
             // putting the copy functionality of the grid all in one place much easier.
             PagedEntityGrid pagedGrid = this as PagedEntityGrid;
             if (pagedGrid != null)
@@ -948,7 +943,7 @@ namespace ShipWorks.Data.Grid
             }
             else
             {
-                base.OnKeyDown(e);   
+                base.OnKeyDown(e);
             }
         }
 
@@ -1001,7 +996,17 @@ namespace ShipWorks.Data.Grid
                     c => c.Bounds.Left < clickLocation.X && c.Bounds.Right > clickLocation.X);
             }
 
-            base.WndProc(ref m);
+            // For some reason if you drag a column on the grid and
+            // put it back in the same position it crashes
+            // logging crash for now
+            try
+            {
+                base.WndProc(ref m);
+            }
+            catch (InvalidOperationException ex)
+            {
+                log.Error(ex.Message);
+            }
         }
 
         #endregion

@@ -136,6 +136,7 @@ namespace ShipWorks.Filters.Grid
         /// Update the grid to display the most up-to-date records for the specified filter node.  Returns false if there were no changes
         /// found that requiered an update.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool UpdateFiltering(bool forceReload)
         {
             Debug.Assert(!InvokeRequired);

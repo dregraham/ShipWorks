@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         JToken GetProduct(string productID);
         JToken GetShipment(string invoiceID);
         JToken GetShippingAddress(string shipmentID);
-        void UploadShipmentDetails(string trackingNumber, string shipmentID, string onlineStatus, string orderNumber);
+        void UploadShipmentDetails(string trackingNumber, string shipmentID);
+        void UpdateOrderStatus(string lemonStandOrderID, string getCodeName);
     }
 }

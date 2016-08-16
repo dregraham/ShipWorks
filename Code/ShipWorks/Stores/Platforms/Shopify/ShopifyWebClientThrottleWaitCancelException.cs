@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -19,5 +17,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
 
         }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected ShopifyWebClientThrottleWaitCancelException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
     }
 }

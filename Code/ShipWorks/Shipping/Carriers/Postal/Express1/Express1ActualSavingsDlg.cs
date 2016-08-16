@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
                     if (discountedRate != null)
                     {
-                        if (Express1Utilities.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.Amount <= originalRate.Amount)
+                        if (Express1Utilities.IsPostageSavingService(originalRateDetail.ServiceType) && discountedRate.AmountOrDefault <= originalRate.AmountOrDefault)
                         {
                             // If we need to add in the parent, add it
                             if (parentRate != null)
@@ -78,9 +78,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             GridRow row = new GridRow(new string[]
                     {
                         originalRate.Description,
-                        originalRate.Amount.ToString("c"),
-                        discountedRate.Amount.ToString("c"),
-                        (originalRate.Amount - discountedRate.Amount).ToString("c")
+                        originalRate.AmountOrDefault.ToString("c"),
+                        discountedRate.AmountOrDefault.ToString("c"),
+                        (originalRate.AmountOrDefault - discountedRate.AmountOrDefault).ToString("c")
                     });
 
 

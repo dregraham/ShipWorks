@@ -18,13 +18,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void ScheduleType_ReturnsWeekly_Test()
+        public void ScheduleType_ReturnsWeekly()
         {
             Assert.Equal(ActionScheduleType.Weekly, testObject.ScheduleType);
         }
 
         [Fact]
-        public void FrequencyInWeeks_ChangesTo1_WhenSettingValueToZero_Test()
+        public void FrequencyInWeeks_ChangesTo1_WhenSettingValueToZero()
         {
             testObject.FrequencyInWeeks = 0;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FrequencyInWeeks_ChangesTo1_WhenSettingValueToNegativeValue_Test()
+        public void FrequencyInWeeks_ChangesTo1_WhenSettingValueToNegativeValue()
         {
             testObject.FrequencyInWeeks = -1;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FrequencyInWeeks_ChangesTo52_WhenSettingValueGreaterThan52_Test()
+        public void FrequencyInWeeks_ChangesTo52_WhenSettingValueGreaterThan52()
         {
             testObject.FrequencyInWeeks = 53;
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void FrequencyInWeeks_AllowsPositiveValue_Test()
+        public void FrequencyInWeeks_AllowsPositiveValue()
         {
             // Prove that a positive number sets property correctly
             testObject.FrequencyInWeeks = 1;
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void ExecuteOnDays_CountIsZero_WhenSetToNull_Test()
+        public void ExecuteOnDays_CountIsZero_WhenSetToNull()
         {
             // Prove that a positive number sets property correctly
             testObject.ExecuteOnDays = null;
@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void ExecuteOnDays_CountIsCorrect_Test()
+        public void ExecuteOnDays_CountIsCorrect()
         {
             // Prove that a positive number sets property correctly
             testObject.ExecuteOnDays.Add(DayOfWeek.Sunday);
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void CreateEditor_ReturnsWeeklyActionScheduleEditor_Test()
+        public void CreateEditor_ReturnsWeeklyActionScheduleEditor()
         {
             Assert.IsAssignableFrom<WeeklyActionScheduleEditor>(testObject.CreateEditor());
         }

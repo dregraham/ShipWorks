@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using SpreadsheetGear.CustomFunctions;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 {
     /// <summary>
     /// Best rate broker for Endicia accounts
     /// </summary>
-    public class EndiciaBestRateBroker : PostalResellerBestRateBroker<EndiciaAccountEntity>
+    public class EndiciaBestRateBroker : PostalResellerBestRateBroker<EndiciaAccountEntity, IEndiciaAccountEntity>
     {
         bool isEndiciaDhlEnabled;
         bool isEndiciaConsolidatorEnabled;
@@ -25,25 +21,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         public EndiciaBestRateBroker() : this(new EndiciaShipmentType(), new EndiciaAccountRepository())
         {
-            
+
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository) :
+        public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository) :
             this(shipmentType, accountRepository, "USPS")
         {
 
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, string carrierDescription) :
+        protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         {
-
+            GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
         }
 
         /// <summary>
@@ -51,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
         {
-            return (InsuranceProvider)settings.EndiciaInsuranceProvider;
+            return (InsuranceProvider) settings.EndiciaInsuranceProvider;
         }
 
         /// <summary>
@@ -105,8 +101,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 
             isEndiciaDhlEnabled = brokerSettings.IsEndiciaDHLEnabled();
             isEndiciaConsolidatorEnabled = brokerSettings.IsEndiciaConsolidatorEnabled();
-			
-			((EndiciaShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
+
+            ((EndiciaShipmentType) ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
         }
 
         /// <summary>

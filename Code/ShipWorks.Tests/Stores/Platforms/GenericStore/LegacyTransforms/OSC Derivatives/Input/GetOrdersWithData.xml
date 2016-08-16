@@ -1,0 +1,184 @@
+<?xml version="1.0" standalone="yes" ?>
+<ShipWorks>
+  <ModuleVersion>2.4.3</ModuleVersion>
+  <Parameters>
+    <Start>1901-12-13 14:45:52</Start>
+    <End>2009-10-16 10:35:19</End>
+    <MaxCount>25</MaxCount>
+  </Parameters>
+  <Orders>
+    <Order>
+      <OrderNumber>2</OrderNumber>
+      <OrderDate>2008-10-17 13:06:44</OrderDate>
+      <LastModified>2008-10-17 13:06:44</LastModified>
+      <LastModifiedLocal>2008-10-17 08:06:44</LastModifiedLocal>
+      <ShippingMethod>Flat Rate (Best Way)</ShippingMethod>
+      <StatusCode>2</StatusCode>
+      <CustomerComment></CustomerComment>
+      <Customer>
+        <CustomerID>2</CustomerID>
+        <Phone>2175534024</Phone>
+        <Email>ej@ejinnovations.com</Email>
+      </Customer>
+      <ShipAddress>
+        <Name>Dozer Johnson</Name>
+        <Company></Company>
+        <Street1>3705 Carney Blvd.</Street1>
+        <Street2></Street2>
+        <Street3></Street3>
+        <City>Springfield</City>
+        <PostalCode>62712</PostalCode>
+        <State>Illinois</State>
+        <Country>United States</Country>
+      </ShipAddress>
+      <BillAddress>
+        <Name>Dozer Johnson</Name>
+        <Company></Company>
+        <Street1>3704 Carney Blvd.</Street1>
+        <Street2></Street2>
+        <Street3></Street3>
+        <City>Springfield</City>
+        <PostalCode>62712</PostalCode>
+        <State>Illinois</State>
+        <Country>United States</Country>
+      </BillAddress>
+      <Payment>
+        <Method>Credit Card</Method>
+        <CreditCard>
+          <Type>Visa</Type>
+          <Owner>Dozer Johnson</Owner>
+          <Number>*******</Number>
+          <Expires>0116</Expires>
+        </CreditCard>
+      </Payment>
+      <Items>
+        <Item>
+          <ItemID>2</ItemID>
+          <ProductID>19</ProductID>
+          <Code>DVD-TSAB</Code>
+          <Name>There's Something About Mary</Name>
+          <Quantity>1</Quantity>
+          <UnitPrice>49.99</UnitPrice>
+          <Image>http://osc.interapptive.local/images/dvd/theres_something_about_mary.gif</Image>
+          <Weight>7.00</Weight>
+          <Attributes></Attributes>
+        </Item>
+        <Item>
+          <ItemID>3</ItemID>
+          <ProductID>3</ProductID>
+          <Code>MSIMPRO</Code>
+          <Name>Microsoft IntelliMouse Pro</Name>
+          <Quantity>1</Quantity>
+          <UnitPrice>39.99</UnitPrice>
+          <Image>http://osc.interapptive.local/images/microsoft/msimpro.gif</Image>
+          <Weight>7.00</Weight>
+          <Attributes></Attributes>
+        </Item>
+      </Items>
+      <Totals>
+        <Total>
+          <TotalID>4</TotalID>
+          <Name>Sub-Total:</Name>
+          <Text>$89.98</Text>
+          <Value>89.9800</Value>
+          <Class>ot_subtotal</Class>
+        </Total>
+        <Total>
+          <TotalID>5</TotalID>
+          <Name>Flat Rate (Best Way):</Name>
+          <Text>$5.00</Text>
+          <Value>5.0000</Value>
+          <Class>ot_shipping</Class>
+        </Total>
+        <Total>
+          <TotalID>6</TotalID>
+          <Name>Total:</Name>
+          <Text>&lt;b&gt;$94.98&lt;/b&gt;</Text>
+          <Value>94.9800</Value>
+          <Class>ot_total</Class>
+        </Total>
+      </Totals>
+    </Order>
+    <Order>
+      <OrderNumber>3</OrderNumber>
+      <OrderDate>2008-10-17 13:26:40</OrderDate>
+      <LastModified>2008-10-17 13:26:40</LastModified>
+      <LastModifiedLocal>2008-10-17 08:26:40</LastModifiedLocal>
+      <ShippingMethod>Flat Rate (Best Way)</ShippingMethod>
+      <StatusCode>1</StatusCode>
+      <CustomerComment></CustomerComment>
+      <Customer>
+        <CustomerID>3</CustomerID>
+        <Phone>217555555</Phone>
+        <Email>neo@ejinnovations.com</Email>
+      </Customer>
+      <ShipAddress>
+        <Name>Neo Johnson</Name>
+        <Company></Company>
+        <Street1>3704 Carney Blvd.</Street1>
+        <Street2></Street2>
+        <Street3></Street3>
+        <City>Springfield</City>
+        <PostalCode>62712</PostalCode>
+        <State>Illinois</State>
+        <Country>United States</Country>
+      </ShipAddress>
+      <BillAddress>
+        <Name>Neo Johnson</Name>
+        <Company></Company>
+        <Street1>3704 Carney Blvd.</Street1>
+        <Street2></Street2>
+        <Street3></Street3>
+        <City>Springfield</City>
+        <PostalCode>62712</PostalCode>
+        <State>Illinois</State>
+        <Country>United States</Country>
+      </BillAddress>
+      <Payment>
+        <Method>Cash on Delivery</Method>
+        <CreditCard>
+          <Type></Type>
+          <Owner></Owner>
+          <Number>*******</Number>
+          <Expires></Expires>
+        </CreditCard>
+      </Payment>
+      <Items>
+        <Item>
+          <ItemID>4</ItemID>
+          <ProductID>25</ProductID>
+          <Code>MSINTKB</Code>
+          <Name>Microsoft Internet Keyboard PS/2</Name>
+          <Quantity>1</Quantity>
+          <UnitPrice>69.99</UnitPrice>
+          <Image>http://osc.interapptive.local/images/microsoft/intkeyboardps2.gif</Image>
+          <Weight>8.00</Weight>
+          <Attributes></Attributes>
+        </Item>
+      </Items>
+      <Totals>
+        <Total>
+          <TotalID></TotalID>
+          <Name>Sub-Total:</Name>
+          <Text>$69.99</Text>
+          <Value>69.9900</Value>
+          <Class>ot_subtotal</Class>
+        </Total>
+        <Total>
+          <TotalID>8</TotalID>
+          <Name>Flat Rate (Best Way):</Name>
+          <Text>$5.00</Text>
+          <Value>5.0000</Value>
+          <Class>ot_shipping</Class>
+        </Total>
+        <Total>
+          <TotalID>9</TotalID>
+          <Name>Total:</Name>
+          <Text>&lt;b&gt;$74.99&lt;/b&gt;</Text>
+          <Value>74.9900</Value>
+          <Class>ot_total</Class>
+        </Total>
+      </Totals>
+    </Order>
+  </Orders>
+</ShipWorks>

@@ -20,7 +20,7 @@
 // making a combined work based on this library.  Thus, the terms and
 // conditions of the GNU General Public License cover the whole
 // combination.
-// 
+//
 // As a special exception, the copyright holders of this library give you
 // permission to link this library with independent modules to produce an
 // executable, regardless of the license terms of these independent
@@ -38,76 +38,78 @@ using System.IO;
 
 namespace ICSharpCode.SharpZipLib.BZip2
 {
-	
-	/// <summary>
-	/// A helper class to simplify compressing and decompressing streams.
-	/// </summary>
-	public sealed class BZip2
-	{
-		/// <summary>
-		/// Decompress <paramref name="inStream">input</paramref> writing 
-		/// decompressed data to the <paramref name="outStream">output stream</paramref>
-		/// </summary>
-		/// <param name="inStream">The stream containing data to decompress.</param>
-		/// <param name="outStream">The stream to write decompressed data to.</param>
-		/// <remarks>Both streams are closed on completion</remarks>
-		public static void Decompress(Stream inStream, Stream outStream) 
-		{
-			if ( inStream == null ) {
-				throw new ArgumentNullException("inStream");
-			}
-			
-			if ( outStream == null ) {
-				throw new ArgumentNullException("outStream");
-			}
-			
-			using ( outStream ) {
-				using ( BZip2InputStream bzis = new BZip2InputStream(inStream) ) {
-					int ch = bzis.ReadByte();
-					while (ch != -1) {
-						outStream.WriteByte((byte)ch);
-						ch = bzis.ReadByte();
-					}
-				}
-			}
-		}
-		
-		/// <summary>
-		/// Compress <paramref name="inStream">input stream</paramref> sending 
-		/// result to <paramref name="outStream">output stream</paramref>
-		/// </summary>
-		/// <param name="inStream">The stream to compress.</param>
-		/// <param name="outStream">The stream to write compressed data to.</param>
-		/// <param name="blockSize">The block size to use.</param>
-		/// <remarks>Both streams are closed on completion</remarks>
-		public static void Compress(Stream inStream, Stream outStream, int blockSize) 
-		{			
-			if ( inStream == null ) {
-				throw new ArgumentNullException("inStream");
-			}
-			
-			if ( outStream == null ) {
-				throw new ArgumentNullException("outStream");
-			}
-			
-			using ( inStream ) {
-				using (BZip2OutputStream bzos = new BZip2OutputStream(outStream, blockSize)) {
-					int ch = inStream.ReadByte();
-					while (ch != -1) {
-						bzos.WriteByte((byte)ch);
-						ch = inStream.ReadByte();
-					}
-				}
-			}
-		}
+    /// <summary>
+    /// A helper class to simplify compressing and decompressing streams.
+    /// </summary>
+    public static class BZip2
+    {
+        /// <summary>
+        /// Decompress <paramref name="inStream">input</paramref> writing
+        /// decompressed data to the <paramref name="outStream">output stream</paramref>
+        /// </summary>
+        /// <param name="inStream">The stream containing data to decompress.</param>
+        /// <param name="outStream">The stream to write decompressed data to.</param>
+        /// <remarks>Both streams are closed on completion</remarks>
+        public static void Decompress(Stream inStream, Stream outStream)
+        {
+            if (inStream == null)
+            {
+                throw new ArgumentNullException("inStream");
+            }
 
-		/// <summary>
-		/// Initialise a default instance of this class.
-		/// </summary>
-		BZip2()
-		{
-		}
-	}
+            if (outStream == null)
+            {
+                throw new ArgumentNullException("outStream");
+            }
+
+            using (outStream)
+            {
+                using (BZip2InputStream bzis = new BZip2InputStream(inStream))
+                {
+                    int ch = bzis.ReadByte();
+                    while (ch != -1)
+                    {
+                        outStream.WriteByte((byte) ch);
+                        ch = bzis.ReadByte();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compress <paramref name="inStream">input stream</paramref> sending
+        /// result to <paramref name="outStream">output stream</paramref>
+        /// </summary>
+        /// <param name="inStream">The stream to compress.</param>
+        /// <param name="outStream">The stream to write compressed data to.</param>
+        /// <param name="blockSize">The block size to use.</param>
+        /// <remarks>Both streams are closed on completion</remarks>
+        public static void Compress(Stream inStream, Stream outStream, int blockSize)
+        {
+            if (inStream == null)
+            {
+                throw new ArgumentNullException("inStream");
+            }
+
+            if (outStream == null)
+            {
+                throw new ArgumentNullException("outStream");
+            }
+
+            using (inStream)
+            {
+                using (BZip2OutputStream bzos = new BZip2OutputStream(outStream, blockSize))
+                {
+                    int ch = inStream.ReadByte();
+                    while (ch != -1)
+                    {
+                        bzos.WriteByte((byte) ch);
+                        ch = inStream.ReadByte();
+                    }
+                }
+            }
+        }
+    }
 }
 
 /* derived from a file which contained this license :

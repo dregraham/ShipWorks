@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Actions.Scheduling
 {
@@ -26,6 +27,13 @@ namespace ShipWorks.Actions.Scheduling
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
         public SchedulingException(string message, Exception innerException)
             : base(message, innerException)
+        { }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected SchedulingException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         { }
     }
 }

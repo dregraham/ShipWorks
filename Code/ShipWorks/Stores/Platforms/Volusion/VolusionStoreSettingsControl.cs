@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Security;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Platforms.Volusion
@@ -44,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             timeZoneControl.SelectedTimeZone = TimeZoneInfo.FindSystemTimeZoneById(volusionStore.ServerTimeZone);
 
             UpdateStatusLabels();
-            
+
         }
 
         /// <summary>
@@ -84,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             VolusionStoreEntity volusionStore = store as VolusionStoreEntity;
 
             volusionStore.ServerTimeZone = timeZoneControl.SelectedTimeZone.Id;
-            
+
             volusionStore.ShipmentMethods = this.store.ShipmentMethods;
             volusionStore.PaymentMethods = this.store.PaymentMethods;
 
@@ -149,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 MessageHelper.ShowInformation(this, "The shipping methods were successfully updated.");
             }
         }
-        
+
         /// <summary>
         /// Updates/refreshes payment methods
         /// </summary>

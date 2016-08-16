@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.OnTrac;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 {
@@ -11,24 +12,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
     {
         private OnTracShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<OnTracAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>> accountRepository;
 
         public OnTracShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<OnTracAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
 
             testObject = new OnTracShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToRepository_Test()
+        public void HasAccounts_DelegatesToRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
         [Fact]
-        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
+        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount()
         {
             List<OnTracAccountEntity> OnTracAccounts = new List<OnTracAccountEntity>()
             {
@@ -50,15 +51,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         }
 
         [Fact]
-        public void SaveAccountToShipment_ThrowsOnTracException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsOnTracException_WhenNoAccounts()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<OnTracAccountEntity>());
 
             Assert.Throws<OnTracException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
-        
+
         [Fact]
-        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {
             List<OnTracAccountEntity> accounts = new List<OnTracAccountEntity>()
             {
@@ -78,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts()
         {
             List<OnTracAccountEntity> accounts = new List<OnTracAccountEntity>()
             {

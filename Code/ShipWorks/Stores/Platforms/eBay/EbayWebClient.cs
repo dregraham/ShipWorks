@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.Ebay.Requests;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
@@ -96,6 +97,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Send a message for the given item to the buyer
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public void SendMessage(long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
         {
             EbaySendMessageRequest request = new EbaySendMessageRequest(token, itemID, buyerID, messageType, subject, message, copySender);
@@ -116,6 +118,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Marks a transation as paid (or not) and shipped (or not) on my ebay
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public void CompleteSale(long itemID, long transactionID, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier)
         {
             EbayCompleteSaleRequest request = new EbayCompleteSaleRequest(token, itemID, transactionID, paid, shipped, trackingNumber, shippingCarrier);
@@ -126,6 +129,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Combine the given transactions, specifying the additional costs for the combined order
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public long CombineOrders(IEnumerable<TransactionType> transactionsToCombine, double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost, string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed)
         {
             EbayAddOrderRequest request = new EbayAddOrderRequest(token, transactionsToCombine, orderTotal, paymentMethods, shippingCost, shippingCountryCode, shippingService, salesTaxPercent, taxState, isShippingTaxed);

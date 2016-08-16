@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Shipping.Carriers.BestRate;
 using Autofac;
 
@@ -99,14 +94,6 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            throw new ShippingException("No carrier is selected for the shipment.");
-        }
-
-        /// <summary>
         /// Gets an instance to the best rate shipping broker for the None shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -115,5 +102,10 @@ namespace ShipWorks.Shipping.Carriers.None
         {
             return new NullShippingBroker();
         }
+
+        /// <summary>
+        /// Checks whether this shipment type is allowed for the given shipment
+        /// </summary>
+        public override bool IsAllowedFor(ShipmentEntity shipment) => true;
     }
 }

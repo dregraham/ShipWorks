@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using Rebex.Net;
-using ShipWorks.UI;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Email.Accounts

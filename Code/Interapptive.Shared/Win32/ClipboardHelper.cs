@@ -12,14 +12,24 @@ namespace Interapptive.Shared.Win32
     /// <summary>
     /// Wrapper class around the Clipboard for help with not crashing
     /// </summary>
-    public static class ClipboardHelper
+    public class ClipboardHelper
     {
+        private readonly IMessageHelper messageHelper;
         static readonly ILog log = LogManager.GetLogger(typeof(ClipboardHelper));
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="messageHelper"></param>
+        public ClipboardHelper(IMessageHelper messageHelper)
+        {
+            this.messageHelper = messageHelper;
+        }
 
         /// <summary>
         /// Wraps Clipboard.SetText to handle and display exceptions due to clipboard being locked.
         /// </summary>
-        public static void SetText(string text, TextDataFormat format, IWin32Window owner)
+        public void SetText(string text, TextDataFormat format, IWin32Window owner)
         {
             try
             {
@@ -29,7 +39,7 @@ namespace Interapptive.Shared.Win32
             {
                 log.Error("Clipboard.SetText", ex);
 
-                MessageHelper.ShowError(owner, "Could not copy because the clipboard is in use by another application.");
+                messageHelper.ShowError("Could not copy because the clipboard is in use by another application.");
             }
         }
     }

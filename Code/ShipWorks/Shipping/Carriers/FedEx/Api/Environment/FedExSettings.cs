@@ -1,5 +1,5 @@
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;

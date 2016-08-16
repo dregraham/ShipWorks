@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using Common.Logging;
+﻿using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
-using Microsoft.Web.Services3.Referral;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
@@ -26,15 +20,23 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
     /// <summary>
     /// Downloader for eBay
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class EbayDownloader : StoreDownloader
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
 
         // The current time according to eBay
@@ -58,7 +60,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Begin the order download process
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -175,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Increment the page, if that's the method we are using
                 //if (usePagedDownload)
                 //{
-                    page++;
+                page++;
                 //}
             }
         }
@@ -186,7 +190,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation
-            EbayOrderEntity order = (EbayOrderEntity)InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
+            EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
 
             // Special processing for cancelled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
@@ -208,11 +212,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
 
             // Online status
-            order.OnlineStatusCode = (int)orderType.OrderStatus;
+            order.OnlineStatusCode = (int) orderType.OrderStatus;
             order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
 
             // SellingManager Pro
-            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?)null;
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
 
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
@@ -238,7 +242,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Charges
             if (!order.CombinedLocally)
             {
-                UpdateCharges(order, orderType);                
+                UpdateCharges(order, orderType);
             }
 
             // Notes
@@ -253,7 +257,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 order.LocalStatus = "Shipped";
             }
 
-            // Need to 
+            // Need to
             MergeOrderItemsFromDb(order);
 
             // Make totals adjustments
@@ -318,52 +322,81 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
 
-                sqlDeadlockRetry.ExecuteWithRetry(adapter => { 
-                    // Save the new order
-                    SaveDownloadedOrder(order);
-
-                    // Go through each abandoned item and delete it
-                    foreach (OrderItemEntity item in abandonedItems)
+                sqlDeadlockRetry.ExecuteWithRetry(() =>
+                {
+                    using (SqlTransaction transaction = connection.BeginTransaction())
                     {
-                        // Detatch it from the order
-                        // This is to get the appropriate orderitem instance
-                        OrderItemEntity orderItem = affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.SingleOrDefault(i => i.OrderItemID == item.OrderItemID);
-                        if (orderItem != null)
+                        using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                         {
-                            orderItem.Order = null;
+                            // Save the new order
+                            SaveDownloadedOrder(order, transaction);
+
+                            // Remove the abandoned items
+                            DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
+
+                            // Copy Notes, Shipments from affected orders into the combined order
+                            // delete the affected orders
+                            ConsolidateOrderResources(order, affectedOrders, adapter);
                         }
-                        else
-                        {
-                            log.Info($"Item {item.OrderItemID} does not belong to an order.");
-                        }
-                        
-                        // Make sure the detachment works both ways
-                        Debug.Assert(affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.All(i => i.OrderItemID != item.OrderItemID));
-
-                        // Deleted all the attributes
-                        foreach (OrderItemAttributeEntity attribute in item.OrderItemAttributes)
-                        {
-                            adapter.DeleteEntity(attribute);
-                        }
-
-                        // And delete it
-                        adapter.DeleteEntity(item);
-                    }
-
-                    // Find all the orders that have no items.  We're going to have to delete them, since they are now empty and pointless.  But before
-                    // we delete them, we need to migrate their shipments and notes so they don't just get lost.
-                    foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
-                    {
-                        // Copy the notes from the old order
-                        OrderUtility.CopyNotes(fromOrder.OrderID, order);
-
-                        // Copy the shipments from the old order
-                        OrderUtility.CopyShipments(fromOrder.OrderID, order);
-
-                        // Delete the old order
-                        DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
                     }
                 });
+            }
+        }
+
+        /// <summary>
+        /// Delete abandoned items from orders that are being combined
+        /// </summary>
+        private void DeleteAbandonedItems(IEnumerable<OrderItemEntity> abandonedItems, IEnumerable<OrderEntity> affectedOrders, SqlAdapter adapter)
+        {
+            // Go through each abandoned item and delete it
+            foreach (OrderItemEntity item in abandonedItems)
+            {
+                // Detatch it from the order
+                // This is to get the appropriate orderitem instance
+                OrderItemEntity orderItem = affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.SingleOrDefault(i => i.OrderItemID == item.OrderItemID);
+                if (orderItem != null)
+                {
+                    orderItem.Order = null;
+                }
+                else
+                {
+                    log.Info($"Item {item.OrderItemID} does not belong to an order.");
+                }
+
+                // Make sure the detachment works both ways
+                Debug.Assert(affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.All(i => i.OrderItemID != item.OrderItemID));
+
+                // Deleted all the attributes
+                foreach (OrderItemAttributeEntity attribute in item.OrderItemAttributes)
+                {
+                    adapter.DeleteEntity(attribute);
+                }
+
+                // And delete it
+                adapter.DeleteEntity(item);
+            }
+        }
+
+        /// <summary>
+        /// Copy Notes and Shipments from old orders into the newly created combined order and remove the old orders
+        /// </summary>
+        /// <param name="order">The new order that the old</param>
+        /// <param name="affectedOrders">Old orders to copy from and delete</param>
+        /// <param name="adapter">The adapter to use</param>
+        private void ConsolidateOrderResources(OrderEntity order, IEnumerable<OrderEntity> affectedOrders, SqlAdapter adapter)
+        {
+            // Find all the orders that have no items.  We're going to have to delete them, since they are now empty and pointless.  But before
+            // we delete them, we need to migrate their shipments and notes so they don't just get lost.
+            foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
+            {
+                // Copy the notes from the old order
+                OrderUtility.CopyNotes(fromOrder.OrderID, order);
+
+                // Copy the shipments from the old order
+                OrderUtility.CopyShipments(fromOrder.OrderID, order);
+
+                // Delete the old order
+                DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
             }
         }
 
@@ -484,7 +517,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Split the name
             PersonName personName = PersonName.Parse(address.Name);
 
-            order.ShipNameParseStatus = (int)personName.ParseStatus;
+            order.ShipNameParseStatus = (int) personName.ParseStatus;
             order.ShipUnparsedName = personName.UnparsedName;
             order.ShipCompany = address.CompanyName ?? "";
             order.ShipFirstName = personName.First;
@@ -497,16 +530,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Doeses the downloaded address match original.
+        /// Does the downloaded address match original.
         /// </summary>
         private static bool DoesDownloadedAddressMatchOriginal(EbayOrderEntity order, AddressAdapter downloadedShipAddress)
         {
             bool downloadAddressMatchesOriginal = false;
 
             // See if there is an original address and if it matches the downloaded address.
-            List<ValidatedAddressEntity> validatedAddressEntities = ValidatedAddressManager.GetSuggestedAddresses(SqlAdapter.Default, order.OrderID, "Ship");
-            ValidatedAddressEntity originalAddress = validatedAddressEntities.Where(entity => entity.IsOriginal)
-                .OrderByDescending(entity => entity.ValidatedAddressID).FirstOrDefault();
+            ValidatedAddressEntity originalAddress =
+                ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, "Ship");
+
             if (originalAddress != null)
             {
                 AddressAdapter originalAddressAdapter = new AddressAdapter(originalAddress, "");
@@ -537,7 +570,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Calculates the DateTime to use as the starting point from the previous four download cycles.
         /// </summary>
-        /// <param name="onlineLastModifiedStartingPoint">The DateTime of the most recent online last modified date that ShipWorks is aware of. This is used 
+        /// <param name="onlineLastModifiedStartingPoint">The DateTime of the most recent online last modified date that ShipWorks is aware of. This is used
         /// in the event that the last four download cycles are more recent (i.e. this is to ensure overlap).</param>
         /// <returns>The DateTime to use as the starting point of a download.</returns>
         private DateTime? CalculateStartingPoint(DateTime? onlineLastModifiedStartingPoint)
@@ -552,7 +585,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
             if (startDates.Count < 4)
             {
-                // We don't have enough download history, so subtract the initial download days from the 
+                // We don't have enough download history, so subtract the initial download days from the
                 // earliest download date to mimic the first download cycle
                 return startDates.Min().Subtract(TimeSpan.FromDays(Store.InitialDownloadDays ?? 7));
             }
@@ -563,9 +596,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Use ebay official time in case the computer server time is off.
             DateTime twoHoursAgo = eBayOfficialTime.Subtract(TimeSpan.FromMinutes(120));
 
-            // Use the lesser value of two hours ago, downloadIntervalStartTime and the most recent 
-            // last modified date. This is for the case where the order data has been modified by support 
-            // (or an action has been previously created by support to manipulate the last modified date 
+            // Use the lesser value of two hours ago, downloadIntervalStartTime and the most recent
+            // last modified date. This is for the case where the order data has been modified by support
+            // (or an action has been previously created by support to manipulate the last modified date
             // to resolve skipped orders).
             // The two hours ago protects from people jamming on the download button
             return new[]
@@ -577,7 +610,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Gets the date/time that the last number of most recent, successful downloads having orders 
+        /// Gets the date/time that the last number of most recent, successful downloads having orders
         /// were started for this store.
         /// </summary>
         /// <param name="previousDownloadCount">The number of previous downloads to use when getting starting point(s).</param>
@@ -588,7 +621,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             RelationPredicateBucket bucket = new RelationPredicateBucket
             (
                 DownloadFields.StoreID == Store.StoreID &
-                DownloadFields.Result == (int)DownloadResult.Success &
+                DownloadFields.Result == (int) DownloadResult.Success &
                 DownloadFields.QuantityTotal > 0
             );
 
@@ -600,7 +633,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
 
             List<DateTime> startDates = new DateTimeList();
-            using (SqlDataReader reader = (SqlDataReader)SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
             {
                 while (reader.Read())
                 {
@@ -623,12 +656,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Only exists for GSP shipments
             if (orderType.MultiLegShippingDetails != null &&
-                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider != null && 
-                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails != null && 
+                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider != null &&
+                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails != null &&
                 orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost != null)
             {
                 shipping.Amount = (decimal) orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost.Value;
-            } 
+            }
             else if (orderType.ShippingServiceSelected.ShippingServiceCost != null)
             {
                 shipping.Amount = (decimal) orderType.ShippingServiceSelected.ShippingServiceCost.Value;
@@ -818,7 +851,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 orderItem.Name = transaction.Variation.VariationTitle;
             }
 
-            // Overwrite the SKU if a variation SKU is provided.  
+            // Overwrite the SKU if a variation SKU is provided.
             if (!string.IsNullOrWhiteSpace(transaction.Variation.SKU))
             {
                 UpdateTransactionSKU(orderItem, transaction.Variation.SKU);
@@ -975,7 +1008,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             if (order.OrderTotal != Convert.ToDecimal(amountPaid) &&
-                order.OnlineStatusCode is int && (int)order.OnlineStatusCode == (int)OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
+                order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
                 !order.CombinedLocally) // Don't bother trying to reconcile a locally combined order
             {
                 OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other");
@@ -992,17 +1025,18 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="isGsp">if set to <c>true</c> [is global shipping program order].</param>
         /// <param name="gspDetails">The multi leg shipping details.</param>
         /// <exception cref="EbayException">eBay did not provide a reference ID for an order designated for the Global Shipping Program.</exception>
+        [NDependIgnoreLongMethod]
         private void UpdateGlobalShippingProgramInfo(EbayOrderEntity order, bool isGsp, MultiLegShippingDetailsType gspDetails)
         {
             order.GspEligible = isGsp;
 
             if (order.GspEligible)
             {
-                // This is part of the global shipping program, so we need to pull out the address info 
-                // of the international shipping provider but first make sure there aren't any null 
+                // This is part of the global shipping program, so we need to pull out the address info
+                // of the international shipping provider but first make sure there aren't any null
                 // objects in the address heirarchy
                 if (gspDetails != null &&
-                    gspDetails.SellerShipmentToLogisticsProvider != null && 
+                    gspDetails.SellerShipmentToLogisticsProvider != null &&
                     gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress != null)
                 {
                     // Pull out the name of the international shipping provider
@@ -1010,16 +1044,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     order.GspFirstName = name.First;
                     order.GspLastName = name.Last;
 
-                    // Address info                    
+                    // Address info
 
                     // eBay includes "Suite 400" as part of street1 which some shipping carriers (UPS) don't recognize as a valid address.
-                    // So, we'll try to split the street1 line (1850 Airport Exchange Blvd, Suite 400) into separate addresses based on 
+                    // So, we'll try to split the street1 line (1850 Airport Exchange Blvd, Suite 400) into separate addresses based on
                     // the presence of a comma in street 1
 
                     // We're ultimately going to populate the ebayOrder.GspStreet property values based on the elements in th streetLines list
                     List<string> streetLines = new List<string>
                     {
-                        // Default the list to empty strings for the case where the Street1 and Street2 
+                        // Default the list to empty strings for the case where the Street1 and Street2
                         // properties of the shipping address are null
                         gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 ?? string.Empty,
                         gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street2 ?? string.Empty
@@ -1054,7 +1088,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                     if (order.GspPostalCode.Length >= 5)
                     {
-                        // Only grab the first five digits of the postal code; there have been incidents in the past where eBay 
+                        // Only grab the first five digits of the postal code; there have been incidents in the past where eBay
                         // sends down an invalid 9 digit postal code (e.g. 41018-319) that prevents orders from being shipped
                         order.GspPostalCode = order.GspPostalCode.Substring(0, 5);
                     }
@@ -1098,7 +1132,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 if (order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
                 {
-                    // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded 
+                    // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded
                     // first then the combined orders being downloaded, this would inadvertently get set back to GSP if the combined order is
                     // a GSP order (if the same buyer purchases one item that is GSP and another that isn't, the GSP settings get applied
                     // to the combined order).
@@ -1197,7 +1231,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
                 EbayOrderEntity ebayOrder = collection.FirstOrDefault();
 
-                if (ebayOrder==null)
+                if (ebayOrder == null)
                 {
                     ebayOrder = GetCombinedOrder(identifier, includeCharges);
                 }
@@ -1250,9 +1284,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
 
         /// <summary>
-        /// Locate an item with the given identifier.  Can be optionally restricted to only loading the ItemID
+        /// Locate an item with the given identifier
         /// </summary>
-        private EbayOrderItemEntity FindItem(EbayOrderIdentifier identifier, bool idOnly = false)
+        private EbayOrderItemEntity FindItem(EbayOrderIdentifier identifier)
         {
             if (identifier.EbayOrderID != 0)
             {
@@ -1261,7 +1295,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             object objItemID = SqlAdapter.Default.GetScalar(EbayOrderItemFields.OrderItemID,
                 null, AggregateFunction.None,
-                EbayOrderItemFields.EbayItemID == identifier.EbayItemID & EbayOrderItemFields.EbayTransactionID == identifier.TransactionID,
+                EbayOrderItemFields.EbayItemID == identifier.EbayItemID &
+                    EbayOrderItemFields.EbayTransactionID == identifier.TransactionID,
                 null);
 
             if (objItemID == null)
@@ -1276,15 +1311,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 EbayOrderItemEntity item = new EbayOrderItemEntity(itemID);
 
-                if (!idOnly)
-                {
-                    PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
-                    prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderItemEntity);
+                prefetch.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+                prefetch.Add(OrderItemEntity.PrefetchPathOrder);
 
-                    SqlAdapter.Default.FetchEntity(item, prefetch);
-                }
+                SqlAdapter.Default.FetchEntity(item, prefetch);
 
-                return item;
+                return item.Order.StoreID == Store.StoreID ? item : null;
             }
         }
 
@@ -1465,7 +1498,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             while (true)
             {
                 GetFeedbackResponseType response = webClient.GetFeedback(feedbackType, page);
-                
+
                 // Quit if eBay says there aren't any more
                 if (response.FeedbackDetailItemTotal == 0 || page > response.PaginationResult.TotalNumberOfPages)
                 {
@@ -1516,7 +1549,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessFeedback(FeedbackDetailType feedback)
         {
             SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {0}", feedback.OrderLineItemID));
-            sqlDeadlockRetry.ExecuteWithRetry(adapter => {
+            sqlDeadlockRetry.ExecuteWithRetry(adapter =>
+            {
                 EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
 
                 if (item == null)
@@ -1529,12 +1563,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // Feedback we've recieved
                 if (feedback.Role == TradingRoleCodeType.Seller)
                 {
-                    item.FeedbackReceivedType = (int)feedback.CommentType;
+                    item.FeedbackReceivedType = (int) feedback.CommentType;
                     item.FeedbackReceivedComments = feedback.CommentText;
                 }
                 else
                 {
-                    item.FeedbackLeftType = (int)feedback.CommentType;
+                    item.FeedbackLeftType = (int) feedback.CommentType;
                     item.FeedbackLeftComments = feedback.CommentText;
                 }
 
@@ -1567,7 +1601,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         protected override void VerifyOrderTotal(OrderEntity order)
         {
-            // do nothing because during normal ebay operations, there are 
+            // do nothing because during normal ebay operations, there are
             // times when the orders don't always balance correctly temporarily.
         }
 

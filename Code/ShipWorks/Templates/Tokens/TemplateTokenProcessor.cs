@@ -118,7 +118,7 @@ namespace ShipWorks.Templates.Tokens
                     converted = "";
                 }
 
-                throw new TemplateTokenException(string.Format("There was a problem with one of your tokens:\n\nToken:\n{0}{1}\n\nError:\n{2}", tokenText, converted, ex.Message), ex);
+                throw new TemplateTokenException($"There was a problem with one of your tokens:\n\nToken:\n{tokenText}{converted}\n\nError:\n{ex.Message}", ex);
             }
         }
 

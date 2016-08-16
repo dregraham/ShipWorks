@@ -4,41 +4,37 @@ using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using ShipWorks.Shipping.Carriers.Api;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
     [Serializable]
     public class FedExSoapCarrierException : CarrierException
     {
-        private string message;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExSoapCarrierException(SoapException soapFault)
-            :
-                base(string.Empty, soapFault)
+            : base(ParseException(soapFault), soapFault)
         {
-            ParseException(soapFault);
+
         }
 
         /// <summary>
-        /// The user displayable exception message
+        /// Serialization constructor
         /// </summary>
-        public override string Message
+        protected FedExSoapCarrierException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
-            get
-            {
-                return message;
-            }
+
         }
 
         /// <summary>
         /// Extract the numeric error code from the FedEx exception
         /// </summary>
-        public void ParseException(SoapException ex)
+        public static string ParseException(SoapException ex)
         {
-            message = "";
+            string message = "";
 
             if (ex.Detail != null && ex.Detail.FirstChild != null)
             {
@@ -81,6 +77,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     message += ".";
                 }
             }
+
+            return message;
         }
     }
 }

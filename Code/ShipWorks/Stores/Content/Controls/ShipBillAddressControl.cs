@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Controls;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using Interapptive.Shared.Business;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Stores.Content.Controls
 {
@@ -19,8 +13,6 @@ namespace ShipWorks.Stores.Content.Controls
     /// </summary>
     public partial class ShipBillAddressControl : UserControl
     {
-        private bool enableAddressValidation = false;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -53,18 +45,13 @@ namespace ShipWorks.Stores.Content.Controls
         /// <summary>
         /// Enable address validation for the addresses
         /// </summary>
-        public bool EnableAddressValidation
+        public void EnableAddressValidation(IValidatedAddressScope validatedAddressScope)
         {
-            get
-            {
-                return enableAddressValidation;
-            }
-            set
-            {
-                enableAddressValidation = value;
-                personBilling.EnableValidationControls = enableAddressValidation;
-                personShipping.EnableValidationControls = enableAddressValidation;
-            }
+            personBilling.EnableValidationControls = true;
+            personBilling.ValidatedAddressScope = validatedAddressScope;
+
+            personShipping.EnableValidationControls = true;
+            personShipping.ValidatedAddressScope = validatedAddressScope;
         }
 
         /// <summary>

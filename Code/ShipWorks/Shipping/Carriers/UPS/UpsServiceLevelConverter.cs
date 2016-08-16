@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Carriers.UPS.Enums;
+﻿using Interapptive.Shared;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Enums;
 
@@ -30,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the service level.
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static ServiceLevelType GetServiceLevel(UpsServiceType upsService, int? guaranteedDaysToDelivery)
         {
             switch (upsService)
@@ -38,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 case UpsServiceType.Ups3DaySelectFromCanada:
                     return ServiceLevelType.ThreeDays;
 
-                case UpsServiceType.Ups2nDayAirIntra:
+                case UpsServiceType.Ups2ndDayAirIntra:
                 case UpsServiceType.Ups2DayAirAM:
                 case UpsServiceType.Ups2DayAir:
                     return ServiceLevelType.TwoDays;

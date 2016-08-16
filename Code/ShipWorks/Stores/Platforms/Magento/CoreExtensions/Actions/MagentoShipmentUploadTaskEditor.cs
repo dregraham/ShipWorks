@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 {
@@ -30,6 +32,13 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
             if (task == null)
             {
                 throw new ArgumentNullException("task");
+            }
+
+            MagentoStoreEntity store = StoreManager.GetStore(task.StoreID) as MagentoStoreEntity;
+
+            if (store?.MagentoVersion == (int)MagentoVersion.MagentoTwo)
+            {
+                sendEmailCheckBox.Hide();
             }
 
             this.task = task;

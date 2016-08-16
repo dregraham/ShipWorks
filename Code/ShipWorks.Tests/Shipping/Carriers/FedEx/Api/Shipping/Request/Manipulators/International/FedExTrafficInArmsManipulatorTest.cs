@@ -38,13 +38,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // setup the test by setting the requested shipment to null
             nativeRequest.RequestedShipment = null;
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServicesRequested_WhenLicencseNumberIsProvided_Test()
+        public void Manipulate_AccountsForNullSpecialServicesRequested_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServiceTypes_WhenLicencseNumberIsProvided_Test()
+        public void Manipulate_AccountsForNullSpecialServiceTypes_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenLicencseNumberIsProvided_Test()
+        public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsEmptyString_Test()
+        public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsEmptyString()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = string.Empty;
 
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsNull_Test()
+        public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsNull()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = null;
 
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ArmsDetailIsNotNull_WhenLicencseNumberIsProvided_Test()
+        public void Manipulate_ArmsDetailIsNotNull_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
 
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_LicenseNumberIsAssigned_WhenLicencseNumberIsProvided_Test()
+        public void Manipulate_LicenseNumberIsAssigned_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
 

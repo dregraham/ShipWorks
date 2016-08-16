@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         [Fact]
         public void FiresAtSpecifiedFrequency()
         {
-            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.UtcNow };
+            DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = new DateTime(2015, 1, 1) };
 
             DateTimeOffset[] fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.True(intervals.All(x => x.TotalDays == schedule.FrequencyInDays));
+            Assert.True(intervals.All(x => x.Days == schedule.FrequencyInDays));
         }
 
         [Fact]

@@ -8,7 +8,7 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Stores.Platforms.ThreeDCart.WizardPages
 {
     /// <summary>
-    /// Setup wizard page for configuring the 3D Cart account.
+    /// Setup wizard page for configuring the 3dcart account.
     /// </summary>
     public partial class ThreeDCartAccountPage : AddStoreWizardPage
     {

@@ -1,24 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Filters;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Customers;
+using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Filters.Content.Conditions.Orders.Address;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Filters.Search;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.Shipments;
-using ShipWorks.Users.Audit;
-using ShipWorks.Filters.Content.Conditions.Orders.Address;
-using ShipWorks.Filters.Content.Conditions.OrderCharges;
-using ShipWorks.Filters.Content.Conditions.Customers;
+using ShipWorks.Stores;
 using ShipWorks.Templates;
-using ShipWorks.Filters.Content.Editors.ValueEditors;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Data.Administration
 {
@@ -32,7 +29,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void CreateCoreRequiredData()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 ConfigurationData.CreateInstance(adapter);
                 SystemData.CreateInstance(adapter);
@@ -62,8 +59,8 @@ namespace ShipWorks.Data.Administration
 
                 try
                 {
-                    // We need to push a new scope for the layout context, b\c if the user ends up cancelling the wizard, it needs to be restored to the
-                    // way it was.  And if it doesnt, the layout context gets reloaded anyway.
+                    // We need to push a new scope for the layout context, b\c if the user ends up canceling the wizard, it needs to be restored to the
+                    // way it was.  And if it doesn't, the layout context gets reloaded anyway.
                     FilterLayoutContext.PushScope();
 
                     CreateOrderFilters(FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders)));
@@ -196,7 +193,7 @@ namespace ShipWorks.Data.Administration
             dateCondition.Operator = DateOperator.WithinTheLast;
             dateCondition.WithinUnit = DateWithinUnit.Days;
             dateCondition.WithinAmount = days;
-            
+
             definition.RootContainer.FirstGroup.Conditions.Add(dateCondition);
 
             return definition;
@@ -411,7 +408,7 @@ namespace ShipWorks.Data.Administration
                 "Not Packed"
             };
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 foreach (string text in orderPresets)
                 {
@@ -440,9 +437,10 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create the never-changing top-level filter for the given target
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static FilterNodeEntity CreateTopLevelFilter(FilterTarget target)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 // We will be specifying the pk values
                 adapter.IdentityInsert = true;
@@ -457,7 +455,7 @@ namespace ShipWorks.Data.Administration
                     filter.FilterTarget = (int) target;
                     filter.IsFolder = true;
                     filter.Definition = null;
-                    filter.State = (int)FilterState.Enabled;
+                    filter.State = (int) FilterState.Enabled;
                     adapter.SaveAndRefetch(filter);
 
                     FilterSequenceEntity sequence = new FilterSequenceEntity();
@@ -505,13 +503,12 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-
         /// <summary>
         /// Create the set of builtin template folders
         /// </summary>
         private static void CreateBuiltinTemplateFolders()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 // We will be specifying the pk values
                 adapter.IdentityInsert = true;

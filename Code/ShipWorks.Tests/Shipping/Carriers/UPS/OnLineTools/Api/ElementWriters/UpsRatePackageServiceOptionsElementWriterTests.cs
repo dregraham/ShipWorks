@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         [Fact]
-        public void WriteServiceOptionsElement_DoesNotWriteDryIce_Test()
+        public void WriteServiceOptionsElement_DoesNotWriteDryIce()
         {
             package.DryIceEnabled = true;
             package.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;

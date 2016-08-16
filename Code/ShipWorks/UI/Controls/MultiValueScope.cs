@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.UI.Controls
@@ -218,6 +219,8 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Terminate the scope
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public void Dispose()
         {
             if (this == current)

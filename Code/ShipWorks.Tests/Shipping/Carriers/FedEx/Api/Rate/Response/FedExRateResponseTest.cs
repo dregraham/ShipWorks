@@ -33,40 +33,40 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
         }
 
         [Fact]
-        public void Request_ReturnsRequestProvidedToConstructor_Test()
+        public void Request_ReturnsRequestProvidedToConstructor()
         {
             Assert.Equal(carrierRequest.Object, testObject.Request);
         }
 
         [Fact]
-        public void NativeResponse_ReturnsRateReplyProvidedToConstructor_Test()
+        public void NativeResponse_ReturnsRateReplyProvidedToConstructor()
         {
             Assert.Equal(nativeResponse, testObject.NativeResponse);
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenResponseContainsError_Test()
+        public void Process_ThrowsFedExApiException_WhenResponseContainsError()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenResponseContainsFailure_Test()
+        public void Process_ThrowsFedExApiException_WhenResponseContainsFailure()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyDetailsIsNull_Test()
+        public void Process_ThrowsFedExApiException_WhenRateReplyDetailsIsNull()
         {
             nativeResponse.RateReplyDetails = null;
             Assert.Throws<FedExException>(() => testObject.Process());
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs556_Test()
+        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs556()
         {
             nativeResponse.RateReplyDetails = null;
             nativeResponse.Notifications[0].Code = "556";
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs557_Test()
+        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs557()
         {
             nativeResponse.RateReplyDetails = null;
             nativeResponse.Notifications[0].Code = "557";
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs558_Test()
+        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs558()
         {
             nativeResponse.RateReplyDetails = null;
             nativeResponse.Notifications[0].Code = "558";

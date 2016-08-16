@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Messaging;
+﻿using ShipWorks.Core.Messaging;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -15,10 +15,11 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                Messenger.Current.Remove(uspsAccountConvertedToken);
-                components.Dispose();
+                uspsAccountConvertedToken?.Dispose();
+
+        		components?.Dispose();
             }
 
             base.Dispose(disposing);

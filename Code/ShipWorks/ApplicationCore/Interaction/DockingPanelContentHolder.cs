@@ -13,6 +13,8 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data;
 using ShipWorks.Data.Caching;
+using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -96,7 +98,7 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// <summary>
         /// Update the displayed content based on the given entity keys
         /// </summary>
-        public void UpdateContent(FilterTarget activeTarget, IGridSelection selection)
+        public Task UpdateContent(FilterTarget activeTarget, IGridSelection selection)
         {
             bool showMessage = false;
 
@@ -139,26 +141,34 @@ namespace ShipWorks.ApplicationCore.Interaction
             
             EntityTypeChangeVersion changeVersion = DataProvider.GetEntityTypeChangeVersion(content.EntityType);
 
+            Task task;
+
             // If the actual keys being displayed may have changed, update the content completely
             if (HasSelectionChanged(selection))
             {
-                content.ChangeContent(selection);
+                task = content.ChangeContent(selection);
             }
             // May have new\removed rows - need a reload
             else if (changeVersion.InsertVersion != lastInsertVersion || changeVersion.DeleteVersion != lastDeleteVersion)
             {
-                content.ReloadContent();
+                task = content.ReloadContent();
             }
             // Some entity data may have changed, just need an update
             else if (changeVersion.UpdateVersion != lastUpdateVersion)
             {
-                content.UpdateContent();
+                task = content.UpdateContent();
+            }
+            else
+            {
+                task = TaskUtility.CompletedTask;
             }
 
             lastSelectionVersion = selection.Version;
             lastUpdateVersion = changeVersion.UpdateVersion;
             lastInsertVersion = changeVersion.InsertVersion;
             lastDeleteVersion = changeVersion.DeleteVersion;
+
+            return task;
         }
 
         /// <summary>

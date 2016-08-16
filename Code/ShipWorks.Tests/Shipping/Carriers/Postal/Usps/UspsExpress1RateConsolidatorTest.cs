@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.AmountOrDefault == rate.AmountOrDefault));
             }
         }
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.AmountOrDefault == rate.AmountOrDefault));
             }
         }
 
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.AmountOrDefault == rate.AmountOrDefault));
             }
         }
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.Amount == rate.Amount));
+                Assert.NotNull(rateResults.Rates.SingleOrDefault(x => x.Description == rate.Description && x.ShipmentType == rate.ShipmentType && x.AmountOrDefault == rate.AmountOrDefault));
             }
         }
 

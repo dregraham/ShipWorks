@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Create_ScanFormsListCountIsZero_WhenShipmentsListIsEmpty_Test()
+        public void Create_ScanFormsListCountIsZero_WhenShipmentsListIsEmpty()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Create_ScanFormsListCountIsZero_WhenShipmentsListIsNull_Test()
+        public void Create_ScanFormsListCountIsZero_WhenShipmentsListIsNull()
         {
             List<ShipmentEntity> shipments = null;
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Create_DelegatesCreationToGateway_Test()
+        public void Create_DelegatesCreationToGateway()
         {
             testObject.Create(oneShipment);
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Create_AssignsShipmentCount_Test()
+        public void Create_AssignsShipmentCount()
         {
             testObject.Create(oneShipment);
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Create_DelegatesSaveToCarrierAccount_Test()
+        public void Create_DelegatesSaveToCarrierAccount()
         {
             testObject.Create(oneShipment);
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Create_SeparatesPostalAndDhlShipments_WhenSendingToGateway_Test()
+        public void Create_SeparatesPostalAndDhlShipments_WhenSendingToGateway()
         {
             ShipmentEntity firstDhlShipment = new ShipmentEntity()
             {
@@ -167,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void CreateScanForm_InstantiatesScanForm_WithSingleImage_Test()
+        public void CreateScanForm_InstantiatesScanForm_WithSingleImage()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -182,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void CreateScanForm_InstantiatesScanForm_WithMultipleImages_Test()
+        public void CreateScanForm_InstantiatesScanForm_WithMultipleImages()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -199,7 +199,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void CreateScanForm_AddsScanFormToList_Test()
+        public void CreateScanForm_AddsScanFormToList()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -210,7 +210,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
         
         [Fact]
-        public void Print_DelegatesToBatchPrinter_WhenBatchSizeIsGreaterThanOne_Test()
+        public void Print_DelegatesToBatchPrinter_WhenBatchSizeIsGreaterThanOne()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -228,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DoesNotDelegateToScanFormPrinter_WhenBatchSizeIsGreaterThanOne_Test()
+        public void Print_DoesNotDelegateToScanFormPrinter_WhenBatchSizeIsGreaterThanOne()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -246,7 +246,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DelegatesToScanFormPrinter_WhenBatchSizeIsOne_Test()
+        public void Print_DelegatesToScanFormPrinter_WhenBatchSizeIsOne()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -263,7 +263,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DoesNotDelegateToBatchPrinter_WhenBatchSizeIsOne_Test()
+        public void Print_DoesNotDelegateToBatchPrinter_WhenBatchSizeIsOne()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -280,7 +280,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DelegatesToScanFormPrinter_WhenBatchSizeIsZero_Test()
+        public void Print_DelegatesToScanFormPrinter_WhenBatchSizeIsZero()
         {
             List<ScanForm> scanForms = new List<ScanForm>();
 
@@ -291,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DoesNotDelegateToBatchPrinter_WhenBatchSizeIsZero_Test()
+        public void Print_DoesNotDelegateToBatchPrinter_WhenBatchSizeIsZero()
         {
             List<ScanForm> scanForms = new List<ScanForm>();
 
@@ -302,7 +302,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsTrue_WhenBatchSizeIsZero_Test()
+        public void Print_ReturnsTrue_WhenBatchSizeIsZero()
         {
             List<ScanForm> scanForms = new List<ScanForm>();
 
@@ -313,7 +313,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsTrue_WhenBatchSizeIsOne_AndScanFormPrinterReturnsTrue_Test()
+        public void Print_ReturnsTrue_WhenBatchSizeIsOne_AndScanFormPrinterReturnsTrue()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -334,7 +334,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsFalse_WhenBatchSizeIsOne_AndScanFormPrinterReturnsFalse_Test()
+        public void Print_ReturnsFalse_WhenBatchSizeIsOne_AndScanFormPrinterReturnsFalse()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -355,7 +355,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsTrue_WhenBatchSizeIsGreaterThanOne_AndScanFormPrinterReturnsTrue_Test()
+        public void Print_ReturnsTrue_WhenBatchSizeIsGreaterThanOne_AndScanFormPrinterReturnsTrue()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -377,7 +377,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsFalse_WhenBatchSizeIsGreaterThanOne_AndScanFormPrinterReturnsFalse_Test()
+        public void Print_ReturnsFalse_WhenBatchSizeIsGreaterThanOne_AndScanFormPrinterReturnsFalse()
         {
             long batchId = 1000;
             string batchName = "unit test batch";
@@ -399,7 +399,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void ShipmentCount_DelegatesToShipmentRepository_WhenShipmentCountIsZero_Test()
+        public void ShipmentCount_DelegatesToShipmentRepository_WhenShipmentCountIsZero()
         {
             testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, batchShipmentRepository.Object);
             int count = testObject.ShipmentCount;
@@ -408,7 +408,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void ShipmentCount_DoesNotDelegateToShipmentRepository_WhenShipmentCountIsNotZero_Test()
+        public void ShipmentCount_DoesNotDelegateToShipmentRepository_WhenShipmentCountIsNotZero()
         {
 
             // Call the create method, so the shipment count will be initialized
@@ -418,7 +418,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void ShipmentCount_ProcessDhlInSeperateBatch_WhenDhlAndNonDhlShipmentsPresent_Test()
+        public void ShipmentCount_ProcessDhlInSeperateBatch_WhenDhlAndNonDhlShipmentsPresent()
         {
             List<ShipmentEntity> shipmentsToBatch = new List<ShipmentEntity>
             {

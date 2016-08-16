@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Other;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -109,8 +110,11 @@ namespace ShipWorks.Shipping.Carriers
                 return;
             }
 
-            OtherShipmentType otherShipmentType = new OtherShipmentType();
-            otherShipmentType.LoadShipmentData(shipment, false);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ShipmentType otherShipmentType = lifetimeScope.ResolveKeyed<ShipmentType>(ShipmentTypeCode.Other);
+                otherShipmentType.LoadShipmentData(shipment, false);
+            }   
         }
     }
 }

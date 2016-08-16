@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
     /// <summary>
     /// Account repository for Express1 Endicia accounts
     /// </summary>
-    public class Express1EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity>
+    public class Express1EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity, IEndiciaAccountEntity>
     {
         /// <summary>
         /// Gets all the Express1 Endicia accounts in the system
         /// </summary>
-        public override IEnumerable<EndiciaAccountEntity> Accounts
-        {
-            get
-            {
-                return EndiciaAccountManager.Express1Accounts;
-            }
-        }
+        public override IEnumerable<EndiciaAccountEntity> Accounts => EndiciaAccountManager.Express1Accounts;
+
+        /// <summary>
+        /// Gets all the Express1 Endicia accounts in the system
+        /// </summary>
+        public override IEnumerable<IEndiciaAccountEntity> AccountsReadOnly => EndiciaAccountManager.Express1AccountsReadOnly;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => EndiciaAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Gets the Endicia account with the specified id.
@@ -28,7 +32,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
 
-			// Return null if found account is not Express1
+            // Return null if found account is not Express1
+            return (endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.Express1) ? endiciaAccountEntity : null;
+        }
+
+        /// <summary>
+        /// Gets the Endicia account with the specified id.
+        /// </summary>
+        /// <param name="accountID">Id of the account to retrieve</param>
+        public override IEndiciaAccountEntity GetAccountReadOnly(long accountID)
+        {
+            IEndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccountReadOnly(accountID);
+
+            // Return null if found account is not Express1
             return (endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.Express1) ? endiciaAccountEntity : null;
         }
 
@@ -41,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             get
             {
-                long? accountID = new Express1EndiciaShipmentType().GetPrimaryProfile().Postal.Endicia.EndiciaAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.Express1Endicia).Postal.Endicia.EndiciaAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Express1Endicia, accountID);
             }
         }

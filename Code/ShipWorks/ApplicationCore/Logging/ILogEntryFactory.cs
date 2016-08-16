@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.ApplicationCore.Logging
+﻿using Interapptive.Shared.Net;
+
+namespace ShipWorks.ApplicationCore.Logging
 {
     public interface ILogEntryFactory
     {

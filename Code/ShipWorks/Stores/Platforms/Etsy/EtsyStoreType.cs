@@ -19,6 +19,7 @@ using log4net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
 using System.Linq;
+using Autofac;
 using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Etsy
@@ -118,7 +119,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Create the pages to be displayed in the Add Store Wizard
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage>();
 
@@ -382,7 +384,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return
                 EntityUtility.IsSameField(field, OrderItemFields.Code) ||

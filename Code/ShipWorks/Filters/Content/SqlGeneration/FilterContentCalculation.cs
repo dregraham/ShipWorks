@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.Special;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Data;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
 using ShipWorks.Data.Connection;
-using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Special;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 
 namespace ShipWorks.Filters.Content.SqlGeneration
@@ -48,7 +45,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 filterDefinition = GetEffectiveFilterDefinition(node);
                 filterSqlContext = new SqlGenerationContext(filterDefinition.FilterTarget);
 
-                if (filterDefinition.IsEmpty() || node.Filter.State == (byte)FilterState.Disabled)
+                if (filterDefinition.IsEmpty() || node.Filter.State == (byte) FilterState.Disabled)
                 {
                     filterSqlPredicate = "WHERE 1 = 2";
                 }
@@ -88,10 +85,10 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             else
             {
                 return new FilterSqlResult(
-                    countID, 
-                    GetFilterSql(true), 
-                    GetFilterSql(false), 
-                    filterSqlContext.Parameters, 
+                    countID,
+                    GetFilterSql(true),
+                    GetFilterSql(false),
+                    filterSqlContext.Parameters,
                     filterSqlContext.ColumnsUsed,
                     filterSqlContext.JoinsUsed);
             }
@@ -182,7 +179,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
             // Has to pass the definition of this filter
             FilterDefinition nodeDefinition = (node.Filter.Definition != null) ? new FilterDefinition(node.Filter.Definition) : new FilterDefinition((FilterTarget) node.Filter.FilterTarget);
-            
+
             // If the node definition itself is empty, then we want the entire definition to be empty.  If we didn't do this, then the node definition would become equivalent
             // to the folder definition, which is not what we want.  An empty node definition should yeild zero results.
             if (nodeDefinition.IsEmpty())
@@ -259,7 +256,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             // Do the fetch
             ExistingConnectionScope.ExecuteWithAdapter(adapter =>
             {
-                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, true))
+                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, true))
                 {
                     while (reader.Read())
                     {

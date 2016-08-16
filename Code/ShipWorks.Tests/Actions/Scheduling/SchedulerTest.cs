@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void ScheduleAction_DelegatesToSchedulingEngine_WhenJobDoesNotExist_AndStartDateIsInFuture_Test()
+        public void ScheduleAction_DelegatesToSchedulingEngine_WhenJobDoesNotExist_AndStartDateIsInFuture()
         {
             ActionEntity action = new ActionEntity();
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void ScheduleAction_DelegatesToScheduler_WhenJobExists_AndStartDateOccursInPast_Test()
+        public void ScheduleAction_DelegatesToScheduler_WhenJobExists_AndStartDateOccursInPast()
         {
             ActionEntity action = new ActionEntity();
 
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void ScheduleAction_DelegatesToScheduler_WhenJobExists_AndStartDateOccursNow_Test()
+        public void ScheduleAction_DelegatesToScheduler_WhenJobExists_AndStartDateOccursNow()
         {
             ActionEntity action = new ActionEntity();
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void ScheduleAction_DelegatesToSchedulingEngine_WhenJobExists_AndStartDateIsInFuture_Test()
+        public void ScheduleAction_DelegatesToSchedulingEngine_WhenJobExists_AndStartDateIsInFuture()
         {
             ActionEntity action = new ActionEntity();
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void ScheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
+        public void ScheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine()
         {
             ActionEntity action = new ActionEntity();
             ActionSchedule schedule = new Mock<ActionSchedule>().Object;
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void UnscheduleAction_DelegatesToSchedulingEngine_WhenJobExists_Test()
+        public void UnscheduleAction_DelegatesToSchedulingEngine_WhenJobExists()
         {
             ActionEntity action = new ActionEntity();
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void UnscheduleAction_DoesNotDelegateToSchedulingEngine_WhenJobDoesNotExist_Test()
+        public void UnscheduleAction_DoesNotDelegateToSchedulingEngine_WhenJobDoesNotExist()
         {
             ActionEntity action = new ActionEntity();
 
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        public void UnscheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
+        public void UnscheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine()
         {
             ActionEntity action = new ActionEntity();
 

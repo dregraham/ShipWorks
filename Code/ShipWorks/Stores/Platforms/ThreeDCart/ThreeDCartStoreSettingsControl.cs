@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             threeDCartStore = (ThreeDCartStoreEntity) store;
 
             // If this is the first time loading a converted legacy store, the TimeZoneID will be null.
-            // So we will assume that the customer has never changed the time zone using the 3d Cart admin,
+            // So we will assume that the customer has never changed the time zone using the 3dcart admin,
             // and that it is still the default of Eastern Standard Time.
             if (string.IsNullOrWhiteSpace(threeDCartStore.TimeZoneID))
             {

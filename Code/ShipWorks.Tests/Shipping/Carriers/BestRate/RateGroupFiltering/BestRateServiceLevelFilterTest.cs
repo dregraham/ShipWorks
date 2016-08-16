@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         private BestRateServiceLevelFilter testObject;
 
         [Fact]
-        public void Filter_RatesAreOrderedFromCheapestToMostExpensive_Test()
+        public void Filter_RatesAreOrderedFromCheapestToMostExpensive()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_RatesWithSameCost_AreOrderedByServiceLevel_Test()
+        public void Filter_RatesWithSameCost_AreOrderedByServiceLevel()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_ReturnsAllRates_WhenLessThanFiveRatesAreAvailable_Test()
+        public void Filter_ReturnsAllRates_WhenLessThanFiveRatesAreAvailable()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable_Test()
+        public void Filter_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable()
         {
 
             // Setup the broker to return specific rates
@@ -115,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
+        public void Filter_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [Fact]
-        public void Filter_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService_Test()
+        public void Filter_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using SqlObjectReferenceManager = ShipWorks.SqlServer.Common.Data.ObjectReferenceManager;
 using ShipWorks.Data.Connection;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using ShipWorks.Data.Model;
 using ShipWorks.Templates;
 using ShipWorks.Users;
@@ -86,6 +87,7 @@ namespace ShipWorks.Data
         /// Returns the combined reasons of how each of the object ID's in the list are in use
         /// by a consumer.  The results are limited to non-empty descriptions, and duplicates are removed.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static List<string> GetReferenceReasons(List<long> objectIDs)
         {
             if (objectIDs.Count == 0)

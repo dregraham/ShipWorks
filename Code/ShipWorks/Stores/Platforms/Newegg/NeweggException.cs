@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
         ///   
         /// <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
-        public NeweggException(SerializationInfo info, StreamingContext context)
+        protected NeweggException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             badResponse = (NeweggResponse)info.GetValue("badResponse", typeof(NeweggResponse));

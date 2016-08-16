@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
+using Interapptive.Shared;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.Data.Import.Spreadsheet;
@@ -34,6 +35,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
         /// <summary>
         /// Load the given list of columns into the grid
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void LoadColumns(IEnumerable<GenericSpreadsheetSourceColumn> sourceColumns)
         {
             if (sourceColumns == null)

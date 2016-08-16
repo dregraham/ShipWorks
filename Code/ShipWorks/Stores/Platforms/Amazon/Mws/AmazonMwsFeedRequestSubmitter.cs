@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
-using System.Net;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
@@ -12,6 +9,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// <summary>
     /// Submits Amazon MWS Feed XML requests to Amazon.
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what ShipWorks currently uses")]
     public class AmazonMwsFeedRequestSubmitter : HttpVariableRequestSubmitter
     {
         string feedContent = "";
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Constructor
         /// </summary>
         public AmazonMwsFeedRequestSubmitter()
-        {            
+        {
             ContentType = "text/xml; charset=iso-8859-1";
 
             // Subscribe to the request submitting event, so we can set the content type
@@ -34,12 +34,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         public string FeedContent
         {
-            get 
-            { 
-                return feedContent; 
+            get
+            {
+                return feedContent;
             }
-            set 
-            { 
+            set
+            {
                 feedContent = value;
 
                 if (feedContent == null)
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets the querystring for the request.  We are POSTing content while still using querystring parameters
         /// </summary>
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
-        /// Called when [request submitting]. We need to intercept the request, so the 
+        /// Called when [request submitting]. We need to intercept the request, so the
         /// content type and response format can be set to XML.
         /// </summary>
         void OnRequestSubmitting(object sender, HttpRequestSubmittingEventArgs e)

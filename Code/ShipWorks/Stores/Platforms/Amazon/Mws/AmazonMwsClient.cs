@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,20 +9,20 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.IO.Text;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Stores.Communication.Throttling;
-using ShipWorks.Stores.Platforms.BigCommerce;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -54,16 +53,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         public AmazonMwsClient(AmazonStoreEntity store, IProgressReporter progress)
         {
-
             if (store == null)
             {
                 throw new ArgumentNullException("store");
             }
 
-            AmazonMwsConnection mwsConnection = new AmazonMwsConnection(store.MerchantID, store.AuthToken, store.AmazonApiRegion);
-
             this.store = store;
-            this.mwsSettings = new AmazonMwsWebClientSettings(mwsConnection);
+            this.mwsSettings = new AmazonMwsWebClientSettings(store as IAmazonCredentials);
             this.throttler = new AmazonMwsRequestThrottle();
             this.progress = progress;
         }
@@ -86,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
-        /// Makes an api call to make sure the MWS system is not RED (down) 
+        /// Makes an api call to make sure the MWS system is not RED (down)
         /// </summary>
         public void TestServiceStatus()
         {
@@ -169,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 string id = (string) xElement.Element(amz + "MarketplaceId");
                 string name = (string) xElement.Element(amz + "Name");
-                string domain = (string)xElement.Element(amz + "DomainName");
+                string domain = (string) xElement.Element(amz + "DomainName");
 
                 marketplaces.Add(new AmazonMwsMarketplace { MarketplaceID = id, Name = name, DomainName = domain });
             }
@@ -208,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 if (apiCall == AmazonMwsApiCall.ListOrders)
                 {
                     request.Variables.Add("LastUpdatedAfter", FormatDate(timeToSend));
-                } 
+                }
                 else
                 {
                     request.Variables.Add("NextToken", nextToken);
@@ -297,7 +293,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <returns>An XPathNamespaceNavigator object.</returns>
         public XPathNamespaceNavigator GetProductDetails(List<AmazonOrderItemEntity> items)
         {
-            
+
             if (items.Count > MaxItemsPerProductDetailsRequest)
             {
                 string message = string.Format("There is a {0} item limit on the number of products the Amazon API allows to be retrieved in a single request", MaxItemsPerProductDetailsRequest);
@@ -316,12 +312,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
 
             // execute the request
-            IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetMatchingProductForId);            
+            IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetMatchingProductForId);
             var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, AmazonMwsApiCall.GetMatchingProductForId, mwsSettings);
-            
-            // Add the additional namespace so weight, image URL, and other data about the 
+
+            // Add the additional namespace so weight, image URL, and other data about the
             // product can be extracted
-            xpath.Namespaces.AddNamespace("details", string.Format("http://mws.amazonservices.com/schema/Products/{0}/default.xsd", mwsSettings.GetApiVersion(AmazonMwsApiCall.GetMatchingProductForId)));
+            xpath.Namespaces.AddNamespace("details",
+                string.Format("http://mws.amazonservices.com/schema/Products/{0}/default.xsd",
+                mwsSettings.GetApiVersion(AmazonMwsApiCall.GetMatchingProductForId)));
 
             // done
             return xpath;
@@ -396,6 +394,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Creates the Amazon Feed Xml for submitting and returns the path it is written to
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string CreateFulfillmentFeed(List<ShipmentEntity> shipments)
         {
             using (TextWriter textWriter = new EncodingStringWriter(Encoding.UTF8))
@@ -527,7 +526,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 carrier = ShippingManager.GetOtherCarrierDescription(shipment).Name;
             }
-            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode)shipment.ShipmentType))
+            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode) shipment.ShipmentType))
             {
                 PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
@@ -579,7 +578,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                         XElement timestampElement = root.Element("Timestamp");
                         if (timestampElement != null)
                         {
-                            string timeString = (string)timestampElement.Attribute("timestamp");
+                            string timeString = (string) timestampElement.Attribute("timestamp");
                             DateTime serverTime;
 
                             if (!string.IsNullOrEmpty(timeString) && DateTime.TryParse(timeString, out serverTime))
@@ -606,15 +605,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             catch (Exception)
             {
                 log.WarnFormat("Unable to determine if local clock is in sync with Amazon Services, continuing under the assumption it is.");
-                
+
                 // don't want any "ping" failure to prevent downloads and uploads if possible
                 return true;
             }
         }
 
         /// <summary>
-        /// Executes a request 
+        /// Executes a request
         /// </summary>
+        [NDependIgnoreLongMethod]
         private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall)
         {
             try
@@ -632,7 +632,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 if (amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
                 {
                     request.Variables.Add("SellerId", store.MerchantID);
-                    request.Variables.Add("Marketplace", store.MarketplaceID);  
+                    request.Variables.Add("Marketplace", store.MarketplaceID);
                 }
 
                 if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken && amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
@@ -680,7 +680,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, progress);
 
-                IHttpResponseReader response = 
+                IHttpResponseReader response =
                     throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest);
 
                 // log the response
@@ -743,7 +743,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 throw WebHelper.TranslateWebException(ex, typeof(AmazonException));
             }
         }
-        
+
         /// <summary>
         /// Submit an Amazon request, throttled so we don't over-call
         /// </summary>
@@ -778,7 +778,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
             }
         }
-        
+
 
         /// <summary>
         /// Reads the status of the Amazon MWS api out of a GetServiceStatus repsonse
@@ -859,7 +859,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             return SecureText.Decrypt(encrypted, "Interapptive");
         }
-        
+
 
         /// <summary>
         /// Dispose

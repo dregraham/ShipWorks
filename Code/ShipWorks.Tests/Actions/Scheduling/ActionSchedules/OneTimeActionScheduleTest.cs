@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void StartDateTimeInUtc_IsTopOfTheHour_Test()
+        public void StartDateTimeInUtc_IsTopOfTheHour()
         {
             DateTime utcNow = DateTime.UtcNow;
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void StartDateTimeInUtc_HourIsIncremented_Test()
+        public void StartDateTimeInUtc_HourIsIncremented()
         {
             DateTime utcNow = DateTime.UtcNow;
 
@@ -41,13 +41,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void StartDateTimeInUtc_MinuteIsZero_Test()
+        public void StartDateTimeInUtc_MinuteIsZero()
         {
             Assert.Equal(0, testObject.StartDateTimeInUtc.Minute);
         }
 
         [Fact]
-        public void StartDateTimeInUtc_SecondIsZero_Test()
+        public void StartDateTimeInUtc_SecondIsZero()
         {
             Assert.Equal(0, testObject.StartDateTimeInUtc.Second);
         }

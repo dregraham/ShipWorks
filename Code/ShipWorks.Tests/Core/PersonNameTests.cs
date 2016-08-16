@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using Interapptive.Shared;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
+using Xunit;
 
 namespace ShipWorks.Tests.Core
 {
@@ -69,7 +64,7 @@ namespace ShipWorks.Tests.Core
             name.Last = "Smith";
             name.Suffix = "Jr.";
 
-           Assert.Equal(name.FullName, "Joe Smith Jr.");
+            Assert.Equal(name.FullName, "Joe Smith Jr.");
         }
 
         [Fact]
@@ -94,6 +89,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, string.Empty);
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, string.Empty);
+            Assert.Equal(PersonNameParseStatus.Simple, name.ParseStatus);
         }
 
         [Fact]
@@ -106,6 +102,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, "Randolph");
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, string.Empty);
+            Assert.Equal(PersonNameParseStatus.Simple, name.ParseStatus);
         }
 
         [Fact]
@@ -118,6 +115,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, "Randolph");
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, "III");
+            Assert.Equal(PersonNameParseStatus.Simple, name.ParseStatus);
         }
 
         [Fact]
@@ -130,6 +128,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, string.Empty);
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, "Jr");
+            Assert.Equal(PersonNameParseStatus.Simple, name.ParseStatus);
         }
 
         [Fact]
@@ -142,6 +141,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, string.Empty);
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, string.Empty);
+            Assert.Equal(PersonNameParseStatus.PrefixFound, name.ParseStatus);
         }
 
         [Fact]
@@ -154,6 +154,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, "Randolph");
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, string.Empty);
+            Assert.Equal(PersonNameParseStatus.PrefixFound, name.ParseStatus);
         }
 
         [Fact]
@@ -166,6 +167,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, "Randolph");
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, "ii");
+            Assert.Equal(PersonNameParseStatus.PrefixFound, name.ParseStatus);
         }
 
         [Fact]
@@ -178,6 +180,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(name.Middle, string.Empty);
             Assert.Equal(name.Last, "D'oe");
             Assert.Equal(name.Suffix, "M.D.");
+            Assert.Equal(PersonNameParseStatus.PrefixFound, name.ParseStatus);
         }
     }
 }

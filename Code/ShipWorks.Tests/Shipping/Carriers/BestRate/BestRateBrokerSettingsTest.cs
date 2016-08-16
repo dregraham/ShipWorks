@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -13,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -22,18 +22,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         private ShippingSettingsEntity settings;
         private List<IBestRateShippingBroker> brokers;
-        
+
         public BestRateBrokerSettingsTest()
         {
             settings = new ShippingSettingsEntity();
             brokers = new List<IBestRateShippingBroker>();
-            
 
-            settings.BestRateExcludedTypes = new int[0];
-            settings.ActivatedTypes = new int[]
+
+            settings.BestRateExcludedTypes = Enumerable.Empty<ShipmentTypeCode>();
+            settings.ActivatedTypes = new[]
             {
-                (int)ShipmentTypeCode.Express1Endicia,
-                (int)ShipmentTypeCode.Express1Usps
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.Express1Usps
             };
 
             testObject = new BestRateBrokerSettings(settings, null);
@@ -41,20 +41,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1EnabledAndNoAccount_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1EnabledAndNoAccount()
         {
             Assert.Equal(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInBestRates_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInBestRates()
         {
-            settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Usps };
+            settings.BestRateExcludedTypes = new[] { ShipmentTypeCode.Express1Usps };
             Assert.Equal(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInSettings_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInSettings()
         {
             testObject.EnabledShipmentTypeCodes =
                 EnumHelper.GetEnumList<ShipmentTypeCode>()
@@ -64,27 +64,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsEnabledAndAccountExists_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsEnabledAndAccountExists()
         {
             brokers.Add(new Express1UspsBestRateBroker());
             Assert.Equal(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1EnabledAndNoAccount_Test()
+        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1EnabledAndNoAccount()
         {
             Assert.Equal(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsDisabledForEndiciaInBestRates_Test()
+        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsDisabledForEndiciaInBestRates()
         {
-            settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Endicia };
+            settings.BestRateExcludedTypes = new[] { ShipmentTypeCode.Express1Endicia };
             Assert.Equal(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsDisabledForEndiciaInSettings_Test()
+        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsDisabledForEndiciaInSettings()
         {
             testObject.EnabledShipmentTypeCodes =
                 EnumHelper.GetEnumList<ShipmentTypeCode>()
@@ -94,14 +94,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsEnabledAndAccountExists_Test()
+        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsEnabledAndAccountExists()
         {
             brokers.Add(new Express1EndiciaBestRateBroker());
             Assert.Equal(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
         }
 
         [Fact]
-        public void IsMailInnovationsAvailable_ReturnsTrue_OltEnabled_Test()
+        public void IsMailInnovationsAvailable_ReturnsTrue_OltEnabled()
         {
             settings.UpsMailInnovationsEnabled = true;
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsMailInnovationsAvailable_ReturnsFalse_OltDisabled_Test()
+        public void IsMailInnovationsAvailable_ReturnsFalse_OltDisabled()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
@@ -120,21 +120,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void IsMailInnovationsAvailable_ReturnsTrue_WorldShipEnabled_Test()
+        public void IsMailInnovationsAvailable_ReturnsTrue_WorldShipEnabled()
         {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            using (var mock = AutoMock.GetLoose())
             {
+                WorldShipShipmentType shipmentType = mock.Create<WorldShipShipmentType>();
+
                 settings.WorldShipMailInnovationsEnabled = true;
-                Assert.Equal(true, testObject.IsMailInnovationsAvailable(mock.Create<WorldShipShipmentType>()));
+                Assert.Equal(true, testObject.IsMailInnovationsAvailable(shipmentType));
             }
         }
 
         [Fact]
-        public void IsMailInnovationsAvailable_ReturnsFalse_WorldShipDisabled_Test()
+        public void IsMailInnovationsAvailable_ReturnsFalse_WorldShipDisabled()
         {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            using (var mock = AutoMock.GetLoose())
             {
-                Assert.Equal(false, testObject.IsMailInnovationsAvailable(mock.Create<WorldShipShipmentType>()));
+                WorldShipShipmentType shipmentType = mock.Create<WorldShipShipmentType>();
+
+                Assert.Equal(false, testObject.IsMailInnovationsAvailable(shipmentType));
             }
         }
 

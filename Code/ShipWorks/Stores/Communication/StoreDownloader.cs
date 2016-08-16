@@ -1,38 +1,34 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Web.UI.WebControls.WebParts;
-using Microsoft.Web.Services3.Addressing;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.Linq;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.UI;
 using ShipWorks.Stores.Content;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Templates.Processing;
 using System.Diagnostics;
-using ShipWorks.Data.Controls;
 using ShipWorks.Data.Connection;
 using ShipWorks.Common.Threading;
-using ShipWorks.Stores.Platforms;
 using System.Linq;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions;
 using Interapptive.Shared.Business;
-using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
 using System.Reflection;
+using Interapptive.Shared;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Data.Utility;
+using ShipWorks.SqlServer.Common.Data;
+using System.Data.SqlClient;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -47,13 +43,12 @@ namespace ShipWorks.Stores.Communication
         StoreEntity store;
         IProgressReporter progress;
         long downloadLogID;
+        protected SqlConnection connection;
 
         StoreType storeType;
 
         int quantitySaved = 0;
         int quantityNew = 0;
-        private AddressAdapter originalShippingAddress;
-        private AddressAdapter originalBillingAddress;
 
         /// <summary>
         /// Constructor
@@ -72,6 +67,16 @@ namespace ShipWorks.Stores.Communication
             this.store = store;
             this.storeType = storeType;
         }
+
+        /// <summary>
+        /// Gets the address of order from InstantiateOrder
+        /// </summary>
+        protected AddressAdapter OriginalShippingAddress { get; private set; }
+
+        /// <summary>
+        /// Gets the address of order from InstantiateOrder
+        /// </summary>
+        protected AddressAdapter OriginalBillingAddress { get; private set; }
 
         /// <summary>
         /// The store the downloader downloads from
@@ -102,7 +107,7 @@ namespace ShipWorks.Stores.Communication
         {
             get
             {
-                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType)store.AddressValidationSetting);
+                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType) store.AddressValidationSetting);
                 return storeSetting;
             }
         }
@@ -143,7 +148,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download data from the configured store.
         /// </summary>
-        public void Download(IProgressReporter progress, long downloadLogID)
+        public void Download(IProgressReporter progress, long downloadLogID, SqlConnection connection)
         {
             if (progress == null)
             {
@@ -157,14 +162,24 @@ namespace ShipWorks.Stores.Communication
 
             this.progress = progress;
             this.downloadLogID = downloadLogID;
+            this.connection = connection;
 
-            Download();
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                Download(trackedDurationEvent);
+
+                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+            }
         }
 
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
-        protected abstract void Download();
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
+        /// associate any store-specific download properties/metrics.</param>
+        protected abstract void Download(TrackedDurationEvent trackedDurationEvent);
 
         /// <summary>
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.
@@ -179,7 +194,7 @@ namespace ShipWorks.Stores.Communication
                     null, AggregateFunction.Max,
                     OrderFields.StoreID == store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?)result;
+                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
 
                 log.InfoFormat("MAX(OnlineLastModified) = {0:u}", dateTime);
 
@@ -202,8 +217,8 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it 
-        /// will be used to calculate the initial number of days back to to.
+        /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
+        /// will be used to calculate the initial number of days back to.
         /// </summary>
         protected DateTime? GetOrderDateStartingPoint()
         {
@@ -214,7 +229,7 @@ namespace ShipWorks.Stores.Communication
                     null, AggregateFunction.Max,
                     OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
-                DateTime? dateTime = result is DBNull ? null : (DateTime?)result;
+                DateTime? dateTime = result is DBNull ? null : (DateTime?) result;
 
                 log.InfoFormat("MAX(OrderDate) = {0:u}", dateTime);
 
@@ -256,7 +271,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     if (store.InitialDownloadOrder != null)
                     {
-                        // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what 
+                        // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what
                         // it does is download all orders AFTER it.  But for the initial download policy, we want to START with it.  So we have
                         // to backoff by one to include it.
                         orderNumber = Math.Max(0, store.InitialDownloadOrder.Value - 1);
@@ -306,11 +321,11 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                originalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
+                OriginalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", OriginalShippingAddress);
 
-                originalBillingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Bill", originalBillingAddress);
+                OriginalBillingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", OriginalBillingAddress);
 
                 return order;
             }
@@ -338,9 +353,9 @@ namespace ShipWorks.Stores.Communication
                 order.RollupNoteCount = 0;
                 order.RollupItemCount = 0;
                 order.RollupItemTotalWeight = 0;
-                
+
                 order.ShipSenseHashKey = string.Empty;
-                order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
+                order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
             }
 
             return order;
@@ -454,7 +469,7 @@ namespace ShipWorks.Stores.Communication
                 // First see if any of the current (newly downloaded) notes match this note
                 if (order.Notes.Any(n =>
                     string.Compare(n.Text, noteText, true) == 0
-                    && n.Source == (int)NoteSource.Downloaded))
+                    && n.Source == (int) NoteSource.Downloaded))
                 {
                     return null;
                 }
@@ -464,7 +479,7 @@ namespace ShipWorks.Stores.Communication
                 {
                     IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
                     relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
-                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int)NoteSource.Downloaded));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int) NoteSource.Downloaded));
 
                     using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
                     {
@@ -494,6 +509,19 @@ namespace ShipWorks.Stores.Communication
         /// Save the given order that has been downloaded.
         /// </summary>
         protected virtual void SaveDownloadedOrder(OrderEntity order)
+        {
+            using (SqlTransaction transaction = connection.BeginTransaction())
+            {
+                SaveDownloadedOrder(order, transaction);
+            }
+        }
+
+        /// <summary>
+        /// Save the given order that has been downloaded.
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
+        protected virtual void SaveDownloadedOrder(OrderEntity order, SqlTransaction transaction)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -541,7 +569,7 @@ namespace ShipWorks.Stores.Communication
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                 {
                     // Get the customer
                     if (order.IsNew)
@@ -586,7 +614,7 @@ namespace ShipWorks.Stores.Communication
                     }
 
                     // If it's new and LastModified isn't set, use the date
-                    if (order.IsNew && !order.Fields[(int)OrderFieldIndex.OnlineLastModified].IsChanged)
+                    if (order.IsNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
                     {
                         order.OnlineLastModified = order.OrderDate;
                     }
@@ -625,23 +653,23 @@ namespace ShipWorks.Stores.Communication
                     OrderUtility.PopulateOrderDetails(order, adapter);
                     OrderUtility.UpdateShipSenseHashKey(order);
                     adapter.SaveAndRefetch(order);
-					
-					// Update unprocessed shipment addresses if the order address has changed
+
+                    // Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
+                        bool shippingAddressChanged = OriginalShippingAddress != newShippingAddress;
                         if (shippingAddressChanged)
                         {
                             SetAddressValidationStatus(order, "Ship", adapter);
                             adapter.SaveAndRefetch(order);
 
-                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, OriginalShippingAddress, newShippingAddress);
                         }
 
                         // Update the customer's addresses if necessary
                         AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
-                        bool billingAddressChanged = originalBillingAddress != newBillingAddress;
+                        bool billingAddressChanged = OriginalBillingAddress != newBillingAddress;
 
                         if (billingAddressChanged)
                         {
@@ -653,11 +681,11 @@ namespace ShipWorks.Stores.Communication
                         if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
                             || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy))
                         {
-                            CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
+                            CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, originalBillingAddress, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, originalShippingAddress, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }
@@ -669,7 +697,7 @@ namespace ShipWorks.Stores.Communication
                         SetAddressValidationStatus(order, "Bill", adapter);
                         adapter.SaveAndRefetch(order);
                     }
-                    
+
                     log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
@@ -699,12 +727,13 @@ namespace ShipWorks.Stores.Communication
         {
             AddressAdapter address = new AddressAdapter(order, prefix);
 
-            address.POBox = (int)ValidationDetailStatusType.Unknown;
-            address.MilitaryAddress = (int)ValidationDetailStatusType.Unknown;
-            address.USTerritory = (int)ValidationDetailStatusType.Unknown;
-            address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            address.POBox = (int) ValidationDetailStatusType.Unknown;
+            address.MilitaryAddress = (int) ValidationDetailStatusType.Unknown;
+            address.USTerritory = (int) ValidationDetailStatusType.Unknown;
+            address.ResidentialStatus = (int) ValidationDetailStatusType.Unknown;
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
+            address.AddressType = (int) AddressType.NotChecked;
 
             ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
 
@@ -714,17 +743,18 @@ namespace ShipWorks.Stores.Communication
                      addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
                     prefix == "Ship")
                 {
-                    address.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                    address.AddressValidationStatus = (int) AddressValidationStatusType.Pending;
                 }
                 else
                 {
-                    address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                    address.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                 }
             }
         }
         /// <summary>
         /// Update's the customer's address from an order, if it's necessary
         /// </summary>
+        [NDependIgnoreTooManyParams]
         private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, AddressAdapter originalAddress, string prefix)
         {
             if (!shouldUpdate || IsAddressEmpty(order, prefix))
@@ -739,11 +769,11 @@ namespace ShipWorks.Stores.Communication
                     shouldCopy = false;
                     break;
                 case ModifiedOrderCustomerUpdateBehavior.CopyIfBlankOrMatching:
-                    if (IsAddressEmpty(existingCustomer,prefix))
+                    if (IsAddressEmpty(existingCustomer, prefix))
                     {
                         shouldCopy = true;
-                    } 
-                    else if (originalAddress==null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
+                    }
+                    else if (originalAddress == null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
                     {
                         shouldCopy = true;
                     }
@@ -758,7 +788,7 @@ namespace ShipWorks.Stores.Communication
                 default:
                     throw new ArgumentOutOfRangeException("behavior");
             }
-            
+
             if (shouldCopy)
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);
@@ -816,7 +846,7 @@ namespace ShipWorks.Stores.Communication
             {
                 if (order.Fields[fieldIndex].IsChanged)
                 {
-                    order.SetNewFieldValue(fieldIndex, AddressCasing.Apply((string)order.GetCurrentFieldValue(fieldIndex)));
+                    order.SetNewFieldValue(fieldIndex, AddressCasing.Apply((string) order.GetCurrentFieldValue(fieldIndex)));
                 }
             }
         }
@@ -827,7 +857,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual void VerifyOrderTotal(OrderEntity order)
         {
-            if (order.Fields[(int)OrderFieldIndex.OrderTotal].IsChanged)
+            if (order.Fields[(int) OrderFieldIndex.OrderTotal].IsChanged)
             {
                 decimal total = OrderUtility.CalculateTotal(order);
 

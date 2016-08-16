@@ -165,6 +165,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Get the entity that corresponds to the specified row, according to the current sort.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public EntityBase2 GetEntityFromRow(int row, TimeSpan? timeout)
         {
             Stopwatch timer = Stopwatch.StartNew();
@@ -278,6 +279,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Generate a SortDefinition based on the given clauses and relations
         /// </summary>
+        [NDependIgnoreLongMethod]
         private SortDefinition ResolveSortDefinition(SortDefinition sortDefinition)
         {
             SortExpression sortExpression = new SortExpression();

@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Constructor for MWS Api Errors
         /// </summary>
-        public AmazonException(string code, string message, Exception inner) 
+        public AmazonException(string code, string message, Exception inner)
             : base (message, inner)
         {
             this.code = code;
@@ -69,7 +69,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             this.webServiceType = webServiceType;
         }
-
 
         /// <summary>
         /// Deserialize

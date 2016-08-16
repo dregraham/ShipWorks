@@ -376,6 +376,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -390,6 +392,8 @@ namespace ShipWorks.Data.Model
 		EarliestExpectedDeliveryDate,
 		///<summary>LatestExpectedDeliveryDate. </summary>
 		LatestExpectedDeliveryDate,
+		///<summary>PurchaseOrderNumber. </summary>
+		PurchaseOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -445,6 +449,76 @@ namespace ShipWorks.Data.Model
 		ASIN,
 		///<summary>ConditionNote. </summary>
 		ConditionNote,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonProfile.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum AmazonProfileFieldIndex:int
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DeliveryExperience. </summary>
+		DeliveryExperience,
+		///<summary>Weight. </summary>
+		Weight,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum AmazonShipmentFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>CarrierName. </summary>
+		CarrierName,
+		///<summary>ShippingServiceName. </summary>
+		ShippingServiceName,
+		///<summary>ShippingServiceID. </summary>
+		ShippingServiceID,
+		///<summary>ShippingServiceOfferID. </summary>
+		ShippingServiceOfferID,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DeliveryExperience. </summary>
+		DeliveryExperience,
+		///<summary>DeclaredValue. </summary>
+		DeclaredValue,
+		///<summary>AmazonUniqueShipmentID. </summary>
+		AmazonUniqueShipmentID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -552,6 +626,8 @@ namespace ShipWorks.Data.Model
 		ExcludeFBA,
 		///<summary>DomainName. </summary>
 		DomainName,
+		///<summary>AmazonShippingToken. </summary>
+		AmazonShippingToken,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1217,6 +1293,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1237,6 +1315,8 @@ namespace ShipWorks.Data.Model
 		FlagType,
 		///<summary>MarketplaceNames. </summary>
 		MarketplaceNames,
+		///<summary>IsPrime. </summary>
+		IsPrime,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1385,6 +1465,14 @@ namespace ShipWorks.Data.Model
 		AttributesToDownload,
 		///<summary>ConsolidatorAsUsps. </summary>
 		ConsolidatorAsUsps,
+		///<summary>AmazonMerchantID. </summary>
+		AmazonMerchantID,
+		///<summary>AmazonAuthToken. </summary>
+		AmazonAuthToken,
+		///<summary>AmazonApiRegion. </summary>
+		AmazonApiRegion,
+		///<summary>AmazonShippingToken. </summary>
+		AmazonShippingToken,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1542,6 +1630,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -1703,6 +1793,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -1761,6 +1853,8 @@ namespace ShipWorks.Data.Model
 		AuditNewOrders,
 		///<summary>AuditDeletedOrders. </summary>
 		AuditDeletedOrders,
+		///<summary>CustomerKey. </summary>
+		CustomerKey,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2107,6 +2201,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -2775,6 +2871,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -3696,6 +3794,8 @@ namespace ShipWorks.Data.Model
 		Passive,
 		///<summary>InternalOwnerID. </summary>
 		InternalOwnerID,
+		///<summary>ReuseControlConnectionSession. </summary>
+		ReuseControlConnectionSession,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4142,6 +4242,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
@@ -4810,6 +4912,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -4946,6 +5050,8 @@ namespace ShipWorks.Data.Model
 		Token,
 		///<summary>StoreURL. </summary>
 		StoreURL,
+		///<summary>StatusCodes. </summary>
+		StatusCodes,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5103,6 +5209,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
@@ -5222,8 +5330,8 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
 		MagentoTrackingEmails,
-		///<summary>MagentoConnect. </summary>
-		MagentoConnect,
+		///<summary>MagentoVersion. </summary>
+		MagentoVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5381,6 +5489,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -5785,6 +5895,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -6027,6 +6139,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -6248,6 +6362,99 @@ namespace ShipWorks.Data.Model
 		ObjectID,
 		///<summary>Reason. </summary>
 		Reason,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OdbcStore.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum OdbcStoreFieldIndex:int
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>License. </summary>
+		License,
+		///<summary>Edition. </summary>
+		Edition,
+		///<summary>TypeCode. </summary>
+		TypeCode,
+		///<summary>Enabled. </summary>
+		Enabled,
+		///<summary>SetupComplete. </summary>
+		SetupComplete,
+		///<summary>StoreName. </summary>
+		StoreName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Fax. </summary>
+		Fax,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		///<summary>AutoDownload. </summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. </summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. </summary>
+		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. </summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. </summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. </summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. </summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. </summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. </summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>ImportConnectionString. </summary>
+		ImportConnectionString,
+		///<summary>ImportMap. </summary>
+		ImportMap,
+		///<summary>ImportStrategy. </summary>
+		ImportStrategy,
+		///<summary>ImportColumnSourceType. </summary>
+		ImportColumnSourceType,
+		///<summary>ImportColumnSource. </summary>
+		ImportColumnSource,
+		///<summary>UploadStrategy. </summary>
+		UploadStrategy,
+		///<summary>UploadMap. </summary>
+		UploadMap,
+		///<summary>UploadColumnSourceType. </summary>
+		UploadColumnSourceType,
+		///<summary>UploadColumnSource. </summary>
+		UploadColumnSource,
+		///<summary>UploadConnectionString. </summary>
+		UploadConnectionString,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6548,6 +6755,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6800,6 +7009,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -7099,6 +7310,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -7539,6 +7752,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -7872,6 +8087,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -7990,8 +8207,8 @@ namespace ShipWorks.Data.Model
 		Phone,
 		///<summary>Fax. </summary>
 		Fax,
-		///<summary>Email. Inherited from Store</summary>
-		Email_Store,
+		///<summary>Email. </summary>
+		Email,
 		///<summary>Website. </summary>
 		Website,
 		///<summary>AutoDownload. </summary>
@@ -8016,10 +8233,14 @@ namespace ShipWorks.Data.Model
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
-		///<summary>Email. </summary>
-		Email,
+		///<summary>SearsEmail. </summary>
+		SearsEmail,
 		///<summary>Password. </summary>
 		Password,
+		///<summary>SecretKey. </summary>
+		SecretKey,
+		///<summary>SellerID. </summary>
+		SellerID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8578,6 +8799,8 @@ namespace ShipWorks.Data.Model
 		FedExFimsUsername,
 		///<summary>FedExFimsPassword. </summary>
 		FedExFimsPassword,
+		///<summary>ShipmentEditLimit. </summary>
+		ShipmentEditLimit,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8750,6 +8973,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -8977,6 +9202,85 @@ namespace ShipWorks.Data.Model
 		DownloadPageSize,
 		///<summary>RequestTimeout. </summary>
 		RequestTimeout,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SparkPayStore.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum SparkPayStoreFieldIndex:int
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>License. </summary>
+		License,
+		///<summary>Edition. </summary>
+		Edition,
+		///<summary>TypeCode. </summary>
+		TypeCode,
+		///<summary>Enabled. </summary>
+		Enabled,
+		///<summary>SetupComplete. </summary>
+		SetupComplete,
+		///<summary>StoreName. </summary>
+		StoreName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Fax. </summary>
+		Fax,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		///<summary>AutoDownload. </summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. </summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. </summary>
+		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. </summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. </summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. </summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. </summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. </summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. </summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>Token. </summary>
+		Token,
+		///<summary>StoreUrl. </summary>
+		StoreUrl,
+		///<summary>StatusCodes. </summary>
+		StatusCodes,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9249,6 +9553,169 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrder.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ThreeDCartOrderFieldIndex:int
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>CustomerID. </summary>
+		CustomerID,
+		///<summary>OrderNumber. </summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. </summary>
+		OrderDate,
+		///<summary>OrderTotal. </summary>
+		OrderTotal,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OnlineLastModified. </summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. </summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. </summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. </summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. </summary>
+		RequestedShipping,
+		///<summary>BillFirstName. </summary>
+		BillFirstName,
+		///<summary>BillMiddleName. </summary>
+		BillMiddleName,
+		///<summary>BillLastName. </summary>
+		BillLastName,
+		///<summary>BillCompany. </summary>
+		BillCompany,
+		///<summary>BillStreet1. </summary>
+		BillStreet1,
+		///<summary>BillStreet2. </summary>
+		BillStreet2,
+		///<summary>BillStreet3. </summary>
+		BillStreet3,
+		///<summary>BillCity. </summary>
+		BillCity,
+		///<summary>BillStateProvCode. </summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. </summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. </summary>
+		BillCountryCode,
+		///<summary>BillPhone. </summary>
+		BillPhone,
+		///<summary>BillFax. </summary>
+		BillFax,
+		///<summary>BillEmail. </summary>
+		BillEmail,
+		///<summary>BillWebsite. </summary>
+		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
+		///<summary>ShipFirstName. </summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. </summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. </summary>
+		ShipLastName,
+		///<summary>ShipCompany. </summary>
+		ShipCompany,
+		///<summary>ShipStreet1. </summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. </summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. </summary>
+		ShipStreet3,
+		///<summary>ShipCity. </summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. </summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. </summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. </summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. </summary>
+		ShipPhone,
+		///<summary>ShipFax. </summary>
+		ShipFax,
+		///<summary>ShipEmail. </summary>
+		ShipEmail,
+		///<summary>ShipWebsite. </summary>
+		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
+		///<summary>RollupItemCount. </summary>
+		RollupItemCount,
+		///<summary>RollupItemName. </summary>
+		RollupItemName,
+		///<summary>RollupItemCode. </summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. </summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. </summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. </summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. </summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. </summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. </summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. </summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. </summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. </summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>ThreeDCartOrderID. </summary>
+		ThreeDCartOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrderItem.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9377,6 +9844,8 @@ namespace ShipWorks.Data.Model
 		StatusCodes,
 		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
 		DownloadModifiedNumberOfDaysBack,
+		///<summary>RestUser. </summary>
+		RestUser,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9884,6 +10353,8 @@ namespace ShipWorks.Data.Model
 		ContractType,
 		///<summary>CreatedDate. </summary>
 		CreatedDate,
+		///<summary>PendingInitialAccount. </summary>
+		PendingInitialAccount,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10589,6 +11060,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseHashKey,
 		///<summary>ShipSenseRecognitionStatus. </summary>
 		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. </summary>
+		ShipAddressType,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>
@@ -10644,6 +11117,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
 		YahooProductID,
+		///<summary>Url. </summary>
+		Url,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10738,6 +11213,12 @@ namespace ShipWorks.Data.Model
 		YahooEmailAccountID,
 		///<summary>TrackingUpdatePassword. </summary>
 		TrackingUpdatePassword,
+		///<summary>YahooStoreID. </summary>
+		YahooStoreID,
+		///<summary>AccessToken. </summary>
+		AccessToken,
+		///<summary>BackupOrderNumber. </summary>
+		BackupOrderNumber,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10770,6 +11251,10 @@ namespace ShipWorks.Data.Model
 		AmazonOrderEntity,
 		///<summary>AmazonOrderItem</summary>
 		AmazonOrderItemEntity,
+		///<summary>AmazonProfile</summary>
+		AmazonProfileEntity,
+		///<summary>AmazonShipment</summary>
+		AmazonShipmentEntity,
 		///<summary>AmazonStore</summary>
 		AmazonStoreEntity,
 		///<summary>AmeriCommerceStore</summary>
@@ -10940,6 +11425,8 @@ namespace ShipWorks.Data.Model
 		ObjectLabelEntity,
 		///<summary>ObjectReference</summary>
 		ObjectReferenceEntity,
+		///<summary>OdbcStore</summary>
+		OdbcStoreEntity,
 		///<summary>OnTracAccount</summary>
 		OnTracAccountEntity,
 		///<summary>OnTracProfile</summary>
@@ -11026,6 +11513,8 @@ namespace ShipWorks.Data.Model
 		ShopifyStoreEntity,
 		///<summary>ShopSiteStore</summary>
 		ShopSiteStoreEntity,
+		///<summary>SparkPayStore</summary>
+		SparkPayStoreEntity,
 		///<summary>StatusPreset</summary>
 		StatusPresetEntity,
 		///<summary>Store</summary>
@@ -11042,6 +11531,8 @@ namespace ShipWorks.Data.Model
 		TemplateStoreSettingsEntity,
 		///<summary>TemplateUserSettings</summary>
 		TemplateUserSettingsEntity,
+		///<summary>ThreeDCartOrder</summary>
+		ThreeDCartOrderEntity,
 		///<summary>ThreeDCartOrderItem</summary>
 		ThreeDCartOrderItemEntity,
 		///<summary>ThreeDCartStore</summary>

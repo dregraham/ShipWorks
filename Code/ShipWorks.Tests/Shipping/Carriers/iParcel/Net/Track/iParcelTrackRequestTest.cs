@@ -67,25 +67,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         }
 
         [Fact]
-        public void OperationName_Test()
+        public void OperationName()
         {
             Assert.Equal("Track", testObject.OperationName);
         }
 
         [Fact]
-        public void RootElementName_Test()
+        public void RootElementName()
         {
             Assert.Equal("iparcelTrackingRequest", testObject.RootElementName);
         }
 
         [Fact]
-        public void RequestElements_ContainOneItems_Test()
+        public void RequestElements_ContainOneItems()
         {
             Assert.Equal(1, testObject.RequestElements.Count);
         }
 
         [Fact]
-        public void RequestElements_ContainsTrackingNumberElement_Test()
+        public void RequestElements_ContainsTrackingNumberElement()
         {
             Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelTrackingNumberElement)));
         }

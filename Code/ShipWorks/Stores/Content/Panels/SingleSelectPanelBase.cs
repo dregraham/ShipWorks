@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Grid;
+using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -55,7 +57,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Reload the content of the control with the given selection
         /// </summary>
-        public override void ChangeContent(IGridSelection selection)
+        public override Task ChangeContent(IGridSelection selection)
         {
             if (selection.Count != 1)
             {
@@ -77,6 +79,8 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             entityGrid.OpenGateway(gateway);
+
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>

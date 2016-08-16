@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
         }
 
         [Fact]
-        public void GetIdentifier_NoInnerException_ReturnsCorrectIdentifier_Test()
+        public void GetIdentifier_NoInnerException_ReturnsCorrectIdentifier()
         {
             string expectedIdentifier = string.Format("{0} {1}{2},None{3}", version, testException.Object.GetType().Name, exceptionMessage, stackTrace);
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
         }
 
         [Fact]
-        public void GetIdentifier_WithInnerException_ReturnsCorrectIdentifier_Test()
+        public void GetIdentifier_WithInnerException_ReturnsCorrectIdentifier()
         {
 
             Exception testInnerException = new Exception(innerExceptionMessage);
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
         }
 
         [Fact]
-        public void GetIdentifier_NoInnerExceptionAndIsIoException_ReturnsCorrectIdentifier_Test()
+        public void GetIdentifier_NoInnerExceptionAndIsIoException_ReturnsCorrectIdentifier()
         {
             string expectedIdentifier = string.Format("{0} {1}{2},None{3}", version, testIoException.Object.GetType().Name, exceptionMessage, stackTrace);
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
         }
 
         [Fact]
-        public void GetIdentifier_WithInnerExceptionAndIsIoException_ReturnsCorrectIdentifier_Test()
+        public void GetIdentifier_WithInnerExceptionAndIsIoException_ReturnsCorrectIdentifier()
         {
             IOException testInnerException = new IOException(innerExceptionMessage);
             IOException testException = new IOException(exceptionMessage, testInnerException);

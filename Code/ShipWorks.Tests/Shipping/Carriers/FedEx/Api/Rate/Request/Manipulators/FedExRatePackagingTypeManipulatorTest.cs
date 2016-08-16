@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIs10KgBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIs10KgBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box10Kg;
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIs25KgBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIs25KgBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box25Kg;
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsCustom_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsCustom()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Custom;
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsEnvelope_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsEnvelope()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Envelope;
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsPak_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsPak()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Pak;
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsTube_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsTube()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsSmallBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsSmallBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.SmallBox;
 
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsMediumBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsMediumBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.MediumBox;
 
@@ -128,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsLargeBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsLargeBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.LargeBox;
 
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetFedExPackagingType_WhenPackageIsExtraLargeBox_Test()
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsExtraLargeBox()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.ExtraLargeBox;
 
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_PackagingTypeSpecifiedIsTrue_Test()
+        public void Manipulate_PackagingTypeSpecifiedIsTrue()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;
 
@@ -161,7 +161,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_ThrowsException_WhenPackageTypeIsUnknown_Test()
+        public void Manipulate_ThrowsException_WhenPackageTypeIsUnknown()
         {
             shipmentEntity.FedEx.PackagingType = 43;
 

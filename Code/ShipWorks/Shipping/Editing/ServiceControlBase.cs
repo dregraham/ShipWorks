@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.RelationClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Data;
-using Divelements.SandGrid;
-using ShipWorks.Data.Grid.DetailView;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -32,7 +23,7 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class ServiceControlBase : UserControl
     {
-        // The type of shipment this instance is servicing 
+        // The type of shipment this instance is servicing
         readonly ShipmentTypeCode shipmentTypeCode;
 
         // The values last past to the LoadShipments function
@@ -79,7 +70,7 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler ShipSenseFieldChanged;
 
         /// <summary>
-        /// Raised when something occurs that causes the service control to change the shipment type. For example, this was created to support 
+        /// Raised when something occurs that causes the service control to change the shipment type. For example, this was created to support
         /// the best rate shipment type and allowing the selection of a rate to change the shipment type.
         /// </summary>
         public event EventHandler ShipmentTypeChanged;
@@ -99,9 +90,9 @@ namespace ShipWorks.Shipping.Editing
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
-            
-            // Make sure the rate control shows all rates by default; other 
-            // service controls (i.e. best rate) can override this as needed 
+
+            // Make sure the rate control shows all rates by default; other
+            // service controls (i.e. best rate) can override this as needed
             RateControl = rateControl;
             RateControl.ShowAllRates = true;
             RateControl.ShowSingleRate = false;
@@ -120,7 +111,7 @@ namespace ShipWorks.Shipping.Editing
                 return shipmentTypeCode;
             }
         }
-        
+
         /// <summary>
         /// A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control
@@ -151,23 +142,33 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Initialization
         /// </summary>
-        public virtual void Initialize()
+        public virtual void Initialize(ILifetimeScope lifetimeScope)
+        {
+            personControl.ValidatedAddressScope = lifetimeScope.Resolve<IValidatedAddressScope>();
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initialization
+        /// </summary>
+        protected virtual void Initialize()
         {
 
         }
 
         /// <summary>
-        /// Loads the accounts. This should be overridden in derived classes to account for a sign-up via 
+        /// Loads the accounts. This should be overridden in derived classes to account for a sign-up via
         // processing a shipment with a provider that doesn't have any accounts
         /// </summary>
         public virtual void LoadAccounts()
         {
-            
+
         }
 
         /// <summary>
         /// Load the data for the list of shipments into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             if (shipments == null)
@@ -228,7 +229,7 @@ namespace ShipWorks.Shipping.Editing
                 // Go through and load the data from each shipment
                 foreach (ShipmentEntity shipment in shipments)
                 {
-                    labelFormat.ApplyMultiValue((ThermalLanguage)shipment.RequestedLabelFormat);
+                    labelFormat.ApplyMultiValue((ThermalLanguage) shipment.RequestedLabelFormat);
 
                     // Residential status info
                     if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
@@ -303,6 +304,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Loads the UI for Return Shipments
         /// </summary>
+        [NDependIgnoreLongMethodAttribute]
         private void LoadReturnsUI()
         {
             ReturnsControlBase newReturnsControl = null;
@@ -318,7 +320,7 @@ namespace ShipWorks.Shipping.Editing
                 // Always show it if any types support returns
                 sectionReturns.Visible = true;
 
-                // Checkbox for enabling returns editing 
+                // Checkbox for enabling returns editing
                 using (MultiValueScope scope = new MultiValueScope())
                 {
                     foreach (ShipmentEntity shipment in loadedShipments)
@@ -428,15 +430,15 @@ namespace ShipWorks.Shipping.Editing
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage)v, shipment));
-                
+                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage) v, shipment));
+
                 // Residential
                 if (shipmentType.IsResidentialStatusRequired(shipment))
                 {
                     ResidentialDeterminationType? type = null;
 
                     // Read the selected type
-                    residentialDetermination.ReadMultiValue(v => { if (v != null) type = (ResidentialDeterminationType) v; } );
+                    residentialDetermination.ReadMultiValue(v => { if (v != null) type = (ResidentialDeterminationType) v; });
 
                     if (type != null)
                     {
@@ -462,7 +464,7 @@ namespace ShipWorks.Shipping.Editing
         {
             suspendRateEvent++;
         }
-        
+
         /// <summary>
         /// Resume raising the event that the rate critiera has changed.  This function does not raise the event
         /// </summary>
@@ -478,10 +480,7 @@ namespace ShipWorks.Shipping.Editing
         {
             if (suspendRateEvent == 0)
             {
-                if (RateCriteriaChanged != null)
-                {
-                    RateCriteriaChanged(this, EventArgs.Empty);
-                }
+                RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -508,13 +507,10 @@ namespace ShipWorks.Shipping.Editing
         {
             if (suspendShipSenseFieldChangedEvent == 0)
             {
-                if (ShipSenseFieldChanged != null)
-                {
-                    ShipSenseFieldChanged(this, EventArgs.Empty);
-                }
+                ShipSenseFieldChanged?.Invoke(this, EventArgs.Empty);
             }
         }
-        
+
         /// <summary>
         /// Laying out controls
         /// </summary>
@@ -537,13 +533,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// One or more shipments have been created by the control
         /// </summary>
-        protected void RaiseShipmentsAdded(List<ShipmentEntity> shipments)
-        {
-            if (ShipmentsAdded != null)
-            {
-                ShipmentsAdded(this, new ShipmentsAddedRemovedEventArgs(shipments));
-            }
-        }
+        protected void RaiseShipmentsAdded(List<ShipmentEntity> shipments) =>
+            ShipmentsAdded?.Invoke(this, new ShipmentsAddedRemovedEventArgs(shipments));
 
         /// <summary>
         /// Synchronizes the selected rate in the rate control.
@@ -554,24 +545,14 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
-        private void OnRecipientDestinationChanged(object sender, EventArgs e)
-        {
-            if (RecipientDestinationChanged != null)
-            {
-                RecipientDestinationChanged(this, EventArgs.Empty);
-            }
-        }
+        private void OnRecipientDestinationChanged(object sender, EventArgs e) =>
+            RecipientDestinationChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
-        protected void OnOriginDestinationChanged(object sender, EventArgs e)
-        {
-            if (OriginDestinationChanged != null)
-            {
-                OriginDestinationChanged(this, EventArgs.Empty);
-            }
-        }
+        protected void OnOriginDestinationChanged(object sender, EventArgs e) =>
+            OriginDestinationChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// Something changed about the data typed in for the person
@@ -618,31 +599,66 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Raises the shipment service changed Event
         /// </summary>
-        protected void RaiseShipmentServiceChanged()
-        {
-            if (ShipmentServiceChanged != null)
-            {
-                ShipmentServiceChanged(this, EventArgs.Empty);
-            }
-        }
+        protected void RaiseShipmentServiceChanged() => ShipmentServiceChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         /// Raises the shipment type changed event.
         /// </summary>
-        protected void RaiseShipmentTypeChanged()
-        {
-            if (ShipmentTypeChanged != null)
-            {
-                ShipmentTypeChanged(this, EventArgs.Empty);
-            }
-        }
+        protected void RaiseShipmentTypeChanged() => ShipmentTypeChanged?.Invoke(this, EventArgs.Empty);
 
-		/// <summary>
-		/// Show the knowledge base article for thermal settings
-		/// </summary>
+        /// <summary>
+        /// Show the knowledge base article for thermal settings
+        /// </summary>
         private void OnHelpClick(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
+        }
+
+        /// <summary>
+        /// Pre select a rate
+        /// </summary>
+        public virtual void PreSelectRate(RateSelectedEventArgs args) => OnConfigureRateClick(this, args);
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public virtual void FlushChanges()
+        {
+
+        }
+
+        /// <summary>
+        /// Unload shipments
+        /// </summary>
+        internal void UnloadShipments()
+        {
+            loadedShipments.Clear();
+        }
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                components?.Dispose();
+
+                RecipientDestinationChanged = null;
+                OriginDestinationChanged = null;
+                ShipmentServiceChanged = null;
+                RateCriteriaChanged = null;
+                ShipSenseFieldChanged = null;
+                ShipmentsAdded = null;
+                ShipmentTypeChanged = null;
+                ClearRatesAction = null;
+
+                UnloadShipments();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

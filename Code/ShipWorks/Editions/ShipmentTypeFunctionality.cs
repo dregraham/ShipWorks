@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using Microsoft.Web.Services3.Configuration;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 
@@ -27,10 +25,11 @@ namespace ShipWorks.Editions
         {
             shipmentTypeRestrictions = new Dictionary<ShipmentTypeCode, List<ShipmentTypeRestrictionType>>();
         }
-        
+
         /// <summary>
         /// Deserializes the XML in the specified path looking for data in the ShipmentTypeFunctionality node.
         /// </summary>
+        /// <param name="storeId">The store ID.</param>
         /// <param name="path">The path.</param>
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
         public static ShipmentTypeFunctionality Deserialize(long storeId, XPathNavigator path)
@@ -48,8 +47,9 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Deserializes the specified source.
         /// </summary>
+        /// <param name="storeId">The store ID.</param>
         /// <param name="source">The source.</param>
-        /// <returns></returns>
+        /// <returns>ShipmentTypeFunctionality.</returns>
         public static ShipmentTypeFunctionality Deserialize(long storeId, XElement source)
         {
             return Deserialize(storeId, source, ShippingPolicies.Load);
@@ -59,11 +59,10 @@ namespace ShipWorks.Editions
         /// Deserializes the XML in the specified XElement for data in the ShipmentTypeFunctionality node; no restrictions
         /// are configured if the node is not found.
         /// </summary>
+        /// <param name="storeId">The store ID.</param>
         /// <param name="source">The source.</param>
         /// <param name="storePolicyConfigurationAction">Action to store policy configuration.</param>
-        /// <returns>
-        /// An instance of ShipmentTypeFunctionality.
-        /// </returns>
+        /// <returns>An instance of ShipmentTypeFunctionality.</returns>
         public static ShipmentTypeFunctionality Deserialize(long storeId, XElement source, Action<long, List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>> storePolicyConfigurationAction)
         {
             ShipmentTypeFunctionality functionality = new ShipmentTypeFunctionality();
@@ -108,7 +107,12 @@ namespace ShipWorks.Editions
         /// </summary>
         public IEnumerable<ShipmentTypeRestrictionType> this[ShipmentTypeCode key]
         {
-            get { return shipmentTypeRestrictions.ContainsKey(key) ? shipmentTypeRestrictions[key] : new List<ShipmentTypeRestrictionType>(); }
+            get
+            {
+                return shipmentTypeRestrictions.ContainsKey(key) 
+                    ? shipmentTypeRestrictions[key] 
+                    : new List<ShipmentTypeRestrictionType>();
+            }
         }
 
         /// <summary>
@@ -148,7 +152,6 @@ namespace ShipWorks.Editions
                 // No restrictions for this key yet, so add them
                 shipmentTypeRestrictions.Add(shipmentTypeCode, restrictions);
             }
-            
         }
     }
 }

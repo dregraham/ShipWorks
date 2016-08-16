@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Authentication
         }
 
         [Fact]
-        public void Build_AddsIPAddressElement_Test()
+        public void Build_AddsIPAddressElement()
         {
             XElement element = testObject.Build();
 
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Authentication
         }
 
         [Fact]
-        public void Build_IPAddress_Test()
+        public void Build_IPAddress()
         {
             XElement element = testObject.Build();
             

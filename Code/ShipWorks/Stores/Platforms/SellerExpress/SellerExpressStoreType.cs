@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Autofac;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -24,37 +26,23 @@ namespace ShipWorks.Stores.Platforms.SellerExpress
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SellerExpress;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SellerExpress;
 
         /// <summary>
         /// Log request/responses as SellerExpress
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.SellerExpress;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SellerExpress;
 
         /// <summary>
         /// Gets the account settings help URL.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000024105-connecting-sellerexpress-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065050";
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
             {

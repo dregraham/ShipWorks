@@ -2,6 +2,7 @@
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -11,8 +12,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     /// <typeparam name="TAccount">Type of carrier account</typeparam>
     /// <typeparam name="TPackage">Type of package</typeparam>
-    public abstract class PackageBasedBestRateBroker<TAccount, TPackage> : BestRateBroker<TAccount>
-        where TAccount : EntityBase2
+    public abstract class PackageBasedBestRateBroker<TAccount, TAccountInterface, TPackage> : BestRateBroker<TAccount, TAccountInterface>
+        where TAccount : TAccountInterface
+        where TAccountInterface : ICarrierAccount
         where TPackage : EntityBase2
     {
         /// <summary>
@@ -21,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipmentType">Shipment type that will be used</param>
         /// <param name="accountRepository">Repository that will be used for retrieving accounts</param>
         /// <param name="carrierDescription">Text description of the carrier that will be pre-pended to rate descriptions</param>
-        protected PackageBasedBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount> accountRepository, string carrierDescription) :
+        protected PackageBasedBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         {
 
@@ -56,10 +58,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 packages = Packages(shipment);
 
-                // Update the first package PackgeID to be that of the original persisted package.  If this isn't 
+                // Update the first package PackgeID to be that of the original persisted package.  If this isn't
                 // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
                 SetPackageId(packages[0], originalPackageId);
-                
+
                 packages.ToList().ForEach(x => adapter.SaveEntity(x, true, false));
             }
         }

@@ -32,6 +32,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         }
 
         /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected BigCommerceMaxIncompleteOrdersReachedException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
+
+        /// <summary>
         /// Override to implement GetObjectData for serialization
         /// </summary>
         /// <param name="info"></param>

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
@@ -24,21 +20,12 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Identifying code for Click Cart Pro
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.ClickCartPro; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.ClickCartPro;
 
         /// <summary>
         /// Gets the logging source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.ClickCartPro;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.ClickCartPro;
 
         /// <summary>
         /// Constructor
@@ -120,7 +107,11 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
                 {"start", new UnixTimeVariableTransformer()},
 
                 // make sure a value is sent for the "comments" parameter.  Server side fails if it is missing or blank.
-                {"comments", new VariableTransformer( (originalValue) => String.IsNullOrEmpty(originalValue) ? "(none)" : originalValue ) }
+                {
+                    "comments",
+                    new VariableTransformer(
+                        (originalValue) => String.IsNullOrEmpty(originalValue) ? "(none)" : originalValue)
+                }
             };
 
             // get custom store capabilities. ClickCartPro is essentially OsCommerce
@@ -128,7 +119,8 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
             capabilities.OnlineStatusDataType = GenericVariantDataType.Text;
 
             // create the legacy client instead of the regular genric one
-            LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity)Store, LegacyStyleSheets.ClickCartProStyleSheet, capabilities, transformers);
+            LegacyAdapterStoreWebClient client = new LegacyAdapterStoreWebClient((GenericModuleStoreEntity) Store,
+                LegacyStyleSheets.ClickCartProStyleSheet, capabilities, transformers);
 
             // CCP returns MovedPermanently on POSTs
             client.VersionProbeCompatibilityIndicator = HttpStatusCode.MovedPermanently;
@@ -153,5 +145,8 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
             ElementOutline outline = container.AddElement("ClickCartPro");
             outline.AddElement("ClickCartProOrderID", () => order.Value.ClickCartProOrderID);
         }
+
+        public override string AccountSettingsHelpUrl
+            => "http://support.shipworks.com/support/solutions/articles/146669";
     }
 }

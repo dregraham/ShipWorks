@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -80,21 +83,33 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Determines if endicia DHL is enabled.
+        /// Determines if Endicia DHL is enabled.
         /// </summary>
         public bool IsEndiciaDHLEnabled()
         {
-            return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaDhl).Level == EditionRestrictionLevel.None);
+            EditionRestrictionLevel restrictionLevel = GetRestrictionLevel(EditionFeature.EndiciaDhl);
+            return restrictionLevel == EditionRestrictionLevel.None;
         }
 
         /// <summary>
-        /// Determines if Consolidator enabled.
+        /// Determines if Endicia consolidator is enabled.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public bool IsEndiciaConsolidatorEnabled()
         {
-            return (activeRestrictions.CheckRestriction(EditionFeature.EndiciaConsolidator).Level == EditionRestrictionLevel.None);
+            EditionRestrictionLevel restrictionLevel = GetRestrictionLevel(EditionFeature.EndiciaConsolidator);
+            return restrictionLevel == EditionRestrictionLevel.None;
+        }
+
+        /// <summary>
+        /// A helper method to get the restriction level for a given feature.
+        /// </summary>
+        private EditionRestrictionLevel GetRestrictionLevel(EditionFeature feature)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                EditionRestrictionLevel restrictionLevel = lifetimeScope.Resolve<ILicenseService>().CheckRestriction(feature, null);
+                return restrictionLevel;
+            }
         }
     }
 }

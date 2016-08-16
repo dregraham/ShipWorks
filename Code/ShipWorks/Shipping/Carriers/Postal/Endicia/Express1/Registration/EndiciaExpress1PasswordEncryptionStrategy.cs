@@ -1,11 +1,11 @@
 ﻿using System;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 {
     /// <summary>
-    /// An implementation of the IExpress1PasswordEncryptionStrategy interface that is specific to the 
+    /// An implementation of the IExpress1PasswordEncryptionStrategy interface that is specific to the
     /// registration of an Express1 for Endicia account.
     /// </summary>
     public class EndiciaExpress1PasswordEncryptionStrategy : IExpress1PasswordEncryptionStrategy

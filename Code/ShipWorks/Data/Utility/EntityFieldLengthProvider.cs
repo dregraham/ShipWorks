@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ComponentFactory.Krypton.Toolkit;
-using ShipWorks.Templates.Tokens;
+﻿using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls.Design;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace ShipWorks.Data.Utility
 {
@@ -213,6 +211,8 @@ namespace ShipWorks.Data.Utility
         /// <summary>
         /// Get the entity field associated with the given source
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static EntityField2 GetSourceField(EntityFieldLengthSource source)
         {
             switch (source)
@@ -364,6 +364,13 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.OnTracInstructions: return OnTracShipmentFields.Instructions;
                 case EntityFieldLengthSource.OnTracReference1: return OnTracShipmentFields.Reference1;
                 case EntityFieldLengthSource.OnTracReference2: return OnTracShipmentFields.Reference2;
+
+                case EntityFieldLengthSource.AmazonShipmentCarrierName: return AmazonShipmentFields.CarrierName;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceID: return AmazonShipmentFields.ShippingServiceID;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceName: return AmazonShipmentFields.ShippingServiceName;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceOfferID: return AmazonShipmentFields.ShippingServiceOfferID;
+
+                case EntityFieldLengthSource.OdbcStoreCustomQuery: return OdbcStoreFields.UploadColumnSource;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);

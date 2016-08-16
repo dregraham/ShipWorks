@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
-    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity>, IUpsOpenAccountRepository, ICarrierAccountRepository<UpsAccountEntity>
+    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity, IUpsAccountEntity>, IUpsOpenAccountRepository
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
-        public override IEnumerable<UpsAccountEntity> Accounts
-        {
-            get
-            {
-                return UpsAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<UpsAccountEntity> Accounts => UpsAccountManager.Accounts;
+
+        /// <summary>
+        /// Returns a read only list of accounts
+        /// </summary>
+        public override IEnumerable<IUpsAccountEntity> AccountsReadOnly => UpsAccountManager.AccountsReadOnly;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => UpsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -30,13 +34,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets a read only version of the specified account
+        /// </summary>
+        /// <param name="uspsAccountID"></param>
+        /// <returns></returns>
+        public override IUpsAccountEntity GetAccountReadOnly(long accountID) =>
+            UpsAccountManager.GetAccountReadOnly(accountID);
+
+        /// <summary>
         ///  Returns the default account as defined by the primary profile
         ///  </summary>
         public override UpsAccountEntity DefaultProfileAccount
         {
             get
             {
-                long? accountID = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools).GetPrimaryProfile().Ups.UpsAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.UpsOnLineTools).Ups.UpsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.UpsOnLineTools, accountID);
             }
         }

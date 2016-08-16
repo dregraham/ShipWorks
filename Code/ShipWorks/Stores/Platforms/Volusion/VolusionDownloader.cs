@@ -14,7 +14,9 @@ using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
 using log4net;
 using System.Globalization;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -53,7 +55,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        [NDependIgnoreLongMethod]
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             { 

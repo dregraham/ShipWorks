@@ -32,25 +32,25 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void TriggerType_ReturnsScheduled_Test()
+        public void TriggerType_ReturnsScheduled()
         {
             Assert.Equal(ActionTriggerType.Scheduled, testObject.TriggerType);
         }
 
         [Fact]
-        public void CreateEditor_ReturnsScheduledTriggerEditor_Test()
+        public void CreateEditor_ReturnsScheduledTriggerEditor()
         {
             Assert.IsAssignableFrom<ScheduledTriggerEditor>(testObject.CreateEditor());
         }
 
         [Fact]
-        public void TriggeringEntityType_IsNull_Test()
+        public void TriggeringEntityType_IsNull()
         {
             Assert.Null(testObject.TriggeringEntityType);
         }
 
         [Fact]
-        public void Schedule_IsOneTimeActionSchedule_WhenNoSettings_Test()
+        public void Schedule_IsOneTimeActionSchedule_WhenNoSettings()
         {
             testObject = new ScheduledTrigger();
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void StartDateTimeInUtc_UsesStartDateFromSettings_WhenXmlSettingsContainsStartDate_Test()
+        public void StartDateTimeInUtc_UsesStartDateFromSettings_WhenXmlSettingsContainsStartDate()
         {
             DateTime testTime = DateTime.Parse("6/8/2013 12:07:00 AM");
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void StartDateTimeInUtc_IsCorrect_WhenSerializedAndDeserailized_Test()
+        public void StartDateTimeInUtc_IsCorrect_WhenSerializedAndDeserailized()
         {
 
             MemoryStream stream = new MemoryStream();
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void DeserializeXml_ReturnsDailyActionSchedule_WhenScheduleTypeIsDaily_Test()
+        public void DeserializeXml_ReturnsDailyActionSchedule_WhenScheduleTypeIsDaily()
         {
             const string xmlSettings = 
                 @"<Settings>
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void DeserializeXml_FrequencyInDaysEqualsXmlValue_WhenScheduleTypeIsDaily_Test()
+        public void DeserializeXml_FrequencyInDaysEqualsXmlValue_WhenScheduleTypeIsDaily()
         {
             const string xmlSettings =
                 @"<Settings>

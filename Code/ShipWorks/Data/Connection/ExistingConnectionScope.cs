@@ -32,8 +32,8 @@ namespace ShipWorks.Data.Connection
         /// Returns the sql connection that is currently in scope.  Returns null if there is no
         /// connection active.
         /// </summary>
-        public static SqlConnection ScopedConnection 
-        { 
+        public static SqlConnection ScopedConnection
+        {
             get;
             private set;
         }
@@ -42,8 +42,8 @@ namespace ShipWorks.Data.Connection
         /// Returns the sql transaction that is currently in scope.  Returns null if there is no
         /// connection active.
         /// </summary>
-        public static SqlTransaction ScopedTransaction 
-        { 
+        public static SqlTransaction ScopedTransaction
+        {
             get;
             private set;
         }
@@ -100,7 +100,7 @@ namespace ShipWorks.Data.Connection
                     }
                 }
             }
-            
+
             using (SqlCommand command = SqlCommandProvider.Create(ScopedConnection))
             {
                 command.Transaction = ScopedTransaction;

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Stores.Management
 {
@@ -14,14 +11,17 @@ namespace ShipWorks.Stores.Management
     /// </summary>
     public partial class StoreConfirmDeleteDlg : Form
     {
+        private readonly StoreEntity store;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public StoreConfirmDeleteDlg(string storeName)
+        public StoreConfirmDeleteDlg(StoreEntity store)
         {
+            this.store = store;
             InitializeComponent();
 
-            labelStore.Text = string.Format(labelStore.Text, storeName);
+            labelStore.Text = string.Format(labelStore.Text, store.StoreName);
         }
 
         /// <summary>
@@ -30,6 +30,28 @@ namespace ShipWorks.Stores.Management
         private void OnConfirm(object sender, EventArgs e)
         {
             delete.Enabled = checkBoxConfirm.Checked;
+        }
+
+        /// <summary>
+        /// Ensure that we can lock the download table prior to letting the user delete
+        /// </summary>
+        private void OnDelete(object sender, EventArgs e)
+        {
+            try
+            {
+                // We open a lock that will stay open for the duration of the store delete,
+                // which will serve to lock out any other running instance of ShipWorks from downloading
+                // for this store.
+                using (new SqlEntityLock(store.StoreID, "Deleting"))
+                {
+                }
+                DialogResult = DialogResult.OK;
+            }
+            catch (SqlAppResourceLockException)
+            {
+                MessageHelper.ShowError(this,
+                    $"Another machine is currently downloading orders for {store.StoreName}. Please wait for the download to complete before trying to delete the store.");
+            }
         }
     }
 }

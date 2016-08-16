@@ -526,6 +526,7 @@
           <s:enumeration value="Custom" />
           <s:enumeration value="GiftCertificate" />
           <s:enumeration value="CheckoutByAmazon" />
+          <s:enumeration value="PayWithAmazon" />
         </s:restriction>
       </s:simpleType>
       <s:complexType name="DataDecimal">

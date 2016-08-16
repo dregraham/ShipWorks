@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -31,6 +32,14 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
             predicate.Apply(pred);
 
             Assert.True(pred.ContainsPredicate(ShipmentFields.Processed == false));
+        }
+
+        [Fact]
+        public void Apply_AddsVoidedToExpression()
+        {
+            predicate.Apply(pred);
+
+            Assert.True(pred.ContainsPredicate(ShipmentFields.Voided == false));
         }
 
         [Fact]

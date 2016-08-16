@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
     {
 
         [Fact]
-        public void GetShippingBroker_ReturnsWorldShipShippingBroker_Test()
+        public void GetShippingBroker_ReturnsWorldShipShippingBroker()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {

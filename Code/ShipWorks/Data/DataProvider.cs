@@ -1,28 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Threading;
-using ShipWorks.Filters;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Caching;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using System.Diagnostics;
-using WindowsTimer = System.Windows.Forms.Timer;
-using ShipWorks.Users;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using log4net;
-using System.Runtime.Caching;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Caching;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
-using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data
 {
@@ -40,7 +27,7 @@ namespace ShipWorks.Data
         // Provider of headers
         static OrderHeaderProvider orderHeaderProvider;
 
-        // The wrapper that monitors the cache for cahnges
+        // The wrapper that monitors the cache for changes
         static EntityCacheChangeMonitor cacheChangeMonitor;
 
         private static ExecutionMode executionMode;
@@ -63,7 +50,7 @@ namespace ShipWorks.Data
                     EntityType.ServiceStatusEntity
                 };
 
-        // Maintains version information of each entity and when update, insert, and delets are detected for it
+        // Maintains version information of each entity and when update, insert, and deletes are detected for it
         static Dictionary<EntityType, EntityTypeChangeVersion> entityTypeChangeVersions;
 
         /// <summary>
@@ -108,7 +95,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Clears any existing cache entries in preperation for a newly connected database
+        /// Clears any existing cache entries in preparation for a newly connected database
         /// </summary>
         public static void InitializeForCurrentDatabase()
         {
@@ -116,8 +103,8 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Clears any existing cache entries in preperation for a newly connected database. This
-        /// overloaded version of InitializeForCurrentDatabase is intended to be used for 
+        /// Clears any existing cache entries in preparation for a newly connected database. This
+        /// overloaded version of InitializeForCurrentDatabase is intended to be used for
         /// integration testing purposes.
         /// </summary>
         public static void InitializeForCurrentDatabase(ExecutionMode mode)
@@ -127,15 +114,24 @@ namespace ShipWorks.Data
             executionMode = mode;
 
             // Properly dispose the old one if there is one
+            StopTrackingChanges();
+
+            cacheChangeMonitor = new EntityCacheChangeMonitor(entityCache, relationCache, executionMode);
+            cacheChangeMonitor.CacheChanged += new EntityCacheChangeMonitoredChangedEventHandler(OnChangeMonitorChangedCache);
+        }
+
+        /// <summary>
+        /// Stop tracking changes
+        /// </summary>
+        public static void StopTrackingChanges()
+        {
+            // Properly dispose the old one if there is one
             if (cacheChangeMonitor != null)
             {
                 cacheChangeMonitor.CacheChanged -= new EntityCacheChangeMonitoredChangedEventHandler(OnChangeMonitorChangedCache);
                 cacheChangeMonitor.Dispose();
                 cacheChangeMonitor = null;
             }
-
-            cacheChangeMonitor = new EntityCacheChangeMonitor(entityCache, relationCache, executionMode);
-            cacheChangeMonitor.CacheChanged += new EntityCacheChangeMonitoredChangedEventHandler(OnChangeMonitorChangedCache);
         }
 
         /// <summary>
@@ -202,6 +198,14 @@ namespace ShipWorks.Data
         public static EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
         {
             return entityCache.GetEntity(entityID, fetchIfMissing);
+        }
+
+        /// <summary>
+        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
+        /// </summary>
+        public static EntityBase2 GetEntity(long entityID, SqlAdapter adapter, bool fetchIfMissing = true)
+        {
+            return entityCache.GetEntity(entityID, fetchIfMissing, adapter);
         }
 
         /// <summary>
@@ -282,7 +286,7 @@ namespace ShipWorks.Data
             bool shouldCacheEntity = e.Action != EntityPersistedAction.Delete && entity.Fields.State == EntityState.Fetched;
 
             // Second - special case - since the "child" shipment rows share a ShipmentID - but we only want to cache the true ShipmentEntity type,
-            // we have to make sure we are caching for instance a FedExShipmentEntity under the ShipmentID where the primary ShipmentEntity is 
+            // we have to make sure we are caching for instance a FedExShipmentEntity under the ShipmentID where the primary ShipmentEntity is
             // expected to be.
             if (shouldCacheEntity && entityType == EntityType.ShipmentEntity && !(entity is ShipmentEntity))
             {
@@ -301,7 +305,7 @@ namespace ShipWorks.Data
             if (e.Action == EntityPersistedAction.Insert || e.Action == EntityPersistedAction.Delete)
             {
                 // We know some entity of this type (say a shipment) got inserted or deleted.  So we need
-                // to clear the cache of anyone with related shipemnt keys - since there could be more or less
+                // to clear the cache of anyone with related shipment keys - since there could be more or less
                 // of them now.
                 relationCache.ClearRelatedTo(entityType);
             }
@@ -364,8 +368,8 @@ namespace ShipWorks.Data
             {
                 handler(null, EventArgs.Empty);
             }
-            
-            // Only raise the order specific entity change event if it's subscribed to 
+
+            // Only raise the order specific entity change event if it's subscribed to
             // and if any of the changes are for order entities
             EventHandler orderHandler = OrderEntityChangeDetected;
             if (orderHandler != null)
@@ -376,7 +380,7 @@ namespace ShipWorks.Data
                 }
             }
 
-            // Only raise the shipment specific entity change event if it's subscribed to 
+            // Only raise the shipment specific entity change event if it's subscribed to
             // and if any of the cahnges are for shipment entities
             EventHandler shipmentHandler = ShipmentEntityChangeDetected;
             if (shipmentHandler != null && DidEntityTypeChanged(EntityType.ShipmentEntity, e))
@@ -394,6 +398,5 @@ namespace ShipWorks.Data
                    args.Updated.Any(x => x == entityType) ||
                    args.Deleted.Any(x => x == entityType);
         }
-
     }
 }

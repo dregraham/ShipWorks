@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         }
 
         [Fact]
-        public void Process_ErrorThrown_ErrorInReply_Test()
+        public void Process_ErrorThrown_ErrorInReply()
         {
             reply.Notifications = new[]
             {
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         }
 
         [Fact]
-        public void Process_TwoAddressesReturned_Test()
+        public void Process_TwoAddressesReturned()
         {
             testObject.Process();
 

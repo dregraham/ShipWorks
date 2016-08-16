@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Pdf;
+using Autofac;
+using Autofac.Features.OwnedInstances;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,6 +15,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// </summary>
     public class FimsLabelRepository : IFimsLabelRepository
     {
+        private readonly IDataResourceManager dataResourceManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FimsLabelRepository()
+        {
+            dataResourceManager = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IDataResourceManager>>().Value;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FimsLabelRepository(IDataResourceManager dataResourceManager)
+        {
+            this.dataResourceManager = dataResourceManager;
+        }
+
         /// <summary>
         /// Responsible for saving retrieved FedEx FIMS Labels to Database
         /// </summary>
@@ -29,10 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             // Create a ShipWorks label from the PDF received from FIMS
             using (MemoryStream pdfBytes = new MemoryStream(fimsShipResponse.LabelPdfData))
             {
-                using (PdfDocument pdf = new PdfDocument(pdfBytes))
-                {
-                    DataResourceManager.CreateFromPdf(pdf, ownerID, "LabelImage");
-                }
+                dataResourceManager.CreateFromPdf(pdfBytes, ownerID, "LabelImage");
             }
         }
 

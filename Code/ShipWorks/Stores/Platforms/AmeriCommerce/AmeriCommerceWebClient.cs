@@ -1,32 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Utility;
-using System.Net;
 using System.Web.Services.Protocols;
-using Interapptive.Shared.Win32;
 using log4net;
 using System.Globalization;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.FedEx;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Net;
-using System.Security;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
     /// <summary>
     /// Web client for communicating with the AmeriCommerce SOAP api
     /// </summary>
-    public class AmeriCommerceWebClient 
+    public class AmeriCommerceWebClient
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceWebClient));
 
         // API security token (encrypted)
@@ -35,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         Dictionary<int, string> stateCache = new Dictionary<int, string>();
         Dictionary<int, string> countryCache = new Dictionary<int, string>();
 
-        // the store 
+        // the store
         AmeriCommerceStoreEntity store;
 
         /// <summary>
@@ -197,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Fills a stub OrderTrans object 
+        /// Fills a stub OrderTrans object
         /// </summary>
         public OrderTrans FillOrderDetail(OrderTrans order)
         {
@@ -347,8 +342,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 
         /// <summary>
         /// Gets the weight in pounds of the value passed in.
-        /// 
-        /// Per Dustin Holmes email, there are only 2 weight unites (pounds and kg), so 
+        ///
+        /// Per Dustin Holmes email, there are only 2 weight unites (pounds and kg), so
         /// for now we'll just do a hard coded conversion but keep this here so it can easily
         /// be handed off to AmeriCommerce.
         /// </summary>

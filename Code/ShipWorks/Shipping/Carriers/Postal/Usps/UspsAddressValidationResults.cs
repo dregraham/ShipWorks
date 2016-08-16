@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -42,5 +43,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Gets or sets the message.
         /// </summary>
         public string BadAddressMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status codes.
+        /// </summary>
+        public StatusCodes StatusCodes { get; set; }
     }
 }

@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.UI.Controls.Html;
 using ShipWorks.Templates.Management.Skeletons;
@@ -185,6 +186,7 @@ namespace ShipWorks.Templates
         /// <summary>
         /// Load the store specific settings for the template
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static TemplateStoreSettingsEntity GetStoreSettings(TemplateEntity template, long? storeID)
         {
             TemplateStoreSettingsEntity settings = null;

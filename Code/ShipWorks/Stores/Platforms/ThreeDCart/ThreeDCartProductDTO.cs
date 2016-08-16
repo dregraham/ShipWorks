@@ -1,76 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Stores.Platforms.ThreeDCart
+﻿namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
     /// <summary>
-    /// Helper class for caching 3D Cart product data
+    /// Helper class for caching 3dcart product data
     /// </summary>
     public class ThreeDCartProductDTO
     {
         /// <summary>
-        /// The 3D Cart item name
+        /// The 3dcart item name
         /// </summary>
-        public string ItemName
-        {
-            get;
-            set;
-        }
+        public string ItemName { get; set; }
 
         /// <summary>
-        /// The 3D Cart option name
+        /// The 3dcart option name
         /// </summary>
-        public string OptionName
-        {
-            get;
-            set;
-        }
+        public string OptionName { get; set; }
 
         /// <summary>
-        /// The 3D Cart option description
+        /// The 3dcart option description
         /// </summary>
-        public string OptionDescription
-        {
-            get;
-            set;
-        }
+        public string OptionDescription { get; set; }
 
         /// <summary>
-        /// The 3D Cart image url
+        /// The 3dcart image url
         /// </summary>
-        public string ImageUrl
-        {
-            get;
-            set;
-        }
+        public string ImageUrl { get; set; }
 
         /// <summary>
-        /// The 3D Cart image thumbnail url
+        /// The 3dcart image thumbnail url
         /// </summary>
-        public string ImageThumbnail
-        {
-            get;
-            set;
-        }
+        public string ImageThumbnail { get; set; }
 
         /// <summary>
-        /// The 3D Cart option price
+        /// The 3dcart option price
         /// </summary>
-        public decimal OptionPrice
-        {
-            get;
-            set;
-        }
+        public decimal OptionPrice { get; set; }
 
         /// <summary>
-        /// The 3D Cart warehouse bin
+        /// The 3dcart warehouse bin
         /// </summary>
-        public string WarehouseBin
-        {
-            get; 
-            set; 
-        }
+        public string WarehouseBin { get; set; }
     }
 }

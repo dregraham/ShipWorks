@@ -1,19 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using log4net;
-using System.Reflection;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Connection;
+using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Threading;
+using log4net;
+using NDesk.Options;
+using ShipWorks.Actions;
+using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
-using ShipWorks.ApplicationCore.Interaction;
-using NDesk.Options;
-using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 
 namespace ShipWorks.Data.Administration
 {
@@ -26,10 +33,10 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSchemaUpdater));
 
         // Used for executing scripts
-        static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
+        static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Res.Data.Administration.Scripts.Update");
 
         /// <summary>
-        /// Get the dabase schema version that is required by this version of ShipWorks
+        /// Get the database schema version that is required by this version of ShipWorks
         /// </summary>
         public static Version GetRequiredSchemaVersion()
         {
@@ -37,7 +44,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Indiciates if the connection to the given database is the exact database version required for ShipWorks
+        /// Indicates if the connection to the given database is the exact database version required for ShipWorks
         /// </summary>
         public static bool IsCorrectSchemaVersion()
         {
@@ -76,7 +83,7 @@ namespace ShipWorks.Data.Administration
                     // "Could not find stored procedure"
                     if (ex.Number == 2812 || ex.Number == 21343)
                     {
-                        return new Version(3,0);
+                        return new Version(3, 0);
                     }
 
                     throw;
@@ -129,10 +136,11 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in 
+        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
         /// customer or production scenarios.
         /// </summary>
-        public static void UpdateDatabase(ProgressProvider progressProvider, bool debuggingMode = false)
+        [NDependIgnoreLongMethod]
+        public static void UpdateDatabase(IProgressProvider progressProvider, bool debuggingMode = false)
         {
             Version installed = GetInstalledSchemaVersion();
 
@@ -147,7 +155,7 @@ namespace ShipWorks.Data.Administration
             ProgressItem progressFunctionality = new ProgressItem("Update Functionality");
             progressFunctionality.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFunctionality);
-           
+
             // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
             // because reconnection to a very large database seems to take some time after running a big upgrade
             using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))
@@ -168,25 +176,51 @@ namespace ShipWorks.Data.Administration
                             // Update the assemblies
                             UpdateAssemblies(progressFunctionality);
 
-                            // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
-                            // So the following stuff only runs when we are in a "regular" 3x update.
-                            if (!MigrationController.IsMigrationInProgress())
-                            {
-                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-                            }
+                            // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                            UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
 
                             // Functionality is done
                             progressFunctionality.PercentComplete = 100;
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
 
-                            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                            if (installed <= new Version(3, 9, 3, 0))
+                            HandleUpdateDatabaseForV3(installed);
+
+                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
+                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
+
+                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                            // database upgrade can take time and cause a timeout.
+                            if (singleUserScope != null)
                             {
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
+                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                            }
+
+                            HandleUpdateDatabaseForV4(installed);
+
+                            HandleUpdateDatabaseForV5(installed);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("UpdateDatabase failed", ex);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Run v3 specific update database logic
+        /// </summary>
+        private static void HandleUpdateDatabaseForV3(Version installed)
+        {
+            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
+            if (installed <= new Version(3, 9, 3, 0))
+            {
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
 
                                         DECLARE @dbName nvarchar(100)
                                         DECLARE @isAutoShrink int
@@ -198,20 +232,20 @@ namespace ShipWorks.Data.Administration
                                         where name = @dbName
 
                                         IF(@isAutoShrink = 1)
-	                                        EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
+                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
 
-                                    cmd.ExecuteNonQuery();
-                                });
+                    cmd.ExecuteNonQuery();
+                });
 
-                                // Update size and growth of shipworks database
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
-                                        DECLARE @logSize int 
-                                        DECLARE @dataSize int 
-                                        DECLARE @dataFileGrowth int 
+                // Update size and growth of shipworks database
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
+                                        DECLARE @logSize int
+                                        DECLARE @dataSize int
+                                        DECLARE @dataFileGrowth int
                                         DECLARE @logFileGrowth int
-                                        DECLARE @dataName nvarchar(100) 
+                                        DECLARE @dataName nvarchar(100)
                                         DECLARE @logName nvarchar(100)
                                         DECLARE @dbName nvarchar(100)
 
@@ -223,7 +257,7 @@ namespace ShipWorks.Data.Administration
                                                @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
                                                @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
                                                @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-                                        FROM sys.master_files 
+                                        FROM sys.master_files
                                         where DB_NAME(database_id) = @dbName
 
                                         IF (@logSize < 25600)
@@ -239,29 +273,29 @@ namespace ShipWorks.Data.Administration
                                             EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
                                     ";
 
-                                    cmd.ExecuteNonQuery();
-                                });
+                    cmd.ExecuteNonQuery();
+                });
 
-                                // Update size and growth of tempdb
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
-                                        DECLARE @logSize int 
-                                        DECLARE @dataSize int 
-                                        DECLARE @dataFileGrowth int 
+                // Update size and growth of tempdb
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
+                                        DECLARE @logSize int
+                                        DECLARE @dataSize int
+                                        DECLARE @dataFileGrowth int
                                         DECLARE @logFileGrowth int
-                                        DECLARE @dataName nvarchar(100) 
+                                        DECLARE @dataName nvarchar(100)
                                         DECLARE @logName nvarchar(100)
 
                                         SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
-	                                           @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
-	                                           @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
-	                                           @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
-	                                           @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
-	                                           @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-                                        FROM sys.master_files 
+                                               @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
+                                               @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
+                                               @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
+                                               @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
+                                               @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
+                                        FROM sys.master_files
                                         where DB_NAME(database_id) = 'tempdb'
-	 
+
                                         IF (@logSize < 25600)
                                             EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', SIZE = 200MB)' )
 
@@ -275,34 +309,105 @@ namespace ShipWorks.Data.Administration
                                             EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
                                     ";
 
-                                    cmd.ExecuteNonQuery();
-                                });
-                            }
-                            
-                            // If we were upgrading from this version, add AddressValidation filters.
-                            if (installed < new Version(3, 12, 0, 0))
-                            {
-                                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
-                                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
-                            }
+                    cmd.ExecuteNonQuery();
+                });
+            }
 
-                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
-                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
+            // If we were upgrading from this version, add AddressValidation filters.
+            if (installed < new Version(3, 12, 0, 0))
+            {
+                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
+                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
+            }
+        }
 
-                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
-                            // database upgrade can take time and cause a timeout.
-                            if (singleUserScope != null)
+        /// <summary>
+        /// Run v4 specific update database logic
+        /// </summary>
+        private static void HandleUpdateDatabaseForV4(Version installed)
+        {
+            // If we were upgrading from this version, Regenerate scheduled actions
+            // To fix issue caused by breaking out assemblies
+            if (installed < new Version(4, 5, 0, 0))
+            {
+                // Grab all of the actions that are enabled and schedule based
+                ActionManager.InitializeForCurrentSession();
+                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    foreach (ActionEntity action in actions)
+                    {
+                        // Some trigger's state depend on the enabled state of the action
+                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
+
+                        if (scheduledTrigger?.Schedule != null)
+                        {
+                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
+                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
                             {
-                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                                action.Enabled = false;
+                            }
+                            else
+                            {
+                                scheduledTrigger.SaveExtraState(action, adapter);
                             }
                         }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log.Error("UpdateDatabase failed", ex);
 
-                    throw;
+                        ActionManager.SaveAction(action, adapter);
+                    }
+
+                    adapter.Commit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Run v5 specific update database logic
+        /// </summary>
+        private static void HandleUpdateDatabaseForV5(Version installed)
+        {
+            // update Configuration table Key column to have an encrypted empty string
+            // using the GetDatabaseGuid stored procedure as the salt.
+            if (installed < new Version(5, 0, 0, 0))
+            {
+                using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
+                {
+                    // Resolve a CustomerLicense passing in an empty string as the key parameter
+                    ICustomerLicense customerLicense = iocScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
+
+                    // Save the license
+                    customerLicense.Save();
+                }
+            }
+
+            // If we were upgrading from this version, Regenerate scheduled actions
+            // To fix issue caused by breaking out assemblies
+            if (installed < new Version(5, 4, 0, 0))
+            {
+                // Grab all of the actions that are enabled and schedule based
+                ActionManager.InitializeForCurrentSession();
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    foreach (ActionEntity action in ActionManager.Actions)
+                    {
+                        // Some trigger's state depend on the enabled state of the action
+                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
+
+                        if (scheduledTrigger?.Schedule != null)
+                        {
+                            // Check to see if the action is a One Time action and in the past, if so we disable it
+                            if (scheduledTrigger.Schedule.StartDateTimeInUtc >= DateTime.UtcNow ||
+                                scheduledTrigger.Schedule.ScheduleType != ActionScheduleType.OneTime)
+                            {
+                                scheduledTrigger.SaveExtraState(action, adapter);
+                            }
+                        }
+
+                        ActionManager.SaveAction(action, adapter);
+                    }
+
+                    adapter.Commit();
                 }
             }
         }
@@ -314,7 +419,7 @@ namespace ShipWorks.Data.Administration
         {
             List<SqlUpdateScript> scripts = new List<SqlUpdateScript>();
 
-            foreach (string resource in Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(r => r.StartsWith(sqlLoader.ResourcePath)))
+            foreach (string resource in sqlLoader.ScriptResources)
             {
                 scripts.Add(new SqlUpdateScript(resource));
             }
@@ -323,7 +428,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Update the schema version store procuedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
+        /// Update the schema version store procedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlConnection con)
         {
@@ -337,7 +442,7 @@ namespace ShipWorks.Data.Administration
         {
             using (SqlCommand cmd = SqlCommandProvider.Create(con))
             {
-                UpdateSchemaVersionStoredProcedure(cmd, version);   
+                UpdateSchemaVersionStoredProcedure(cmd, version);
             }
         }
 
@@ -372,16 +477,16 @@ namespace ShipWorks.Data.Administration
                     DROP PROCEDURE [dbo].[{0}]", procedureName);
             SqlCommandProvider.ExecuteNonQuery(cmd);
 
-            #if DEBUG
-                string withEncryption = "";
-            #else
+#if DEBUG
+            string withEncryption = "";
+#else
                 string withEncryption = "WITH ENCRYPTION";
-            #endif
+#endif
 
             cmd.CommandText = string.Format(@"
-                CREATE PROCEDURE dbo.{2} 
+                CREATE PROCEDURE dbo.{2}
                 {0}
-                AS 
+                AS
                 SELECT '{1}' AS 'SchemaVersion'", withEncryption, version.ToString(4), procedureName);
             SqlCommandProvider.ExecuteNonQuery(cmd);
         }
@@ -431,8 +536,8 @@ namespace ShipWorks.Data.Administration
                 // Execute the script
                 SqlScript executor = sqlLoader[script.ScriptName];
 
-                // Update the progress as we complete each bactch in the script
-                executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
+                // Update the progress as we complete each batch in the script
+                executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
                 {
                     // Update the progress
                     progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
@@ -442,7 +547,7 @@ namespace ShipWorks.Data.Administration
                 ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
 
                 ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
-                
+
                 ExistingConnectionScope.Commit();
             }
 
@@ -466,7 +571,7 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Since our filters use column masks that are exactly dependant on column positioning, we regenerate them every time
+        /// Since our filters use column masks that are exactly dependent on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
         private static void UpdateFilters(ProgressItem progress, SqlConnection connection, SqlTransaction transaction)
@@ -475,8 +580,8 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                // We need to push a new scope for the layout context, b\c if the user ends up cancelling the wizard, it needs to be restored to the
-                // way it was.  And if it doesnt, the layout context gets reloaded anyway.
+                // We need to push a new scope for the layout context, b\c if the user ends up canceling the wizard, it needs to be restored to the
+                // way it was.  And if it doesn't, the layout context gets reloaded anyway.
                 FilterLayoutContext.PushScope();
 
                 // Regenerate the filters
@@ -523,7 +628,7 @@ namespace ShipWorks.Data.Administration
             public void Execute(List<string> args)
             {
                 string type = null;
-                
+
                 // Need to extract the type
                 OptionSet optionSet = new OptionSet()
                     {
@@ -541,54 +646,54 @@ namespace ShipWorks.Data.Administration
                 switch (type)
                 {
                     case "required":
-                    {
-                        // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
-                        // a new int from the schema id
-                        int schemaID = GetSchemaID(GetRequiredSchemaVersion());
+                        {
+                            // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                            // a new int from the schema id
+                            int schemaID = GetSchemaID(GetRequiredSchemaVersion());
 
-                        log.InfoFormat("Required shcema version: {0}", schemaID);
-                        Environment.ExitCode = schemaID;
+                            log.InfoFormat("Required shcema version: {0}", schemaID);
+                            Environment.ExitCode = schemaID;
 
-                        break;
-                    }
+                            break;
+                        }
 
                     case "database":
-                    {
-                        // At the point in which this is called, SqlSession has not been setup
-                        SqlSession.Initialize();
-
-                        try
                         {
-                            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
-                            {
-                                // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
-                                // a new int from the schema id
-                                int schemaID = GetSchemaID(GetInstalledSchemaVersion());
+                            // At the point in which this is called, SqlSession has not been setup
+                            SqlSession.Initialize();
 
-                                log.InfoFormat("Database schema version  {0}", schemaID);
-                                Environment.ExitCode = schemaID;
+                            try
+                            {
+                                if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+                                {
+                                    // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                                    // a new int from the schema id
+                                    int schemaID = GetSchemaID(GetInstalledSchemaVersion());
+
+                                    log.InfoFormat("Database schema version  {0}", schemaID);
+                                    Environment.ExitCode = schemaID;
+                                }
+                                else
+                                {
+                                    log.Warn("Could not determine database schema ID since SqlSession is not configured.");
+
+                                    // We don't know
+                                    Environment.ExitCode = 0;
+                                }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                log.Warn("Could not determine database schema ID since SqlSession is not configured.");
-
-                                // We don't know
+                                log.Error("Could not determine database schema ID", ex);
                                 Environment.ExitCode = 0;
                             }
+
+                            break;
                         }
-                        catch (Exception ex)
-                        {
-                            log.Error("Could not determine database schema ID", ex);
-                            Environment.ExitCode = 0;
-                        } 
-                        
-                        break;
-                    }
 
                     default:
-                    {
-                        throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
-                    }
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
+                        }
                 }
             }
         }

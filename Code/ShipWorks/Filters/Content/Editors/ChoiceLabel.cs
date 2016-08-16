@@ -1,17 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Text;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
-using System.Linq;
-using System.Collections;
-using SandContextPopup = Divelements.SandRibbon.ContextPopup;
-using SandMenuItem = Divelements.SandRibbon.MenuItem;
-using SandMenu = Divelements.SandRibbon.Menu;
 using ShipWorks.Filters.Content.Conditions;
+using SandContextPopup = Divelements.SandRibbon.ContextPopup;
+using SandMenu = Divelements.SandRibbon.Menu;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Filters.Content.Editors
 {
@@ -84,7 +83,7 @@ namespace ShipWorks.Filters.Content.Editors
         {
             if (enumType.Name == typeof(DateOperator).Name)
             {
-                EnumList<DateOperator> enumList = EnumHelper.GetEnumList<DateOperator>();
+                IEnumerable<EnumEntry<DateOperator>> enumList = EnumHelper.GetEnumList<DateOperator>();
                 InitializeFromEnumList(enumList.Select(e => e.Value).ToArray());
             }
             else
@@ -153,8 +152,8 @@ namespace ShipWorks.Filters.Content.Editors
         public ChoiceLabelUsage LabelUsage
         {
             get
-            { 
-                return usage; 
+            {
+                return usage;
             }
             set
             {
@@ -176,7 +175,7 @@ namespace ShipWorks.Filters.Content.Editors
             }
             set
             {
-                
+
             }
         }
 

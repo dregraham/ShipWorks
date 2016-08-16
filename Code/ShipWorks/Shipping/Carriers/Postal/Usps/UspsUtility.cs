@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
@@ -47,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.RRDISAL, PostalServiceType.RrdIsal},
             {ServiceType.RRDEPKT, PostalServiceType.RrdEpsePacketService},
             {ServiceType.RRDGNRC, PostalServiceType.RrdGeneric},
-			{ServiceType.DHLPG, PostalServiceType.DhlParcelGround},
+            {ServiceType.DHLPG, PostalServiceType.DhlParcelGround},
             {ServiceType.DHLPE, PostalServiceType.DhlParcelExpedited},
             {ServiceType.DHLPPE, PostalServiceType.DhlParcelPlusExpedited},
             {ServiceType.DHLPPG, PostalServiceType.DhlParcelPlusGround},
@@ -111,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             ServiceType? serviceType = uspsServiceTypeTranslation
                 .Where(pair => pair.Value == postalServiceType)
-                .Select(pair => (ServiceType?)pair.Key)
+                .Select(pair => (ServiceType?) pair.Key)
                 .FirstOrDefault();
 
             if (serviceType.HasValue)
@@ -164,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return IsStampsInsuranceAllowed && ShippingSettings.Fetch().UspsInsuranceProvider == (int) InsuranceProvider.Carrier;
+                return IsStampsInsuranceAllowed && ShippingSettings.FetchReadOnly().UspsInsuranceProvider == (int) InsuranceProvider.Carrier;
             }
         }
 
@@ -175,21 +178,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsInsurance).Level == EditionRestrictionLevel.None;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.StampsInsurance, null);
+
+                    // If scan based returns is not allowed, show the the default returns control
+                    return restrictionLevel == EditionRestrictionLevel.None;
+                }
             }
         }
 
         /// <summary>
         /// Gets the display name of Stamps.com insurance
         /// </summary>
-        public static string StampsInsuranceDisplayName 
+        public static string StampsInsuranceDisplayName
         {
             get
             {
                 return "Stamps.com Insurance";
-            } 
+            }
         }
-		
+
         /// <summary>
         /// Determines whether the specified service type is for one of the international consolidators supported by USPS.
         /// </summary>
@@ -197,9 +207,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the service is an international consolidator service type; otherwise, <c>false</c>.</returns>
         public static bool IsInternationalConsolidatorServiceType(PostalServiceType serviceType)
         {
-            return IsAsendiaServiceType(serviceType) || 
-                IsGlobegisticsServiceType(serviceType) || 
-                IsInternationalBondedCouriersServiceType(serviceType) || 
+            return IsAsendiaServiceType(serviceType) ||
+                IsGlobegisticsServiceType(serviceType) ||
+                IsInternationalBondedCouriersServiceType(serviceType) ||
                 IsRrDonnellyServiceType(serviceType) ||
                 IsInternationalDhlServiceType(serviceType);
         }
@@ -211,8 +221,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the service is an Asendia service type; otherwise, <c>false</c>.</returns>
         public static bool IsAsendiaServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.AsendiaIsal || 
-                serviceType == PostalServiceType.AsendiaIpa || 
+            return serviceType == PostalServiceType.AsendiaIsal ||
+                serviceType == PostalServiceType.AsendiaIpa ||
                 serviceType == PostalServiceType.AsendiaGeneric ||
                 serviceType == PostalServiceType.AsendiaePacket;
         }
@@ -224,9 +234,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a Globegistics service type; otherwise, <c>false</c>.</returns>
         public static bool IsGlobegisticsServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.GlobegisticsGeneric || 
-                serviceType == PostalServiceType.GlobegisticsIpa || 
-                serviceType == PostalServiceType.GlobegisticsIsal|| 
+            return serviceType == PostalServiceType.GlobegisticsGeneric ||
+                serviceType == PostalServiceType.GlobegisticsIpa ||
+                serviceType == PostalServiceType.GlobegisticsIsal ||
                 serviceType == PostalServiceType.GlobegisticsePacket;
         }
 
@@ -237,8 +247,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a InternationalBondedCouriers service type; otherwise, <c>false</c>.</returns>
         public static bool IsInternationalBondedCouriersServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.InternationalBondedCouriersIpa || 
-                serviceType == PostalServiceType.InternationalBondedCouriersIsal || 
+            return serviceType == PostalServiceType.InternationalBondedCouriersIpa ||
+                serviceType == PostalServiceType.InternationalBondedCouriersIsal ||
                 serviceType == PostalServiceType.InternationalBondedCouriersePacket;
         }
 
@@ -249,9 +259,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a RRDonnelly service type; otherwise, <c>false</c>.</returns>
         public static bool IsRrDonnellyServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.RrdIpa || 
-                serviceType == PostalServiceType.RrdIsal || 
-                serviceType == PostalServiceType.RrdEpsePacketService  ||
+            return serviceType == PostalServiceType.RrdIpa ||
+                serviceType == PostalServiceType.RrdIsal ||
+                serviceType == PostalServiceType.RrdEpsePacketService ||
                 serviceType == PostalServiceType.RrdGeneric;
         }
 
@@ -262,7 +272,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a DHL international service type; otherwise, <c>false</c>.</returns>
         public static bool IsInternationalDhlServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.DhlPacketIpa || 
+            return serviceType == PostalServiceType.DhlPacketIpa ||
                 serviceType == PostalServiceType.DhlPacketIsal;
         }
     }

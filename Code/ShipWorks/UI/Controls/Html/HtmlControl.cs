@@ -29,6 +29,7 @@ namespace ShipWorks.UI.Controls.Html
     /// tim@itwriting.com, visit the messageboard at http://www.itwriting.com/HTMLEditorBase.php
     /// </summary>
     [Designer(typeof(HtmlControl.HtmlControlDesigner)), ComVisible(true)]
+    [NDependIgnoreLongTypes]
     public class HtmlControl : Control, IDisposable 
     {
         #region Designer to manage how the Control displays in Vs.net etc.
@@ -2765,6 +2766,8 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Executes The short cut keys that should be available and handles all of the cases of design mode versus not.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         internal void DoShortCut(Keys key) 
         {
             switch (key) 

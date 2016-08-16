@@ -7,6 +7,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users;
@@ -88,6 +89,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Log the result of the print
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void LogPrintResultContent(TemplateResult templateResult, PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier)
         {
             TemplateEntity template = templateResult.XPathSource.Template;

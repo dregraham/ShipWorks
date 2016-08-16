@@ -21,7 +21,10 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Net;
 using Rebex.Mime.Headers;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
@@ -57,7 +60,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Start the download process
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -430,6 +435,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Gets a ShipWorks status string from OrderMotion Status Code
         /// </summary>
+        [NDependIgnoreLongMethod]
         private string GetItemStatus(string omStatusCode)
         {
             int intCode = -1;

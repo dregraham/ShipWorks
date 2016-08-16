@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Net;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.BestRate.Footnote;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
-using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Settings;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Tracking;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using Interapptive.Shared.Business;
-using ShipWorks.UI;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.ApplicationCore;
-using System.Globalization;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.Tracking;
+using ShipWorks.UI;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
+using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -62,18 +62,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// UPS supports getting rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// UPS accounts have an address that can be used as the shipment origin
         /// </summary>
-        public override bool SupportsAccountAsOrigin
-        {
-            get { return true; }
-        }
+        public override bool SupportsAccountAsOrigin => true;
 
         /// <summary>
         /// Gets or sets the account repository that the shipment type should use
@@ -84,18 +78,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// have to be done is to assign this property with a repository that contains
         /// the appropriate account information for getting counter rates.
         /// </summary>
-        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
+        public ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> AccountRepository { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts
-        {
-	        get 
-	        {
-                return AccountRepository.Accounts.Any();
-	        }
-        }
+        public override bool HasAccounts => AccountRepository.Accounts.Any();
 
         /// <summary>
         /// Gets or sets the settings repository that the shipment type should use
@@ -137,11 +125,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the UPS specific profile control
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new UpsProfileControl();
         }
-        
+
         /// <summary>
         /// Create the UPS specific customs control
         /// </summary>
@@ -172,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(ups.Packages, new RelationPredicateBucket(UpsPackageFields.ShipmentID == shipment.ShipmentID));
-                    ups.Packages.Sort((int)UpsPackageFieldIndex.UpsPackageID, ListSortDirection.Ascending);
+                    ups.Packages.Sort((int) UpsPackageFieldIndex.UpsPackageID, ListSortDirection.Ascending);
                 }
 
                 // We reloaded the packages, so reset the tracker
@@ -191,46 +179,33 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Configure data for the newly created shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
-            // Let's figure out what is null....
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Order);
 
             if (shipment.Ups == null)
             {
-                throw new NullReferenceException("shipment.Ups cannot be null.");
-            }
-
-            if (shipment.Order == null)
-            {
-                throw new NullReferenceException("shipment.Order cannot be null.");
-            }
-
-            if (shipment.Ups.Packages == null)
-            {
-                throw new NullReferenceException("shipment.Ups.Packages cannot be null.");
+                shipment.Ups = new UpsShipmentEntity(shipment.ShipmentID);
             }
 
             shipment.Ups.CodEnabled = false;
             shipment.Ups.CodAmount = shipment.Order.OrderTotal;
-            shipment.Ups.CodPaymentType = (int)UpsCodPaymentType.Cash;
+            shipment.Ups.CodPaymentType = (int) UpsCodPaymentType.Cash;
 
             shipment.Ups.CustomsDocumentsOnly = false;
             shipment.Ups.CustomsDescription = "Goods";
 
             shipment.Ups.CommercialPaperlessInvoice = false;
-            shipment.Ups.CommercialInvoiceTermsOfSale = (int)UpsTermsOfSale.NotSpecified;
-            shipment.Ups.CommercialInvoicePurpose = (int)UpsExportReason.Sale;
+            shipment.Ups.CommercialInvoiceTermsOfSale = (int) UpsTermsOfSale.NotSpecified;
+            shipment.Ups.CommercialInvoicePurpose = (int) UpsExportReason.Sale;
             shipment.Ups.CommercialInvoiceComments = "";
             shipment.Ups.CommercialInvoiceFreight = 0;
             shipment.Ups.CommercialInvoiceInsurance = 0;
             shipment.Ups.CommercialInvoiceOther = 0;
 
-            shipment.Ups.WorldShipStatus = (int)WorldShipStatusType.None;
+            shipment.Ups.WorldShipStatus = (int) WorldShipStatusType.None;
 
             shipment.Ups.NegotiatedRate = false;
             shipment.Ups.PublishedCharges = 0;
@@ -246,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             shipment.Ups.UspsPackageID = string.Empty;
             shipment.Ups.CostCenter = string.Empty;
-            shipment.Ups.IrregularIndicator = (int)UpsIrregularIndicatorType.NotApplicable;
+            shipment.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             shipment.Ups.Cn22Number = string.Empty;
 
             shipment.Ups.ShipmentChargeAccount = string.Empty;
@@ -256,11 +231,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
             shipment.Ups.Packages.Add(package);
+            shipment.Ups.Packages.RemovedEntitiesTracker = new UpsPackageCollection();
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
 
-            shipment.Ups.RequestedLabelFormat = (int)ThermalLanguage.None;
+            shipment.Ups.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -315,7 +291,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(ups.Packages, new RelationPredicateBucket(UpsProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
-                    ups.Packages.Sort((int)UpsProfilePackageFieldIndex.UpsProfilePackageID, ListSortDirection.Ascending);
+                    ups.Packages.Sort((int) UpsProfilePackageFieldIndex.UpsProfilePackageID, ListSortDirection.Ascending);
                 }
             }
         }
@@ -338,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         profile.Ups.Packages.Remove(package);
                     }
 
-                        // If its deleted, delete it
+                    // If its deleted, delete it
                     else
                     {
                         package.Fields.State = EntityState.Fetched;
@@ -355,9 +331,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the service types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
@@ -367,9 +343,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets the package types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the package types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to UpsPackagingType values for a UpsShipmentType)
         /// </summary>
         public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
@@ -379,39 +355,61 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
+        {
+            // Get valid packaging types
+            List<int> validPackageTypes = UpsUtility.GetValidPackagingTypes(ShipmentTypeCode).Select(x => (int) x).ToList();
+            IEnumerable<int> excludedPackageTypes = ShipmentTypeManager.GetType(ShipmentTypeCode).GetExcludedPackageTypes();
+
+            // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
+            if (shipments != null && shipments.Any())
+            {
+                IEnumerable<int> neededPackageTypes = shipments.SelectMany(s => s.Ups.Packages.Select(p => p.PackagingType)).Distinct().ToList();
+                excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
+                validPackageTypes.AddRange(neededPackageTypes);
+            }
+
+            return validPackageTypes.Except(excludedPackageTypes)
+                .ToDictionary(t => t, t => EnumHelper.GetDescription((UpsPackagingType) t));
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        [NDependIgnoreLongMethod]
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
 
-            long shipperID = UpsAccountManager.Accounts.Count > 0 ? UpsAccountManager.Accounts[0].UpsAccountID : (long)0;
+            long shipperID = UpsAccountManager.Accounts.Count > 0 ? UpsAccountManager.Accounts[0].UpsAccountID : (long) 0;
 
             profile.Ups.UpsAccountID = shipperID;
-            profile.OriginID = (int)ShipmentOriginSource.Account;
-            profile.Ups.ResidentialDetermination = (int)ResidentialDeterminationType.FromAddressValidation;
+            profile.OriginID = (int) ShipmentOriginSource.Account;
+            profile.Ups.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
 
-            profile.Ups.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
+            profile.Ups.DeliveryConfirmation = (int) UpsDeliveryConfirmationType.None;
             profile.Ups.ReferenceNumber = "Order {//Order/Number}";
             profile.Ups.ReferenceNumber2 = "";
 
-            profile.Ups.Service = (int)UpsServiceType.UpsGround;
+            profile.Ups.Service = (int) UpsServiceType.UpsGround;
             profile.Ups.SaturdayDelivery = false;
 
-            profile.Ups.PayorType = (int)UpsPayorType.Sender;
+            profile.Ups.PayorType = (int) UpsPayorType.Sender;
             profile.Ups.PayorAccount = "";
             profile.Ups.PayorPostalCode = "";
-            profile.Ups.PayorCountryCode = UpsAccountManager.Accounts.Count > 0 ? UpsAccountManager.Accounts[0].CountryCode : "US";
+            profile.Ups.PayorCountryCode = GetDefaultCountry();
 
-            profile.Ups.EmailNotifySender = (int)UpsEmailNotificationType.None;
-            profile.Ups.EmailNotifyRecipient = (int)UpsEmailNotificationType.None;
-            profile.Ups.EmailNotifyOther = (int)UpsEmailNotificationType.None;
+            profile.Ups.EmailNotifySender = (int) UpsEmailNotificationType.None;
+            profile.Ups.EmailNotifyRecipient = (int) UpsEmailNotificationType.None;
+            profile.Ups.EmailNotifyOther = (int) UpsEmailNotificationType.None;
             profile.Ups.EmailNotifyOtherAddress = "";
             profile.Ups.EmailNotifyFrom = "";
-            profile.Ups.EmailNotifySubject = (int)UpsEmailNotificationSubject.TrackingNumber;
+            profile.Ups.EmailNotifySubject = (int) UpsEmailNotificationSubject.TrackingNumber;
             profile.Ups.EmailNotifyMessage = "";
 
-            profile.Ups.ReturnService = (int)UpsReturnServiceType.ElectronicReturnLabel;
+            profile.Ups.ReturnService = (int) UpsReturnServiceType.ElectronicReturnLabel;
             profile.Ups.ReturnContents = "";
             profile.Ups.ReturnUndeliverableEmail = UpsAccountManager.Accounts.Count > 0 ? UpsAccountManager.Accounts[0].Email : "";
 
@@ -425,18 +423,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             profile.Ups.UspsPackageID = string.Empty;
             profile.Ups.CostCenter = string.Empty;
-            profile.Ups.IrregularIndicator = (int)UpsIrregularIndicatorType.NotApplicable;
+            profile.Ups.IrregularIndicator = (int) UpsIrregularIndicatorType.NotApplicable;
             profile.Ups.Cn22Number = string.Empty;
 
             profile.Ups.ShipmentChargeAccount = string.Empty;
-            profile.Ups.ShipmentChargeCountryCode = string.Empty;
+            profile.Ups.ShipmentChargeCountryCode = GetDefaultCountry();
             profile.Ups.ShipmentChargePostalCode = string.Empty;
-            profile.Ups.ShipmentChargeType = (int)UpsShipmentChargeType.BillReceiver;
+            profile.Ups.ShipmentChargeType = (int) UpsShipmentChargeType.BillReceiver;
         }
+
+        /// <summary>
+        /// If there is an account, set the country code to the first if account. If no account found, us "US"
+        /// </summary>
+        private static string GetDefaultCountry() =>
+                    UpsAccountManager.Accounts.FirstOrDefault()?.CountryCode ?? "US";
 
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
         {
             UpsShipmentEntity ups = shipment.Ups;
@@ -529,7 +534,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.ApplyProfile(shipment, profile);
 
             long? accountID = (source.UpsAccountID == 0 && UpsAccountManager.Accounts.Count > 0) ?
-                                  (long?)UpsAccountManager.Accounts[0].UpsAccountID :
+                                  (long?) UpsAccountManager.Accounts[0].UpsAccountID :
                                   source.UpsAccountID;
 
             ShippingProfileUtility.ApplyProfileValue(accountID, ups, UpsShipmentFields.UpsAccountID);
@@ -602,17 +607,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             // The Ups object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Ups != null)
+            if (originID == (int) ShipmentOriginSource.Account && shipment.Ups != null)
             {
-                UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
+                IUpsAccountEntity account = UpsAccountManager.GetAccountReadOnly(shipment.Ups.UpsAccountID);
                 if (account == null)
                 {
-                    account = UpsAccountManager.Accounts.FirstOrDefault();
+                    account = UpsAccountManager.AccountsReadOnly.FirstOrDefault();
                 }
 
                 if (account != null)
                 {
-                    PersonAdapter.Copy(account, "", person);
+                    account.Address.CopyTo(person);
                     return true;
                 }
                 else
@@ -627,14 +632,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            UpsServiceType serviceType = (UpsServiceType)shipment.Ups.Service;
+            UpsServiceType serviceType = (UpsServiceType) shipment.Ups.Service;
 
             // Need to check with the store  to see if anything about the shipment was overridden in case
-            // it may have effected the shipping services available (i.e. the eBay GSP program)            
+            // it may have effected the shipping services available (i.e. the eBay GSP program)
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
             var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
@@ -644,7 +650,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Default to a valid service type if the current one is invalid
             if (!serviceTypes.Contains(serviceType))
             {
-                shipment.Ups.Service = (int)(UpsServiceType)serviceTypes.First();
+                shipment.Ups.Service = (int) serviceTypes.First();
             }
 
             RedistributeContentWeight(shipment);
@@ -654,14 +660,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.Ups.Packages.Any(p => p.Insurance);
 
-            // Set the provider type based on UPS settings
-            shipment.InsuranceProvider = settings.UpsInsuranceProvider;
-
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
-            if (shipment.Ups.Packages.Count > 1)
-            {
-                shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
-            }
+            // We're setting this once to avoid marking the entity as dirty
+            shipment.InsuranceProvider = shipment.Ups.Packages.Count > 1 ?
+                (int) InsuranceProvider.Carrier :
+                settings.UpsInsuranceProvider;
 
             shipment.RequestedLabelFormat = shipment.Ups.RequestedLabelFormat;
 
@@ -671,20 +674,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 package.InsurancePennyOne = settings.UpsInsurancePennyOne;
 
                 // For WorldShip... if using a MailInnovations service class, we force Penny One since UPS does not provide the first $100 for that
-                if (shipment.ShipmentType == (int)ShipmentTypeCode.UpsWorldShip)
+                if (shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip)
                 {
-                    if (UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)shipment.Ups.Service))
+                    if (UpsUtility.IsUpsMiOrSurePostService((UpsServiceType) shipment.Ups.Service))
                     {
                         package.InsurancePennyOne = true;
                     }
                 }
 
                 // The only time we send the full insuredvalue as declared value is if insurance is enabled, and they are using carrier insurance.
-                if (shipment.Insurance && shipment.InsuranceProvider == (int)InsuranceProvider.Carrier)
+                if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
                 {
                     package.DeclaredValue = package.InsuranceValue;
                 }
-                else if (UpsUtility.IsUpsSurePostService((UpsServiceType)shipment.Ups.Service))
+                else if (UpsUtility.IsUpsSurePostService((UpsServiceType) shipment.Ups.Service))
                 {
                     // If Surepost, don't send any declared value.
                     package.DeclaredValue = 0;
@@ -711,7 +714,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 foreach (UpsPackageEntity package in shipment.Ups.Packages)
                 {
-                    package.Weight = shipment.ContentWeight/shipment.Ups.Packages.Count;
+                    package.Weight = shipment.ContentWeight / shipment.Ups.Packages.Count;
                 }
 
                 return true;
@@ -748,7 +751,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return EnumHelper.GetDescription((UpsServiceType)shipment.Ups.Service);
+            return EnumHelper.GetDescription((UpsServiceType) shipment.Ups.Service);
         }
 
         /// <summary>
@@ -801,7 +804,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 return new ShipmentParcel(shipment, package.UpsPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
-                    new DimensionsAdapter(package));
+                    new DimensionsAdapter(package))
+                {
+                    TotalWeight = package.Weight + package.DimsWeight
+                };
             }
 
             throw new ArgumentException(string.Format("'{0}' is out of range for the shipment.", parcelIndex), "parcelIndex");
@@ -839,170 +845,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-        /// <summary>
-        /// Get the UPS rates for the given shipment
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            ICarrierSettingsRepository originalSettings = SettingsRepository;
-            ICertificateInspector originalInspector = CertificateInspector;
-            ICarrierAccountRepository<UpsAccountEntity> originalAccountRepository = AccountRepository;
 
-            try
-            {
-                bool usingCounterRates = !SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted;
 
-                // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
-                // counter rates from the broker is not impacted
-                if (usingCounterRates)
-                {
-                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-
-                    // We need to swap out the SettingsRepository and certificate inspector 
-                    // to get UPS counter rates
-                    SettingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
-                    AccountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
-                }
-
-                return GetCachedRates<UpsException>(shipment, GetRatesFromApi);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            finally
-            {
-                // Switch the settings repository back to the original now that we have counter rates
-                SettingsRepository = originalSettings;
-                CertificateInspector = originalInspector;
-                AccountRepository = originalAccountRepository;
-            }
-        }
-
-        /// <summary>
-        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
-        /// a ShippingException is thrown informing the user.
-        /// </summary>
-        private void ValidatePackageDimensions(ShipmentEntity shipment)
-        {
-            string exceptionMessage = string.Empty;
-            int packageIndex = 1;
-
-            foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
-            {
-                if (upsPackage.PackagingType == (int) UpsPackagingType.Custom)
-                {
-                    if (!DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
-                    {
-                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, Environment.NewLine);
-                    }
-                }
-
-                packageIndex++;
-            }
-
-            if (exceptionMessage.Length > 0)
-            {
-                exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
-                throw new InvalidPackageDimensionsException(exceptionMessage);
-            }
-        }
-
-        /// <summary>
-        /// Get the UPS rates from the UPS api
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            try
-            {
-                // Validate each of the packages dimensions.
-                ValidatePackageDimensions(shipment);
-
-                List<RateResult> rates = new List<RateResult>();
-
-                // Get the transit times and services
-                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, AccountRepository, SettingsRepository, CertificateInspector);
-
-                UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository, CertificateInspector);
-                List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
-
-                UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, AccountRepository);
-                
-                if (!serviceRates.Any())
-                {
-                    rates.Add(new RateResult("* No rates were returned for the selected Service.", ""));
-                }
-                else
-                {
-                    // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = account.RateType == (int)UpsRateType.Negotiated;
-
-                    // Indicates if any of the rates returned were negotiated.
-                    bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
-                    bool allNegotiated = serviceRates.All(s => s.Negotiated);
-
-                    // Add a rate for each service
-                    foreach (UpsServiceRate serviceRate in serviceRates)
-                    {
-                        UpsServiceType service = serviceRate.Service;
-
-                        UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
-
-                        RateResult rateResult = new RateResult(
-                            (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
-                            GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(transitTime),
-                            serviceRate.Amount,
-                            service)
-                        {
-                            ServiceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, transitTime),
-                            ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate,
-                            ShipmentType = ShipmentTypeCode.UpsOnLineTools,
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools)
-                        };
-
-                        rates.Add(rateResult);
-                    }
-
-                    // If they wanted negotiated rates, we have to show some results
-                    if (wantedNegotiated)
-                    {
-                        if (allNegotiated)
-                        {
-                            rates.Add(new RateResult("* All rates are negotiated rates.", ""));
-                        }
-                        else if (anyNegotiated)
-                        {
-                            rates.Add(new RateResult("* Indicates a negotiated rate.", ""));
-                        }
-                        else
-                        {
-                            rates.Add(new RateResult("* Negotiated rates were not returned. Contact Interapptive.", ""));
-                        }
-                    }
-
-                    if (shipment.ReturnShipment)
-                    {
-                        rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
-                    }
-                }
-                
-                // Filter out any excluded services, but always include the service that the shipment is configured with
-                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
-                
-                RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
-
-                AddFootnoteFactory(account, finalGroup);
-
-                return finalGroup;
-            }
-            catch (InvalidPackageDimensionsException ex)
-            {
-                throw new UpsException(ex.Message, ex);
-            }
-        }
 
         /// <summary>
         /// Adds the footnote factory.
@@ -1016,51 +860,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
             }
-        }
-
-        /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this ups shipment type.
-        /// </summary>
-        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
-        {
-            List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes()
-                .Select(s => (UpsServiceType)s).Union(new List<UpsServiceType> { (UpsServiceType)shipment.Ups.Service }).ToList();
-
-            return rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType)r.Tag))).ToList();
-        }
-
-        /// <summary>
-        /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
-        /// empty string is returned.
-        /// </summary>
-        private string GetServiceTransitDays(UpsTransitTime transitTime)
-        {
-            if (transitTime != null)
-            {
-                return transitTime.BusinessDays.ToString(CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                return "";
-            }
-        }
-
-        /// <summary>
-        /// Gets the service estimated arrival time for the given service type if it's available.
-        /// </summary>
-        /// <param name="transitTime">The transit time.</param>
-        /// <returns>A string value of the arrival time in the format of "DayOfWeek h:mm tt" (e.g. Friday 4:00 PM)</returns>
-        private static string GetServiceEstimatedArrivalTime(UpsTransitTime transitTime)
-        {
-            string arrivalInfo = string.Empty;
-
-            if (transitTime != null)
-            {
-                DateTime localArrival = transitTime.ArrivalDate.ToLocalTime();
-                arrivalInfo = ShippingManager.GetArrivalDescription(localArrival);
-            }
-
-            return arrivalInfo;
         }
 
         /// <summary>
@@ -1092,92 +891,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Void the given shipment
-        /// </summary>
-        public override void VoidShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                if (!UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
-                {
-                    UpsApiVoidClient.VoidShipment(shipment);
-                }
-            }
-            catch (UpsException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new UpsShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            UpsShipmentEntity upsShipmentEntity = shipment.Ups;
-            UpsServiceType upsServiceType = (UpsServiceType)upsShipmentEntity.Service;
-
-            if (UpsUtility.IsUpsSurePostService(upsServiceType) &&
-                (shipment.InsuranceProvider == (int)InsuranceProvider.Carrier) &&
-                upsShipmentEntity.Packages.Any(p => p.Insurance && p.InsuranceValue > 0))
-            {
-                throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
-            }
-
-            // Make sure package dimensions are valid.
-            ValidatePackageDimensions(shipment);
-
-            // Clear out any values that aren't allowed for SurePost or MI
-            if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))
-            {
-                shipment.ReturnShipment = false;
-                upsShipmentEntity.ReturnContents = string.Empty;
-                upsShipmentEntity.ReturnService = (int)UpsReturnServiceType.ElectronicReturnLabel;
-                upsShipmentEntity.ReturnUndeliverableEmail = string.Empty;
-
-                upsShipmentEntity.CodEnabled = false;
-                upsShipmentEntity.CodAmount = 0;
-                upsShipmentEntity.CodPaymentType = (int)UpsCodPaymentType.Cash;
-
-                upsShipmentEntity.ShipperRelease = false;
-
-                UpsPackageEntity upsPackageEntity = upsShipmentEntity.Packages.FirstOrDefault();
-                upsPackageEntity.AdditionalHandlingEnabled = false;
-                upsPackageEntity.DryIceEnabled = false;
-                upsPackageEntity.DryIceIsForMedicalUse = false;
-                upsPackageEntity.DryIceRegulationSet = (int)UpsDryIceRegulationSet.Cfr;
-                upsPackageEntity.DryIceWeight = 0;
-                upsPackageEntity.VerbalConfirmationEnabled = false;
-                upsPackageEntity.VerbalConfirmationName = string.Empty;
-                upsPackageEntity.VerbalConfirmationPhone = string.Empty;
-                upsPackageEntity.VerbalConfirmationPhoneExtension = string.Empty;
-
-                // Clear out any specific to MI
-                if (UpsUtility.IsUpsMiService(upsServiceType))
-                {
-                    upsShipmentEntity.CarbonNeutral = false;
-                    upsShipmentEntity.ReferenceNumber = string.Empty;
-                    upsShipmentEntity.ReferenceNumber2 = string.Empty;
-                }
-
-                // Clear out any specific to SurePost
-                if (UpsUtility.IsUpsSurePostService(upsServiceType))
-                {
-                    upsShipmentEntity.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
-                    upsShipmentEntity.PayorAccount = string.Empty;
-                    upsShipmentEntity.PayorCountryCode = string.Empty;
-                    upsShipmentEntity.PayorPostalCode = string.Empty;
-                    upsShipmentEntity.PayorType = (int)UpsPayorType.Sender;
-                }
-            }
         }
 
         /// <summary>
@@ -1212,7 +930,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <returns>An instance of an UpsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return UpsAccountManager.Accounts.Any() ? new UpsBestRateBroker(this) : new UpsCounterRatesBroker(this);
+            if (UpsAccountManager.Accounts.Any())
+            {
+                return new UpsBestRateBroker(this);
+            }
+
+            return new NullShippingBroker();
         }
 
         /// <summary>
@@ -1231,52 +954,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     EntityUtility.MarkAsNew(package);
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(UpsShipmentFields.UpsAccountID);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.CodAmount);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.CodEnabled);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.CodPaymentType);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.Service);
-                ratingField.ShipmentFields.Add(UpsShipmentFields.DeliveryConfirmation);
-                ratingField.PackageFields.Add(UpsPackageFields.PackagingType);
-                ratingField.PackageFields.Add(UpsPackageFields.DeclaredValue);
-                ratingField.PackageFields.Add(UpsPackageFields.VerbalConfirmationEnabled);
-                ratingField.PackageFields.Add(UpsPackageFields.DimsWeight);
-                ratingField.PackageFields.Add(UpsPackageFields.DimsLength);
-                ratingField.PackageFields.Add(UpsPackageFields.DimsHeight);
-                ratingField.PackageFields.Add(UpsPackageFields.DimsWidth);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceRegulationSet);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceWeight);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceEnabled);
-                ratingField.PackageFields.Add(UpsPackageFields.DryIceIsForMedicalUse);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
-        /// Gets the rating hash based on the shipment's configuration.
-        /// </summary>
-        public override string GetRatingHash(ShipmentEntity shipment)
-        {
-            return RatingFields.GetRatingHash(shipment, shipment.Ups.Packages);
         }
 
         /// <summary>
@@ -1310,9 +987,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Return an adapter per package
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (UpsPackageEntity packageEntity in shipment.Ups.Packages)
+            for (int index = 0; index < shipment.Ups.Packages.Count; index++)
             {
-                adapters.Add(new UpsPackageAdapter(shipment, packageEntity));
+                UpsPackageEntity packageEntity = shipment.Ups.Packages[index];
+                adapters.Add(new UpsPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;
@@ -1324,7 +1002,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
-            if (shipment.AdjustedOriginCountryCode() == "PR" && 
+            if (shipment.AdjustedOriginCountryCode() == "PR" &&
                 shipment.AdjustedShipCountryCode() == "US")
             {
                 return false;
@@ -1340,7 +1018,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (shipment.Ups != null)
             {
-                shipment.Ups.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.Ups.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
     }

@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
         }
 
         [Fact]
-        public void Process_LocationIdWillBeSet_ReplyWillShowSuccessAndLocation_Test()
+        public void Process_LocationIdWillBeSet_ReplyWillShowSuccessAndLocation()
         {
             testObject.Process();
 
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
         }
 
         [Fact]
-        public void Process_ExceptionWillBeThrown_ReplyWillContainErrorInHighestSeverity_Test()
+        public void Process_ExceptionWillBeThrown_ReplyWillContainErrorInHighestSeverity()
         {
             reply.HighestSeverity = NotificationSeverityType.FAILURE;
 

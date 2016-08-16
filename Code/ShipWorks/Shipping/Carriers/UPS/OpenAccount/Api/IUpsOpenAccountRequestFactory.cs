@@ -20,5 +20,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// to open a new UPS account via the UpsOpenAccount API.</returns>
         CarrierRequest CreateOpenAccountRequest(OpenAccountRequest request);
+
+        /// <summary>
+        /// Creates the link new account request factory.
+        /// </summary>
+        CarrierRequest CreateLinkNewAccountRequestFactory();
     }
 }

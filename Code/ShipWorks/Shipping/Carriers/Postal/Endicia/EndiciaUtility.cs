@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -20,9 +19,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get
             {
-                return
-                    EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaInsurance).Level == EditionRestrictionLevel.None &&
-                    ShippingSettings.Fetch().EndiciaInsuranceProvider == (int) InsuranceProvider.Carrier;
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaInsurance, null);
+
+                    return
+                        restrictionLevel == EditionRestrictionLevel.None &&
+                        ShippingSettings.Fetch().EndiciaInsuranceProvider == (int) InsuranceProvider.Carrier;
+                }
             }
         }
     }

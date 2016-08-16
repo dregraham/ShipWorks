@@ -54,13 +54,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // setup the test by setting the requested shipment to null
             nativeRequest.RequestedShipment = null;
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServicesRequested_WhenBrokerIsEnabled_Test()
+        public void Manipulate_AccountsForNullSpecialServicesRequested_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
             nativeRequest.RequestedShipment.SpecialServicesRequested = null;
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServiceTypes_WhenBrokerIsEnabled_Test()
+        public void Manipulate_AccountsForNullSpecialServiceTypes_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenBrokerIsEnabled_Test()
+        public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServicesRequested_WhenBrokerIsNotEnabled_Test()
+        public void Manipulate_AccountsForNullSpecialServicesRequested_WhenBrokerIsNotEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = false;
             nativeRequest.RequestedShipment.SpecialServicesRequested = null;
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServiceTypes_WhenBrokerIsNotEnabled_Test()
+        public void Manipulate_AccountsForNullSpecialServiceTypes_WhenBrokerIsNotEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = false;
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenBrokerIsNotEnabled_Test()
+        public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenBrokerIsNotEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = false;
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
@@ -162,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerArrayLengthIsOne_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerArrayLengthIsOne_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerIsNotNull_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerIsNotNull_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -182,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerAccountIsFedExBrokerAccount_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerAccountIsFedExBrokerAccount_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerAddressIsNotNull_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerAddressIsNotNull_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerContactIsNotNull_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerContactIsNotNull_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -214,7 +214,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerTypeIsImport_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerTypeIsImport_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -224,7 +224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerTypeSpecifiedIsTrue_WhenBrokerIsEnabled_Test()
+        public void Manipulate_BrokerTypeSpecifiedIsTrue_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
 
@@ -234,7 +234,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CustomClearanceDetailsIsNotNull_WhenBrokerIsEnabled_Test()
+        public void Manipulate_CustomClearanceDetailsIsNotNull_WhenBrokerIsEnabled()
         {
             shipmentEntity.FedEx.BrokerEnabled = true;
             nativeRequest.RequestedShipment.CustomsClearanceDetail = null;
@@ -246,7 +246,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_BrokerPhoneExtension_Test()
+        public void Manipulate_BrokerPhoneExtension()
         {
             testObject.Manipulate(carrierRequest.Object);
 

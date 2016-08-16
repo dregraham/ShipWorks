@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_HasAddress_AddressInShipment_Test()
+        public void Manipulate_HasAddress_AddressInShipment()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_HasAddressStreetLines_AddressStreetLinesInShipment_Test()
+        public void Manipulate_HasAddressStreetLines_AddressStreetLinesInShipment()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_StreetLinesMatchRequest_AddressStreetLinesInShipment_Test()
+        public void Manipulate_StreetLinesMatchRequest_AddressStreetLinesInShipment()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_CityCorrect_AddressInRequestHasCity_Test()
+        public void Manipulate_CityCorrect_AddressInRequestHasCity()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_StateCorrect_AddressInRequestHasState_Test()
+        public void Manipulate_StateCorrect_AddressInRequestHasState()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_ZipCorrect_AddressInRequestHasZip_Test()
+        public void Manipulate_ZipCorrect_AddressInRequestHasZip()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_CountryCorrect_AddressInRequestHasCountry_Test()
+        public void Manipulate_CountryCorrect_AddressInRequestHasCountry()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_ResidentialCorrect_AddressInRequestHasResidentialResult_Test()
+        public void Manipulate_ResidentialCorrect_AddressInRequestHasResidentialResult()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_OtherCriteriaCorrect_ShipmentValid_Test()
+        public void Manipulate_OtherCriteriaCorrect_ShipmentValid()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WrongRequestType_Test()
+        public void Manipulate_ThrowsCarrierException_WrongRequestType()
         {
             CarrierRequest wrongRequest = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object, new ProcessShipmentRequest());
             Assert.Throws<CarrierException>(() => testObject.Manipulate(wrongRequest));

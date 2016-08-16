@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.UI.Wizard;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Editions.Freemium
 {
@@ -75,7 +69,6 @@ namespace ShipWorks.Editions.Freemium
                     }
                     else
                     {
-
                         // They had a freemium account, but then something happened (canceled\disabled\whatever)
                         if (accountDetail.ActivationState != LicenseActivationState.Active)
                         {
@@ -90,8 +83,8 @@ namespace ShipWorks.Editions.Freemium
                         // This means the ELS account has been created - let them continue, they'll set that up in the ELS wizard.
                         else
                         {
-                            store.License = accountDetail.License.Key;
-                            store.Edition = EditionSerializer.Serialize(accountDetail.Edition);
+                            store.License = accountDetail.Key;
+                            store.Edition = accountDetail.Edition.Serialize();
 
                             return true;
                         }

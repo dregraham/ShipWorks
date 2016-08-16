@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         
-        public void Schedule_VerifyJobsRunAtCorrectTimes_Test()
+        public void Schedule_VerifyJobsRunAtCorrectTimes()
         {
             InitializeForHourlyActionScheduleTestTimesShouldRun();
 
@@ -221,7 +221,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         }
 
         
-        public void Schedule_VerifyJobsDontRunAtIncorrectTimes_Test()
+        public void Schedule_VerifyJobsDontRunAtIncorrectTimes()
         {
             InitializeForHourlyActionScheduleTestTimesShouldNotRun();
 

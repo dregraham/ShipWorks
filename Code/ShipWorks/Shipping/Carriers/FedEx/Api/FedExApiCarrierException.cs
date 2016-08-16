@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -29,14 +30,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             :base(GenerateMessage(notifications.Select(n => n.Message ?? n.Code)))
         {
         }
-
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        //public FedExApiException(RateNotification[] notifications)
-        //{
-        //    GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        //}
 
         /// <summary>
         /// Constructor
@@ -78,21 +71,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
         }
 
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        //public FedExApiException(AddressValidationNotification[] notifications)
-        //{
-        //    GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        //}
-
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        //public FedExApiException(CloseNotification[] notifications)
-        //{
-        //    GenerateMessage(notifications.Select(n => n.Message ?? n.Code));
-        //}
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected FedExApiCarrierException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
 
         /// <summary>
         /// Gets the one error. If more than 1, makes sure not to take the "Insured Value is not allowed for SmartPost
@@ -108,7 +92,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 return notifications.Select(n => n.Value ?? n.Key);
             }
         }
-
 
         /// <summary>
         /// Generate the error message to display based on the messages returned

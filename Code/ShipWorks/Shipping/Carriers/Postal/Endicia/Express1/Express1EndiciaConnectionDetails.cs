@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 

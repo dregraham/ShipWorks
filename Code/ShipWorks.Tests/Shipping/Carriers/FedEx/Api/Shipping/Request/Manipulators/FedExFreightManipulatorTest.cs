@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExFreightManipulator_ReturnsRequestedShipment_Test()
+        public void Manipulate_FedExFreightManipulator_ReturnsRequestedShipment()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExFreightManipulator_ReturnsNoExpressFreight_WhenServiceIsNotFreight_Test()
+        public void Manipulate_FedExFreightManipulator_ReturnsNoExpressFreight_WhenServiceIsNotFreight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             testObject.Manipulate(carrierRequest.Object);
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExFreightManipulator_ReturnsRequestedUSValues_Test()
+        public void Manipulate_FedExFreightManipulator_ReturnsRequestedUSValues()
         {
             shipmentEntity.ShipCountryCode = "US";
             shipmentEntity.OriginCountryCode = "US";
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExFreightManipulator_ReturnsRequestedCAValues_Test()
+        public void Manipulate_FedExFreightManipulator_ReturnsRequestedCAValues()
         {
             shipmentEntity.ShipCountryCode = "CA";
 
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FedExFreightManipulator_ContainsShippingDocumentType_Test()
+        public void Manipulate_FedExFreightManipulator_ContainsShippingDocumentType()
         {
             FedExShipmentEntity fedEx = shipmentEntity.FedEx;
             fedEx.Service = (int)FedExServiceType.FedEx1DayFreight;

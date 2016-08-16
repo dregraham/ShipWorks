@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
-using ShipWorks.SqlServer.Common.Data;
+﻿using System.Data.SqlClient;
 
 namespace ShipWorks.Data.Utility
 {
@@ -17,10 +11,22 @@ namespace ShipWorks.Data.Utility
         string reason;
 
         /// <summary>
+        /// A lock is taken on the given entityID using the given connection, preventing any other
+        /// connection also requesting a lock from working with the entityID.
+        /// Throws a SqlAppResourceLockException if the lock cannot be taken.
+        /// </summary>
+        public SqlEntityLock(SqlConnection con, long entityID, string reason)
+            : base(con, string.Format("EntityLock_{0}", entityID))
+        {
+            this.entityID = entityID;
+            this.reason = reason;
+        }
+
+        /// <summary>
         /// A lock is taken on the given entityID, preventing any other connection also requesting a lock from working
         /// with the entityID. Throws a SqlAppResourceLockException if the lock cannot be taken.
         /// </summary>
-        public SqlEntityLock(long entityID, string reason) 
+        public SqlEntityLock(long entityID, string reason)
             : base(string.Format("EntityLock_{0}", entityID))
         {
             this.entityID = entityID;

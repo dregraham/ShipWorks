@@ -31,11 +31,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         protected void RaiseRateCriteriaChanged()
         {
-            if (RateCriteriaChanged != null)
-            {
-                RateCriteriaChanged(this, EventArgs.Empty);
-            }
+            RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
         }
-
     }
 }

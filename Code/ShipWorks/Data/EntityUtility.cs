@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Filters;
-using ShipWorks.Data.Adapter.Custom;
 using System.Diagnostics;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter;
 using System.Drawing;
-using ShipWorks.Properties;
-using ShipWorks.Shipping;
-using System.Linq;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using Interapptive.Shared;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Adapter;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
 using ShipWorks.Templates;
 
 namespace ShipWorks.Data
@@ -50,6 +48,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Static constructor
         /// </summary>
+        [NDependIgnoreLongMethod]
         static EntityUtility()
         {
             entitySeedValues[EntityType.ComputerEntity] = 1;
@@ -208,7 +207,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Clone the given entity collection using a deep clone.  
+        /// Clone the given entity collection using a deep clone.
         /// </summary>
         public static List<T> CloneEntityCollection<T>(IEnumerable<T> collection) where T : EntityBase2
         {
@@ -316,7 +315,7 @@ namespace ShipWorks.Data
 
             return fieldValue;
         }
-        
+
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. OneToMany relationships are considered.
         /// Returns null if no such chain is found. Many to Many relationships are never considered.
@@ -330,6 +329,7 @@ namespace ShipWorks.Data
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// Many to Many relationships are never considered.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, bool allowOneToMany)
         {
             // Try it bottom-to-top with the given entities
@@ -464,6 +464,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, List<EntityType> visitedEntityTypes)
         {
             // If this is the type we are looking for, we are done.  Just return an empty relation collection (since no relation is needed to get from an
@@ -489,7 +490,7 @@ namespace ShipWorks.Data
                 RelationCollection relations = CheckKnownRelations(fromEntityType, toEntityType);
                 if (relations != null)
                 {
-                    // If any of the relations revisit one of our visited, that violates how we use visited, and probably generated a longer, and invalid relation path.  The first 
+                    // If any of the relations revisit one of our visited, that violates how we use visited, and probably generated a longer, and invalid relation path.  The first
                     // one will obviously contain the "fromType" since that's what we are coming from - so we skip that.
                     foreach (EntityRelation relation in relations.Cast<EntityRelation>().Skip(1))
                     {
@@ -656,7 +657,7 @@ namespace ShipWorks.Data
 
             return GetEntityImage(GetEntityType(entityID), size);
         }
-        
+
         /// <summary>
         /// Get a 16x16 image representing the given EntityType
         /// </summary>
@@ -668,6 +669,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get an image of the given entity of the given size
         /// </summary>
+        [NDependIgnoreComplexMethodAttribute]
         public static Image GetEntityImage(EntityType entityType, int size)
         {
             if (size != 16 && size != 32)
@@ -692,7 +694,7 @@ namespace ShipWorks.Data
 
                 case EntityType.OrderItemEntity:
                     return size == 16 ? Resources.shoppingcart16 : Resources.shoppingcart32;
-                
+
                 case EntityType.OrderChargeEntity:
                     return size == 16 ? Resources.currency_dollar16 : Resources.currency_dollar32;
 
@@ -802,12 +804,43 @@ namespace ShipWorks.Data
 
             object keyValue = primaryKeyNotParent.Single().CurrentValue;
 
-            if ( keyValue is long)
+            if (keyValue is long)
             {
                 return (long) keyValue;
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Reset the dirty flag on an entity graph and its fields when the fields have not changed
+        /// </summary>
+        public static void ResetDirtyFlagOnUnchangedEntityFields(this IEntity2 entity)
+        {
+            foreach (KeyValuePair<IEntity2, IEnumerable<IEntityField2>> entityAndFields in entity.GetDirtyGraph().Where(x => !x.Key.IsNew))
+            {
+                foreach (IEntityField2 field in entityAndFields.Value.Where(x => x.IsChanged && FieldUtilities.ValuesAreEqual(x.DbValue, x.CurrentValue)))
+                {
+                    field.IsChanged = false;
+                }
+
+                if (entityAndFields.Value.None(x => x.IsChanged))
+                {
+                    entityAndFields.Key.Fields.IsDirty = false;
+                    entityAndFields.Key.IsDirty = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a graph of dirty entities and fields using the passed entity as the root
+        /// </summary>
+        public static IDictionary<IEntity2, IEnumerable<IEntityField2>> GetDirtyGraph(this IEntity2 entity)
+        {
+            return new ObjectGraphUtils()
+                .ProduceTopologyOrderedList(entity)
+                .Where(x => x.IsDirty).ToDictionary(x => x,
+                x => x.Fields.OfType<IEntityField2>().Where(field => field.IsChanged).ToList() as IEnumerable<IEntityField2>);
         }
     }
 }

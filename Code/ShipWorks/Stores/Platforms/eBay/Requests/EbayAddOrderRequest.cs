@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
@@ -24,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// <param name="salesTaxPercent">The sales tax percent.</param>
         /// <param name="taxState">State of the tax.</param>
         /// <param name="isShippingTaxed">if set to <c>true</c> [is shipping taxed].</param>
+        [NDependIgnoreTooManyParams]
         public EbayAddOrderRequest(EbayToken token, IEnumerable<TransactionType> transactionsToCombine, double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost, string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed)
             : base(token, "AddOrder")
         {

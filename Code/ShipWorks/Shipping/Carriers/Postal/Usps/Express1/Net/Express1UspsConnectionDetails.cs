@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
@@ -49,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             get
             {
                 return (TestServer) ?
-                    "http://www.express1dev.com/Services/SDCV36Service.svc" :
+                    "https://www.express1dev.com/Services/SDCV36Service.svc" :
                     "https://service.express1.com/Services/SDCV36Service.svc";
             }
         }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Initialize the comboboxes
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             base.Initialize();
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             uspsAccount.DisplayMember = "Key";
             uspsAccount.ValueMember = "Value";
 
-            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.None, false);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.None);
 
             if (accounts.Count > 0)
             {

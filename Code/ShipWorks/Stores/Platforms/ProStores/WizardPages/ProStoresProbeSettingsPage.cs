@@ -11,6 +11,7 @@ using Interapptive.Shared.UI;
 using System.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
+using Interapptive.Shared;
 using ShipWorks.Stores.Management;
 using Interapptive.Shared.Net;
 
@@ -34,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
         /// <summary>
         /// Stepping next
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             string url = storeUrl.Text.Trim();

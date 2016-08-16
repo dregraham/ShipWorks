@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.shipworks.com/ui">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <ui:EnumImageConverter x:Key="EnumImage" />
+
+    <DataTemplate x:Key="BrokerExceptionsRateFootnoteViewModelTemplate">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Style="{StaticResource Image.Icon}"
+                   Source="{Binding SeverityLevel,Converter={StaticResource EnumImage}}" />
+            <TextBlock Margin="6,1,0,0">
+                ShipWorks could not get all possible rates.
+                <Hyperlink Command="{Binding ShowExceptions}">More info...</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

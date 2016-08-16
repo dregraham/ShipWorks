@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void OnClickRegistrationLink(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.i-parcel.com/contact.aspx", this);
+            WebHelper.OpenUrl("https://www.i-parcel.com/en/contact-us", this);
         }
 
         /// <summary>

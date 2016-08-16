@@ -16,25 +16,25 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void ScheduleType_ReturnsDaily_Test()
+        public void ScheduleType_ReturnsDaily()
         {
             Assert.Equal(ActionScheduleType.Daily, testObject.ScheduleType);
         }
 
         [Fact]
-        public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToZero_Test()
+        public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToZero()
         {
             Assert.Throws<ActionScheduleException>(() => testObject.FrequencyInDays = 0);
         }
 
         [Fact]
-        public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToNegativeValue_Test()
+        public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToNegativeValue()
         {
             Assert.Throws<ActionScheduleException>(() => testObject.FrequencyInDays = -1);
         }
 
         [Fact]
-        public void FrequencyInDays_AllowsPositiveValue_Test()
+        public void FrequencyInDays_AllowsPositiveValue()
         {
             // Prove that a positive number sets property correctly
             testObject.FrequencyInDays = 1;
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
         [Fact]
-        public void CreateEditor_ReturnsDailyActionScheduleEditor_Test()
+        public void CreateEditor_ReturnsDailyActionScheduleEditor()
         {
             Assert.IsAssignableFrom<DailyActionScheduleEditor>(testObject.CreateEditor());
         }

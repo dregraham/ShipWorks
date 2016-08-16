@@ -7,6 +7,7 @@ using Interapptive.Shared.IO.Text.Csv;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using log4net;
 
@@ -102,6 +103,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Loads the CSV data into a format ShipWorks will work with.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public void ImportCsv(string csvData)
         {
             try

@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [ExcelData("DataSources\\Usps.xlsx", "Stamps")]
         [Trait("Category", "USPS")]
         [Theory]
-        public void ProcessBatch_UspsAndExpress1Usps_Test(DataRow row)
+        public void ProcessBatch_UspsAndExpress1Usps(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [ExcelData("DataSources\\Usps.xlsx", "Stamps")]
         [Trait("Category", "USPS")]
         [Theory]
-        public void GetRates_UspsAndExpress1Usps_Test(DataRow row)
+        public void GetRates_UspsAndExpress1Usps(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [ExcelData("DataSources\\Usps.xlsx", "PurchasePostage")]
         [Trait("Category", "USPS")]
         [Theory]
-        public void PurchasePostage_UspsAndExpress1Usps_Test(DataRow row)
+        public void PurchasePostage_UspsAndExpress1Usps(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [ExcelData("DataSources\\Usps.xlsx", "PurchasePostage")]
         [Trait("Category", "USPS")]
         [Theory]
-        public void CheckPostage_UspsAndExpress1Usps_Test(DataRow row)
+        public void CheckPostage_UspsAndExpress1Usps(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 

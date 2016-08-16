@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.shipworks.com/ui">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate x:Key="Express1RateNotQualifiedFootnoteViewModelTemplate">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Style="{StaticResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
+            <TextBlock Margin="6,1,0,0">
+                The selected packaging option does not qualify for a rate discount.
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

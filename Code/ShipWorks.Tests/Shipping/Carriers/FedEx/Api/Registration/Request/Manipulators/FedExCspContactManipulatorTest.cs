@@ -39,13 +39,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRegisterWebCspUserRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRegisterWebCspUserRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionRequest());
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsBillingAddress_Test()
+        public void Manipulate_SetsBillingAddress()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_ContactIsNotNull_Test()
+        public void Manipulate_ContactIsNotNull()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsContactAddress_Test()
+        public void Manipulate_SetsContactAddress()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        public void Manipulate_SetsContactPerson_Test()
+        public void Manipulate_SetsContactPerson()
         {
             testObject.Manipulate(carrierRequest.Object);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -88,6 +89,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Get the MarketplaceAdvisor method id for the given shipment.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static int GetShippingMethodID(ShipmentEntity shipment)
         {
             if (!shipment.Processed)

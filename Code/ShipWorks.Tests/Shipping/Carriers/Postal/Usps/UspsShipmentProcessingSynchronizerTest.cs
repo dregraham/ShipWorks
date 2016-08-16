@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
@@ -11,24 +12,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
     {
         private UspsShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepository;
 
         public UspsShipmentProcessingSynchronizerTest()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
 
             testObject = new UspsShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [Fact]
-        public void HasAccounts_DelegatesToRepository_Test()
+        public void HasAccounts_DelegatesToRepository()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
         [Fact]
-        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
+        public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
@@ -53,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
@@ -61,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
@@ -84,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {

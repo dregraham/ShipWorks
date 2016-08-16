@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -16,6 +17,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
         public LemonStandException(string message, Exception inner)
             : base(message, inner)
+        {
+        }
+
+        protected LemonStandException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
+            base(serializationInfo, streamingContext)
         {
         }
     }

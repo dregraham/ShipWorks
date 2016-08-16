@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -20,14 +19,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// Defines most of the logic for the carrier specific best rate brokers
     /// </summary>
     /// <typeparam name="TAccount">Type of account</typeparam>
-    public abstract class BestRateBroker<TAccount> : IBestRateShippingBroker where TAccount : EntityBase2
+    public abstract class BestRateBroker<TAccount, TAccountInterface> : IBestRateShippingBroker
+        where TAccount : TAccountInterface where TAccountInterface : ICarrierAccount
     {
         private readonly string carrierDescription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount> accountRepository, string carrierDescription)
+        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription)
         {
             this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
@@ -39,9 +39,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets or sets the account repository.
         /// </summary>
-        protected ICarrierAccountRepository<TAccount> AccountRepository
+        protected ICarrierAccountRepository<TAccount, TAccountInterface> AccountRepository
         {
-            get; 
+            get;
             private set;
         }
 
@@ -53,8 +53,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// The action to GetRates.
         /// </summary>
-        public Func<ShipmentEntity, ShipmentType, RateGroup>GetRatesAction { get; set; }
+        public Func<ShipmentEntity, ShipmentType, RateGroup> GetRatesAction { get; set; }
 
+        /// <summary>
+        /// Get the insurance provider for the broker to use.
+        /// </summary>
         public abstract InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
 
         /// <summary>
@@ -92,18 +95,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             try
             {
-                accounts = AccountsForRates(shipment); 
+                accounts = AccountsForRates(shipment);
             }
             catch (ShippingException)
             {
                 // We don't need to worry about customs if there are no accounts
             }
-            
+
             foreach (TAccount account in accounts)
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
                 ShipmentEntity clonedShipmentEntity = EntityUtility.CloneEntity(shipment);
-                clonedShipmentEntity.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+                clonedShipmentEntity.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
 
                 CreateShipmentChild(clonedShipmentEntity);
                 ShipmentType.ConfigureNewShipment(clonedShipmentEntity);
@@ -120,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Gets the single best rate for each account based 
+        /// Gets the single best rate for each account based
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -128,77 +131,114 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
         public virtual RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            List<TAccount> accounts = new List<TAccount>();
-
-            try
-            {
-                accounts = AccountsForRates(shipment);
-            }
-            catch (ShippingException ex)
-            {
-                brokerExceptions.Add(new BrokerException(ex, BrokerExceptionSeverityLevel.Error, ShipmentType));
-            }
+            List<TAccount> accounts = GetAccountsForRating(shipment, brokerExceptions);
 
             // Get rates for each account asynchronously
             IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,
-                                                                                            a => Task<RateGroup>.Factory.StartNew(() =>
-                                                                                                {
-                                                                                                    using (BestRateScope context = new BestRateScope())
-                                                                                                    {
-                                                                                                        return GetRatesForAccount(shipment, a, brokerExceptions);
-                                                                                                    }
-
-                                                                                                })
-                                                                                            );
+                                                                                            a => CreateGetBestRateTask(shipment, brokerExceptions, a));
 
             Task.WaitAll(accountRateTasks.Values.ToArray<Task>());
             IDictionary<TAccount, RateGroup> accountRateGroups = accountRateTasks.Where(x => x.Value.Result != null)
                                                                                  .ToDictionary(x => x.Key, x => x.Value.Result);
 
             // Filter the returned rates
-            List<RateResult> filteredRates = accountRateGroups.SelectMany(x => x.Value.Rates)
-                                                              .Where(IsValidRate)
-                                                              .Where(r => !IsExcludedServiceType(r.OriginalTag))
-                                                              .ToList();
+            List<RateResult> filteredRates = FilterAccountRates(accountRateGroups);
 
-            // Create a dictionary of rates with their associated accounts for lookup later
-            IDictionary<RateResult, TAccount> accountLookup = accountRateGroups
-                .Select(ar => ar.Value.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
-                .SelectMany(x => x)
-                .Where(x => x.Key != null)
-                .ToDictionary(x => x.Key, x => x.Value);
+            IDictionary<RateResult, TAccount> accountLookup = CreateRateAccountDictionary(accountRateGroups);
 
             foreach (RateResult rate in filteredRates)
             {
-                // Account for the rate being a previously cached rate where the tag is already a best rate tag
-                object originalTag = rate.OriginalTag;
-
-                // Replace the service type with a function that will select the correct shipment type
-                rate.Tag = new BestRateResultTag
-                {
-                    OriginalTag = originalTag,
-                    ResultKey = GetResultKey(rate),
-                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], originalTag),
-                    AccountDescription = AccountDescription(accountLookup[rate])
-                };
-
-                rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
-                rate.CarrierDescription = carrierDescription;
-
-                // Child rates (like USPS Priority with signature or delivery confirmation) won't have a provider logo set
-                rate.ProviderLogo = rate.ProviderLogo ?? EnumHelper.GetImage(ShipmentType.ShipmentTypeCode);
+                UpdateRateDetails(accountLookup, rate);
             }
 
             RateGroup bestRateGroup = new RateGroup(filteredRates.ToList());
             if (!filteredRates.Any())
             {
                 // With no rates for the group, the carrier will default to UPS, so set it correctly if there are no rates.
-                bestRateGroup.Carrier = this.ShipmentType.ShipmentTypeCode;
+                bestRateGroup.Carrier = ShipmentType.ShipmentTypeCode;
             }
 
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
             return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Update the rate details
+        /// </summary>
+        private void UpdateRateDetails(IDictionary<RateResult, TAccount> accountLookup, RateResult rate)
+        {
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag
+            object originalTag = rate.OriginalTag;
+
+            // Replace the service type with a function that will select the correct shipment type
+            rate.Tag = new BestRateResultTag
+            {
+                OriginalTag = originalTag,
+                ResultKey = GetResultKey(rate),
+                RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], originalTag),
+                AccountDescription = AccountDescription(accountLookup[rate])
+            };
+
+            rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
+            rate.CarrierDescription = carrierDescription;
+
+            // Child rates (like USPS Priority with signature or delivery confirmation) won't have a provider logo set
+            rate.ProviderLogo = rate.ProviderLogo ?? EnumHelper.GetImage(ShipmentType.ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Get list of accounts for rating
+        /// </summary>
+        private List<TAccount> GetAccountsForRating(ShipmentEntity shipment, ICollection<BrokerException> brokerExceptions)
+        {
+            try
+            {
+                return AccountsForRates(shipment);
+            }
+            catch (ShippingException ex)
+            {
+                brokerExceptions.Add(new BrokerException(ex, BrokerExceptionSeverityLevel.Error, ShipmentType));
+            }
+
+            return new List<TAccount>();
+        }
+
+        /// <summary>
+        /// Filter the account rate groups
+        /// </summary>
+        private List<RateResult> FilterAccountRates(IDictionary<TAccount, RateGroup> accountRateGroups)
+        {
+            return accountRateGroups.SelectMany(x => x.Value.Rates)
+                .Where(IsValidRate)
+                .Where(r => !IsExcludedServiceType(r.OriginalTag))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Create a dictionary of rates with their associated accounts for lookup later
+        /// </summary>
+        private static Dictionary<RateResult, TAccount> CreateRateAccountDictionary(IDictionary<TAccount, RateGroup> accountRateGroups)
+        {
+            return accountRateGroups
+                .Select(ar => ar.Value.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
+                .SelectMany(x => x)
+                .Where(x => x.Key != null)
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        /// <summary>
+        /// Create a task to get best rates
+        /// </summary>
+        private Task<RateGroup> CreateGetBestRateTask(ShipmentEntity shipment, List<BrokerException> brokerExceptions, TAccount a)
+        {
+            return Task<RateGroup>.Factory.StartNew(() =>
+            {
+                using (new BestRateScope())
+                {
+                    return GetRatesForAccount(shipment, a, brokerExceptions);
+                }
+            });
         }
 
         /// <summary>
@@ -209,19 +249,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // Only add the account to the account list if it's not null
             TAccount accountForRating = AccountRepository.Accounts.Count() == 1 ? AccountRepository.Accounts.First() : AccountRepository.DefaultProfileAccount;
-            IEnumerable<TAccount> accounts = accountForRating == null ? new List<TAccount>() : new List<TAccount> { accountForRating };
+            IEnumerable<TAccount> accounts = Object.Equals(accountForRating, default(TAccount)) ? new List<TAccount>() : new List<TAccount> { accountForRating };
 
             // Filter the list to be the default profile account, and that it's other properties are valid
             accounts = accounts.Where(account =>
             {
                 if (account is NullEntity ||
-                    (shipment.OriginOriginID == (int)ShipmentOriginSource.Account && Equals(account, accountForRating)))
+                    (shipment.OriginOriginID == (int) ShipmentOriginSource.Account && Equals(account, accountForRating)))
                 {
                     return true;
                 }
 
-                PersonAdapter personAdapter = new PersonAdapter(account, "");
-                return personAdapter.AdjustedCountryCode((ShipmentTypeCode)shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
+                return account.Address.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
             });
 
             return accounts.ToList();
@@ -287,7 +326,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
                 ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
-                testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+                testRateShipment.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
 
                 //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
                 testRateShipment.BestRate.InsuranceValue = 0;
@@ -349,14 +388,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // Since the list of providers used in best rate settings is independent than the global
                     // list we need to make sure the shipment type is removed from the excluded list if needed
                     ShippingSettingsEntity settings = ShippingSettings.Fetch();
-                    if (settings.ExcludedTypes.Contains(selectedShipment.ShipmentType))
+                    if (settings.ExcludedTypes.Contains(selectedShipment.ShipmentTypeCode))
                     {
-                        settings.ExcludedTypes = settings.ExcludedTypes.Where(t => t != selectedShipment.ShipmentType).ToArray();
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(t => t != selectedShipment.ShipmentTypeCode).ToArray();
                         ShippingSettings.Save(settings);
                     }
- 
+
                     LoadShipment(selectedShipment);
-                    
+
                     SelectRate(selectedShipment);
                     UpdateChildShipmentSettings(selectedShipment, originalShipment, account);
 
@@ -414,9 +453,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected virtual void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, TAccount account)
         {
             // Set the address of the shipment to either the account, or the address of the original shipment
-            if (!IsCounterRate && currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            if (!IsCounterRate && currentShipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(account, "", currentShipment, "Origin");
+                account.Address.CopyTo(currentShipment, "Origin");
             }
             else
             {
@@ -430,7 +469,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="tag">Service type specified in the rate tag</param>
         protected virtual int GetServiceTypeFromTag(object tag)
         {
-            return (int)tag;
+            return (int) tag;
         }
 
         /// <summary>
@@ -446,7 +485,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private static bool IsValidRate(RateResult rate)
         {
-            return rate != null && rate.Tag != null && rate.Selectable && rate.Amount > 0;
+            return rate != null && rate.Tag != null && rate.Selectable && rate.AmountOrDefault > 0;
         }
 
         /// <summary>

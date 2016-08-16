@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsRequestTypeElement_WhenNotUsedForRates_Test()
+        public void Build_ValidationElement_ContainsRequestTypeElement_WhenNotUsedForRates()
         {
             testObject = new iParcelShipValidationElement(credentials, true, false);
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsRequestTypeElement_WhenUsedForRates_Test()
+        public void Build_ValidationElement_ContainsRequestTypeElement_WhenUsedForRates()
         {
             testObject = new iParcelShipValidationElement(credentials, true, true);
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsReturnInfoElement_Test()
+        public void Build_ValidationElement_ContainsReturnInfoElement()
         {
             XElement element = testObject.Build();
             XElement returnElement = element.XPathSelectElement("/ReturnInfo");
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsDomesticShippingElement_Test()
+        public void Build_ValidationElement_ContainsDomesticShippingElement()
         {
             XElement element = testObject.Build();
             XElement domesticElement = element.XPathSelectElement("/DomesticShipping");
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ValidationElement_DomesticShippingElementIsOne_WhenDomesticShippingIsTrue_Test()
+        public void Build_ValidationElement_DomesticShippingElementIsOne_WhenDomesticShippingIsTrue()
         {
             XElement element = testObject.Build();
             XElement domesticElement = element.XPathSelectElement("/DomesticShipping");
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         }
 
         [Fact]
-        public void Build_ValidationElement_ContainsDomesticShippingElementIsZero_WhenDomesticShippingIsFalse_Test()
+        public void Build_ValidationElement_ContainsDomesticShippingElementIsZero_WhenDomesticShippingIsFalse()
         {
             testObject = new iParcelShipValidationElement(credentials, false, true);
 

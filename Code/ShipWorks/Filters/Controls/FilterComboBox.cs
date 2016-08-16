@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Filters.Management;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;
@@ -12,6 +12,7 @@ using ShipWorks.Filters;
 using ShipWorks.Users;
 using System.Drawing.Imaging;
 using System.ComponentModel;
+using Interapptive.Shared;
 using ShipWorks.UI;
 using ShipWorks.Properties;
 using Interapptive.Shared.Utility;
@@ -378,6 +379,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Draw the selected filter
         /// </summary>
+        [NDependIgnoreLongMethod]
         protected override void OnDrawSelectedItem(Graphics g, Color foreColor, Rectangle bounds)
         {
             bool selected = false;

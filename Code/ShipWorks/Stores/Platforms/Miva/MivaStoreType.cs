@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
@@ -43,24 +44,12 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Identifies the store type
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Miva;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Miva;
 
         /// <summary>
         /// Log request/responses as Magento
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Miva;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Miva;
 
         /// <summary>
         /// Create an instance of the MivaStoreType, which derives form Generic
@@ -95,7 +84,8 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Create the wizard pages used to create the store
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage> 
                 {
@@ -276,5 +266,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                     });
             }
         }
+
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129335";
     }
 }

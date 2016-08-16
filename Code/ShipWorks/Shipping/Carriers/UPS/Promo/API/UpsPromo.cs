@@ -1,6 +1,8 @@
 ﻿using System;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
@@ -14,13 +16,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     {
         private readonly IPromoClientFactory promoClientFactory;
         private readonly IUpsPromoPolicy promoPolicy;
-        private readonly ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromo(UpsAccountEntity upsAccount, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory, IUpsPromoPolicy promoPolicy)
+        public UpsPromo(UpsAccountEntity upsAccount, ICarrierSettingsRepository upsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository, IPromoClientFactory promoFactory, IUpsPromoPolicy promoPolicy)
         {
             AccountId = upsAccount.UpsAccountID;
             AccountNumber = upsAccount.AccountNumber;
@@ -58,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// The Country Code of the UPS Account
         /// </summary>
         public string CountryCode { get; }
-        
+
         /// <summary>
         /// Gets the account identifier.
         /// </summary>
@@ -84,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode);
 
             // If the activation was successful save it to the UpsAccount Entity
-            // Otherwise throw exception containing the info about the failure 
+            // Otherwise throw exception containing the info about the failure
             if (promoActivation.IsSuccessful)
             {
                 account.PromoStatus = (int)UpsPromoStatus.Applied;
@@ -123,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             Terms = client.GetAgreement();
             return Terms;
         }
-        
+
         /// <summary>
         /// Gets the PromoStatus for the UpsAccountEntity
         /// </summary>

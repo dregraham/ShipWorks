@@ -6,7 +6,7 @@ namespace ShipWorks.Tests.Actions.Triggers
     public class ActionTriggerFactoryTest
     {
         [Fact]
-        public void CreateTrigger_ReturnsOrderDownloadedTrigger_Test()
+        public void CreateTrigger_ReturnsOrderDownloadedTrigger()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.OrderDownloaded, null);
 
@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void CreateTrigger_ReturnsDownloadFinishedTrigger_Test()
+        public void CreateTrigger_ReturnsDownloadFinishedTrigger()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.DownloadFinished, null);
 
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void CreateTrigger_ReturnsShipmentProcessedTrigger_Test()
+        public void CreateTrigger_ReturnsShipmentProcessedTrigger()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentProcessed, null);
 
@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void CreateTrigger_ReturnsShipmentVoidedTrigger_Test()
+        public void CreateTrigger_ReturnsShipmentVoidedTrigger()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentVoided, null);
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void CreateTrigger_ReturnsFilterContentTrigger_Test()
+        public void CreateTrigger_ReturnsFilterContentTrigger()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.FilterContentChanged, null);
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         }
 
         [Fact]
-        public void CreateTrigger_ReturnsScheduledTrigger_Test()
+        public void CreateTrigger_ReturnsScheduledTrigger()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, null);
 

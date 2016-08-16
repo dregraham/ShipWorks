@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model;
 using System.Reflection;
 
 namespace ShipWorks.Users.Security
@@ -10,6 +7,7 @@ namespace ShipWorks.Users.Security
     /// All actions that a user can perform in ShipWorks that are auditable and\or securable.
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Serializable]
     public enum PermissionType
     {
         [PermissionScope(PermissionScope.Global)] AlwaysGrant = 0,

@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             catch (Exception ex)
             {
-                uspsRateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(new Express1UspsShipmentType(), ex.GetBaseException()));
+                uspsRateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Express1Usps, ex.GetBaseException()));
             }
 
             return uspsRateGroup;
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return express1Rates.Select(x => new {Rate = x, Tag = x.Tag as PostalRateSelection})
                 .Where(x => ServicesMatch(x.Tag, uspsRate.Tag as PostalRateSelection))
                 .Select(x => x.Rate)
-                .FirstOrDefault(x => x.Amount < uspsRate.Amount);
+                .FirstOrDefault(x => x.AmountOrDefault < uspsRate.AmountOrDefault);
         }
 
         /// <summary>

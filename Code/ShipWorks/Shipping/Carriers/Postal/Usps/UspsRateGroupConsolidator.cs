@@ -29,13 +29,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     consolidatedRates.Add(rateResult);
                 }
                 // if better rate found, us it instead
-                else if (foundConsolidatedRate.Amount > rateResult.Amount)
+                else if (foundConsolidatedRate.AmountOrDefault > rateResult.AmountOrDefault)
                 {
                     int indexOfFoundConsolidatedRate = consolidatedRates.IndexOf(foundConsolidatedRate);
                     consolidatedRates[indexOfFoundConsolidatedRate] = rateResult;
                 }
                 // if it is the same rate, add this account to the result
-                else if (foundConsolidatedRate.Amount == rateResult.Amount)
+                else if (foundConsolidatedRate.AmountOrDefault == rateResult.AmountOrDefault)
                 {
                     AddAccounts(foundConsolidatedRate, rateResult);
                 }

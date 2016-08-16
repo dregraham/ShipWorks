@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Common.Threading
 {
@@ -32,7 +30,7 @@ namespace ShipWorks.Common.Threading
         }
 
         /// <summary>
-        /// Indicates if the operation was cancelled
+        /// Indicates if the operation was canceled
         /// </summary>
         public bool Canceled
         {

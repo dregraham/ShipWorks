@@ -14,6 +14,8 @@ using ShipWorks.ApplicationCore.Interaction;
 using System.Security;
 using Common.Logging.Log4Net;
 using Common.Logging;
+using Interapptive.Shared;
+using Interapptive.Shared.Net;
 using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
 
 namespace ShipWorks.ApplicationCore.Logging
@@ -65,7 +67,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Provide methhod for background process to register thread to clean up logs
+        /// Provide method for background process to register thread to clean up logs
         /// </summary>
         public static void RegisterLogCleanup()
         {
@@ -189,20 +191,9 @@ namespace ShipWorks.ApplicationCore.Logging
             // We only want info and above in the file
             LevelRangeFilter levelFilter = new LevelRangeFilter();
 
-#if DEBUG
-            levelFilter.LevelMin = Level.Debug;
-#else
-            if (InterapptiveOnly.IsInterapptiveUser)
-            {
-                levelFilter.LevelMin = Level.Debug;
-            }
-            else
-            {
-                levelFilter.LevelMin = Level.Info;
-            }
-#endif
+            levelFilter.LevelMin = logOptions.MinLevel;
+            levelFilter.LevelMax = logOptions.MaxLevel;
 
-            levelFilter.LevelMax = Level.Fatal;
             levelFilter.ActivateOptions();
 
             appender.AddFilter(levelFilter);
@@ -287,6 +278,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Runs on a schedule to see if any log files are in need of deleting.
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static void CleanupThread()
         {
             try

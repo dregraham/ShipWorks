@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             }
 
             // We want the cheapest rates to appear first, and any ties to be ordered by service level
-            IEnumerable<RateResult> orderedRates = rateResults.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
+            IEnumerable<RateResult> orderedRates = rateResults.OrderBy(r => r.AmountOrDefault).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
 
             return rateGroup.CopyWithRates(orderedRates);
         }

@@ -11,7 +11,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// <summary>
     /// Condition that compares against the online last modified date of an order
     /// </summary>
-    [ConditionElement("Last Modified (Online)", "Order.OnlineLastModified", ApplicableTest = "IsApplicable")]
+    [ConditionElement("Last Modified (Online)", "Order.OnlineLastModified", "IsApplicable")]
     public class OnlineLastModifiedCondition : DateCondition
     {
         /// <summary>

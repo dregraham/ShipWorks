@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void ApplyManipulators_DelegatesToAllManipulators_Test()
+        public void ApplyManipulators_DelegatesToAllManipulators()
         {
             testObject.ApplyManipulators();
 

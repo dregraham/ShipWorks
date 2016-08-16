@@ -1,9 +1,9 @@
-using System;
-using System.Linq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -40,11 +40,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request);
 
-            if (request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
+            if (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
             {
-                // Customers noted errors sending dry ice through ground because it was being set at the shipment level
-                // FedEx support said that dry ice should be at the package level for ground, even though we passed
-                // certification sending it at the shipment level and that code was in place for years
                 ConfigurePackage(request, nativeRequest, currentPackageIndex);   
             }
         }
@@ -136,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
             }
 
-            // Add ShipemtnSpecialServiceType
+            // Add ShipmentSpecialServiceType
             if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes == null)
             {
                 nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];

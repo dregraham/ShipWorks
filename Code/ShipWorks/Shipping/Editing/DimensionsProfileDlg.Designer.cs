@@ -45,12 +45,12 @@
             this.labelHeightUnits = new System.Windows.Forms.Label();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ok.Location = new System.Drawing.Point(60, 147);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
@@ -61,7 +61,7 @@
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(141, 147);
             this.cancel.Name = "cancel";
@@ -174,15 +174,15 @@
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(58, 113);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300;
-            this.weight.RangeMin = 0;
+            this.weight.RangeMax = 300D;
+            this.weight.RangeMin = 0D;
             this.weight.ShowWeighButton = false;
-            this.weight.Size = new System.Drawing.Size(98, 20);
+            this.weight.Size = new System.Drawing.Size(98, 21);
             this.weight.TabIndex = 12;
-            this.weight.Weight = 0;
+            this.weight.Weight = 0D;
             // 
             // DimensionsProfileDlg
             // 
@@ -206,7 +206,7 @@
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -216,7 +216,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Dimensions Profile";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

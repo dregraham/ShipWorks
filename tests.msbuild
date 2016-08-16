@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <UsingTask
-    AssemblyFile=".\packages\xunit.runner.msbuild.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.runner.msbuild.dll"
+    AssemblyFile=".\packages\xunit.runner.msbuild.2.1.0\build\portable-net45+win8+wp8+wpa81\xunit.runner.msbuild.dll"
     TaskName="Xunit.Runner.MSBuild.xunit" />
 
   <ItemGroup>
@@ -12,15 +12,20 @@
   </ItemGroup>
 
   <Target Name="Units">
-    <xunit Assemblies="@(UnitsAssemblies)" Xml="TestResults\units.xml" />
+    <xunit Assemblies="@(UnitsAssemblies)"
+        Xml="TestResults\units.xml"
+        ParallelizeAssemblies="true"
+        ParallelizeTestCollections="true" />
   </Target>
 
+  <!-- We need the integration tests to run in parallel so that the correct synchronization context gets set.
+  		 If they are not run in parallel, some async tests will deadlock -->
   <Target Name="Integration">
-    <xunit Assemblies="@(IntegrationAssemblies)" 
+    <xunit Assemblies="@(IntegrationAssemblies)"
       Xml="TestResults\integration.xml"
       IncludeTraits="$(IncludeTraits)"
-      ParallelizeAssemblies="false"
-      ParallelizeTestCollections="false" />
+      ParallelizeAssemblies="true"
+      ParallelizeTestCollections="true" />
   </Target>
 
 </Project>

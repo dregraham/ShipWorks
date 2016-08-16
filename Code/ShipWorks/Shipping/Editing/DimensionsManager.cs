@@ -7,13 +7,14 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Editing
 {
     /// <summary>
     /// Provides access to the dimensions profiles
     /// </summary>
-    public static class DimensionsManager
+    public static class DimensionsManager 
     {
         static TableSynchronizer<DimensionsProfileEntity> synchronizer;
         static bool needCheckForChanges = false;

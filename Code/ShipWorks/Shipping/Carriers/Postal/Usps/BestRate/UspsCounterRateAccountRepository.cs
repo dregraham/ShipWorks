@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
 {
     /// <summary>
     /// A repository for USPS counter rate accounts
     /// </summary>
-    public class UspsCounterRateAccountRepository : ICarrierAccountRepository<UspsAccountEntity>
+    public class UspsCounterRateAccountRepository : ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>
     {
         private readonly ICredentialStore credentialStore;
 
@@ -26,8 +27,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         public IEnumerable<UspsAccountEntity> Accounts
         {
-            get 
-            { 
+            get
+            {
                 List<UspsAccountEntity> accounts = new List<UspsAccountEntity>();
                 try
                 {
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
                         UspsAccountID = -1052,
                         CreatedDate = DateTime.Now.AddDays(-30)
                     };
-                    
+
                     accounts.Add(account);
                 }
                 catch (MissingCounterRatesCredentialException)
@@ -52,6 +53,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public IEnumerable<IUspsAccountEntity> AccountsReadOnly => Accounts;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public void CheckForChangesNeeded()
+        {
+            // Since this is for counter rates, we don't need to worry about this
+        }
+
+        /// <summary>
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
@@ -59,6 +73,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         {
             return Accounts.First();
         }
+
+        /// <summary>
+        /// Returns a carrier counter rate account.
+        /// </summary>
+        /// <returns>Returns the first counter rate.</returns>
+        public IUspsAccountEntity GetAccountReadOnly(long accountID) => AccountsReadOnly.First();
 
         /// <summary>
         /// Gets the default profile account.

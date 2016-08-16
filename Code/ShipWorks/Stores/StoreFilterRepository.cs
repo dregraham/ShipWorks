@@ -32,7 +32,7 @@ namespace ShipWorks.Stores
 
             StoreFilterRepositorySaveResult result = new StoreFilterRepositorySaveResult
             {
-                FolderCreated = false, 
+                FolderCreated = false,
                 StoreFolderName = storeFilterFolder.Name
             };
 
@@ -61,9 +61,9 @@ namespace ShipWorks.Stores
 
             // If there is a match, use this as the store node, else create a new store node
             FilterNodeEntity storeNode = foldersWithMatchingNameAndStoreCondition.Any() ?
-                foldersWithMatchingNameAndStoreCondition.First() : 
+                foldersWithMatchingNameAndStoreCondition.First() :
                 FilterLayoutContext.Current.AddFilter(storeFilterFolder, ordersNode, 0)[0];
-            
+
             // Always create an "All Orders" filter so that the folder count show's the full store orders's count.  Otherwise our users would
             // likely be confused.
             FilterEntity allOrders = CreateStoreFilterAllOrders();
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores
                 {
                     continue;
                 }
-                
+
                 // The condition is "Equal to this store"
                 if (storeCondition.Value != store.StoreID || storeCondition.Operator != EqualityOperator.Equals)
                 {
@@ -175,7 +175,7 @@ namespace ShipWorks.Stores
 
             FilterEntity folder = new FilterEntity();
             folder.Name = string.Format("{0} ({1})", StoreTypeManager.GetType(store).StoreTypeName, store.StoreName);
-            folder.FilterTarget = (int)FilterTarget.Orders;
+            folder.FilterTarget = (int) FilterTarget.Orders;
             folder.IsFolder = true;
             folder.Definition = definition.GetXml();
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores
 
             FilterEntity filter = new FilterEntity();
             filter.Name = "All Orders";
-            filter.FilterTarget = (int)FilterTarget.Orders;
+            filter.FilterTarget = (int) FilterTarget.Orders;
             filter.IsFolder = false;
             filter.Definition = definition.GetXml();
 

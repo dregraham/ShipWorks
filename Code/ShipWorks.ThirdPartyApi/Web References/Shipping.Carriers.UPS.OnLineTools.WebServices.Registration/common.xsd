@@ -19,6 +19,7 @@
   <xsd:complexType name="RequestType">
     <xsd:sequence>
       <xsd:element minOccurs="0" maxOccurs="unbounded" name="RequestOption" type="xsd:string" />
+      <xsd:element minOccurs="0" name="SubVersion" type="xsd:string" />
       <xsd:element minOccurs="0" name="TransactionReference" type="common:TransactionReferenceType" />
     </xsd:sequence>
   </xsd:complexType>

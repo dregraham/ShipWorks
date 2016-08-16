@@ -53,7 +53,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             {
                 // Try to read from the scale brand on the given port
                 ScaleReadResult result = ReadScale(lockedPort, lockedBrand);
-                
+
                 if (result.Status != ScaleReadStatus.Success)
                 {
                     // Didn't find something on the locked port, clear it
@@ -82,7 +82,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             }
 
             // If we get here, we did not find a valid scale from which to read the weight
-            return new ScaleReadResult(ScaleReadStatus.NotFound, "Could not find a compatible scale, the scale is in motion, or the scale is being used by another application.");
+            return ScaleReadResult.NotFound("Could not find a compatible scale, the scale is in motion, or the scale is being used by another application.");
         }
 
         /// <summary>
@@ -123,18 +123,18 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 {
                     if (port == null)
                     {
-                        return new ScaleReadResult(ScaleReadStatus.NotFound, "Could not open port to read scale.");
+                        return ScaleReadResult.NotFound("Could not open port to read scale.");
                     }
 
                     string result = port.ReadTo("\r");
 
                     if (result.Length < 5)
                     {
-                        return new ScaleReadResult(ScaleReadStatus.NotFound, "Data invalid for Salter scale.");
+                        return ScaleReadResult.NotFound("Data invalid for Salter scale.");
                     }
 
                     // We are now always assuming its in lb\oz, as the Endicia2200 scale and the Salter
-                    // scale are almost totally similiar, but use different symbols to indicate lb\oz vs. grams.
+                    // scale are almost totally similar, but use different symbols to indicate lb\oz vs. grams.
                     bool poundsOz = true;
 
                     // Get the last 5 digits
@@ -149,48 +149,48 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
                         if (!double.TryParse(result.Substring(0, 2), out pounds))
                         {
-                            return new ScaleReadResult(ScaleReadStatus.ReadError, "Unknown data read from Endicia scale.");
+                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.");
                         }
 
                         if (!double.TryParse(result.Substring(2, 2), out ouncesWhole))
                         {
-                            return new ScaleReadResult(ScaleReadStatus.ReadError, "Unknown data read from Endicia scale.");
+                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.");
                         }
 
                         if (!double.TryParse(result.Substring(4, 1), out ouncesDecimal))
                         {
-                            return new ScaleReadResult(ScaleReadStatus.ReadError, "Unknown data read from Endicia scale.");
+                            return ScaleReadResult.ReadError("Unknown data read from Endicia scale.");
                         }
 
                         // Extract ounces
                         double ounces = ouncesWhole + ouncesDecimal / 10.0;
 
                         // Parse the weight part of the result
-                        return new ScaleReadResult(pounds + ounces / 16.0);
+                        return ScaleReadResult.Success(pounds + ounces / 16.0);
                     }
                     else
                     {
                         double grams = Convert.ToDouble(result);
 
-                        return new ScaleReadResult(grams * 2.20462262 / 1000.0);
+                        return ScaleReadResult.Success(grams * 2.20462262 / 1000.0);
                     }
                 }
             }
             catch (InvalidOperationException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.ReadError, ex.Message);
+                return ScaleReadResult.ReadError(ex.Message);
             }
             catch (UnauthorizedAccessException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.ReadError, ex.Message);
+                return ScaleReadResult.ReadError(ex.Message);
             }
             catch (TimeoutException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.NotFound, ex.Message);
+                return ScaleReadResult.NotFound(ex.Message);
             }
             catch (IOException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.NotFound, ex.Message);
+                return ScaleReadResult.NotFound(ex.Message);
             }
         }
 
@@ -205,20 +205,20 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 {
                     if (port == null)
                     {
-                        return new ScaleReadResult(ScaleReadStatus.NotFound, "Could not open port to read scale.");
+                        return ScaleReadResult.NotFound("Could not open port to read scale.");
                     }
 
                     port.Write("\r");
                     string result = port.ReadLine();
 
-                    // Strip non alpha-nums
+                    // Strip non alpha-numerics
                     string stripped = Regex.Match(result, "[. 0-9a-zA-Z]+").Value;
 
                     // Parse the weight part of the result
                     double weight;
                     if (stripped.Length < 7 || !double.TryParse(stripped.Substring(0, 7), out weight))
                     {
-                        return new ScaleReadResult(ScaleReadStatus.ReadError, "Unknown data read from Fairbanks scale.");
+                        return ScaleReadResult.ReadError("Unknown data read from Fairbanks scale.");
                     }
 
                     // If its in kilograms, do the conversion
@@ -227,24 +227,24 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                         weight *= 2.20462262;
                     }
 
-                    return new ScaleReadResult(weight);
+                    return ScaleReadResult.Success(weight);
                 }
             }
             catch (InvalidOperationException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.ReadError, ex.Message);
+                return ScaleReadResult.ReadError(ex.Message);
             }
             catch (UnauthorizedAccessException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.ReadError, ex.Message);
+                return ScaleReadResult.ReadError(ex.Message);
             }
             catch (TimeoutException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.NotFound, ex.Message);
+                return ScaleReadResult.NotFound(ex.Message);
             }
             catch (IOException ex)
             {
-                return new ScaleReadResult(ScaleReadStatus.NotFound, ex.Message);
+                return ScaleReadResult.NotFound(ex.Message);
             }
         }
 
@@ -265,7 +265,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 buadTries.Add(lockedBaud);
             }
 
-            // The toledo can be configure to any several buad or parities
+            // The Toledo can be configure to any several baud or parities
             foreach (int buadTry in buadTries)
             {
                 foreach (Parity parityTry in parityTries)
@@ -290,7 +290,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                                         lockedBaud = buadTry;
                                         lockedParity = parityTry;
 
-                                        return new ScaleReadResult(weight);
+                                        return ScaleReadResult.Success(weight);
                                     }
                                 }
                             }
@@ -315,7 +315,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 }
             }
 
-            return new ScaleReadResult(ScaleReadStatus.NotFound, "Could not locate a MT serial port scale.");
+            return ScaleReadResult.NotFound("Could not locate a MT serial port scale.");
         }
 
         /// <summary>

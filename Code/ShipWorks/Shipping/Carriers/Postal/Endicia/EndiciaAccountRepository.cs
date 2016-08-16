@@ -1,24 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     /// <summary>
     /// Basic repository for retrieving Endicia accounts
     /// </summary>
-    public class EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity>, ICarrierAccountRepository<EndiciaAccountEntity>
+    public class EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity, IEndiciaAccountEntity>,
+        ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>
     {
         /// <summary>
         /// Returns a list of Endicia accounts.
         /// </summary>
-        public override IEnumerable<EndiciaAccountEntity> Accounts
-        {
-            get
-            {
-                return EndiciaAccountManager.EndiciaAccounts.ToList();
-            }
-        }
+        public override IEnumerable<EndiciaAccountEntity> Accounts => EndiciaAccountManager.EndiciaAccounts.ToList();
+
+        /// <summary>
+        /// Returns a list of Endicia accounts.
+        /// </summary>
+        public override IEnumerable<IEndiciaAccountEntity> AccountsReadOnly => EndiciaAccountManager.EndiciaAccountsReadOnly;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => EndiciaAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a Endicia account for the provided accountID.
@@ -29,7 +35,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
 
-			// return null if found account is not Endicia
+            // return null if found account is not Endicia
+            return endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.None ? endiciaAccountEntity : null;
+        }
+
+        /// <summary>
+        /// Returns a Endicia account for the provided accountID.
+        /// </summary>
+        /// <param name="accountID">The account ID for which to return an account.</param>
+        /// <returns>The matching account.</returns>
+        public override IEndiciaAccountEntity GetAccountReadOnly(long accountID)
+        {
+            IEndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccountReadOnly(accountID);
+
+            // return null if found account is not Endicia
             return endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.None ? endiciaAccountEntity : null;
         }
 
@@ -42,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             get
             {
-                long? accountID = new EndiciaShipmentType().GetPrimaryProfile().Postal.Endicia.EndiciaAccountID;
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.Endicia).Postal.Endicia.EndiciaAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Endicia, accountID);
             }
         }

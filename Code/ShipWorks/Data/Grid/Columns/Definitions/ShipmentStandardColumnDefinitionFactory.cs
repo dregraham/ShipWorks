@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.CoreExtensions.Grid;
@@ -37,7 +38,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         {
                             ShipmentEntity shipment = (ShipmentEntity) e;
 
-                            if (ShippingDlg.ProcessingErrors.ContainsKey(shipment.ShipmentID))
+                            if (ShippingDlg.ErrorManager?.ShipmentHasError(shipment.ShipmentID) ?? false)
                             {
                                 return 3;
                             }

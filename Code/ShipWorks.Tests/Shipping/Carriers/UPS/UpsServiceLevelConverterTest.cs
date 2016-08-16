@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         private UpsTransitTime upsTransitTime;
 
         [Fact]
-        public void GetServiceLevel_ReturnsThreeDays_WhenPassedUps3DaySelect_Test()
+        public void GetServiceLevel_ReturnsThreeDays_WhenPassedUps3DaySelect()
         {
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(UpsServiceType.Ups3DaySelect, null);
 
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void GetServiceLevel_ReturnsAnytime_WhenPassedUpsGroundAndNegativeOneDays_Test()
+        public void GetServiceLevel_ReturnsAnytime_WhenPassedUpsGroundAndNegativeOneDays()
         {
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(UpsServiceType.UpsGround, -1);
 
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUps2DayAirAMAndNull_Test()
+        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUps2DayAirAMAndNull()
         {
             serviceRate = new UpsServiceRate(UpsServiceType.Ups2DayAirAM, 1, false, 5);
             upsTransitTime = new UpsTransitTime(UpsServiceType.Ups2DayAirAM, 1, DateTime.Today);
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndServiceRateDefines2Days_Test()
+        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndServiceRateDefines2Days()
         {
             serviceRate = new UpsServiceRate(UpsServiceType.UpsGround, 1, false, 2);
             upsTransitTime = new UpsTransitTime(UpsServiceType.UpsGround, 1, DateTime.Today);
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [Fact]
-        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndTransitTimeDefines2Days_Test()
+        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndTransitTimeDefines2Days()
         {
             serviceRate = new UpsServiceRate(UpsServiceType.UpsGround, 1, false, null);
             upsTransitTime = new UpsTransitTime(UpsServiceType.UpsGround, 2, DateTime.Today);

@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PackageCountIsTwo_TwoPacakgesInShipment_Test()
+        public void Manipulate_PackageCountIsTwo_TwoPacakgesInShipment()
         {
             testObject.Manipulate(request);
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsPounds_Test()
+        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsPounds()
         {
             request.ShipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsKilograms_Test()
+        public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsKilograms()
         {
             request.ShipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Kilograms;
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InsuredValueSetProperly_TwoPacakgesWithInsuredValue_Test()
+        public void Manipulate_InsuredValueSetProperly_TwoPacakgesWithInsuredValue()
         {
             testObject.Manipulate(request);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AssignsSequenceNumber_Test()
+        public void Manipulate_AssignsSequenceNumber()
         {
             request.SequenceNumber = 0;
 

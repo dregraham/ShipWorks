@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -18,7 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store);
+        ILicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store);
 
         /// <summary>
         /// Get the status of the specified license
@@ -41,6 +42,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         TrialDetail ExtendTrial(StoreEntity store);
 
         /// <summary>
+        /// Associates a Usps account created in ShipWorks as the users free Stamps.com account
+        /// </summary>
+        AssociateShipWorksWithItselfResponse AssociateShipworksWithItself(AssociateShipworksWithItselfRequest associateShipworksWithItselfRequest);
+
+        /// <summary>
+        /// Activates ShipWorks using the given user
+        /// </summary>
+        GenericResult<IActivationResponse> ActivateLicense(string email, string password);
+
+        /// <summary>
         /// Send the user their username using the specified email address
         /// </summary>
         void SendAccountUsername(string email, string username);
@@ -54,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false);
+        string LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false);
 
         /// <summary>
         /// Void the given processed shipment to Tango
@@ -116,5 +127,40 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <param name="account">The account.</param>
         void LogUspsAccount(UspsAccountEntity account);
+
+        /// <summary>
+        /// Gets the license capabilities.
+        /// </summary>
+        ILicenseCapabilities GetLicenseCapabilities(ICustomerLicense license);
+
+        /// <summary>
+        /// Gets the active stores from Tango.
+        /// </summary>
+        IEnumerable<ActiveStore> GetActiveStores(ICustomerLicense license);
+
+        /// <summary>
+        /// Deletes a store from Tango.
+        /// </summary>
+        void DeleteStore(ICustomerLicense customerLicense, string storeLicenseKey);
+
+        /// <summary>
+        /// Deletes multiple stores from Tango.
+        /// </summary>
+        void DeleteStores(ICustomerLicense customerLicense, IEnumerable<string> storeLicenseKeys);
+
+        /// <summary>
+        /// Makes a request to Tango to add a store
+        /// </summary>
+        IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store);
+
+        /// <summary>
+        /// Associates a free Stamps.com account with a customer license.
+        /// </summary>
+        void AssociateStampsUsernameWithLicense(string licenseKey, string stampsUsername, string stampsPassword);
+
+        /// <summary>
+        /// Gets the Tango customer id for a license.
+        /// </summary>
+        string GetTangoCustomerId();
     }
 }

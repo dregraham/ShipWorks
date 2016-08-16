@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -14,6 +14,9 @@ namespace ShipWorks.Stores.Platforms.SureDone
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what SureDone currently uses")]
     public class SureDoneStoreType : GenericModuleStoreType
     {
         /// <summary>
@@ -27,28 +30,16 @@ namespace ShipWorks.Stores.Platforms.SureDone
         /// <summary>
         /// StoreType enum value
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.SureDone;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.SureDone;
 
         /// <summary>
         /// Log request/responses as SureDone
         /// </summary>
-        public override ApiLogSource LogSource   
-        {
-            get
-            {
-                return ApiLogSource.SureDone;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.SureDone;
 
         /// <summary>
         /// Return value that uniquely identifies this store instance
-        /// 
+        ///
         /// The only unique thing in the module url is the value of the token param.
         /// So we will get that value, hash it, and return a Base64 string of it.
         /// </summary>
@@ -56,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.SureDone
         {
             get
             {
-                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
+                GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity) Store;
 
                 string moduleUrl = genericStore.ModuleUrl;
                 Uri moduleUri = new Uri(moduleUrl);
@@ -79,9 +70,6 @@ namespace ShipWorks.Stores.Platforms.SureDone
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/categories/105240/folders/4000004785/articles/4000022397-connecting-suredone-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000022397";
     }
 }

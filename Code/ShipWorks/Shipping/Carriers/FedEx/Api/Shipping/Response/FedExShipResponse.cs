@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 {
     /// <summary>
-    /// This object is used to process the FedExShipmentResponse, saving labels and other shipment informaiton
+    /// This object is used to process the FedExShipmentResponse, saving labels and other shipment information
     /// to the shipment object. It is populated with the actual WSDL response object.
     /// </summary>
     public class FedExShipResponse : ICarrierResponse
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             this.shipmentManipulators = shipmentManipulators;
             this.request = request;
         }
-        
+
         /// <summary>
         /// Gets the request the was used to generate the response.
         /// </summary>
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             // This should never happen, but our users will let us know if it does
             if (nativeResponse.CompletedShipmentDetail.CompletedPackageDetails.Length != 1)
             {
-                throw new CarrierException("Invalid number of package details returned for a shipment request request.");
+                throw new CarrierException("Invalid number of package details returned for a shipment request.");
             }
         }
 

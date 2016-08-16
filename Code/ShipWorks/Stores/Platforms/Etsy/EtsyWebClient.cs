@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Web;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Net.OAuth;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -16,7 +15,6 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Platforms.Etsy.Enums;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -335,7 +333,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Try to get an email already sent message from the exception
         /// </summary>
         /// <remarks>This method is mainly meant to remove the logic that figures out what type of exception
-        /// we're dealing with, if it's the right error code, etc. from what we actually want to do 
+        /// we're dealing with, if it's the right error code, etc. from what we actually want to do
         /// with that information.</remarks>
         private static bool TryGetEmailAlreadySentMessage(Exception exception, out string errorDetail)
         {
@@ -473,7 +471,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
         /// <summary>
         /// Given a comma seperated list of order numbers, return the order numbers where the Etsy status doesn't match the parameters.
-        /// </summary> 
+        /// </summary>
         public IEnumerable<long> GetOrderNumbersWithChangedStatus(string orderNumbers, string etsyFieldName, bool currentStatus)
         {
             JArray receipts = GetOrderStatuses(orderNumbers);

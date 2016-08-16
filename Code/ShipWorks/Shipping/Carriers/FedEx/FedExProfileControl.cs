@@ -14,6 +14,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Adapter.Custom;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -23,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Control for editing fedex profiles
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FedExProfileControl : ShippingProfileControlBase
     {
         /// <summary>
@@ -46,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load the data from the given profile into the UI
         /// </summary>
+        [NDependIgnoreLongMethod]
         public override void LoadProfile(ShippingProfileEntity profile)
         {
             base.LoadProfile(profile);

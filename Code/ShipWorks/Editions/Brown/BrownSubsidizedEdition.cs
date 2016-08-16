@@ -25,7 +25,7 @@ namespace ShipWorks.Editions.Brown
             // Add shipment type restrictions
             foreach (ShipmentTypeCode shipmentType in Enum.GetValues(typeof(ShipmentTypeCode)))
             {
-                if (BrownEditionUtility.IsShipmentTypeAllowed(shipmentType))
+                if (new BrownEditionUtility().IsShipmentTypeAllowed(shipmentType))
                 {
                     continue;
                 }

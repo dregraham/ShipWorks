@@ -4,6 +4,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
 using Autofac;
+using Interapptive.Shared;
 
 namespace ShipWorks.Stores
 {
@@ -84,6 +85,8 @@ namespace ShipWorks.Stores
         /// Return the StoreType for the given store type.  If store is not null,
         /// then any "instance" methods of the StoreType will use it.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private static StoreType GetType(StoreTypeCode typeCode, StoreEntity store, ILifetimeScope lifetimeScope)
         {
             switch (typeCode)

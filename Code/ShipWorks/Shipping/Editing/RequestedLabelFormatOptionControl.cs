@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -27,7 +29,7 @@ namespace ShipWorks.Shipping.Editing
             SetSettingsMovedMessageLocation();
 
             SetDisplayMode(DisplayMode.LanguageSelection);
-        }        
+        }
 
         /// <summary>
         /// Remove the specified formats from the list of options
@@ -43,15 +45,23 @@ namespace ShipWorks.Shipping.Editing
         public void LoadDefaultProfile(ShipmentType workingShipmentType)
         {
             shipmentType = workingShipmentType;
+            ShippingProfileEntity shippingProfile = null;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
+                shippingProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+            }
 
             if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
                 SetDisplayMode(DisplayMode.ProfileNotification);
-                primaryProfileLink.Text = shipmentType.GetPrimaryProfile().Name;
+                primaryProfileLink.Text = shippingProfile.Name;
             }
             else
             {
-                requestedLabelFormat.LoadFromEntity(shipmentType.GetPrimaryProfile());
+                requestedLabelFormat.LoadFromEntity(shippingProfile);
             }
         }
 
@@ -67,9 +77,14 @@ namespace ShipWorks.Shipping.Editing
 
             log.InfoFormat("Saving requested label format for {0}", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
 
-            ShippingProfileEntity profile = shipmentType.GetPrimaryProfile();
-            requestedLabelFormat.SaveToEntity(profile);
-            ShippingProfileManager.SaveProfile(profile);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
+                ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+                requestedLabelFormat.SaveToEntity(profile);
+                ShippingProfileManager.SaveProfile(profile);
+            }
         }
 
         /// <summary>
@@ -77,9 +92,14 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnProfileLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            using (ShippingProfileEditorDlg profileEditor = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile()))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                profileEditor.ShowDialog(this);   
+                IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+
+                ShippingProfileEditorDlg profileEditor = lifetimeScope.Resolve<ShippingProfileEditorDlg>(
+                    new TypedParameter(typeof(ShippingProfileEntity), shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType))
+                );
+                profileEditor.ShowDialog(this);
             }
         }
 
@@ -90,11 +110,11 @@ namespace ShipWorks.Shipping.Editing
         /// to move things around in the designer</remarks>
         private void SetSettingsMovedMessageLocation()
         {
-            Point delta = requestedLabelFormat.Location - (Size)settingsMovedMessage.Location;
+            Point delta = requestedLabelFormat.Location - (Size) settingsMovedMessage.Location;
             delta.Offset(0, 3);
 
-            settingsMovedMessage.Location = settingsMovedMessage.Location + (Size)delta;
-            primaryProfileLink.Location = primaryProfileLink.Location + (Size)delta;
+            settingsMovedMessage.Location = settingsMovedMessage.Location + (Size) delta;
+            primaryProfileLink.Location = primaryProfileLink.Location + (Size) delta;
         }
 
         /// <summary>

@@ -2,51 +2,47 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
+using Autofac;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Dashboard;
+using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
-using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions.Freemium;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.OrderItems;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Properties;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.OrderCombining;
+using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.Ebay.WizardPages;
 using ShipWorks.Stores.Platforms.PayPal;
-using ShipWorks.Templates.Processing.TemplateXml;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters;
-using Interapptive.Shared.Utility;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions.OrderItems;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.Properties;
-using ShipWorks.ApplicationCore.Dashboard;
-using ShipWorks.Stores.Management;
-using ShipWorks.Filters;
-using ShipWorks.Data.Administration;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
-using ShipWorks.Editions;
-using ShipWorks.Editions.Freemium;
-using ShipWorks.Shipping;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -66,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             NotShipped
         }
 
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayStoreType));
 
         /// <summary>
@@ -74,14 +70,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         static EbayStoreType()
         {
-            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectivePaymentStatus(e) );
-            EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e) );
+            EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => (int) EbayUtility.GetEffectivePaymentStatus(e));
+            EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e));
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayStoreType(StoreEntity store) 
+        public EbayStoreType(StoreEntity store)
             : base(store)
         {
         }
@@ -99,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get { return ((EbayStoreEntity)Store).EBayUserID; }
+            get { return ((EbayStoreEntity) Store).EBayUserID; }
         }
 
         /// <summary>
@@ -107,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new EbayDownloader((EbayStoreEntity)Store);
+            return new EbayDownloader((EbayStoreEntity) Store);
         }
 
         /// <summary>
@@ -130,7 +126,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the setup wizard pages
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage>();
 
@@ -151,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // People end up thinking they have to download paypal details and images, when really it just takes forever.  Don't show these options by default
             // pages.Add(new EBayPayPalPage());
             // pages.Add(new EBayOptionsPage());
-           
+
             return pages;
         }
 
@@ -240,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ForEveryItemCondition everyItem = new ForEveryItemCondition();
             everyItem.Container.FirstGroup.JoinType = ConditionJoinType.All;
             definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
-            
+
             EbayFeedbackCondition buyerLeft = new EbayFeedbackCondition();
             buyerLeft.Operator = EqualityOperator.Equals;
             buyerLeft.Value = EbayFeedbackConditionStatusType.BuyerLeftPositive;
@@ -252,12 +249,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
             everyItem.Container.FirstGroup.Conditions.Add(sellerNot);
 
             return new FilterEntity
-                {
-                    Name = "Needs Feeback",
-                    Definition = definition.GetXml(),
-                    IsFolder = false,
-                    FilterTarget = (int) FilterTarget.Orders
-                };
+            {
+                Name = "Needs Feeback",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int) FilterTarget.Orders
+            };
         }
 
         /// <summary>
@@ -271,7 +268,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayBuyerID = "",
 
                 SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
-                
+
                 GspEligible = false,
                 GspFirstName = "",
                 GspLastName = "",
@@ -381,11 +378,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ebayStore.PayPalApiUserName = "";
             ebayStore.PayPalApiPassword = "";
             ebayStore.PayPalApiSignature = "";
-            ebayStore.PayPalApiCredentialType = (short)PayPalCredentialType.Signature;
+            ebayStore.PayPalApiCredentialType = (short) PayPalCredentialType.Signature;
             ebayStore.DownloadItemDetails = false;
             ebayStore.DownloadPayPalDetails = false;
             ebayStore.DownloadOlderOrders = false;
-            
+
             List<BuyerPaymentMethodCodeType> defaults = new List<BuyerPaymentMethodCodeType>
             {
                 BuyerPaymentMethodCodeType.PayPal,
@@ -396,7 +393,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // default shipping methods used when creating Combined Payments
             ebayStore.DomesticShippingService = "USPSExpressFlatRateEnvelope";
             ebayStore.InternationalShippingService = "USPSPriorityFlatRateEnvelope";
-            
+
             return ebayStore;
         }
 
@@ -441,7 +438,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return
                 EntityUtility.IsSameField(field, OrderItemFields.Code) ||
@@ -545,7 +542,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             recordElement.AddElement("RecordNumber", () => order.Value.SellingManagerRecord);
 
             outline.AddElement("EligibleForGSP", () => order.Value.GspEligible);
-            outline.AddElement("ShippingMethod", () => EnumHelper.GetDescription((EbayShippingMethod)order.Value.SelectedShippingMethod));
+            outline.AddElement("ShippingMethod", () => EnumHelper.GetDescription((EbayShippingMethod) order.Value.SelectedShippingMethod));
 
             // Since typical ebay orders will have just a single item, and to ease template migration from v2, include
             // the auction details here like with v2
@@ -637,7 +634,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
                 new MenuCommand("Ship to Buyer", OnShipToBuyer)
-            };  
+            };
 
             return commands;
         }
@@ -656,6 +653,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             executor.ExecuteCompleted += (o, e) =>
             {
                 context.Complete(e.Issues, MenuCommandResult.Error);
+
+                SendOrderSelectionChangingMessage(context.SelectedKeys);
             };
 
             executor.ExecuteAsync(ShipToGspFacilityCallback, context.SelectedKeys);
@@ -679,11 +678,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 if (ebayOrder.GspEligible)
                 {
-                    if (ebayOrder.SelectedShippingMethod != (int)EbayShippingMethod.GlobalShippingProgram)
+                    if (ebayOrder.SelectedShippingMethod != (int) EbayShippingMethod.GlobalShippingProgram)
                     {
-                        // We have an eBay order that is eligible for the GSP program that needs to have the 
-                        // shipping method changed 
-                        ebayOrder.SelectedShippingMethod = (int)EbayShippingMethod.GlobalShippingProgram;
+                        // We have an eBay order that is eligible for the GSP program that needs to have the
+                        // shipping method changed
+                        ebayOrder.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
                         using (SqlAdapter adapter = new SqlAdapter())
                         {
                             adapter.SaveAndRefetch(ebayOrder);
@@ -692,7 +691,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
                 else
                 {
-                    // The order is not eligible for the GSP program (determined by eBay) 
+                    // The order is not eligible for the GSP program (determined by eBay)
                     throw new EbayException(string.Format("Order number {0} is not eligible for the Global Shipping Program", ebayOrder.OrderNumber));
                 }
             }
@@ -701,6 +700,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId, ex.Message);
                 issueAdder.Add(orderId, ex);
             }
+        }
+
+        /// <summary>
+        /// Sends an OrderSelectionChangedMessage so that other panels can update appropriately.
+        /// </summary>
+        private static void SendOrderSelectionChangingMessage(IEnumerable<long> orderIds)
+        {
+            OrderSelectionChangingMessage orderSelectionChangingMessage = new OrderSelectionChangingMessage(new object(), orderIds.ToList());
+            Messenger.Current.Send(orderSelectionChangingMessage);
         }
 
         /// <summary>
@@ -717,6 +725,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             executor.ExecuteCompleted += (o, e) =>
             {
                 context.Complete(e.Issues, MenuCommandResult.Error);
+
+                SendOrderSelectionChangingMessage(context.SelectedKeys);
             };
 
             executor.ExecuteAsync(ShipToBuyerCallback, context.SelectedKeys);
@@ -739,9 +749,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
 
                 // Only perform the update if the selected shipping method has not already been overridden to direct to buyer
-                if (ebayOrder.SelectedShippingMethod != (int)EbayShippingMethod.DirectToBuyerOverridden)
+                if (ebayOrder.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
                 {
-                    ebayOrder.SelectedShippingMethod = (int)EbayShippingMethod.DirectToBuyerOverridden;
+                    ebayOrder.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyerOverridden;
                     using (SqlAdapter adapter = new SqlAdapter())
                     {
                         adapter.SaveAndRefetch(ebayOrder);
@@ -781,7 +791,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         void OnPotentialCombinedOrdersFound(object sender, EbayPotentialCombinedOrdersFoundEventArgs e)
         {
             // unpack the user state
-            MenuCommandExecutionContext context = (MenuCommandExecutionContext)e.UserState;
+            MenuCommandExecutionContext context = (MenuCommandExecutionContext) e.UserState;
 
             // handle completing the menu command
             if (e.Error != null)
@@ -852,7 +862,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void OnSendMessage(MenuCommandExecutionContext context)
         {
             List<long> selectedIds = context.SelectedKeys.ToList();
-            
+
             using (EbayMessagingDlg dlg = new EbayMessagingDlg(selectedIds))
             {
                 if (dlg.ShowDialog(context.Owner) != DialogResult.OK)
@@ -901,10 +911,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // unpack the user state
             Dictionary<string, object> state = userState as Dictionary<string, object>;
 
-            EbaySendMessageType messageType = (EbaySendMessageType)state["MessageType"];
-            string subject = (string)state["Subject"];
-            string message = (string)state["Message"];
-            bool copyMe = (bool)state["CopyMe"];
+            EbaySendMessageType messageType = (EbaySendMessageType) state["MessageType"];
+            string subject = (string) state["Subject"];
+            string message = (string) state["Message"];
+            bool copyMe = (bool) state["CopyMe"];
 
             // Perform token processing on the message to be sent
             string processedSubject = TemplateTokenProcessor.ProcessTokens(subject, entityId);
@@ -984,7 +994,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             try
             {
                 EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.LeaveFeedback(entityId, (CommentTypeCodeType)state["feedbackType"], (string)state["feedback"]);
+                updater.LeaveFeedback(entityId, (CommentTypeCodeType) state["feedbackType"], (string) state["feedback"]);
             }
             catch (EbayException ex)
             {
@@ -1024,7 +1034,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(orderID) as EbayStoreEntity;
 
             // unpack the user state
-            EbayOnlineAction action = (EbayOnlineAction)userState;
+            EbayOnlineAction action = (EbayOnlineAction) userState;
 
             bool? paid = null;
             if (action == EbayOnlineAction.Paid || action == EbayOnlineAction.NotPaid)
@@ -1055,6 +1065,28 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
         #endregion
 
+
+        /// <summary>
+        /// Will calling OverrideShipmentDetails change the specified shipment
+        /// </summary>
+        public override bool WillOverrideShipmentDetailsChangeShipment(IShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                return false;
+            }
+
+            // Fetch the eBay order details so we have the latest GSP related data about the order
+            IEbayOrderEntity ebayOrder = shipment.Order as IEbayOrderEntity ??
+                DataProvider.GetEntity(shipment.OrderID) as IEbayOrderEntity;
+
+            // We're going to use the the GSP policy to inspect the order and configure the shipment
+            // to be shipped to the GSP domestic facility if it's eligible
+            Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
+
+            return policy.IsEligibleForGlobalShippingProgram(ebayOrder);
+        }
+
         /// <summary>
         /// Intended to be called during the processing of a shipment to allow the store to the
         /// chance to override the shipment details for any functionality that may be specific
@@ -1066,52 +1098,51 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// of the shipment were changed.</returns>
         public override List<ShipmentFieldIndex> OverrideShipmentDetails(ShipmentEntity shipment)
         {
-            // Overridden so we can change the shipping address if this is a Global Shipping Program order
-            List<ShipmentFieldIndex> modifiedFieldList = new List<ShipmentFieldIndex>();
-
             if (shipment != null)
             {
                 // Fetch the eBay order details so we have the latest GSP related data about the order
-                EbayOrderEntity ebayOrder = DataProvider.GetEntity(shipment.OrderID) as EbayOrderEntity;
+                IEbayOrderEntity ebayOrder = shipment.Order as IEbayOrderEntity ??
+                    DataProvider.GetEntity(shipment.OrderID) as IEbayOrderEntity;
 
                 // We're going to use the the GSP policy to inspect the order and configure the shipment
                 // to be shipped to the GSP domestic facility if it's eligible
-                Ebay.Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
+                Shipping.GlobalShippingProgram.Policy policy = new Shipping.GlobalShippingProgram.Policy();
 
                 if (policy.IsEligibleForGlobalShippingProgram(ebayOrder))
                 {
-                    // The order is an GSP order, so we'll need to change the address on the 
+                    // The order is an GSP order, so we'll need to change the address on the
                     // shipment to go to the GSP facility address on the eBay order
-                    modifiedFieldList = policy.ConfigureShipmentForGlobalShippingProgram(shipment, ebayOrder);
+                    return policy.ConfigureShipmentForGlobalShippingProgram(shipment, ebayOrder);
                 }
             }
 
-            return modifiedFieldList;
+            return new List<ShipmentFieldIndex>();
         }
 
         /// <summary>
         /// Determines whether the shipping address is editable for the specified shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns>
-        ///   <c>true</c> if [shipping address is editable] for [the specified shipment]; otherwise, <c>false</c>.
-        /// </returns>
-        public override bool IsShippingAddressEditable(ShipmentEntity shipment)
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
         {
-            bool isEditable = false;
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
 
-            if (base.IsShippingAddressEditable(shipment))
+            if (editable == ShippingAddressEditStateType.Editable)
             {
-                // Grab the order details and check with the GSP policy to see if 
+                // Grab the order details and check with the GSP policy to see if
                 // the order is currently flagged as a GSP order
-                EbayOrderEntity ebayOrder = DataProvider.GetEntity(shipment.OrderID) as EbayOrderEntity;
+                EbayOrderEntity ebayOrder = order as EbayOrderEntity;
                 Shipping.GlobalShippingProgram.Policy gspPolicy = new Shipping.GlobalShippingProgram.Policy();
 
                 // Global Shipping Program shipments should not have an editable shipping address
-                isEditable = !gspPolicy.IsEligibleForGlobalShippingProgram(ebayOrder);                
+                //isEditable = !gspPolicy.IsEligibleForGlobalShippingProgram(ebayOrder);
+                if (gspPolicy.IsEligibleForGlobalShippingProgram(ebayOrder))
+                {
+                    editable = ShippingAddressEditStateType.GspFulfilled;
+                }
             }
 
-            return isEditable;
+            return editable;
         }
 
         /// <summary>

@@ -12,6 +12,9 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
 using System.Collections;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Editions;
 
@@ -59,7 +62,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 // Showing the insurance control is dependent on if its allowed in tango
                 insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.EndiciaInsuranceProvider;
-                panelInsurance.Visible = (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaInsurance).Level == EditionRestrictionLevel.None);
+
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.EndiciaInsurance, null);
+
+                    panelInsurance.Visible = restrictionLevel == EditionRestrictionLevel.None;
+                }
             }
             else
             {

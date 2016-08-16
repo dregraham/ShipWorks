@@ -33,13 +33,12 @@
             this.pictureBoxStore = new System.Windows.Forms.PictureBox();
             this.labelStore = new System.Windows.Forms.Label();
             this.checkBoxConfirm = new System.Windows.Forms.CheckBox();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBoxStore)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStore)).BeginInit();
             this.SuspendLayout();
             // 
             // delete
             // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.delete.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Enabled = false;
             this.delete.Location = new System.Drawing.Point(301, 78);
             this.delete.Name = "delete";
@@ -47,10 +46,11 @@
             this.delete.TabIndex = 0;
             this.delete.Text = "Delete";
             this.delete.UseVisualStyleBackColor = true;
+            this.delete.Click += new System.EventHandler(this.OnDelete);
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(382, 78);
             this.cancel.Name = "cancel";
@@ -85,7 +85,7 @@
             this.checkBoxConfirm.Size = new System.Drawing.Size(401, 36);
             this.checkBoxConfirm.TabIndex = 4;
             this.checkBoxConfirm.Text = "I understand this permanently deletes all data for the store, including customers" +
-                ", orders, and shipments.";
+    ", orders, and shipments.";
             this.checkBoxConfirm.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.checkBoxConfirm.UseVisualStyleBackColor = true;
             this.checkBoxConfirm.CheckedChanged += new System.EventHandler(this.OnConfirm);
@@ -101,7 +101,7 @@
             this.Controls.Add(this.pictureBoxStore);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.delete);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -110,7 +110,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Delete Store";
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBoxStore)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStore)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

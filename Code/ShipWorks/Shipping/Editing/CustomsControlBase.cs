@@ -1,28 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using Divelements.SandGrid;
-using ShipWorks.UI.Controls;
 using System.Diagnostics;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
+using System.Drawing;
 using System.Globalization;
-using ShipWorks.UI;
-using Interapptive.Shared.Business;
+using System.Linq;
+using System.Windows.Forms;
+using Divelements.SandGrid;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Model;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -31,7 +22,7 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class CustomsControlBase : UserControl
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(CustomsControlBase));
 
         // If enableEditing was specified in LoadShipments
@@ -101,6 +92,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load the given shipments customs information into the control
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool resetSelection)
         {
             SuspendShipSenseFieldChangeEvent();
@@ -144,10 +137,10 @@ namespace ShipWorks.Shipping.Editing
                 if (buckets.Count == 0)
                 {
                     buckets.AddRange(shipment.CustomsItems.Select(c => new RowBucket
-                        {
-                            Description = c.Description,
-                            CustomsItems = new List<ShipmentCustomsItemEntity> { c }
-                        }));
+                    {
+                        Description = c.Description,
+                        CustomsItems = new List<ShipmentCustomsItemEntity> { c }
+                    }));
                 }
                 else
                 {
@@ -194,11 +187,11 @@ namespace ShipWorks.Shipping.Editing
                         else
                         {
                             // No more buckets left to use, have to create a new one
-                            buckets.Add(new RowBucket 
-                                { 
-                                    Description = customsItem.Description, 
-                                    CustomsItems = new List<ShipmentCustomsItemEntity> { customsItem } 
-                                });
+                            buckets.Add(new RowBucket
+                            {
+                                Description = customsItem.Description,
+                                CustomsItems = new List<ShipmentCustomsItemEntity> { customsItem }
+                            });
                         }
                     }
                 }
@@ -399,10 +392,19 @@ namespace ShipWorks.Shipping.Editing
                     SaveCustomsItem(customsItem, changedWeights, changedValues);
                 }
             }
-            
+
             // Update the content weights and values for all affected shipments
             UpdateContentWeight(changedWeights.Select(p => p.Key));
             UpdateCustomsValue(changedValues.Select(p => p.Key));
+        }
+
+        /// <summary>
+        /// Flush any in-progress changes before saving
+        /// </summary>
+        /// <remarks>This should cause weight controls to finish, etc.</remarks>
+        public virtual void FlushChanges()
+        {
+            weight.FlushChanges();
         }
 
         /// <summary>
@@ -453,9 +455,8 @@ namespace ShipWorks.Shipping.Editing
             }
             catch (ORMEntityIsDeletedException ex)
             {
-                // shipsense sync might delete the original customs item
-                // i think. 
-                log.Error(String.Format("Error saving customs item: {0}", ex.Message));
+                // ShipSense sync might delete the original customs item i think.
+                log.Error(string.Format("Error saving customs item: {0}", ex.Message));
             }
             harmonizedCode.ReadMultiText(s => customsItem.HarmonizedCode = s);
             countryOfOrigin.ReadMultiText(s => customsItem.CountryOfOrigin = Geography.GetCountryCode(s));
@@ -510,7 +511,7 @@ namespace ShipWorks.Shipping.Editing
             }
 
             SaveValuesToSelectedEntities();
-            
+
             RaiseShipSenseFieldChanged();
         }
 
@@ -564,7 +565,7 @@ namespace ShipWorks.Shipping.Editing
             Cursor.Current = Cursors.WaitCursor;
 
             itemsGrid.SelectedElements.Clear();
-            
+
             List<ShipmentCustomsItemEntity> createdList = new List<ShipmentCustomsItemEntity>();
 
             // Add to each shipment
@@ -590,7 +591,6 @@ namespace ShipWorks.Shipping.Editing
             {
                 RaiseShipSenseFieldChanged();
             }
-            
         }
 
         /// <summary>
@@ -684,6 +684,14 @@ namespace ShipWorks.Shipping.Editing
         protected void ResumeShipSenseFieldChangeEvent()
         {
             suspendShipSenseFieldEvent--;
+        }
+
+        /// <summary>
+        /// Unload shipments
+        /// </summary>
+        internal void UnloadShipments()
+        {
+            loadedShipments.Clear();
         }
     }
 }

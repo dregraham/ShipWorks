@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -23,6 +21,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         public EndiciaException(string message, Exception innerException)
             : base(message, innerException)
+        {
+
+        }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected EndiciaException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
 
         }

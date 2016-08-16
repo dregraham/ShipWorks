@@ -1,25 +1,13 @@
 using System;
-using System.IO;
-using System.Diagnostics;
-using System.Data;
-using System.Data.SqlClient;
-using System.Text;
-using System.Xml;
-using System.Xml.XPath;
-using System.Windows.Forms;
-using System.Threading;
-using Interapptive.Shared;
-using log4net;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Users;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Data;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Administration;
-using ShipWorks.Data.Administration.SqlServerSetup;
+using log4net;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data.Connection
 {
@@ -36,11 +24,10 @@ namespace ShipWorks.Data.Connection
         readonly SqlSessionConfiguration configuration;
 
         // Cached properties of the server
-        DateTime serverDateLocal;
-        DateTime serverDateUtc;
-        Stopwatch timeSinceTimeTaken;
         string serverMachineName;
         Version serverVersion;
+
+        private Guid databaseId = Guid.Empty;
 
         /// <summary>
         /// Static constructor
@@ -63,18 +50,18 @@ namespace ShipWorks.Data.Connection
         /// Constructor
         /// </summary>
         public SqlSession()
-            : this(new SqlSessionConfiguration()) 
-        { 
-        
+            : this(new SqlSessionConfiguration())
+        {
+
         }
 
         /// <summary>
         /// Copy constructor
         /// </summary>
         public SqlSession(SqlSession copy)
-            : this(copy.Configuration) 
-        { 
-        
+            : this(copy.Configuration)
+        {
+
         }
 
         /// <summary>
@@ -88,7 +75,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// One-time initializtion of the SqlSession.
+        /// One-time initialization of the SqlSession.
         /// </summary>
         public static void Initialize()
         {
@@ -147,12 +134,46 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Returns DatabaseGuid of database.
+        /// </summary>
+        public Guid DatabaseIdentifier
+        {
+            get
+            {
+                if (databaseId == Guid.Empty)
+                {
+                    databaseId = GetDatabaseId();
+                }
+
+                return databaseId;
+            }
+        }
+
+        /// <summary>
+        /// Returns DatabaseGuid of database.
+        /// </summary>
+        private static Guid GetDatabaseId()
+        {
+            try
+            {
+                using (SqlConnection con = Current.OpenConnection())
+                {
+                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseIdentifierException(ex);
+            }
+        }
+
+        /// <summary>
         /// Needs to be called whenver a core property of teh connection string changes
         /// </summary>
         private void ConnectionChanged()
         {
             // This forces the time to be regotten the next time asked for
-            timeSinceTimeTaken = null;
+            SqlDateTimeProvider.Current.ResetCache();
 
             // Set cached properties so that they will get re-populated when asked for.
             serverVersion = null;
@@ -323,6 +344,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Gets the list of any missing permissions minimally required to run ShipWorks
         /// </summary>
+        [NDependIgnoreLongMethod]
         public List<string> DetermineMissingPermissions(SqlSessionPermissionSet permissionSet)
         {
             List<string> missing = new List<string>();
@@ -376,7 +398,7 @@ namespace ShipWorks.Data.Connection
                 }
                 catch (SqlException ex)
                 {
-                    // We are specifically looking for 229 - "The SELECT\UPDATE\etc permission was denied."  208 for example would be that the object does not exist, which would mean 
+                    // We are specifically looking for 229 - "The SELECT\UPDATE\etc permission was denied."  208 for example would be that the object does not exist, which would mean
                     // that we just haven't setup the ShipWorks database yet
                     if (ex.Number == 229)
                     {
@@ -445,62 +467,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Get the latest time information from the server. Uses a cache mechanism for efficiency, so
-        /// we don't go to the server every invocation.
-        /// 
-        /// If the time has been retrieved from the server withing the past 30 minutes, then the current time
-        /// is estimated by adding the last retrieved time plus the elapsed time.
-        /// </summary>
-        public DateTime GetLocalDate()
-        {
-            RefreshSqlDateTime();
-            return serverDateLocal + timeSinceTimeTaken.Elapsed;
-        }
-
-        /// <summary>
-        /// Get the latest Utc time information from the server. Uses a cache mechanism for efficiency, so
-        /// we don't go to the server every invocation.
-        /// 
-        /// If the time has been retrieved from the server withing the past 30 minutes, then the current time
-        /// is estimated by adding the last retrieved time plus the elapsed time.
-        /// </summary>
-        public DateTime GetUtcDate()
-        {
-            RefreshSqlDateTime();
-            return serverDateUtc + timeSinceTimeTaken.Elapsed;
-        }
-
-        /// <summary>
-        /// Ensure that the cached Sql server time is reasonably fresh
-        /// </summary>
-        private void RefreshSqlDateTime()
-        {
-            if (timeSinceTimeTaken != null && timeSinceTimeTaken.Elapsed < TimeSpan.FromMinutes(30))
-            {
-                return;
-            }
-
-            // Get the server times if our cache is stale
-            ExistingConnectionScope.ExecuteWithCommand(cmd =>
-            {
-                cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
-
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
-                {
-                    reader.Read();
-
-                    serverDateLocal = (DateTime)reader["ServerDateLocal"];
-                    serverDateUtc = (DateTime)reader["ServerDateUtc"];
-
-                    log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverDateLocal, serverDateUtc);
-
-                    timeSinceTimeTaken = Stopwatch.StartNew();
-                }
-            });
-        }
-
-        /// <summary>
-        /// Get the machine name of the server that sql server is installed 
+        /// Get the machine name of the server that sql server is installed
         /// </summary>
         public string GetServerMachineName()
         {

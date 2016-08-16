@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
+    [Collection("ShippingPolicy")]
     public class ShippingPoliciesTest
     {
         private ShippingPolicies policies;

@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_RatesRetrieved_ValidResponse_Test()
+        public void GetRates_RatesRetrieved_ValidResponse()
         {
             var rateGroup = RunSuccessfullGetRates();
 
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_ResponseLogged_ValidResponse_Test()
+        public void GetRates_ResponseLogged_ValidResponse()
         {
             RunSuccessfullGetRates();
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_RequestLogged_ValidResponse_Test()
+        public void GetRates_RequestLogged_ValidResponse()
         {
             RunSuccessfullGetRates();
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_UrlInCorrectFormat_ValidResponse_Test()
+        public void GetRates_UrlInCorrectFormat_ValidResponse()
         {
             RunSuccessfullGetRates();
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_RequestUsedGetMethod_ValidResponse_Test()
+        public void GetRates_RequestUsedGetMethod_ValidResponse()
         {
             RunSuccessfullGetRates();
 
@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_ThrowsOnTracException_WhenErrorInShipment_Test()
+        public void GetRates_ThrowsOnTracException_WhenErrorInShipment()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
             {
@@ -220,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_ThrowsOnTracException_WhenNoShipmentReturned_Test()
+        public void GetRates_ThrowsOnTracException_WhenNoShipmentReturned()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
             {
@@ -237,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_ThrowsOnTracException_WhenRequestErrorReturned_Test()
+        public void GetRates_ThrowsOnTracException_WhenRequestErrorReturned()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
             {
@@ -253,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [Fact]
-        public void GetRates_LogsUnknownRateType_WhenUnknownRateTypeReturned_Test()
+        public void GetRates_LogsUnknownRateType_WhenUnknownRateTypeReturned()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
             {

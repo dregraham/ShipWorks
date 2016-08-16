@@ -1,21 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
-using System.Text;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     /// <summary>
     /// OnTrac Account Manager
     /// </summary>
-    public class OnTracAccountManager
+    public static class OnTracAccountManager
     {
         static TableSynchronizer<OnTracAccountEntity> synchronizer;
+        static IEnumerable<IOnTracAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -47,16 +51,42 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Return the active list of OnTrac accounts
+        /// </summary>
+        public static IEnumerable<IOnTracAccountEntity> AccountsReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyAccounts;
+                }
+            }
+        }
+
+        /// <summary>
         /// Save the given OnTrac account
         /// </summary>
         public static void SaveAccount(OnTracAccountEntity account)
         {
+            bool wasDirty = account.IsDirty;
+
             using (var adapter = new SqlAdapter())
             {
                 adapter.SaveAndRefetch(account);
             }
 
             CheckForChangesNeeded();
+
+            if (wasDirty)
+            {
+                Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            }
         }
 
         /// <summary>
@@ -82,6 +112,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     synchronizer.EntityCollection.Sort((int) OnTracAccountFieldIndex.OnTracAccountID, ListSortDirection.Ascending);
                 }
 
+                readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
+
                 needCheckForChanges = false;
             }
         }
@@ -95,6 +127,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Get the account with the specified ID, or null if not found.
+        /// </summary>
+        public static IOnTracAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return AccountsReadOnly.FirstOrDefault(a => a.OnTracAccountID == accountID);
+        }
+
+        /// <summary>
         /// Delete the given OnTrac account
         /// </summary>
         public static void DeleteAccount(OnTracAccountEntity account)
@@ -105,6 +145,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             CheckForChangesNeeded();
+
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.OnTrac));
         }
 
         /// <summary>

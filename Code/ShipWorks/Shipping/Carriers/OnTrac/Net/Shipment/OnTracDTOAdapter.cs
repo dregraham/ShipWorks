@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
     /// <summary>
     /// Converts ShipWorks ShipmentEntity to an OnTrac DTO
     /// </summary>
-    public class OnTracDtoAdapter
+    public static class OnTracDtoAdapter
     {
         /// <summary>
         /// Create a shipment object that conforms to the OnTrac XSD

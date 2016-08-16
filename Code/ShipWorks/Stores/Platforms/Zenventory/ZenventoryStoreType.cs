@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Autofac;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -24,25 +23,13 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <summary>
         /// Gets the type code for this store
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.Zenventory;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Zenventory;
 
 
         /// <summary>
         /// Get the log source
         /// </summary>
-        public override ApiLogSource LogSource
-        {
-            get
-            {
-                return ApiLogSource.Zenventory;
-            }
-        }
+        public override ApiLogSource LogSource => ApiLogSource.Zenventory;
 
         /// <summary>
         /// Create the user control used in the Store Manager window.
@@ -55,7 +42,8 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage> {new ZenventoryAddStoreWizardPage()};
 
@@ -65,20 +53,11 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <summary>
         /// Identifies this store type
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                return ((GenericModuleStoreEntity)Store).ModuleUsername;
-            }
-        }
+        protected override string InternalLicenseIdentifier => ((GenericModuleStoreEntity)Store).ModuleUsername;
 
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public override string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/solution/articles/4000023323-connecting-zenventory-with"; }
-        }
+        public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000023323";
     }
 }

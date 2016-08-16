@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
-using System.Threading;
 
 namespace ShipWorks.Data.Grid.Paging
 {
@@ -34,7 +30,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Fetch the entity with the given ID.  If it is not in cache, and fetchIfMissing is true, it will be retrieved from the database.
         /// </summary>
-        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing)
+        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
         {
             return DataProvider.GetEntity(entityID, fetchIfMissing);
         }

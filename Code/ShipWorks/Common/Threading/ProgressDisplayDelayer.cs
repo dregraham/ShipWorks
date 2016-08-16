@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
-using System.Diagnostics;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI;
-using log4net;
-using Interapptive.Shared;
 using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Common.Threading
@@ -96,7 +91,7 @@ namespace ShipWorks.Common.Threading
             {
                 bool blockMessage = false;
 
-                // If we are in a KEYDOWN, we want to let the pair complete, so we check that weve already blocked a 
+                // If we are in a KEYDOWN, we want to let the pair complete, so we check that weve already blocked a
                 // corresponding keydown before blocking a keyup
                 if (m.Msg == NativeMethods.WM_KEYUP && blockedKeyDown)
                 {
@@ -206,7 +201,7 @@ namespace ShipWorks.Common.Threading
                 }
             }
 
-            // Show the window after 
+            // Show the window after
             ThreadPool.RegisterWaitForSingleObject(doneEvent, new WaitOrTimerCallback(ShowAfterCallback), null, timeSpan, true);
         }
 
@@ -244,7 +239,7 @@ namespace ShipWorks.Common.Threading
             bool isDone = !timedOut;
 
             // If it doesn't, show the window
-            if (!isDone)
+            if (!isDone && Program.ExecutionMode.IsUISupported)
             {
                 // This lock ensures that we wont show the window right after it really gets done, after having checked
                 // right before that when it was not done.
@@ -303,7 +298,7 @@ namespace ShipWorks.Common.Threading
                         {
                             NativeMethods.EnableWindow(owner.Handle, true);
                         }
-                        
+
                         CancelKeyboardBlocking();
                     }
                 }

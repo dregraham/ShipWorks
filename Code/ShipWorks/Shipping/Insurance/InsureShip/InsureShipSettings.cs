@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
@@ -84,7 +81,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
         /// <summary>
         /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
-        /// 
+        ///
         /// Technically, it is 7 days, but we don't know when the shipment was shipped during the day.
         /// </summary>
         public TimeSpan ClaimSubmissionWaitingPeriod

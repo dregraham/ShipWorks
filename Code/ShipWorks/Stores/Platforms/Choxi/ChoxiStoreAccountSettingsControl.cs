@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.UI;
 using ShipWorks.Data.Model;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 
@@ -36,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Choxi
 
             useTestServer.Visible = InterapptiveOnly.MagicKeysDown;
 
-            ChoxiStoreType store = new ChoxiStoreType(new GenericModuleStoreEntity { TypeCode = (int)StoreTypeCode.Choxi });
+            ChoxiStoreType store = (ChoxiStoreType) StoreTypeManager.GetType(StoreTypeCode.Choxi);
             helpLink.Url = store.AccountSettingsHelpUrl;
 
         }

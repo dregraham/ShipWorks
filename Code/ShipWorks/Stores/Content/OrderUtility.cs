@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
-using ShipWorks.Shipping.ShipSense;
-using log4net;
-using ShipWorks.Templates.Tokens;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Stores.Content
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public static ShipmentEntity GetLatestActiveShipment(long orderID)
         {
-            ShipmentEntity shipment = 
+            ShipmentEntity shipment =
                 DataProvider.GetRelatedEntities(orderID, EntityType.ShipmentEntity)
                     .Cast<ShipmentEntity>()
                     .Where(s => s.Processed && !s.Voided)
@@ -55,28 +55,20 @@ namespace ShipWorks.Stores.Content
         }
 
         /// <summary>
-        /// Calculate the order total of the given order
+        /// Calculate the order total of the order.  The FK rows must be present and referenced
+        /// by the order object.
         /// </summary>
-        public static decimal CalculateTotal(long orderID, bool includeCharges)
+        public static decimal CalculateTotal(OrderEntity order, bool includeCharges)
         {
-            PrefetchPath2 prefetch = new PrefetchPath2(EntityType.OrderEntity);
+            MethodConditions.EnsureArgumentIsNotNull(order);
 
-            // Grab items and their attributes
-            prefetch.Add(OrderEntity.PrefetchPathOrderItems).SubPath.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
+            PopulateOrderDetails(order);
 
-            // Grab charges
-            if (includeCharges)
-            {
-                prefetch.Add(OrderEntity.PrefetchPathOrderCharges);
-            }
+            // If includeCharges was true, send the order's OrderCharges collection.  Otherwise, if charges should not be included,
+            // send an empty collection.
+            EntityCollection<OrderChargeEntity> orderCharges = includeCharges ? order.OrderCharges : new EntityCollection<OrderChargeEntity>();
 
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                OrderEntity order = new OrderEntity(orderID);
-                adapter.FetchEntity(order, prefetch);
-
-                return CalculateTotal(order);
-            }
+            return CalculateTotal(order.OrderItems, orderCharges);
         }
 
         /// <summary>
@@ -334,32 +326,48 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Populates the order, order items, and order item attribute for the given shipment.
         /// </summary>
+        public static OrderEntity FetchOrder(long orderID)
+        {
+            OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
+            if (order != null)
+            {
+                PopulateOrderDetails(order);
+            }
+            return order;
+        }
+
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given shipment.
+        /// </summary>
         /// <param name="shipment">The shipment.</param>
         public static void PopulateOrderDetails(ShipmentEntity shipment)
         {
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                PopulateOrderDetails(shipment, adapter);
+            }
+        }
+
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given shipment.
+        /// </summary>
+        public static void PopulateOrderDetails(ShipmentEntity shipment, SqlAdapter adapter)
+        {
             if (shipment.Order == null)
             {
-                shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+                shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
             }
 
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
-
-                foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
-                {
-                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
-                }
-            }
+            PopulateOrderDetails(shipment.Order, adapter);
         }
 
         /// <summary>
         /// Populates the order, order items, and order item attribute for the given order.
         /// </summary>
         /// <param name="order">The order.</param>
-        public static void PopulateOrderDetails(OrderEntity order)
+        private static void PopulateOrderDetails(OrderEntity order)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 PopulateOrderDetails(order, adapter);
             }
@@ -372,11 +380,27 @@ namespace ShipWorks.Stores.Content
         /// <param name="adapter">The adapter.</param>
         public static void PopulateOrderDetails(OrderEntity order, SqlAdapter adapter)
         {
-            adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            if (order.Store == null)
+            {
+                order.Store = StoreManager.GetStore(order.StoreID);
+            }
+
+            if (order.OrderItems.None())
+            {
+                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
+
+            if (order.OrderCharges.None())
+            {
+                adapter.FetchEntityCollection(order.OrderCharges, new RelationPredicateBucket(OrderChargeFields.OrderID == order.OrderID));
+            }
 
             foreach (OrderItemEntity orderItemEntity in order.OrderItems)
             {
-                adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                if (orderItemEntity.OrderItemAttributes.None())
+                {
+                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                }
             }
         }
 

@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -81,6 +82,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         /// <param name="shipments">The list of shipments</param>
         /// <returns>True if the the view or edit control can be shown.  False otherwise.</returns>
+        [NDependIgnoreLongMethod]
         private bool IsValid(List<ShipmentEntity> shipments)
         {
             if (!shipments.Any())
@@ -202,7 +204,7 @@ namespace ShipWorks.Shipping.Insurance
                 // Get the cost 
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                InsuranceChoice insuranceChoice = shipmentType.GetParcelDetail(shipment, 0).Insurance;
+                IInsuranceChoice insuranceChoice = shipmentType.GetParcelDetail(shipment, 0).Insurance;
                 InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipment, insuranceChoice.InsuranceValue);
 
                 if (cost.ShipWorks > 0 && cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)

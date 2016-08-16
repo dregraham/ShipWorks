@@ -81,13 +81,13 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void InputRequirement_ReturnsNone_Test()
+        public void InputRequirement_ReturnsNone()
         {
             Assert.Equal(ActionTaskInputRequirement.None, testObject.InputRequirement);
         }
 
         [Fact]
-        public void TimeoutInMinutes_IsDefaultedTo120_Test()
+        public void TimeoutInMinutes_IsDefaultedTo120()
         {
             testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsTrue_WhenTriggerTypeIsScheduled_Test()
+        public void IsAllowedForTrigger_ReturnsTrue_WhenTriggerTypeIsScheduled()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.Scheduled);
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsDownloadFinished_Test()
+        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsDownloadFinished()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.DownloadFinished);
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsFilterContentChanged_Test()
+        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsFilterContentChanged()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.FilterContentChanged);
 
@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsOrderDownloaded_Test()
+        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsOrderDownloaded()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.OrderDownloaded);
 
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsShipmentProcessed_Test()
+        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsShipmentProcessed()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.ShipmentProcessed);
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsShipmentVoided_Test()
+        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsShipmentVoided()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.ShipmentVoided);
 
@@ -143,7 +143,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsUserInitiated_Test()
+        public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsUserInitiated()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.UserInitiated);
 
@@ -151,7 +151,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneHour_Test()
+        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneHour()
         {
             DateTime elapsedByOneHourDate = DefaultStartDateTimeInUtc.AddHours(testObject.TimeoutInMinutes / 60 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneHourDate);
@@ -162,7 +162,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneMinute_Test()
+        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneMinute()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddMinutes(testObject.TimeoutInMinutes + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -173,7 +173,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneSecond_Test()
+        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneSecond()
         {
             DateTime elapsedByOneSecondDate = DefaultStartDateTimeInUtc.AddSeconds(testObject.TimeoutInMinutes * 60 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneSecondDate);
@@ -184,7 +184,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneMillisecond_Test()
+        public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneMillisecond()
         {
             DateTime elapsedByOneMillisecondDate = DefaultStartDateTimeInUtc.AddMilliseconds(testObject.TimeoutInMinutes * 60000 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMillisecondDate);
@@ -195,7 +195,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_FetchesIndexes_WhenScheduledEndTimeHasNotLapsed_Test()
+        public void Run_FetchesIndexes_WhenScheduledEndTimeHasNotLapsed()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -206,7 +206,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsAllIndexesNeedingRebuilt_Test()
+        public void Run_LogsAllIndexesNeedingRebuilt()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -217,7 +217,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsMessageWhenNoIndexesNeedRebuilt_Test()
+        public void Run_LogsMessageWhenNoIndexesNeedRebuilt()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -230,7 +230,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_RebuildsEachIndex_WhenThereIsOnlyOneIndexToRebuild_Test()
+        public void Run_RebuildsEachIndex_WhenThereIsOnlyOneIndexToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -243,7 +243,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsEachRebuiltIndex_WhenThereIsOnlyOneIndexToRebuild_Test()
+        public void Run_LogsEachRebuiltIndex_WhenThereIsOnlyOneIndexToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -256,7 +256,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsEachRebuiltIndexAfterCompletion_WhenThereIsOnlyOneIndexToRebuild_Test()
+        public void Run_LogsEachRebuiltIndexAfterCompletion_WhenThereIsOnlyOneIndexToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -269,7 +269,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_RebuildsEachIndex_WhenThereAreMultipleIndexesToRebuild_Test()
+        public void Run_RebuildsEachIndex_WhenThereAreMultipleIndexesToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -280,7 +280,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsEachRebuiltIndex_WhenThereAreMultipleIndexesToRebuild_Test()
+        public void Run_LogsEachRebuiltIndex_WhenThereAreMultipleIndexesToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -291,7 +291,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsEachRebuiltIndexAfterCompletion_WhenThereAreMultipleIndexesToRebuild_Test()
+        public void Run_LogsEachRebuiltIndexAfterCompletion_WhenThereAreMultipleIndexesToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -302,7 +302,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_MovesToNextIndex_WhenIndexFails_AndThereAreMultipleIndexesToRebuild_Test()
+        public void Run_MovesToNextIndex_WhenIndexFails_AndThereAreMultipleIndexesToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -326,7 +326,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsException_WhenIndexFails_AndThereAreMultipleIndexesToRebuild_Test()
+        public void Run_LogsException_WhenIndexFails_AndThereAreMultipleIndexesToRebuild()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
@@ -350,7 +350,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_ThrowsException_WhenUnableToObtainIndexesToRebuild_Test()
+        public void Run_ThrowsException_WhenUnableToObtainIndexesToRebuild()
         {
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Throws(new Exception("Mocked exception"));
 
@@ -358,7 +358,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void Run_LogsException_WhenUnableToObtainIndexesToRebuild_Test()
+        public void Run_LogsException_WhenUnableToObtainIndexesToRebuild()
         {
             try
             {
@@ -373,7 +373,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         }
 
         [Fact]
-        public void CreateEditor_ThrowsInvalidOperationException_Test()
+        public void CreateEditor_ThrowsInvalidOperationException()
         {
             Assert.Throws<InvalidOperationException>(() => testObject.CreateEditor());
         }

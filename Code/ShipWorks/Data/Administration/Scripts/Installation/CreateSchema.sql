@@ -1,3 +1,6 @@
+
+
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -373,7 +376,8 @@ CREATE TABLE [dbo].[AmazonStore]
 [MerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ExcludeFBA] [bit] NOT NULL,
-[DomainName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[DomainName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonStore_AmazonShippingToken] DEFAULT (N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z')
 )
 GO
 PRINT N'Creating primary key [PK_AmazonStore] on [dbo].[AmazonStore]'
@@ -433,7 +437,7 @@ CREATE TABLE [dbo].[Order]
 [BillResidentialStatus] [int] NOT NULL,
 [BillPOBox] [int] NOT NULL,
 [BillUSTerritory] [int] NOT NULL,
-[BillMilitaryAddress] [int] NOT NULL,  
+[BillMilitaryAddress] [int] NOT NULL,
 [ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -455,7 +459,7 @@ CREATE TABLE [dbo].[Order]
 [ShipResidentialStatus] [int] NOT NULL,
 [ShipPOBox] [int] NOT NULL,
 [ShipUSTerritory] [int] NOT NULL,
-[ShipMilitaryAddress] [int] NOT NULL,  
+[ShipMilitaryAddress] [int] NOT NULL,
 [RollupItemCount] [int] NOT NULL,
 [RollupItemName] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupItemCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -469,7 +473,8 @@ CREATE TABLE [dbo].[Order]
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-[ShipSenseRecognitionStatus] int NOT NULL
+[ShipSenseRecognitionStatus] int NOT NULL,
+[ShipAddressType] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -626,7 +631,7 @@ CREATE NONCLUSTERED INDEX [IX_Order_BillUSTerritory] ON [dbo].[Order] ([BillUSTe
 GO
 PRINT N'Creating index [IX_Order_ShipAddressValidationStatus] on [dbo].[Order]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Order_ShipAddressValidationStatus] ON [dbo].[Order] ([ShipAddressValidationStatus] DESC)
+CREATE NONCLUSTERED INDEX [IX_Order_ShipAddressValidationStatus] ON [dbo].[Order] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderDate])
 GO
 PRINT N'Creating index [IX_Auto_ShipFirstName] on [dbo].[Order]'
 GO
@@ -637,7 +642,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_Auto_ShipFirstName')
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipFirstName] ON [dbo].[Order]
 (
-	[ShipFirstName] ASC
+    [ShipFirstName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 PRINT N'Creating index [IX_Order_ShipMilitaryAddress] on [dbo].[Order]'
@@ -656,40 +661,6 @@ PRINT N'Creating index [IX_Order_ShipUSTerritory] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Order_ShipUSTerritory] ON [dbo].[Order] ([ShipUSTerritory] DESC)
 GO
-PRINT N'Adding [Order].[IX_Store_OrderNumberComplete_IsManual] Index'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
-(
-	[StoreID] ASC,
-	[OrderNumberComplete] ASC,
-	[IsManual] ASC
-)
-GO
-PRINT N'Adding [Order].[IX_Order_DestinationResidential] Index'
-GO
--- Intended to match the conditions on the US Residential filter in ShipWorks
-CREATE NONCLUSTERED INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
-(
-	[ShipResidentialStatus] ASC,
-	[ShipPOBox] ASC,
-	[ShipUSTerritory] ASC,
-	[ShipMilitaryAddress] ASC
-)
-WHERE ShipResidentialStatus = 1 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
-GO
-PRINT N'Adding [Order].[IX_Order_DestinationCommercial] Index'
-GO
--- Intended to match the conditions on the US Commercial filter in ShipWorks
-CREATE NONCLUSTERED INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
-(
-	[ShipResidentialStatus] ASC,
-	[ShipPOBox] ASC,
-	[ShipUSTerritory] ASC,
-	[ShipMilitaryAddress] ASC
-)
-WHERE ShipResidentialStatus = 2 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
-GO
-
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
@@ -704,7 +675,8 @@ CREATE TABLE [dbo].[AmazonOrder]
 [FulfillmentChannel] [int] NOT NULL,
 [IsPrime] [int] NOT NULL,
 [EarliestExpectedDeliveryDate] [datetime] NULL,
-[LatestExpectedDeliveryDate] [datetime] NULL
+[LatestExpectedDeliveryDate] [datetime] NULL,
+[PurchaseOrderNumber] [nvarchar](50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
@@ -762,7 +734,7 @@ ALTER TABLE [dbo].[OrderItem] ADD CONSTRAINT [PK_OrderItem] PRIMARY KEY CLUSTERE
 GO
 PRINT N'Creating index [IX_OrderItem_OrderID] on [dbo].[OrderItem]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([OrderID] ASC, [OrderItemID] ASC)
 GO
 ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
@@ -1051,7 +1023,7 @@ CREATE TABLE [dbo].[Shipment]
 [ShipResidentialStatus] [int] NOT NULL,
 [ShipPOBox] [int] NOT NULL,
 [ShipUSTerritory] [int] NOT NULL,
-[ShipMilitaryAddress] [int] NOT NULL, 
+[ShipMilitaryAddress] [int] NOT NULL,
 [ResidentialDetermination] [int] NOT NULL,
 [ResidentialResult] [bit] NOT NULL,
 [OriginOriginID] [bigint] NOT NULL,
@@ -1096,15 +1068,15 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
 GO
 PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID]) WITH (FILLFACTOR = 75)
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID], [Voided]) WITH (FILLFACTOR = 75)
 GO
 PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] 
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment]
 (
-	[OrderID] ASC,
-	[Processed] ASC,
-	[ShipSenseStatus] ASC
+    [OrderID] ASC,
+    [Processed] ASC,
+    [ShipSenseStatus] ASC
 )
 GO
 PRINT N'Creating index [IX_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
@@ -1117,7 +1089,7 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_ActualLabelFormat] ON [dbo].[Shipment] ([
 GO
 PRINT N'Creating index [IX_Shipment_ShipAddressValidationStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ShipAddressValidationStatus] ON [dbo].[Shipment] ([ShipAddressValidationStatus] DESC) INCLUDE ([Processed])
+CREATE NONCLUSTERED INDEX [IX_Shipment_ShipAddressValidationStatus] ON [dbo].[Shipment] ([ShipAddressValidationStatus] DESC) INCLUDE ([OrderID], [Processed], [Voided])
 GO
 PRINT N'Creating index [IX_Shipment_ShipMilitaryAddress] on [dbo].[Shipment]'
 GO
@@ -1219,7 +1191,8 @@ CREATE TABLE [dbo].[ChannelAdvisorOrder]
 [FlagStyle] [nvarchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FlagDescription] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FlagType] [int] NOT NULL,
-[MarketplaceNames] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[MarketplaceNames] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsPrime] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrder] on [dbo].[ChannelAdvisorOrder]'
@@ -1229,6 +1202,10 @@ GO
 PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[ChannelAdvisorOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineShippingStatus] ON [dbo].[ChannelAdvisorOrder] ([OnlineShippingStatus])
+GO
+PRINT N'Creating index [IX_ChannelAdvisorOrder_IsPrime] on [dbo].[ChannelAdvisorOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_IsPrime] ON [dbo].[ChannelAdvisorOrder]([IsPrime])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
@@ -1258,6 +1235,8 @@ CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [db
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceStoreName]) INCLUDE ([MarketplaceBuyerID], [MarketplaceSalesID])
 GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_Classification] ON [dbo].[ChannelAdvisorOrderItem] ([Classification])
+GO
 PRINT N'Creating [dbo].[ChannelAdvisorStore]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorStore]
@@ -1266,7 +1245,11 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ProfileID] [int] NOT NULL,
 [AttributesToDownload] [xml] NOT NULL,
-[ConsolidatorAsUsps] [bit] NOT NULL
+[ConsolidatorAsUsps] [bit] NOT NULL,
+[AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AmazonShippingToken] [nvarchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -1607,7 +1590,7 @@ CREATE TABLE [dbo].[PostalShipment]
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalProfile_NoPostage] DEFAULT ((0))
+[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalShipment_NoPostage] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -1662,6 +1645,58 @@ GO
 PRINT N'Creating primary key [PK_EtsyStore] on [dbo].[EtsyStore]'
 GO
 ALTER TABLE [dbo].[EtsyStore] ADD CONSTRAINT [PK_EtsyStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Creating [dbo].[AmazonShipment]'
+GO
+CREATE TABLE [dbo].[AmazonShipment]
+(
+[ShipmentID] [bigint] NOT NULL,
+[CarrierName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierName] DEFAULT (''),
+[ShippingServiceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceName] DEFAULT (''),
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceId] DEFAULT (''),
+[ShippingServiceOfferID] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceOfferId] DEFAULT (''),
+[InsuranceValue] [money] NOT NULL CONSTRAINT [DF_AmazonShipment_InsuranceValue] DEFAULT ((0)),
+[DimsProfileID] [bigint] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsProfileID] DEFAULT ((0)),
+[DimsLength] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsLength] DEFAULT ((0)),
+[DimsWidth] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsWidth] DEFAULT ((0)),
+[DimsHeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsHeight] DEFAULT ((0)),
+[DimsWeight] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsWeight] DEFAULT ((0)),
+[DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsAddWeight] DEFAULT ((0)),
+[DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((2)),
+[DeclaredValue] [money] NULL,
+[AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonShipment] on [dbo].[AmazonShipment]'
+GO
+ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [PK_AmazonShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Creating [dbo].[AmazonProfile]'
+GO
+CREATE TABLE [dbo].[AmazonProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL,
+[DimsProfileID] [bigint] NULL,
+[DimsLength] [float] NULL,
+[DimsWidth] [float] NULL,
+[DimsHeight] [float] NULL,
+[DimsWeight] [float] NULL,
+[DimsAddWeight] [bit] NULL,
+[DeliveryExperience] [int] NULL,
+[Weight] [float] NULL,
+)
+GO
+PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'
+GO
+ALTER TABLE [dbo].[AmazonProfile] ADD CONSTRAINT [PK_AmazonProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
 PRINT N'Creating [dbo].[FedExShipment]'
 GO
@@ -2274,7 +2309,7 @@ CREATE TABLE [dbo].[MagentoStore]
 (
 [StoreID] [bigint] NOT NULL,
 [MagentoTrackingEmails] [bit] NOT NULL,
-[MagentoConnect] [bit] NOT NULL
+[MagentoVersion] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MagentoStore] on [dbo].[MagentoStore]'
@@ -2330,7 +2365,7 @@ ALTER TABLE [dbo].[OrderItemAttribute] ADD CONSTRAINT [PK_OrderItemAttribute] PR
 GO
 PRINT N'Creating index [IX_OrderItemAttribute_OrderItemID] on [dbo].[OrderItemAttribute]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderItemAttribute_OrderItemID] ON [dbo].[OrderItemAttribute] ([OrderItemID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItemAttribute_OrderItemID] ON [dbo].[OrderItemAttribute] ([OrderItemID] ASC,[OrderItemAttributeID] ASC)
 GO
 ALTER TABLE [dbo].[OrderItemAttribute] ENABLE CHANGE_TRACKING
 GO
@@ -2459,7 +2494,7 @@ ALTER TABLE [dbo].[Note] ADD CONSTRAINT [PK_Note] PRIMARY KEY CLUSTERED  ([NoteI
 GO
 PRINT N'Creating index [IX_OrderNote_ObjectID] on [dbo].[Note]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID]) INCLUDE ([Edited])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID] ASC, [NoteID] ASC) INCLUDE ([Edited])
 GO
 ALTER TABLE [dbo].[Note] ENABLE CHANGE_TRACKING
 GO
@@ -2655,7 +2690,7 @@ ALTER TABLE [dbo].[OrderCharge] ADD CONSTRAINT [PK_OrderCharge] PRIMARY KEY CLUS
 GO
 PRINT N'Creating index [IX_OrderCharge_OrderID] on [dbo].[OrderCharge]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderCharge_OrderID] ON [dbo].[OrderCharge] ([OrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderCharge_OrderID] ON [dbo].[OrderCharge] ([OrderID] ASC, [OrderChargeID] ASC)
 GO
 ALTER TABLE [dbo].[OrderCharge] ENABLE CHANGE_TRACKING
 GO
@@ -2705,7 +2740,7 @@ ALTER TABLE [dbo].[OrderPaymentDetail] ADD CONSTRAINT [PK_OrderPaymentDetail] PR
 GO
 PRINT N'Creating index [IX_OrderPaymentDetail_OrderID] on [dbo].[OrderPaymentDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderPaymentDetail_OrderID] ON [dbo].[OrderPaymentDetail] ([OrderID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderPaymentDetail_OrderID] ON [dbo].[OrderPaymentDetail] ([OrderID] ASC, [OrderPaymentDetailID] ASC)
 GO
 ALTER TABLE [dbo].[OrderPaymentDetail] ENABLE CHANGE_TRACKING
 GO
@@ -3061,8 +3096,10 @@ GO
 CREATE TABLE [dbo].[SearsStore]
 (
 [StoreID] [bigint] NOT NULL,
-[Email] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[SearsEmail] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SecretKey] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SellerID] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_SearsStore] on [dbo].[SearsStore]'
@@ -3452,6 +3489,26 @@ PRINT N'Creating primary key [PK_TemplateUserSettings] on [dbo].[TemplateUserSet
 GO
 ALTER TABLE [dbo].[TemplateUserSettings] ADD CONSTRAINT [PK_TemplateUserSettings] PRIMARY KEY CLUSTERED  ([TemplateUserSettingsID])
 GO
+SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Creating [dbo].[ThreeDCartOrder]'
+GO
+CREATE TABLE [dbo].[ThreeDCartOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[ThreeDCartOrderID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ThreeDCartOrder] on [dbo].[ThreeDCartOrder]'
+GO
+ALTER TABLE [dbo].[ThreeDCartOrder] ADD CONSTRAINT [PK_ThreeDCartOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ThreeDCartOrder]'
+GO
+ALTER TABLE [dbo].[ThreeDCartOrder] ADD CONSTRAINT [FK_ThreeDCartOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
 PRINT N'Creating [dbo].[ThreeDCartOrderItem]'
 GO
 CREATE TABLE [dbo].[ThreeDCartOrderItem]
@@ -3473,7 +3530,8 @@ CREATE TABLE [dbo].[ThreeDCartStore]
 [ApiUserKey] [nvarchar] (65) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TimeZoneID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [StatusCodes] [xml] NULL,
-[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
+[RestUser] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartStore] on [dbo].[ThreeDCartStore]'
@@ -3851,7 +3909,8 @@ GO
 CREATE TABLE [dbo].[YahooOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[YahooProductID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Url] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL Default ''
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderItem] on [dbo].[YahooOrderItem]'
@@ -3864,7 +3923,10 @@ CREATE TABLE [dbo].[YahooStore]
 (
 [StoreID] [bigint] NOT NULL,
 [YahooEmailAccountID] [bigint] NOT NULL,
-[TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[TrackingUpdatePassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[YahooStoreID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[AccessToken] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL DEFAULT '',
+[BackupOrderNumber] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_YahooStore] on [dbo].[YahooStore]'
@@ -3939,7 +4001,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerUpdateModifiedBilling] [int] NOT NULL,
 [CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
-[AuditDeletedOrders] [bit] NOT NULL
+[AuditDeletedOrders] [bit] NOT NULL,
+[CustomerKey] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -4201,7 +4264,7 @@ CREATE TABLE [dbo].[FilterNodeUpdatePending]
 (
 [FilterNodeContentID] [bigint] NOT NULL,
 [FilterTarget] [int] NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Position] [int] NOT NULL
 )
@@ -4230,7 +4293,8 @@ CREATE TABLE [dbo].[FtpAccount]
 [Port] [int] NOT NULL,
 [SecurityType] [int] NOT NULL,
 [Passive] [bit] NOT NULL,
-[InternalOwnerID] [bigint] NULL
+[InternalOwnerID] [bigint] NULL,
+[ReuseControlConnectionSession] [bit] NOT NULL DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_FtpAccount] on [dbo].[FtpAccount]'
@@ -4622,7 +4686,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [AutoCreateShipments] [bit] NOT NULL,
 [FedExFimsEnabled] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsEnabled] DEFAULT ((0)),
 [FedExFimsUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsUsername] DEFAULT (''),
-[FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT ('')
+[FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT (''),
+[ShipmentEditLimit] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -4640,24 +4705,24 @@ GO
 PRINT N'Creating [dbo].[ExcludedServiceType]'
 GO
 CREATE TABLE [dbo].[ExcludedServiceType](
-	[ShipmentType] [int] NOT NULL,
-	[ServiceType] [int] NOT NULL,
- CONSTRAINT [PK_ExcludedServiceType] PRIMARY KEY CLUSTERED 
+    [ShipmentType] [int] NOT NULL,
+    [ServiceType] [int] NOT NULL,
+ CONSTRAINT [PK_ExcludedServiceType] PRIMARY KEY CLUSTERED
 (
-	[ShipmentType] ASC,
-	[ServiceType] ASC
+    [ShipmentType] ASC,
+    [ServiceType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[ExcludedPackageType]'
 GO
 CREATE TABLE [dbo].[ExcludedPackageType](
-	[ShipmentType] [int] NOT NULL,
-	[PackageType] [int] NOT NULL,
- CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED 
+    [ShipmentType] [int] NOT NULL,
+    [PackageType] [int] NOT NULL,
+ CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED
 (
-	[ShipmentType] ASC,
-	[PackageType] ASC
+    [ShipmentType] ASC,
+    [PackageType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -4691,7 +4756,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
-[CreatedDate] [datetime] NOT NULL
+[CreatedDate] [datetime] NOT NULL,
+[PendingInitialAccount] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
@@ -4776,24 +4842,24 @@ GO
 PRINT N'Creating [dbo].[ValidatedAddress]'
 GO
 CREATE TABLE [dbo].[ValidatedAddress](
-	[ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
-	[ConsumerID] [bigint] NOT NULL,
-	[AddressPrefix] [nvarchar](10) NOT NULL,
-	[IsOriginal] [bit] NOT NULL,
-	[Street1] [nvarchar](60) NOT NULL,
-	[Street2] [nvarchar](60) NOT NULL,
-	[Street3] [nvarchar](60) NOT NULL,
-	[City] [nvarchar](50) NOT NULL,
-	[StateProvCode] [nvarchar](50) NOT NULL,
-	[PostalCode] [nvarchar](20) NOT NULL,
-	[CountryCode] [nvarchar](50) NOT NULL,
-	[ResidentialStatus] [int] NOT NULL,
-	[POBox] [int] NOT NULL,
-	[USTerritory] [int] NOT NULL,
-	[MilitaryAddress] [int] NOT NULL,
- CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED 
+    [ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
+    [ConsumerID] [bigint] NOT NULL,
+    [AddressPrefix] [nvarchar](10) NOT NULL,
+    [IsOriginal] [bit] NOT NULL,
+    [Street1] [nvarchar](60) NOT NULL,
+    [Street2] [nvarchar](60) NOT NULL,
+    [Street3] [nvarchar](60) NOT NULL,
+    [City] [nvarchar](50) NOT NULL,
+    [StateProvCode] [nvarchar](50) NOT NULL,
+    [PostalCode] [nvarchar](20) NOT NULL,
+    [CountryCode] [nvarchar](50) NOT NULL,
+    [ResidentialStatus] [int] NOT NULL,
+    [POBox] [int] NOT NULL,
+    [USTerritory] [int] NOT NULL,
+    [MilitaryAddress] [int] NOT NULL,
+ CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED
 (
-	[ValidatedAddressID] ASC
+    [ValidatedAddressID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -5046,6 +5112,14 @@ GO
 PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[AmazonShipment]'
+GO
+ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [FK_AmazonShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[AmazonProfile]'
+GO
+ALTER TABLE [dbo].[AmazonProfile] ADD CONSTRAINT [FK_AmazonProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[FilterSequence]'
 GO
@@ -5446,9 +5520,10 @@ PRINT N'Creating [dbo].[LemonStandStore]'
 GO
 CREATE TABLE [dbo].[LemonStandStore]
 (
-	[StoreID] [bigint] NOT NULL,
-	[Token] [varchar](100) NOT NULL,
-	[StoreURL] [varchar](255) NOT NULL,
+    [StoreID] [bigint] NOT NULL,
+    [Token] [varchar](100) NOT NULL,
+    [StoreURL] [varchar](255) NOT NULL,
+    [StatusCodes] [xml] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandStore] on [dbo].[LemonStandStore]'
@@ -5484,10 +5559,10 @@ PRINT N'Creating [dbo].[LemonStandOrderItem]'
 GO
 CREATE TABLE [dbo].[LemonStandOrderItem]
 (
-	[OrderItemID] [bigint] NOT NULL,
-	[UrlName] [nvarchar](100) NOT NULL,
-	[ShortDescription] [nvarchar](255) NOT NULL,
-	[Category] [nvarchar](100) NOT NULL
+    [OrderItemID] [bigint] NOT NULL,
+    [UrlName] [nvarchar](100) NOT NULL,
+    [ShortDescription] [nvarchar](255) NOT NULL,
+    [Category] [nvarchar](100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrderItem] on [dbo].[LemonStandOrderItem]'
@@ -5504,11 +5579,54 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_Auto_LemonStandOrderID] ON [dbo].[LemonStandOrder]
 (
-	[LemonStandOrderID] ASC
+    [LemonStandOrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
+PRINT N'Creating [dbo].[SparkPayStore]'
+GO
+CREATE TABLE [dbo].[SparkPayStore]
+(
+[StoreID] [bigint] NOT NULL,
+[Token] [nvarchar] (70) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StoreUrl] [nvarchar] (350) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StatusCodes] [xml] NULL
+)
+GO
+PRINT N'Creating primary key [PK_SparkPayStore] on [dbo].[SparkPayStore]'
+GO
+ALTER TABLE [dbo].[SparkPayStore] ADD CONSTRAINT [PK_SparkPayStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
 
+PRINT N'Adding foreign keys to [dbo].[SparkPayStore]'
+GO
+ALTER TABLE [dbo].[SparkPayStore] ADD CONSTRAINT [FK_SparkPayStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Creating [dbo].[OdbcStore]'
+GO
+CREATE TABLE [dbo].[OdbcStore]
+(
+	[StoreID] [bigint] NOT NULL,
+	[ImportConnectionString] [nvarchar](2048) NOT NULL,
+	[ImportMap] [nvarchar](max) NOT NULL,
+	[ImportStrategy] [int] NOT NULL,
+	[ImportColumnSourceType] [int] NOT NULL,
+	[ImportColumnSource] [nvarchar](2048) NOT NULL,
+	[UploadStrategy] [int] NOT NULL,
+	[UploadMap] [nvarchar](max) NOT NULL,
+	[UploadColumnSourceType] [int] NOT NULL,
+	[UploadColumnSource] [nvarchar](2048) NOT NULL,
+	[UploadConnectionString] [nvarchar](2048) NOT NULL,
+)
+GO
+PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'
+GO
+ALTER TABLE [dbo].[OdbcStore] ADD CONSTRAINT [PK_OdbcStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OdbcStore]'
+GO
+ALTER TABLE [dbo].[OdbcStore] ADD CONSTRAINT [FK_OdbcStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 
 PRINT N'Creating extended properties'
 GO
@@ -6079,4 +6197,20 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'UpsAccountID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'WorldShipStatus'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'CarrierName'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'ShippingServiceName'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'InsuranceValue'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsProfileID'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsWeight'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DimsAddWeight'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'129', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeliveryExperience'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeclaredValue'
 GO

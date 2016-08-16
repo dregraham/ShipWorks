@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.Profiles
@@ -14,7 +11,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Apply the given value to the specified entity and field, but only if the value is non-null
         /// </summary>
-        public static void ApplyProfileValue<T>(Nullable<T> value, EntityBase2 entity, EntityField2 field) where T : struct
+        public static void ApplyProfileValue<T>(T? value, EntityBase2 entity, EntityField2 field) where T : struct
         {
             if (value.HasValue)
             {

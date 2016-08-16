@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates;
-using ShipWorks.Data;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Templates.Media;
-using System.Windows.Forms;
-using ShipWorks.Users;
-using ShipWorks.Data.Connection;
-using ShipWorks.Email;
 using System.Diagnostics;
 using System.Threading;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Email;
 
 namespace ShipWorks.Actions
 {
@@ -33,7 +25,7 @@ namespace ShipWorks.Actions
 
         bool flushingPostponed = false;
 
-        // We take an applock for the duration of the context on this ID.  Useful for knowning which postponed queues are still being used.  Potentially
+        // We take an applock for the duration of the context on this ID.  Useful for knowing which postponed queues are still being used.  Potentially
         // other uses in the future?
         string contextLockName = Guid.NewGuid().ToString();
         SqlAppResourceLock contextSqlLock;
@@ -58,7 +50,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Indicates if there are any ActionProcessingContext objects currently in existance
+        /// Indicates if there are any ActionProcessingContext objects currently in existence
         /// </summary>
         public static bool IsProcessing
         {
@@ -90,7 +82,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// The list of current postponents. Each postponement represents a single queue that has postponed a single step.
+        /// The list of current postponements. Each postponement represents a single queue that has postponed a single step.
         /// </summary>
         public List<ActionPostponement> Postponements
         {

@@ -17,6 +17,7 @@ using System.Web;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Actions.Tasks.Common
 {

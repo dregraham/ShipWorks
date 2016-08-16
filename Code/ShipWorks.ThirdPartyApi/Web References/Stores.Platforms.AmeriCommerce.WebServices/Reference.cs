@@ -51208,6 +51208,11 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices {
         BillMeLater,
 
         AffirmCheckout,
+
+        /// <summary>
+        /// Left out of WSDL
+        /// </summary>
+        PayWithAmazon
     }
     
     /// <remarks/>

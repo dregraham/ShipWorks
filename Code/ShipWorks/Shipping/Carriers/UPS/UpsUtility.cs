@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml;
+using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -30,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// UPS utility functions
     /// </summary>
     public static class UpsUtility
-    {        
+    {
 		private static Lazy<bool> hasSurePostShipments = new Lazy<bool>(SurePostShipmentsExist);
         private static IEnumerable<UpsServiceType> surePostShipmentTypes;
 
@@ -289,6 +286,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the global instanced UPS access key
         /// </summary>
+        [NDependIgnoreLongMethod]
         public static string FetchAndSaveUpsAccessKey(UpsAccountEntity upsAccount, string upsLicense)
         {
             // Create the client for connecting to the UPS server
@@ -355,9 +353,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 return surePostShipmentTypes ?? (surePostShipmentTypes = new ReadOnlyCollection<UpsServiceType>(new []
                 {
-                    UpsServiceType.UpsSurePost1LbOrGreater, 
-                    UpsServiceType.UpsSurePostBoundPrintedMatter, 
-                    UpsServiceType.UpsSurePostMedia, 
+                    UpsServiceType.UpsSurePost1LbOrGreater,
+                    UpsServiceType.UpsSurePostBoundPrintedMatter,
+                    UpsServiceType.UpsSurePostMedia,
                     UpsServiceType.UpsSurePostLessThan1Lb
                 }));
             }
@@ -377,7 +375,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // UPS Shipment service type  IN ([surePostServiceTypeValues])
                 UpsShipmentFields.Service == surePostServiceTypeValues
             );
-            
+
             using (UpsShipmentCollection upsShipmentCollection = new UpsShipmentCollection())
             {
                 return SqlAdapter.Default.GetDbCount(upsShipmentCollection, bucket) > 0;
@@ -389,7 +387,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool CanUseSurePost()
         {
-            return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.UpsSurePost, null);
+
+                return restrictionLevel == EditionRestrictionLevel.None;
+            }
         }
 
         /// <summary>
@@ -421,7 +425,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// UPS only allows email addresses less than or equal to 50 characters.  
+        /// UPS only allows email addresses less than or equal to 50 characters.
         /// </summary>
         /// <returns>
         /// If the email address length is 50 or less, emailAddress is returned.

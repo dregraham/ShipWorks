@@ -33,6 +33,7 @@ namespace ShipWorks.Templates.Controls
     /// <summary>
     /// Control for displaying the preview of a single ShipWorks template
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class TemplatePreviewControl : UserControl
     {
         // Logger
@@ -426,10 +427,11 @@ namespace ShipWorks.Templates.Controls
 
             pendingPreview = null;
         }
-        
+
         /// <summary>
         /// Make the current pending preview the active one
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void ActivatePreview(PendingPreview preview)
         {
             if (InvokeRequired)
@@ -498,6 +500,7 @@ namespace ShipWorks.Templates.Controls
         /// <summary>
         /// Do the template processing and return the results.  Any progress can be reported using the specified provider.
         /// </summary>
+        [NDependIgnoreLongMethod]
         void BackgroundProcessPreview(object state)
         {
             object[] asyncData = (object[]) state;

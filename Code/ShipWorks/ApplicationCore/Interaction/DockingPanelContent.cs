@@ -6,6 +6,7 @@ using ShipWorks.Filters;
 using System.Collections;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
+using System.Threading.Tasks;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -42,19 +43,19 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// <summary>
         /// Change the content of the panel based on the given keys.
         /// </summary>
-        void ChangeContent(IGridSelection selection);
+        Task ChangeContent(IGridSelection selection);
 
         /// <summary>
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        void ReloadContent();
+        Task ReloadContent();
 
         /// <summary>
         /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
         /// the known existing rows and their known corresponding entities.
         /// </summary>
-        void UpdateContent();
+        Task UpdateContent();
 
         /// <summary>
         /// Update the content to reflect changes to the loaded stores

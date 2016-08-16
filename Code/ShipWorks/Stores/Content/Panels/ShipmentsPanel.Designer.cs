@@ -118,7 +118,7 @@
             this.menuInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message;
             this.menuInsuranceClaim.Name = "menuInsuranceClaim";
             this.menuInsuranceClaim.Size = new System.Drawing.Size(198, 22);
-            this.menuInsuranceClaim.Text = "Insurance Claim";
+            this.menuInsuranceClaim.Text = "File Claim";
             this.menuInsuranceClaim.Click += new System.EventHandler(this.OnSubmitClaim);
             // 
             // menuSep2
@@ -137,7 +137,6 @@
             // 
             this.ratesControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ratesControl.ConsolidatePostalRates = true;
             this.ratesControl.Location = new System.Drawing.Point(0, 64);
             this.ratesControl.Name = "ratesControl";
             this.ratesControl.Size = new System.Drawing.Size(659, 184);

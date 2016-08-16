@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Net;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,6 +18,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         private UpsInvoiceRegistrationAddressManipulator testObject;
 
         private UpsAccountEntity upsAccount;
+
+        private string ipAddress = "192.168.1.101";
 
         public UpsInvoiceRegistrationAddressManipulatorTest()
         {
@@ -42,11 +45,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
                 Email = "HSimpson@aol.com"
             };
 
-            testObject = new UpsInvoiceRegistrationAddressManipulator(upsAccount);
+            Mock<INetworkUtility> networkUtility = new Mock<INetworkUtility>();
+            networkUtility.Setup(u => u.GetIPAddress())
+                .Returns(ipAddress);
+
+            testObject = new UpsInvoiceRegistrationAddressManipulator(upsAccount, networkUtility.Object);
         }
 
         [Fact]
-        public void Manipulate_CustomerNameIsSet_Test()
+        public void Manipulate_CustomerNameIsSet()
         {
             testObject.Manipulate(request);
 
@@ -54,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_CompanyNameIsSet_Test()
+        public void Manipulate_CompanyNameIsSet()
         {
             testObject.Manipulate(request);
 
@@ -62,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_AddressLine0IsSet_Test()
+        public void Manipulate_AddressLine0IsSet()
         {
             testObject.Manipulate(request);
 
@@ -70,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_AddressLine1IsSet_Test()
+        public void Manipulate_AddressLine1IsSet()
         {
             testObject.Manipulate(request);
 
@@ -78,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_CityIsSet_Test()
+        public void Manipulate_CityIsSet()
         {
             testObject.Manipulate(request);
 
@@ -86,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_StateIsSet_Test()
+        public void Manipulate_StateIsSet()
         {
             testObject.Manipulate(request);
 
@@ -94,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_ZipIsSet_Test()
+        public void Manipulate_ZipIsSet()
         {
             testObject.Manipulate(request);
 
@@ -102,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_PostalCodeIsSet_Test()
+        public void Manipulate_PostalCodeIsSet()
         {
             testObject.Manipulate(request);
 
@@ -110,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_CountryCodeIsSet_Test()
+        public void Manipulate_CountryCodeIsSet()
         {
             testObject.Manipulate(request);
 
@@ -118,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_PhoneIsSet_Test()
+        public void Manipulate_PhoneIsSet()
         {
             testObject.Manipulate(request);
 
@@ -126,11 +133,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         }
 
         [Fact]
-        public void Manipulate_EmailIsSet_Test()
+        public void Manipulate_EmailIsSet()
         {
             testObject.Manipulate(request);
 
             Assert.Equal(upsAccount.Email, registerRequest.EmailAddress);
+        }
+
+        [Fact]
+        public void Manipulate_IPAddressIsSet()
+        {
+            testObject.Manipulate(request);
+
+            Assert.Equal(ipAddress, registerRequest.EndUserIPAddress);
         }
     }
 }

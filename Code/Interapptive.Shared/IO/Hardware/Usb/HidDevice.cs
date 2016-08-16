@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Win32.SafeHandles;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace Interapptive.Shared.Usb
 {
@@ -68,6 +66,9 @@ namespace Interapptive.Shared.Usb
         /// <summary>
         /// Synchronously read the input report from the device
         /// </summary>
+        [SuppressMessage("SonarQube",
+            "S2674: Check the return value of the \"Read\" call to see how many bytes were read.",
+            Justification = "Number of bytes read at the end doesn't affect the results of the method")]
         public byte[] ReadInputReport()
         {
             try

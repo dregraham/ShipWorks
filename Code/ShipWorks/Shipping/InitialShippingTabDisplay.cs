@@ -7,7 +7,7 @@
     public enum InitialShippingTabDisplay
     {
         /// <summary>
-        /// The shipping tab of the shipping dialog should be displayed 
+        /// The shipping tab of the shipping dialog should be displayed
         /// </summary>
         Shipping = 0,
 

@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void EncryptedPassword_WhenIsEncryptedIsTrue_Test()
+        public void EncryptedPassword_WhenIsEncryptedIsTrue()
         {
             testObject = new iParcelCredentials("someUser", "somePassword", true, serviceGateway.Object);
 
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void EncryptedPassword_WhenIsEncryptedIsFalse_Test()
+        public void EncryptedPassword_WhenIsEncryptedIsFalse()
         {
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
 
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void DecryptedPassword_WhenIsEncryptedIsTrue_Test()
+        public void DecryptedPassword_WhenIsEncryptedIsTrue()
         {
             testObject = new iParcelCredentials("someUser", "D4ljlev6Y5B+KN4tWMzYsw==", true, serviceGateway.Object);
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void DecryptedPassword_WhenIsEncryptedIsFalse_Test()
+        public void DecryptedPassword_WhenIsEncryptedIsFalse()
         {
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_ThrowsiParcelException_WhenUsernameIsNull_Test()
+        public void Validate_ThrowsiParcelException_WhenUsernameIsNull()
         {
             testObject = new iParcelCredentials(null, "somePassword", false, serviceGateway.Object);
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_ThrowsiParcelException_WhenUsernameIsEmpty_Test()
+        public void Validate_ThrowsiParcelException_WhenUsernameIsEmpty()
         {
             testObject = new iParcelCredentials(string.Empty, "somePassword", false, serviceGateway.Object);
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_ThrowsiParcelException_WhenPasswordIsNull_Test()
+        public void Validate_ThrowsiParcelException_WhenPasswordIsNull()
         {
             testObject = new iParcelCredentials("someUser", null, false, serviceGateway.Object);
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_ThrowsiParcelException_WhenPasswordIsEmpty_Test()
+        public void Validate_ThrowsiParcelException_WhenPasswordIsEmpty()
         {
             testObject = new iParcelCredentials("someUser", string.Empty, false, serviceGateway.Object);
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_DelegatesToServiceGateway_Test()
+        public void Validate_DelegatesToServiceGateway()
         {
             serviceGateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_ThrowsiParcelException_WhenCredentialsDoNotPassGatewayValidation_Test()
+        public void Validate_ThrowsiParcelException_WhenCredentialsDoNotPassGatewayValidation()
         {
             serviceGateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(false);
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void Validate_ValidCredentials_Test()
+        public void Validate_ValidCredentials()
         {
             serviceGateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void SaveToEntity_ThrowsiParcelException_ForInvalidCredentials_Test()
+        public void SaveToEntity_ThrowsiParcelException_ForInvalidCredentials()
         {
             // Setup our test object with an invalid username
             testObject = new iParcelCredentials(string.Empty, "somePassword", false, serviceGateway.Object);
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void SaveToEntity_Username_Test()
+        public void SaveToEntity_Username()
         {
             IParcelAccountEntity account = new IParcelAccountEntity();
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void SaveToEntity_Password_Test()
+        public void SaveToEntity_Password()
         {
             IParcelAccountEntity account = new IParcelAccountEntity();
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);

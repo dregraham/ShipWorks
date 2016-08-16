@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;

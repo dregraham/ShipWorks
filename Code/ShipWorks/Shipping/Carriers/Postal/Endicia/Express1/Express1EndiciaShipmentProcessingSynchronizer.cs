@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
     /// <summary>
-    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of an Express1 for Endicia shipment 
+    /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing
+    /// of an Express1 for Endicia shipment
     /// </summary>
     public class Express1EndiciaShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1EndiciaShipmentProcessingSynchronizer"/> class.
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// Initializes a new instance of the <see cref="Express1EndiciaShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public Express1EndiciaShipmentProcessingSynchronizer(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository)
+        public Express1EndiciaShipmentProcessingSynchronizer(ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

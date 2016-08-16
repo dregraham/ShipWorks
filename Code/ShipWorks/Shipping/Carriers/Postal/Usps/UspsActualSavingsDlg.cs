@@ -75,9 +75,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             GridRow row = new GridRow(new string[]
                     {
                         originalRate.Description,
-                        originalRate.Amount.ToString("c"),
-                        discountedRate.Amount.ToString("c"),
-                        (originalRate.Amount - discountedRate.Amount).ToString("c")
+                        originalRate.AmountOrDefault.ToString("c"),
+                        discountedRate.AmountOrDefault.ToString("c"),
+                        (originalRate.AmountOrDefault - discountedRate.AmountOrDefault).ToString("c")
                     });
 
 

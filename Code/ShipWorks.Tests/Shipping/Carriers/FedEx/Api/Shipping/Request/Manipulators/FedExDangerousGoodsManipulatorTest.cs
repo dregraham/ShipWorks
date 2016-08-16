@@ -65,13 +65,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedPackageLineItems_Test()
+        public void Manipulate_AccountsForNullRequestedPackageLineItems()
         {
             // Setup the test by configuring the native request to have a null requested package line items
             // property and re-initialize the carrier request with the updated native request
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForEmptyRequestedPackageLineItems_Test()
+        public void Manipulate_AccountsForEmptyRequestedPackageLineItems()
         {
             // Setup the test by configuring the native request to have an empty arrary for the requested 
             // package line items property and re-initialize the carrier request with the updated native request
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServicesRequested_Test()
+        public void Manipulate_AccountsForNullSpecialServicesRequested()
         {
             // Setup the test by configuring the native request to a null value for the customer references
             // property and re-initialize the carrier request with the updated native request
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DangerousGoodsDetailPropertyIsNotNull_WhenDangerousGoodsEnabledIsTrue_Test()
+        public void Manipulate_DangerousGoodsDetailPropertyIsNotNull_WhenDangerousGoodsEnabledIsTrue()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsEnabled = true;
 
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DangerousGoodsDetailPropertyIsNull_WhenDangerousGoodsEnabledIsFalse_Test()
+        public void Manipulate_DangerousGoodsDetailPropertyIsNull_WhenDangerousGoodsEnabledIsFalse()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsEnabled = false;
 
@@ -165,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AddsDangerousGoodsOption_Test()
+        public void Manipulate_AddsDangerousGoodsOption()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AddsDangerousGoodsOption_WhenSpecialServicesRequestedIsNull_Test()
+        public void Manipulate_AddsDangerousGoodsOption_WhenSpecialServicesRequestedIsNull()
         {
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested = null;
 
@@ -186,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
 
         [Fact]
-        public void Manipulate_AddsDangerousGoodsOption_WhenServiceTypesIsNull_Test()
+        public void Manipulate_AddsDangerousGoodsOption_WhenServiceTypesIsNull()
         {
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = null;
 
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AddsDangerousGoodsOption_WhenServiceTypesIsNotEmpty_Test()
+        public void Manipulate_AddsDangerousGoodsOption_WhenServiceTypesIsNotEmpty()
         {
             // Add a few service types for this test
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[]
@@ -214,7 +214,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AddsDangerousGoodsOption_AndRetainsExistingServiceTypes_WhenServiceTypesIsNotEmpty_Test()
+        public void Manipulate_AddsDangerousGoodsOption_AndRetainsExistingServiceTypes_WhenServiceTypesIsNotEmpty()
         {
             // Add a few service types for this test
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[]
@@ -233,7 +233,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilityTypeIsAccessible_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
+        public void Manipulate_AccessibilityTypeIsAccessible_WhenDangerousGoodsTypeIsLithiumBatteries()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Accessible;
@@ -245,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilityTypeIsInAccessible_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
+        public void Manipulate_AccessibilityTypeIsInAccessible_WhenDangerousGoodsTypeIsLithiumBatteries()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
@@ -257,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilitySpecifiedIsTrue_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
+        public void Manipulate_AccessibilitySpecifiedIsTrue_WhenDangerousGoodsTypeIsLithiumBatteries()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
@@ -269,7 +269,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilityTypeIsAccessible_WhenDangerousGoodsTypeIsORMD_Test()
+        public void Manipulate_AccessibilityTypeIsAccessible_WhenDangerousGoodsTypeIsORMD()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.OrmD;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Accessible;
@@ -281,7 +281,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilityTypeIsInAccessible_WhenDangerousGoodsTypeIsORMD_Test()
+        public void Manipulate_AccessibilityTypeIsInAccessible_WhenDangerousGoodsTypeIsORMD()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.OrmD;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
@@ -293,7 +293,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilitySpecifiedIsFalse_WhenDangerousGoodsTypeIsHazardousMaterials_Test()
+        public void Manipulate_AccessibilitySpecifiedIsFalse_WhenDangerousGoodsTypeIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -306,7 +306,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccessibilitySpecifiedIsTrue_WhenDangerousGoodsTypeIsORMD_Test()
+        public void Manipulate_AccessibilitySpecifiedIsTrue_WhenDangerousGoodsTypeIsORMD()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.OrmD;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
@@ -318,7 +318,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CargoAircraftIsTrue_Test()
+        public void Manipulate_CargoAircraftIsTrue()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsCargoAircraftOnly = true;
 
@@ -329,7 +329,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CargoAircraftIsFalse_Test()
+        public void Manipulate_CargoAircraftIsFalse()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsCargoAircraftOnly = false;
 
@@ -340,7 +340,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CargoAircraftSpecifiedIsTrue_Test()
+        public void Manipulate_CargoAircraftSpecifiedIsTrue()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -349,7 +349,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_EmergencyContactNumber_Test()
+        public void Manipulate_EmergencyContactNumber()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsEmergencyContactPhone = "123-4565-7890";
 
@@ -360,7 +360,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_Offeror_Test()
+        public void Manipulate_Offeror()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsOfferor = "the offeror";
 
@@ -371,7 +371,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionArrayHasOneItem_Test()
+        public void Manipulate_OptionArrayHasOneItem()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -380,7 +380,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionIsNotApplicable_Test()
+        public void Manipulate_OptionIsNotApplicable()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.NotApplicable;
 
@@ -391,7 +391,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionIsLithiumBattery_Test()
+        public void Manipulate_OptionIsLithiumBattery()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
@@ -402,7 +402,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionIsOrmD_Test()
+        public void Manipulate_OptionIsOrmD()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.OrmD;
 
@@ -413,7 +413,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OptionIsHazardousMaterials_Test()
+        public void Manipulate_OptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -425,7 +425,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsHome_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsHome()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -434,7 +434,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsOneDayFreight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsOneDayFreight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -443,7 +443,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDay_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDay()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2Day;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -452,7 +452,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDayAM_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDayAM()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2DayAM;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -461,7 +461,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDayFreight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDayFreight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2DayFreight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -470,7 +470,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsThreeDayFreight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsThreeDayFreight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx3DayFreight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -479,7 +479,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsExpressSaver_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsExpressSaver()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExExpressSaver;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -488,7 +488,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsFirstInternationalPriorityEurope_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsFirstInternationalPriorityEurope()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExEuropeFirstInternationalPriority;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -497,7 +497,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsOvernight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsOvernight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FirstOvernight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -506,7 +506,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalEconomy_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalEconomy()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalEconomy;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -515,7 +515,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalEconomyFreight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalEconomyFreight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalEconomyFreight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -524,7 +524,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalFirst_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalFirst()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalFirst;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -533,7 +533,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalPriority_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalPriority()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalPriority;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -542,7 +542,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalPriorityFreight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalPriorityFreight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalPriorityFreight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -551,7 +551,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsPriorityOvernight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsPriorityOvernight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -560,7 +560,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsSmartPost_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsSmartPost()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -569,7 +569,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsStandardOvernight_Test()
+        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsStandardOvernight()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.StandardOvernight;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -578,7 +578,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenUnrecognizedOptionTypeIsProvided_Test()
+        public void Manipulate_ThrowsInvalidOperationException_WhenUnrecognizedOptionTypeIsProvided()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = 23;
 
@@ -586,7 +586,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ContainerIsNull_WhenOptionIsNotHazardousMaterials_Test()
+        public void Manipulate_ContainerIsNull_WhenOptionIsNotHazardousMaterials()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
@@ -597,7 +597,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_OP900Set_WhenDangerousGoodsSet_Test()
+        public void Manipulate_OP900Set_WhenDangerousGoodsSet()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -609,7 +609,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ContainerContainsOneItem_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_ContainerContainsOneItem_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -621,7 +621,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesContainsOneItem_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesContainsOneItem_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -633,7 +633,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesContentDescriptionIsNotNull_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesContentDescriptionIsNotNull_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -645,7 +645,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesContentDescriptionId_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesContentDescriptionId_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialNumber = "UN2533";
@@ -658,7 +658,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesContentDescriptionHazardClass_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesContentDescriptionHazardClass_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialClass = "6.1";
@@ -671,7 +671,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesProperShippingName_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesProperShippingName_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialProperName = "Methyl trichloroacetate";
@@ -684,7 +684,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesPackingGroupIsDefault_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesPackingGroupIsDefault_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.Default;
@@ -697,7 +697,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesPackingGroupIsI_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesPackingGroupIsI_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.I;
@@ -710,7 +710,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesPackingGroupIsII_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesPackingGroupIsII_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.II;
@@ -723,7 +723,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesPackingGroupIsIII_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesPackingGroupIsIII_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.III;
@@ -736,7 +736,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesPackingGroupIsNotSpecified_WhenOptionIsHazardousMaterials_AndPackingGroupIsNotApplicable_Test()
+        public void Manipulate_HazardousCommoditiesPackingGroupIsNotSpecified_WhenOptionIsHazardousMaterials_AndPackingGroupIsNotApplicable()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.NotApplicable;
@@ -749,7 +749,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenHazardousCommoditiesPackingGroupIsNotRecognized_AndOptionIsHazardousMaterials_Test()
+        public void Manipulate_ThrowsInvalidOperationException_WhenHazardousCommoditiesPackingGroupIsNotRecognized_AndOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = 45;
@@ -759,7 +759,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_HazardousCommoditiesPackingGroupSpecifiedIsTrue_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_HazardousCommoditiesPackingGroupSpecifiedIsTrue_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.I;
@@ -772,7 +772,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_QuantityAmount_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_QuantityAmount_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -785,7 +785,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_QuantityAmountSpecifiedIsTrue_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_QuantityAmountSpecifiedIsTrue_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -798,7 +798,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_QuantityUnits_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_QuantityUnits_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -812,7 +812,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PackagingCount_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_PackagingCount_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -825,7 +825,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PackagingUnits_WhenOptionIsHazardousMaterials_Test()
+        public void Manipulate_PackagingUnits_WhenOptionIsHazardousMaterials()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
@@ -839,7 +839,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PackagingIsNull_WhenOptionIsNotHazardousMaterials_Test()
+        public void Manipulate_PackagingIsNull_WhenOptionIsNotHazardousMaterials()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
@@ -851,7 +851,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
 
         [Fact]
-        public void Manipulate_UsesSequenceNumberOnRequest_WhenDangerousGoodsEnabled_Test()
+        public void Manipulate_UsesSequenceNumberOnRequest_WhenDangerousGoodsEnabled()
         {
             // Setup the FedEx shipment to contain multiple packages to test that the 
             // manipulator process the correct package in the shipment when the 
@@ -874,7 +874,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_UsesSequenceNumberOnRequest_WhenDangerousGoodsNotEnabled_Test()
+        public void Manipulate_UsesSequenceNumberOnRequest_WhenDangerousGoodsNotEnabled()
         {
             // Setup the FedEx shipment to contain multiple packages to test that the 
             // manipulator process the correct package in the shipment when the 

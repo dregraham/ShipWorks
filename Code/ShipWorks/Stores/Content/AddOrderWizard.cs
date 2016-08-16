@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.Stores.Communication;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
@@ -34,6 +35,7 @@ namespace ShipWorks.Stores.Content
     /// <summary>
     /// Wizard for adding a new order to ShipWorks
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class AddOrderWizard : WizardForm
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AddOrderWizard));
@@ -93,6 +95,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Initialization
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnLoad(object sender, EventArgs e)
         {
             customerName.Visible = false;
@@ -358,6 +361,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Stepping next on the last page
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnFinish(object sender, WizardStepEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;

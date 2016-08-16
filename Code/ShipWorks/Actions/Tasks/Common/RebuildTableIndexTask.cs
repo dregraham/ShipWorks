@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common;
 
 namespace ShipWorks.Actions.Tasks.Common
 {

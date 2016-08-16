@@ -1,30 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Data;
-using System.Windows.Forms;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using System.Linq;
-using ShipWorks.Stores;
-using ShipWorks.UI.Controls;
-using ShipWorks.Data.Utility;
-using Interapptive.Shared.Business;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Stores;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Data.Controls
 {
     /// <summary>
     /// Control for editing the details of a person
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class PersonControl : UserControl
     {
         // Controls if it's always editable, or can go into edit-mode.
@@ -40,7 +42,7 @@ namespace ShipWorks.Data.Controls
         bool isReadonly = false;
 
         /// <summary>
-        /// The user has typed something into the control.  This is kind of like TextChanged for a text box, 
+        /// The user has typed something into the control.  This is kind of like TextChanged for a text box,
         /// except for the whole thing.
         /// </summary>
         public event EventHandler ContentChanged;
@@ -149,9 +151,15 @@ namespace ShipWorks.Data.Controls
         }
 
         /// <summary>
+        /// Gets and sets the validated address scope used by this control
+        /// </summary>
+        public IValidatedAddressScope ValidatedAddressScope { get; set; }
+
+        /// <summary>
         /// Address selector used by the validator
         /// </summary>
-        public AddressSelector AddressSelector {
+        public AddressSelector AddressSelector
+        {
             get
             {
                 return addressSelector;
@@ -169,7 +177,7 @@ namespace ShipWorks.Data.Controls
                 if (addressSelector != null)
                 {
                     addressSelector.AddressSelecting += OnAddressSelectorAddressSelecting;
-                    addressSelector.AddressSelected += OnAddressSelectorAddressSelected;   
+                    addressSelector.AddressSelected += OnAddressSelectorAddressSelected;
                 }
             }
         }
@@ -345,6 +353,7 @@ namespace ShipWorks.Data.Controls
         /// Validate that RequiredFields have data entered.
         /// IMPORTANT: This should only be used when not in MultiValued mode.
         /// </summary>
+        [NDependIgnoreLongMethod]
         public bool ValidateRequiredFields()
         {
             if (RequiredFields == PersonFields.None)
@@ -353,7 +362,7 @@ namespace ShipWorks.Data.Controls
             }
 
             List<string> emptyFieldNames = new List<string>();
-            
+
             foreach (ControlFieldMap controlFieldMap in controlFieldMappings)
             {
                 if (controlFieldMap.Control is Label || !RequiredField(controlFieldMap.Fields))
@@ -370,7 +379,7 @@ namespace ShipWorks.Data.Controls
                     {
                         throw new InvalidOperationException("ValidateRequiredFields not valid in a MultiValued scenario.");
                     }
-                 
+
                     if (string.IsNullOrEmpty(multiValueTextBox.Text))
                     {
                         fieldIsEmpty = true;
@@ -650,7 +659,8 @@ namespace ShipWorks.Data.Controls
                 {
                     if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
                     {
-                        newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                        newAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                        newAddress.AddressType = (int) AddressType.NotChecked;
                     }
 
                     newAddress.AddressValidationSuggestionCount = 0;
@@ -666,7 +676,7 @@ namespace ShipWorks.Data.Controls
 
                 if (shouldSaveAddressSuggestions && EnableValidationControls)
                 {
-                    ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);   
+                    ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);
                 }
             }
         }
@@ -674,6 +684,7 @@ namespace ShipWorks.Data.Controls
         /// <summary>
         /// Populate the person from the values in the UI
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void PopulatePersonFromUI(PersonAdapter person)
         {
             fullName.ReadMultiText(value =>
@@ -700,11 +711,7 @@ namespace ShipWorks.Data.Controls
                     name.Last = name.Last.Substring(0, maxLast);
                 }
 
-                person.FirstName = name.First;
-                person.MiddleName = name.Middle;
-                person.LastName = name.LastWithSuffix;
-                person.UnparsedName = name.UnparsedName;
-                person.NameParseStatus = name.ParseStatus;
+                person.ParsedName = name;
             });
             company.ReadMultiText(value => person.Company = value);
 
@@ -788,7 +795,7 @@ namespace ShipWorks.Data.Controls
             });
 
             shouldSaveAddressSuggestions = true;
-            
+
             UpdateValidationUI();
         }
 
@@ -997,10 +1004,11 @@ namespace ShipWorks.Data.Controls
             person.CopyTo(lastValidatedAddress);
             lastValidatedAddress.AddressValidationError = string.Empty;
             lastValidatedAddress.AddressValidationSuggestionCount = 0;
-            
+
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
             {
                 lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
             }
 
             validatedAddresses.Clear();
@@ -1008,10 +1016,7 @@ namespace ShipWorks.Data.Controls
 
             UpdateValidationUI();
 
-            if (ContentChanged != null)
-            {
-                ContentChanged(this, EventArgs.Empty);
-            }
+            ContentChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1019,10 +1024,7 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnDestinationChanged(object sender, EventArgs e)
         {
-            if (DestinationChanged != null)
-            {
-                DestinationChanged(this, EventArgs.Empty);
-            }
+            DestinationChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1048,10 +1050,13 @@ namespace ShipWorks.Data.Controls
                 return validatedAddresses;
             }
 
-            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            if (ValidatedAddressScope == null)
             {
-                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix);
+                return new List<ValidatedAddressEntity>();
             }
+
+            return ValidatedAddressScope.LoadValidatedAddresses(EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix)
+                .ToList();
         }
 
         /// <summary>
@@ -1069,7 +1074,7 @@ namespace ShipWorks.Data.Controls
         {
             using (new MultiValueScope())
             {
-                PopulateAddressControls(e.SelectedAddress);    
+                PopulateAddressControls(e.SelectedAddress);
             }
 
             isLoadingEntities = false;
@@ -1116,8 +1121,8 @@ namespace ShipWorks.Data.Controls
             dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
 
             addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
-            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType)dummyAddress.AddressValidationStatus);
-           
+            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
+
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
 
@@ -1126,7 +1131,7 @@ namespace ShipWorks.Data.Controls
             validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
 
             addressValidationSuggestionLink.Left = validateAddress.Visible ?
-                validateAddress.Left - addressValidationSuggestionLink.Width - 6 : 
+                validateAddress.Left - addressValidationSuggestionLink.Width - 6 :
                 validateAddress.Right - addressValidationSuggestionLink.Width;
 
             addressValidationStatusText.Width = addressValidationSuggestionLink.Left -
@@ -1152,7 +1157,7 @@ namespace ShipWorks.Data.Controls
         private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
         {
             AddressValidator validator = new AddressValidator();
-            validator.Validate(address, true, (addressEntity, entities) =>
+            Task task = validator.ValidateAsync(address, true, (addressEntity, entities) =>
             {
                 shouldSaveAddressSuggestions = true;
 
@@ -1160,14 +1165,16 @@ namespace ShipWorks.Data.Controls
 
                 if (addressEntity != null)
                 {
-                    validatedAddresses.Add(addressEntity);    
+                    validatedAddresses.Add(addressEntity);
                 }
 
                 if (entities != null)
                 {
-                    validatedAddresses.AddRange(entities);   
+                    validatedAddresses.AddRange(entities);
                 }
             });
+
+            task.Wait();
         }
 
         /// <summary>
@@ -1176,7 +1183,7 @@ namespace ShipWorks.Data.Controls
         private void OnAddressValidated(object sender, BackgroundExecutorCompletedEventArgs<AddressAdapter> args)
         {
             lastValidatedAddress = args.UserState as AddressAdapter;
-            
+
             isLoadingEntities = true;
 
             using (new MultiValueScope())

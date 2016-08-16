@@ -8,19 +8,15 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Filters;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using log4net;
 using System.Globalization;
 using System.Linq;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -43,13 +39,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// StoreTypeCode enum value for BigCommerce Store Types
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get
-            {
-                return StoreTypeCode.BigCommerce;
-            }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.BigCommerce;
 
         /// <summary>
         /// This is a string that uniquely identifies the store.  
@@ -89,13 +79,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Initial download policy of the store
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy => new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
 
         /// <summary>
         /// Creates a new instance of an BigCommerce store entity
@@ -191,7 +175,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage>
                 {

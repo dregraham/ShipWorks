@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Submit_DelegatesToValidator_Test()
+        public void Submit_DelegatesToValidator()
         {
             testObject.Submit();
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Submit_ThrowsRegistrationException_WhenValidationFails_Test()
+        public void Submit_ThrowsRegistrationException_WhenValidationFails()
         {
             // Setup our mocked validator to return two errors
             mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>()))
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Submit_DelegatesToGateway_WhenValidationPasses_Test()
+        public void Submit_DelegatesToGateway_WhenValidationPasses()
         {
             // Using a mocked validator, so there shouldn't be any validation errors
             testObject.Submit();
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Submit_DoesNotDelegateToGateway_WhenValidationFails_Test()
+        public void Submit_DoesNotDelegateToGateway_WhenValidationFails()
         {
             // Setup our mocked validator to return two errors
             mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>()))
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Submit_ThrowsUspsException_WhenRegistrationGatewayThrowsException_Test()
+        public void Submit_ThrowsUspsException_WhenRegistrationGatewayThrowsException()
         {
             // Setup up our mocked gateway to throw an execption
             mockedGateway.Setup(g => g.Register(It.IsAny<UspsRegistration>())).Throws(new UspsRegistrationException());
@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
 
         [Fact]
-        public void Constructor_AssignsVersion4IPAddress_Test()
+        public void Constructor_AssignsVersion4IPAddress()
         {
             //Constructor was called in initialize method, so just need to verify log
 

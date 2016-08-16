@@ -1,20 +1,25 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
-    public class OnTracAccountRepository : CarrierAccountRepositoryBase<OnTracAccountEntity>, ICarrierAccountRepository<OnTracAccountEntity>
+    public class OnTracAccountRepository : CarrierAccountRepositoryBase<OnTracAccountEntity, IOnTracAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<OnTracAccountEntity> Accounts
-        {
-            get
-            {
-                return OnTracAccountManager.Accounts;
-            }
-        }
+        public override IEnumerable<OnTracAccountEntity> Accounts => OnTracAccountManager.Accounts;
+
+        /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public override IEnumerable<IOnTracAccountEntity> AccountsReadOnly => OnTracAccountManager.AccountsReadOnly;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() => OnTracAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -27,6 +32,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        /// <param name="accountID">The account ID for which to return an account.</param>
+        /// <returns>The matching account as IEntity2.</returns>
+        public override IOnTracAccountEntity GetAccountReadOnly(long accountID)
+        {
+            return OnTracAccountManager.GetAccountReadOnly(accountID);
+        }
+
+        /// <summary>
         /// Gets the default profile account.
         /// </summary>
         /// <value>
@@ -36,8 +51,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             get
             {
-                long? accountID = new OnTracShipmentType().GetPrimaryProfile().OnTrac.OnTracAccountID;
-
+                long? accountID = GetPrimaryProfile(ShipmentTypeCode.OnTrac).OnTrac.OnTracAccountID;
                 return GetProfileAccount(ShipmentTypeCode.OnTrac, accountID);
             }
         }

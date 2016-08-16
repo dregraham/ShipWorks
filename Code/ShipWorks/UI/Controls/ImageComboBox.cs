@@ -1,8 +1,8 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Image = System.Drawing.Image;
 
@@ -12,13 +12,10 @@ namespace ShipWorks.UI.Controls
     /// Class for displaying images next to ComboBox items
     /// </summary>
     public class ImageComboBox : PopupComboBox
-	{
-        // Used to track mouse wheel movement
-        private int totalWheelAmount = 0;
-
+    {
         #region DropDownListBox
 
-        // Custom ListBox for displaying the dropdown items
+        // Custom ListBox for displaying the drop down items
         class DropDownListBox : ListBox
         {
             int hoverIndex = -1;
@@ -28,9 +25,9 @@ namespace ShipWorks.UI.Controls
             /// </summary>
             public DropDownListBox()
             {
-                this.DrawMode = DrawMode.OwnerDrawFixed;
-                this.ItemHeight = 18;
-                this.IntegralHeight = false;
+                DrawMode = DrawMode.OwnerDrawFixed;
+                ItemHeight = 18;
+                IntegralHeight = false;
 
                 SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
             }
@@ -193,13 +190,19 @@ namespace ShipWorks.UI.Controls
 
         #endregion
 
+        private const int PageDownAmount = 10;
+
+        // Used to track mouse wheel movement
+        private int totalWheelAmount = 0;
+
+        Dictionary<Keys, Action> keyHandlers;
         DropDownListBox listBox = new DropDownListBox();
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public ImageComboBox()
-		{
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ImageComboBox()
+        {
             // Create the drop-down
             PopupController popupController = new PopupController(listBox);
             popupController.Animate = PopupAnimation.System;
@@ -207,16 +210,18 @@ namespace ShipWorks.UI.Controls
             popupController.PopupClosing += OnClosingDropDown;
 
             // The filter is what we are going to be dropping down
-            this.PopupController = popupController;
+            PopupController = popupController;
 
             // Refresh item list on focus instead of on show to handle tabbing to the drop down
             // and then using arrow keys to select an item.  Refreshing on show resulted in an
             // exception because we were trying to select an item that wasn't in the list yet.
             GotFocus += (sender, args) => RefreshItemList();
-		}
+
+            keyHandlers = CreateKeyHandlers();
+        }
 
         /// <summary>
-        /// Dropdown is showing, we have to fill the box
+        /// Drop down is showing, we have to fill the box
         /// </summary>
         protected override void OnShowingDropDown()
         {
@@ -264,7 +269,7 @@ namespace ShipWorks.UI.Controls
                 return;
             }
 
-            Image image = (Image)sender;
+            Image image = (Image) sender;
 
             ImageAnimator.UpdateFrames(image);
 
@@ -292,7 +297,7 @@ namespace ShipWorks.UI.Controls
             }
 
             listBox.SelectedIndexChanged += new EventHandler(OnSelectItem);
-            
+
             // If the popup is visible, go ahead and restart the animation
             if (PopupController.IsPopupVisible)
             {
@@ -320,7 +325,7 @@ namespace ShipWorks.UI.Controls
 
             SelectedIndex = listBox.SelectedIndex;
 
-            // Check for closable
+            // Check for whether the drop down should close
             if (imageItem == null || imageItem.CloseOnSelect)
             {
                 PopupController.Close(DialogResult.OK);
@@ -365,12 +370,12 @@ namespace ShipWorks.UI.Controls
                         listBox.SelectedIndex = index;
                     }
                 }
+
+                return;
             }
-            else
-            {
-                // This isn't a mouse wheel message, so pass it on
-                base.WndProc(ref m);
-            }
+
+            // This isn't a mouse wheel message, so pass it on
+            base.WndProc(ref m);
         }
 
         /// <summary>
@@ -378,45 +383,9 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            // The user wants to select the previous item in the list
-            if (keyData == Keys.Down || keyData == Keys.Right)
-            {
-                if (listBox.SelectedIndex < Items.Count - 1)
-                {
-                    listBox.SelectedIndex++;    
-                }
-                
-                return true;
-            }
-
-            // The user wants to select the next item in the list
-            if (keyData == Keys.Up || keyData == Keys.Left)
-            {
-                if (listBox.SelectedIndex > 0)
-                {
-                    listBox.SelectedIndex--;    
-                }
-                
-                return true;
-            }
-
-            // If the combo box allows free text entering, don't override the keyboard behavior
-            if (DropDownStyle == ComboBoxStyle.DropDownList && keyData >= Keys.A && keyData <= Keys.Z)
-            {
-                // Find the first occurrance of an item that begins with the specified letter that's AFTER the currently selected item.
-                // If that fails, try from the beginning.  That will let someone cycle through all the items that begin with a specific letter.
-                object foundItem = Items.Cast<Object>().Skip(listBox.SelectedIndex + 1).FirstOrDefault(x => ItemTextBeginsWith(x, keyData)) ??
-                                   Items.Cast<Object>().Take(listBox.SelectedIndex + 1).FirstOrDefault(x => ItemTextBeginsWith(x, keyData));
-
-                if (foundItem != null)
-                {
-                    listBox.SelectedIndex = Items.IndexOf(foundItem);
-                }
-
-                return true;
-            }
-
-            return base.ProcessCmdKey(ref msg, keyData);
+            return HandleNavigationKeys(keyData) ||
+                HandleAlphabetKeys(keyData) ||
+                base.ProcessCmdKey(ref msg, keyData);
         }
 
         /// <summary>
@@ -428,9 +397,90 @@ namespace ShipWorks.UI.Controls
         private static bool ItemTextBeginsWith(object item, Keys key)
         {
             ImageComboBoxItem listItem = item as ImageComboBoxItem;
-            string itemText = (listItem != null) ? listItem.Text : item.ToString();
+            string itemText = listItem != null ? listItem.Text : item.ToString();
 
-            return itemText.StartsWith(key.ToString(), StringComparison.OrdinalIgnoreCase);
+            string selectedStartingString = key.ToString();
+            if (selectedStartingString.Length == 2)
+            {
+                selectedStartingString = selectedStartingString[1].ToString();
+            }
+
+            return itemText.StartsWith(selectedStartingString, StringComparison.OrdinalIgnoreCase);
         }
-	}
+
+        /// <summary>
+        /// Create the key handlers
+        /// </summary>
+        private Dictionary<Keys, Action> CreateKeyHandlers()
+        {
+            return new Dictionary<Keys, Action>
+            {
+                { Keys.Up, () => MoveSelectionUp(1) },
+                { Keys.Left, () => MoveSelectionUp(1) },
+                { Keys.Down, () => MoveSelectionDown(1) },
+                { Keys.Right, () => MoveSelectionDown(1) },
+                { Keys.PageUp, () => MoveSelectionUp(PageDownAmount) },
+                { Keys.PageDown, () => MoveSelectionDown(PageDownAmount) },
+                { Keys.Home, () => listBox.SelectedIndex = 0 },
+                { Keys.Space, () => listBox.SelectedIndex = 0 },
+                { Keys.End, () => listBox.SelectedIndex = Math.Max(Items.Count - 1, 0) }
+            };
+        }
+
+        /// <summary>
+        /// Move the current selection down by the specified amount
+        /// </summary>
+        private void MoveSelectionDown(int amount) =>
+            listBox.SelectedIndex = Math.Min(listBox.SelectedIndex + amount, Items.Count - 1);
+
+        /// <summary>
+        /// Move the current selection up by the specified amount
+        /// </summary>
+        private void MoveSelectionUp(int amount) =>
+            listBox.SelectedIndex = Math.Max(listBox.SelectedIndex - amount, 0);
+
+        /// <summary>
+        /// Handle navigation keys for item selection
+        /// </summary>
+        private bool HandleNavigationKeys(Keys keyData)
+        {
+            if (keyHandlers.ContainsKey(keyData))
+            {
+                keyHandlers[keyData]();
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Handle alphabet keys for selection
+        /// </summary>
+        private bool HandleAlphabetKeys(Keys keyData)
+        {
+            // If the combo box allows free text entering, don't override the keyboard behavior
+            if (DropDownStyle == ComboBoxStyle.DropDownList && IsSelectionKey(keyData))
+            {
+                // Find the first occurrence of an item that begins with the specified letter that's AFTER the currently selected item.
+                // If that fails, try from the beginning.  That will let someone cycle through all the items that begin with a specific letter.
+                object foundItem = Items.Cast<object>().Skip(listBox.SelectedIndex + 1).FirstOrDefault(x => ItemTextBeginsWith(x, keyData)) ??
+                                   Items.Cast<object>().Take(listBox.SelectedIndex + 1).FirstOrDefault(x => ItemTextBeginsWith(x, keyData));
+
+                if (foundItem != null)
+                {
+                    listBox.SelectedIndex = Items.IndexOf(foundItem);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Is the key a selection key
+        /// </summary>
+        private bool IsSelectionKey(Keys keyData) =>
+            (keyData >= Keys.A && keyData <= Keys.Z) || (keyData >= Keys.D0 && keyData <= Keys.D9);
+    }
 }

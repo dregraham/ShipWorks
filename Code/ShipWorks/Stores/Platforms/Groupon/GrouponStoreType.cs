@@ -23,6 +23,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Net;
 using System.Windows.Forms;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -137,7 +138,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
             {
@@ -218,6 +220,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
+        /// Create the customer Order Item Xml for the order item provided
+        /// </summary>
+        public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
+        {
+            var item = new Lazy<GrouponOrderItemEntity>(() => (GrouponOrderItemEntity)itemSource());
+
+            ElementOutline outline = container.AddElement("Groupon");
+            outline.AddElement("BOMSKU", () => item.Value.BomSKU);
+        }
+
+        /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
@@ -228,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityField2 field)
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
         }

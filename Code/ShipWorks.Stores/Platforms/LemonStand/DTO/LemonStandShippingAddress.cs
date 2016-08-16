@@ -12,11 +12,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         [JsonProperty("last_name")]
         public string LastName { get; set; }
 
-        [JsonProperty("company")]
-        public string Company { get; set; }
-
         [JsonProperty("street_address")]
         public string StreetAddress { get; set; }
+
+        [JsonProperty("street_address_line2")]
+        public string StreetAddress2 { get; set; }
 
         [JsonProperty("city")]
         public string City { get; set; }

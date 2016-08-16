@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                 field = rollupInfo.ChildField;
             }
 
-            return storeType.GridHyperlinkSupported(field);
+            return storeType.GridHyperlinkSupported(formattedValue.Entity, field);
         }
 
         /// <summary>

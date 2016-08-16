@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {

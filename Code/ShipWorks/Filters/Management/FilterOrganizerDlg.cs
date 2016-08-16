@@ -33,6 +33,7 @@ namespace ShipWorks.Filters.Management
     /// <summary>
     /// Window for managing filters
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class FilterOrganizerDlg : Form
     {
         FilterLayoutContext layoutContext;
@@ -628,6 +629,7 @@ namespace ShipWorks.Filters.Management
         /// <summary>
         /// Delete the selected node
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnDelete(object sender, EventArgs e)
         {
             if (!delete.Enabled)

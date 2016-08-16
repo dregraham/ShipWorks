@@ -15,6 +15,8 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Get the icon image of the country flag. Null if one is not present for the country.
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static Image GetCountryFlag(string code)
         {
             switch (code)

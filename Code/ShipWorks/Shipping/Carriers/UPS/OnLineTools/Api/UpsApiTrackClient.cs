@@ -10,6 +10,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using log4net;
 using System.Diagnostics;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -26,6 +27,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Return the tracking results for the given tracking number
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public static TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             UpsAccountEntity account = UpsAccountManager.Accounts.FirstOrDefault();

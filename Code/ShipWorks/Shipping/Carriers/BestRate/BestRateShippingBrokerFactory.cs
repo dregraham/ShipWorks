@@ -2,8 +2,6 @@
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Postal.BestRate;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -19,13 +17,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
         /// </summary>
-        public BestRateShippingBrokerFactory()
-            : this(new List<IShippingBrokerFilter> { new UpsWorldShipBrokerFilter(), new PostalCounterBrokerFilter(), new UpsBestRateRestrictionBrokerFilter() })
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
-        /// </summary>
         /// <param name="filters">The filters.</param>
         public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters)
         {
@@ -34,25 +25,22 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
         /// <summary>
         /// Creates all of the best rate shipping brokers available in the system for the shipping
-        /// providers that are activated and configured.
+        /// providers that are activated and configured. This will not return any counter rate brokers.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="createCounterRateBrokers">Should counter rate brokers be created</param>
-        /// <returns>The shipping broker for all activated and configured shipment types that have not
-        /// been excluded from being used to find the best rate.</returns>
-        public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment, bool createCounterRateBrokers)
+        public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment)
         {
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-            List <ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
+            List<ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
 
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
             foreach (ShipmentType shipmentType in shipmentTypes)
             {
                 if (!IsShipmentTypeExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
                 {
+                    // Disregard the counter rate brokers
                     IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment);
-
-                    if (broker.HasAccounts && (createCounterRateBrokers || !broker.IsCounterRate))
+                    if (broker.HasAccounts && !broker.IsCounterRate)
                     {
                         brokers.Add(broker);
                     }
@@ -81,10 +69,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private static bool IsShipmentTypeExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
         {
-            int shipmentTypeCodeValue = (int)shipmentTypeCode;
-
             // Always include web tools, so we get USPS counter rates as needed
-            return (shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCodeValue) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
+            return (shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCode) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
         }
     }
 }

@@ -41,16 +41,17 @@
             this.labelPort = new System.Windows.Forms.Label();
             this.securityMethod = new System.Windows.Forms.ComboBox();
             this.labelSecurity = new System.Windows.Forms.Label();
-            this.borderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.labelTransfer = new System.Windows.Forms.Label();
             this.transferMethod = new System.Windows.Forms.ComboBox();
             this.testConnection = new System.Windows.Forms.Button();
+            this.reuseControlConnectionSession = new System.Windows.Forms.CheckBox();
+            this.borderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.SuspendLayout();
             // 
             // ok
             // 
             this.ok.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.ok.Location = new System.Drawing.Point(192, 199);
+            this.ok.Location = new System.Drawing.Point(192, 215);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 8;
@@ -62,7 +63,7 @@
             // 
             this.cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(273, 199);
+            this.cancel.Location = new System.Drawing.Point(273, 215);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 9;
@@ -132,7 +133,7 @@
             // 
             // port
             // 
-            this.port.Location = new System.Drawing.Point(75, 132);
+            this.port.Location = new System.Drawing.Point(75, 151);
             this.port.Name = "port";
             this.port.Size = new System.Drawing.Size(148, 21);
             this.port.TabIndex = 5;
@@ -140,7 +141,7 @@
             // labelPort
             // 
             this.labelPort.AutoSize = true;
-            this.labelPort.Location = new System.Drawing.Point(38, 135);
+            this.labelPort.Location = new System.Drawing.Point(38, 154);
             this.labelPort.Name = "labelPort";
             this.labelPort.Size = new System.Drawing.Size(31, 13);
             this.labelPort.TabIndex = 18;
@@ -170,22 +171,10 @@
             this.labelSecurity.TabIndex = 23;
             this.labelSecurity.Text = "Security:";
             // 
-            // borderEdge1
-            // 
-            this.borderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.borderEdge1.AutoSize = false;
-            this.borderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
-            this.borderEdge1.Location = new System.Drawing.Point(15, 187);
-            this.borderEdge1.Name = "borderEdge1";
-            this.borderEdge1.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2007Silver;
-            this.borderEdge1.Size = new System.Drawing.Size(328, 1);
-            this.borderEdge1.Text = "kryptonBorderEdge1";
-            // 
             // labelTransfer
             // 
             this.labelTransfer.AutoSize = true;
-            this.labelTransfer.Location = new System.Drawing.Point(17, 162);
+            this.labelTransfer.Location = new System.Drawing.Point(17, 181);
             this.labelTransfer.Name = "labelTransfer";
             this.labelTransfer.Size = new System.Drawing.Size(52, 13);
             this.labelTransfer.TabIndex = 26;
@@ -198,7 +187,7 @@
             this.transferMethod.Items.AddRange(new object[] {
             "Active",
             "Passive"});
-            this.transferMethod.Location = new System.Drawing.Point(75, 159);
+            this.transferMethod.Location = new System.Drawing.Point(75, 178);
             this.transferMethod.Name = "transferMethod";
             this.transferMethod.Size = new System.Drawing.Size(150, 21);
             this.transferMethod.TabIndex = 6;
@@ -206,7 +195,7 @@
             // testConnection
             // 
             this.testConnection.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.testConnection.Location = new System.Drawing.Point(15, 199);
+            this.testConnection.Location = new System.Drawing.Point(15, 215);
             this.testConnection.Name = "testConnection";
             this.testConnection.Size = new System.Drawing.Size(111, 23);
             this.testConnection.TabIndex = 7;
@@ -214,11 +203,34 @@
             this.testConnection.UseVisualStyleBackColor = true;
             this.testConnection.Click += new System.EventHandler(this.OnTestConnection);
             // 
+            // reuseControlConnectionSession
+            // 
+            this.reuseControlConnectionSession.AutoSize = true;
+            this.reuseControlConnectionSession.Location = new System.Drawing.Point(75, 131);
+            this.reuseControlConnectionSession.Name = "reuseControlConnectionSession";
+            this.reuseControlConnectionSession.Size = new System.Drawing.Size(190, 17);
+            this.reuseControlConnectionSession.TabIndex = 30;
+            this.reuseControlConnectionSession.Text = "Reuse Control Connection Session";
+            this.reuseControlConnectionSession.UseVisualStyleBackColor = true;
+            // 
+            // borderEdge1
+            // 
+            this.borderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.borderEdge1.AutoSize = false;
+            this.borderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
+            this.borderEdge1.Location = new System.Drawing.Point(15, 207);
+            this.borderEdge1.Name = "borderEdge1";
+            this.borderEdge1.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2007Silver;
+            this.borderEdge1.Size = new System.Drawing.Size(328, 1);
+            this.borderEdge1.Text = "kryptonBorderEdge1";
+            // 
             // FtpAccountEditorDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 234);
+            this.ClientSize = new System.Drawing.Size(360, 266);
+            this.Controls.Add(this.reuseControlConnectionSession);
             this.Controls.Add(this.testConnection);
             this.Controls.Add(this.transferMethod);
             this.Controls.Add(this.labelTransfer);
@@ -265,9 +277,10 @@
         private System.Windows.Forms.Label labelPort;
         private System.Windows.Forms.ComboBox securityMethod;
         private System.Windows.Forms.Label labelSecurity;
-        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge borderEdge1;
         private System.Windows.Forms.Label labelTransfer;
         private System.Windows.Forms.ComboBox transferMethod;
         private System.Windows.Forms.Button testConnection;
+        private System.Windows.Forms.CheckBox reuseControlConnectionSession;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge borderEdge1;
     }
 }

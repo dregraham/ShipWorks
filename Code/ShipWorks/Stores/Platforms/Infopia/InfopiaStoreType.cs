@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Communication;
-using ShipWorks.UI.Wizard;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
-using ShipWorks.Templates.Processing.TemplateXml;
+using System.Text;
+using Autofac;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using Interapptive.Shared.Net;
-using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Infopia.WizardPages;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {
     /// <summary>
     /// Integration with the Infopia platform
     /// </summary>
+    [SuppressMessage("CSharp.Analyzers",
+        "CA5351: Do not use insecure cryptographic algorithm MD5",
+        Justification = "This is what Infopia currently uses")]
     public class InfopiaStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(InfopiaStoreType));
 
         /// <summary>
@@ -72,13 +71,14 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new InfopiaDownloader((InfopiaStoreEntity)Store);
+            return new InfopiaDownloader((InfopiaStoreEntity) Store);
         }
 
         /// <summary>
         /// Instantiate and return the setup wizard pages for Infopia
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>()
             {
@@ -115,9 +115,9 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get 
+            get
             {
-                InfopiaStoreEntity store = (InfopiaStoreEntity)Store;
+                InfopiaStoreEntity store = (InfopiaStoreEntity) Store;
 
                 // We can't use the actual token, because its secure.
                 byte[] bytes = Encoding.UTF8.GetBytes(store.ApiToken);
@@ -180,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Online Update commands for Infopia
         /// </summary>
-        public override List<MenuCommand>  CreateOnlineUpdateInstanceCommands()
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -195,9 +195,9 @@ namespace ShipWorks.Stores.Platforms.Infopia
             }
 
             commands.Add(new MenuCommand("Upload shipment details", new MenuCommandExecutor(OnUploadShipmentDetails))
-                {
-                    BreakBefore = true
-                });
+            {
+                BreakBefore = true
+            });
 
             return commands;
         }
@@ -235,7 +235,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 try
                 {
                     // upload
-                    InfopiaOnlineUpdater updater = new InfopiaOnlineUpdater((InfopiaStoreEntity)Store);
+                    InfopiaOnlineUpdater updater = new InfopiaOnlineUpdater((InfopiaStoreEntity) Store);
                     updater.UploadShipmentDetails(shipment);
                 }
                 catch (InfopiaException ex)
@@ -267,7 +267,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 context.Complete(e.Issues, MenuCommandResult.Error);
 
             };
-            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys,  status );
+            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, status);
         }
 
         /// <summary>
@@ -276,11 +276,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
         private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             log.Debug(Store.StoreName);
-            
-            string status = (string)userState;
+
+            string status = (string) userState;
             try
             {
-                InfopiaOnlineUpdater updater = new InfopiaOnlineUpdater((InfopiaStoreEntity)Store);
+                InfopiaOnlineUpdater updater = new InfopiaOnlineUpdater((InfopiaStoreEntity) Store);
                 updater.UpdateOrderStatus(orderID, status);
             }
             catch (InfopiaException ex)

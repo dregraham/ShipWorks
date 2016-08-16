@@ -7,7 +7,7 @@ using System.Reflection;
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     /// <summary>
-    /// High-level Amazon operations that are used to declare web client intent so it can prepare 
+    /// High-level Amazon operations that are used to declare web client intent so it can prepare
     /// locking/quota handling.
     /// </summary>
     [Flags]
@@ -17,10 +17,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// No quota handling required
         /// </summary>
-        None, 
+        None,
 
         /// <summary>
-        /// Simple credentials testing 
+        /// Simple credentials testing
         /// </summary>
         TestCredentials,
 

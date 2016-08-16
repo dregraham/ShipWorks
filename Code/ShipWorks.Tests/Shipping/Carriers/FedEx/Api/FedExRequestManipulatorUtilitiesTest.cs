@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsNotValidShipmentRequest_Test()
+        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsNotValidShipmentRequest()
         {
             // Setup to pass a shipment entity as the native request
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipmentEntity());
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsObject_Test()
+        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsObject()
         {
             // Setup to pass a object as the native request
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsDeleteShipmentRequest_Test()
+        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsDeleteShipmentRequest()
         {
             // Setup to pass a DeleteShipmentRequest as the native request
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.DeleteShipmentRequest());
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void FedExGetShipServiceRequestedShipment_ReturnsProcessShipmentRequest_Test()
+        public void FedExGetShipServiceRequestedShipment_ReturnsProcessShipmentRequest()
         {
             // Setup to pass a ProcessShipmentRequest as the native request
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity,
@@ -68,19 +68,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsAssignableFrom<ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest>(carrierRequest.Object.NativeRequest);
         }
 
-        //[Fact]
-        //public void FedExGetShipServiceRequestedShipment_ReturnsCreatePendingShipmentRequest_Test()
-        //{
-        //    // Setup to pass a CreatePendingShipmentRequest as the native request
-        //    carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest());
-
-        //    FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
-
-        //    Assert.IsAssignableFrom<ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest>(carrierRequest.Object.NativeRequest);
-        //}
-
         [Fact]
-        public void FedExGetShipServiceRequestedShipment_ReturnsCreateValidateShipmentRequest_Test()
+        public void FedExGetShipServiceRequestedShipment_ReturnsCreateValidateShipmentRequest()
         {
             // Setup to pass a ValidateShipmentRequest as the native request
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ValidateShipmentRequest());
@@ -91,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void FedExGetShipmentDropoffType_ReturnsCreateValidateShipmentRequest_Test()
+        public void FedExGetShipmentDropoffType_ReturnsCreateValidateShipmentRequest()
         {
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.DropoffType dropOffType = FedExRequestManipulatorUtilities.GetShipmentDropoffType((FedExDropoffType)shipmentEntity.FedEx.DropoffType);
 
@@ -99,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void GetApiServiceType_ReturnsPriorityOvernight_WhenServiceTypeIsOneRatePriorityOvernight_Test()
+        public void GetApiServiceType_ReturnsPriorityOvernight_WhenServiceTypeIsOneRatePriorityOvernight()
         {
             ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRatePriorityOvernight);
 
@@ -107,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void GetApiServiceType_ReturnsStandardOvernight_WhenServiceTypeIsOneRateStandardOvernight_Test()
+        public void GetApiServiceType_ReturnsStandardOvernight_WhenServiceTypeIsOneRateStandardOvernight()
         {
             ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRateStandardOvernight);
 
@@ -115,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void GetApiServiceType_ReturnsFedEx2Day_WhenServiceTypeIsOneRate2Day_Test()
+        public void GetApiServiceType_ReturnsFedEx2Day_WhenServiceTypeIsOneRate2Day()
         {
             ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRate2Day);
 
@@ -123,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void GetApiServiceType_ReturnsFedEx2DayAM_WhenServiceTypeIsOneRate2DayAM_Test()
+        public void GetApiServiceType_ReturnsFedEx2DayAM_WhenServiceTypeIsOneRate2DayAM()
         {
             ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRate2DayAM);
 
@@ -131,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void GetApiServiceType_ReturnsFirstOvernight_WhenServiceTypeIsOneRateFirstOvernight_Test()
+        public void GetApiServiceType_ReturnsFirstOvernight_WhenServiceTypeIsOneRateFirstOvernight()
         {
             ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRateFirstOvernight);
 
@@ -139,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void GetApiServiceType_ReturnExpressSaver_WhenServiceTypeIsOneRateExpressSaver_Test()
+        public void GetApiServiceType_ReturnExpressSaver_WhenServiceTypeIsOneRateExpressSaver()
         {
             ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRateExpressSaver);
 
@@ -149,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region Shipping Web Authentication Tests
 
         [Fact]
-        public void CreateShippingWebAuthenticationDetails_UsesCspCredentialKeyFromSettings_Test()
+        public void CreateShippingWebAuthenticationDetails_UsesCspCredentialKeyFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -162,7 +151,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShippingWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings_Test()
+        public void CreateShippingWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -175,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShippingWebAuthenticationDetails_UsesUserCredentialKeyFromSettings_Test()
+        public void CreateShippingWebAuthenticationDetails_UsesUserCredentialKeyFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -188,7 +177,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShippingWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings_Test()
+        public void CreateShippingWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -206,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region Registration Web Authentication Tests
 
         [Fact]
-        public void CreateRegistrationWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings_Test()
+        public void CreateRegistrationWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -219,7 +208,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegistrationWebAuthenticationDetails_UsesCspCredentialKeyFromSettings_Test()
+        public void CreateRegistrationWebAuthenticationDetails_UsesCspCredentialKeyFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -232,7 +221,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegistrationWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings_Test()
+        public void CreateRegistrationWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -245,7 +234,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegistrationWebAuthenticationDetails_UsesUserCredentialKeyFromSettings_Test()
+        public void CreateRegistrationWebAuthenticationDetails_UsesUserCredentialKeyFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -263,7 +252,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region Package Movement Web Authentication Tests
 
         [Fact]
-        public void CreatePackageMovementWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings_Test()
+        public void CreatePackageMovementWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -276,7 +265,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementWebAuthenticationDetails_UsesCspCredentialKeyFromSettings_Test()
+        public void CreatePackageMovementWebAuthenticationDetails_UsesCspCredentialKeyFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -289,7 +278,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings_Test()
+        public void CreatePackageMovementWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -302,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementWebAuthenticationDetails_UsesUserCredentialKeyFromSettings_Test()
+        public void CreatePackageMovementWebAuthenticationDetails_UsesUserCredentialKeyFromSettings()
         {
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
@@ -320,7 +309,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region Shipping Client Detail Tests
 
         [Fact]
-        public void CreateShippingClientDetail_UsesAccountNumberFromAccount_Test()
+        public void CreateShippingClientDetail_UsesAccountNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { AccountNumber = "123-456-789" };
 
@@ -333,7 +322,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateShippingClientDetail_UsesMeterNumberFromAccount_Test()
+        public void CreateShippingClientDetail_UsesMeterNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 
@@ -351,7 +340,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region Registration Client Detail Tests
 
         [Fact]
-        public void CreateRegistrationClientDetail_UsesAccountNumberFromAccount_Test()
+        public void CreateRegistrationClientDetail_UsesAccountNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { AccountNumber = "123-456-789" };
 
@@ -364,7 +353,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreateRegistrationClientDetail_UsesMeterNumberFromAccount_Test()
+        public void CreateRegistrationClientDetail_UsesMeterNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 
@@ -382,7 +371,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region Package Movement Client Detail Tests
 
         [Fact]
-        public void CreatePackageMovementClientDetail_UsesAccountNumberFromAccount_Test()
+        public void CreatePackageMovementClientDetail_UsesAccountNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { AccountNumber = "123-456-789" };
 
@@ -395,7 +384,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementClientDetail_UsesMeterNumberFromAccount_Test()
+        public void CreatePackageMovementClientDetail_UsesMeterNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 
@@ -408,7 +397,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementClientDetail_UsesClientProductIdFromSettings_Test()
+        public void CreatePackageMovementClientDetail_UsesClientProductIdFromSettings()
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 
@@ -421,7 +410,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void CreatePackageMovementClientDetail_UsesClientProductVersionFromSettings_Test()
+        public void CreatePackageMovementClientDetail_UsesClientProductVersionFromSettings()
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules
 {
@@ -17,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules
         /// </summary>
         /// <param name="order">The order.</param>
         /// <returns>A Boolean value indicating whether the rule passed.</returns>
-        public bool Evaluate(EbayOrderEntity ebayOrder)
+        public bool Evaluate(IEbayOrderEntity ebayOrder)
         {
             bool isEligible = false;
 

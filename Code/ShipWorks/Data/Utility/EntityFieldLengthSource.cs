@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Reflection;
 
 namespace ShipWorks.Data.Utility
 {
     /// <summary>
     /// Defines the field sources for field length information
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum EntityFieldLengthSource
     {
         None,
@@ -166,5 +164,7 @@ namespace ShipWorks.Data.Utility
         AmazonShipmentShippingServiceName,
         AmazonShipmentShippingServiceID,
         AmazonShipmentShippingServiceOfferID,
+
+        OdbcStoreCustomQuery
     }
 }

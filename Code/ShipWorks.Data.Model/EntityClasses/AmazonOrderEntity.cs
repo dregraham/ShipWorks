@@ -65,7 +65,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
-
+			/// <summary>Member name Shipments</summary>
+			public static readonly string Shipments = "Shipments";
 			/// <summary>Member name ValidatedAddress</summary>
 			public static readonly string ValidatedAddress = "ValidatedAddress";
 
@@ -506,6 +507,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("LatestExpectedDeliveryDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("PurchaseOrderNumber", fieldHashtable);
 		}
 		#endregion
 
@@ -643,6 +647,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, false); }
 			set	{ SetValue((int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, value); }
+		}
+
+		/// <summary> The PurchaseOrderNumber property of the Entity AmazonOrder<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonOrder"."PurchaseOrderNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String PurchaseOrderNumber
+		{
+			get { return (System.String)GetValue((int)AmazonOrderFieldIndex.PurchaseOrderNumber, true); }
+			set	{ SetValue((int)AmazonOrderFieldIndex.PurchaseOrderNumber, value); }
 		}
 
 

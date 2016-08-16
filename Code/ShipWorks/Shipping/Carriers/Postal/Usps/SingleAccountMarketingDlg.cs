@@ -24,16 +24,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 express1TargetedText = "No more switching between accounts to get the lowest rates!";
             }
 
-            this.signUpForExpeditedControl.DiscountText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and " +
-                                                          "IntuiShip, all through one single USPS account. " + express1TargetedText 
-                                                          + Environment.NewLine + Environment.NewLine + "To get these discounts, you " +
-                                                          "just need to open a free USPS account which will enable you to easily print both USPS Priority Mail " +
-                                                          "and Priority Mail Express labels and First Class shipping labels, all within one account.";
+            this.signUpForExpeditedControl.DiscountText = "You can now save up to 54% off Retail prices on USPS Priority Mail and Priority Mail Express Shipments " + 
+                                                            "with ShipWorks, all through one single USPS account. " + Environment.NewLine + Environment.NewLine +
+                                                            "To get these discounts, you just need to open a free USPS account which will enable you to easily " +
+                                                            "print USPS Priority Mail, Priority Mail Express and First Class shipping labels, all within one account.";
 
-            this.convertToExpeditedControl.DescriptionText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and " +
-                                                             "IntuiShip, all through one single USPS account. No " +
-                                                             "more switching between accounts to get the lowest rates!" + Environment.NewLine + Environment.NewLine + 
-                                                             "ShipWorks offers these discounted rates through IntuiShip, a partner of the USPS.";
+            this.convertToExpeditedControl.DescriptionText = "You can now save up to 54% off Retail prices on USPS Priority Mail and Priority Mail Express Shipments " + 
+                                                            "with ShipWorks, all through one single USPS account. No more switching between accounts to get the lowest rates!";
 
         }
     }

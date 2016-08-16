@@ -7,7 +7,7 @@ namespace ShipWorks.Tests.Shipping
     public class ShippingManagerTest
     {
         [Fact]
-        public void CalculateExpectedDeliveryDate_Returns2DaysFromNow_Ship2DayOnAMonday_Test()
+        public void CalculateExpectedDeliveryDate_Returns2DaysFromNow_Ship2DayOnAMonday()
         {
             DateTime aMonday = new DateTime(2013, 11, 11);
             DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(2, aMonday, DayOfWeek.Saturday, DayOfWeek.Sunday);
@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping
         }
 
         [Fact]
-        public void CalculateExpectedDeliveryDate_Returns4DaysFromNow_Ship2DayOnAFriday_Test()
+        public void CalculateExpectedDeliveryDate_Returns4DaysFromNow_Ship2DayOnAFriday()
         {
             DateTime aFriday = new DateTime(2013, 11, 15);
             DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(2, aFriday, DayOfWeek.Saturday, DayOfWeek.Sunday);

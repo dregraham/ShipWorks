@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 
@@ -14,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
     /// </summary>
     public class UpsPromoFactory : IUpsPromoFactory
     {
-        private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly IPromoClientFactory promoClientFactory;
         private readonly IUpsPromoPolicy upsPromoPolicy;
         readonly ICarrierSettingsRepository settingsRepository;
@@ -22,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromoFactory(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup, ICarrierAccountRepository<UpsAccountEntity> accountRepository, IPromoClientFactory promoClientFactory, IUpsPromoPolicy upsPromoPolicy)
+        public UpsPromoFactory(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> lookup, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, IPromoClientFactory promoClientFactory, IUpsPromoPolicy upsPromoPolicy)
         {
             this.accountRepository = accountRepository;
             this.promoClientFactory = promoClientFactory;

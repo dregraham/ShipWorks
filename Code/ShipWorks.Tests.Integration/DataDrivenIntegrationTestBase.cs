@@ -14,20 +14,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 {
     public class DataDrivenIntegrationTestBase
     {
-        //private TestContext testContextInstance;
         private bool isTranslationMapPopulated = false;
-
-        //public TestContext TestContext
-        //{
-        //    get
-        //    {
-        //        return testContextInstance;
-        //    }
-        //    set
-        //    {
-        //        testContextInstance = value;
-        //    }
-        //}
         
         /// <summary>
         /// Populates the test object based on the mapping of a spreadsheet columns to the test object's properties.

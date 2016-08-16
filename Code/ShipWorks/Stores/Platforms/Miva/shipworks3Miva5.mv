@@ -3,13 +3,13 @@
 |
 | Miva Merchant v5.x
 |
-| This file and the source codes contained herein are the property 
-| of Interapptive, Inc.  Use of this file is restricted to the specific 
-| terms and conditions in the License Agreement associated with this 
+| This file and the source codes contained herein are the property
+| of Interapptive, Inc.  Use of this file is restricted to the specific
+| terms and conditions in the License Agreement associated with this
 | file.  Distribution of this file or portions of this file for uses
-| not covered by the License Agreement is not allowed without a written 
+| not covered by the License Agreement is not allowed without a written
 | agreement signed by an officer of Interapptive, Inc.
-| 
+|
 | The code contained herein may not be reproduced, copied or
 | redistributed in any form, as part of another product or otherwise.
 | Modified versions of this code may not be sold or redistributed.
@@ -30,7 +30,7 @@
 <MvEVAL EXPR="{ Main() }">
 
 <MvFUNCTION NAME = "GlobalVariables">
-    <MvASSIGN NAME="g.swModuleVersion" VALUE="3.2.0.0">
+    <MvASSIGN NAME="g.swModuleVersion" VALUE="4.6.0.0">
     <MvASSIGN NAME="g.swSchemaVersion" VALUE="1.0.0"></MvASSIGN>
     <MvASSIGN NAME="g.swModuleCode" VALUE="ShipWorks3">
 </MvFUNCTION>
@@ -48,15 +48,15 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Module_Install_Store" STANDARDOUTPUTLEVEL = "" PARAMETERS="module var" ERROROUTPUTLEVEL = "syntax, expression">
-	<MvFUNCTIONRETURN VALUE = 1>
+  <MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Module_Uninstall_Store" PARAMETERS="module var" STANDARDOUTPUTLEVEL = "">
-	<MvFUNCTIONRETURN VALUE = 1>
+  <MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Module_Upgrade_Store" PARAMETERS="module var,version"  STANDARDOUTPUTLEVEL = "">
-	<MvFUNCTIONRETURN VALUE = 1>
+  <MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Main">
@@ -66,14 +66,14 @@
     <MvCOMMENT><!-- We will handle MvDO errors ourself --></MvCOMMENT>
     <MIVA MvOPENVIEW_Error = "nonfatal, nodisplay">
 
-    
+
     <MvCOMMENT><!-- Let clients knkow this is XML --></MvCOMMENT>
     <MvASSIGN NAME="l.throwaway" value="{miva_output_header('Content-Type','text/xml')}">
 
-        <MvEVAL EXPR = "{ OpenXmlDocument() }"> 
+        <MvEVAL EXPR = "{ OpenXmlDocument() }">
     <MvEVAL EXPR = "{ SetupEnvironment() }">
-            
-    <MvCOMMENT><!-- Dont do anything if no user\pass are specified--></MvCOMMENT>   
+
+    <MvCOMMENT><!-- Dont do anything if no user\pass are specified--></MvCOMMENT>
     <MvIF EXPR = "{ NOT g.username AND NOT g.password }">
         <MvEVAL EXPR = "{ CloseXmlDocument() }">
         <MvEXIT>
@@ -83,25 +83,25 @@
     <MvDO FILE = "{ g.Relative_Library_Utilities }" NAME = "l.user_id" VALUE = "{ DetermineAdminUser(g.swAdminUser) }">
         <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00031', MvDO_Error) }"></MvIF>
 
-	  <MvIF EXPR = "{ NOT l.user_id }">
+    <MvIF EXPR = "{ NOT l.user_id }">
         <MvEVAL EXPR = "{ ErrorTermination('SW-00003', 'Administrator privledges are required.' ) }">
     </MvIF>
-    
+
     <MvCOMMENT><!-- Make sure the module even exists in Miva Merchant at all --></MvCOMMENT>
     <MvASSIGN NAME = "l.moduleCode" VALUE = "{g.swModuleCode}">
     <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.found" VALUE = "{ Module_Load_Code(l.moduleCode, l.module)}">
         <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00032', MvDO_Error) }"></MvIF>
-        
-	  <MvIF EXPR = "{ NOT l.found }">
+
+    <MvIF EXPR = "{ NOT l.found }">
         <MvEVAL EXPR = "{ ErrorTermination('SW-00014', g.Error_Message ) }">
     </MvIF>
 
     <MvCOMMENT><!-- Open the store.  Special case: if the action is to GetStores, we dont try to open the store --></MvCOMMENT>
     <MvIF EXPR = "{ g.Action NE 'getstores' }">
-        <MvEVAL EXPR = "{ OpenStore() }">  
-            
+        <MvEVAL EXPR = "{ OpenStore() }">
+
     </MvIF>
-      
+
      <MvIF EXPR="{ g.Action NE '' }">
         <Parameters>
           <Action><MvEVAL EXPR="{ g.Action }"></Action>
@@ -116,7 +116,7 @@
     <MvIF EXPR="{ g.Start EQ '' }">
         <MvASSIGN NAME="g.Start" VALUE="0" ></MvASSIGN>
     </MvIF>
-      
+
     <MvCOMMENT><!--  Process the action --></MvCOMMENT>
     <MvIF EXPR = "{ g.Action EQ 'getmodule'  }">       <MvEVAL EXPR = "{ Action_GetModule()    }">           </MvIF>
     <MvIF EXPR = "{ g.Action EQ 'getstores'  }">       <MvEVAL EXPR = "{ Action_GetStores()    }">           </MvIF>
@@ -127,14 +127,14 @@
     <MvIF EXPR = "{ g.Action EQ 'getstatuscodes'}">    <MvEVAL EXPR = "{ Action_GetStatusCodes()  }">        </MvIF>
     <MvIF EXPR = "{ g.Action EQ 'updatestatus'}">      <MvEVAL EXPR = "{ Action_UpdateStatus()  }">          </MvIF>
     <MvIF EXPR = "{ g.Action EQ 'updateshipment'}">    <MvEVAL EXPR = "{ Action_UpdateShipment()  }">        </MvIF>
-    
+
     <MvCOMMENT><!--  Finished! --></MvCOMMENT>
-    <MvEVAL EXPR = "{ CloseXmlDocument() }"> 
-    
+    <MvEVAL EXPR = "{ CloseXmlDocument() }">
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "OpenXmlDocument">
-  
+
     <?xml version="1.0" standalone="yes"?>
     <ShipWorks moduleVersion="{g.swModuleVersion}" schemaVersion="{g.swSchemaVersion}">
 
@@ -142,7 +142,7 @@
 
 <MvFUNCTION NAME = "CloseXmlDocument">
     </ShipWorks>
-	  <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ AdminSession_Delete_Session( g.Session_ID ) }">
+    <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ AdminSession_Delete_Session( g.Session_ID ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ErrorTermination" PARAMETERS = "code, message">
@@ -152,10 +152,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "OutputErrorXml" PARAMETERS = "code, message">
-	<Error>
-	    <Code><MvEVAL EXPR="{ encodeentities( l.code ) }"></Code>
-	    <Description><MvEVAL EXPR="{ encodeentities( l.message ) }"></Description>
-	</Error>
+  <Error>
+      <Code><MvEVAL EXPR="{ encodeentities( l.code ) }"></Code>
+      <Description><MvEVAL EXPR="{ encodeentities( l.message ) }"></Description>
+  </Error>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "SetupEnvironment">
@@ -163,68 +163,68 @@
     <MvDO FILE = "../../lib/config.mvc">
 
     <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00006', MvDO_Error) }"></MvIF>
-        
+
     <MvASSIGN NAME="g.Relative_Library_DB"            VALUE="{'../../' $ g.Library_DB}">
     <MvASSIGN NAME="g.Relative_Library_Utilities"     VALUE="{'../../' $ g.Library_Utilities}">
-          
+
     <MvASSIGN NAME = "g.Version_Mismatch" VALUE = 0>
-    
+
     <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ OpenDataFiles(g.Merchant_Version, g.Domain) }">
         <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00007', MvDO_Error) }"></MvIF>
-        
+
     <MvASSIGN NAME="g.imageBaseUrl" VALUE="{ g.Domain:base_url }" >
-      
+
     <MvIF EXPR = "{ NOT l.ok }">
-	    <MvIF EXPR = "{ NOT g.Version_Mismatch }">
-		    <MvEVAL EXPR = "{ ErrorTermination('SW-00001', 'Miva Merchant has not been initialized.  Please use the Miva Merchant Setup script to initialize the required data files.' ) }">
-	    </MvIF>
+      <MvIF EXPR = "{ NOT g.Version_Mismatch }">
+        <MvEVAL EXPR = "{ ErrorTermination('SW-00001', 'Miva Merchant has not been initialized.  Please use the Miva Merchant Setup script to initialize the required data files.' ) }">
+      </MvIF>
     <MvELSE>
-	    <MvDO FILE = "{ g.Relative_Library_Utilities }" NAME = "g.Session_ID" VALUE = "{ DetermineSessionID() }">
+      <MvDO FILE = "{ g.Relative_Library_Utilities }" NAME = "g.Session_ID" VALUE = "{ DetermineSessionID() }">
             <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00008', MvDO_Error) }"></MvIF>
     </MvIF>
-    
+
     <MvASSIGN NAME="g.Relative_Module_Root"           VALUE="{'../../' }">
     <MvASSIGN NAME="g.Relative_Module_Admin"          VALUE="{'../../../' $ g.Module_Admin}">
     <MvASSIGN NAME="g.Relative_Library_Crypto"        VALUE="{'../../' $ g.Library_Crypto}">
     <MvASSIGN NAME="g.Relative_Native_DBAPI"          VALUE="{'../../' $ g.Library_Native_DBAPI }">
-          
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "OpenStore">
     <MvCOMMENT><!-- Has to be at least 1 store --></MvCOMMENT>
-	<MvDO FILE = "{ g.Relative_Library_DB }" NAME = "g.Store_Count" VALUE = "{ Store_Count() }">
-	<MvIF EXPR = "{ g.Store_Count EQ 0 }">
-		<MvEVAL EXPR = "{ ErrorTermination('SW-00004', 'No stores exist.  Please use the administration utility to create one.' ) }">
-	</MvIF>
+  <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "g.Store_Count" VALUE = "{ Store_Count() }">
+  <MvIF EXPR = "{ g.Store_Count EQ 0 }">
+    <MvEVAL EXPR = "{ ErrorTermination('SW-00004', 'No stores exist.  Please use the administration utility to create one.' ) }">
+  </MvIF>
 
     <MvCOMMENT><!-- Figure out what store to use if its not set --></MvCOMMENT>
-	<MvIF EXPR = "{ len( g.StoreCode ) EQ 0 }">
-		<MvIF EXPR = "{ g.Store_Count EQ 1 }">
-			<MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ StoreList_Load_All(l.StoreArray) }">
-	            <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00033', MvDO_Error) }"></MvIF>
-	            
-			<MvIF EXPR = "{ l.ok }">
-				<MvASSIGN NAME = "g.StoreCode" VALUE = "{ l.StoreArray[1]:code }">
-			</MvIF>
-		<MvELSE>
-			<MvEVAL EXPR = "{ ErrorTermination('SW-00005', 'Multiple stores exist.  Please select a store.' ) }">
-		</MvIF>			    
-	</MvIF>
+  <MvIF EXPR = "{ len( g.StoreCode ) EQ 0 }">
+    <MvIF EXPR = "{ g.Store_Count EQ 1 }">
+      <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ StoreList_Load_All(l.StoreArray) }">
+              <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00033', MvDO_Error) }"></MvIF>
 
-  <MvCOMMENT><!--  Open the store --></MvCOMMENT>      
+      <MvIF EXPR = "{ l.ok }">
+        <MvASSIGN NAME = "g.StoreCode" VALUE = "{ l.StoreArray[1]:code }">
+      </MvIF>
+    <MvELSE>
+      <MvEVAL EXPR = "{ ErrorTermination('SW-00005', 'Multiple stores exist.  Please select a store.' ) }">
+    </MvIF>
+  </MvIF>
+
+  <MvCOMMENT><!--  Open the store --></MvCOMMENT>
   <MvCOMMENT><!-- Note: some of the underlying Miva modules that are used when updating shipment status require passing the store data in --></MvCOMMENT>
   <MvCOMMENT><!-- global variable named g.Store; populating store data in a variable named anything else will cause an error in an underlying --></MvCOMMENT>
   <MvCOMMENT><!-- Miva module (tui_ut.mv) unrelated to ShipWorks. --></MvCOMMENT>
-	<MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ Store_Open( g.StoreCode, g.Store) }">
-	    <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00034', MvDO_Error) }"></MvIF>
-	    	    
+  <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.ok" VALUE = "{ Store_Open( g.StoreCode, g.Store) }">
+      <MvIF EXPR = "{ MvDO_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00034', MvDO_Error) }"></MvIF>
+
     <MvIF EXPR = "{ NOT l.ok }">
-	    <MvEVAL EXPR = "{ ErrorTermination('SW-00009', g.Error_Message) }">
-	</MvIF>
+      <MvEVAL EXPR = "{ ErrorTermination('SW-00009', g.Error_Message) }">
+  </MvIF>
 </MvFUNCTION>
 
 <MvFUNCTION NAME= "Action_GetModule">
-  
+
     <Module>
 
       <Platform>Miva Merchant 5</Platform>
@@ -236,36 +236,36 @@
           <OnlineStatus supported="true" supportsComments="true" dataType="text" />
           <OnlineShipmentUpdate supported="true" />
       </Capabilities>
-      
+
     </Module>
-  
+
 </MvFUNCTION>
-  
+
 <MvFUNCTION NAME = "Action_GetStores">
     <Stores>
-    
+
         <MvOPENVIEW NAME="merchant" VIEW="Stores" QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'Stores' }" >
-	        <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00040', MvOPENVIEW_Error) }"></MvIF>
-	        
-	    <MvWHILE EXPR = "{ NOT Stores.d.EOF }">
-	    
-	        <Store>
-	            <Code><MvEVAL EXPR="{ encodeentities( Stores.d.code ) }"></Code>
-	            <Name><MvEVAL EXPR="{ encodeentities( Stores.d.name ) }"></Name>
-	        </Store>
-	        
-	        <MvSKIP NAME="merchant" VIEW="Stores" ROWS = 1>
-	    </MvWHILE>
-	    
-	    <MvCLOSEVIEW NAME="merchant" VIEW="Stores" >
-	</Stores>
-	
+          <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00040', MvOPENVIEW_Error) }"></MvIF>
+
+      <MvWHILE EXPR = "{ NOT Stores.d.EOF }">
+
+          <Store>
+              <Code><MvEVAL EXPR="{ encodeentities( Stores.d.code ) }"></Code>
+              <Name><MvEVAL EXPR="{ encodeentities( Stores.d.name ) }"></Name>
+          </Store>
+
+          <MvSKIP NAME="merchant" VIEW="Stores" ROWS = 1>
+      </MvWHILE>
+
+      <MvCLOSEVIEW NAME="merchant" VIEW="Stores" >
+  </Stores>
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME= "Action_GetStore">
-  
+
     <Store>
-      
+
         <Name><MvEVAL EXPR="{ encodeentities( Store:name ) }"></Name>
         <CompanyOrOwner><MvEVAL EXPR="{ encodeentities( Store:company ) }"></CompanyOrOwner>
         <Email><MvEVAL EXPR="{ encodeentities( Store:email ) }"></Email>
@@ -275,35 +275,35 @@
         <PostalCode><MvEVAL EXPR="{ encodeentities( Store:zip ) }"></PostalCode>
         <Country><MvEVAL EXPR="{ encodeentities( Store:country ) }"></Country>
         <Phone><MvEVAL EXPR="{ encodeentities( Store:phone ) }"></Phone>
-      
+
     </Store>
-  
+
 </MvFUNCTION>
-  
+
 <MvFUNCTION NAME = "Action_GetStatusCodes">
     <MvIF EXPR="{ g.statusSource EQ 'sebenza' }">
-		  <MvOPENVIEW NAME="Merchant" VIEW="statusCodes" QUERY="{ 'SELECT code, name FROM ' $ g.Store_Table_Prefix $ 'SS_STATUS_StatusTypes' }">
-			<MvIF EXPR = "{ MvOPENVIEW_Error }">
-			  <MvEVAL EXPR = "{ ErrorTermination('SW-00066', 'You have configured ShipWorks to use the Sebenza Ultimate Status module, but is not installed in your Miva Merchant store.' ) }">
-		  </MvIF>
-			
-  		<StatusCodes>
-  			<MvWHILE EXPR="{ NOT statusCodes.d.eof }">
-  					<MvASSIGN NAME="l.code"  VALUE = "{ statusCodes.d.code }">
-  					<MvASSIGN NAME="l.name"  VALUE = "{ statusCodes.d.name }">
+      <MvOPENVIEW NAME="Merchant" VIEW="statusCodes" QUERY="{ 'SELECT code, name FROM ' $ g.Store_Table_Prefix $ 'SS_STATUS_StatusTypes' }">
+      <MvIF EXPR = "{ MvOPENVIEW_Error }">
+        <MvEVAL EXPR = "{ ErrorTermination('SW-00066', 'You have configured ShipWorks to use the Sebenza Ultimate Status module, but is not installed in your Miva Merchant store.' ) }">
+      </MvIF>
 
-  					<StatusCode>
-  						<Code><MvEVAL EXPR="{ l.code }"></Code>
-  						<Name><MvEVAL EXPR="{ l.name }"></Name>
-  					</StatusCode>
-  						
-  					<MvSKIP NAME="Merchant" VIEW="statusCodes" ROWS=1>
-  			</MvWHILE>
-  			<MvCLOSEVIEW NAME="merchant" VIEW="statusCodes" >
-  				
-  	  </StatusCodes>
+      <StatusCodes>
+        <MvWHILE EXPR="{ NOT statusCodes.d.eof }">
+            <MvASSIGN NAME="l.code"  VALUE = "{ statusCodes.d.code }">
+            <MvASSIGN NAME="l.name"  VALUE = "{ statusCodes.d.name }">
+
+            <StatusCode>
+              <Code><MvEVAL EXPR="{ l.code }"></Code>
+              <Name><MvEVAL EXPR="{ l.name }"></Name>
+            </StatusCode>
+
+            <MvSKIP NAME="Merchant" VIEW="statusCodes" ROWS=1>
+        </MvWHILE>
+        <MvCLOSEVIEW NAME="merchant" VIEW="statusCodes" >
+
+      </StatusCodes>
     </MvIF>
-        
+
     <MvIF EXPR="{ g.statusSource EQ 'miva' }">
         <MvCOMMENT><!-- Wombat has hard coded status codes --></MvCOMMENT>
         <StatusCodes>
@@ -345,12 +345,12 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Action_GetCount">
-	
-  <MvOPENVIEW NAME="merchant" VIEW="Orders" 
+
+  <MvOPENVIEW NAME="merchant" VIEW="Orders"
               QUERY="{ 'select count(*) as orderCount from ' $ g.Store_Table_Prefix $ 'Orders o where o.orderdate > ' $ g.Start }" >
-	<MvIF EXPR = "{ MvOPENVIEW_Error }">
-	    <MvEVAL EXPR = "{ ErrorTermination('SW-00036', MvOPENVIEW_Error) }">
-	</MvIF>
+  <MvIF EXPR = "{ MvOPENVIEW_Error }">
+      <MvEVAL EXPR = "{ ErrorTermination('SW-00036', MvOPENVIEW_Error) }">
+  </MvIF>
 
   <MvCOMMENT><!-- Had a case where Orders.d.orderCount was coming back as what appears to have been a null character (\0) if no orders were available--></MvCOMMENT>
   <MvASSIGN NAME = "l.orderCount" VALUE = "{ Orders.d.orderCount }">
@@ -360,37 +360,37 @@
   <MvELSE>
       <OrderCount><MvEVAL EXPR = "{ l.orderCount }"></OrderCount>
   </MvIF>
-  
-	<MvCLOSEVIEW NAME="merchant" VIEW="Orders">
+
+  <MvCLOSEVIEW NAME="merchant" VIEW="Orders">
 
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Action_GetNextOrderID">
 
     <MvIF EXPR = "{ NOT g.keytype }">
-        <MvEVAL EXPR = "{ ErrorTermination('SW-00028', 'KeyType must be specified') }">        
+        <MvEVAL EXPR = "{ ErrorTermination('SW-00028', 'KeyType must be specified') }">
     </MvIF>
-    
+
     <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.newKey" VALUE = "{ StoreKey_Generate( g.keytype ) }">
     <MvIF EXPR = "{ MvDO_Error }">
         <MvEVAL EXPR = "{ ErrorTermination('SW-00029', MvDO_Error) }">
     </MvIF>
-    
+
     <MvIF EXPR = "{ l.newKey EQ 0}">
         <MvEVAL EXPR = "{ ErrorTermination('SW-00030', 'Invalid key type: ' $ g.keytype) }">
     </MvIF>
-    
+
     <KeyType><MvEVAL EXPR="{ encodeentities( g.keytype ) }"></KeyType>
-	  <OrderID><MvEVAL EXPR="{ encodeentities( l.newKey ) }"></OrderID>
-    
+    <OrderID><MvEVAL EXPR="{ encodeentities( l.newKey ) }"></OrderID>
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Action_GetOrders">
 
     <MvIF EXPR = "{ NOT g.maxcount }">
-        <MvASSIGN NAME = "g.maxcount" VALUE = "{ 50 }"> 
+        <MvASSIGN NAME = "g.maxcount" VALUE = "{ 50 }">
     </MvIF>
-    
+
     <MvASSIGN NAME = "l.downloadcount" VALUE = "{ 0  }">
 
     <MvIF EXPR = "{ 'mysql' CIN g.Module_Library_Native_DBAPI }">
@@ -402,37 +402,37 @@
         <MvEVAL EXPR = "{ SebenzaExtraMsg_OpenDB(0) }">
         <MvCLOSEVIEW NAME="merchant" VIEW = "acdproOrders">
     </MvIF>
-      
+
     <MvCOMMENT><!-- this is used to prevent straddling orders with the same date accross a download paging boundary --></MvCOMMENT>
     <MvASSIGN NAME = "l.maxdate" VALUE = 0>
-      
-    <MvASSIGN NAME="l.query" VALUE="{ 
+
+    <MvASSIGN NAME="l.query" VALUE="{
         ' select o.* from ' $ g.Store_Table_Prefix $ 'Orders o ' $
         ' where o.orderdate > ' $ g.Start $ ' and o.orderdate < ' $ (s.time_t - 5) $
         ' order by o.orderdate asc '
         }" >
-                
-    <MvCOMMENT><!-- Do all orders with no entry in the download table --></MvCOMMENT>       
+
+    <MvCOMMENT><!-- Do all orders with no entry in the download table --></MvCOMMENT>
     <MvOPENVIEW NAME="merchant" VIEW="Orders" QUERY="{l.query}" >
-	  <MvIF EXPR = "{ MvOPENVIEW_Error }">
-	      <MvEVAL EXPR = "{ ErrorTermination('SW-00010', MvOPENVIEW_Error) }">
-   	</MvIF>
+    <MvIF EXPR = "{ MvOPENVIEW_Error }">
+        <MvEVAL EXPR = "{ ErrorTermination('SW-00010', MvOPENVIEW_Error) }">
+    </MvIF>
 
     <Orders>
 
       <MvWHILE EXPR = "{ (NOT Orders.d.EOF) AND (l.downloadcount LT g.maxcount) }">
 
-    	    <MvASSIGN NAME = "l.downloadcount" VALUE = "{ l.downloadcount + 1 }">    
-   	      <MvEVAL EXPR = "{ CreateOrderXML() }">
-    
+          <MvASSIGN NAME = "l.downloadcount" VALUE = "{ l.downloadcount + 1 }">
+          <MvEVAL EXPR = "{ CreateOrderXML() }">
+
           <MvCOMMENT><!-- this is used to prevent straddling orders with the same date accross a download paging boundary --></MvCOMMENT>
           <MvIF EXPR = "{ Orders.d.orderdate GT l.maxdate }">
              <MvASSIGN NAME = "l.maxdate" VALUE = "Orders.d.orderdate" >
           </MvIF>
-            
-	        <MvSKIP NAME="merchant" VIEW="Orders" ROWS = 1>
-	    </MvWHILE>
-  	
+
+          <MvSKIP NAME="merchant" VIEW="Orders" ROWS = 1>
+      </MvWHILE>
+
       <MvCOMMENT><!-- This is to prevent a case where two orders have the same date, but straddle the paging boundary.  This will
                       make it so we maybe download more than maxcount, but we won't leave any stranded.--></MvCOMMENT>
       <MvWHILE EXPR = "{ (NOT Orders.d.EOF) AND (Orders.d.orderdate LE (l.maxdate + 2) ) }">
@@ -441,22 +441,22 @@
           <MvEVAL EXPR = "{ CreateOrderXML() }">
 
           <MvSKIP NAME = "Orders" ROWS = "1">
-             
+
       </MvWHILE>
-        
+
       <MvCLOSEVIEW NAME="merchant" VIEW="Orders" >
-        
+
     </Orders>
-      
+
 </MvFUNCTION>
 
 
 <MvFUNCTION NAME = "CreateOrderXML">
 
     <Order>
-      
-	    <OrderNumber><MvEVAL EXPR="{ encodeentities( Orders.d.id ) }"></OrderNumber>
-	    <OrderDate><MvEVAL EXPR="{ encodeentities( FormatDate(Orders.d.orderdate) ) }"></OrderDate>      
+
+      <OrderNumber><MvEVAL EXPR="{ encodeentities( Orders.d.id ) }"></OrderNumber>
+      <OrderDate><MvEVAL EXPR="{ encodeentities( FormatDate(Orders.d.orderdate) ) }"></OrderDate>
       <CustomerID><MvEVAL EXPR="{ encodeentities( Orders.d.cust_id ) }"></CustomerID>
       <ShippingMethod><MvComment><!-- This gets set within ShipWorks --></MvComment></ShippingMethod>
 
@@ -467,44 +467,44 @@
       <MvIF EXPR="{ g.statusSource EQ 'miva' }">
           <StatusCode><MvEVAL EXPR="{ encodeentities( Orders.d.status ) }"></StatusCode>
       </MvIF>
-        
+
       <ShippingAddress>
-	        <FirstName><MvEVAL EXPR="{ encodeentities( Orders.d.ship_fname ) }"></FirstName>
-	        <LastName><MvEVAL EXPR="{ encodeentities( Orders.d.ship_lname ) }"></LastName>
-	        <Company><MvEVAL EXPR="{ encodeentities( Orders.d.ship_comp ) }"></Company>
-	        <Street1><MvEVAL EXPR="{ encodeentities( Orders.d.ship_addr ) }"></Street1>
-	        <Street2><MvEVAL EXPR="{ encodeentities( Orders.d.ship_addr2 ) }"></Street2>
-	        <City><MvEVAL EXPR="{ encodeentities( Orders.d.ship_city ) }"></City>
-	        <State><MvEVAL EXPR="{ encodeentities( Orders.d.ship_state ) }"></State>
-	        <PostalCode><MvEVAL EXPR="{ encodeentities( Orders.d.ship_zip ) }"></PostalCode>
-	        <Country><MvEVAL EXPR="{ encodeentities( Orders.d.ship_cntry ) }"></Country>
-	        <Phone><MvEVAL EXPR="{ encodeentities( Orders.d.ship_phone ) }"></Phone>
-	        <Fax><MvEVAL EXPR="{ encodeentities( Orders.d.ship_fax ) }"></Fax>
-	        <Email><MvEVAL EXPR="{ encodeentities( Orders.d.ship_email ) }"></Email>
+          <FirstName><MvEVAL EXPR="{ encodeentities( Orders.d.ship_fname ) }"></FirstName>
+          <LastName><MvEVAL EXPR="{ encodeentities( Orders.d.ship_lname ) }"></LastName>
+          <Company><MvEVAL EXPR="{ encodeentities( Orders.d.ship_comp ) }"></Company>
+          <Street1><MvEVAL EXPR="{ encodeentities( Orders.d.ship_addr ) }"></Street1>
+          <Street2><MvEVAL EXPR="{ encodeentities( Orders.d.ship_addr2 ) }"></Street2>
+          <City><MvEVAL EXPR="{ encodeentities( Orders.d.ship_city ) }"></City>
+          <State><MvEVAL EXPR="{ encodeentities( Orders.d.ship_state ) }"></State>
+          <PostalCode><MvEVAL EXPR="{ encodeentities( Orders.d.ship_zip ) }"></PostalCode>
+          <Country><MvEVAL EXPR="{ encodeentities( Orders.d.ship_cntry ) }"></Country>
+          <Phone><MvEVAL EXPR="{ encodeentities( Orders.d.ship_phone ) }"></Phone>
+          <Fax><MvEVAL EXPR="{ encodeentities( Orders.d.ship_fax ) }"></Fax>
+          <Email><MvEVAL EXPR="{ encodeentities( Orders.d.ship_email ) }"></Email>
       </ShippingAddress>
-      
+
       <BillingAddress>
-	        <FirstName><MvEVAL EXPR="{ encodeentities( Orders.d.bill_fname ) }"></FirstName>
-	        <LastName><MvEVAL EXPR="{ encodeentities( Orders.d.bill_lname ) }"></LastName>
-	        <Company><MvEVAL EXPR="{ encodeentities( Orders.d.bill_comp ) }"></Company>
-	        <Street1><MvEVAL EXPR="{ encodeentities( Orders.d.bill_addr ) }"></Street1>
-	        <Street2><MvEVAL EXPR="{ encodeentities( Orders.d.bill_addr2 ) }"></Street2>
-	        <City><MvEVAL EXPR="{ encodeentities( Orders.d.bill_city ) }"></City>
-	        <State><MvEVAL EXPR="{ encodeentities( Orders.d.bill_state ) }"></State>
-	        <PostalCode><MvEVAL EXPR="{ encodeentities( Orders.d.bill_zip ) }"></PostalCode>
-	        <Country><MvEVAL EXPR="{ encodeentities( Orders.d.bill_cntry ) }"></Country>
-	        <Phone><MvEVAL EXPR="{ encodeentities( Orders.d.bill_phone ) }"></Phone>
-	        <Fax><MvEVAL EXPR="{ encodeentities( Orders.d.bill_fax ) }"></Fax>
-	        <Email><MvEVAL EXPR="{ encodeentities( Orders.d.bill_email ) }"></Email>
+          <FirstName><MvEVAL EXPR="{ encodeentities( Orders.d.bill_fname ) }"></FirstName>
+          <LastName><MvEVAL EXPR="{ encodeentities( Orders.d.bill_lname ) }"></LastName>
+          <Company><MvEVAL EXPR="{ encodeentities( Orders.d.bill_comp ) }"></Company>
+          <Street1><MvEVAL EXPR="{ encodeentities( Orders.d.bill_addr ) }"></Street1>
+          <Street2><MvEVAL EXPR="{ encodeentities( Orders.d.bill_addr2 ) }"></Street2>
+          <City><MvEVAL EXPR="{ encodeentities( Orders.d.bill_city ) }"></City>
+          <State><MvEVAL EXPR="{ encodeentities( Orders.d.bill_state ) }"></State>
+          <PostalCode><MvEVAL EXPR="{ encodeentities( Orders.d.bill_zip ) }"></PostalCode>
+          <Country><MvEVAL EXPR="{ encodeentities( Orders.d.bill_cntry ) }"></Country>
+          <Phone><MvEVAL EXPR="{ encodeentities( Orders.d.bill_phone ) }"></Phone>
+          <Fax><MvEVAL EXPR="{ encodeentities( Orders.d.bill_fax ) }"></Fax>
+          <Email><MvEVAL EXPR="{ encodeentities( Orders.d.bill_email ) }"></Email>
       </BillingAddress>
-      
-	    <MvEVAL EXPR = "{ CreateOrderItemsXML() }">
+
+      <MvEVAL EXPR = "{ CreateOrderItemsXML() }">
       <MvEVAL EXPR = "{ CreateOrderChargesXML() }">
-              
-	    <MvIF EXPR = "{ g.Secure }">
+
+      <MvIF EXPR = "{ g.Secure }">
           <MvEVAL EXPR = "{ CreatePaymentXML() }">
       </MvIF>
-      
+
       <MvIF EXPR = "{ g.SebenzaACD }">
           <MvEVAL EXPR = "{ CreateSebenzaExtraMsgXML() }">
       </MvIF>
@@ -512,63 +512,63 @@
       <Debug>
         <RawDate><MvEVAL EXPR="{ encodeentities( Orders.d.orderdate) }"></RawDate>
       </Debug>
-        
-	</Order>
-        
+
+  </Order>
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "OutputSebenzaStatusTag">
 
-	  <MvOPENVIEW NAME="Merchant" VIEW="OrderStatus" QUERY="{ 'SELECT status FROM ' $ g.Store_Table_Prefix $ 'SS_STATUS_Orders WHERE id =' $ Orders.d.id }">
+    <MvOPENVIEW NAME="Merchant" VIEW="OrderStatus" QUERY="{ 'SELECT status FROM ' $ g.Store_Table_Prefix $ 'SS_STATUS_Orders WHERE id =' $ Orders.d.id }">
     <MvIF EXPR = "{ MvOPENVIEW_Error EQ '' }">
-      
-	    <MvIF EXPR="{ NOT OrderStatus.d.eof }">
-		    <StatusCode><MvEVAL EXPR="{ encodeentities( OrderStatus.d.status ) }"></StatusCode>
-	    </MvIF>
 
-	    <MvCLOSEVIEW NAME="merchant" VIEW="OrderStatus" >
-        
+      <MvIF EXPR="{ NOT OrderStatus.d.eof }">
+        <StatusCode><MvEVAL EXPR="{ encodeentities( OrderStatus.d.status ) }"></StatusCode>
+      </MvIF>
+
+      <MvCLOSEVIEW NAME="merchant" VIEW="OrderStatus" >
+
     </MvIF>
 
 </MvFUNCTION>
-  
+
 <MvFUNCTION NAME = "CreateOrderItemsXML">
 
   <Items>
-        
-    <MvOPENVIEW NAME="merchant" 
-        VIEW="OrderItems" 
-        QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'OrderItems where order_id = ' $ Orders.d.id }" >
-	  <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00043', MvOPENVIEW_Error) }"></MvIF>
 
-	  <MvWHILE EXPR = "{ NOT OrderItems.d.EOF }">
+    <MvOPENVIEW NAME="merchant"
+        VIEW="OrderItems"
+        QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'OrderItems where order_id = ' $ Orders.d.id }" >
+    <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00043', MvOPENVIEW_Error) }"></MvIF>
+
+    <MvWHILE EXPR = "{ NOT OrderItems.d.EOF }">
       <Item>
-	        <MvASSIGN NAME="l.attWeight" VALUE="0" >
-	        <MvASSIGN NAME="l.attCost" VALUE="0" >
-    	    
+          <MvASSIGN NAME="l.attWeight" VALUE="0" >
+          <MvASSIGN NAME="l.attCost" VALUE="0" >
+
           <MvEVAL EXPR = "{ CreateItemAttributesXML(l.attWeight, l.attCost) }">
-        
-		      <ItemID><MvEVAL EXPR="{ OrderItems.d.line_id }"></ItemID>
-		      <MvEVAL EXPR = "{ InsertProductXML(l.attCost) }">
-		      <Name><MvEVAL EXPR="{ encodeentities( OrderItems.d.name ) }"></Name>
-		      <Code><MvEVAL EXPR="{ encodeentities( OrderItems.d.code ) }"></Code>
-		      <UnitPrice><MvEVAL EXPR="{ OrderItems.d.price }"></UnitPrice>
-		      <Weight><MvEVAL EXPR="{ OrderItems.d.weight + l.attWeight }"></Weight>
-		      <Quantity><MvEVAL EXPR="{ OrderItems.d.quantity }"></Quantity>
-      </Item>      
-      
-	    <MvSKIP NAME="merchant" VIEW="OrderItems" ROWS = 1>
-        
-	</MvWHILE>
-	
-	<MvCLOSEVIEW NAME="merchant" VIEW="OrderItems" >
+
+          <ItemID><MvEVAL EXPR="{ OrderItems.d.line_id }"></ItemID>
+          <MvEVAL EXPR = "{ InsertProductXML(l.attCost) }">
+          <Name><MvEVAL EXPR="{ encodeentities( OrderItems.d.name ) }"></Name>
+          <Code><MvEVAL EXPR="{ encodeentities( OrderItems.d.code ) }"></Code>
+          <UnitPrice><MvEVAL EXPR="{ OrderItems.d.price }"></UnitPrice>
+          <Weight><MvEVAL EXPR="{ OrderItems.d.weight + l.attWeight }"></Weight>
+          <Quantity><MvEVAL EXPR="{ OrderItems.d.quantity }"></Quantity>
+      </Item>
+
+      <MvSKIP NAME="merchant" VIEW="OrderItems" ROWS = 1>
+
+  </MvWHILE>
+
+  <MvCLOSEVIEW NAME="merchant" VIEW="OrderItems" >
 
   </Items>
-  
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME="GetImageUrl" PARAMETERS="productImageUrl">
-      
+
     <MvASSIGN NAME="l.imageLength" VALUE="{ len(l.productImageUrl) }">
     <MvASSIGN NAME="l.baseLength" VALUE="{ len(g.imageBaseUrl) }">
     <MvASSIGN NAME="l.modLength" VALUE="{ len(g.Domain:mod_root) }">
@@ -582,24 +582,24 @@
 
     <MvFUNCTIONRETURN VALUE="{ l.return }"/>
 </MvFUNCTION>
- 
-  
+
+
 <MvFUNCTION NAME = "InsertProductXML" PARAMETERS="attCost" >
 
   <MvIF EXPR = "{ OrderItems.d.product_id NE '' }">
-    
-	      <ProductID><MvEVAL EXPR="{ OrderItems.d.product_id }"></ProductID>
-	
-        <MvOPENVIEW NAME="merchant" 
-            VIEW="Products" 
-            QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'Products where id = ' $ OrderItems.d.product_id }" >
-  	    <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00045', MvOPENVIEW_Error) }"></MvIF>
 
-  	    <MvIF EXPR = "{ NOT Products.d.EOF }">
+        <ProductID><MvEVAL EXPR="{ OrderItems.d.product_id }"></ProductID>
+
+        <MvOPENVIEW NAME="merchant"
+            VIEW="Products"
+            QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'Products where id = ' $ OrderItems.d.product_id }" >
+        <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00045', MvOPENVIEW_Error) }"></MvIF>
+
+        <MvIF EXPR = "{ NOT Products.d.EOF }">
             <ThumbnailImage><MvIF EXPR="{Products.d.thumbnail}"><MvEVAL EXPR="{ g.imageBaseUrl $ encodeentities( GetImageUrl(Products.d.thumbnail) ) }"></MvIF></ThumbnailImage>
-  	        <Image><MvIF EXPR="{Products.d.image}"><MvEVAL EXPR="{ g.imageBaseUrl $ encodeentities( GetImageUrl( Products.d.image ) ) }"></MvIF></Image>
+            <Image><MvIF EXPR="{Products.d.image}"><MvEVAL EXPR="{ g.imageBaseUrl $ encodeentities( GetImageUrl( Products.d.image ) ) }"></MvIF></Image>
             <UnitCost><MvEVAL EXPR="{ encodeentities( Products.d.cost + l.attCost) }"></UnitCost>
-         
+
             <MvCOMMENT><!-- If running Wombat and higher, output sku --></MvCOMMENT>
             <MvIF EXPR = "{ ( NOT (ISNULL g.Merchant_API_Version)) AND (g.Merchant_API_Version GE 5.60) }">
               <SKU><MvEVAL EXPR="{ Products.d.sku }"></MvEVAL></SKU>
@@ -608,26 +608,26 @@
             <ThumbnailImage></ThumbnailImage>
             <Image></Image>
             <UnitCost>0.00</UnitCost>
-  	    </MvIF>
-	
-	    <MvCLOSEVIEW NAME="merchant" VIEW="Products" >
+        </MvIF>
+
+      <MvCLOSEVIEW NAME="merchant" VIEW="Products" >
   </MvIF>
-  
-  
+
+
 </MvFUNCTION>
-  
+
 
 <MvFUNCTION NAME = "CreateOrderChargesXML">
 
-    <MvOPENVIEW NAME="merchant" 
-        VIEW="OrderCharges" 
+    <MvOPENVIEW NAME="merchant"
+        VIEW="OrderCharges"
         QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'OrderCharges where order_id = ' $ Orders.d.id }" >
-	  <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00043', MvOPENVIEW_Error) }"></MvIF>
+    <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00043', MvOPENVIEW_Error) }"></MvIF>
 
-	  <Totals>
-      
-	      <MvWHILE EXPR = "{ NOT OrderCharges.d.EOF }">
-      	
+    <Totals>
+
+        <MvWHILE EXPR = "{ NOT OrderCharges.d.EOF }">
+
           <Total
              id="{ OrderCharges.d.charge_id }"
              name="{ encodeentities( OrderCharges.d.descrip ) }"
@@ -635,13 +635,13 @@
              impact="add">
             <MvEVAL EXPR="{ OrderCharges.d.disp_amt }">
           </Total>
-          
+
           <MvSKIP NAME="merchant" VIEW="OrderCharges" ROWS = 1>
-	      </MvWHILE>
-	
-	</Totals> 
-      
-	<MvCLOSEVIEW NAME="merchant" VIEW="OrderCharges" >
+        </MvWHILE>
+
+  </Totals>
+
+  <MvCLOSEVIEW NAME="merchant" VIEW="OrderCharges" >
 
 </MvFUNCTION>
 
@@ -650,101 +650,101 @@
     <MvASSIGN NAME="l.weight" VALUE="0">
     <MvASSIGN NAME="l.cost" VALUE="0">
 
-    <MvOPENVIEW NAME="merchant" 
-        VIEW="OrderOptions" 
+    <MvOPENVIEW NAME="merchant"
+        VIEW="OrderOptions"
         QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'OrderOptions where order_id = ' $ Orders.d.id $ ' and line_id = ' $ OrderItems.d.line_id }" >
-	<MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00043', MvOPENVIEW_Error) }"></MvIF>
+  <MvIF EXPR = "{ MvOPENVIEW_Error }"><MvEVAL EXPR = "{ ErrorTermination('SW-00043', MvOPENVIEW_Error) }"></MvIF>
 
    <Attributes>
 
       <MvWHILE EXPR = "{ NOT OrderOptions.d.EOF }">
-	
-	    <MvASSIGN NAME="l.optWeight" VALUE="{ OrderOptions.d.weight }">
-	    <MvASSIGN NAME="l.optCost" VALUE="{ 0 }">
-	    
-	    <MvCOMMENT><!-- Assume the worst, that we will not be able to properly lookup the prompts -->
+
+      <MvASSIGN NAME="l.optWeight" VALUE="{ OrderOptions.d.weight }">
+      <MvASSIGN NAME="l.optCost" VALUE="{ 0 }">
+
+      <MvCOMMENT><!-- Assume the worst, that we will not be able to properly lookup the prompts -->
       </MvCOMMENT>
         <MvASSIGN NAME = "attPrompt" VALUE = "{ OrderOptions.d.attr_code }">
         <MvASSIGN NAME = "optPrompt" VALUE = "{ OrderOptions.d.opt_code }">
-        
+
         <MvASSIGN NAME = "l.checkTemplates" VALUE = "{ 1 }" >
-        
-	    <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.att_found" VALUE = "{ Attribute_Load_ID( OrderOptions.d.attr_id, l.Attribute ) }">
-	    <MvIF EXPR = "{ (l.att_found) AND (OrderOptions.d.attr_code EQ l.Attribute:code) }" >
-	    
+
+      <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.att_found" VALUE = "{ Attribute_Load_ID( OrderOptions.d.attr_id, l.Attribute ) }">
+      <MvIF EXPR = "{ (l.att_found) AND (OrderOptions.d.attr_code EQ l.Attribute:code) }" >
+
             <MvASSIGN NAME = "attPrompt" VALUE = "{ l.Attribute:prompt }">
-	        <MvASSIGN NAME="l.optCost" VALUE="{ l.Attribute:cost }">
-	        
+          <MvASSIGN NAME="l.optCost" VALUE="{ l.Attribute:cost }">
+
             <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.att_opt_found" VALUE = "{ Option_Load_ID( OrderOptions.d.option_id, l.Option ) }">
             <MvIF EXPR = "{ l.att_opt_found AND (OrderOptions.d.opt_code EQ l.Option:code) }">
-            
+
                 <MvASSIGN NAME = "optPrompt" VALUE = "{ l.Option:prompt }">
-	            <MvASSIGN NAME="l.optCost" VALUE="{ l.Option:cost }">
-	        
+              <MvASSIGN NAME="l.optCost" VALUE="{ l.Option:cost }">
+
                 <MvASSIGN NAME = "l.checkTemplates" VALUE = "{ 0 }" >
 
             </MvIF>
-	    </MvIF>
-	    
+      </MvIF>
+
         <MvCOMMENT><!-- If we dont find a match as an attribute, look for a match as an attribute template --></MvCOMMENT>
         <MvIF EXPR = "{ l.checkTemplates AND len(OrderOptions.d.attr_id) NE 0 }">
 
-            <MvOPENVIEW NAME="merchant" VIEW="AttributeTemplateAttrs" 
+            <MvOPENVIEW NAME="merchant" VIEW="AttributeTemplateAttrs"
                 QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'AttributeTemplateAttrs where id = ' $ OrderOptions.d.attr_id }" >
 
-	        <MvASSIGN NAME = "l.att_temp_found" VALUE = "{ NOT AttributeTemplateAttrs.d.EOF }">
-	        <MvIF EXPR = "{ l.att_temp_found AND (OrderOptions.d.attr_code EQ AttributeTemplateAttrs.d.code) }">
-	        
+          <MvASSIGN NAME = "l.att_temp_found" VALUE = "{ NOT AttributeTemplateAttrs.d.EOF }">
+          <MvIF EXPR = "{ l.att_temp_found AND (OrderOptions.d.attr_code EQ AttributeTemplateAttrs.d.code) }">
+
                 <MvASSIGN NAME = "attPrompt" VALUE = "{ AttributeTemplateAttrs.d.prompt }">
-	            <MvASSIGN NAME="l.optCost" VALUE="{ AttributeTemplateAttrs.d.cost }">
-	            
-                <MvOPENVIEW NAME="merchant" VIEW="AttributeTemplateOptions" 
+              <MvASSIGN NAME="l.optCost" VALUE="{ AttributeTemplateAttrs.d.cost }">
+
+                <MvOPENVIEW NAME="merchant" VIEW="AttributeTemplateOptions"
                     QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'AttributeTemplateOptions where id = ' $ OrderOptions.d.option_id }" >
 
-    	        <MvASSIGN NAME = "l.att_opt_found" VALUE = "{ NOT AttributeTemplateOptions.d.EOF }">
+              <MvASSIGN NAME = "l.att_opt_found" VALUE = "{ NOT AttributeTemplateOptions.d.EOF }">
                 <MvIF EXPR = "{ l.att_opt_found AND (OrderOptions.d.opt_code EQ AttributeTemplateOptions.d.code) }">
-                
+
                     <MvASSIGN NAME = "optPrompt" VALUE = "{ AttributeTemplateOptions.d.prompt }">
-	                <MvASSIGN NAME="l.optCost" VALUE="{ AttributeTemplateOptions.d.cost }">
-	                
+                  <MvASSIGN NAME="l.optCost" VALUE="{ AttributeTemplateOptions.d.cost }">
+
                 </MvIF>
 
-	       	    <MvCLOSEVIEW NAME="merchant" VIEW="AttributeTemplateOptions" >
+              <MvCLOSEVIEW NAME="merchant" VIEW="AttributeTemplateOptions" >
             </MvIF>
-	        
-	        <MvCLOSEVIEW NAME="merchant" VIEW="AttributeTemplateAttrs" >
-	        
+
+          <MvCLOSEVIEW NAME="merchant" VIEW="AttributeTemplateAttrs" >
+
         </MvIF>
-	    
+
         <MvASSIGN NAME="l.weight" VALUE="{ l.weight + l.optWeight }">
         <MvASSIGN NAME="l.cost" VALUE="{ l.cost + l.optCost }">
 
-	<MvCOMMENT>Cannot output a blank attribute id</MvCOMMENT>
-	<MvIF EXPR = "{ NOT(l.att_found OR l.att_temp_found) }">
-		<MvASSIGN NAME="l.attrib_id" VALUE="999999999">
-		<MvASSIGN NAME="l.unitPrice" VALUE="0" >
-	<MvELSE>
-		<MvASSIGN NAME="l.attrib_id" VALUE = "{ OrderOptions.d.attr_id }">
-		<MvASSIGN NAME="l.unitPrice" VALUE = "{ OrderOptions.d.price }">
-	</MvIF>
+  <MvCOMMENT>Cannot output a blank attribute id</MvCOMMENT>
+  <MvIF EXPR = "{ NOT(l.att_found OR l.att_temp_found) }">
+    <MvASSIGN NAME="l.attrib_id" VALUE="999999999">
+    <MvASSIGN NAME="l.unitPrice" VALUE="0" >
+  <MvELSE>
+    <MvASSIGN NAME="l.attrib_id" VALUE = "{ OrderOptions.d.attr_id }">
+    <MvASSIGN NAME="l.unitPrice" VALUE = "{ OrderOptions.d.price }">
+  </MvIF>
 
       <Attribute>
-			    <AttributeID><MvEVAL EXPR="{ l.attrib_id }"></AttributeID>
-			    <Name><MvEVAL EXPR="{ encodeentities( attPrompt ) }"></Name>
-			    <Value><MvEVAL EXPR="{ encodeentities( optPrompt $ OrderOptions.d.data $ OrderOptions.d.data_long) }"></Value>
-			    <Price><MvEVAL EXPR="{ l.unitPrice }"></Price>
+          <AttributeID><MvEVAL EXPR="{ l.attrib_id }"></AttributeID>
+          <Name><MvEVAL EXPR="{ encodeentities( attPrompt ) }"></Name>
+          <Value><MvEVAL EXPR="{ encodeentities( optPrompt $ OrderOptions.d.data $ OrderOptions.d.data_long) }"></Value>
+          <Price><MvEVAL EXPR="{ l.unitPrice }"></Price>
           <Debug>
-			      <MivaAttributeCode><MvEVAL EXPR="{ encodeentities( OrderOptions.d.attr_code ) }"></MivaAttributeCode>
-			      <MivaOptionCode><MvEVAL EXPR="{ encodeentities( OrderOptions.d.opt_code ) }"></MivaOptionCode>
+            <MivaAttributeCode><MvEVAL EXPR="{ encodeentities( OrderOptions.d.attr_code ) }"></MivaAttributeCode>
+            <MivaOptionCode><MvEVAL EXPR="{ encodeentities( OrderOptions.d.opt_code ) }"></MivaOptionCode>
           </Debug>
       </Attribute>
-		
-	    <MvSKIP NAME="merchant" VIEW="OrderOptions" ROWS = 1>
-	</MvWHILE>
-	
-	</Attributes>
-     
-	<MvCLOSEVIEW NAME="merchant" VIEW="OrderOptions" >
+
+      <MvSKIP NAME="merchant" VIEW="OrderOptions" ROWS = 1>
+  </MvWHILE>
+
+  </Attributes>
+
+  <MvCLOSEVIEW NAME="merchant" VIEW="OrderOptions" >
 
 </MvFUNCTION>
 
@@ -753,7 +753,7 @@
   <Payment>
         <MvCOMMENT><!-- Test for pre-Wombat --></MvCOMMENT>
         <MvIF EXPR = "{ (ISNULL g.Merchant_API_Version) OR (g.Merchant_API_Version LT 5.60) }">
-    
+
             <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.found" VALUE = "{ Module_Load_ID( Orders.d.pay_id, l.payModule ) }">
             <MvIF EXPR = "{ l.found }">
 
@@ -761,19 +761,19 @@
 
                     <MvIF EXPR = "{ Orders.d.pay_secid }">
                             <MvIF EXPR = "{ len( l.secure_data ) }">
-                    
+
                     <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.found" VALUE = "{ Encryption_Load_ID( Orders.d.pay_secid, l.encryption ) }">
-                    
+
                     <MvCOMMENT><!-- Crypto opens util.mvc, we need to alter the path to it so it can be found. --></MvCOMMENT>
                     <MvASSIGN NAME="l.pathOld" Value = "{g.Module_Library_Utilities}">
                     <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ g.Library_Filename_Utilities }">
-                    
-                                    <MvDO FILE = "{ g.Relative_Library_Crypto }" 
-                                        NAME = "l.valid" 
+
+                                    <MvDO FILE = "{ g.Relative_Library_Crypto }"
+                                        NAME = "l.valid"
                                         VALUE = "{ Decrypt_Payment( Orders.d.pay_secid, Orders.d.pay_seckey, l.secure_data, l.decrypted_data, g.swpassphrase ) }">
 
                     <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ l.pathOld }">
-                    
+
                     <MvIF EXPR="{l.valid}">
                         <MvASSIGN NAME="l.secure_data" VALUE="{ l.decrypted_data }" >
                     <MvELSE>
@@ -784,26 +784,26 @@
                     <MvELSE>
                             <MvASSIGN NAME = "l.secure_data" VALUE = "{ miva_array_deserialize( l.secure_data ) }">
                     </MvIF>
-                    
+
 
                     <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.desc" VALUE = "{ PaymentModule_Report_Description( l.payModule, miva_array_deserialize( Orders.d.pay_data )  ) }">
                     <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.fields" VALUE = "{ PaymentModule_Report_Fields( l.payModule, miva_array_deserialize( Orders.d.pay_data ), l.secure_data) }">
-            
+
                     <MvASSIGN NAME = "l.pos" VALUE = 1>
                     <MvASSIGN NAME = "l.field" VALUE = "{ ltrim( rtrim( gettoken( l.fields, ',', l.pos ) ) ) }">
-                    
+
                     <MvWHILE EXPR = "{ len( l.field ) }">
-                    
-                        
+
+
                         <MvCOMMENT><!-- Have seen where a payment module opens uil.mvc, we need to alter the path to it so it can be found.t --></MvCOMMENT>
                     <MvASSIGN NAME="l.pathOld" Value = "{g.Module_Library_Utilities}">
                     <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ '../../lib/' $ g.Library_Filename_Utilities }">
 
-                                <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.label" VALUE = "{ PaymentModule_Report_Label( l.payModule, l.field  ) }">	
+                                <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.label" VALUE = "{ PaymentModule_Report_Label( l.payModule, l.field  ) }">
                                 <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.value" VALUE = "{ PaymentModule_Report_Value( l.payModule, l.field, miva_array_deserialize( Orders.d.pay_data ), l.secure_data ) }">
 
                     <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ l.pathOld }">
-                      
+
                   <Detail name="{ l.label }" value="{ l.value }" />
 
                             <MvASSIGN NAME = "l.pos" VALUE = "{ l.pos + 1 }">
@@ -812,7 +812,7 @@
             </MvIF>
         <MvELSE>
             <MvEVAL EXPR = "{ CreateWombatPaymentXML() }">
-	</MvIF>
+  </MvIF>
 
   </Payment>
 
@@ -820,7 +820,7 @@
 
 <MvFUNCTION NAME = "CreateWombatPaymentXML">
 
-    <MvOPENVIEW NAME="merchant" VIEW="Payments" 
+    <MvOPENVIEW NAME="merchant" VIEW="Payments"
                 QUERY="{ 'select * from ' $ g.Store_Table_Prefix $ 'OrderPayments where order_id = ' $ Orders.d.id }" >
 
     <MvIF EXPR = "{ MvOPENVIEW_Error }">
@@ -839,18 +839,18 @@
 
                         <MvCOMMENT><!-- Need an actual record to pass to the decryption routine --></MvCOMMENT>
                         <MvDO FILE = "{ g.Relative_Library_DB }" NAME = "l.found" VALUE = "{ OrderPayment_Load_ID(Payments.d.id, l.OrderPayment)}">
-                        
+
                         <MvCOMMENT><!-- Crypto opens util.mvc, we need to alter the path to it so it can be found. --></MvCOMMENT>
                         <MvASSIGN NAME="l.pathOld" Value = "{g.Module_Library_Utilities}">
                         <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ g.Library_Filename_Utilities }">
-                        
+
                         <MvASSIGN NAME="l.comment" VALUE="{ 'ShipWorks' }" >
-                        <MvDO FILE = "{ g.Relative_Library_Crypto }" 
-                            NAME = "l.valid" 
+                        <MvDO FILE = "{ g.Relative_Library_Crypto }"
+                            NAME = "l.valid"
                             VALUE = "{ Decrypt_OrderPayment( l.comment, l.OrderPayment, g.swpassphrase, l.decrypted_data ) }">
 
                         <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ l.pathOld }">
-                        
+
                         <MvIF EXPR="{l.valid}">
                             <MvASSIGN NAME="l.secure_data" VALUE="{ l.decrypted_data }" >
                         <MvELSE>
@@ -861,46 +861,46 @@
             <MvELSE>
                     <MvASSIGN NAME = "l.secure_data" VALUE = "{ miva_array_deserialize( l.secure_data ) }">
             </MvIF>
-            
+
 
             <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.desc" VALUE = "{ PaymentModule_Report_Description( l.payModule, miva_array_deserialize( Payments.d.pay_data )  ) }">
             <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.fields" VALUE = "{ PaymentModule_Report_Fields( l.payModule, miva_array_deserialize( Payments.d.pay_data ), l.secure_data) }">
-    
+
             <MvASSIGN NAME = "l.pos" VALUE = 1>
             <MvASSIGN NAME = "l.field" VALUE = "{ ltrim( rtrim( gettoken( l.fields, ',', l.pos ) ) ) }">
-            
+
             <MvWHILE EXPR = "{ len( l.field ) }">
-            
-                
+
+
                 <MvCOMMENT><!-- Have seen where a payment module opens uil.mvc, we need to alter the path to it so it can be found.t --></MvCOMMENT>
             <MvASSIGN NAME="l.pathOld" Value = "{g.Module_Library_Utilities}">
             <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ '../../lib/' $ g.Library_Filename_Utilities }">
 
-                        <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.label" VALUE = "{ PaymentModule_Report_Label( l.payModule, l.field  ) }">	
+                        <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.label" VALUE = "{ PaymentModule_Report_Label( l.payModule, l.field  ) }">
                         <MvDO FILE = "{ g.Relative_Module_Root $ l.payModule:module }" NAME = "l.value" VALUE = "{ PaymentModule_Report_Value( l.payModule, l.field, miva_array_deserialize( Payments.d.pay_data ), l.secure_data ) }">
 
             <MvASSIGN NAME="g.Module_Library_Utilities" VALUE="{ l.pathOld }">
-              
+
           <Detail name="{ l.label }" value="{ l.value }" />
 
                     <MvASSIGN NAME = "l.pos" VALUE = "{ l.pos + 1 }">
                     <MvASSIGN NAME = "l.field" VALUE = "{ ltrim( rtrim( gettoken( l.fields, ',', l.pos ) ) ) }">
             </MvWHILE>
         </MvIF>
-        
+
         <MvSKIP NAME="merchant" VIEW="Payments" ROWS = 1>
     </MvWHILE>
-    
+
     <MvCLOSEVIEW NAME="merchant" VIEW="Payments">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "CreateSebenzaExtraMsgXML">
-  
+
   <MvEVAL EXPR = "{ SebenzaExtraMsg_OpenDB(Orders.d.id) }">
-        
+
   <Notes>
       <MvWHILE EXPR = "{ NOT acdproOrders.d.EOF }">
-        
+
           <MvIF EXPR = "{ acdproOrders.d.acd_id  EQ 'add1' }"><MvEVAL EXPR="{ OutputSebenzaExtraMsgAsNote(1) }"></MvIF>
           <MvIF EXPR = "{ acdproOrders.d.acd_id  EQ 'add2' }"><MvEVAL EXPR="{ OutputSebenzaExtraMsgAsNote(2) }"></MvIF>
           <MvIF EXPR = "{ acdproOrders.d.acd_id  EQ 'add3' }"><MvEVAL EXPR="{ OutputSebenzaExtraMsgAsNote(3) }"></MvIF>
@@ -910,43 +910,43 @@
           <MvIF EXPR = "{ acdproOrders.d.acd_id  EQ 'add7' }"><MvEVAL EXPR="{ OutputSebenzaExtraMsgAsNote(7) }"></MvIF>
           <MvIF EXPR = "{ acdproOrders.d.acd_id  EQ 'add8' }"><MvEVAL EXPR="{ OutputSebenzaExtraMsgAsNote(8) }"></MvIF>
           <MvIF EXPR = "{ acdproOrders.d.acd_id  EQ 'add9' }"><MvEVAL EXPR="{ OutputSebenzaExtraMsgAsNote(9) }"></MvIF>
-          
+
           <MvSKIP NAME="merchant" VIEW = "acdproOrders" ROWS = "1">
-            
+
       </MvWHILE>
-        
-	   <MvCLOSEVIEW NAME="merchant" VIEW = "acdproOrders">
+
+     <MvCLOSEVIEW NAME="merchant" VIEW = "acdproOrders">
 
   </Notes>
-    
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "OutputSebenzaExtraMsgAsNote" PARAMETERS="index">
 
   <MvIF EXPR="{ acdproOrders.d.content NE '' }">
-    
+
     <Note public="true">
         <MvEVAL EXPR="{ 'ACD' $ index $ ': ' $ encodeentities( acdproOrders.d.content ) }">
     </Note>
-    
+
   </MvIF>
-  
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "SebenzaExtraMsg_OpenDB"  PARAMETERS="order_id" ERROROUTPUTLEVEL = "syntax, expression">
-  
+
       <MvOPENVIEW NAME = "merchant"
-	      VIEW="acdproOrders"
-	      QUERY="{ 'SELECT acd_id, content FROM ' $ g.Store_Table_Prefix $ 'SS_ACDPRO_results
+        VIEW="acdproOrders"
+        QUERY="{ 'SELECT acd_id, content FROM ' $ g.Store_Table_Prefix $ 'SS_ACDPRO_results
                               WHERE order_id = ? AND acd_id like \'add%\' ORDER BY acd_id' }"
-	      FIELDS="l.order_id">
-          
+        FIELDS="l.order_id">
+
       <MvIF EXPR = "{ g.MvOPENVIEW_Error }">
         <MvEVAL EXPR = "{ ErrorTermination('SW-00065', 'ShipWorks is configured to download Sebenza Additional Checkout Data, but the module is not installed in your Miva Merchant store.' ) }">
       </MvIF>
-          
+
 </MvFUNCTION>
-  
+
 <MvFUNCTION NAME = "Action_UpdateStatus">
     <MvEVAL EXPR = "{ ErrorTermination('SW-00068', 'Status updates must be performed from ShipWorks.' ) }">
 
@@ -968,13 +968,13 @@
               <MvASSIGN NAME="l.x" VALUE="{ l.x + 1 }">
             </MvWHILE>
         </MvIF>
-        
+
         <MvASSIGN NAME="l.statusIndex"  VALUE="{ l.statusIndex + 1 }">
       </MvWHILE>
-    
+
     <MvFUNCTIONRETURN VALUE="{ l.outputArray }">
 </MvFUNCTION>
-      
+
 <MvFUNCTION NAME = "Action_UpdateShipment">
     <MvCOMMENT><!-- Test for pre-Wombat and throw an error --> </MvCOMMENT>
     <MvIF EXPR = "{ (ISNULL g.Merchant_API_Version) OR (g.Merchant_API_Version LT 5.60) }">
@@ -982,21 +982,22 @@
     <MvELSE>
         <MvCOMMENT><!-- Load the order --></MvCOMMENT>
         <MvASSIGN NAME = "l.success" VALUE = "{ [ g.Relative_Library_DB ].Order_Load_ID( g.order, l.order ) }">
-          
+
         <MvCOMMENT><!-- we want to load all Pending and Picking order items to ship--></MvCOMMENT>
         <MvASSIGN NAME="l.statusesToLoad" INDEX="1" VALUE="0">
         <MvASSIGN NAME="l.statusesToLoad" INDEX="2" VALUE="100">
+        <MvASSIGN NAME="l.statusesToLoad" INDEX="3" VALUE="400">
         <MvASSIGN NAME="l.orderitems" VALUE="{ GetOrderItemsOfStatuses( g.order, l.statusesToLoad ) }">
 
         <MvCOMMENT><!-- only if there are order items to ship --></MvCOMMENT>
         <MvIF EXPR = "{ miva_array_elements(l.orderitems) GT 0 }">
-          
+
           <MvCOMMENT> <!-- Create a shipment with all of the items included --></MvCOMMENT>
           <MvIF EXPR = "{ [ g.Relative_Library_DB ].OrderItemList_CreateShipment( g.order, miva_array_elements(l.orderitems), l.orderitems ) AND [ g.Relative_Library_DB ].Order_Update_Status( l.order ) }">
-                        
+
             <MvCOMMENT><!-- Try to locate the new shipment so we can update tracking information --></MvCOMMENT>
             <MvASSIGN NAME = "l.ordershipment_count" VALUE = "{ [ g.Relative_Library_DB ].OrderShipmentList_Load_Order( g.order, l.ordershipments ) }">
-              
+
             <MvASSIGN NAME = "l.greatestID" VALUE = "0">
             <MvASSIGN NAME = "l.greatestIndex" VALUE = "0">
             <MvASSIGN NAME = "l.currentIndex" VALUE = "1">
@@ -1018,27 +1019,27 @@
                 <MvASSIGN NAME="l.valuesToSet:id" VALUE="{ l.ordershipment:id }">
                 <MvASSIGN NAME="l.valuesToSet:tracknum" VALUE = "{ g.tracking }">
                 <MvASSIGN NAME="l.valuesToSet:tracktype" VALUE ="{ g.carrier }">
-                <MvASSIGN NAME="l.valuesToSet:status" VALUE="200">                  
+                <MvASSIGN NAME="l.valuesToSet:status" VALUE="200">
                 <MvASSIGN NAME="l.valuesToSet:order_id" VALUE="{ g.order }">
 
                 <MvCOMMENT><!-- Set the shipment date --></MvCOMMENT>
                   <MvCOMMENT><!-- Default the ship date to the MivaScript equivalent of DateTime.Now. This is done for an interim fix --></MvCOMMENT>
                   <MvCOMMENT><!-- so the entire app didn't have to be deployed to fix the problem with the ship date not being set. --></MvCOMMENT>
-                  <MvASSIGN NAME = "l.shipmentDate" VALUE = "{ dyn_time_t }">                  
-                  
+                  <MvASSIGN NAME = "l.shipmentDate" VALUE = "{ dyn_time_t }">
+
                   <MvIF EXPR ="{ g.shipdate }">
-                    <MvCOMMENT><!-- Use the ship date parameter in the request if it was given. Adding this parameter required a code change to --></MvCOMMENT>  
+                    <MvCOMMENT><!-- Use the ship date parameter in the request if it was given. Adding this parameter required a code change to --></MvCOMMENT>
                     <MvCOMMENT><!-- the MivaWebClient so it may not be here if the module was provided to the customer in advance of the full app being deployed.--></MvCOMMENT>
                     <MvASSIGN NAME = "l.shipmentDate" VALUE = "{ g.shipdate }">
                   </MvIF>
-                      
+
                 <MvASSIGN NAME="l.valuesToSet:ship_date" VALUE="{ l.shipmentDate }">
-                  
-                <MvCOMMENT><!-- We have everything setup for Miva and any underlying modules, so now we can update the status of the order shipment --></MvCOMMENT>  
+
+                <MvCOMMENT><!-- We have everything setup for Miva and any underlying modules, so now we can update the status of the order shipment --></MvCOMMENT>
                 <MvIF EXPR = "{ NOT [ g.Relative_Library_DB ].OrderShipment_Update_Status( l.ordershipment, l.valuesToSet ) }">
                   <MvEVAL EXPR = "{ ErrorTermination('SW-00070', 'Order status was updated, but ShipWorks was unable to apply a tracking number.' ) }">
                 </MvIF>
-  
+
                 <MvASSIGN NAME = "l.success" VALUE = "{ [ g.Relative_Library_DB ].Order_Load_ID( g.order, l.reloadedOrder ) }">
                 <MvIF EXPR = "{ NOT [ g.Relative_Library_DB ].Order_Update_Status( l.reloadedOrder ) }">
                   <MvEVAL EXPR = "{ ErrorTermination('SW-00071', 'FAIL' ) }">
@@ -1048,7 +1049,7 @@
             <MvEVAL EXPR = "{ ErrorTermination('SW-00069', 'Miva was unable to create a shipment and update its status.' ) }">
          </MvIF>
        <MvELSE>
-         <MvCOMMENT><!-- no items to package into shipments --></MvCOMMENT> 
+         <MvCOMMENT><!-- no items to package into shipments --></MvCOMMENT>
        </MvIF>
     </MvIF>
 
@@ -1059,34 +1060,34 @@
         <OrderStatus><MvEVAL EXPR="{ l.order:status }"></OrderStatus>
       </Debug>
 </MvFUNCTION>
-  
+
 <MvFUNCTION NAME = "ShowVariables" PARAMETERS="scope" STANDARDOUTPUTLEVEL = "text,html,compresswhitespace">
-	<MvASSIGN NAME = "l.varlist" VALUE = "{ miva_getvarlist(scope) }">
-	<MvASSIGN NAME = "l.pos" VALUE = "1">
-	<MvASSIGN NAME = "l.var" VALUE = "{ gettoken( l.varlist, ',', l.pos ) }">
-	<MvWHILE EXPR = "{ l.var }">
-	    <MvEVAL EXPR="<Variable>">
-		<MvEVAL EXPR = "{ encodeentities(scope $ '.' $ l.var) }"> = <MvEVAL EXPR = "{ encodeentities(miva_variable_value( scope $ '.' $ l.var )) }">
-		<MvASSIGN NAME = "l.pos" VALUE = "{ l.pos + 1 }">
-		<MvASSIGN NAME = "l.var" VALUE = "{ gettoken( l.varlist, ',', l.pos ) }">
-	    <MvEVAL EXPR="</Variable>">
-	</MvWHILE>
+  <MvASSIGN NAME = "l.varlist" VALUE = "{ miva_getvarlist(scope) }">
+  <MvASSIGN NAME = "l.pos" VALUE = "1">
+  <MvASSIGN NAME = "l.var" VALUE = "{ gettoken( l.varlist, ',', l.pos ) }">
+  <MvWHILE EXPR = "{ l.var }">
+      <MvEVAL EXPR="<Variable>">
+    <MvEVAL EXPR = "{ encodeentities(scope $ '.' $ l.var) }"> = <MvEVAL EXPR = "{ encodeentities(miva_variable_value( scope $ '.' $ l.var )) }">
+    <MvASSIGN NAME = "l.pos" VALUE = "{ l.pos + 1 }">
+    <MvASSIGN NAME = "l.var" VALUE = "{ gettoken( l.varlist, ',', l.pos ) }">
+      <MvEVAL EXPR="</Variable>">
+  </MvWHILE>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "FormatDate" PARAMETERS = "time_t" STANDARDOUTPUTLEVEL = "">
 
-    <MvASSIGN NAME = "l.date" VALUE = "{ 
-       time_t_year( l.time_t, 0 ) $ '-' $ 
-       padl( time_t_month( l.time_t, 0 ), 2, '0' ) $ '-' $ 
+    <MvASSIGN NAME = "l.date" VALUE = "{
+       time_t_year( l.time_t, 0 ) $ '-' $
+       padl( time_t_month( l.time_t, 0 ), 2, '0' ) $ '-' $
        padl( time_t_dayofmonth( l.time_t, 0 ), 2, '0' ) }">
 
     <MvASSIGN NAME = "l.time" VALUE = "{
        padl( time_t_hour( l.time_t, 0 ), 2, '0' ) $ ':' $
-			 padl( time_t_min( l.time_t, 0 ), 2, '0' ) $ ':' $ 
-			 padl( time_t_sec( l.time_t, 0 ), 2, '0' ) }">
+       padl( time_t_min( l.time_t, 0 ), 2, '0' ) $ ':' $
+       padl( time_t_sec( l.time_t, 0 ), 2, '0' ) }">
 
    <MvFUNCTIONRETURN VALUE = "{ l.date $ 'T' $ l.time $ 'Z' }">
-     
+
 </MvFUNCTION>
 
 <MvFUNCTION NAME="StoreUtilityModule_Action" PARAMETERS="module var" STANDARDOUTPUTLEVEL="">

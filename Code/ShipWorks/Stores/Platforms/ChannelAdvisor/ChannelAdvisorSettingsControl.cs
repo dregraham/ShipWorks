@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -17,6 +13,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         public ChannelAdvisorSettingsControl()
         {
             InitializeComponent();
+
+            // Show Amazon control if the Amazon ctrl is configured.
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            amazon.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
         }
 
         /// <summary>
@@ -32,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             attributes.LoadStore(caStore);
             consolidator.LoadStore(caStore);
+            amazon.LoadStore(caStore);
         }
 
         /// <summary>
@@ -45,12 +46,20 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 throw new InvalidOperationException("A non Channel Advisor store was passed to the Channel Advisor store settings control.");
             }
 
-            attributes.SaveToEntity(caStore);
-            consolidator.SaveToEntity(caStore);
-
+            try
+            {
+                attributes.SaveToEntity(caStore);
+                consolidator.SaveToEntity(caStore);
+                amazon.SaveToEntity(caStore);
+            }
+            catch (ChannelAdvisorException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+                return false;
+            }
             return true;
         }
-        
+
         /// <summary>
         /// Called when Attributes Controle is resized
         /// </summary>
@@ -58,7 +67,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnAttributesResize(object sender, EventArgs e)
         {
-            this.Height = attributes.Height + consolidator.Height;
+            Height = attributes.Height + consolidator.Height;
+
+            // Adjust height if the Amazon control is visible
+            if (amazon.Visible)
+            {
+                Height += amazon.Height;
+            }
         }
     }
 }

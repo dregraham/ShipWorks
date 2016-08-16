@@ -15,7 +15,9 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -42,7 +44,9 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Download orders from the ProStores online store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
             {
@@ -178,6 +182,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
@@ -256,6 +261,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Load the appropriate address info from the XPath
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void LoadAddressInfo(ProStoresOrderEntity order, XPathNavigator xpath)
         {
             PersonName shipFullName = PersonName.Parse(XPathUtility.Evaluate(xpath, "Recipient", ""));

@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         }
 
         [Fact]
-        public void Write_AddsCustomsItemsNodeToChangeSet_Test()
+        public void Write_AddsCustomsItemsNodeToChangeSet()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         }
 
         [Fact]
-        public void Write_AddsBeforeAfterNodesToCustomsItems_Test()
+        public void Write_AddsBeforeAfterNodesToCustomsItems()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         }
 
         [Fact]
-        public void Write_BeforeItemsMatchXml_Test()
+        public void Write_BeforeItemsMatchXml()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         }
 
         [Fact]
-        public void Write_AfterItemsMatchXml_Test()
+        public void Write_AfterItemsMatchXml()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         }
 
         [Fact]
-        public void Write_DoesNotWriteAnyHash_Test()
+        public void Write_DoesNotWriteAnyHash()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);

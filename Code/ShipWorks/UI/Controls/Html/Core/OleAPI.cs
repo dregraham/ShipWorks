@@ -9,6 +9,7 @@ using Interapptive.Shared.Win32;
 
 namespace ShipWorks.UI.Controls.Html.Core
 {
+    [NDependIgnore]
     public static class OleApi
     {
         #region Constants
@@ -1474,11 +1475,13 @@ namespace ShipWorks.UI.Controls.Html.Core
     #endregion
 
     #region IDocHostShowUI
+    [NDependIgnore]
     [ComVisible(true), ComImport(),
         Guid("C4D244B0-D43E-11CF-893B-00AA00BDCE1A"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IDocHostShowUI 
+        internal interface IDocHostShowUI
     {
+        [NDependIgnoreLongMethod]
         [return: MarshalAs(UnmanagedType.I4)][PreserveSig]
         int ShowMessage(
             [In] IntPtr hwnd,[In][MarshalAs(UnmanagedType.LPWStr)] String lpStrText,
@@ -1486,7 +1489,8 @@ namespace ShipWorks.UI.Controls.Html.Core
             [In] uint dwType,[In][MarshalAs(UnmanagedType.LPWStr)] String
             lpStrHelpFile,[In] uint dwHelpContext,
             [Out] IntPtr lpresult);
-	
+
+        [NDependIgnoreLongMethod]
         [return: MarshalAs(UnmanagedType.I4)][PreserveSig]
         int ShowHelp(
             [In] IntPtr hwnd,
@@ -2179,6 +2183,7 @@ namespace ShipWorks.UI.Controls.Html.Core
     #endregion
 
     #region IOleObject
+    [NDependIgnore]
     [ComVisible(true), ComImport(),
         Guid("00000112-0000-0000-C000-000000000046"),
         InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
@@ -2351,6 +2356,7 @@ namespace ShipWorks.UI.Controls.Html.Core
     [GuidAttribute("0000010d-0000-0000-C000-000000000046")]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     [ComImportAttribute()]
+    [NDependIgnore]
     public interface IViewObject
     {
         void Draw(

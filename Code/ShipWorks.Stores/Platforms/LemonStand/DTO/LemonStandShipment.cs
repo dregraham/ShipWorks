@@ -1,9 +1,12 @@
 ﻿using System.Reflection;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    [SuppressMessage("SonarQube", "S125:Sections of code should not be \"commented out\"",
+        Justification = "Commented out code shows an example of the json that is returned from the api")]
     public class LemonStandShipment
     {
         //    "data": {
@@ -42,22 +45,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         //        }
         //    }
         //}
+
         [JsonProperty("id")]
         public string ID { get; set; }
 
-        [JsonProperty("number")]
-        public string Number { get; set; }
-
         [JsonProperty("shipping_service")]
         public string ShippingService { get; set; }
-
-        [JsonProperty("notes")]
-        public string Notes { get; set; }
-
-        [JsonProperty("created_at")]
-        public string CreatedAt { get; set; }
-
-        [JsonProperty("updated_at")]
-        public string UpdatedAt { get; set; }
     }
 }

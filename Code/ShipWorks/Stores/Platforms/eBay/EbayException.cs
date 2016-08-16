@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Deserialization constructor
         /// </summary>
-        public EbayException(SerializationInfo info, StreamingContext context)
+        protected EbayException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             errorCode = info.GetString("errorCode");

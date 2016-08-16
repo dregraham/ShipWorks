@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Services.Protocols;
-using System.Xml;
 using System.Xml.Linq;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -87,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                     new XElement("labelType", labelType),
                     new XElement("declaration", declaration),
                     new XElement("shipper",
-                        new XElement("name", shipment.OriginFirstName + " " + shipment.OriginLastName),
+                        new XElement("name", new PersonName(shipment.OriginFirstName, shipment.OriginMiddleName, shipment.OriginLastName)),
                         new XElement("company", shipment.OriginCompany),
                         new XElement("address1", shipment.OriginStreet1),
                         new XElement("address2", shipment.OriginStreet2),
@@ -98,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                         new XElement("phone", shipment.OriginPhone),
                         new XElement("email", shipment.OriginEmail)),
                     new XElement("consignee",
-                        new XElement("name", shipment.ShipFirstName + " " + shipment.ShipLastName),
+                        new XElement("name", new PersonName(shipment.ShipFirstName, shipment.ShipMiddleName, shipment.ShipLastName)),
                         new XElement("company", shipment.ShipCompany),
                         new XElement("address1", shipment.ShipStreet1),
                         new XElement("address2", shipment.ShipStreet2),
@@ -207,6 +203,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Process the response by array
         /// </summary>
+        [NDependIgnoreLongMethod]
         private static FimsShipResponse ProcessResponse(byte[] responseBytes)
         {
             if (responseBytes == null)

@@ -79,26 +79,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
         }
 
         [Fact]
-        public void Request_ReturnsRequestProvidedToConstructor_Test()
+        public void Request_ReturnsRequestProvidedToConstructor()
         {
             Assert.Equal(carrierRequest.Object, testObject.Request);
         }
 
         [Fact]
-        public void NativeResponse_ReturnsRateReplyProvidedToConstructor_Test()
+        public void NativeResponse_ReturnsRateReplyProvidedToConstructor()
         {
             Assert.Equal(nativeResponse, testObject.NativeResponse);
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenResponseContainsError_Test()
+        public void Process_ThrowsFedExApiException_WhenResponseContainsError()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenResponseContainsFailure_Test()
+        public void Process_ThrowsFedExApiException_WhenResponseContainsFailure()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             Assert.Throws<FedExApiCarrierException>(() => testObject.Process());

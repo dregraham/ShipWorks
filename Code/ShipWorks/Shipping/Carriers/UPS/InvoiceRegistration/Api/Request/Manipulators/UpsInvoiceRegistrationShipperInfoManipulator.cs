@@ -32,6 +32,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipu
         {
             RegisterRequest registerRequest = (RegisterRequest)request.NativeRequest;
 
+            if (upsAccount.AccountNumber == string.Empty)
+            {
+                registerRequest.ShipperAccount = null;
+                return;
+            }
+
             if (registerRequest.ShipperAccount == null)
             {
                 registerRequest.ShipperAccount = new ShipperAccountType();

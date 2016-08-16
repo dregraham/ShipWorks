@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using Interapptive.Shared;
 
 namespace ShipWorks.UI.Controls.Colors
 {
@@ -190,6 +191,7 @@ namespace ShipWorks.UI.Controls.Colors
             UpdateDisplay();
         }
 
+        [NDependIgnoreLongMethod]
         public void Draw(Graphics g, Point mousePoint) 
         {
             // You've moved the mouse. 

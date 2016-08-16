@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ThrowsShippingException_WhenCarrierAccountIsNull_Test()
+        public void Print_ThrowsShippingException_WhenCarrierAccountIsNull()
         {
             // Create a new test object that has a null carrier to generate the exception
             testObject = new ScanForm(null, 1000, string.Empty);
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DelegatesToCarrerAccount_ForPrinter_Test()
+        public void Print_DelegatesToCarrerAccount_ForPrinter()
         {
             testObject.Print(new Form());
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_DelegatesToScanFormPrinter_Test()
+        public void Print_DelegatesToScanFormPrinter()
         {
             // The owner doesn't matter since the carrier's printer is mocked
             Form owner = new Form();
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsTrue_WhenPrintingIsSuccessful_Test()
+        public void Print_ReturnsTrue_WhenPrintingIsSuccessful()
         {
             // The test object is already setup with the success path
             bool success = testObject.Print(new Form());
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        public void Print_ReturnsFalse_WhenPrintingFails_Test()
+        public void Print_ReturnsFalse_WhenPrintingFails()
         {
             // Setup our mock printer to return a false value to simulate the printer failing
             printer.Setup(p => p.Print(It.IsAny<Form>(), It.IsAny<ScanForm>())).Returns(false);

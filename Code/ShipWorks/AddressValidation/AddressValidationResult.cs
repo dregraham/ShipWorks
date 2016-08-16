@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using ShipWorks.AddressValidation.Enums;
 
 namespace ShipWorks.AddressValidation
 {

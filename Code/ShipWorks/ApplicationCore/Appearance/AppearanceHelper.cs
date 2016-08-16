@@ -110,6 +110,7 @@ namespace ShipWorks.ApplicationCore.Appearance
         /// <summary>
         /// Create a new instance of a SandRibbon RenderingContext
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public static RenderingContext CreateRibbonRenderingContext(Graphics g, RibbonRenderer renderer, Font font, bool showMnemonics, Color defaultTextColor, Color disabledTextColor)
         {
             // At the time this was written, the constructor was protected.

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
 using Interapptive.Shared.Threading;
 
 namespace Interapptive.Shared.Collections
@@ -10,7 +8,7 @@ namespace Interapptive.Shared.Collections
     /// Generic collection with events raised when contents change.  The colection is thread-safe, and the CollectionChanged event
     /// is raised while the lock is still being held.
     /// </summary>
-    public class ObservableCollection<T> : ThreadSafeCollection<T> where T: class
+    public class ObservableCollection<T> : ThreadSafeCollection<T> where T : class
     {
         CollectionChangedEventHandler<T> collectionChanged;
         object eventLock = new object();
@@ -34,7 +32,7 @@ namespace Interapptive.Shared.Collections
         }
 
         /// <summary>
-        /// Raised when the collection is changed.  The thread-safe lock is held while the event is raised so be 
+        /// Raised when the collection is changed.  The thread-safe lock is held while the event is raised so be
         /// careful not to do anything too time consuming if using multiple threads.
         /// </summary>
         public event CollectionChangedEventHandler<T> CollectionChanged
@@ -108,6 +106,17 @@ namespace Interapptive.Shared.Collections
             while (Count > 0)
             {
                 RemoveItem(0);
+            }
+        }
+
+        /// <summary>
+        /// Adds the items to the collection
+        /// </summary>
+        public void AddRange(IEnumerable<T> newItems)
+        {
+            foreach (T newItem in newItems)
+            {
+                Add(newItem);
             }
         }
     }

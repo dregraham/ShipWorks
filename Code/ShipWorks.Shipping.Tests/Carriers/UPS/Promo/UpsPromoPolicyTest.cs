@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo;

@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request;
@@ -44,8 +45,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class.
         /// </summary>
         public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
-            : this(new FedExServiceGateway(settingsRepository), new FedExOpenShipGateway(settingsRepository), settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
-        {}
+            : this(new FedExServiceGateway(settingsRepository),
+                  new FedExOpenShipGateway(settingsRepository),
+                  settingsRepository,
+                  new FedExShipmentTokenProcessor(),
+                  new FedExResponseFactory(new FedExLabelRepository()))
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class. This
@@ -98,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExPackageSpecialServicesManipulator(),
                 new FedExShippingWebAuthenticationDetailManipulator(),
                 new FedExShippingClientDetailManipulator(settingsRepository),
-                new FedExShippingVersionManipulator(), 
+                new FedExShippingVersionManipulator(),
                 new FedExReferenceManipulator(tokenProcessor, settingsRepository),
                 new FedExPackageDetailsManipulator(),
                 new FedExEmailNotificationsManipulator(),
@@ -186,9 +191,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExGlobalShipAddressClientDetailManipulator(settingsRepository)
             };
 
-            return new FedExGlobalShipAddressRequest(manipulators, shipmentEntity, new FedExResponseFactory(), defaultFedExServiceGateway, accountEntity);
+            return new FedExGlobalShipAddressRequest(manipulators, shipmentEntity, responseFactory, defaultFedExServiceGateway, accountEntity);
         }
-
 
         /// <summary>
         /// Creates the ground close request.
@@ -206,7 +210,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExCloseDateManipulator()
             };
 
-            return new FedExGroundCloseRequest(manipulators, null, defaultFedExServiceGateway, new FedExResponseFactory(), accountEntity);
+            return new FedExGroundCloseRequest(manipulators, null, defaultFedExServiceGateway, responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -225,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExPickupCarrierManipulator()
             };
 
-            return new FedExSmartPostCloseRequest(manipulators, null, defaultFedExServiceGateway, new FedExResponseFactory(), accountEntity);
+            return new FedExSmartPostCloseRequest(manipulators, null, defaultFedExServiceGateway, responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -245,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExVoidParametersManipulator()
             };
 
-            return new FedExVoidRequest(manipulators, shipmentEntity, ChooseFedExServiceGateway(shipmentEntity), new FedExResponseFactory(), accountEntity);
+            return new FedExVoidRequest(manipulators, shipmentEntity, ChooseFedExServiceGateway(shipmentEntity), responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -264,7 +268,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExCspContactManipulator()
             };
 
-            return new FedExRegisterCspUserRequest(manipulators, accountEntity);
+            return new FedExRegisterCspUserRequest(manipulators, defaultFedExServiceGateway, responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -283,7 +287,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExSubscriberManipulator()
             };
 
-            return new FedExSubscriptionRequest(manipulators, accountEntity);
+            return new FedExSubscriptionRequest(manipulators, defaultFedExServiceGateway, responseFactory, accountEntity);
         }
 
 
@@ -329,7 +333,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 manipulators.AddRange(specializedManipulators);
             }
 
-            return new FedExRateRequest(manipulators, shipmentEntity, settingsRepository);
+            return new FedExRateRequest(manipulators, shipmentEntity, defaultFedExServiceGateway, responseFactory, settingsRepository);
         }
 
         /// <summary>
@@ -349,7 +353,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExTrackingPackageIdentifierManipulator()
             };
 
-            return new FedExTrackRequest(manipulators, shipmentEntity, defaultFedExServiceGateway, new FedExResponseFactory(), accountEntity);
+            return new FedExTrackRequest(manipulators, shipmentEntity, defaultFedExServiceGateway, responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -370,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         public IFedExServiceGateway ChooseFedExServiceGateway(ShipmentEntity shipmentEntity)
         {
             IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
-            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int)FedExReturnType.EmailReturnLabel)
+            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int) FedExReturnType.EmailReturnLabel)
             {
                 fedExServiceGateway = openShipFedExServiceGateway;
             }

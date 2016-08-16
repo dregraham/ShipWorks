@@ -2,28 +2,29 @@
 {
     partial class WeightControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                scaleSubscription?.Dispose();
+                components?.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -45,9 +46,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // weighToolbar
-            // 
+            //
             this.weighToolbar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.weighToolbar.BackColor = System.Drawing.Color.Transparent;
             this.weighToolbar.CanOverflow = false;
@@ -61,9 +62,9 @@
             this.weighToolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.weighToolbar.Size = new System.Drawing.Size(26, 25);
             this.weighToolbar.TabIndex = 1;
-            // 
+            //
             // weighButton
-            // 
+            //
             this.weighButton.AutoToolTip = false;
             this.weighButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.weighButton.Image = global::ShipWorks.Properties.Resources.weigh;
@@ -72,14 +73,14 @@
             this.weighButton.Size = new System.Drawing.Size(23, 22);
             this.weighButton.Text = "Weigh";
             this.weighButton.Click += new System.EventHandler(this.OnWeigh);
-            // 
+            //
             // errorProvider
-            // 
+            //
             this.errorProvider.ContainerControl = this;
-            // 
+            //
             // textBox
-            // 
-            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.ContextMenuStrip = this.contextMenu;
             this.textBox.Location = new System.Drawing.Point(0, 0);
@@ -87,9 +88,9 @@
             this.textBox.Size = new System.Drawing.Size(287, 21);
             this.textBox.TabIndex = 0;
             this.textBox.TextChanged += new System.EventHandler(this.OnTextBoxChanged);
-            // 
+            //
             // contextMenu
-            // 
+            //
             this.contextMenu.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCut,
@@ -100,52 +101,52 @@
             this.menuPoundsOunces});
             this.contextMenu.Name = "contextMenu";
             this.contextMenu.Size = new System.Drawing.Size(171, 120);
-            // 
+            //
             // menuCut
-            // 
+            //
             this.menuCut.Image = global::ShipWorks.Properties.Resources.cut;
             this.menuCut.Name = "menuCut";
             this.menuCut.Size = new System.Drawing.Size(170, 22);
             this.menuCut.Text = "Cut";
             this.menuCut.Click += new System.EventHandler(this.OnCut);
-            // 
+            //
             // menuCopy
-            // 
+            //
             this.menuCopy.Image = global::ShipWorks.Properties.Resources.copy;
             this.menuCopy.Name = "menuCopy";
             this.menuCopy.Size = new System.Drawing.Size(170, 22);
             this.menuCopy.Text = "Copy";
             this.menuCopy.Click += new System.EventHandler(this.OnCopy);
-            // 
+            //
             // menuPaste
-            // 
+            //
             this.menuPaste.Image = global::ShipWorks.Properties.Resources.paste;
             this.menuPaste.Name = "menuPaste";
             this.menuPaste.Size = new System.Drawing.Size(170, 22);
             this.menuPaste.Text = "Paste";
             this.menuPaste.Click += new System.EventHandler(this.OnPaste);
-            // 
+            //
             // menuSep
-            // 
+            //
             this.menuSep.Name = "menuSep";
             this.menuSep.Size = new System.Drawing.Size(167, 6);
-            // 
+            //
             // menuFractionalPounds
-            // 
+            //
             this.menuFractionalPounds.Name = "menuFractionalPounds";
             this.menuFractionalPounds.Size = new System.Drawing.Size(170, 22);
             this.menuFractionalPounds.Text = "Fractional Pounds";
             this.menuFractionalPounds.Click += new System.EventHandler(this.OnFractionalPounds);
-            // 
+            //
             // menuPoundsOunces
-            // 
+            //
             this.menuPoundsOunces.Name = "menuPoundsOunces";
             this.menuPoundsOunces.Size = new System.Drawing.Size(170, 22);
             this.menuPoundsOunces.Text = "Pounds && Ounces";
             this.menuPoundsOunces.Click += new System.EventHandler(this.OnPoundsOunces);
-            // 
+            //
             // liveWeight
-            // 
+            //
             this.liveWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.liveWeight.AutoSize = true;
             this.liveWeight.ForeColor = System.Drawing.SystemColors.GrayText;
@@ -154,9 +155,9 @@
             this.liveWeight.Size = new System.Drawing.Size(61, 13);
             this.liveWeight.TabIndex = 2;
             this.liveWeight.Text = "(12 lb 2 oz)";
-            // 
+            //
             // WeightControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;

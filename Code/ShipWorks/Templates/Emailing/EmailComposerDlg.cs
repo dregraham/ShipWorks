@@ -1,45 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using System.Collections;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Common.Threading;
 using System.Threading;
-using Interapptive.Shared.Utility;
+using System.Windows.Forms;
 using Divelements.SandGrid;
-using System.Net.Mail;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.UI.Controls.Html;
-using System.Diagnostics;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
+using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI.Controls;
-using ShipWorks.Properties;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
+using ShipWorks.Properties;
+using ShipWorks.Templates.Processing;
+using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.Html;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.UI;
 using SandContextPopup = Divelements.SandRibbon.ContextPopup;
 using SandMainMenuItem = Divelements.SandRibbon.MainMenuItem;
-using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using SandMenu = Divelements.SandRibbon.Menu;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Templates.Emailing
 {
     /// <summary>
     /// Window for composing a new email message
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class EmailComposerDlg : Form
     {
         TemplateEntity initialTemplate;
@@ -206,7 +201,7 @@ namespace ShipWorks.Templates.Emailing
             object[] data = (object[]) state;
             TemplateEntity template = (TemplateEntity) data[0];
             ProgressDisplayDelayer delayer = (ProgressDisplayDelayer) data[1];
-            ProgressItem progressItem = delayer.ProgressDlg.ProgressProvider.ProgressItems[0];
+            IProgressReporter progressItem = delayer.ProgressDlg.ProgressProvider.ProgressItems[0];
 
             Exception error = null;
 
@@ -244,7 +239,7 @@ namespace ShipWorks.Templates.Emailing
         /// <summary>
         /// Create a list of message drafts to be sent based on the current template result set
         /// </summary>
-        private void CreateMessageDrafts(ProgressDisplayDelayer delayer, ProgressItem progress)
+        private void CreateMessageDrafts(ProgressDisplayDelayer delayer, IProgressReporter progress)
         {
             IEnumerable<List<TemplateResult>> input;
             List<MessageDraft> output = new List<MessageDraft>();
@@ -302,9 +297,9 @@ namespace ShipWorks.Templates.Emailing
             progress.Completed();
 
             // Raise the complete event
-            BeginInvoke(new MethodInvoker<List<MessageDraft>, ProgressDisplayDelayer, bool>(BackgroundCreateDraftsCompleted), 
+            BeginInvoke(new MethodInvoker<List<MessageDraft>, ProgressDisplayDelayer, bool>(BackgroundCreateDraftsCompleted),
                 output,
-                delayer, 
+                delayer,
                 progress.IsCancelRequested);
         }
 
@@ -317,7 +312,7 @@ namespace ShipWorks.Templates.Emailing
 
             long? storeID = settingsResolver.DetermineStore(template, results);
 
-            // Null return means it was canceled 
+            // Null return means it was canceled
             if (storeID == null)
             {
                 return null;
@@ -697,7 +692,7 @@ namespace ShipWorks.Templates.Emailing
         }
 
         /// <summary>
-        /// Load the body content of the draft 
+        /// Load the body content of the draft
         /// </summary>
         private void BackgroundLoadMessageBody(object state)
         {
@@ -843,10 +838,11 @@ namespace ShipWorks.Templates.Emailing
         /// <summary>
         /// Background thread for adding all the messages to the outbox
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void BackgroundAddToOutbox(object state)
         {
             ProgressDisplayDelayer delayer = (ProgressDisplayDelayer) state;
-            ProgressItem progress = delayer.ProgressDlg.ProgressProvider.ProgressItems[0];
+            IProgressReporter progress = delayer.ProgressDlg.ProgressProvider.ProgressItems[0];
 
             // Get all the rows that have not yet been successfully sent
             List<GridRow> unsentRows = messageList.Rows.OfType<GridRow>().Where(r => ((MessageDraft) r.Tag).State != MessageDraftState.Success).ToList();

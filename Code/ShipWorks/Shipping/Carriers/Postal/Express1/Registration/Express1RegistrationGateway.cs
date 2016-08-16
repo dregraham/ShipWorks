@@ -124,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             return new CustomerService(new ApiLogEntry(connectionDetails.ApiLogSource, logName))
                 {
                     Url = connectionDetails.TestServer
-                              ? "http://www.express1dev.com/Services/CustomerService.svc"
+                              ? "https://www.express1dev.com/Services/CustomerService.svc"
                               : "https://service.express1.com/Services/CustomerService.svc"
                 };
         }

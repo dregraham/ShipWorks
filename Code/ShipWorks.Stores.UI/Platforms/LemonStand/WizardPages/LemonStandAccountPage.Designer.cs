@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
+﻿namespace ShipWorks.Stores.UI.Platforms.LemonStand.WizardPages
 {
     partial class LemonStandAccountPage
     {

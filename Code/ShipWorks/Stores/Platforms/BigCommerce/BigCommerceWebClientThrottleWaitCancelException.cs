@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -16,6 +14,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public BigCommerceWebClientThrottleWaitCancelException() : 
             base("Waiting for BigCommerce to stop throttling was canceled.", null)
+        {
+
+        }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected BigCommerceWebClientThrottleWaitCancelException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
 
         }

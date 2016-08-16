@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Filters.Management
 {
@@ -35,5 +34,12 @@ namespace ShipWorks.Filters.Management
         {
 
         }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected FilterException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
     }
 }

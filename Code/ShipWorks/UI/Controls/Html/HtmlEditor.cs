@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.UI.Utility;
 using ShipWorks.UI.Controls.Colors;
 using ShipWorks.UI.Controls.Html.Core;
@@ -15,6 +16,7 @@ namespace ShipWorks.UI.Controls.Html
     /// <summary>
     /// UserControl for editing html
     /// </summary>
+    [NDependIgnoreLongTypes]
     public partial class HtmlEditor : UserControl
     {
         // Current fore color that the forecolor button will activate
@@ -73,6 +75,7 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// Update the state of all the toolbar buttons
         /// </summary>
+        [NDependIgnoreLongMethod]
         void UpdateToolbar()
         {
             fontName.Enabled = htmlControl.CanSetFontName;
@@ -243,6 +246,8 @@ namespace ShipWorks.UI.Controls.Html
         /// <summary>
         /// User clicked an action button from the toolbar
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         private void OnToolbarButtonClick(object sender, EventArgs e)
         {
             if (sender == buttonCut) htmlControl.Cut();

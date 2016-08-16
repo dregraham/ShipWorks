@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_RequestedHoldSerivceGround_ShipmentIsGround_Test()
+        public void Manipulate_RequestedHoldSerivceGround_ShipmentIsGround()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_RequestedHoldSerivceGroundHome_ShipmentIsGroundHome_Test()
+        public void Manipulate_RequestedHoldSerivceGroundHome_ShipmentIsGroundHome()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_RequestedHoldSerivceExpress_ShipmentIs2Day_Test()
+        public void Manipulate_RequestedHoldSerivceExpress_ShipmentIs2Day()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2Day;
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        public void Manipulate_MultipleMatchesSet_ShipmentIsValid_Test()
+        public void Manipulate_MultipleMatchesSet_ShipmentIsValid()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 

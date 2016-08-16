@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -11,26 +10,21 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
-using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -96,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create the UserControl used to edit OnTrac profiles.
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new OnTracProfileControl();
         }
@@ -143,6 +137,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
+        {
+            return GetAvailablePackageTypes(excludedServiceTypeRepository)
+                .Cast<OnTracPackagingType>()
+                .Union(shipments.Select(x => x.OnTrac)
+                    .Where(x => x != null)
+                    .Select(x => (OnTracPackagingType) x.PackagingType))
+                .ToDictionary(packagingType => (int) packagingType, packagingType => EnumHelper.GetDescription(packagingType));
+        }
+
+        /// <summary>
         /// Create OnTrac specific information
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
@@ -164,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return EnumHelper.GetDescription((OnTracServiceType)shipment.OnTrac.Service);
+            return EnumHelper.GetDescription((OnTracServiceType) shipment.OnTrac.Service);
         }
 
         /// <summary>
@@ -176,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 return EnumHelper.GetEnumList<OnTracServiceType>().Select(x => x.Value);
             }
-        } 
+        }
 
         /// <summary>
         /// Get the OnTrac shipment details
@@ -211,7 +218,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
-                new DimensionsAdapter(shipment.OnTrac));
+                new DimensionsAdapter(shipment.OnTrac))
+            {
+                TotalWeight = shipment.TotalWeight
+            };
         }
 
         /// <summary>
@@ -220,54 +230,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new OnTracShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Process the shipment
-        /// </summary>
-        public override void ProcessShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                if (shipment == null)
-                {
-                    throw new ArgumentNullException("shipment");
-                }
-
-                OnTracAccountEntity account = GetAccountForShipment(shipment);
-
-                OnTracShipmentRequest onTracShipmentRequest = new OnTracShipmentRequest(account);
-                DatabaseOnTracShipmentRepository onTracShipmentRepository = new DatabaseOnTracShipmentRepository();
-
-                // None is only an option if an invalid country is selected.
-                if (((OnTracServiceType)shipment.OnTrac.Service) == OnTracServiceType.None)
-                {
-                    throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
-                }
-
-                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
-                {
-                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
-                }
-                else
-                {
-                    shipment.ActualLabelFormat = null;
-                }
-
-                // Transform shipment to OnTrac DTO
-                ShipmentRequestList shipmentRequestList = OnTracDtoAdapter.CreateShipmentRequestList(
-                    shipment,
-                    account.AccountNumber);
-
-                // Get new shipment from OnTrac and save the shipment info
-                ShipmentResponse shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequestList);
-
-                onTracShipmentRepository.SaveShipmentFromOnTrac(shipmentResponse, shipment);
-            }
-            catch (OnTracException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
         }
 
         /// <summary>
@@ -283,6 +245,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            if (shipment.OnTrac == null)
+            {
+                shipment.OnTrac = new OnTracShipmentEntity(shipment.ShipmentID);
+            }
+
             OnTracShipmentEntity onTracShipment = shipment.OnTrac;
 
             onTracShipment.DeclaredValue = 0;
@@ -291,12 +258,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTracShipment.CodType = 0;
             onTracShipment.CodAmount = 0;
 
-            onTracShipment.PackagingType = (int)OnTracPackagingType.Package;
+            onTracShipment.PackagingType = (int) OnTracPackagingType.Package;
 
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
 
-            shipment.OnTrac.RequestedLabelFormat = (int)ThermalLanguage.None;
+            shipment.OnTrac.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -304,7 +271,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
-        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
             profile.OriginID = (int) ShipmentOriginSource.Account;
@@ -327,8 +294,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.DimsWeight = 0;
             onTrac.DimsAddWeight = true;
 
-            onTrac.PackagingType = (int)OnTracPackagingType.Package;
-            onTrac.ResidentialDetermination = (int)ResidentialDeterminationType.FromAddressValidation;
+            onTrac.PackagingType = (int) OnTracPackagingType.Package;
+            onTrac.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
 
             onTrac.Reference1 = string.Empty;
             onTrac.Reference2 = string.Empty;
@@ -380,42 +347,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets rates
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            return GetCachedRates<OnTracException>(shipment, GetRatesFromApi);  
-        }
-
-        /// <summary>
-        /// Gets rates from the OnTrac API
-        /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            OnTracAccountEntity account = null;
-
-            try
-            {
-                account = GetAccountForShipment(shipment);
-            }
-            catch (OnTracException ex)
-            {
-                if (ex.Message == "No OnTrac account is selected for the shipment.")
-                {
-                    // Provide a message with additional context
-                    throw new OnTracException("An OnTrac account is required to view rates.", ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            OnTracRates rateRequest = new OnTracRates(account);
-            return rateRequest.GetRates(shipment, GetAvailableServiceTypes().Cast<OnTracServiceType>().Union(new List<OnTracServiceType> { (OnTracServiceType)shipment.OnTrac.Service }));
-        }
-
-        /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
@@ -445,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create the settings control for OnTrac
         /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
+        protected override SettingsControlBase CreateSettingsControl()
         {
             return new OnTracSettingsControl();
         }
@@ -512,7 +443,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get the OnTrac account to be used for the given shipment
         /// </summary>
-        private static OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
+        public static OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
         {
             OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID);
             if (account == null)
@@ -547,14 +478,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             else
             {
                 // shipment not processed
-                if (originID == (int)ShipmentOriginSource.Account && shipment.OnTrac != null)
+                if (originID == (int) ShipmentOriginSource.Account && shipment.OnTrac != null)
                 {
-                    OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID)
-                        ?? OnTracAccountManager.Accounts.FirstOrDefault();
+                    IOnTracAccountEntity account = OnTracAccountManager.GetAccountReadOnly(shipment.OnTrac.OnTracAccountID)
+                        ?? OnTracAccountManager.AccountsReadOnly.FirstOrDefault();
 
                     if (account != null)
                     {
-                        PersonAdapter.Copy(account, "", person);
+                        account.Address.CopyTo(person);
                         isSuccessfull = true;
                     }
                 }
@@ -596,35 +527,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        public override RatingFields RatingFields
-        {
-            get
-            {
-                if (ratingField != null)
-                {
-                    return ratingField;
-                }
-
-                ratingField = base.RatingFields;
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.OnTracAccountID);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodAmount);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodType);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.SaturdayDelivery);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DeclaredValue);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.PackagingType);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsAddWeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsHeight);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsLength);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWidth);
-                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWeight);
-
-                return ratingField;
-            }
-        }
-
-        /// <summary>
         /// Customs is never required for OnTrac.
         /// </summary>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
@@ -638,7 +540,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             if (shipment.OnTrac != null)
             {
-                shipment.OnTrac.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.OnTrac.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

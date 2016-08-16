@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
     public class UpsShipmentTypeTest
     {
         [Fact]
-        public void SupportsMultiplePackages_ReturnsTrue_Test()
+        public void SupportsMultiplePackages_ReturnsTrue()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {

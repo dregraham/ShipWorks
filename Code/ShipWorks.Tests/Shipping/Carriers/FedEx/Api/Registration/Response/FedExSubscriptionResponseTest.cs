@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenSeverityIsError_Test()
+        public void Process_ThrowsFedExApiException_WhenSeverityIsError()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenSeverityIsFailure_Test()
+        public void Process_ThrowsFedExApiException_WhenSeverityIsFailure()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_GetsAccountFromRequest_Test()
+        public void Process_GetsAccountFromRequest()
         {
             testObject.Process();
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        public void Process_SetsMeterNumberOfAccountFromRequest_Test()
+        public void Process_SetsMeterNumberOfAccountFromRequest()
         {
             testObject.Process();
 

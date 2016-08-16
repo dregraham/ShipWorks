@@ -23,13 +23,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void Accounts_ReturnsCollectionWithOneItem_Test()
+        public void Accounts_ReturnsCollectionWithOneItem()
         {
             Assert.Equal(1, testObject.Accounts.Count());
         }
 
         [Fact]
-        public void Accounts_DelegatesToCredentialStore_WhenAssigningUsername_Test()
+        public void Accounts_DelegatesToCredentialStore_WhenAssigningUsername()
         {
             UspsAccountEntity account = testObject.Accounts.First();
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void Accounts_DelegatesToCredentialStore_WhenAssigningPassword_Test()
+        public void Accounts_DelegatesToCredentialStore_WhenAssigningPassword()
         {
             UspsAccountEntity account = testObject.Accounts.First();
 

@@ -6,7 +6,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
     public class FedExWebServiceReferenceTest
     {
         [Fact]
-        public void DataTypeOfGlobalShipAddressDistanceValue_IsDouble_Test()
+        public void DataTypeOfGlobalShipAddressDistanceValue_IsDouble()
         {
             // The Distance.Value is a decimal datatype in the original reference that gets generated from 
             // the WSDL. There are cases where the distance coming back from FedEx are so small, such as

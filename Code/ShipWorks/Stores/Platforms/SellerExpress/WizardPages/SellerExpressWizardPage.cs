@@ -19,6 +19,10 @@ namespace ShipWorks.Stores.Platforms.SellerExpress.WizardPages
         public SellerExpressWizardPage()
         {
             InitializeComponent();
+
+            SellerExpressStoreType store = (SellerExpressStoreType)StoreTypeManager.GetType(StoreTypeCode.SellerExpress);
+
+            helpLink.Url = store.AccountSettingsHelpUrl;
         }
 
         /// <summary>

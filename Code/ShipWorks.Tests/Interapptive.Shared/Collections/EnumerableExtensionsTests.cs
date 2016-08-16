@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using Interapptive.Shared.Collections;
-using Xunit;
 using System.Linq;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-
+using Interapptive.Shared.Collections;
+using Moq;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Collections
 {
@@ -85,6 +85,30 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         }
 
         [Fact]
+        public void SplitIntoChunks_ReturnsThreeCollections_WhenValuesAreLessThanMax()
+        {
+            var items = Enumerable.Range(0, 9).Select(x => (x % 3) + 1)
+                .SplitIntoChunks(x => x, 6.1);
+            Assert.Equal(3, items.Count());
+        }
+
+        [Fact]
+        public void SplitIntoChunks_ReturnsThreeCollections_WhenValueEqualsMax()
+        {
+            var items = Enumerable.Range(0, 9).Select(x => (x % 3) + 1)
+                .SplitIntoChunks(x => x, 6);
+            Assert.Equal(3, items.Count());
+        }
+
+        [Fact]
+        public void SplitIntoChunks_ReturnsEachItemInItsOwnCollection_WhenEachItemIsMoreThanMaxValue()
+        {
+            var items = Enumerable.Range(0, 9).Select(x => (x % 3) + 2)
+                .SplitIntoChunks(x => x, 1);
+            Assert.Equal(9, items.Count());
+        }
+
+        [Fact]
         public void CanRepeatSequence()
         {
             var sequence = new[] { 1, 2, 5 };       //Arthurian sequence
@@ -98,7 +122,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         [Fact]
         public void Combine_ReturnsEmpty_WithNullList()
         {
-            string result = ((IEnumerable<string>)null).Combine();
+            string result = ((IEnumerable<string>) null).Combine();
             Assert.Equal(string.Empty, result);
         }
 
@@ -112,7 +136,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         [Fact]
         public void Combine_ReturnsCombinedStrings_WithValidList()
         {
-            List<string> list = new List<string> {"foo", "bar"};
+            List<string> list = new List<string> { "foo", "bar" };
             string result = list.Combine();
             Assert.Equal("foobar", result);
         }
@@ -128,7 +152,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         [Fact]
         public void Combine_ReturnsEmpty_WithNullCharList()
         {
-            string result = ((IEnumerable<string>)null).Combine();
+            string result = ((IEnumerable<string>) null).Combine();
             Assert.Equal(string.Empty, result);
         }
 
@@ -158,8 +182,8 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         [Fact]
         public void Except_ReturnsElementsThatDoNotMatch_BasedOnProperty()
         {
-            List<string> list = new List<string> {"foo", "bar", "baz"};
-            List<string> result = list.Except(new List<string> {"hat"}, x => x[1]).ToList();
+            List<string> list = new List<string> { "foo", "bar", "baz" };
+            List<string> result = list.Except(new List<string> { "hat" }, x => x[1]).ToList();
             Assert.Equal(1, result.Count);
             Assert.Equal("foo", result[0]);
         }
@@ -190,6 +214,81 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
         {
             bool result = Enumerable.Range(0, 100).None(x => x == 20);
             Assert.False(result);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithFewerItems_ReturnsNegative()
+        {
+            ComparisonResult result = Enumerable.Range(0, 5).CompareCountTo(6);
+            Assert.Equal(ComparisonResult.Less, result);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithMoreItems_ReturnsPositive()
+        {
+            ComparisonResult result = Enumerable.Range(0, 5).CompareCountTo(4);
+            Assert.Equal(ComparisonResult.More, result);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithSameItems_ReturnsZero()
+        {
+            ComparisonResult result = Enumerable.Range(0, 5).CompareCountTo(5);
+            Assert.Equal(ComparisonResult.Equal, result);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithFewerItemsAndGenericICollection_ReturnsNegativeUsingCount()
+        {
+            Mock<ICollection<string>> testObject = new Mock<ICollection<string>>();
+            testObject.SetupGet(x => x.Count).Returns(2);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(ComparisonResult.Less, testObject.Object.CompareCountTo(3));
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithMoreItemsAndGenericICollection_ReturnsPositiveUsingCount()
+        {
+            Mock<ICollection<string>> testObject = new Mock<ICollection<string>>();
+            testObject.SetupGet(x => x.Count).Returns(4);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.True(testObject.Object.CompareCountTo(3) > 0);
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithEqualItemsAndGenericICollection_ReturnsZeroUsingCount()
+        {
+            Mock<ICollection<string>> testObject = new Mock<ICollection<string>>();
+            testObject.SetupGet(x => x.Count).Returns(3);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(ComparisonResult.Equal, testObject.Object.CompareCountTo(3));
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithFewerItemsAndICollection_ReturnsNegativeUsingCount()
+        {
+            Mock<ICollection> testObject = new Mock<ICollection>();
+            testObject.SetupGet(x => x.Count).Returns(2);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(ComparisonResult.Less, testObject.Object.CompareCountTo(3));
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithMoreItemsAndICollection_ReturnsPositiveUsingCount()
+        {
+            Mock<ICollection> testObject = new Mock<ICollection>();
+            testObject.SetupGet(x => x.Count).Returns(4);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(ComparisonResult.More, testObject.Object.CompareCountTo(3));
+        }
+
+        [Fact]
+        public void HasMoreOrLessThanCount_WithEqualItemsAndICollection_ReturnsZeroUsingCount()
+        {
+            Mock<ICollection> testObject = new Mock<ICollection>();
+            testObject.SetupGet(x => x.Count).Returns(3);
+            testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
+            Assert.Equal(ComparisonResult.Equal, testObject.Object.CompareCountTo(3));
         }
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Data.SqlClient;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
-using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.Setup
 {
@@ -26,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Setup
         }
 
         /// <summary>
-        /// Determins if someone current holds the ShipWorksSetupLock lock
+        /// Determines if someone current holds the ShipWorksSetupLock lock
         /// </summary>
         public static bool IsLocked()
         {

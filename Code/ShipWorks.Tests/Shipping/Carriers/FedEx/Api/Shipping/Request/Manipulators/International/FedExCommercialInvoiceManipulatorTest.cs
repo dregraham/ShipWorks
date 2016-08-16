@@ -73,13 +73,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // setup the test by setting the requested shipment to null
             nativeRequest.RequestedShipment = null;
@@ -109,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullSpecialServices_Test()
+        public void Manipulate_AccountsForNullSpecialServices()
         {
             // setup the test by setting the requested shipment to null
             nativeRequest.RequestedShipment.SpecialServicesRequested = null;
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CustomClearanceDetailsIsNotNull_WhenCommercialInvoiceIsTrue_Test()
+        public void Manipulate_CustomClearanceDetailsIsNotNull_WhenCommercialInvoiceIsTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             nativeRequest.RequestedShipment.CustomsClearanceDetail = null;
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CustomClearanceDetailsIsNull_WhenCommercialInvoiceIsFalse_Test()
+        public void Manipulate_CustomClearanceDetailsIsNull_WhenCommercialInvoiceIsFalse()
         {
             shipmentEntity.FedEx.CommercialInvoice = false;
             nativeRequest.RequestedShipment.CustomsClearanceDetail = null;
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_CommercialInvoiceIsNotNull_Test()
+        public void Manipulate_CommercialInvoiceIsNotNull()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.FOB_or_FCA;
@@ -157,7 +157,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TermsOfSaleIsFca_Test()
+        public void Manipulate_TermsOfSaleIsFca()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.FOB_or_FCA;
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TermsOfSaleIsCptOrCf_Test()
+        public void Manipulate_TermsOfSaleIsCptOrCf()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CFR_or_CPT;
@@ -181,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TermsOfSaleIsCipOrCif_Test()
+        public void Manipulate_TermsOfSaleIsCipOrCif()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CIF_or_CIP;
@@ -193,7 +193,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TermsOfSaleIsEXW_Test()
+        public void Manipulate_TermsOfSaleIsEXW()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.EXW;
@@ -205,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TermsOfSaleIsDDP_Test()
+        public void Manipulate_TermsOfSaleIsDDP()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.DDP;
@@ -217,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TermsOfSaleIsDDU_Test()
+        public void Manipulate_TermsOfSaleIsDDU()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.DDU;
@@ -229,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenTermsOfSaleIsNotRecognized_Test()
+        public void Manipulate_ThrowsInvalidOperationException_WhenTermsOfSaleIsNotRecognized()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = 112;
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeIsSold_Test()
+        public void Manipulate_PurposeIsSold()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Sold;
@@ -250,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeIsNotSold_Test()
+        public void Manipulate_PurposeIsNotSold()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.NotSold;
@@ -262,7 +262,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeIsGift_Test()
+        public void Manipulate_PurposeIsGift()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Gift;
@@ -274,7 +274,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeIsSample_Test()
+        public void Manipulate_PurposeIsSample()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Sample;
@@ -286,7 +286,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeIsPersonalEffects_Test()
+        public void Manipulate_PurposeIsPersonalEffects()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Personal;
@@ -298,7 +298,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeIsRepairAndReturn_Test()
+        public void Manipulate_PurposeIsRepairAndReturn()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Repair;
@@ -310,7 +310,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenPurposeIsNotRecognized_Test()
+        public void Manipulate_ThrowsInvalidOperationException_WhenPurposeIsNotRecognized()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoicePurpose = 54;
@@ -319,7 +319,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_PurposeSpecifiedIsTrue_WhenCommercialInvoiceIsTrue_Test()
+        public void Manipulate_PurposeSpecifiedIsTrue_WhenCommercialInvoiceIsTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -331,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
 
         [Fact]
-        public void Manipulate_InvoiceCommentsHasOneElement_Test()
+        public void Manipulate_InvoiceCommentsHasOneElement()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -342,7 +342,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceComments_Test()
+        public void Manipulate_InvoiceComments()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -353,7 +353,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FreightChargeCurrencyIsUSD_Test()
+        public void Manipulate_FreightChargeCurrencyIsUSD()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -364,7 +364,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_FreightChargeAmount_Test()
+        public void Manipulate_FreightChargeAmount()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -375,7 +375,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TaxCurrencyIsUSD_Test()
+        public void Manipulate_TaxCurrencyIsUSD()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -386,7 +386,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_TaxAmount_Test()
+        public void Manipulate_TaxAmount()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -397,7 +397,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceCustomerReferenceIsNull_WhenReferenceIsEmptyString_Test()
+        public void Manipulate_InvoiceCustomerReferenceIsNull_WhenReferenceIsEmptyString()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceReference = string.Empty;
@@ -409,7 +409,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceCustomerReferenceIsNull_WhenReferenceIsNull_Test()
+        public void Manipulate_InvoiceCustomerReferenceIsNull_WhenReferenceIsNull()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceReference = null;
@@ -421,7 +421,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceCustomerReferenceIsNotNull_WhenReferenceIsProvided_Test()
+        public void Manipulate_InvoiceCustomerReferenceIsNotNull_WhenReferenceIsProvided()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceReference = "reference";
@@ -433,7 +433,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceCustomerReferenceSizeIsOne_WhenReferenceIsProvided_Test()
+        public void Manipulate_InvoiceCustomerReferenceSizeIsOne_WhenReferenceIsProvided()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceReference = "reference";
@@ -445,7 +445,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceCustomerReferenceIsCustomerReferenceType_WhenReferenceIsProvided_Test()
+        public void Manipulate_InvoiceCustomerReferenceIsCustomerReferenceType_WhenReferenceIsProvided()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceReference = "reference";
@@ -457,7 +457,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InvoiceCustomerReferenceValue_WhenReferenceIsProvided_Test()
+        public void Manipulate_InvoiceCustomerReferenceValue_WhenReferenceIsProvided()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceReference = "reference";
@@ -469,7 +469,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -481,7 +481,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterAddressIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterAddressIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -494,7 +494,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterContactIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterContactIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -507,7 +507,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterAccountNumber_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterAccountNumber_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -520,7 +520,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterTINsIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterTINsIsNotNull_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -532,7 +532,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterTINsSizeisOne_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterTINsSizeisOne_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -544,7 +544,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ImporterTINNumber_WhenCommercialInvoiceAndImporterRecordAreTrue_Test()
+        public void Manipulate_ImporterTINNumber_WhenCommercialInvoiceAndImporterRecordAreTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.ImporterOfRecord = true;
@@ -556,7 +556,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InsuranceChargeIsNotNull_WhenCommercialInvoiceIsTrue_Test()
+        public void Manipulate_InsuranceChargeIsNotNull_WhenCommercialInvoiceIsTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -567,7 +567,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InsuranceChargeCurrencyIsUSD_WhenCommercialInvoiceIsTrue_Test()
+        public void Manipulate_InsuranceChargeCurrencyIsUSD_WhenCommercialInvoiceIsTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 
@@ -578,7 +578,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_InsuranceChargeAmount_WhenCommercialInvoiceIsTrue_Test()
+        public void Manipulate_InsuranceChargeAmount_WhenCommercialInvoiceIsTrue()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
 

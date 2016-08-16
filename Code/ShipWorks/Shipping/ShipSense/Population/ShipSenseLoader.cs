@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense.Population
 {
@@ -18,18 +18,18 @@ namespace ShipWorks.Shipping.ShipSense.Population
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoader));
 
         private static object runningLock = new object();
-        
+
         private IShipSenseLoaderGateway shipSenseLoaderGateway;
         private readonly IProgressReporter progressReporter;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseLoader" /> class.
         /// </summary>
         /// <param name="progressReporter">The progress reporter.</param>
         public ShipSenseLoader(IProgressReporter progressReporter)
-            :this(progressReporter, new ShipSenseLoaderGateway(new Knowledgebase()))
+            : this(progressReporter, new ShipSenseLoaderGateway(new Knowledgebase()))
         { }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseLoader" /> class.
         /// </summary>
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// Gets or sets a value indicating whether to [reset order hash keys] as part of the load process.
         /// </summary>
         public bool ResetOrderHashKeys { get; set; }
-        
+
         /// <summary>
         /// Does some precursory work prior to (re)loading the ShipSense knowledge base.
         /// </summary>
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     {
                         progressReporter.Starting();
                         UpdateProgress("Updating orders...", 0);
-                        
+
                         if (ResetOrderHashKeys)
                         {
                             shipSenseLoaderGateway.ResetOrderHashKeys();
@@ -142,17 +142,17 @@ namespace ShipWorks.Shipping.ShipSense.Population
             int ordersAnalyzed = 0;
 
             using (LoggedStopwatch stopwatch = new LoggedStopwatch(log, "OrderHashes"))
-            {                
+            {
                 OrderEntity order = shipSenseLoaderGateway.FetchNextOrderToAnalyze();
 
                 while (order != null && !progressReporter.IsCancelRequested)
                 {
-                    // Update the hash key and set the recognition status to NotRecognized; the second part of the 
+                    // Update the hash key and set the recognition status to NotRecognized; the second part of the
                     // loader will update the status to Recognized if an KB entry gets added that matches the hash.
                     // This avoid situations where we have orders with a hash key value but still having a status
                     // of NotApplicable during uploads
                     OrderUtility.UpdateShipSenseHashKey(order);
-                    order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
+                    order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
                     shipSenseLoaderGateway.SaveOrder(order);
 
                     ordersAnalyzed++;
@@ -226,9 +226,9 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             if (disposing)
             {
-               shipSenseLoaderGateway.Dispose();
+                shipSenseLoaderGateway.Dispose();
 
-               shipSenseLoaderGateway = null;
+                shipSenseLoaderGateway = null;
             }
         }
     }

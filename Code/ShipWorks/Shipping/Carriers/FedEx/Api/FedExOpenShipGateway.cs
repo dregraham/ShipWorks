@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;

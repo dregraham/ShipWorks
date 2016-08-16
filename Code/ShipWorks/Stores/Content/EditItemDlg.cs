@@ -13,6 +13,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
@@ -267,6 +268,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Commit the changes
         /// </summary>
+        [NDependIgnoreLongMethod]
         private void OnOK(object sender, EventArgs e)
         {
             double quantityValue;

@@ -53,13 +53,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment_Test()
+        public void Manipulate_AccountsForNullRequestedShipment()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullShippingChargesPayment_Test()
+        public void Manipulate_AccountsForNullShippingChargesPayment()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullPayor_Test()
+        public void Manipulate_AccountsForNullPayor()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -119,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullResponsibleParty_Test()
+        public void Manipulate_AccountsForNullResponsibleParty()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountsForNullAddress_Test()
+        public void Manipulate_AccountsForNullAddress()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_DelegatesToRequest_Test()
+        public void Manipulate_DelegatesToRequest()
         {
             testObject.Manipulate(carrierRequest.Object);
 
@@ -156,7 +156,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsPaymentTypeToSender_Test()
+        public void Manipulate_SetsPaymentTypeToSender()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Sender;
@@ -168,7 +168,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_UsesFedExAccountNumber_WhenPaymentTypeIsSender_Test()
+        public void Manipulate_UsesFedExAccountNumber_WhenPaymentTypeIsSender()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Sender;
@@ -180,7 +180,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_UsesFedExAccountCountryCode_WhenPaymentTypeIsSender_Test()
+        public void Manipulate_UsesFedExAccountCountryCode_WhenPaymentTypeIsSender()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Sender;
@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_UsesFedExAccountNameAsContactName_WhenPaymentTypeIsSender_Test()
+        public void Manipulate_UsesFedExAccountNameAsContactName_WhenPaymentTypeIsSender()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Sender;
@@ -204,7 +204,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsPaymentTypeToRecipient_Test()
+        public void Manipulate_SetsPaymentTypeToRecipient()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Recipient;
@@ -216,7 +216,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsRecipient_Test()
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsRecipient()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Recipient;
@@ -228,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_UsesFedExShipmentPayorTransportAccount_WhenPaymentTypeIsRecipient_Test()
+        public void Manipulate_UsesFedExShipmentPayorTransportAccount_WhenPaymentTypeIsRecipient()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Recipient;
@@ -240,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AssignsContactPersonName_WhenPaymentTypeIsRecepient_Test()
+        public void Manipulate_AssignsContactPersonName_WhenPaymentTypeIsRecepient()
         {
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Recipient;
 
@@ -251,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsPaymentTypeToThirdParty_Test()
+        public void Manipulate_SetsPaymentTypeToThirdParty()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -263,7 +263,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_UsesFedExShipmentPayorTransportAccount_WhenPaymentTypeIsThirdParty_Test()
+        public void Manipulate_UsesFedExShipmentPayorTransportAccount_WhenPaymentTypeIsThirdParty()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -275,7 +275,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AssignsContactPersonName_WhenPaymentTypeIsThirdParty_Test()
+        public void Manipulate_AssignsContactPersonName_WhenPaymentTypeIsThirdParty()
         {
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
 
@@ -286,7 +286,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdPartyAndPayCountryCodeIsEmpty_Test()
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdPartyAndPayCountryCodeIsEmpty()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -299,7 +299,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdPartyAndPayCountryCodeIsNull_Test()
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsThirdPartyAndPayCountryCodeIsNull()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -312,7 +312,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCode_WhenPaymentTypeIsThirdParty_Test()
+        public void Manipulate_SetsCountryCode_WhenPaymentTypeIsThirdParty()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -325,7 +325,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsPaymentTypeToCollect_Test()
+        public void Manipulate_SetsPaymentTypeToCollect()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Collect;
@@ -337,7 +337,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ContactPersonNameIsNotNullOrEmpty_WhenPaymentTypeIsCollect_Test()
+        public void Manipulate_ContactPersonNameIsNotNullOrEmpty_WhenPaymentTypeIsCollect()
         {
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Collect;
 
@@ -354,7 +354,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_AccountNumberIsNotNullOrEmpty_WhenPaymentTypeIsCollect_Test()
+        public void Manipulate_AccountNumberIsNotNullOrEmpty_WhenPaymentTypeIsCollect()
         {
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Collect;
 
@@ -371,7 +371,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsCollect_AndPayCountryCodeIsEmpty_Test()
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsCollect_AndPayCountryCodeIsEmpty()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.Collect;
@@ -384,7 +384,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsCollect_AndPayCountryCodeIsNull_Test()
+        public void Manipulate_SetsCountryCodeToUS_WhenPaymentTypeIsCollect_AndPayCountryCodeIsNull()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -397,7 +397,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsCountryCode_WhenPaymentTypeIsCollect_Test()
+        public void Manipulate_SetsCountryCode_WhenPaymentTypeIsCollect()
         {
             // Setup the fedex shipment payor type for the test
             shipmentEntity.FedEx.PayorTransportType = (int)FedExPayorType.ThirdParty;
@@ -410,7 +410,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_ForUnknownPayorType_Test()
+        public void Manipulate_ThrowsInvalidOperationException_ForUnknownPayorType()
         {
             // Setup the fedex shipment payor type for the test by setting the type to an unsupported value
             shipmentEntity.FedEx.PayorTransportType = 23;

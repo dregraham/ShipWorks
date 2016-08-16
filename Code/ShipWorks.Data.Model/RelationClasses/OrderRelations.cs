@@ -111,7 +111,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "Shipments" , true);
 				relation.AddEntityFieldPair(OrderFields.OrderID, ShipmentFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
@@ -453,6 +453,23 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between OrderEntity and ThreeDCartOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
+		/// Order.OrderID - ThreeDCartOrder.OrderID
+		/// </summary>
+		internal IEntityRelation RelationToSubTypeThreeDCartOrderEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+
+				relation.AddEntityFieldPair(OrderFields.OrderID, ThreeDCartOrderFields.OrderID);
+	
+	
+	
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between OrderEntity and YahooOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
 		/// Order.OrderID - YahooOrder.OrderID
 		/// </summary>
@@ -511,6 +528,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeSearsOrderEntity;
 				case "ShopifyOrderEntity":
 					return this.RelationToSubTypeShopifyOrderEntity;
+				case "ThreeDCartOrderEntity":
+					return this.RelationToSubTypeThreeDCartOrderEntity;
 				case "YahooOrderEntity":
 					return this.RelationToSubTypeYahooOrderEntity;
 				default:

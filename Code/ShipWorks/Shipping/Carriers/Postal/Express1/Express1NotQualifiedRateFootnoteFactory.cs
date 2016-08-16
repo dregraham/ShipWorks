@@ -1,5 +1,5 @@
-﻿using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -12,15 +12,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Construct a new Express1NotQualifiedRateFootnoteFactory object
         /// </summary>
         /// <param name="shipmentType">Type of shipment that instantiated this factory</param>
-        public Express1NotQualifiedRateFootnoteFactory(ShipmentType shipmentType)
+        public Express1NotQualifiedRateFootnoteFactory(ShipmentTypeCode shipmentTypeCode)
         {
-            ShipmentType = shipmentType;
+            ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; private set; }
 
         /// <summary>
         /// Notes that this factory should not be used in BestRate
@@ -39,5 +39,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             return new Express1RateNotQualifiedFootnote();
         }
+
+        /// <summary>
+        /// Get a view model that represents this footnote
+        /// </summary>
+        public object CreateViewModel(ICarrierShipmentAdapter shipmentAdapter) =>
+            new Express1RateNotQualifiedFootnoteViewModel();
     }
 }

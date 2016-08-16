@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using System.Collections.Generic;
+using Interapptive.Shared;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -31,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Saves to shipment entity.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
+        [NDependIgnoreLongMethod]
         public void SaveToShipment(ShipmentEntity shipmentEntity)
         {
             holdAtLocation.ReadMultiCheck(c => shipmentEntity.FedEx.FedExHoldAtLocationEnabled = c);

@@ -1,11 +1,12 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
-    public class OnTracBestRateBroker : BestRateBroker<OnTracAccountEntity>
+    public class OnTracBestRateBroker : BestRateBroker<OnTracAccountEntity, IOnTracAccountEntity>
     {
         private const string OnTracCarrierDescription = "OnTrac";
 
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        public OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity> accountRepository) :
+        public OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, OnTracCarrierDescription)
         {
 
@@ -44,10 +45,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
             currentShipment.OnTrac.DimsLength = originalShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            currentShipment.OnTrac.DimsWeight = originalShipment.ContentWeight;
+            currentShipment.OnTrac.DimsWeight = originalShipment.BestRate.DimsWeight;
             currentShipment.OnTrac.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
 
-            currentShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
+            // Update total weight
+            ShipmentType.UpdateTotalWeight(currentShipment);
+
+            currentShipment.OnTrac.Service = (int) OnTracServiceType.Ground;
             currentShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
         }
 
@@ -76,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// <param name="tag">Rate tag that represents the service type</param>
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
-            shipment.OnTrac.Service = (int)tag;
+            shipment.OnTrac.Service = (int) tag;
         }
 
         /// <summary>
@@ -84,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
         {
-            return (InsuranceProvider)settings.OnTracInsuranceProvider;
+            return (InsuranceProvider) settings.OnTracInsuranceProvider;
         }
 
         /// <summary>
@@ -92,14 +96,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         protected override BrokerException WrapShippingException(ShippingException ex)
         {
-            OnTracException onTracException = ex.InnerException as OnTracException;
-
-            if (onTracException != null && onTracException.DoesNotServiceLocation)
-            {
-                return new BrokerException(ex, BrokerExceptionSeverityLevel.Warning, ShipmentType);
-            }
-
-            return base.WrapShippingException(ex);
+            return ex.Message.ToLower().Contains("zip code entered is invalid or not serviced by ontrac") ?
+                new BrokerException(ex, BrokerExceptionSeverityLevel.Warning, ShipmentType) :
+                base.WrapShippingException(ex);
         }
 
         /// <summary>
