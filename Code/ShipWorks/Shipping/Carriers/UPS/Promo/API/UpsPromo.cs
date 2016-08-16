@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             }
 
             // Create promofootnote factory
-            UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(this);
+            UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(this, account);
 
             // Add factgory too the final group rate group
             return promoFootNoteFactory;
