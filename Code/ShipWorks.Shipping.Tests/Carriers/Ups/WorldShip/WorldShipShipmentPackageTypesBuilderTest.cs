@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Settings;
 using Xunit;
@@ -22,8 +23,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups.WorldShip
 
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<WorldShipShipmentType> shipmentType = mock.MockRepository.Create<WorldShipShipmentType>();
-                shipmentType.Setup(x => x.BuildPackageTypeDictionary(It.IsAny<List<ShipmentEntity>>(), It.IsAny<IExcludedPackageTypeRepository>()))
+                Mock<IUpsPromoFactory> promoFactory = new Mock<IUpsPromoFactory>();
+
+                Mock<WorldShipShipmentType> shipmentType =
+                    mock.MockRepository.Create<WorldShipShipmentType>(promoFactory.Object);
+                shipmentType.Setup(
+                    x =>
+                        x.BuildPackageTypeDictionary(It.IsAny<List<ShipmentEntity>>(),
+                            It.IsAny<IExcludedPackageTypeRepository>()))
                     .Verifiable();
 
                 mock.Provide(shipmentType.Object);
@@ -32,7 +39,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups.WorldShip
 
                 testObject.BuildPackageTypeDictionary(shipments);
 
-                shipmentType.Verify(s => s.BuildPackageTypeDictionary(It.IsAny<List<ShipmentEntity>>(), It.IsAny<IExcludedPackageTypeRepository>()));
+                shipmentType.Verify(
+                    s =>
+                        s.BuildPackageTypeDictionary(It.IsAny<List<ShipmentEntity>>(),
+                            It.IsAny<IExcludedPackageTypeRepository>()));
             }
         }
 

@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
@@ -35,7 +37,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         [Fact]
         public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList()
         {
-            var testBroker1 = new UpsCounterRatesBroker(new Mock<UpsShipmentType>().Object);
+            Mock<IUpsPromoFactory> promoFactory = new Mock<IUpsPromoFactory>();
+
+            // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
+            var shipmentType = new Mock<WorldShipShipmentType>(promoFactory.Object);
+
+            var testBroker1 = new UpsCounterRatesBroker(shipmentType.Object);
             var testBroker2 = new Mock<IBestRateShippingBroker>().Object;
             var brokers = new List<IBestRateShippingBroker> {testBroker1, testBroker2};
 

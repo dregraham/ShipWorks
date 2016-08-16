@@ -9,6 +9,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
@@ -78,8 +79,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             getRatesShipments = new List<ShipmentEntity>();
 
+            Mock<IUpsPromoFactory> promoFactory = new Mock<IUpsPromoFactory>();
+
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
-            genericShipmentTypeMock = new Mock<WorldShipShipmentType>();
+            genericShipmentTypeMock = new Mock<WorldShipShipmentType>(promoFactory.Object);
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsWorldShip);
 
             // Mimic the bare minimum of what the configure method is doing

@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Settings;
 using Xunit;
 
@@ -21,7 +22,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
 
             using (var mock = AutoMock.GetLoose())
             {
-                Mock<UpsOltShipmentType> shipmentType = mock.MockRepository.Create<UpsOltShipmentType>();
+                Mock<IUpsPromoFactory> promoFactory = new Mock<IUpsPromoFactory>();
+
+                Mock<UpsOltShipmentType> shipmentType = mock.MockRepository.Create<UpsOltShipmentType>(promoFactory.Object);
                 shipmentType.Setup(x => x.BuildPackageTypeDictionary(It.IsAny<List<ShipmentEntity>>(), It.IsAny<IExcludedPackageTypeRepository>()))
                     .Verifiable();
 
