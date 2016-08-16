@@ -2351,6 +2351,12 @@
     <Compile Include=".\EntityInterfaces\IIParcelProfilePackageEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyOdbcStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IOdbcStoreEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

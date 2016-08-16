@@ -153,6 +153,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Website { get; }
+        /// <summary> The PromoStatus property of the Entity UpsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsAccount"."PromoStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Byte PromoStatus { get; }
         
         
         
