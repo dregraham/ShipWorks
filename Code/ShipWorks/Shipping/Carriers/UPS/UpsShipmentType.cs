@@ -845,9 +845,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-
-
-
         /// <summary>
         /// Adds the footnote factory.
         /// </summary>
