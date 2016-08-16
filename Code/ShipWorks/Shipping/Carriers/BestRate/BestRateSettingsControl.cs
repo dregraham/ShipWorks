@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.PostalWebTools,
             ShipmentTypeCode.Express1Endicia,
             ShipmentTypeCode.Express1Usps,
-            ShipmentTypeCode.UpsOnLineTools,
             ShipmentTypeCode.UpsWorldShip,
             ShipmentTypeCode.Amazon,
             ShipmentTypeCode.iParcel
