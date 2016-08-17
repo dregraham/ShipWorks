@@ -13,15 +13,10 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo {
-    using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
-    using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
+{
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.79.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -39,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo {
         
         /// <remarks/>
         public PromoDiscountService() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_Shipping_Carriers_UPS_WebServices_Promo_PromoDiscountService;
+            this.Url = "https://wwwcie.ups.com/webservices/PromoDiscount";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
