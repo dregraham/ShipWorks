@@ -9,11 +9,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
     /// </summary>
     public partial class UpsPromoFootnote : RateFootnoteControl
     {
+        private readonly FootnoteParameters parameters;
         private readonly IUpsPromo upsPromo;
 
-        public UpsPromoFootnote(IUpsPromo upsPromo)
+        public UpsPromoFootnote(FootnoteParameters parameters, IUpsPromo upsPromo)
         {
             InitializeComponent();
+            this.parameters = parameters;
             this.upsPromo = upsPromo;
         }
 
@@ -28,7 +30,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
             }
 
             RateCache.Instance.Clear();
-            Hide();
+
+            parameters.ReloadRatesAction.Invoke();
         }
 
         /// <summary>

@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new UpsPromoFootnote(promo);
+            return new UpsPromoFootnote(parameters, promo);
         }
 
         /// <summary>
@@ -47,6 +47,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
             {
                 IUpsPromoFootnoteViewModel viewModel = lifetimeScope.Resolve<IUpsPromoFootnoteViewModel>();
                 viewModel.UpsPromo = promo;
+                viewModel.ShipmentAdapter = shipmentAdapter;
                 return viewModel;
             }
         }

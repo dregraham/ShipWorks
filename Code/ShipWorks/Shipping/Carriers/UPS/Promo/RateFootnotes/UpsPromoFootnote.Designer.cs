@@ -37,6 +37,7 @@
             // linkControl
             // 
             this.linkControl.AutoSize = true;
+            this.linkControl.BackColor = System.Drawing.Color.Transparent;
             this.linkControl.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkControl.ForeColor = System.Drawing.Color.Blue;

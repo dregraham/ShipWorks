@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -115,6 +116,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
                 .AsImplementedInterfaces();
+
             builder.RegisterType<UpsPromoPolicy>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -124,6 +126,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsOltShipmentType>()
                 .As<UpsShipmentType>();
+
+            builder.RegisterType<UpsPromoFootnoteViewModel>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>

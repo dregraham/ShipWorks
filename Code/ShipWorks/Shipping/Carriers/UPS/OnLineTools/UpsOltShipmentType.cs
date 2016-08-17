@@ -12,7 +12,6 @@ using ShipWorks.Data;
 using System.Drawing;
 using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -21,14 +20,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// </summary>
     public class UpsOltShipmentType : UpsShipmentType
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UpsOltShipmentType"/> class.
-        /// </summary>
-        public UpsOltShipmentType(IUpsPromoFactory promoFactory) :
-            base(promoFactory)
-        {
-        }
-
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
@@ -55,9 +46,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         }
 
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the service types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)

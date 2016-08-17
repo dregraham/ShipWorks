@@ -46,14 +46,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        private readonly IUpsPromoFactory promoFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected UpsShipmentType(IUpsPromoFactory promoFactory)
+        protected UpsShipmentType()
         {
-            this.promoFactory = promoFactory;
             // Use the "live" versions of the repository by default
             AccountRepository = new UpsAccountRepository();
             SettingsRepository = new UpsSettingsRepository();
@@ -842,20 +840,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
 
                 return trackingList;
-            }
-        }
-
-        /// <summary>
-        /// Adds the footnote factory.
-        /// </summary>
-        private void AddFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
-        {
-            UpsPromo upsPromo = promoFactory.Get(account);
-            UpsPromoFootnoteFactory upsPromoFootnoteFactory = upsPromo.GetFootnoteFactory();
-
-            if (upsPromoFootnoteFactory != null)
-            {
-                rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
             }
         }
 

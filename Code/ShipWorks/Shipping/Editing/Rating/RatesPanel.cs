@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void ChangeShipment(long? shipmentID)
         {
             // This method can get triggered when the shipment dialog closes but the
-            // shipment ID did not actually chagne. We only want to reset the collapsible 
+            // shipment ID did not actually chagne. We only want to reset the collapsible
             // state when the shipment ID actually changes.
             resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
@@ -289,7 +289,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with 
+                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with
         /// A helper method for loading the rates in the rate control.
         /// </summary>
         /// <param name="rateGroup">The rate group.</param>

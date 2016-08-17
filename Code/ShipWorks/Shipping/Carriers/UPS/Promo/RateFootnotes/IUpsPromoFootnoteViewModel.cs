@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
 {
@@ -8,5 +9,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         /// The UPS promo.
         /// </summary>
         IUpsPromo UpsPromo { get; set; }
+
+        /// <summary>
+        /// Shipment adapter associated with the current rates
+        /// </summary>
+        ICarrierShipmentAdapter ShipmentAdapter { get; set; }
     }
 }

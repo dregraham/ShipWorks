@@ -79,10 +79,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             getRatesShipments = new List<ShipmentEntity>();
 
-            Mock<IUpsPromoFactory> promoFactory = new Mock<IUpsPromoFactory>();
-
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
-            genericShipmentTypeMock = new Mock<UpsShipmentType>(promoFactory.Object);
+            genericShipmentTypeMock = new Mock<UpsShipmentType>();
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.UpsOnLineTools);
 
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))

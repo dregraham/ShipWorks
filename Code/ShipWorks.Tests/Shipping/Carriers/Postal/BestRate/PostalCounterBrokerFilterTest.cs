@@ -37,10 +37,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         [Fact]
         public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList()
         {
-            Mock<IUpsPromoFactory> promoFactory = new Mock<IUpsPromoFactory>();
-
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
-            var shipmentType = new Mock<WorldShipShipmentType>(promoFactory.Object);
+            var shipmentType = new Mock<WorldShipShipmentType>();
 
             var testBroker1 = new UpsCounterRatesBroker(shipmentType.Object);
             var testBroker2 = new Mock<IBestRateShippingBroker>().Object;

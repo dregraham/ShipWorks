@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
-using System;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.RateFootnotes
 {
@@ -31,10 +30,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.RateFootnotes
                 mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings().UpsAccessKey).Returns("blahh");
                 var upsPromo = mock.Create<UpsPromo>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
 
-                UpsPromoFootnote footnote = new UpsPromoFootnote(upsPromo);
+                UpsPromoFootnote footnote = new UpsPromoFootnote(null, upsPromo);
 
                 Assert.Equal(true, footnote.AssociatedWithAmountFooter);
-
             }
         }
     }

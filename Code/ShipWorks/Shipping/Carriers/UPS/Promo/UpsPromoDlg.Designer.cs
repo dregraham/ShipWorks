@@ -120,6 +120,7 @@
             this.Controls.Add(this.remindMe);
             this.Name = "UpsPromoDlg";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Activate Ups Promo";
             this.ResumeLayout(false);
             this.PerformLayout();

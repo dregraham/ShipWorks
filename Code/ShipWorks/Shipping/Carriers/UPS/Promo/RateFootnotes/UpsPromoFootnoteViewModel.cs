@@ -2,17 +2,22 @@
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
 {
     public class UpsPromoFootnoteViewModel : IUpsPromoFootnoteViewModel
     {
+        private readonly IMessenger messenger;
         private readonly IWin32Window owner;
 
-        public UpsPromoFootnoteViewModel(IWin32Window owner)
+        public UpsPromoFootnoteViewModel(IMessenger messenger, IWin32Window owner)
         {
+            this.messenger = messenger;
             this.owner = owner;
             ActivatePromo = new RelayCommand(ActivatePromoAction);
         }
@@ -29,6 +34,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         public IUpsPromo UpsPromo { get; set; }
 
         /// <summary>
+        /// Shipment adapter associated with the current rates
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICarrierShipmentAdapter ShipmentAdapter { get; set; }
+
+        /// <summary>
         /// Bring up the UpsPromoDlg
         /// </summary>
         private void ActivatePromoAction()
@@ -39,6 +50,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
             }
 
             RateCache.Instance.Clear();
+
+            messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter));
         }
     }
 }
