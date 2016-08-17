@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 (int) OdbcColumnSourceType.CustomQuery;
 
             store.ImportColumnSource = ColumnSourceIsTable ?
-                SelectedTable.Name :
+                SelectedTable?.Name :
                 CustomQuery;
 
             fieldMap.Name = MapName;
