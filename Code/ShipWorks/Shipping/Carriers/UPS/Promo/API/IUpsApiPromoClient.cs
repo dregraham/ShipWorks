@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using log4net;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
@@ -19,13 +18,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <summary>
         /// Gets the Promo Acceptance Terms
         /// </summary>
-        PromoAcceptanceTerms GetAgreement();
+        PromoAcceptanceTerms GetAgreement(string promoCode);
     }
 
-    
     /// <summary>
     /// Todo: get rid of this
-    /// This relies on a file at c:\FakeUpsApiPromoClient.json. 
+    /// This relies on a file at c:\FakeUpsApiPromoClient.json.
     /// An example of this file is in this directory.
     /// </summary>
     class FakeUpsApiPromoClient : IUpsApiPromoClient
@@ -53,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 ActivateThrowsError = fakeConfig["Activate"]["ThrowsError"].Value<bool>();
                 ActivateIsSuccessful = fakeConfig["Activate"]["IsSuccessful"].Value<bool>();
             }
-            
+
             this.promo = promo;
         }
 
@@ -78,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             });
         }
 
-        public PromoAcceptanceTerms GetAgreement()
+        public PromoAcceptanceTerms GetAgreement(string promoCode)
         {
             string acceptanceCode = "42";
             log.Info($"FakeUpsApiPromoClient.GetAgreement() returning acceptance code of {acceptanceCode}, AgreementURL of www.google.com and PromoDescription of \"Mocked Descriptoin\"");
