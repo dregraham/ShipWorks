@@ -2,6 +2,7 @@
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -13,6 +14,8 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
@@ -25,9 +28,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
-using Interapptive.Shared.Security;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
-        private DateTime? notifyTime;
+        private DateTime? smartPickupNotifyTime;
         private UpsPromo promo;
 
         private string upsLicense;
@@ -586,13 +586,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// If UpsAccessKey is not set, it is retrieved from UPS and set in ShippingSettings
         /// </remarks>
         [NDependIgnoreLongMethod]
-        private bool GetUpsAccessKey()
+        private void GetUpsAccessKey()
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             if (!string.IsNullOrEmpty(settings.UpsAccessKey))
             {
                 // Already been set
-                return true;
+                return;
             }
 
             // Create the client for connecting to the UPS server
@@ -635,34 +635,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
             xmlWriter.WriteEndElement();
 
-            try
-            {
-                Cursor.Current = Cursors.WaitCursor;
+            Cursor.Current = Cursors.WaitCursor;
 
-                // Process the XML request
-                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
+            // Process the XML request
+            XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
 
-                // Now we can get the Access License number
-                string accessKey = (string)upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
+            // Now we can get the Access License number
+            string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
 
-                // Refetch in case it changed...
-                settings = ShippingSettings.Fetch();
-                settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
+            // Refetch in case it changed...
+            settings = ShippingSettings.Fetch();
+            settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
 
-                ShippingSettings.Save(settings);
-
-                return true;
-            }
-            catch (UpsException ex)
-            {
-                MessageBox.Show(this,
-                    "An error occurred: " + ex.Message,
-                    "ShipWorks",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>
@@ -726,9 +711,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     labelSetupComplete1.Text = "Congratulations, you successfully created a UPS account within ShipWorks!";
                     labelSetupComplete2.Text = $"Your new UPS account number: {upsAccount.AccountNumber}";
                     labelSetupComplete3.Text = "Please watch your email for a confirmation from UPS and more information on how to use your account.";
-                    if (notifyTime.HasValue)
+                    if (smartPickupNotifyTime.HasValue)
                     {
-                        labelSetupCompleteNotifyTime.Text = $"UPS Smart Pickup Notify Time: {notifyTime.Value.ToString("t")}";
+                        labelSetupCompleteNotifyTime.Text = $"UPS Smart Pickup Notify Time: {smartPickupNotifyTime.Value.ToString("t")}";
                     }
                 }
             }
@@ -762,18 +747,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsBillingContactInfoControl.SaveToAccountAndRequest(openAccountRequest, upsAccount);
                 if (upsBillingContactInfoControl.SameAsPickup)
                 {
-                    if (!CreateAccount())
-                    {
-                        e.NextPage = CurrentPage;
-                    }
-                    else if (Pages.Contains(wizardPagePromo))
-                    {
-                        e.NextPage = wizardPagePromo;
-                    }
-                    else
-                    {
-                        e.NextPage = Pages[Pages.Count - 1]; // Go to last page
-                    }
+                    CreateAccount();
+
+                    // Go to wizardpage if in wizard, else go to the last page.
+                    e.NextPage = Pages.Contains(wizardPagePromo) ? wizardPagePromo : Pages[Pages.Count - 1];
                 }
             }
             catch (UpsOpenAccountException ex)
@@ -790,10 +767,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 upsPickupLocationControl.SavePickupInfoToAccountAndRequest(openAccountRequest, upsAccount);
-                if (!CreateAccount())
-                {
-                    e.NextPage = CurrentPage;
-                }
+                CreateAccount();
             }
             catch (UpsOpenAccountException ex)
             {
@@ -919,12 +893,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Creates the account.
         /// </summary>
         /// <exception cref="System.NotImplementedException"></exception>
-        private bool CreateAccount()
+        private void CreateAccount()
         {
-            if (!GetUpsAccessKey())
-            {
-                return false;
-            }
+            RegisterNewAccount();
+
             UpsOpenAccountResponseDTO upsOpenAccountResponse;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
@@ -935,21 +907,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             if (upsOpenAccountResponse == null)
             {
-                return false;
+                throw new UpsOpenAccountException("Couldn't open an account.", UpsOpenAccountErrorCode.UnknownError);
             }
 
-            notifyTime = upsOpenAccountResponse.NotifyTime;
-
-            try
-            {
-                RegisterNewAccount();
-                notifyTime = upsOpenAccountResponse.NotifyTime;
-                return true;
-            }
-            catch (UpsException ex)
-            {
-                throw new UpsOpenAccountException(ex.Message, UpsOpenAccountErrorCode.MissingRequiredFields);
-            }
+            smartPickupNotifyTime = upsOpenAccountResponse.UpsSmartPickupNotifyTime;
         }
 
         /// <summary>
@@ -963,8 +924,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IUpsClerk clerk =
-                        lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
                     registrationStatus = clerk.RegisterAccount(upsAccount);
                 }
 
@@ -1008,10 +968,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Creates the ups account. Note the recursive call to correct the address.
         /// </summary>
         /// <param name="clerk">The clerk.</param>
-        /// <param name="retrySmartPost">if set to <c>true</c> [retry smart post].</param>
+        /// <param name="retryingDueToSmartPickupError">if set to <c>true</c> [retry smart post].</param>
         /// <returns></returns>
         /// <exception cref="UpsOpenAccountException">Ups didn't return a new account number.</exception>
-        private UpsOpenAccountResponseDTO OpenUpsAccount(IUpsClerk clerk, bool retrySmartPost)
+        private UpsOpenAccountResponseDTO OpenUpsAccount(IUpsClerk clerk, bool retryingDueToSmartPickupError)
         {
             UpsOpenAccountResponseDTO upsOpenAccountResponse = null;
 
@@ -1060,7 +1020,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountException ex)
             {
-                if (ex.ErrorCode == UpsOpenAccountErrorCode.SmartPickupError && !retrySmartPost)
+                if (ex.ErrorCode == UpsOpenAccountErrorCode.SmartPickupError && !retryingDueToSmartPickupError)
                 {
                     string correctedAddress = UpsUtility.CorrectSmartPickupError(openAccountRequest.PickupAddress.City);
 

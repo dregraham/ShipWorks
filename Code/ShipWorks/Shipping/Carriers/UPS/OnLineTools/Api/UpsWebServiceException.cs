@@ -26,6 +26,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="UpsWebServiceException"/> class.
+        /// </summary>
+        public UpsWebServiceException(string message, Exception ex): base(message, ex)
+        {
+            
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public UpsWebServiceException(SoapException ex) :
