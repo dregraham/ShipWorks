@@ -98,6 +98,7 @@ namespace ShipWorks.Shipping
         private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICustomsManager customsManager;
+        private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private bool closing;
 
         /// <summary>
@@ -107,12 +108,13 @@ namespace ShipWorks.Shipping
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager)
+            ICustomsManager customsManager, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory)
         {
             InitializeComponent();
 
             ErrorManager = errorManager;
             this.customsManager = customsManager;
+            this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
             this.messenger = messenger;
@@ -1492,6 +1494,11 @@ namespace ShipWorks.Shipping
         public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
             Cursor.Current = Cursors.WaitCursor;
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
+            }
 
             return shippingManager.SaveShipmentsToDatabase(shipments, forceSave);
         }
