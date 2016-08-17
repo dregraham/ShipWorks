@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     upsServiceManager.GetServices(shipment)
                         .Where(s => s.IsSurePost)
                         .Select(s => s.UpsServiceType)
-                        .Except(shipmentType.GetExcludedServiceTypes().Select(s => (UpsServiceType) s));
+                        .Except(shipmentType.GetExcludedServiceTypes().Cast<UpsServiceType>());
 
                 foreach (UpsServiceType serviceType in surePostServiceTypes)
                 {
