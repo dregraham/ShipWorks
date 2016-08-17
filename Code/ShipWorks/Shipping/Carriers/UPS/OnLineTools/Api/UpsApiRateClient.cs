@@ -147,15 +147,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
             IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
 
-            List<UpsServiceType> surePostServices = upsServiceManager.GetServices(shipment)
+            UpsServiceType[] shipmentSpecificExclusions =
+            {
+                shipment.TotalWeight >= 1D
+                    ? UpsServiceType.UpsSurePostLessThan1Lb
+                    : UpsServiceType.UpsSurePost1LbOrGreater
+            };
+
+            IEnumerable<UpsServiceType> surePostServices = upsServiceManager.GetServices(shipment)
                         .Where(s => s.IsSurePost)
                         .Select(s => s.UpsServiceType)
-                        .Except(shipmentType.GetExcludedServiceTypes().Cast<UpsServiceType>()).ToList();
-
-            // If the weight is more than 1 lb dont bother getting rates for the less than 1 lb service
-            surePostServices.Remove(shipment.TotalWeight >= 1D ?
-                UpsServiceType.UpsSurePostLessThan1Lb :
-                UpsServiceType.UpsSurePost1LbOrGreater);
+                        .Except(shipmentType.GetExcludedServiceTypes().Cast<UpsServiceType>())
+                        .Except(shipmentSpecificExclusions);
 
             return surePostServices;
         }
