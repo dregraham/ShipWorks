@@ -572,6 +572,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IEnumerable<PostalServiceType> postalServices = GetDomesticServices(shipmentType.ShipmentTypeCode)
                 .Union(GetInternationalServices(shipmentType.ShipmentTypeCode))
                 .ToList();
+
             servicePicker.Initialize(postalServices, excludedServices);
         }
     }

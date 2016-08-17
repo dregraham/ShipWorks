@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -21,6 +21,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Carrier supports services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
+        /// Carrier supports packages
+        /// </summary>
+        protected override bool SupportsPackages => true;
 
         /// <summary>
         /// Load the settings into the control
@@ -71,9 +81,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Save the settings 
+        /// Save the settings
         /// </summary>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             optionsControl.SaveSettings(settings);
 

@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Save the settings
         /// </summary>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             // If there are no changes, don't do anything
             if (!isDirty)
