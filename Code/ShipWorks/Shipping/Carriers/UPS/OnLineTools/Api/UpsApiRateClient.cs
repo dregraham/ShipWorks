@@ -149,9 +149,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             UpsServiceType[] shipmentSpecificExclusions =
             {
-                shipment.TotalWeight >= 1D
-                    ? UpsServiceType.UpsSurePostLessThan1Lb
-                    : UpsServiceType.UpsSurePost1LbOrGreater
+                shipment.TotalWeight >= 1D ?
+                    UpsServiceType.UpsSurePostLessThan1Lb :
+                    UpsServiceType.UpsSurePost1LbOrGreater
             };
 
             IEnumerable<UpsServiceType> surePostServices = upsServiceManager.GetServices(shipment)
