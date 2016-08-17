@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             {
                 try
                 {
-                    terms = promo.GetAgreementTerms();
+                    terms = promo.Terms;
                 }
                 catch (UpsPromoException )
                 {

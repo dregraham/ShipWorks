@@ -50,12 +50,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         void Decline();
 
         /// <summary>
-        /// Gets the PromoAcceptanceTerms from UpsApiPromoClient
-        /// </summary>
-        /// <returns></returns>
-        PromoAcceptanceTerms GetAgreementTerms();
-
-        /// <summary>
         /// Gets the PromoStatus for the UpsAccountEntity
         /// </summary>
         /// <returns></returns>

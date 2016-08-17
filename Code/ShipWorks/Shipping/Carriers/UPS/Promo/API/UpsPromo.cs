@@ -18,6 +18,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         private readonly IUpsPromoPolicy promoPolicy;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
+        private PromoAcceptanceTerms terms;
+
+        private const string ContinentalUSPromoCode = "P090029838";
+        private const string AlaskaPromoCode = "P950029472";
+        private const string HawaiiPromoCode = "P780029996";
 
         /// <summary>
         /// Constructor
@@ -69,7 +74,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <summary>
         /// The Promo Terms and Conditions
         /// </summary>
-        public PromoAcceptanceTerms Terms { get; set; }
+        public PromoAcceptanceTerms Terms
+        {
+            get { return terms ?? (terms = GetAgreementTerms()); }
+            set { terms = value; }
+        }
 
         /// <summary>
         /// Activates the Promo Code
@@ -118,12 +127,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <summary>
         /// Gets the PromoAcceptanceTerms from UpsApiPromoClient
         /// </summary>
-        /// <returns></returns>
-        public PromoAcceptanceTerms GetAgreementTerms()
+        private PromoAcceptanceTerms GetAgreementTerms()
         {
             IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-            Terms = client.GetAgreement();
-            return Terms;
+            return client.GetAgreement(GetPromoCode());
         }
 
         /// <summary>
@@ -150,6 +157,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
 
             // Add factgory too the final group rate group
             return promoFootNoteFactory;
+        }
+
+        private string GetPromoCode()
+        {
+            if (!CountryCode.Equals("US", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return string.Empty;
+            }
+
+            string stateCode = account.StateProvCode;
+
+            if (stateCode.Equals("AK", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return AlaskaPromoCode;
+            }
+
+            if (stateCode.Equals("HI", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return HawaiiPromoCode;
+            }
+
+            return ContinentalUSPromoCode;
         }
     }
 }

@@ -10,8 +10,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     /// </summary>
     public class UpsApiPromoClient : IUpsApiPromoClient
     {
-        private const string PromoCode = "SomePromoCode";
-        private const string LiveEndpoing = "https://onlinetools.ups.com/webservices/PromoDiscount";
+        private const string LiveEndpoint = "https://onlinetools.ups.com/webservices/PromoDiscount";
         private const string TestingEndpoint = "https://wwwcie.ups.com/webservices/PromoDiscount";
 
         /// <summary>
@@ -27,13 +26,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 LanguageCode = "en"
             };
         }
-        
+
         /// <summary>
         /// Requests Terms and Conditions for UPS Promo Api
         /// </summary>
         /// <returns></returns>
-        public PromoAcceptanceTerms GetAgreement()
+        public PromoAcceptanceTerms GetAgreement(string promoCode)
         {
+            PromoCode = promoCode;
+
             PromoDiscountAgreementRequest request = new PromoDiscountAgreementRequest
             {
                 Locale = Locale,
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 using (PromoDiscountService service = new PromoDiscountService())
                 {
                     // Point the service to the correct endpoint
-                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoing;
+                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;
                     service.UPSSecurityValue = new UPSSecurity()
                     {
                         ServiceAccessToken = new UPSSecurityServiceAccessToken()
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                     };
 
                     PromoDiscountAgreementResponse response = service.ProcessPromoDiscountAgreement(request);
-                    return new PromoAcceptanceTerms(response);
+                    return new PromoAcceptanceTerms(response, this);
                 }
             }
             catch (Exception ex)
@@ -68,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
             }
         }
-        
+
         /// <summary>
         /// Activates the UPS Promo with the given acceptance code
         /// </summary>
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                 using (PromoDiscountService service = new PromoDiscountService())
                 {
                     // Point the service to the correct endpoint
-                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoing;
+                    service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;
                     service.UPSSecurityValue = new UPSSecurity()
                     {
                         ServiceAccessToken = new UPSSecurityServiceAccessToken()
@@ -119,6 +120,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// Locale information for the request
         /// </summary>
         private LocaleType Locale { get; }
+
+        /// <summary>
+        /// The promo code.
+        /// </summary>
+        private string PromoCode { get; set; }
 
         /// <summary>
         /// Indicates if the test server should be used instead of the live server

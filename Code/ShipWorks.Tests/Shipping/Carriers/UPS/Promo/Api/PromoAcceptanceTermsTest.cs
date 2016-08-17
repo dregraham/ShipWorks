@@ -9,7 +9,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
     public class PromoAcceptanceTermsTest
     {
         private PromoAcceptanceTerms testObject;
-        
+
         private readonly Mock<ILog> log;
 
         public PromoAcceptanceTermsTest()
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = responseCode.ToString() } }
             };
 
-            Assert.Throws<UpsPromoException>(() => new PromoAcceptanceTerms(response, log.Object));
+            Assert.Throws<UpsPromoException>(() => new PromoAcceptanceTerms(response, null, log.Object));
         }
 
         [Theory]
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = responseCode.ToString() } }
             };
 
-            Assert.Throws<UpsPromoException>(() => new PromoAcceptanceTerms(response, log.Object));
+            Assert.Throws<UpsPromoException>(() => new PromoAcceptanceTerms(response, null, log.Object));
 
             log.Verify(l => l.InfoFormat(It.IsAny<string>(), response.Response.ResponseStatus.Code, response.Response.ResponseStatus.Description), Times.Once());
         }
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = "1" } }
             };
 
-            testObject = new PromoAcceptanceTerms(response, log.Object);
+            testObject = new PromoAcceptanceTerms(response, null, log.Object);
 
             Assert.Equal(false, testObject.IsAccepted);
         }
@@ -78,8 +78,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 PromoAgreement = new PromoAgreementType() { AgreementURL = "www.example.com" },
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = "1" } }
             };
-            
-            testObject = new PromoAcceptanceTerms(response, log.Object);
+
+            testObject = new PromoAcceptanceTerms(response, null, log.Object);
 
             Assert.Equal(response.PromoAgreement.AgreementURL, testObject.URL);
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = "1" } }
             };
 
-            testObject = new PromoAcceptanceTerms(response, log.Object);
+            testObject = new PromoAcceptanceTerms(response, null, log.Object);
 
             Assert.Equal(response.PromoAgreement.AcceptanceCode, testObject.AcceptanceCode);
         }
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 PromoDescription = "theDescription"
             };
 
-            testObject = new PromoAcceptanceTerms(response, log.Object);
+            testObject = new PromoAcceptanceTerms(response, null, log.Object);
 
             Assert.Equal(response.PromoDescription, testObject.Description);
         }
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = "1" } }
             };
 
-            testObject = new PromoAcceptanceTerms(response, log.Object);
+            testObject = new PromoAcceptanceTerms(response, null, log.Object);
             testObject.AcceptTerms();
 
             log.Verify(l => l.Info("UPS promo terms and conditions have been accepted."), Times.Once());
@@ -137,7 +137,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
                 Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = "1" } }
             };
 
-            testObject = new PromoAcceptanceTerms(response, log.Object);
+            testObject = new PromoAcceptanceTerms(response, null, log.Object);
             testObject.AcceptTerms();
 
             Assert.Equal(true, testObject.IsAccepted);
