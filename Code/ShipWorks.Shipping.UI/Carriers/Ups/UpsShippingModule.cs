@@ -49,17 +49,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsServiceManagerFactory>()
                 .AsImplementedInterfaces();
-            builder.RegisterType<UpsAccountRepository>()
-                .AsImplementedInterfaces();
 
             builder.RegisterType<UpsAccountRepository>()
                 .AsImplementedInterfaces()
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsWorldShip)
-                .SingleInstance();
-
-            builder.RegisterType<UpsPromoWebClientFactory>()
-                .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterType<UpsShipmentAdapter>()
@@ -106,16 +100,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsWorldShip);
 
             builder.RegisterType<UpsSettingsRepository>()
-                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools);
+                .AsSelf()
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsWorldShip);
 
-            builder.RegisterType<UpsServiceGateway>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<UpsOpenAccountRequestFactory>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
-                .AsImplementedInterfaces();
+            builder.RegisterType<UpsPromoWebClientFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
             builder.RegisterType<UpsPromoPolicy>()
                 .AsImplementedInterfaces()
@@ -124,10 +115,16 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsPromoFactory>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<UpsOltShipmentType>()
-                .As<UpsShipmentType>();
-
             builder.RegisterType<UpsPromoFootnoteViewModel>()
+                .AsImplementedInterfaces();
+				
+            builder.RegisterType<UpsServiceGateway>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsOpenAccountRequestFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
                 .AsImplementedInterfaces();
         }
 

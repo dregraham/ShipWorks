@@ -151,7 +151,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePromo);
             this.mainPanel.Controls.Add(this.wizardPageRates);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
@@ -871,6 +870,38 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelCreateAccountRegistrationFailed1.TabIndex = 3;
             this.labelCreateAccountRegistrationFailed1.Text = "You have successfully created a UPS account within ShipWorks!";
             // 
+            // wizardPageInvoiceAuthentication
+            // 
+            this.wizardPageInvoiceAuthentication.Controls.Add(this.upsInvoiceAuthorizationControl);
+            this.wizardPageInvoiceAuthentication.Controls.Add(this.invoiceAuthenticationInstructions);
+            this.wizardPageInvoiceAuthentication.Description = "Account invoice authentication required";
+            this.wizardPageInvoiceAuthentication.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageInvoiceAuthentication.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageInvoiceAuthentication.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageInvoiceAuthentication.Name = "wizardPageInvoiceAuthentication";
+            this.wizardPageInvoiceAuthentication.Size = new System.Drawing.Size(579, 474);
+            this.wizardPageInvoiceAuthentication.TabIndex = 0;
+            this.wizardPageInvoiceAuthentication.Title = "Account Registration";
+            this.wizardPageInvoiceAuthentication.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInvoiceAuthentication);
+            this.wizardPageInvoiceAuthentication.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnStepIntoInvoiceAuthentication);
+            // 
+            // upsInvoiceAuthorizationControl
+            // 
+            this.upsInvoiceAuthorizationControl.Location = new System.Drawing.Point(23, 54);
+            this.upsInvoiceAuthorizationControl.Name = "upsInvoiceAuthorizationControl";
+            this.upsInvoiceAuthorizationControl.Size = new System.Drawing.Size(357, 135);
+            this.upsInvoiceAuthorizationControl.TabIndex = 0;
+            // 
+            // invoiceAuthenticationInstructions
+            // 
+            this.invoiceAuthenticationInstructions.ForeColor = System.Drawing.Color.Black;
+            this.invoiceAuthenticationInstructions.Location = new System.Drawing.Point(20, 5);
+            this.invoiceAuthenticationInstructions.Name = "invoiceAuthenticationInstructions";
+            this.invoiceAuthenticationInstructions.Size = new System.Drawing.Size(402, 49);
+            this.invoiceAuthenticationInstructions.TabIndex = 21;
+            this.invoiceAuthenticationInstructions.Text = "You must validate your account by providing information from a valid invoice.\r\n\r\n" +
+    "You must use any of the last 3 invoices issued within the past {days} days.";
+            // 
             // wizardPagePromo
             // 
             this.wizardPagePromo.Controls.Add(this.promoControls);
@@ -939,37 +970,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.promoDescription.Size = new System.Drawing.Size(530, 21);
             this.promoDescription.TabIndex = 0;
             this.promoDescription.Text = "label2";
-            // wizardPageInvoiceAuthentication
-            // 
-            this.wizardPageInvoiceAuthentication.Controls.Add(this.upsInvoiceAuthorizationControl);
-            this.wizardPageInvoiceAuthentication.Controls.Add(this.invoiceAuthenticationInstructions);
-            this.wizardPageInvoiceAuthentication.Description = "Account invoice authentication required";
-            this.wizardPageInvoiceAuthentication.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageInvoiceAuthentication.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageInvoiceAuthentication.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageInvoiceAuthentication.Name = "wizardPageInvoiceAuthentication";
-            this.wizardPageInvoiceAuthentication.Size = new System.Drawing.Size(579, 474);
-            this.wizardPageInvoiceAuthentication.TabIndex = 0;
-            this.wizardPageInvoiceAuthentication.Title = "Account Registration";
-            this.wizardPageInvoiceAuthentication.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInvoiceAuthentication);
-            this.wizardPageInvoiceAuthentication.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnStepIntoInvoiceAuthentication);
-            // 
-            // upsInvoiceAuthorizationControl
-            // 
-            this.upsInvoiceAuthorizationControl.Location = new System.Drawing.Point(23, 54);
-            this.upsInvoiceAuthorizationControl.Name = "upsInvoiceAuthorizationControl";
-            this.upsInvoiceAuthorizationControl.Size = new System.Drawing.Size(357, 135);
-            this.upsInvoiceAuthorizationControl.TabIndex = 0;
-            // 
-            // invoiceAuthenticationInstructions
-            // 
-            this.invoiceAuthenticationInstructions.ForeColor = System.Drawing.Color.Black;
-            this.invoiceAuthenticationInstructions.Location = new System.Drawing.Point(20, 5);
-            this.invoiceAuthenticationInstructions.Name = "invoiceAuthenticationInstructions";
-            this.invoiceAuthenticationInstructions.Size = new System.Drawing.Size(402, 49);
-            this.invoiceAuthenticationInstructions.TabIndex = 21;
-            this.invoiceAuthenticationInstructions.Text = "You must validate your account by providing information from a valid invoice.\r\n\r\n" +
-    "You must use any of the last 3 invoices issued within the past {days} days.";
             // 
             // UpsSetupWizard
             // 

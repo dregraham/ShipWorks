@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
         /// <param name="shipmentType">Instance of a UPS WorldShip shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get UPS accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public WorldShipBestRateBroker(WorldShipShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository) : 
+        public WorldShipBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository) : 
             base(shipmentType, accountRepository, new UpsSettingsRepository())
         {
         }

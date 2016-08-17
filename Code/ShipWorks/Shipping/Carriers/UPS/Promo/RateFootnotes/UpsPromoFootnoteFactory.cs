@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode { get; set; }
+        public ShipmentTypeCode ShipmentTypeCode { get; }
 
         /// <summary>
         /// Creates a UpsPromoFootnote
