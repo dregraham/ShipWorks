@@ -33,32 +33,34 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private readonly ILog log;
         private ICarrierSettingsRepository settingsRepository;
         private ICertificateInspector certificateInspector;
+        private readonly UpsShipmentType shipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
         public UpsApiRateClient()
-            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository(), new TrustingCertificateInspector())
+            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository(), new TrustingCertificateInspector(), new UpsOltShipmentType())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
         public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
-            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
-            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector)
+            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, UpsShipmentType shipmentType)
+            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector, shipmentType)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient" /> class.
         /// </summary>
         private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
-            ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+            ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, UpsShipmentType shipmentType)
         {
             this.accountRepository = accountRepository;
             this.log = log;
             this.settingsRepository = settingsRepository;
             this.certificateInspector = certificateInspector;
+            this.shipmentType = shipmentType;
         }
 
         /// <summary>
@@ -110,7 +112,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                 IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
                 IEnumerable<UpsServiceType> surePostServiceTypes =
-                    upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
+                    upsServiceManager.GetServices(shipment)
+                        .Where(s => s.IsSurePost)
+                        .Select(s => s.UpsServiceType)
+                        .Except(shipmentType.GetExcludedServiceTypes().Select(s => (UpsServiceType) s));
 
                 foreach (UpsServiceType serviceType in surePostServiceTypes)
                 {
