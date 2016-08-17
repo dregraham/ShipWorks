@@ -108,16 +108,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             if (GetSurePostRestrictionLevel() == EditionRestrictionLevel.None)
             {
-                // Get SurePost rates since SurePost is not restricted
-                UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
-                IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
-                IEnumerable<UpsServiceType> surePostServiceTypes =
-                    upsServiceManager.GetServices(shipment)
-                        .Where(s => s.IsSurePost)
-                        .Select(s => s.UpsServiceType)
-                        .Except(shipmentType.GetExcludedServiceTypes().Cast<UpsServiceType>());
-
-                foreach (UpsServiceType serviceType in surePostServiceTypes)
+                foreach (UpsServiceType serviceType in GetSurePostServiceTypes(shipment))
                 {
                     try
                     {
@@ -146,6 +137,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return rates;
+        }
+
+        /// <summary>
+        /// Get the SurePost service types we should get rates for
+        /// </summary>
+        private IEnumerable<UpsServiceType> GetSurePostServiceTypes(ShipmentEntity shipment)
+        {
+            UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
+            IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
+
+            List<UpsServiceType> surePostServices = upsServiceManager.GetServices(shipment)
+                        .Where(s => s.IsSurePost)
+                        .Select(s => s.UpsServiceType)
+                        .Except(shipmentType.GetExcludedServiceTypes().Cast<UpsServiceType>()).ToList();
+
+            // If the weight is more than 1 lb dont bother getting rates for the less than 1 lb service
+            surePostServices.Remove(shipment.TotalWeight >= 1D ?
+                UpsServiceType.UpsSurePostLessThan1Lb :
+                UpsServiceType.UpsSurePost1LbOrGreater);
+
+            return surePostServices;
         }
 
         /// <summary>
