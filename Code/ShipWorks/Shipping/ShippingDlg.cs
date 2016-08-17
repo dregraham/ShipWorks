@@ -1179,7 +1179,9 @@ namespace ShipWorks.Shipping
             {
                 // We know only one shipment Type is selected at this point, so we can use the first shipment entity to
                 // grab the shipment type and apply any applicable policies to the rate control
-                ShippingPolicies.Current.Apply(loadedShipmentEntities.First().ShipmentTypeCode, rateControl);
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                license?.ApplyShippingPolicy(loadedShipmentEntities.First().ShipmentTypeCode, rateControl);
+
                 rateControl.LoadRates(rateGroup);
 
                 ServiceControl.SyncSelectedRate();

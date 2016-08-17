@@ -15,6 +15,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
 
@@ -342,6 +344,24 @@ namespace ShipWorks.ApplicationCore.Licensing
                 log.Error("Error when associating stamps account with license.", ex);
             }
 
+        }
+
+        /// <summary>
+        /// Apply Shipping Policy for the ShipmentTypeCode to the target
+        /// </summary>
+        /// <remarks>Currently this only applies to Best Rate</remarks>
+        public void ApplyShippingPolicy(ShipmentTypeCode shipmentTypeCode, object target)
+        {
+            if (shipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                BestRateUpsRestrictionShippingPolicy bestRateUpsRestriction = new BestRateUpsRestrictionShippingPolicy();
+                bestRateUpsRestriction.Configure("True");
+                bestRateUpsRestriction.Apply(target);
+
+                RateResultCountShippingPolicy rateResultCount = new RateResultCountShippingPolicy();
+                rateResultCount.Configure("5");
+                rateResultCount.Apply(target);
+            }
         }
 
         /// <summary>

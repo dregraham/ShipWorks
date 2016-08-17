@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -136,6 +137,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
         {
+        }
+
+        /// <summary>
+        /// Nothing to apply for disabled license
+        /// </summary>
+        public void ApplyShippingPolicy(ShipmentTypeCode shipmentTypeCode, object target)
+        {
+
         }
 
         /// <summary>
