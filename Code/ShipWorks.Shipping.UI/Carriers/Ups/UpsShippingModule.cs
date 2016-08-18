@@ -19,6 +19,8 @@ using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using System;
+using System.Collections.Concurrent;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
@@ -107,6 +109,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsPromoWebClientFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ConcurrentDictionary<long, DateTime>>()
+                .UsingConstructor()
+                .AsSelf();
 
             builder.RegisterType<UpsPromoPolicy>()
                 .AsImplementedInterfaces()

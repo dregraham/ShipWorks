@@ -17,10 +17,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsPromoPolicy(IDateTimeProvider dateTimeProvider)
+        public UpsPromoPolicy(IDateTimeProvider dateTimeProvider, ConcurrentDictionary<long, DateTime> remindLaterAccounts)
         {
             this.dateTimeProvider = dateTimeProvider;
-            remindLaterAccounts = new ConcurrentDictionary<long, DateTime>();
+            this.remindLaterAccounts = remindLaterAccounts;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 return reminderExpiration < dateTimeProvider.Now;
             }
 
-            // PromoStatus is none and they havn't asked to be reminded later.
+            // PromoStatus is none and they haven't asked to be reminded later.
             return true;
         }
 
