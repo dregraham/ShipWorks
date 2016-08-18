@@ -24,6 +24,104 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
             AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) {DefaultValue = DefaultValue.Mock});
 
         [Fact]
+        public void Constructor_SetsAccountNumber()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                UpsAccountEntity account = new UpsAccountEntity()
+                {
+                    AccountNumber = "12345"
+                };
+
+                var testObject = CreateUpsPromo(mock, client, account);
+
+                Assert.Equal("12345", testObject.AccountNumber);
+            }
+        }
+
+        [Fact]
+        public void Constructor_SetsUsername()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                UpsAccountEntity account = new UpsAccountEntity()
+                {
+                    UserID = "username"
+                };
+
+                var testObject = CreateUpsPromo(mock, client, account);
+
+                Assert.Equal("username", testObject.Username);
+            }
+        }
+
+        [Fact]
+        public void Constructor_SetsPassword()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                UpsAccountEntity account = new UpsAccountEntity()
+                {
+                    Password = "password"
+                };
+
+                var testObject = CreateUpsPromo(mock, client, account);
+
+                Assert.Equal("password", testObject.Password);
+            }
+        }
+
+        [Fact]
+        public void Constructor_SetsAccessLicenseNumber()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+
+                var testObject = CreateUpsPromo(mock, client);
+
+                Assert.Equal("blah", testObject.AccessLicenseNumber);
+            }
+        }
+
+        [Fact]
+        public void Constructor_SetsCountryCode()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                UpsAccountEntity account = new UpsAccountEntity()
+                {
+                    CountryCode = "US"
+                };
+
+                var testObject = CreateUpsPromo(mock, client, account);
+
+                Assert.Equal("US", testObject.CountryCode);
+            }
+        }
+
+        [Fact]
+        public void Constructor_SetsAccountId()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                UpsAccountEntity account = new UpsAccountEntity()
+                {
+                    UpsAccountID = 12345
+                };
+
+                var testObject = CreateUpsPromo(mock, client, account);
+
+                Assert.Equal(12345, testObject.AccountId);
+            }
+        }
+
+        [Fact]
         public void GetStatus_Returns_UpsAccountPromoStatus()
         {
             using (var mock = GetLooseThatReturnsMocks())
@@ -323,6 +421,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
             }
         }
 
+        [Fact]
+        public void RemindMe_DelegatesToPromoPolicy()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                var promoPolicy = mock.Mock<IUpsPromoPolicy>();
+                var testObject = CreateUpsPromo(mock, client);
+
+                testObject.RemindMe();
+
+                promoPolicy.Verify(p => p.RemindLater(It.IsAny<UpsPromo>()));
+            }
+        }
+
         private static UpsPromo CreateUpsPromo(AutoMock mock, Mock<IUpsApiPromoClient> client)
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity
@@ -336,7 +449,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
 
         private static UpsPromo CreateUpsPromo(AutoMock mock, Mock<IUpsApiPromoClient> client, UpsAccountEntity upsAccount)
         {
-            mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings().UpsAccessKey).Returns("blahh");
+            mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings().UpsAccessKey).Returns("itWof6javyE=");
 
             PromoDiscountAgreementResponse response = new PromoDiscountAgreementResponse()
             {
