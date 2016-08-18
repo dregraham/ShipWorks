@@ -3,8 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
-using Xunit;
+using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
 {

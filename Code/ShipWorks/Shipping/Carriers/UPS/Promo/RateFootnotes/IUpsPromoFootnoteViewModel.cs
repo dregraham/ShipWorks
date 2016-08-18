@@ -1,5 +1,4 @@
-﻿using ShipWorks.Shipping.Carriers.UPS.Promo.API;
-using ShipWorks.Shipping.Services;
+﻿using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
 {

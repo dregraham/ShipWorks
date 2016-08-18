@@ -15,7 +15,6 @@ using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;

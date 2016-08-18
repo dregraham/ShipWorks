@@ -1139,8 +1139,13 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\PromoActivation.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
     <Compile Include="Shipping\CustomsControlCache.cs" />
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
@@ -1426,15 +1431,10 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.Designer.cs">
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\IPromoClientFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\IUpsApiPromoClient.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\IUpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoAcceptanceTerms.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\PromoActivation.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromoException.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromoWebClientFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsApiPromoClient.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\API\UpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\Api\IPromoClientFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\Api\IUpsApiPromoClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoWebClientFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsApiPromoClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.cs">
       <SubType>UserControl</SubType>

@@ -1,6 +1,6 @@
 ﻿using log4net;
 using Moq;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using Xunit;
 

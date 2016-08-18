@@ -3,7 +3,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using System;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 {
     /// <summary>
     /// Client for interacting with UPS Promo API

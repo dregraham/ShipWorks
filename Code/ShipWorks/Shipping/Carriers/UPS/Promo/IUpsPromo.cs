@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Shipping.Carriers.UPS.Enums;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     public interface IUpsPromo
     {

@@ -1,6 +1,5 @@
-﻿using System;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
-using ShipWorks.Shipping.Editing.Rating;
+﻿using ShipWorks.Shipping.Editing.Rating;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
 {

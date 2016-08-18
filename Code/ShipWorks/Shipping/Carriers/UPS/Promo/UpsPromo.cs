@@ -1,13 +1,13 @@
-﻿using System;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
+using System;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     /// <summary>
     /// Used to activate UPS Promo on UPS accounts

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     /// <summary>
     /// An general exception for UPS Promo

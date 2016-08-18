@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {

@@ -4,9 +4,8 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
-using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.RateFootnotes

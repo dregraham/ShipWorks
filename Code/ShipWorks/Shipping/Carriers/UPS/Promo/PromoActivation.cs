@@ -1,8 +1,7 @@
-using System;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     /// <summary>
     /// Holds information about PromoActivation

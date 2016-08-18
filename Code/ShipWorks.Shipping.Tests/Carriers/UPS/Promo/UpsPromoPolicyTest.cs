@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using System;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.Promo

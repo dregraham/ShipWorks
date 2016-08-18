@@ -1,7 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
-
-namespace ShipWorks.Shipping.Carriers.UPS.Promo
+﻿namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     /// <summary>
     /// UpsPromoPolicy Interface

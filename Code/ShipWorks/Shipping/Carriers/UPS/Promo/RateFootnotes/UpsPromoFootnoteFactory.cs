@@ -1,8 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 

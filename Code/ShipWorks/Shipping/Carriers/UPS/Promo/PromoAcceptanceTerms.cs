@@ -1,7 +1,7 @@
 using log4net;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     /// <summary>
     /// Holds Promo Terms and Conditions info

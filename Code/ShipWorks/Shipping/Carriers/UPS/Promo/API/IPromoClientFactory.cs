@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
+﻿namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 {
     /// <summary>
     /// A factory interface for creating IUpsApiPromoClient instances.

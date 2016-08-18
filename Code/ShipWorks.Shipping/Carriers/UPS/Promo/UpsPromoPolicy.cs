@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using System;
+using System.Collections.Concurrent;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {

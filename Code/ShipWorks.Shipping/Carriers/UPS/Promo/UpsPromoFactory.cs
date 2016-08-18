@@ -1,9 +1,8 @@
 ﻿using Autofac.Features.Indexed;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo.API;
+using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
