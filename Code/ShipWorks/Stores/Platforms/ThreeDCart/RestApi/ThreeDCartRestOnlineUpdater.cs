@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -253,7 +254,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 CheckForOthers(shipmentEntity, typeCode)
             };
 
-            return methods.FirstOrDefault(m => !string.IsNullOrWhiteSpace(m)) ?? string.Empty;
+            string service = methods.FirstOrDefault(m => !string.IsNullOrWhiteSpace(m)) ?? string.Empty;
+
+            // Strip out everything except for alpha numeric, period and parenthesis
+            // 3dcart throws a 400 bad request when the request contains other characters
+            return new Regex("[^a-zA-Z0-9.() ]").Replace(service, "");
         }
 
         /// <summary>
