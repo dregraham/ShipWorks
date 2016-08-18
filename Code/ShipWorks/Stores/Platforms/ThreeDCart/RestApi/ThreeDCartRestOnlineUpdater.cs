@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 
             // Strip out everything except for alpha numeric, period and parenthesis
             // 3dcart throws a 400 bad request when the request contains other characters
-            return new Regex("[^a-zA-Z0-9.() ]").Replace(service, "");
+            return new Regex("[^a-zA-Z0-9 .()-]").Replace(service, "");
         }
 
         /// <summary>
