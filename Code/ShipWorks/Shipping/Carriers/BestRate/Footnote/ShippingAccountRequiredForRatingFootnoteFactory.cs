@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// </summary>
         /// <param name="parameters">Parameters that allow footnotes to interact with the rates grid</param>
         /// <returns>A instance of a RateFootnoteControl.</returns>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new ShippingAccountRequiredForRatingFootnoteControl();
         }

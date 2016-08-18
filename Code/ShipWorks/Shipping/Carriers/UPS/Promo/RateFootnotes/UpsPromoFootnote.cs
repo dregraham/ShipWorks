@@ -8,10 +8,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
     /// </summary>
     public partial class UpsPromoFootnote : RateFootnoteControl
     {
-        private readonly FootnoteParameters parameters;
+        private readonly IFootnoteParameters parameters;
         private readonly IUpsPromo upsPromo;
 
-        public UpsPromoFootnote(FootnoteParameters parameters, IUpsPromo upsPromo)
+        public UpsPromoFootnote(IFootnoteParameters parameters, IUpsPromo upsPromo)
         {
             InitializeComponent();
             this.parameters = parameters;

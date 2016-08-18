@@ -4,7 +4,7 @@ using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using Xunit;
 
-namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.Api
+namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 {
     public class PromoAcceptanceTermsTest
     {

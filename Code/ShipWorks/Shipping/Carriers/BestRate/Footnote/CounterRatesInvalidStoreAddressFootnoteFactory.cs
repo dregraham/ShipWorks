@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// Create a new CounterRatesInvalidStoreAddressFootnoteControl
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new CounterRatesInvalidStoreAddressFootnoteControl(parameters);
         }

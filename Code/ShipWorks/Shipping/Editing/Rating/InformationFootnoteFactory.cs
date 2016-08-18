@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Creates a footnote control.
         /// </summary>
         /// <param name="parameters">Parameters that allow footnotes to interact with the rates grid</param>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new InformationFootnoteControl(informationText);
         }

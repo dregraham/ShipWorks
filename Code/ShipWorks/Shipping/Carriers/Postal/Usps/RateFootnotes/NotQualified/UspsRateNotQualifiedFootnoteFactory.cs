@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified
         /// <summary>
         /// Create an USPS rate not qualified control
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new UspsRateNotQualifiedFootnote();
         }

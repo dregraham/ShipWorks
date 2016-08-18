@@ -29,9 +29,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
         public ShipmentTypeCode ShipmentTypeCode { get; }
 
         /// <summary>
+        /// Not for Best Rate
+        /// </summary>
+        public bool AllowedForBestRate => false;
+
+        /// <summary>
         /// Creates a UpsPromoFootnote
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new UpsPromoFootnote(parameters, promo);
         }
@@ -50,10 +55,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
                 return viewModel;
             }
         }
-
-        /// <summary>
-        /// Not for Best Rate
-        /// </summary>
-        public bool AllowedForBestRate => false;
     }
 }
