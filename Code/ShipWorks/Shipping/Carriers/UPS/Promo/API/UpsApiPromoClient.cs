@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <param name="upsPromo"></param>
         public UpsApiPromoClient(UpsPromo upsPromo)
         {
-            this.UpsPromo = upsPromo;
+            UpsPromo = upsPromo;
             Locale = new LocaleType()
             {
                 CountryCode = upsPromo.CountryCode,
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                     };
 
                     PromoDiscountAgreementResponse response = service.ProcessPromoDiscountAgreement(request);
-                    return new PromoAcceptanceTerms(response, this);
+                    return new PromoAcceptanceTerms(response);
                 }
             }
             catch (Exception ex)

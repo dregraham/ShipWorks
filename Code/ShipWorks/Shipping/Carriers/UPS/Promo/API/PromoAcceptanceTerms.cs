@@ -8,23 +8,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
     /// </summary>
     public class PromoAcceptanceTerms
     {
-        private readonly IUpsApiPromoClient promoClient;
         private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PromoAcceptanceTerms"/> class.
         /// </summary>
-        public PromoAcceptanceTerms(PromoDiscountAgreementResponse response, IUpsApiPromoClient promoClient)
-            : this(response, promoClient, LogManager.GetLogger(typeof(PromoAcceptanceTerms)))
+        public PromoAcceptanceTerms(PromoDiscountAgreementResponse response)
+            : this(response, LogManager.GetLogger(typeof(PromoAcceptanceTerms)))
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PromoAcceptanceTerms" /> class.
         /// </summary>
         /// <exception cref="UpsPromoException">Thrown when the response code pf the response is not 1.</exception>
-        public PromoAcceptanceTerms(PromoDiscountAgreementResponse response, IUpsApiPromoClient promoClient, ILog log)
+        public PromoAcceptanceTerms(PromoDiscountAgreementResponse response, ILog log)
         {
-            this.promoClient = promoClient;
             this.log = log;
 
             if (response.Response.ResponseStatus.Code != "1")
@@ -46,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// </summary>
         public void AcceptTerms()
         {
-            promoClient.Activate(AcceptanceCode);
             IsAccepted = true;
             log.Info("UPS promo terms and conditions have been accepted.");
         }

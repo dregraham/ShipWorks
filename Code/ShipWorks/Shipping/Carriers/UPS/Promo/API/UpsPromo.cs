@@ -159,6 +159,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
             return promoFootNoteFactory;
         }
 
+        /// <summary>
+        /// Gets the promo code to send, based on the state from the UPS account's address
+        /// </summary>
         private string GetPromoCode()
         {
             if (!CountryCode.Equals("US", StringComparison.InvariantCultureIgnoreCase))

@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
                         Code = GetAgreementIsSuccessful ? "1" : "0"
                     }
                 }
-            }, this);
+            });
         }
     }
 }
