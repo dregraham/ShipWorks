@@ -356,11 +356,17 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 BestRateUpsRestrictionShippingPolicy bestRateUpsRestriction = new BestRateUpsRestrictionShippingPolicy();
                 bestRateUpsRestriction.Configure("True");
-                bestRateUpsRestriction.Apply(target);
+                if (bestRateUpsRestriction.IsApplicable(target))
+                {
+                    bestRateUpsRestriction.Apply(target);
+                }
 
                 RateResultCountShippingPolicy rateResultCount = new RateResultCountShippingPolicy();
                 rateResultCount.Configure("5");
-                rateResultCount.Apply(target);
+                if (rateResultCount.IsApplicable(target))
+                {
+                    rateResultCount.Apply(target);
+                }
             }
         }
 
