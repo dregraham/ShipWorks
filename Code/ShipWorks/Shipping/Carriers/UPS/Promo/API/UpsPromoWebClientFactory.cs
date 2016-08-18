@@ -14,8 +14,7 @@
         /// <returns>A concrete UpsApiPromoClient instance.</returns>
         public IUpsApiPromoClient CreatePromoClient(UpsPromo promo)
         {
-            //return new UpsApiPromoClient(promo);
-            return new FakeUpsApiPromoClient(promo);
+            return new UpsApiPromoClient(promo);
         }
     }
 }

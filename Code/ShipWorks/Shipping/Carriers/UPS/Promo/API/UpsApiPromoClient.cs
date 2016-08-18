@@ -1,7 +1,7 @@
-﻿using System;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// Constructor
         /// </summary>
         /// <param name="upsPromo"></param>
-        public UpsApiPromoClient(UpsPromo upsPromo)
+        public UpsApiPromoClient(IUpsPromo upsPromo)
         {
             UpsPromo = upsPromo;
             Locale = new LocaleType()
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.API
         /// <summary>
         /// Ups Promo code information
         /// </summary>
-        private UpsPromo UpsPromo { get; }
+        private IUpsPromo UpsPromo { get; }
 
         /// <summary>
         /// Locale information for the request
