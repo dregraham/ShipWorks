@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// The Promo Terms and Conditions
         /// </summary>
-        PromoAcceptanceTerms Terms { get; set; }
+        PromoAcceptanceTerms Terms { get; }
 
         /// <summary>
         /// Activates the Promo Code

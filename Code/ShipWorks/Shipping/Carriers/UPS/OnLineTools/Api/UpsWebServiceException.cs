@@ -28,9 +28,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsWebServiceException"/> class.
         /// </summary>
-        public UpsWebServiceException(string message, Exception ex): base(message, ex)
+        public UpsWebServiceException(string message, Exception ex) :
+            base(message, ex)
         {
-            
         }
 
         /// <summary>
@@ -48,7 +48,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         protected UpsWebServiceException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
             base(serializationInfo, streamingContext)
         {
-
         }
 
         /// <summary>
@@ -56,13 +55,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private void ExtractResult(XmlNode xmlNode)
         {
-            if (xmlNode.FirstChild != null && xmlNode.FirstChild.FirstChild != null)
+            if (xmlNode.FirstChild?.FirstChild != null)
             {
                 var errorDetailNode = xmlNode.FirstChild.FirstChild;
                 var primaryErrorNode = errorDetailNode.ChildNodes.OfType<XmlNode>().FirstOrDefault(n => n.LocalName == "PrimaryErrorCode");
 
                 var severityNode = errorDetailNode.ChildNodes.OfType<XmlNode>().FirstOrDefault(n => n.LocalName == "Severity");
-                severity = severityNode != null ? severityNode.InnerText : "";
+                severity = severityNode?.InnerText ?? "";
 
                 foreach (XmlNode node in primaryErrorNode.ChildNodes)
                 {
@@ -100,31 +99,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     message += digest;
                 }
 
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    return message;
-                }
-                else
-                {
-                    return base.Message;
-                }
+                return !string.IsNullOrWhiteSpace(message) ? message : base.Message;
             }
         }
 
         /// <summary>
         /// The SOAP error code
         /// </summary>
-        public virtual string Code
-        {
-            get { return code; }
-        }
+        public virtual string Code => code;
 
         /// <summary>
         /// The UPS description of the error
         /// </summary>
-        public string Description
-        {
-            get { return description; }
-        }
+        public string Description => description;
     }
 }

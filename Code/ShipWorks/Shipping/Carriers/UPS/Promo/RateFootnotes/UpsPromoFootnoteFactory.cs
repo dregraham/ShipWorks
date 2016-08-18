@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
                 IUpsPromoFootnoteViewModel viewModel = lifetimeScope.Resolve<IUpsPromoFootnoteViewModel>();
                 viewModel.UpsPromo = promo;
                 viewModel.ShipmentAdapter = shipmentAdapter;
+
                 return viewModel;
             }
         }

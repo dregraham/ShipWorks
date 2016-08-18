@@ -28,6 +28,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
         }
 
         /// <summary>
+        /// Ups Promo code information
+        /// </summary>
+        private IUpsPromo UpsPromo { get; }
+
+        /// <summary>
+        /// Locale information for the request
+        /// </summary>
+        private LocaleType Locale { get; }
+
+        /// <summary>
+        /// The promo code.
+        /// </summary>
+        private string PromoCode { get; set; }
+
+        /// <summary>
+        /// Indicates if the test server should be used instead of the live server
+        /// </summary>
+        public static bool UseTestServer
+        {
+            get { return InterapptiveOnly.Registry.GetValue("UpsOltTestServer", false); }
+            set { InterapptiveOnly.Registry.SetValue("UpsOltTestServer", value); }
+        }
+
+        /// <summary>
         /// Requests Terms and Conditions for UPS Promo Api
         /// </summary>
         /// <returns></returns>
@@ -109,30 +133,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
             {
                 throw WebHelper.TranslateWebException(ex, typeof(UpsPromoException));
             }
-        }
-
-        /// <summary>
-        /// Ups Promo code information
-        /// </summary>
-        private IUpsPromo UpsPromo { get; }
-
-        /// <summary>
-        /// Locale information for the request
-        /// </summary>
-        private LocaleType Locale { get; }
-
-        /// <summary>
-        /// The promo code.
-        /// </summary>
-        private string PromoCode { get; set; }
-
-        /// <summary>
-        /// Indicates if the test server should be used instead of the live server
-        /// </summary>
-        public static bool UseTestServer
-        {
-            get { return InterapptiveOnly.Registry.GetValue("UpsOltTestServer", false); }
-            set { InterapptiveOnly.Registry.SetValue("UpsOltTestServer", value); }
         }
     }
 }

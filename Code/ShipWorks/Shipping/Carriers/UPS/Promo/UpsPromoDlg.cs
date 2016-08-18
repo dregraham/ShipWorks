@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             }
             catch (UpsPromoException)
             {
-                MessageHelper.ShowError(this, "Error applying promo, we will try again later.");
+                MessageHelper.ShowError(this, "An error occurred while attempting to apply the promo to your UPS account. Please try again later.");
                 promo.RemindMe();
             }
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// Decline the promo
         /// </summary>
-        private void OnDclineClick(object sender, EventArgs e)
+        private void OnDeclineClick(object sender, EventArgs e)
         {
             // Decline the promo and close the dlg
             promo.Decline();
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 }
                 catch (UpsPromoException )
                 {
-                    MessageHelper.ShowError(this, "Error getting Terms and Conditions, we will try again later");
+                    MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
                     promo.RemindMe();
                     Close();
                 }

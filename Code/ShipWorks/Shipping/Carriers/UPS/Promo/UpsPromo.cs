@@ -74,14 +74,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// <summary>
         /// The Promo Terms and Conditions
         /// </summary>
-        public PromoAcceptanceTerms Terms
-        {
-            get { return terms ?? (terms = GetAgreementTerms()); }
-            set { terms = value; }
-        }
+        public PromoAcceptanceTerms Terms => terms ?? (terms = GetAgreementTerms());
 
         /// <summary>
-        /// Activates the Promo Code
+        /// Applies the Promo Code
         /// </summary>
         public void Apply()
         {
@@ -147,16 +143,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         public UpsPromoFootnoteFactory GetFootnoteFactory()
         {
-            if (!promoPolicy.IsEligible(this))
+            if (promoPolicy.IsEligible(this))
             {
-                return null;
+                // Create promo footnote factory
+                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(this, account);
+
+                // Add factory to the final group rate group
+                return promoFootNoteFactory;
             }
 
-            // Create promofootnote factory
-            UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(this, account);
-
-            // Add factgory too the final group rate group
-            return promoFootNoteFactory;
+            return null;
         }
 
         /// <summary>

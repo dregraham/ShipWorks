@@ -14,8 +14,6 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 
@@ -289,7 +287,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with
         /// A helper method for loading the rates in the rate control.
         /// </summary>
         /// <param name="rateGroup">The rate group.</param>

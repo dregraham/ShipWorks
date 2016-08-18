@@ -68,7 +68,7 @@
             this.decline.TabIndex = 4;
             this.decline.Text = "No Thanks";
             this.decline.UseVisualStyleBackColor = true;
-            this.decline.Click += new System.EventHandler(this.OnDclineClick);
+            this.decline.Click += new System.EventHandler(this.OnDeclineClick);
             // 
             // acceptTerms
             // 
