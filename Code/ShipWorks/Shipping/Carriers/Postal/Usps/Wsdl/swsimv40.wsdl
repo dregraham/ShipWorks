@@ -17,7 +17,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="From" type="tns:Address" />
             <s:element minOccurs="1" maxOccurs="1" name="To" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="tns:string-1-64" />
-            <s:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:CustomsV4" />
+            <s:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:CustomsV3" />
             <s:element minOccurs="0" maxOccurs="1" default="false" name="SampleOnly" type="s:boolean" />
             <s:element minOccurs="0" maxOccurs="1" default="Auto" name="ImageType" type="tns:ImageType" />
             <s:element minOccurs="0" maxOccurs="1" default="Default" name="EltronPrinterDPIType" type="tns:EltronPrinterDPIType" />
@@ -219,7 +219,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="OverrideHash" type="s:string" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="CustomsV4">
+      <s:complexType name="CustomsV3">
         <s:complexContent mixed="false">
           <s:extension base="tns:CustomsV2">
             <s:sequence>
@@ -360,7 +360,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="From" type="tns:Address" />
             <s:element minOccurs="1" maxOccurs="1" name="To" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="tns:string-1-64" />
-            <s:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:CustomsV4" />
+            <s:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:CustomsV3" />
             <s:element minOccurs="0" maxOccurs="1" default="false" name="SampleOnly" type="s:boolean" />
             <s:element minOccurs="0" maxOccurs="1" default="Auto" name="ImageType" type="tns:ImageType" />
             <s:element minOccurs="0" maxOccurs="1" default="Default" name="EltronPrinterDPIType" type="tns:EltronPrinterDPIType" />
