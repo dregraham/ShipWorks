@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -111,6 +112,20 @@ namespace ShipWorks.Actions
 
                 DispatchAction(action, shipment.ShipmentID, adapter);
             }
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
+        }
+
+        /// <summary>
+        /// Called when a batch of shipments has finished processing
+        /// </summary>
+        public static void DispatchProcessingBatchFinished(SqlAdapter adapter, DateTime startDate, int shipmentCount)
+        {
+            ActionEntity action = GetEligibleActions(ActionTriggerType.None, 0)
+                .FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
+
+            DispatchAction(action, null, adapter, FinishProcessingBatchTask.CreateExtraData(startDate, shipmentCount));
 
             // Ensure the action processor is working
             ActionProcessor.StartProcessing();
@@ -245,7 +260,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter)
+        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter) =>
+            DispatchAction(action, objectID, adapter, null);
+
+        /// <summary>
+        /// A valid trigger has been met and the given action is ready to be dispatched
+        /// </summary>
+        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter, string extraData)
         {
             log.DebugFormat("Dispatching action '{0}' for {1}", action.Name, objectID);
 
@@ -256,6 +277,7 @@ namespace ShipWorks.Actions
             entity.ActionVersion = action.RowVersion;
             entity.ObjectID = objectID;
             entity.TriggerComputerID = UserSession.Computer.ComputerID;
+            entity.ExtraData = extraData;
 
             if (action.ComputerLimitedType == (int) ComputerLimitedType.TriggeringComputer)
             {

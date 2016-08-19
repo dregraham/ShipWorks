@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Loading
         private static void TrackLoadShipments(ITrackedDurationEvent trackedDurationEvent, int orderCount, int totalShipments, int needsValidationCount, int newShipmentCount)
         {
             trackedDurationEvent.AddMetric("Orders", orderCount);
-            trackedDurationEvent.AddMetric("TotalShipments", totalShipments);
+            trackedDurationEvent.AddMetric(Telemetry.TotalShipmentsKey, totalShipments);
             trackedDurationEvent.AddMetric("PendingValidation", needsValidationCount);
             trackedDurationEvent.AddMetric("ShipmentsCreated", newShipmentCount);
         }
