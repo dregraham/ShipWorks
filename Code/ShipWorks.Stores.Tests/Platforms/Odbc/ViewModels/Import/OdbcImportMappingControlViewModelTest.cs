@@ -18,7 +18,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 {
-    public class OdbcImportFieldMappingControlViewModelTest
+    public class OdbcImportMappingControlViewModelTest
     {
         [Fact]
         public void Load_ThrowsArgumentNullException_WhenDataSourceIsNull()
@@ -590,7 +590,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 ImportMap = EmbeddedResourceHelper.GetEmbeddedResourceString(mapPath),
                 ImportColumnSourceType = (int)OdbcColumnSourceType.Table,
                 ImportColumnSource = "Table",
-                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime
+                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
+                ImportOrderItemStrategy = (int)OdbcImportOrderItemStrategy.SingleLine
             };
 
             Mock<IOdbcDataSourceService> dataSourceService = mock.Mock<IOdbcDataSourceService>();
