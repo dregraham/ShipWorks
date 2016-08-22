@@ -5611,6 +5611,7 @@ CREATE TABLE [dbo].[OdbcStore]
 	[ImportStrategy] [int] NOT NULL,
 	[ImportColumnSourceType] [int] NOT NULL,
 	[ImportColumnSource] [nvarchar](2048) NOT NULL,
+	[ImportOrderItemStrategy] [int] NOT NULL,
 	[UploadStrategy] [int] NOT NULL,
 	[UploadMap] [nvarchar](max) NOT NULL,
 	[UploadColumnSourceType] [int] NOT NULL,
