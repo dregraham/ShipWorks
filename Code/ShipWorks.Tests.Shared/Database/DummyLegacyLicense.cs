@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
 
@@ -59,6 +60,11 @@ namespace ShipWorks.Tests.Shared.Database
         }
 
         public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyShippingPolicy(ShipmentTypeCode shipmentTypeCode, object target)
         {
             throw new NotImplementedException();
         }
