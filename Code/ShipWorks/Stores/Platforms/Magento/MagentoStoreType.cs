@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Autofac;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
@@ -88,7 +89,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Create the custom wizard pages for Magento
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage> 
             {

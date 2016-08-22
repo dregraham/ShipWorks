@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -10,11 +7,18 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
+    /// <summary>
+    /// StoreLicense class - handles legacy licenses
+    /// </summary>
     public class StoreLicense : ILicense
     {
         private readonly StoreEntity store;
@@ -183,6 +187,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
         {
+        }
+
+        /// <summary>
+        /// Apply shipping policies for the ShipmentTypeCode to the target
+        /// </summary>
+        public void ApplyShippingPolicy(ShipmentTypeCode shipmentTypeCode, object target)
+        {
+            ShippingPolicies.Current.Apply(shipmentTypeCode, target);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Editions;
 

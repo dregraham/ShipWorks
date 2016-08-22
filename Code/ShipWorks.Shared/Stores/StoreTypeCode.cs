@@ -356,9 +356,14 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("lemonstand")]
         LemonStand = 68,
 
-        [Description("SparkPay")]
+		[Description("SparkPay")]
         [StoreTypeIdentity("SPARKPAY", "SPK")]
         [StoreTypeIcon("sparkpay")]
-        SparkPay = 69
+        SparkPay = 69,
+
+        [Description("ODBC")]
+        [StoreTypeIdentity("ODBC", "DBC")]
+        [StoreTypeIcon("odbc")]
+        Odbc = 70
     }
 }

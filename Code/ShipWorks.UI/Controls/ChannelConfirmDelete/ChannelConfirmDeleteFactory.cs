@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 

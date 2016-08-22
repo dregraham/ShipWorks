@@ -124,8 +124,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             shipment.FedEx = fedExShipment;
 
             string actualShippingMethod = testObject.GetShipmentMethod(shipment);
-            string expectedShippingMethod =
-                $"{EnumHelper.GetDescription(FedExServiceType.FedEx2Day)}";
+            string expectedShippingMethod = "FedEx 2Day";
 
             Assert.Equal(expectedShippingMethod, actualShippingMethod);
         }
@@ -138,8 +137,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             shipment.Ups = upsShipment;
 
             string actualShippingMethod = testObject.GetShipmentMethod(shipment);
-            string expectedShippingMethod =
-                $"UPS MI - {EnumHelper.GetDescription(UpsServiceType.UpsMailInnovationsExpedited)}";
+            string expectedShippingMethod = "UPS MI - UPS Expedited Mail Innovations";
 
             Assert.Equal(expectedShippingMethod, actualShippingMethod);
         }
@@ -152,8 +150,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             shipment.Ups = upsShipment;
 
             string actualShippingMethod = testObject.GetShipmentMethod(shipment);
-            string expectedShippingMethod =
-                $"{EnumHelper.GetDescription(UpsServiceType.Ups2DayAir)}";
+            string expectedShippingMethod = "UPS 2nd Day Air";
 
             Assert.Equal(expectedShippingMethod, actualShippingMethod);
         }
@@ -207,6 +204,20 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 
             string actualShippingMethod = testObject.GetShipmentMethod(shipment);
             string expectedShippingMethod = string.Empty;
+
+            Assert.Equal(expectedShippingMethod, actualShippingMethod);
+        }
+
+        [Fact]
+        public void GetShipmentMethod_RemovesNonAlphaNumericChars_ShippingMethodHasNonAlphaChars()
+        {
+            otherShipment.Carrier = "Carrier";
+            otherShipment.Service = "FedEx One Rate® (First Overnight)";
+            shipment.ShipmentType = (int)ShipmentTypeCode.Other;
+            shipment.Other = otherShipment;
+
+            string actualShippingMethod = testObject.GetShipmentMethod(shipment);
+            string expectedShippingMethod = "Carrier - FedEx One Rate (First Overnight)";
 
             Assert.Equal(expectedShippingMethod, actualShippingMethod);
         }

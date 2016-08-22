@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -11,6 +10,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -151,6 +151,7 @@ namespace ShipWorks.Shipping.Loading
                 }
 
                 shipment.CustomsItemsLoaded = shipment.CustomsItemsLoaded || shipment.CustomsItems.Any();
+                shipment.CustomsItems.RemovedEntitiesTracker = shipment.CustomsItems.RemovedEntitiesTracker ?? new ShipmentCustomsItemCollection();
 
                 globalShipments.Add(shipment.ShipmentID, shipment);
 

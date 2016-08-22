@@ -685,6 +685,7 @@
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
+    <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\ICustomerLicenseActivationActivity.cs" />
@@ -698,6 +699,7 @@
     <Compile Include="ApplicationCore\Licensing\ComplianceLevel.cs" />
     <Compile Include="ApplicationCore\Licensing\CreditCardTypeInternal.cs" />
     <Compile Include="ApplicationCore\Licensing\LicenseCipherKey.cs" />
+    <Compile Include="ApplicationCore\Licensing\LicenseEnforcement\OdbcStoreTypeEnforcer.cs" />
     <Compile Include="ApplicationCore\Licensing\UpsStatus.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClientFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\UspsPendingAccountType.cs" />
@@ -751,7 +753,6 @@
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ILicenseAccountDetail.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationService.cs" />
-    <Compile Include="ApplicationCore\Licensing\IDialog.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicense.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivation.cs" />
     <Compile Include="ApplicationCore\Licensing\ICustomerLicenseActivationViewModel.cs" />
@@ -1143,12 +1144,14 @@
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
+    <Compile Include="Stores\IStoreSettingsTrackedDurationEvent.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Management\ActivationErrorWizardPage.Designer.cs">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Management\IStoreWizard.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -1633,6 +1636,8 @@
     </Compile>
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
+    <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
@@ -10222,7 +10227,7 @@
     <None Include="Resources\message.png" />
     <None Include="Resources\scroll.png" />
     <None Include="Resources\index2.png" />
-    <None Include="Resources\forbidden.png" />
+    <Resource Include="Resources\forbidden.png" />
     <None Include="Resources\navigate_plus.png" />
     <None Include="Resources\navigate_minus.png" />
     <None Include="Resources\printer_warning.png" />
@@ -10545,6 +10550,7 @@
     <None Include="Resources\revolutionparts.png" />
     <None Include="Resources\orderbot.png" />
     <None Include="Resources\opensky.png" />
+    <None Include="Resources\odbc.png" />
     <Resource Include="Resources\printer_redo_16_16.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
@@ -10582,7 +10588,7 @@
     <None Include="Resources\table_selection_row.png" />
     <None Include="Resources\workstation1.png" />
     <None Include="Resources\table_sql_add.png" />
-    <None Include="Resources\table_selection_column.png" />
+    <Resource Include="Resources\table_selection_column.png" />
     <None Include="Resources\table_sql_ok.png" />
     <None Include="Resources\table_sql1.png" />
     <None Include="Resources\user_headset.png" />
@@ -10845,7 +10851,7 @@
     <None Include="Resources\shoppingcart.png" />
     <None Include="Resources\users31.png" />
     <None Include="Resources\text_code2.png" />
-    <None Include="Resources\warning1.png" />
+    <Resource Include="Resources\warning1.png" />
     <None Include="Resources\unknown.png" />
     <None Include="Resources\stopwatch1.png" />
     <None Include="Resources\stopwatch.png" />

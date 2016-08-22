@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
@@ -76,7 +77,8 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// <summary>
         /// Create the pages to be displayed in the Add Store Wizard
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             List<WizardPage> pages = new List<WizardPage>();
 

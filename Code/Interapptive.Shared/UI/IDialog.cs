@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 
-namespace ShipWorks.ApplicationCore.Licensing
+namespace Interapptive.Shared.UI
 {
     /// <summary>
     /// Interface for displaying WPF Dialogs
@@ -54,6 +54,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Gets or sets the load owner.
         /// </summary>
         void LoadOwner(IWin32Window owner);
+
+        /// <summary>
+        /// Closes the dialog
+        /// </summary>
+        void Close();
     }
 }
 

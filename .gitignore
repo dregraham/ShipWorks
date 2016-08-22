@@ -190,3 +190,4 @@ Build/InnoSetup.iss
 Build/ShipWorks*.*.*.*
 *GhostDoc.xml
 /NDepend/NDependOut
+Code/ShipWorks.SqlServer/ShipWorks.SqlServer.jfm

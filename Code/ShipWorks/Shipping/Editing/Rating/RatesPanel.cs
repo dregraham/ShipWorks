@@ -8,6 +8,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -100,7 +101,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void ChangeShipment(long? shipmentID)
         {
             // This method can get triggered when the shipment dialog closes but the
-            // shipment ID did not actually chagne. We only want to reset the collapsible 
+            // shipment ID did not actually chagne. We only want to reset the collapsible
             // state when the shipment ID actually changes.
             resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
@@ -289,7 +290,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-                    // Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with 
+        /// Resolve the BestRateShipmentType and pass in IBestRateShippingBrokerFactory with
         /// A helper method for loading the rates in the rate control.
         /// </summary>
         /// <param name="rateGroup">The rate group.</param>
@@ -305,8 +306,12 @@ namespace ShipWorks.Shipping.Editing.Rating
                 rateControl.ResetCollapsibleState();
             }
 
-            // Apply any applicable policies to the rate control prior to loading the rates
-            ShippingPolicies.Current.Apply((ShipmentTypeCode) rateGroup.Shipment.ShipmentType, rateControl);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                license?.ApplyShippingPolicy((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
+            }
+
             rateControl.LoadRates(rateGroup);
         }
 

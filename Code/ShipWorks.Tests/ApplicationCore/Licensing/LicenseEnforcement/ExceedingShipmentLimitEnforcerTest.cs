@@ -8,6 +8,7 @@ using ShipWorks.UI;
 using System;
 using System.Windows;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.LicenseEnforcement

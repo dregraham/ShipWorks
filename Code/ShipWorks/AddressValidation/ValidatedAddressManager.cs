@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using Interapptive.Shared;
+﻿using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -11,6 +7,10 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -101,6 +101,16 @@ namespace ShipWorks.AddressValidation
                     dataAccess.SaveEntity(shipment);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the original address for an entity
+        /// </summary>
+        public static ValidatedAddressEntity GetOriginalAddress(SqlAdapter dataAccess, long entityId, string prefix)
+        {
+            return GetSuggestedAddresses(SqlAdapter.Default, entityId, prefix)
+                .Where(entity => entity.IsOriginal)
+                .OrderByDescending(entity => entity.ValidatedAddressID).FirstOrDefault();
         }
 
         /// <summary>

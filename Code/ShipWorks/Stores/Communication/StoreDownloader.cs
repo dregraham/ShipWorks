@@ -1,28 +1,34 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using Interapptive.Shared;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Threading;
-using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
-using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
+using log4net;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.HelperClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Diagnostics;
+using ShipWorks.Data.Connection;
+using ShipWorks.Common.Threading;
+using System.Linq;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.Data.Model;
+using ShipWorks.Actions;
+using Interapptive.Shared.Business;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
+using System.Reflection;
+using Interapptive.Shared;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Data.Utility;
+using ShipWorks.SqlServer.Common.Data;
+using System.Data.SqlClient;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -43,8 +49,6 @@ namespace ShipWorks.Stores.Communication
 
         int quantitySaved = 0;
         int quantityNew = 0;
-        private AddressAdapter originalShippingAddress;
-        private AddressAdapter originalBillingAddress;
 
         /// <summary>
         /// Constructor
@@ -63,6 +67,16 @@ namespace ShipWorks.Stores.Communication
             this.store = store;
             this.storeType = storeType;
         }
+
+        /// <summary>
+        /// Gets the address of order from InstantiateOrder
+        /// </summary>
+        protected AddressAdapter OriginalShippingAddress { get; private set; }
+
+        /// <summary>
+        /// Gets the address of order from InstantiateOrder
+        /// </summary>
+        protected AddressAdapter OriginalBillingAddress { get; private set; }
 
         /// <summary>
         /// The store the downloader downloads from
@@ -150,13 +164,22 @@ namespace ShipWorks.Stores.Communication
             this.downloadLogID = downloadLogID;
             this.connection = connection;
 
-            Download();
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                Download(trackedDurationEvent);
+
+                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+            }
         }
 
         /// <summary>
         /// Must be implemented by derived types to do the actual download
         /// </summary>
-        protected abstract void Download();
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
+        /// associate any store-specific download properties/metrics.</param>
+        protected abstract void Download(TrackedDurationEvent trackedDurationEvent);
 
         /// <summary>
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.
@@ -298,11 +321,11 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                originalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
+                OriginalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", OriginalShippingAddress);
 
-                originalBillingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Bill", originalBillingAddress);
+                OriginalBillingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", OriginalBillingAddress);
 
                 return order;
             }
@@ -635,18 +658,18 @@ namespace ShipWorks.Stores.Communication
                     if (!order.IsNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
+                        bool shippingAddressChanged = OriginalShippingAddress != newShippingAddress;
                         if (shippingAddressChanged)
                         {
                             SetAddressValidationStatus(order, "Ship", adapter);
                             adapter.SaveAndRefetch(order);
 
-                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, OriginalShippingAddress, newShippingAddress);
                         }
 
                         // Update the customer's addresses if necessary
                         AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
-                        bool billingAddressChanged = originalBillingAddress != newBillingAddress;
+                        bool billingAddressChanged = OriginalBillingAddress != newBillingAddress;
 
                         if (billingAddressChanged)
                         {
@@ -661,8 +684,8 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, originalBillingAddress, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, originalShippingAddress, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }

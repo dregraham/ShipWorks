@@ -97,6 +97,8 @@
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Rebex.Mail">
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
     </Reference>
@@ -136,6 +138,9 @@
       <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net40\System.Reactive.PlatformServices.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Threading.Tasks, Version=2.6.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
@@ -145,6 +150,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -153,8 +159,10 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Metrics\DeobfuscationProcessor.cs" />
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
@@ -230,13 +238,20 @@
     <Compile Include="Security\SecureText.cs" />
     <Compile Include="Security\SecureTextEncryptionProvider.cs" />
     <Compile Include="Threading\ProgressItemStatus.cs" />
+    <Compile Include="Threading\IExternalProcess.cs" />
+    <Compile Include="UI\FileDialogType.cs" />
+    <Compile Include="UI\ShipWorksOpenFileDialog.cs" />
+    <Compile Include="UI\IDialog.cs" />
+    <Compile Include="UI\IFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
+    <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\EnumResultExtensions.cs" />
+    <Compile Include="Utility\ExceptionExtensions.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />
@@ -793,6 +808,7 @@
       <Name>ShipWorks.Res</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

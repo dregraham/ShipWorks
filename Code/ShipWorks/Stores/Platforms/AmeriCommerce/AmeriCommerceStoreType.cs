@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Content;
@@ -118,7 +119,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Create the setup wizard pages needed to configure the store 
         /// </summary>
-        public override List<WizardPage> CreateAddStoreWizardPages()
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>
             {

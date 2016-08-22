@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Policies;
 
@@ -26,7 +29,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         {
             List<IBestRateShippingBroker> listOfBrokers = brokers.ToList();
 
-            ShippingPolicies.Current.Apply(ShipmentTypeCode.BestRate, listOfBrokers);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                license?.ApplyShippingPolicy(ShipmentTypeCode.BestRate, listOfBrokers);
+            }
 
             return listOfBrokers;
         }

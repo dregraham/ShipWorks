@@ -157,7 +157,18 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+                // attempt to translate the exception as a web exception
+                Exception translatedException = WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+
+                // if translating is successful the new exception should be a GenericStoreException
+                // this is the preferred method because the translation process will preserve the stack trace
+                if (translatedException.GetType() == typeof(GenericStoreException))
+                {
+                    throw translatedException;
+                }
+
+                // Translating failed, throw a new GenericStoreExcpetion
+                throw new GenericStoreException(ex.Message, ex);
             }
         }
     }

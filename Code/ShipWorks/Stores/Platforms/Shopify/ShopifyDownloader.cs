@@ -21,6 +21,7 @@ using log4net;
 using ShipWorks.Common.Threading;
 using System.Diagnostics;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -64,7 +65,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Download data for the Shopify store
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Downloading orders...";
 

@@ -64,5 +64,10 @@ namespace ShipWorks.Stores.Content
 
             return orders;
         }
+
+        /// <summary>
+        /// Returns the most recent, non-voided, processed shipment for the provided order
+        /// </summary>
+        public ShipmentEntity GetLatestActiveShipment(long orderID) => OrderUtility.GetLatestActiveShipment(orderID);
     }
 }

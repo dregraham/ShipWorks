@@ -14,6 +14,7 @@ using System.Globalization;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {
@@ -44,7 +45,9 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Download the data
         /// </summary>
-        protected override void Download()
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             Progress.Detail = "Checking for orders...";
 
