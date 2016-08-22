@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -186,6 +187,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void AssociateUspsAccount(UspsAccountEntity uspsAccount)
         {
+        }
+
+        /// <summary>
+        /// Apply shipping policies for the ShipmentTypeCode to the target
+        /// </summary>
+        public void ApplyShippingPolicy(ShipmentTypeCode shipmentTypeCode, object target)
+        {
+            ShippingPolicies.Current.Apply(shipmentTypeCode, target);
         }
     }
 }
