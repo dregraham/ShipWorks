@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Services
 
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
-                ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount);
+                ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
             }
 
             return filteredShipments

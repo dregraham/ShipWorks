@@ -27,6 +27,7 @@ namespace Interapptive.Shared.Metrics
     {
         private static readonly TelemetryClient telemetryClient;
         public const string TotalShipmentsKey = "TotalShipments";
+        public const string TotalSuccessfulShipmentsKey = "TotalSuccessfulShipments";
 
         /// <summary>
         /// Static constructor

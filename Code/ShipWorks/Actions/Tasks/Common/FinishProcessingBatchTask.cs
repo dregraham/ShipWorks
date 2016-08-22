@@ -43,6 +43,8 @@ namespace ShipWorks.Actions.Tasks.Common
                 eventTelemetry.Metrics.Add(TrackedDurationEvent.DurationMetricKey,
                     Math.Floor(DateTime.UtcNow.Subtract(data.StartingTime).TotalMilliseconds));
                 eventTelemetry.Metrics.Add(Telemetry.TotalShipmentsKey, data.ShipmentCount);
+                eventTelemetry.Metrics.Add(Telemetry.TotalSuccessfulShipmentsKey,
+                    Math.Max(data.ShipmentCount - data.ShipmentErrorCount, 0));
                 Telemetry.TrackEvent(eventTelemetry);
             }
             catch (Exception)
@@ -59,12 +61,13 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Create extra data that is serialized
         /// </summary>
-        public static string CreateExtraData(DateTime startTime, int count)
+        public static string CreateExtraData(DateTime startTime, int count, int errorCount)
         {
             return SerializationUtility.SerializeToXml(new ExtraData
             {
                 StartingTime = startTime,
                 ShipmentCount = count,
+                ShipmentErrorCount = errorCount,
             });
         }
 
@@ -82,6 +85,11 @@ namespace ShipWorks.Actions.Tasks.Common
             /// Number of labels printed
             /// </summary>
             public int ShipmentCount { get; set; }
+
+            /// <summary>
+            /// How many shipments had errors
+            /// </summary>
+            public int ShipmentErrorCount { get; set; }
         }
     }
 }
