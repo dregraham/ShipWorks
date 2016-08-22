@@ -13,15 +13,11 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
+{
     using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
-    using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -4145,8 +4141,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
         private uint idField;
         
         private string nameField;
-        
+
         /// <remarks/>
+        [CLSCompliant(false)]
         public uint id {
             get {
                 return this.idField;
@@ -4911,8 +4908,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
                 this.codewordTypeField = value;
             }
         }
-        
+
         /// <remarks/>
+        [CLSCompliant(false)]
         public uint Value {
             get {
                 return this.valueField;
