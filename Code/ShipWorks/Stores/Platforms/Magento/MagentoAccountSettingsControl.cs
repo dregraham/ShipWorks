@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             storeCodeTextBox.Text = magentoStore.ModuleOnlineStoreCode;
-            
+
             switch ((MagentoVersion)magentoStore.MagentoVersion)
             {
                 case MagentoVersion.PhpFile:
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             if (webResponse?.StatusCode == HttpStatusCode.NotFound)
             {
                 MessageHelper.ShowError(this, "The ShipWorks module was not found at the Module URL specified." +
-                                              "\n\nEnsure the Add Secret Keys to URLs setting in your Magento store is set to No.  This is " + 
+                                              "\n\nEnsure the Add Secret Keys to URLs setting in your Magento store is set to No.  This is " +
                                               "a common cause of this error.");
 
                 return;
