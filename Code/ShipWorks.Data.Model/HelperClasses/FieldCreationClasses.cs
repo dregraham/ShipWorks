@@ -13922,6 +13922,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportColumnSource);}
 		}
+		/// <summary>Creates a new OdbcStoreEntity.ImportOrderItemStrategy field instance</summary>
+		public static EntityField2 ImportOrderItemStrategy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportOrderItemStrategy);}
+		}
 		/// <summary>Creates a new OdbcStoreEntity.UploadStrategy field instance</summary>
 		public static EntityField2 UploadStrategy
 		{

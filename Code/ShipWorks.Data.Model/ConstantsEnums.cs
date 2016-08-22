@@ -6445,6 +6445,8 @@ namespace ShipWorks.Data.Model
 		ImportColumnSourceType,
 		///<summary>ImportColumnSource. </summary>
 		ImportColumnSource,
+		///<summary>ImportOrderItemStrategy. </summary>
+		ImportOrderItemStrategy,
 		///<summary>UploadStrategy. </summary>
 		UploadStrategy,
 		///<summary>UploadMap. </summary>

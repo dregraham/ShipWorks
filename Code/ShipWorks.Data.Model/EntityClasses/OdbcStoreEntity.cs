@@ -490,6 +490,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ImportColumnSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ImportOrderItemStrategy", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("UploadStrategy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -629,6 +632,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportColumnSource, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.ImportColumnSource, value); }
+		}
+
+		/// <summary> The ImportOrderItemStrategy property of the Entity OdbcStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportOrderItemStrategy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ImportOrderItemStrategy
+		{
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, value); }
 		}
 
 		/// <summary> The UploadStrategy property of the Entity OdbcStore<br/><br/>
