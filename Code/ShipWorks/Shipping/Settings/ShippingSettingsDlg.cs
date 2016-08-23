@@ -359,22 +359,11 @@ namespace ShipWorks.Shipping.Settings
 
                 providerRulesControl.SaveSettings(settings);
 
-                List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
-                List<ExcludedPackageTypeEntity> excludedPackages = new List<ExcludedPackageTypeEntity>();
-
                 // Save all the settings
                 foreach (ShipmentTypeSettingsControl settingsControl in settingsMap.Values)
                 {
-                    settingsControl.SaveSettings(settings);
-                    excludedServices.AddRange(settingsControl.GetExcludedServices());
-                    excludedPackages.AddRange(settingsControl.GetExcludedPackages());
+                    settingsControl.SaveSettings(settings, new ExcludedServiceTypeRepository(), new ExcludedPackageTypeRepository());
                 }
-
-                ExcludedServiceTypeRepository excludedServiceTypeRepository = new ExcludedServiceTypeRepository();
-                excludedServiceTypeRepository.Save(excludedServices);
-
-                ExcludedPackageTypeRepository excludedPackageTypeRepository = new ExcludedPackageTypeRepository();
-                excludedPackageTypeRepository.Save(excludedPackages);
 
                 wasDirty = settings.IsDirty;
                 ShippingSettings.Save(settings);

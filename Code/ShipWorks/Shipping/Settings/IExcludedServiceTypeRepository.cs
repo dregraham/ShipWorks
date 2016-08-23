@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Saves the list of excluded service types.
         /// </summary>
-        void Save(List<ExcludedServiceTypeEntity> excludedServiceTypes);
+        void Save(ShipmentTypeCode shipmentType, IEnumerable<int> excludedServiceTypes);
 
         /// <summary>
         /// Gets the excluded service types for the given shipment type.
