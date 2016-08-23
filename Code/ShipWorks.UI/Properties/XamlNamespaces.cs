@@ -1,5 +1,6 @@
 ﻿using System.Windows.Markup;
 [assembly: XmlnsPrefix("http://schemas.shipworks.com/ui", "ui")]
+[assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.AttachedProperties")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Behaviors")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/ui", "ShipWorks.UI.Controls")]

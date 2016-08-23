@@ -11,21 +11,45 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
     public class ComponentAttribute : Attribute
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="registerAs"></param>
+        public ComponentAttribute(RegistrationType registerAs = RegistrationType.ImplementedInterfaces)
+        {
+            RegisterAs = registerAs;
+        }
+
+        /// <summary>
+        /// What service should this component be registered as
+        /// </summary>
+        public RegistrationType RegisterAs { get; set; }
+
+        /// <summary>
         /// Register all components that use this attribute
         /// </summary>
         internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
         {
             builder.RegisterAssemblyTypes(assemblies)
-                .Where(IsComponent)
+                .Where(IsComponent(RegistrationType.ImplementedInterfaces))
                 .AsImplementedInterfaces();
+
+            builder.RegisterAssemblyTypes(assemblies)
+                .Where(IsComponent(RegistrationType.Self))
+                .AsSelf();
         }
 
         /// <summary>
         /// Is the given type marked as a component
         /// </summary>
-        private static bool IsComponent(Type type)
+        private static Func<Type, bool> IsComponent(RegistrationType registerAs)
         {
-            return GetCustomAttribute(type, typeof(ComponentAttribute)) != null;
+            return type => GetAttribute(type)?.RegisterAs.HasFlag(registerAs) ?? false;
         }
+
+        /// <summary>
+        /// Get a component attribute from the type
+        /// </summary>
+        private static ComponentAttribute GetAttribute(Type type) =>
+            GetCustomAttribute(type, typeof(ComponentAttribute)) as ComponentAttribute;
     }
 }

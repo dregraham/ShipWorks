@@ -1,21 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using Autofac.Extras.Moq;
-using Interapptive.Shared.Utility;
-using System.IO;
-using System.Reflection;
-using System.Linq.Expressions;
-using System.Collections.Generic;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
-using Xunit;
 using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -25,10 +25,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
         public AmazonRatingServiceTests()
         {
-            mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))
                 .Returns<RateGroup>(x => x);
+            //mock.CreateMock<IAmazonShipmentRequestDetailsFactory>(x => 
+            //    x.Setup(y => y.Create(It.IsAny<ShipmentEntity>(), It.IsAny<IAmazonOrder>()))
+            //    .Returns()
         }
 
         [Fact]
@@ -169,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 Order = new AmazonOrderEntity()
                 {
                     AmazonOrderID = "10",
-                    IsPrime = (int)isPrime
+                    IsPrime = (int) isPrime
                 },
                 Amazon = new AmazonShipmentEntity()
                 {
@@ -210,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             {
                 Order = new ChannelAdvisorOrderEntity()
                 {
-                    IsPrime = (int)isPrime,
+                    IsPrime = (int) isPrime,
                     Store = new ChannelAdvisorStoreEntity()
                 },
                 Amazon = new AmazonShipmentEntity()
