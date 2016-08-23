@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -29,9 +28,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))
                 .Returns<RateGroup>(x => x);
-            //mock.CreateMock<IAmazonShipmentRequestDetailsFactory>(x => 
-            //    x.Setup(y => y.Create(It.IsAny<ShipmentEntity>(), It.IsAny<IAmazonOrder>()))
-            //    .Returns()
         }
 
         [Fact]
