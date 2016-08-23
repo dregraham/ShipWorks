@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -83,5 +84,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         /// <param name="uspsAccount">The usps account.</param>
         void AssociateUspsAccount(UspsAccountEntity uspsAccount);
+
+        /// <summary>
+        /// Apply shipping policies for the ShipmentTypeCode to the target
+        /// </summary>
+        void ApplyShippingPolicy(ShipmentTypeCode shipmentTypeCode, object target);
     }
 }

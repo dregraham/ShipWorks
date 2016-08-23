@@ -15,6 +15,8 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -1003,6 +1005,66 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 customerLicense.ForceRefresh();
 
                 messenger.Verify(m => m.Send(It.IsAny<EnabledCarriersChangedMessage>(), It.IsAny<string>()), Times.Once);
+            }
+        }
+
+        [Fact]
+        public void ApplyShippingPolicy_AppliesBestRateUpsRestrictionShippingPolicy_WhenShipmentTypeCodeIsBestRateAndObjectIsListOfShipmentTypeCode()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                List<ShipmentTypeCode> result = new List<ShipmentTypeCode>();
+
+                customerLicense.ApplyShippingPolicy(ShipmentTypeCode.BestRate, result);
+
+                Assert.Contains(ShipmentTypeCode.UpsOnLineTools, result);
+            }
+        }
+
+        [Fact]
+        public void ApplyShippingPolicy_DoesNotApplyBestRateUpsRestrictionShippingPolicy_WhenShipmentTypeCodeIsNotBestRateAndObjectIsListOfShipmentTypeCode()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                List<ShipmentTypeCode> result = new List<ShipmentTypeCode>();
+
+                customerLicense.ApplyShippingPolicy(ShipmentTypeCode.Usps, result);
+
+                Assert.Empty(result);
+            }
+        }
+
+        [Fact]
+        public void ApplyShippingPolicy_AppliesRateResultCountShippingPolicy_WhenShipmentTypeCodeIsBestRateAndObjectIsRateControl()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                RateControl result = new RateControl();
+
+                customerLicense.ApplyShippingPolicy(ShipmentTypeCode.BestRate, result);
+
+                Assert.Equal(5, result.RestrictedRateCount);
+            }
+        }
+
+        [Fact]
+        public void ApplyShippingPolicy_DoesNotAppliesRateResultCountShippingPolicy_WhenShipmentTypeCodeIsNotBestRateAndObjectIsRateControl()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                CustomerLicense customerLicense = mock.Create<CustomerLicense>(new NamedParameter("key", "SomeKey"));
+
+                RateControl result = new RateControl {RestrictedRateCount = 2};
+
+                customerLicense.ApplyShippingPolicy(ShipmentTypeCode.Usps, result);
+
+                Assert.Equal(2, result.RestrictedRateCount);
             }
         }
     }
