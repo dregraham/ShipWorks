@@ -5,10 +5,11 @@ using System.Net;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
@@ -83,20 +84,29 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Cancel Shipment
         /// </summary>
-        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId)
+        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, AmazonShipmentEntity amazonShipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
 
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
             // Add the service
-            request.Variables.Add("ShipmentId", amazonShipmentId);
+            request.Variables.Add("ShipmentId", amazonShipment.AmazonUniqueShipmentID);
 
-            // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+            try
+            {
+                // Get Response
+                IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
 
-            // Deserialize
-            return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
+                // Deserialize
+                return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
+            }
+            catch (AmazonShippingException ex)
+                when (ex.Code == "InvalidState" &&
+                    amazonShipment.CarrierName.StartsWith("dynamex", StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new AmazonShippingException("ShipWorks cannot void a Dynamex shipment. Please contact Dynamex at 855-DYNAMEX or https://www.dynamex.com/contact-us");
+            }
         }
 
         /// <summary>
