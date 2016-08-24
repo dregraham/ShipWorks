@@ -288,8 +288,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             sb.AppendLine("DECLARE @filterNodeContentID bigint");
             sb.AppendLine("DECLARE @filterNodeID bigint");
 
-            // Declare the column mask
-            sb.AppendLine(string.Format("DECLARE @columnMask binary({0})", columnMask.Length));
+            // Declare the column mask.  Currently, all our column masks are 100 in size.  But in case we change that later,
+            // use the max of 100 or the actual length.
+            sb.AppendLine(string.Format("DECLARE @columnMask varbinary({0})", Math.Max(100, columnMask.Length)));
 
             // Declare all variables
             foreach (SqlParameter parameter in parameters)
@@ -413,7 +414,10 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
                 case SqlDbType.Binary:
                 case SqlDbType.VarBinary:
-                    return string.Format("varbinary({0})", parameter.Size);
+                    // Currently, all our column masks are 100 in size.But in case we change that later,
+                    // use the max of 100 or the actual length.  Also, this could be used for one of the other varbinary
+                    // columns that have a larger size.
+                    return string.Format("varbinary({0})", Math.Max(100, parameter.Size));
             }
 
             throw new InvalidOperationException(string.Format("Invalid parameter type: {0}.", parameter.SqlDbType));

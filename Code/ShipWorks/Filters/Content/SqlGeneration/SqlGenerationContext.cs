@@ -205,7 +205,22 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             string text = value as string;
             if (text != null)
             {
-                SqlParameter parameter = new SqlParameter(param, SqlDbType.NVarChar, Math.Max(text.Length, 1));
+                int length = Math.Max(columnsUsed[columnsUsed.Count - 1].MaxLength, 1);
+
+                SqlParameter parameter;
+
+                // We can't send a 0 length param, so if length is 0, we don't send the size param.
+                // Also, if length is greather than int32's max value less 1, we don't send the size param.
+                // If we sent 0  or max length - 1, SQL Server would yell at us.
+                if (length == 0 || length >= Int32.MaxValue - 1)
+                {
+                    parameter = new SqlParameter(param, SqlDbType.NVarChar);
+                }
+                else
+                {
+                    parameter = new SqlParameter(param, SqlDbType.NVarChar, length);
+                }
+
                 parameter.Value = value;
 
                 sqlParameters.Add(parameter);
