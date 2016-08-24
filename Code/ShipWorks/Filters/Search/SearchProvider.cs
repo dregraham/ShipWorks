@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Interapptive.Shared;
-using Interapptive.Shared.Data;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -161,7 +161,7 @@ namespace ShipWorks.Filters.Search
             // are a little early.
             searchComplete.WaitOne();
 
-            Debug.Assert(busyToken == null, "No background operation should be already existant.");
+            Debug.Assert(busyToken == null, "No background operation should be already existent.");
 
             // Keeps the database from changing while we are working
             busyToken = ApplicationBusyManager.OperationStarting("searching");
@@ -298,7 +298,7 @@ namespace ShipWorks.Filters.Search
 
                     lock (searchCmdLock)
                     {
-                        searchCmd = DbCommandProvider.Create(null);
+                        searchCmd = DataAccessAdapter.GetDbProviderFactory().CreateCommand();
                         searchCmd.CommandText = nodeContent.InitialCalculation.Replace("<SwFilterNodeID />", searchNode.FilterNodeID.ToString());
 
                         // debugging delay
@@ -350,7 +350,7 @@ namespace ShipWorks.Filters.Search
             }
 
             // This has to go after the set.  Otherwise if the UI handles the event, and does an Invoke,
-            // we could deadlock if the UI is also wiating on a searchComplete.WaitOne().
+            // we could deadlock if the UI is also waiting on a searchComplete.WaitOne().
             RaiseStatusChanged();
         }
 
@@ -451,7 +451,7 @@ namespace ShipWorks.Filters.Search
                 nodeContent = CreateFilterNodeContent(definition);
 
                 // Make a clone. Because we are on another thread.  The UI thread could be trying
-                // to look at the node ID between setting and saving it if we dont.  It doesnt matter
+                // to look at the node ID between setting and saving it if we don't.  It doesn't matter
                 // that we have a clone.  The actual object does not matter, only the information.
                 FilterNodeEntity clone = new FilterNodeEntity(searchNode.Fields.Clone());
                 clone.IsNew = false;
@@ -537,7 +537,7 @@ namespace ShipWorks.Filters.Search
         [NDependIgnoreLongMethod]
         private void CreateSearchResultsNode()
         {
-            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....
 
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -560,7 +560,7 @@ namespace ShipWorks.Filters.Search
                 searchNode.Created = DateTime.UtcNow;
                 searchNode.Purpose = (int) FilterNodePurpose.Search;
 
-                // We'll just point to and re-use the placeholder sequence.  We don't actually need the sequence\filter for
+                // We'll just point to and re-use the placeholder sequence.  We don't actually need the sequence \ filter for
                 // anything other than that some code references them for such things as determining FilterTarget and the filter
                 // name.
                 //
@@ -625,7 +625,7 @@ namespace ShipWorks.Filters.Search
             }
             catch (ORMConcurrencyException)
             {
-                log.WarnFormat("Failed to ping search due to concurrency - Search must have eneded ({0})", searchID);
+                log.WarnFormat("Failed to ping search due to concurrency - Search must have ended ({0})", searchID);
             }
         }
 
@@ -683,7 +683,7 @@ namespace ShipWorks.Filters.Search
                 // may crash - but that shouldn't happen since each SearchProvider updates the DateTime every 2 hours for as long as it is alive.
                 //
 
-                // Get a list of all search nodes that havnt been pinged in over 24 hours.
+                // Get a list of all search nodes that haven't been pinged in over 24 hours.
                 SearchCollection abandonedSearch = SearchCollection.Fetch(adapter, SearchFields.Pinged < DateTime.UtcNow.AddDays(-1));
 
                 // Delete all filter nodes that are in that abandoned list
