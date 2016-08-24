@@ -58,6 +58,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.DHLBPMG, PostalServiceType.DhlBpmGround},
             {ServiceType.DHLMPE, PostalServiceType.DhlMarketingExpedited},
             {ServiceType.DHLMPG, PostalServiceType.DhlMarketingGround},
+            {ServiceType.SCGPE, PostalServiceType.GlobalPostEconomy},
+            {ServiceType.SCGPP, PostalServiceType.GlobalPostPriority},
         };
 
         /// <summary>
