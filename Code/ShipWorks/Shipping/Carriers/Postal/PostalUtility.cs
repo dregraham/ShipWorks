@@ -256,6 +256,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         .ToList();
 
                     services.AddRange(accesibleConsolidatorTypes);
+
+                    // Add global post services
+                    services.AddRange(new[]
+                    {
+                        PostalServiceType.GlobalPostEconomy,
+                        PostalServiceType.GlobalPostPriority,
+                        PostalServiceType.GlobalPostSmartSaverEconomy,
+                        PostalServiceType.GlobalPostSmartSaverPriority
+                    });
                 }
 
                 return services;
