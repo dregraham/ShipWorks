@@ -74,9 +74,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // since it should be using a different cache key
             try
             {
-                return accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
+                RateGroup rates = accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
                     GetRatesInternal(shipment) :
                     GetCounterRates(shipment);
+
+                SortRateGroup(rates);
+
+                return rates;
             }
             catch (UspsException ex)
             {
@@ -405,6 +409,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // we are not using the counter rate repo so
             // we can send back a trusting certificate inspector
             return new TrustingCertificateInspector();
+        }
+
+        /// <summary>
+        /// Sort the rates in the rate group based on our preferences
+        /// </summary>
+        private void SortRateGroup(RateGroup rateGroup)
+        {
+            // Move all of the global post services to the top
+            IEnumerable<RateResult> globapPostPriority = rateGroup.Rates.Where(r => r.Description.Contains("GlobalPost")).ToList();
+            foreach (RateResult rateResult in globapPostPriority.OrderByDescending(r => r.Amount))
+            {
+                rateGroup.Rates.Remove(rateResult);
+                rateGroup.Rates.Insert(0, rateResult);
+            }
         }
     }
 }
