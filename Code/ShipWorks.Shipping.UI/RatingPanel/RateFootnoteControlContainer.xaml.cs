@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.UI.RatingPanel
 {
     /// <summary>
-    /// Interaction logic for RateFootnoteControl2.xaml
+    /// Interaction logic for RateFootnoteControlContainer.xaml
     /// </summary>
     public partial class RateFootnoteControlContainer : UserControl
     {
