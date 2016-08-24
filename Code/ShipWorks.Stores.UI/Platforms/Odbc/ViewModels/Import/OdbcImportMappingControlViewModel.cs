@@ -128,7 +128,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             {
                 if (value)
                 {
-                    Items[0].DisplayName = "Item 1";
+                    if (Items.Count > 0)
+                    {
+                        Items[0].DisplayName = "Item 1";
+                    }
                 }
                 else
                 {

@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
-                testObject.NumberOfItemsPerOrder = 0;
+                testObject.NumberOfItemsPerOrder = 1;
                 testObject.IsSingleLineOrder = true;
                 var expectedMapNames = new List<string>() { "Order", "Address", "Item 1" };
                 var actualMapNames = new List<string>()
@@ -135,23 +135,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 };
 
                 Assert.Equal(expectedMapNames, actualMapNames);
-            }
-        }
-
-        [Fact]
-        public void SetSingleLineItemTrue_SetsNumberOfItemsBackToOne()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Load(new OdbcStoreEntity());
-
-                testObject.NumberOfItemsPerOrder = 5;
-
-                testObject.IsSingleLineOrder = true;
-
-                Assert.Equal(1, testObject.Items.Count);
             }
         }
 
