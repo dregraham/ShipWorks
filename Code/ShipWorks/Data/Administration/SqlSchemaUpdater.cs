@@ -311,20 +311,11 @@ namespace ShipWorks.Data.Administration
             // Get all the update scripts
             List<SqlUpdateScript> updateScripts = GetUpdateScripts().Where(s => s.SchemaVersion > installed).ToList();
 
-            // Start with generic progress msg
+            // Start with generic progress message
             progress.Detail = "Updating...";
 
             // Store the event handler in a variable so it can be removed easily later
-            SqlInfoMessageEventHandler infoMessageHandler = (sender, e) =>
-            {
-                if (progress.Status == ProgressItemStatus.Running)
-                {
-                    if (!e.Message.StartsWith("Caution"))
-                    {
-                        progress.Detail = e.Message;
-                    }
-                }
-            };
+            SqlInfoMessageEventHandler infoMessageHandler = CreateInfoMessageHandler(progress);
 
             // Listen for script messages to display to the user
             SqlConnection sqlConn = ExistingConnectionScope.ScopedConnection.AsSqlConnection();
@@ -339,29 +330,7 @@ namespace ShipWorks.Data.Administration
             // Go through each update script (they are already sorted in version order)
             foreach (SqlUpdateScript script in updateScripts)
             {
-                ExistingConnectionScope.BeginTransaction();
-
-                log.InfoFormat("Updating to {0}", script.SchemaVersion);
-
-                // How many scripts we've finished with so far
-                int scriptsCompleted = updateScripts.IndexOf(script);
-
-                // Execute the script
-                SqlScript executor = sqlLoader[script.ScriptName];
-
-                // Update the progress as we complete each batch in the script
-                executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
-                {
-                    // Update the progress
-                    progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
-                };
-
-                // Run all the batches in the script
-                ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
-
-                ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
-
-                ExistingConnectionScope.Commit();
+                ExecuteUpdateScript(progress, updateScripts, scriptProgressValue, script);
             }
 
             // Since we have a single, long-lived connection, we want to remove the message handler so future messages
@@ -374,6 +343,48 @@ namespace ShipWorks.Data.Administration
             progress.PercentComplete = 100;
             progress.Detail = "Done";
             progress.Completed();
+        }
+
+        /// <summary>
+        /// Execute an individual update script
+        /// </summary>
+        private static void ExecuteUpdateScript(ProgressItem progress, List<SqlUpdateScript> updateScripts, double scriptProgressValue, SqlUpdateScript script)
+        {
+            ExistingConnectionScope.BeginTransaction();
+
+            log.InfoFormat("Updating to {0}", script.SchemaVersion);
+
+            // How many scripts we've finished with so far
+            int scriptsCompleted = updateScripts.IndexOf(script);
+
+            // Execute the script
+            SqlScript executor = sqlLoader[script.ScriptName];
+
+            // Update the progress as we complete each batch in the script
+            executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
+            {
+                // Update the progress
+                progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
+            };
+
+            // Run all the batches in the script
+            ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
+            ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
+            ExistingConnectionScope.Commit();
+        }
+
+        /// <summary>
+        /// Create a SQL info message handler
+        /// </summary>
+        private static SqlInfoMessageEventHandler CreateInfoMessageHandler(ProgressItem progress)
+        {
+            return (sender, e) =>
+            {
+                if (progress.Status == ProgressItemStatus.Running && !e.Message.StartsWith("Caution"))
+                {
+                    progress.Detail = e.Message;
+                }
+            };
         }
 
         /// <summary>
