@@ -11,5 +11,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Gets or sets the ODBC import strategy.
         /// </summary>
         OdbcImportStrategy OdbcImportStrategy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ODBC import item strategy.
+        /// </summary>
+        OdbcImportOrderItemStrategy OdbcImportItemStrategy { get; set; }
     }
 }

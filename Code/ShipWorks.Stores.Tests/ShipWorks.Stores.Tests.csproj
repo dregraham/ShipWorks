@@ -210,7 +210,7 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploaderTest.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportFieldMappingControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\TestOdbcMapSettingsControlViewModel.cs" />
