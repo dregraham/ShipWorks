@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 when (ex.Code == "InvalidState" &&
                     amazonShipment.CarrierName.StartsWith("dynamex", StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new AmazonShippingException("ShipWorks cannot void a Dynamex shipment. Please contact Dynamex at 855-DYNAMEX or https://www.dynamex.com/contact-us");
+                throw new AmazonShippingException("Dynamex shipments cannot be voided electronically. Please contact Dynamex at 855-DYNAMEX or https://www.dynamex.com/contact-us");
             }
         }
 
