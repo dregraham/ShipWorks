@@ -32,7 +32,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public void OpenTermsAndConditionsDlg(ILifetimeScope lifetimeScope)
         {
             UspsWebClient webClient = (UspsWebClient) lifetimeScope.Resolve<UspsShipmentType>().CreateWebClient();
-
             string url = webClient.GetUrl(account, UrlType.SetTermsGeneral);
 
             try
@@ -43,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             catch (Exception ex)
             {
-                var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
                 messageHelper.ShowError($"Unable to open Terms and Conditions page. {ex.Message}");
             }
         }
