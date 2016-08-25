@@ -1109,6 +1109,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\IUspsRatePromotionFootnoteViewModel.cs" />
@@ -1123,6 +1124,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsGlobalPostTermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
