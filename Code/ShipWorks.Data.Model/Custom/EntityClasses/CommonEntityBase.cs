@@ -1,4 +1,5 @@
 using System;
+using Interapptive.Shared.Collections;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
@@ -167,15 +168,32 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// After a value has been set
+        /// </summary>
+        /// <remarks>This will reset the dirty flag if the new value matches what we expect is in the db</remarks>
+        protected override void OnSetValueComplete(int fieldIndex)
+        {
+            base.OnSetValueComplete(fieldIndex);
+
+            IEntityField2 field = Fields[fieldIndex];
+            if (!IsNew && field.IsChanged && FieldUtilities.ValuesAreEqual(field.DbValue, field.CurrentValue))
+            {
+                field.IsChanged = false;
+
+                if (Fields.None(x => x.IsChanged))
+                {
+                    Fields.IsDirty = false;
+                    IsDirty = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Raise the EntityPersisted event
         /// </summary>
         private static void RaiseEntityPersisted(CommonEntityBase entity, EntityPersistedAction action)
         {
-            EntityPersistedEventHandler handler = EntityPersisted;
-            if (handler != null)
-            {
-                handler(entity, new EntityPersistedEventArgs(action));
-            }
+            EntityPersisted?.Invoke(entity, new EntityPersistedEventArgs(action));
         }
     }
 }

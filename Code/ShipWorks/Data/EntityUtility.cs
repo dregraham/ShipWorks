@@ -815,26 +815,6 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Reset the dirty flag on an entity graph and its fields when the fields have not changed
-        /// </summary>
-        public static void ResetDirtyFlagOnUnchangedEntityFields(this IEntity2 entity)
-        {
-            foreach (KeyValuePair<IEntity2, IEnumerable<IEntityField2>> entityAndFields in entity.GetDirtyGraph().Where(x => !x.Key.IsNew))
-            {
-                foreach (IEntityField2 field in entityAndFields.Value.Where(x => x.IsChanged && FieldUtilities.ValuesAreEqual(x.DbValue, x.CurrentValue)))
-                {
-                    field.IsChanged = false;
-                }
-
-                if (entityAndFields.Value.None(x => x.IsChanged))
-                {
-                    entityAndFields.Key.Fields.IsDirty = false;
-                    entityAndFields.Key.IsDirty = false;
-                }
-            }
-        }
-
-        /// <summary>
         /// Get a graph of dirty entities and fields using the passed entity as the root
         /// </summary>
         public static IDictionary<IEntity2, IEnumerable<IEntityField2>> GetDirtyGraph(this IEntity2 entity)
