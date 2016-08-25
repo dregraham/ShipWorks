@@ -58,6 +58,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 wb.Document?.Window?.OpenNew(url, "location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,resizable=yes");
             }
         }
-
     }
 }
