@@ -845,6 +845,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     throw new UspsInsufficientFundsException(account, ex.Message);
                 }
 
+                if (ex.Code == 5636353 || (errorMessageUpper.Contains("globalpost".ToUpperInvariant()) && errorMessageUpper.Contains("terms and conditions".ToUpperInvariant())))
+                {
+                    throw new UspsGlobalPostTermsAndConditionsException(account, ex.Message);
+                }
+
                 if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
                 {
                     throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");

@@ -20,6 +20,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
@@ -129,6 +130,7 @@ namespace ShipWorks.Shipping.Services
             await executor.ExecuteAsync(ProcessShipment, filteredShipments, executionState);
 
             HandleProcessingException(executionState.OutOfFundsException, executionState.NewErrors);
+            HandleProcessingException(executionState.TermsAndConditionsException, executionState.NewErrors);
 
             // See if we are supposed to open WorldShip
             if (executionState.WorldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
@@ -231,6 +233,9 @@ namespace ShipWorks.Shipping.Services
                 {
                     executionState.OutOfFundsException = executionState.OutOfFundsException ??
                         (ex.InnerException.InnerException as IInsufficientFunds);
+
+                    executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ??
+                        (ex.InnerException.InnerException as ITermsAndConditionsException);
                 }
             }
 
@@ -264,8 +269,10 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(IInsufficientFunds outOfFundsException, IList<string> newErrors)
+        private void HandleProcessingException(object exception, IList<string> newErrors)
         {
+            IInsufficientFunds outOfFundsException = exception as IInsufficientFunds;
+            ITermsAndConditionsException termsAndConditionsException = exception as ITermsAndConditionsException;
             // If any accounts were out of funds we show that instead of the errors
             if (outOfFundsException != null)
             {
@@ -280,6 +287,10 @@ namespace ShipWorks.Shipping.Services
                         dlg.ShowDialog(owner);
                     }
                 }
+            }
+            else if (termsAndConditionsException != null)
+            {
+                termsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
             }
             else
             {

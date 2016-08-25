@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     services.AddRange(accesibleConsolidatorTypes);
 
                     // Add global post services
-                    services.AddRange(new[]
+                    services.InsertRange(0, new[]
                     {
                         PostalServiceType.GlobalPostEconomy,
                         PostalServiceType.GlobalPostPriority
