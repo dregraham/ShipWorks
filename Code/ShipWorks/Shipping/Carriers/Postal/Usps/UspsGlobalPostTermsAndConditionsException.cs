@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Windows;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -31,21 +31,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void OpenTermsAndConditionsDlg(ILifetimeScope lifetimeScope)
         {
-            UspsShipmentType shipmentType = lifetimeScope.Resolve<UspsShipmentType>();
-            UspsWebClient webClient = (UspsWebClient) shipmentType.CreateWebClient();
+            UspsWebClient webClient = (UspsWebClient) lifetimeScope.Resolve<UspsShipmentType>().CreateWebClient();
 
             string url = webClient.GetUrl(account, UrlType.SetTermsGeneral);
 
-            Type type = Type.GetTypeFromProgID("InternetExplorer.Application");
-
-            dynamic ie = Activator.CreateInstance(type);
-
-            ie.AddressBar = false;
-            ie.MenuBar = false;
-            ie.ToolBar = false;
-
-            ie.Visible = true;
-            ie.Navigate(url);
+            try
+            {
+                Thread thread = new Thread(ExceptionMonitor.WrapThread(() => OpenKioskBrowser(url)));
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+            }
+            catch (Exception ex)
+            {
+                var messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+                messageHelper.ShowError($"Unable to open Terms and Conditions page. {ex.Message}");
+            }
         }
+
+        /// <summary>
+        /// Open the url in a browser in kiosk mode
+        /// </summary>
+        private static void OpenKioskBrowser(string url)
+        {
+            using (WebBrowser wb = new WebBrowser())
+            {
+                wb.Url = new Uri("about:blank");
+                wb.Document?.Window?.OpenNew(url, "location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,resizable=yes");
+            }
+        }
+
     }
 }
