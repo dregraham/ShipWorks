@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (AmazonShippingException ex)
             {
-                // Something must be wrong with the credentails
+                // Something must be wrong with the credentials
                 return AmazonValidateCredentialsResponse.Failed(ex.Message);
             }
         }
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // required for each api call
             ConfigureRequest(request, amazonMwsApiCall, mwsSettings);
 
-            // Signes the request
+            // Signs the request
             AddSignature(request, amazonMwsApiCall, mwsSettings);
 
             // add a User Agent header

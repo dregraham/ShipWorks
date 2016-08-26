@@ -38,7 +38,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             messageHelper.ShowInformation(@"Same day rates could not be retrieved from Amazon.
 
 This can happen if it is too late in the day to ship same day,
-or if the 'from' address does not qualify for same day rates.");
+or if the 'from' address does not qualify for same day rates.
+
+You may be able to process a same day shipment directly on your
+Amazon Seller Central account page for the associated order.");
         }
     }
 }

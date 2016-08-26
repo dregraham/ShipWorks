@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
@@ -14,10 +13,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// True if the order is an Amazon Prime order, false otherwise
         /// </summary>
-        string IAmazonOrder.AmazonOrderID
-        {
-            get { return CustomOrderIdentifier; }
-        }
+        string IAmazonOrder.AmazonOrderID => CustomOrderIdentifier;
 
         /// <summary>
         /// The Amazon Order ID from Amazon
@@ -38,6 +34,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Should the order be treated as same day
         /// </summary>
-        public bool IsSameDay(Func<DateTime> getUtcNow) => false;
+        public bool IsSameDay() => false;
     }
 }

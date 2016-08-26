@@ -1,5 +1,4 @@
-﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 
 namespace ShipWorks.Data.Modal.Tests.Custom
@@ -10,7 +9,7 @@ namespace ShipWorks.Data.Modal.Tests.Custom
         public void IsSameDay_ReturnsFalse_Always()
         {
             var order = new ChannelAdvisorOrderEntity();
-            var result = order.IsSameDay(() => default(DateTime));
+            var result = order.IsSameDay();
             Assert.False(result);
         }
     }

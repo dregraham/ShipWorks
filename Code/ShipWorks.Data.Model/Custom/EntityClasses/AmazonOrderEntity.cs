@@ -37,11 +37,9 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         /// <remarks>We have to do the date check here because we won't get rates from Amazon if we treat the shipment
         /// as same day, but the customer missed the delivery date.</remarks>
-        public bool IsSameDay(Func<DateTime> getUtcNow)
+        public bool IsSameDay()
         {
-            return (RequestedShipping?.StartsWith("sameday", StringComparison.OrdinalIgnoreCase) ?? false) &&
-                LatestExpectedDeliveryDate.HasValue &&
-                LatestExpectedDeliveryDate.Value > getUtcNow();
+            return (RequestedShipping?.StartsWith("sameday", StringComparison.OrdinalIgnoreCase) ?? false);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -27,6 +25,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Should the order be treated as same day
         /// </summary>
-        bool IsSameDay(Func<DateTime> getUtcNow);
+        bool IsSameDay();
     }
 }

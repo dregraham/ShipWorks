@@ -110,16 +110,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.Equal(testObject.ShippingServiceOptions.DeliveryExperience, EnumHelper.GetApiValue((AmazonDeliveryExperienceType) 1));
         }
-
-        [Fact]
-        public void Create_UsesUTCNow_OnDateTimeProvider()
-        {
-            var mockedOrder = mock.Mock<IAmazonOrder>();
-            var mockedDateTimeProvider = mock.Mock<IDateTimeProvider>();
-
-            amazonShipmentRequestDetailsFactory.Create(shipmentEntity, mockedOrder.Object);
-
-            mockedOrder.Verify(x => x.IsSameDay(mockedDateTimeProvider.Object.GetUtcNow));
-        }
     }
 }
