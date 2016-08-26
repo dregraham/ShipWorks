@@ -86,5 +86,10 @@ namespace ShipWorks.Shipping
             ProcessingErrors.TryGetValue(shipmentID, out error);
             return error;
         }
+
+        /// <summary>
+        /// How many errors are there?
+        /// </summary>
+        public int ShipmentCount() => processingErrors.Count;
     }
 }

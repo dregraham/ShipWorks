@@ -25,13 +25,13 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "FilterNodeContentDetail"."FilterNodeContentID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         System.Int64 FilterNodeContentID { get; }
         /// <summary> The ObjectID property of the Entity FilterNodeContentDetail<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FilterNodeContentDetail"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         System.Int64 ObjectID { get; }
         
         

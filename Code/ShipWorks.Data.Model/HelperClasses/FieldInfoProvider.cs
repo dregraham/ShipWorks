@@ -278,6 +278,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionQueueEntity", "Status", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.Status, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			base.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
+			base.AddElementFieldInfo("ActionQueueEntity", "ExtraData", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ExtraData, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ActionQueueSelectionEntity's FieldInfo objects</summary>
 		private void InitActionQueueSelectionEntityInfos()
@@ -1268,8 +1269,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Inits FilterNodeContentDetailEntity's FieldInfo objects</summary>
 		private void InitFilterNodeContentDetailEntityInfos()
 		{
-			base.AddElementFieldInfo("FilterNodeContentDetailEntity", "FilterNodeContentID", typeof(System.Int64), false, true, false, false,  (int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, 0, 0, 19);
-			base.AddElementFieldInfo("FilterNodeContentDetailEntity", "ObjectID", typeof(System.Int64), false, false, false, false,  (int)FilterNodeContentDetailFieldIndex.ObjectID, 0, 0, 19);
+			base.AddElementFieldInfo("FilterNodeContentDetailEntity", "FilterNodeContentID", typeof(System.Int64), true, true, false, false,  (int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, 0, 0, 19);
+			base.AddElementFieldInfo("FilterNodeContentDetailEntity", "ObjectID", typeof(System.Int64), true, false, false, false,  (int)FilterNodeContentDetailFieldIndex.ObjectID, 0, 0, 19);
 		}
 		/// <summary>Inits FilterSequenceEntity's FieldInfo objects</summary>
 		private void InitFilterSequenceEntityInfos()

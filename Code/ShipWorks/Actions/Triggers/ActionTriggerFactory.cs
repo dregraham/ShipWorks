@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Triggers;
 
 namespace ShipWorks.Actions.Triggers
 {
@@ -25,6 +21,7 @@ namespace ShipWorks.Actions.Triggers
                 case ActionTriggerType.FilterContentChanged: return new FilterContentTrigger(xmlSettings);
                 case ActionTriggerType.Scheduled: return new ScheduledTrigger(xmlSettings);
                 case ActionTriggerType.UserInitiated: return new UserInitiatedTrigger(xmlSettings);
+                case ActionTriggerType.None: return new EmptyTrigger();
             }
 
             throw new InvalidOperationException("Factory does not handle trigger type: " + type);

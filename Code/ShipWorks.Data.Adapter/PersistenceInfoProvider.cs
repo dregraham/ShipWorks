@@ -265,7 +265,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ActionQueueEntity's mappings</summary>
 		private void InitActionQueueEntityMappings()
 		{
-			base.AddElementMapping( "ActionQueueEntity", "ShipWorksLocal", @"dbo", "ActionQueue", 14 );
+			base.AddElementMapping( "ActionQueueEntity", "ShipWorksLocal", @"dbo", "ActionQueue", 15 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ActionQueueID", "ActionQueueID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ActionID", "ActionID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -280,6 +280,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ActionQueueEntity", "Status", "Status", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "NextStep", "NextStep", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
 			base.AddElementFieldMapping( "ActionQueueEntity", "ContextLock", "ContextLock", true, (int)SqlDbType.NVarChar, 36, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "ActionQueueEntity", "ExtraData", "ExtraData", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 14 );
 		}
 		/// <summary>Inits ActionQueueSelectionEntity's mappings</summary>
 		private void InitActionQueueSelectionEntityMappings()

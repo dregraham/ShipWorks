@@ -103,6 +103,8 @@ namespace ShipWorks.Data.Model
 		NextStep,
 		///<summary>ContextLock. </summary>
 		ContextLock,
+		///<summary>ExtraData. </summary>
+		ExtraData,
 		/// <summary></summary>
 		AmountOfFields
 	}

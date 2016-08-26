@@ -321,6 +321,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.4\5.4.0.4.sql" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.4\5.4.1.0.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.5\5.5.0.0.sql" />
   </ItemGroup>
   <ItemGroup>

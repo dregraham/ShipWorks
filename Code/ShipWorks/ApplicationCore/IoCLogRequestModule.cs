@@ -1,7 +1,7 @@
 ﻿#if DEBUG
+using System;
 using Autofac;
 using Autofac.Core;
-using System;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -26,8 +26,8 @@ namespace ShipWorks.ApplicationCore
         protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry,
             IComponentRegistration registration)
         {
-            registration.Preparing += RegistrationOnPreparing;
-            registration.Activating += RegistrationOnActivating;
+            //registration.Preparing += RegistrationOnPreparing;
+            //registration.Activating += RegistrationOnActivating;
             base.AttachToComponentRegistration(componentRegistry, registration);
         }
 
@@ -36,7 +36,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private string GetPrefix()
         {
-            return new string('-', depth*2);
+            return new string('-', depth * 2);
         }
 
         /// <summary>
