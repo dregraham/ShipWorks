@@ -294,6 +294,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static string GetUpsShipmentClassCode(ShipmentEntity shipment)
         {
+            Dictionary<UpsServiceType, string> upsServiceTypeClassCodes = GetUpsServiceTypeClassCodesMap();
+
+            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
+            return upsServiceTypeClassCodes.ContainsKey(upsServiceType)
+                ? upsServiceTypeClassCodes[upsServiceType]
+                : "NONE";
+        }
+
+        /// <summary>
+        /// Gets the ups service type class codes map.
+        /// </summary>
+        private static Dictionary<UpsServiceType, string> GetUpsServiceTypeClassCodesMap()
+        {
             Dictionary<UpsServiceType, string> upsServiceTypeClassCodes = new Dictionary<UpsServiceType, string>();
             upsServiceTypeClassCodes.Add(UpsServiceType.Ups2DayAir, "2DAY");
             upsServiceTypeClassCodes.Add(UpsServiceType.Ups2DayAirAM, "2DAA");
@@ -325,14 +338,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpressPlus, "UPSCaWorldWideExpressPlus");
             upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpress, "UPSCaWorldWideExpress");
             upsServiceTypeClassCodes.Add(UpsServiceType.Ups2ndDayAirIntra, "UPS2nDayAirIntra");
-
-            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
-            if (upsServiceTypeClassCodes.ContainsKey(upsServiceType))
-            {
-                return upsServiceTypeClassCodes[upsServiceType];
-            }
-
-            return "NONE";
+            return upsServiceTypeClassCodes;
         }
 
         /// <summary>
