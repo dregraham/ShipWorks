@@ -1,36 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
+using System;
+using Xunit;
 
-namespace ShipWorks.Tests.Stores.ChannelAdvisor
+namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
     /// Summary description for ChannelAdvisorOnlineUpdaterTest
     /// </summary>
     public class ChannelAdvisorOnlineUpdaterTest
     {
-        private ChannelAdvisorOrderEntity orderEntity;
-        private ChannelAdvisorStoreEntity storeEntity;
-        private FedExShipmentEntity fedExEntity;
-        private UpsShipmentEntity upsEntity;
+        private readonly ChannelAdvisorOrderEntity orderEntity;
+        private readonly ChannelAdvisorStoreEntity storeEntity;
+        private readonly FedExShipmentEntity fedExEntity;
+        private readonly UpsShipmentEntity upsEntity;
         private ShipmentEntity shipmentEntity;
-        private PostalShipmentEntity postalShipmentEntity;
-        private EndiciaShipmentEntity endiciaShipmentEntity;
-        private UspsShipmentEntity uspsShipmentEntity;
-        private OtherShipmentEntity otherShipmentEntity;
+        private readonly PostalShipmentEntity postalShipmentEntity;
+        private readonly EndiciaShipmentEntity endiciaShipmentEntity;
+        private readonly UspsShipmentEntity uspsShipmentEntity;
+        private readonly OtherShipmentEntity otherShipmentEntity;
         private AmazonShipmentEntity amazonShipmentEntity;
-        private IParcelShipmentEntity iparcelShipmentEntity;
-        private OnTracShipmentEntity ontracShipmentEntity;
+        
 
         public ChannelAdvisorOnlineUpdaterTest()
         {
@@ -44,8 +38,6 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
             otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
             endiciaShipmentEntity = new EndiciaShipmentEntity();
-            iparcelShipmentEntity = new IParcelShipmentEntity {Service = (int) iParcelServiceType.Saver };
-            ontracShipmentEntity = new OnTracShipmentEntity {Service = (int) OnTracServiceType.Ground };
             amazonShipmentEntity = new AmazonShipmentEntity { ShippingServiceName = "UPS Ground", CarrierName = "UPS" };
         }
 
@@ -109,6 +101,30 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.Equal("FIRSTCLASS", code);
         }
 
+        [Fact]
+        public void GetShipmentClassCode_ReturnsInternationalFirst_WhenUspsAndGlobalPostEconomyServiceUsed()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Usps);
+
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostEconomy;
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("IFIRSTCLASS", code);
+        }
+
+        [Fact]
+        public void GetShipmentClassCode_ReturnsGem_WhenUspsAndGlobalPostPriorityServiceUsed()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Usps);
+
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostPriority;
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("GEM", code);
+        }
+        
         [Fact]
         public void GetShipmentClassCode_ReturnsMi_WhenUpsAndMiServiceUsed()
         {
