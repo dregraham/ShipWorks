@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// </summary>
     public class BuyDotComOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComOnlineUpdater));
 
         BuyDotComStoreEntity store;
@@ -171,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-                    return GetEndiciaTrackingType(shipment);
+                    return GetPostalTrackingType(shipment);
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
@@ -204,19 +204,19 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
 
             // See if the parsed free text maps to any Buy.com carrier
-            return description.IsUPS ? BuyDotComTrackingType.Ups : 
-                description.IsFedEx ? BuyDotComTrackingType.FedEx : 
-                description.IsUSPS ? BuyDotComTrackingType.Usps : 
-                description.IsDHL ? BuyDotComTrackingType.DHLGlobalMail : 
+            return description.IsUPS ? BuyDotComTrackingType.Ups :
+                description.IsFedEx ? BuyDotComTrackingType.FedEx :
+                description.IsUSPS ? BuyDotComTrackingType.Usps :
+                description.IsDHL ? BuyDotComTrackingType.DHLGlobalMail :
                 BuyDotComTrackingType.Other;
         }
 
         /// <summary>
-        /// A helper method to get the tracking type for a shipment processed with the Endicia shipment type.
+        /// A helper method to get the tracking type for a shipment processed with the postal shipment type.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>The BuyDotComTrackingType value.</returns>
-        private static BuyDotComTrackingType GetEndiciaTrackingType(ShipmentEntity shipment)
+        private static BuyDotComTrackingType GetPostalTrackingType(ShipmentEntity shipment)
         {
             PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
@@ -226,12 +226,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 // The DHL carrier for Endicia is:
                 return BuyDotComTrackingType.DHLGlobalMail;
             }
-            
+
             if (ShipmentTypeManager.IsConsolidator(service))
             {
                 return BuyDotComTrackingType.Other;
             }
-            
+
             // Use the default carrier for other Endicia types
             return BuyDotComTrackingType.Usps;
         }
