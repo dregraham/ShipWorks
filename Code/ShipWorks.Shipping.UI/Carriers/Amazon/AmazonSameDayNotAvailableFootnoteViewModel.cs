@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Reflection;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// <summary>
         /// Show the more information dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand ShowDialog { get; }
 
         /// <summary>
