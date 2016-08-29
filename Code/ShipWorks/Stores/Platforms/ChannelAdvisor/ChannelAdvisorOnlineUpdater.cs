@@ -307,38 +307,39 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static Dictionary<UpsServiceType, string> GetUpsServiceTypeClassCodesMap()
         {
-            Dictionary<UpsServiceType, string> upsServiceTypeClassCodes = new Dictionary<UpsServiceType, string>();
-            upsServiceTypeClassCodes.Add(UpsServiceType.Ups2DayAir, "2DAY");
-            upsServiceTypeClassCodes.Add(UpsServiceType.Ups2DayAirAM, "2DAA");
-            upsServiceTypeClassCodes.Add(UpsServiceType.Ups3DaySelect, "3DS");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsGround, "GROUND");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsNextDayAir, "NEXTDAY");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsNextDayAirAM, "NDAEA");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsNextDayAirSaver, "NDAS");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsStandard, "STD");
-            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideExpedited, "WWEX");
-            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideExpress, "WWE");
-            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideExpressPlus, "WWEP");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePostLessThan1Lb, "SurePost Less than 1 lb");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePost1LbOrGreater, "SurePost 1 lb or Greater");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePostBoundPrintedMatter, "SurePost Bound Printed Matter");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePostMedia, "SurePost Media");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsExpedited, "MI");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsFirstClass, "MI");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsPriority, "MI");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsIntEconomy, "MI");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsIntPriority, "MI");
-            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideSaver, "UPSWorldwideSaver");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpress, "UPSExpress");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpressEarlyAm, "UPSExpressEarlyAm");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpressSaver, "UPSExpressSaver");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpedited, "UPSExpedited");
-            upsServiceTypeClassCodes.Add(UpsServiceType.Ups3DaySelectFromCanada, "UPS3DaySelectFromCanada");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpressSaver, "UPSCaWorldWideExpressSaver");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpressPlus, "UPSCaWorldWideExpressPlus");
-            upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpress, "UPSCaWorldWideExpress");
-            upsServiceTypeClassCodes.Add(UpsServiceType.Ups2ndDayAirIntra, "UPS2nDayAirIntra");
-            return upsServiceTypeClassCodes;
+            return new Dictionary<UpsServiceType, string>
+            {
+                {UpsServiceType.Ups2DayAir, "2DAY"},
+                {UpsServiceType.Ups2DayAirAM, "2DAA"},
+                {UpsServiceType.Ups3DaySelect, "3DS"},
+                {UpsServiceType.UpsGround, "GROUND"},
+                {UpsServiceType.UpsNextDayAir, "NEXTDAY"},
+                {UpsServiceType.UpsNextDayAirAM, "NDAEA"},
+                {UpsServiceType.UpsNextDayAirSaver, "NDAS"},
+                {UpsServiceType.UpsStandard, "STD"},
+                {UpsServiceType.WorldwideExpedited, "WWEX"},
+                {UpsServiceType.WorldwideExpress, "WWE"},
+                {UpsServiceType.WorldwideExpressPlus, "WWEP"},
+                {UpsServiceType.UpsSurePostLessThan1Lb, "SurePost Less than 1 lb"},
+                {UpsServiceType.UpsSurePost1LbOrGreater, "SurePost 1 lb or Greater"},
+                {UpsServiceType.UpsSurePostBoundPrintedMatter, "SurePost Bound Printed Matter"},
+                {UpsServiceType.UpsSurePostMedia, "SurePost Media"},
+                {UpsServiceType.UpsMailInnovationsExpedited, "MI"},
+                {UpsServiceType.UpsMailInnovationsFirstClass, "MI"},
+                {UpsServiceType.UpsMailInnovationsPriority, "MI"},
+                {UpsServiceType.UpsMailInnovationsIntEconomy, "MI"},
+                {UpsServiceType.UpsMailInnovationsIntPriority, "MI"},
+                {UpsServiceType.WorldwideSaver, "UPSWorldwideSaver"},
+                {UpsServiceType.UpsExpress, "UPSExpress"},
+                {UpsServiceType.UpsExpressEarlyAm, "UPSExpressEarlyAm"},
+                {UpsServiceType.UpsExpressSaver, "UPSExpressSaver"},
+                {UpsServiceType.UpsExpedited, "UPSExpedited"},
+                {UpsServiceType.Ups3DaySelectFromCanada, "UPS3DaySelectFromCanada"},
+                {UpsServiceType.UpsCaWorldWideExpressSaver, "UPSCaWorldWideExpressSaver"},
+                {UpsServiceType.UpsCaWorldWideExpressPlus, "UPSCaWorldWideExpressPlus"},
+                {UpsServiceType.UpsCaWorldWideExpress, "UPSCaWorldWideExpress"},
+                {UpsServiceType.Ups2ndDayAirIntra, "UPS2nDayAirIntra"}
+            };
         }
 
         /// <summary>
