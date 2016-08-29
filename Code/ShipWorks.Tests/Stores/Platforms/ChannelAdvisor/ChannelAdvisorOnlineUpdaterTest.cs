@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
-            Assert.Equal("GEM", code);
+            Assert.Equal("IPRIORITY", code);
         }
         
         [Fact]
