@@ -86,12 +86,19 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             Assert.Equal(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
         }
 
+        [Fact]
+        public void GetTrackingType_ReturnsUsps_WhenUspsAndGlobalPostServiceUsed()
+        {
+            postalShipmentEntity.Usps = uspsShipmentEntity;
+            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostPriority;
 
+            shipmentEntity.Postal = postalShipmentEntity;
+            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
 
+            BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-
-
-
+            Assert.Equal(BuyDotComTrackingType.Usps, buyDotComTrackingType);
+        }
 
         [Fact]
         public void GetTrackingType_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed()
@@ -145,9 +152,5 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             Assert.Equal(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
         }
-
-
-
-
     }
 }
