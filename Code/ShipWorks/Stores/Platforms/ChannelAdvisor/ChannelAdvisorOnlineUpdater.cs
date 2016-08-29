@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using System;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -232,68 +233,60 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "None";
             }
         }
-        
+
         /// <summary>
         /// Gets the fed ex shipment class code.
         /// </summary>
         private static string GetFedExShipmentClassCode(ShipmentEntity shipment)
         {
-            switch ((FedExServiceType)shipment.FedEx.Service)
+            Dictionary<FedExServiceType, string> fedExServiceTypeClassCode = new Dictionary<FedExServiceType, string>();
+
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExGround, "GROUND");
+            fedExServiceTypeClassCode.Add(FedExServiceType.GroundHomeDelivery, "GROUND");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExInternationalGround, "GROUND");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2Day, "2Day");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRate2Day, "2Day");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.PriorityOvernight, "PRIORITY");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRatePriorityOvernight, "PRIORITY");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.FirstOvernight, "1STOVERNIGHT");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRateFirstOvernight, "1STOVERNIGHT");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.StandardOvernight, "OVERNIGHT");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRateStandardOvernight, "OVERNIGHT");
+            
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExExpressSaver, "EXPSAVER");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRateExpressSaver, "EXPSAVER");
+            
+            fedExServiceTypeClassCode.Add(FedExServiceType.FirstFreight, "OVERNIGHTFREIGHT");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedEx1DayFreight, "OVERNIGHTFREIGHT");
+            
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2DayFreight, "2DAYFREIGHT");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriority, "INTLPRIORITY");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalEconomy, "INTLECONOMY");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalFirst, "INTLFIRST");
+
+            /* undefined in CA, the user will have to add this to their store  */
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriorityFreight, "Internaional Priority Freight");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalEconomyFreight, "International Economy Freight");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.SmartPost, "SmartPost");
+
+            FedExServiceType fedExServiceType = (FedExServiceType)shipment.FedEx.Service;
+
+            if (fedExServiceTypeClassCode.ContainsKey((FedExServiceType)shipment.FedEx.Service))
             {
-                case FedExServiceType.FedExGround:
-                case FedExServiceType.GroundHomeDelivery:
-                case FedExServiceType.FedExInternationalGround:
-                    return "GROUND";
-
-                case FedExServiceType.FedEx2Day:
-                case FedExServiceType.OneRate2Day:
-                    return "2Day";
-
-                case FedExServiceType.PriorityOvernight:
-                case FedExServiceType.OneRatePriorityOvernight:
-                    return "PRIORITY";
-
-                case FedExServiceType.FirstOvernight:
-                case FedExServiceType.OneRateFirstOvernight:
-                    return "1STOVERNIGHT";
-
-                case FedExServiceType.StandardOvernight:
-                case FedExServiceType.OneRateStandardOvernight:
-                    return "OVERNIGHT";
-
-                case FedExServiceType.FedExExpressSaver:
-                case FedExServiceType.OneRateExpressSaver:
-                    return "EXPSAVER";
-
-                case FedExServiceType.FirstFreight:
-                case FedExServiceType.FedEx1DayFreight:
-                    return "OVERNIGHTFREIGHT";
-
-                case FedExServiceType.FedEx2DayFreight:
-                    return "2DAYFREIGHT";
-
-                case FedExServiceType.InternationalPriority:
-                    return "INTLPRIORITY";
-
-                case FedExServiceType.InternationalEconomy:
-                    return "INTLECONOMY";
-
-                case FedExServiceType.InternationalFirst:
-                    return "INTLFIRST";
-
-                /* undefined in CA, the user will have to add this to their store  */
-                case FedExServiceType.InternationalPriorityFreight:
-                    return "Internaional Priority Freight";
-
-                case FedExServiceType.InternationalEconomyFreight:
-                    return "International Economy Freight";
-
-                case FedExServiceType.SmartPost:
-                    return "SmartPost";
-
-                default:
-                    return "NONE";
+                return fedExServiceTypeClassCode[fedExServiceType];
             }
+
+            return "None";
         }
 
         /// <summary>
@@ -301,69 +294,45 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private static string GetUpsShipmentClassCode(ShipmentEntity shipment)
         {
+            Dictionary<UpsServiceType, string> upsServiceTypeClassCodes = new Dictionary<UpsServiceType, string>();
+            upsServiceTypeClassCodes.Add(UpsServiceType.Ups2DayAir, "2DAY");
+            upsServiceTypeClassCodes.Add(UpsServiceType.Ups2DayAirAM, "2DAA");
+            upsServiceTypeClassCodes.Add(UpsServiceType.Ups3DaySelect, "3DS");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsGround, "GROUND");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsNextDayAir, "NEXTDAY");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsNextDayAirAM, "NDAEA");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsNextDayAirSaver, "NDAS");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsStandard, "STD");
+            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideExpedited, "WWEX");
+            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideExpress, "WWE");
+            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideExpressPlus, "WWEP");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePostLessThan1Lb, "SurePost Less than 1 lb");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePost1LbOrGreater, "SurePost 1 lb or Greater");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePostBoundPrintedMatter, "SurePost Bound Printed Matter");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsSurePostMedia, "SurePost Media");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsExpedited, "MI");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsFirstClass, "MI");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsPriority, "MI");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsIntEconomy, "MI");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsMailInnovationsIntPriority, "MI");
+            upsServiceTypeClassCodes.Add(UpsServiceType.WorldwideSaver, "UPSWorldwideSaver");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpress, "UPSExpress");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpressEarlyAm, "UPSExpressEarlyAm");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpressSaver, "UPSExpressSaver");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsExpedited, "UPSExpedited");
+            upsServiceTypeClassCodes.Add(UpsServiceType.Ups3DaySelectFromCanada, "UPS3DaySelectFromCanada");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpressSaver, "UPSCaWorldWideExpressSaver");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpressPlus, "UPSCaWorldWideExpressPlus");
+            upsServiceTypeClassCodes.Add(UpsServiceType.UpsCaWorldWideExpress, "UPSCaWorldWideExpress");
+            upsServiceTypeClassCodes.Add(UpsServiceType.Ups2ndDayAirIntra, "UPS2nDayAirIntra");
+
+            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
+            if (upsServiceTypeClassCodes.ContainsKey(upsServiceType))
             {
-                switch ((UpsServiceType) shipment.Ups.Service)
-                {
-                    case UpsServiceType.Ups2DayAir:
-                        return "2DAY";
-                    case UpsServiceType.Ups2DayAirAM:
-                        return "2DAA";
-                    case UpsServiceType.Ups3DaySelect:
-                        return "3DS";
-                    case UpsServiceType.UpsGround:
-                        return "GROUND";
-                    case UpsServiceType.UpsNextDayAir:
-                        return "NEXTDAY";
-                    case UpsServiceType.UpsNextDayAirAM:
-                        return "NDAEA";
-                    case UpsServiceType.UpsNextDayAirSaver:
-                        return "NDAS";
-                    case UpsServiceType.UpsStandard:
-                        return "STD";
-                    case UpsServiceType.WorldwideExpedited:
-                        return "WWEX";
-                    case UpsServiceType.WorldwideExpress:
-                        return "WWE";
-                    case UpsServiceType.WorldwideExpressPlus:
-                        return "WWEP";
-                    case UpsServiceType.UpsSurePostLessThan1Lb:
-                        return "SurePost Less than 1 lb";
-                    case UpsServiceType.UpsSurePost1LbOrGreater:
-                        return "SurePost 1 lb or Greater";
-                    case UpsServiceType.UpsSurePostBoundPrintedMatter:
-                        return "SurePost Bound Printed Matter";
-                    case UpsServiceType.UpsSurePostMedia:
-                        return "SurePost Media";
-                    case UpsServiceType.UpsMailInnovationsExpedited:
-                    case UpsServiceType.UpsMailInnovationsFirstClass:
-                    case UpsServiceType.UpsMailInnovationsPriority:
-                    case UpsServiceType.UpsMailInnovationsIntEconomy:
-                    case UpsServiceType.UpsMailInnovationsIntPriority:
-                        return "MI";
-                    case UpsServiceType.WorldwideSaver:
-                        return "UPSWorldwideSaver";
-                    case UpsServiceType.UpsExpress:
-                        return "UPSExpress";
-                    case UpsServiceType.UpsExpressEarlyAm:
-                        return "UPSExpressEarlyAm";
-                    case UpsServiceType.UpsExpressSaver:
-                        return "UPSExpressSaver";
-                    case UpsServiceType.UpsExpedited:
-                        return "UPSExpedited";
-                    case UpsServiceType.Ups3DaySelectFromCanada:
-                        return "UPS3DaySelectFromCanada";
-                    case UpsServiceType.UpsCaWorldWideExpressSaver:
-                        return "UPSCaWorldWideExpressSaver";
-                    case UpsServiceType.UpsCaWorldWideExpressPlus:
-                        return "UPSCaWorldWideExpressPlus";
-                    case UpsServiceType.UpsCaWorldWideExpress:
-                        return "UPSCaWorldWideExpress";
-                    case UpsServiceType.Ups2ndDayAirIntra:
-                        return "UPS2nDayAirIntra";
-                    default:
-                        return "NONE";
-                }
+                return upsServiceTypeClassCodes[upsServiceType];
             }
+
+            return "NONE";
         }
 
         /// <summary>
