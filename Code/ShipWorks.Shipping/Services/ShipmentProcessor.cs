@@ -295,6 +295,7 @@ namespace ShipWorks.Shipping.Services
             }
             else if (executionState.TermsAndConditionsException != null)
             {
+                MessageHelper.ShowError(owner, executionState.NewErrors.FirstOrDefault());
                 executionState.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
             }
             else
