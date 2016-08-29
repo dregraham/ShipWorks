@@ -27,6 +27,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         private readonly IYahooApiWebClient client;
         private readonly IShippingManager shippingManager;
 
+        private readonly List<string> acceptedCarrierNames = new List<string>()
+        {
+            "usps",
+            "ups",
+            "fedex",
+            "dhl",
+            "airborne"
+        };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiOnlineUpdater"/> class.
         /// </summary>
@@ -141,9 +150,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// Gets the carrier code.
         /// </summary>
-        /// <param name="shipment">The shipment entity.</param>
-        /// <returns></returns>
-        [NDependIgnoreComplexMethod]
         public string GetCarrierCode(ShipmentEntity shipment)
         {
             shippingManager.EnsureShipmentLoaded(shipment);
@@ -155,8 +161,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             {
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
-                    return ShipmentTypeManager.IsDhl(service) ? "dhl" : "usps";
+                    return GetEndiciaCarrierCode(shipment);
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
@@ -165,15 +170,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
-                    {
-                        if (shipment.Ups.UspsTrackingNumber.Length > 0)
-                        {
-                            return "usps";
-                        }
-                    }
-
-                    return "ups";
+                    return GetUpsCarrierCode(shipment);
 
                 case ShipmentTypeCode.FedEx:
                     return "fedex";
@@ -185,36 +182,52 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                     return "";
 
                 case ShipmentTypeCode.Other:
-                    if (shipment.Other.Carrier.ToLower().Contains("usps"))
-                    {
-                        return "usps";
-                    }
-
-                    if (shipment.Other.Carrier.ToLower().Contains("ups"))
-                    {
-                        return "ups";
-                    }
-
-                    if (shipment.Other.Carrier.ToLower().Contains("fedex"))
-                    {
-                        return "fedex";
-                    }
-
-                    if (shipment.Other.Carrier.ToLower().Contains("dhl"))
-                    {
-                        return "dhl";
-                    }
-
-                    if (shipment.Other.Carrier.ToLower().Contains("airborne"))
-                    {
-                        return "airborne";
-                    }
-
-                    return "";
+                    return GetOtherCarrierCode(shipment);
 
                 default:
                     return "";
             }
+        }
+
+        /// <summary>
+        /// Gets the carrier code for Endicia shipment
+        /// </summary>
+        private string GetEndiciaCarrierCode(ShipmentEntity shipment)
+        {
+            PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+            return ShipmentTypeManager.IsDhl(service) ? "dhl" : "usps";
+        }
+
+        /// <summary>
+        /// Gets the carrier code for Ups shipment
+        /// </summary>
+        private string GetUpsCarrierCode(ShipmentEntity shipment)
+        {
+            if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+            {
+                if (shipment.Ups.UspsTrackingNumber.Length > 0)
+                {
+                    return "usps";
+                }
+            }
+
+            return "ups";
+        }
+
+        /// <summary>
+        /// Gets the carrier code for the Other shipment
+        /// </summary>
+        private string GetOtherCarrierCode(ShipmentEntity shipment)
+        {
+            foreach (string acceptedCarrierName in acceptedCarrierNames)
+            {
+                if (shipment.Other.Carrier.ToLower().Contains(acceptedCarrierName))
+                {
+                    return acceptedCarrierName;
+                }
+            }
+
+            return "";
         }
     }
 }
