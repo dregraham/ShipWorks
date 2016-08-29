@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
-using System.Data.Common;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Shipping;
-using System.Net;
 using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
@@ -34,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         static readonly ILog log = LogManager.GetLogger(typeof(EbayOnlineUpdater));
 
         // the store we're working on behalf of
-        EbayStoreEntity store;
+        private readonly EbayStoreEntity store;
 
         /// <summary>
         /// Constructor

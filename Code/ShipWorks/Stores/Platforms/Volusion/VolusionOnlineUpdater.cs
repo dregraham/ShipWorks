@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
@@ -15,11 +10,11 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// </summary>
     public class VolusionOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionOnlineUpdater));
-						  
+
         // store for which this updater is to operate
-        VolusionStoreEntity store;
+        private readonly VolusionStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -58,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             OrderEntity order = shipment.Order;
             if (!order.IsManual)
             {
-                // Upload tracking number 
+                // Upload tracking number
                 VolusionWebClient client = new VolusionWebClient(store);
 
                 // upload the details

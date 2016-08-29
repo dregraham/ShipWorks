@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     public class MagentoOnlineUpdater : GenericStoreOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MagentoOnlineUpdater));
 
         /// <summary>
