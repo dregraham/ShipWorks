@@ -17,10 +17,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
     public class ThreeDCartSoapOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ThreeDCartSoapOnlineUpdater));
-        readonly ThreeDCartStoreEntity threeDCartStore;
+        private readonly ThreeDCartStoreEntity threeDCartStore;
 
         // status code provider
-        ThreeDCartStatusCodeProvider statusCodeProvider;
+        private ThreeDCartStatusCodeProvider statusCodeProvider;
 
         /// <summary>
         /// Constructor
@@ -33,18 +33,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Gets the status code provider
         /// </summary>
-        protected ThreeDCartStatusCodeProvider StatusCodeProvider
-        {
-            get
-            {
-                if (statusCodeProvider == null)
-                {
-                    statusCodeProvider = new ThreeDCartStatusCodeProvider(threeDCartStore);
-                }
-
-                return statusCodeProvider;
-            }
-        }
+        protected ThreeDCartStatusCodeProvider StatusCodeProvider =>
+            statusCodeProvider ?? (statusCodeProvider = new ThreeDCartStatusCodeProvider(threeDCartStore));
 
         /// <summary>
         /// Changes the status of an ThreeDCart order to that specified

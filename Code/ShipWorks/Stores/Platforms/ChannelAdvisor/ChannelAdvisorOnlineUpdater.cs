@@ -21,9 +21,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorOnlineUpdater));
-						  
+
         // the store instance 
-        ChannelAdvisorStoreEntity store;
+        private readonly ChannelAdvisorStoreEntity store;
 
         /// <summary>
         /// Constructor

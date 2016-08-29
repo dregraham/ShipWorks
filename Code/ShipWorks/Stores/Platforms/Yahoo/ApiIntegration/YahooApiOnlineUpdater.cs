@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Autofac;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared;
 using log4net;
 using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -126,6 +125,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             SaveOrderStatus(order.OrderID, status);
         }
 
+        /// <summary>
+        /// Saves the order status.
+        /// </summary>
         private void SaveOrderStatus(long orderID, string status)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();

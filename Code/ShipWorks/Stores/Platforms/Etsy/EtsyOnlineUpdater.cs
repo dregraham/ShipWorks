@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Stores.Content;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -22,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
     public class EtsyOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyOnlineUpdater));
-        readonly EtsyStoreEntity etsyStore;
+        private readonly EtsyStoreEntity etsyStore;
 
         /// <summary>
         /// Constructor
@@ -216,7 +213,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         private void UploadShipmentDetails(EtsyOrderEntity order, ShipmentEntity shipment, UnitOfWork2 unitOfWork)
         {
             var webClient = new EtsyWebClient(etsyStore);
-            
+
             try
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);

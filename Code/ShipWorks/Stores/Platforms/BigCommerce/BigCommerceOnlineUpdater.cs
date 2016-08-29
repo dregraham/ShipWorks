@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         readonly BigCommerceStoreEntity bigCommerceStore;
 
         // Valid list of providers from https://developer.bigcommerce.com/api/stores/v2/orders/shipments#create-a-shipment
-        private static Dictionary<ShipmentTypeCode, string> validProviders = new Dictionary<ShipmentTypeCode, string>
+        private static readonly Dictionary<ShipmentTypeCode, string> validProviders = new Dictionary<ShipmentTypeCode, string>
         {
             { ShipmentTypeCode.Endicia, "endicia" },
             { ShipmentTypeCode.Express1Endicia, "endicia" },
@@ -50,10 +50,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Gets the status code provider
         /// </summary>
-        protected BigCommerceStatusCodeProvider StatusCodeProvider
-        {
-            get { return statusCodeProvider ?? (statusCodeProvider = new BigCommerceStatusCodeProvider(bigCommerceStore)); }
-        }
+        protected BigCommerceStatusCodeProvider StatusCodeProvider =>
+            statusCodeProvider ?? (statusCodeProvider = new BigCommerceStatusCodeProvider(bigCommerceStore));
 
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified

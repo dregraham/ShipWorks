@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
-using ShipWorks.Data.Model;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -23,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     public class MagentoOnlineUpdater : GenericStoreOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MagentoOnlineUpdater));
 
         /// <summary>
@@ -79,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             string title = ShippingManager.GetServiceUsed(shipment);
 
-            return string.Format("{0}|{1}", code, title);
+            return $"{code}|{title}";
         }
 
         /// <summary>

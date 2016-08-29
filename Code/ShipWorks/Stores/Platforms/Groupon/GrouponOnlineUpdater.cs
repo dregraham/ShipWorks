@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using log4net;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping;
-using ShipWorks.Stores.Platforms.Groupon;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
-using System.Threading;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -23,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// </summary>
     public class GrouponOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponOnlineUpdater));
 
         // the store this instance for
@@ -46,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             foreach(long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-                
+
                 // Check to see if shipment exists
                 if (shipment == null)
                 {
@@ -80,6 +72,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
         }
 
+        /// <summary>
+        /// Gets the tracking info to send to groupon
+        /// </summary>
         private static List<GrouponTracking> GetGrouponTracking(ShipmentEntity shipment)
         {
             OrderEntity order = shipment.Order;
@@ -94,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             foreach (GrouponOrderItemEntity item in order.OrderItems)
             {
                 //Need to have a CI_LineItemID to upload tracking
-                if(item.GrouponLineItemID != null && item.GrouponLineItemID.Length != 0)
+                if(!string.IsNullOrEmpty(item.GrouponLineItemID))
                 {
                     string trackingNumber = shipment.TrackingNumber;
                     string carrier = GrouponCarrier.GetCarrierCode(shipment);

@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComOnlineUpdater));
 
-        BuyDotComStoreEntity store;
+        private readonly BuyDotComStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
                 if (shipment == null)
                 {
-                    log.InfoFormat(String.Format("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID));
+                    log.InfoFormat("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID);
                 }
                 else
                 {
