@@ -16,47 +16,59 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     public class UpsApiTrackResponse
     {
         readonly ILog log = LogManager.GetLogger(typeof(UpsApiTrackClient));
+
         private string signedFor = string.Empty;
+        private string overallStatusCode;
 
-        public UpsApiTrackResponse()
-        {
-            ResultDetails = new List<TrackingResultDetail>();
-        }
+        private DateTime? deliveryEstimate;
+        private DateTime? deliveryDateTime;
 
-        public List<TrackingResultDetail> ResultDetails { get; }
+        private readonly List<TrackingResultDetail> resultDetails = new List<TrackingResultDetail>();
 
-        /// <summary>
-        /// This is the last status reported by UPS.  Sometimes it gets delivered, and then
-        /// another status comes in.  So if we see any "Delivered" at all, it takes precedence
-        /// over any more "recent" status
-        /// </summary>
-        public string OverallStatusCode { get; private set; }
-
-        public DateTime? DeliveryEstimate { get; set; }
-
-        public DateTime? DeliveryDateTime { get; set; }
-
-        public string SignedFor
-        {
-            get { return signedFor; }
-            set { signedFor = AddressCasing.Apply(value); }
-        }
-
-        public string OverallStatus
+        private string OverallStatus
         {
             get
             {
                 // Convert the status code to its readable name
                 string statusName = "";
-                if (OverallStatusCode == "I") statusName = "In Transit";
-                if (OverallStatusCode == "D") statusName = "Delivered";
-                if (OverallStatusCode == "X") statusName = "Exception";
-                if (OverallStatusCode == "C") statusName = "Pickup";
-                if (OverallStatusCode == "M") statusName = "Manifest Pickup";
+                if (overallStatusCode == "I") statusName = "In Transit";
+                if (overallStatusCode == "D") statusName = "Delivered";
+                if (overallStatusCode == "X") statusName = "Exception";
+                if (overallStatusCode == "C") statusName = "Pickup";
+                if (overallStatusCode == "M") statusName = "Manifest Pickup";
                 return statusName;
             }
         }
-        
+
+        public TrackingResult TrackingResult
+        {
+            get
+            {
+                TrackingResult result = new TrackingResult();
+                result.Details.AddRange(resultDetails);
+
+                string summary = $"<b>{OverallStatus}</b>";
+
+                if (OverallStatus == "Delivered")
+                {
+                    summary += " on " + deliveryDateTime;
+                }
+                else if (deliveryEstimate.HasValue)
+                {
+                    summary += $"<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {deliveryEstimate.Value}</span>";
+                }
+
+                if (!string.IsNullOrEmpty(signedFor))
+                {
+                    summary += $"<br/><span style='color: rgb(80, 80, 80);'>Signed by: {AddressCasing.Apply(signedFor)}</span>";
+                }
+
+                result.Summary = summary;
+
+                return result;
+            }
+        }
+
         public void LoadResponse(XmlDocument response, ShipmentEntity shipment)
         {
             XPathNavigator xpath = response.CreateNavigator();
@@ -79,23 +91,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Get the navigator for this activity
                 XPathNavigator activityNode = activityNodes.Current.Clone();
 
-                if (string.IsNullOrEmpty(SignedFor))
+                if (string.IsNullOrEmpty(signedFor))
                 {
-                    SignedFor = XPathUtility.Evaluate(activityNode, "ActivityLocation/SignedForByName", "");
+                    signedFor = XPathUtility.Evaluate(activityNode, "ActivityLocation/SignedForByName", "");
                 }
 
                 string statusCode = XPathUtility.Evaluate(activityNode, "Status/StatusType/Code", "");
 
                 // Update the overall status of the package
-                if (OverallStatusCode == "" || statusCode == "D")
+                if (overallStatusCode == "" || statusCode == "D")
                 {
-                    OverallStatusCode = statusCode;
+                    overallStatusCode = statusCode;
                 }
 
                 PopulateDeliveryDateTime(statusCode, activityNode);
 
                 TrackingResultDetail detail = new TrackingResultDetail();
-                ResultDetails.Add(detail);
+                resultDetails.Add(detail);
 
                 detail.Activity = GetStatus(activityNode);
                 detail.Location = GetLocation(activityNode, shipment);
@@ -117,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                 try
                 {
-                    DeliveryDateTime = DateTime.ParseExact(concatenatedDateTime, "yyyyMMdd HHmmss", null);
+                    deliveryDateTime = DateTime.ParseExact(concatenatedDateTime, "yyyyMMdd HHmmss", null);
                 }
                 catch (FormatException ex)
                 {
@@ -126,26 +138,32 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
         }
 
+        /// <summary>
+        /// Populates the delivery estimate based on the ScheduledDeliveryDate
+        /// </summary>
         private void PopulateDeliveryEstimate(XPathNavigator xpath)
         {
-            DeliveryEstimate = null;
-            string deliveryEstimate = XPathUtility.Evaluate(xpath, "//Shipment/ScheduledDeliveryDate", "");
+            deliveryEstimate = null;
+            string scheduledDeliveryDate = XPathUtility.Evaluate(xpath, "//Shipment/ScheduledDeliveryDate", "");
             // Get date into readable format
-            if (!string.IsNullOrEmpty(deliveryEstimate))
+            if (!string.IsNullOrEmpty(scheduledDeliveryDate))
             {
                 DateTime deliveryEstimateDate;
-                if (DateTime.TryParseExact(deliveryEstimate, "yyyyMMdd", null, DateTimeStyles.None, out deliveryEstimateDate))
+                if (DateTime.TryParseExact(scheduledDeliveryDate, "yyyyMMdd", null, DateTimeStyles.None, out deliveryEstimateDate))
                 {
-                    DeliveryEstimate = deliveryEstimateDate;
+                    deliveryEstimate = deliveryEstimateDate;
                 }
                 else
                 {
-                    log.Warn("Could not parse UPS delivery date: " + deliveryEstimate);
-                    Debug.Fail("Could not parse UPS delivery date", deliveryEstimate);
+                    log.Warn($"Could not parse UPS delivery date: {scheduledDeliveryDate}");
+                    Debug.Fail("Could not parse UPS delivery date", scheduledDeliveryDate);
                 }
             }
         }
 
+        /// <summary>
+        /// Gets the status for the activity
+        /// </summary>
         private string GetStatus(XPathNavigator activityNode)
         {
             string statusDesc = XPathUtility.Evaluate(activityNode, "Status/StatusType/Description", "");
@@ -160,6 +178,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return statusDesc;
         }
 
+        /// <summary>
+        /// Gets the location of the activity
+        /// </summary>
         private string GetLocation(XPathNavigator activityNode, ShipmentEntity shipment)
         {
             string city = XPathUtility.Evaluate(activityNode, "ActivityLocation/Address/City", "");
@@ -188,6 +209,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return location;
         }
 
+        /// <summary>
+        /// Gets the time of the activity
+        /// </summary>
         private string GetTime(XPathNavigator activityNode)
         {
             string time = XPathUtility.Evaluate(activityNode, "Time", "").ToLower();
@@ -204,6 +228,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return time;
         }
 
+        /// <summary>
+        /// Gets the date of the activity
+        /// </summary>
         private string GetDate(XPathNavigator activityNode)
         {
             string date = XPathUtility.Evaluate(activityNode, "Date", "");

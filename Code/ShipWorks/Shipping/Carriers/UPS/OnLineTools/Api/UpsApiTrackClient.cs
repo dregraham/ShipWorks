@@ -17,29 +17,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         public static TrackingResult TrackShipment(ShipmentEntity shipment)
         {
-            TrackingResult result = new TrackingResult();
             UpsApiTrackResponse response = ProcessRequest(shipment);
+            return response.TrackingResult;
 
-            result.Details.AddRange(response.ResultDetails);
-            string summary = $"<b>{response.OverallStatus}</b>";
-
-            if (response.OverallStatus == "Delivered")
-            {
-                summary += " on " + response.DeliveryDateTime;
-            }
-            else if (response.DeliveryEstimate.HasValue)
-            {
-                summary += $"<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {response.DeliveryEstimate.Value}</span>";
-            }
-
-            if (!string.IsNullOrEmpty(response.SignedFor))
-            {
-                summary += $"<br/><span style='color: rgb(80, 80, 80);'>Signed by: {response.SignedFor}</span>";
-            }
-
-            result.Summary = summary;
-
-            return result;
+            
         }
 
 
