@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
     {
         private bool columnSourceIsTable = true;
         private bool downloadStrategyIsLastModified = true;
+        private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
         private readonly Func<string, IDialog> dialogFactory;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
         private IOdbcFieldMap fieldMap;
@@ -118,6 +119,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                     ColumnSourceIsTable = importSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
                     LoadAndSetColumnSource(importSettingsFile.ColumnSource);
                     MapName = importSettingsFile.OdbcFieldMap.Name;
+                    importOrderItemStrategy = importSettingsFile.OdbcImportItemStrategy;
 
                     fieldMap = importSettingsFile.OdbcFieldMap;
                 }
@@ -140,6 +142,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             store.ImportColumnSource = ColumnSourceIsTable ?
                 SelectedTable?.Name :
                 CustomQuery;
+
+            store.ImportOrderItemStrategy = (int) importOrderItemStrategy;
 
             fieldMap.Name = MapName;
             store.ImportMap = fieldMap.Serialize();
@@ -180,6 +184,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             DownloadStrategyIsLastModified = store.ImportStrategy == (int)OdbcImportStrategy.ByModifiedTime;
 
             ColumnSourceIsTable = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table;
+
+            importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
         }
 
         /// <summary>

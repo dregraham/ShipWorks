@@ -13,6 +13,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <seealso cref="ShipWorks.Stores.Platforms.Odbc.Mapping.OdbcSettingsFile" />
     public class OdbcImportSettingsFile : OdbcSettingsFile, IOdbcImportSettingsFile
     {
+        private const string ImportStrategyKey = "ImportStrategy";
+        private const string ImportItemStrategyKey = "ImportItemStrategy";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcImportSettingsFile"/> class.
         /// </summary>
@@ -37,16 +40,27 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         public OdbcImportStrategy OdbcImportStrategy { get; set; }
 
         /// <summary>
+        /// Gets or sets the ODBC import item strategy.
+        /// </summary>
+        public OdbcImportOrderItemStrategy OdbcImportItemStrategy { get; set; }
+
+        /// <summary>
         /// Populates the ODBC settings from.
         /// </summary>
         protected override void PopulateOdbcSettingsFrom(JObject settings)
         {
             base.PopulateOdbcSettingsFrom(settings);
 
-            string importStrategy = settings.GetValue("ImportStrategy")?.ToString();
+            string importStrategy = settings.GetValue(ImportStrategyKey)?.ToString();
             if (!string.IsNullOrWhiteSpace(importStrategy))
             {
                 OdbcImportStrategy = EnumHelper.GetEnumByApiValue<OdbcImportStrategy>(importStrategy);
+            }
+
+            string importItemStrategy = settings.GetValue(ImportItemStrategyKey)?.ToString();
+            if (!string.IsNullOrWhiteSpace(importItemStrategy))
+            {
+                OdbcImportItemStrategy = EnumHelper.GetEnumByApiValue<OdbcImportOrderItemStrategy>(importItemStrategy);
             }
         }
 
@@ -57,7 +71,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             base.SaveOdbcSettingsTo(settings);
 
-            settings.Add("ImportStrategy", EnumHelper.GetApiValue(OdbcImportStrategy));
+            settings.Add(ImportStrategyKey, EnumHelper.GetApiValue(OdbcImportStrategy));
+            settings.Add(ImportItemStrategyKey, EnumHelper.GetApiValue(OdbcImportItemStrategy));
         }
     }
 }

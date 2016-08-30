@@ -1,10 +1,13 @@
 ﻿using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericFile;
+using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
@@ -12,9 +15,6 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
@@ -88,6 +88,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime,
                 ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
                 ImportColumnSource = string.Empty,
+                ImportOrderItemStrategy = (int) OdbcImportOrderItemStrategy.SingleLine,
                 UploadMap = string.Empty,
                 UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload,
                 UploadColumnSourceType = (int) OdbcColumnSourceType.Table,

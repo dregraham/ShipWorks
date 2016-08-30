@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Actions.Triggers
 {
@@ -32,6 +29,9 @@ namespace ShipWorks.Actions.Triggers
         Scheduled = 6,
 
         [Description("A custom button is clicked")]
-        UserInitiated = 7
+        UserInitiated = 7,
+
+        [Description("No trigger"), Hidden]
+        None = 8,
     }
 }

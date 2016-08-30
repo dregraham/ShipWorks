@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Web.UI.WebControls.WebParts;
 using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Interapptive.Shared.Metrics
@@ -10,6 +9,7 @@ namespace Interapptive.Shared.Metrics
     /// </summary>
     public class TrackedDurationEvent : ITrackedDurationEvent
     {
+        public const string DurationMetricKey = "DurationIn(ms)";
         private readonly Stopwatch stopwatch;
         private readonly EventTelemetry eventTelemetry;
 
@@ -62,7 +62,7 @@ namespace Interapptive.Shared.Metrics
             {
                 stopwatch.Stop();
 
-                AddMetric("DurationIn(ms)", stopwatch.ElapsedMilliseconds);
+                AddMetric(DurationMetricKey, stopwatch.ElapsedMilliseconds);
 
                 Telemetry.TrackEvent(eventTelemetry);
             }

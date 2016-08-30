@@ -26,6 +26,8 @@ namespace Interapptive.Shared.Metrics
     public static class Telemetry
     {
         private static readonly TelemetryClient telemetryClient;
+        public const string TotalShipmentsKey = "TotalShipments";
+        public const string TotalSuccessfulShipmentsKey = "TotalSuccessfulShipments";
 
         /// <summary>
         /// Static constructor
@@ -120,7 +122,7 @@ namespace Interapptive.Shared.Metrics
         public static void TrackException(Exception ex, Dictionary<string, string> properties)
         {
             Dictionary<string, string> commonProperties = CommonProperties();
-            
+
             foreach (KeyValuePair<string, string> keyValuePair in commonProperties.Where(kvp => !properties.ContainsKey(kvp.Key)))
             {
                 properties.Add(keyValuePair.Key, keyValuePair.Value);

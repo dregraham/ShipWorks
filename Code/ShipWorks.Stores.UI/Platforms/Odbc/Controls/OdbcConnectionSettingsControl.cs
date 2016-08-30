@@ -140,6 +140,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             using(TextWriter writer = new StreamWriter(streamToSave))
             {
                 importSettingsFile.OdbcImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
+                importSettingsFile.OdbcImportItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
                 importSettingsFile.ColumnSourceType = (OdbcColumnSourceType) store.ImportColumnSourceType;
                 importSettingsFile.ColumnSource = store.ImportColumnSource;
                 importSettingsFile.OdbcFieldMap = fieldMap;

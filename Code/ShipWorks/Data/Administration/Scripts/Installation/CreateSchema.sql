@@ -4048,7 +4048,8 @@ CREATE TABLE [dbo].[ActionQueue]
 [ObjectID] [bigint] NULL,
 [Status] [int] NOT NULL,
 [NextStep] [int] NOT NULL,
-[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ExtraData] [xml] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
@@ -5690,17 +5691,18 @@ PRINT N'Creating [dbo].[OdbcStore]'
 GO
 CREATE TABLE [dbo].[OdbcStore]
 (
-	[StoreID] [bigint] NOT NULL,
-	[ImportConnectionString] [nvarchar](2048) NOT NULL,
-	[ImportMap] [nvarchar](max) NOT NULL,
-	[ImportStrategy] [int] NOT NULL,
-	[ImportColumnSourceType] [int] NOT NULL,
-	[ImportColumnSource] [nvarchar](2048) NOT NULL,
-	[UploadStrategy] [int] NOT NULL,
-	[UploadMap] [nvarchar](max) NOT NULL,
-	[UploadColumnSourceType] [int] NOT NULL,
-	[UploadColumnSource] [nvarchar](2048) NOT NULL,
-	[UploadConnectionString] [nvarchar](2048) NOT NULL,
+    [StoreID] [bigint] NOT NULL,
+    [ImportConnectionString] [nvarchar](2048) NOT NULL,
+    [ImportMap] [nvarchar](max) NOT NULL,
+    [ImportStrategy] [int] NOT NULL,
+    [ImportColumnSourceType] [int] NOT NULL,
+    [ImportColumnSource] [nvarchar](2048) NOT NULL,
+	[ImportOrderItemStrategy] [int] NOT NULL,
+    [UploadStrategy] [int] NOT NULL,
+    [UploadMap] [nvarchar](max) NOT NULL,
+    [UploadColumnSourceType] [int] NOT NULL,
+    [UploadColumnSource] [nvarchar](2048) NOT NULL,
+    [UploadConnectionString] [nvarchar](2048) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'
