@@ -203,10 +203,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             string stateCode = XPathUtility.Evaluate(activityNode, "ActivityLocation/Address/StateProvinceCode", "");
             string countryCode = XPathUtility.Evaluate(activityNode, "ActivityLocation/Address/CountryCode", "");
 
-
             // Cleanup the city and status descriptions
             city = AddressCasing.Apply(city);
-
 
             // Build the location string
             string location = city;

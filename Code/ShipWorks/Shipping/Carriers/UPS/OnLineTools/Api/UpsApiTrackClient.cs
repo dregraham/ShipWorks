@@ -54,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             string trackingNumber = shipment.TrackingNumber;
             if (InterapptiveOnly.MagicKeysDown)
             {
-                trackingNumber = UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service)
-                    ? "9102084383041101186729"
-                    : "1ZTT97230394720182";
+                trackingNumber = UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service) ?
+                    "9102084383041101186729" :
+                    "1ZTT97230394720182";
             }
 
             return trackingNumber;
