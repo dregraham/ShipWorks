@@ -19,11 +19,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             UpsApiTrackResponse response = ProcessRequest(shipment);
             return response.TrackingResult;
-
-            
         }
 
-
+        /// <summary>
+        /// Processes the request.
+        /// </summary>
         private static UpsApiTrackResponse ProcessRequest(ShipmentEntity shipment)
         {
             // Create the client for connecting to the UPS server
@@ -46,24 +46,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return response;
         }
 
+        /// <summary>
+        /// Gets the tracking number. Uses a canned tracking number if magic keys are down.
+        /// </summary>
         private static string GetTrackingNumber(ShipmentEntity shipment)
         {
             string trackingNumber = shipment.TrackingNumber;
             if (InterapptiveOnly.MagicKeysDown)
             {
-                if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
-                {
-                    trackingNumber = "9102084383041101186729";
-                }
-                else
-                {
-                    trackingNumber = "1Z7VW1630324312293";
-                }
+                trackingNumber = UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service)
+                    ? "9102084383041101186729"
+                    : "1ZTT97230394720182";
             }
 
             return trackingNumber;
         }
 
+        /// <summary>
+        /// Gets an account. If no account available, throws.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="UpsException">ShipWorks cannot track a UPS shipment without a configured UPS account.</exception>
         private static UpsAccountEntity GetAccount()
         {
             UpsAccountEntity upsAccount = UpsAccountManager.Accounts.FirstOrDefault();

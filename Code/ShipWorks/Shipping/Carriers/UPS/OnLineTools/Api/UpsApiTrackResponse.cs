@@ -13,6 +13,9 @@ using System.Xml.XPath;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
+    /// <summary>
+    /// Processes the API Response of a UPS tracking web call.
+    /// </summary>
     public class UpsApiTrackResponse
     {
         readonly ILog log = LogManager.GetLogger(typeof(UpsApiTrackClient));
@@ -25,21 +28,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
         private readonly List<TrackingResultDetail> resultDetails = new List<TrackingResultDetail>();
 
-        private string OverallStatus
-        {
-            get
-            {
-                // Convert the status code to its readable name
-                string statusName = "";
-                if (overallStatusCode == "I") statusName = "In Transit";
-                if (overallStatusCode == "D") statusName = "Delivered";
-                if (overallStatusCode == "X") statusName = "Exception";
-                if (overallStatusCode == "C") statusName = "Pickup";
-                if (overallStatusCode == "M") statusName = "Manifest Pickup";
-                return statusName;
-            }
-        }
-
+        /// <summary>
+        /// Gets the tracking result.
+        /// </summary>
         public TrackingResult TrackingResult
         {
             get
@@ -47,9 +38,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 TrackingResult result = new TrackingResult();
                 result.Details.AddRange(resultDetails);
 
-                string summary = $"<b>{OverallStatus}</b>";
+                string overallStatusDescription = GetStatusDescription(overallStatusCode);
+                string summary = $"<b>{overallStatusDescription}</b>";
 
-                if (OverallStatus == "Delivered")
+                if (overallStatusDescription == "Delivered")
                 {
                     summary += " on " + deliveryDateTime;
                 }
@@ -69,6 +61,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
         }
 
+        /// <summary>
+        /// Loads the response.
+        /// </summary>
         public void LoadResponse(XmlDocument response, ShipmentEntity shipment)
         {
             XPathNavigator xpath = response.CreateNavigator();
@@ -88,32 +83,53 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Get all the activity nodes
                 XPathNodeIterator activityNodes = packageNode.Select("Activity");
 
-                // Get the navigator for this activity
-                XPathNavigator activityNode = activityNodes.Current.Clone();
-
-                if (string.IsNullOrEmpty(signedFor))
+                // Go through each one
+                while (activityNodes.MoveNext())
                 {
-                    signedFor = XPathUtility.Evaluate(activityNode, "ActivityLocation/SignedForByName", "");
+                    // Get the navigator for this activity
+                    XPathNavigator activityNode = activityNodes.Current.Clone();
+
+                    if (string.IsNullOrEmpty(signedFor))
+                    {
+                        signedFor = XPathUtility.Evaluate(activityNode, "ActivityLocation/SignedForByName", "");
+                    }
+
+                    string statusCode = XPathUtility.Evaluate(activityNode, "Status/StatusType/Code", "");
+
+                    // Update the overall status of the package
+                    if (overallStatusCode == "" || statusCode == "D")
+                    {
+                        overallStatusCode = statusCode;
+                    }
+
+                    PopulateDeliveryDateTime(statusCode, activityNode);
+
+                    TrackingResultDetail detail = new TrackingResultDetail();
+                    resultDetails.Add(detail);
+
+                    detail.Activity = GetStatus(activityNode);
+                    detail.Location = GetLocation(activityNode, shipment);
+                    detail.Date = GetDate(activityNode);
+                    detail.Time = GetTime(activityNode);
                 }
-
-                string statusCode = XPathUtility.Evaluate(activityNode, "Status/StatusType/Code", "");
-
-                // Update the overall status of the package
-                if (overallStatusCode == "" || statusCode == "D")
-                {
-                    overallStatusCode = statusCode;
-                }
-
-                PopulateDeliveryDateTime(statusCode, activityNode);
-
-                TrackingResultDetail detail = new TrackingResultDetail();
-                resultDetails.Add(detail);
-
-                detail.Activity = GetStatus(activityNode);
-                detail.Location = GetLocation(activityNode, shipment);
-                detail.Date = GetDate(activityNode);
-                detail.Time = GetTime(activityNode);
             }
+        }
+
+        /// <summary>
+        /// Convert the status code to its readable name
+        /// </summary>
+        private string GetStatusDescription(string statusCode)
+        {
+            Dictionary<string, string> statusCodesAndNames = new Dictionary<string, string>()
+            {
+                {"I", "In Transit"},
+                {"D", "Delivered"},
+                {"X", "Exception"},
+                {"C", "Pickup"},
+                {"M", "Manifest Pickup"},
+            };
+
+            return statusCodesAndNames.ContainsKey(statusCode) ? statusCodesAndNames[statusCode] : string.Empty;
         }
 
         /// <summary>
