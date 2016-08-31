@@ -629,12 +629,21 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get the service used from the shipment
+        /// Get the service used overridden to ensure compatibility with marketplaces
         /// </summary>
+        /// <remarks>
+        /// Override one off service types that are shipworks specific to
+        /// their more widely known counterparts
+        /// </remarks>
         public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
         {
-            // Global post is overwritten as USPS FirstClass and Priority via the USPS ShipmentType
-            // We want tango reporting to be correct so here we manually set the service used
+            if (!shipment.Processed)
+            {
+                return "";
+            }
+
+            // Global post is special service only offered by Stamps.com
+            // override GlobalPost shipments to First Class or Priority
             IEnumerable<PostalServiceType> globalPostServiceTypes = new[]
             {
                 PostalServiceType.GlobalPostEconomy,
@@ -645,7 +654,13 @@ namespace ShipWorks.Shipping
 
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps && globalPostServiceTypes.Contains((PostalServiceType)shipment.Postal.Service))
             {
-                return $"USPS {EnumHelper.GetDescription((PostalServiceType)shipment.Postal.Service)}";
+                switch (shipment.Postal.Service)
+                {
+                    case (int)PostalServiceType.GlobalPostEconomy:
+                        return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
+                    case (int)PostalServiceType.GlobalPostPriority:
+                        return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
+                }
             }
 
             return GetActualServiceUsed(shipment);
