@@ -21,6 +21,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
@@ -131,7 +132,7 @@ namespace ShipWorks.Shipping.Services
 
             await executor.ExecuteAsync(ProcessShipment, filteredShipments, executionState);
 
-            HandleProcessingException(executionState.OutOfFundsException, executionState.NewErrors);
+            HandleProcessingException(executionState);
 
             // See if we are supposed to open WorldShip
             if (executionState.WorldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
@@ -239,6 +240,9 @@ namespace ShipWorks.Shipping.Services
                 {
                     executionState.OutOfFundsException = executionState.OutOfFundsException ??
                         (ex.InnerException.InnerException as IInsufficientFunds);
+
+                    executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ??
+                        (ex.InnerException.InnerException as ITermsAndConditionsException);
                 }
             }
 
@@ -272,34 +276,39 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(IInsufficientFunds outOfFundsException, IList<string> newErrors)
+        private void HandleProcessingException(ShipmentProcessorExecutionState executionState)
         {
             // If any accounts were out of funds we show that instead of the errors
-            if (outOfFundsException != null)
+            if (executionState.OutOfFundsException != null)
             {
                 DialogResult answer = MessageHelper.ShowQuestion(owner,
-                    $"You do not have sufficient funds in {outOfFundsException.Provider} account {outOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
+                    $"You do not have sufficient funds in {executionState.OutOfFundsException.Provider} account {executionState.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
                     "Would you like to purchase more now?");
 
                 if (answer == DialogResult.OK)
                 {
-                    using (Form dlg = outOfFundsException.CreatePostageDialog(lifetimeScope))
+                    using (Form dlg = executionState.OutOfFundsException.CreatePostageDialog(lifetimeScope))
                     {
                         dlg.ShowDialog(owner);
                     }
                 }
             }
+            else if (executionState.TermsAndConditionsException != null)
+            {
+                MessageHelper.ShowError(owner, executionState.NewErrors.FirstOrDefault());
+                executionState.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
+            }
             else
             {
-                if (!newErrors.Any())
+                if (!executionState.NewErrors.Any())
                 {
                     return;
                 }
 
-                string message = newErrors.Take(3)
+                string message = executionState.NewErrors.Take(3)
                     .Aggregate("Some errors occurred during processing.", (x, y) => x + "\n\n" + y);
 
-                if (newErrors.Count > 3)
+                if (executionState.NewErrors.Count > 3)
                 {
                     message += "\n\nSee the shipment list for all errors.";
                 }

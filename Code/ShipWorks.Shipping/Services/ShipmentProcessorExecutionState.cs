@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Services
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.Services
             // Special cases - I didn't think we needed to abstract these.  If it gets out of hand we should refactor.
             WorldshipExported = false;
             OutOfFundsException = null;
+            TermsAndConditionsException = null;
 
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             LicenseCheckResults = new Dictionary<long, Exception>();
@@ -55,6 +57,11 @@ namespace ShipWorks.Shipping.Services
         /// Out of funds exception that may have been generated while processing
         /// </summary>
         public IInsufficientFunds OutOfFundsException { get; internal set; }
+
+        /// <summary>
+        /// Terms and conditions exception that may have been generated while processing
+        /// </summary>
+        public ITermsAndConditionsException TermsAndConditionsException { get; internal set; }
 
         /// <summary>
         /// Is this for Worldship
