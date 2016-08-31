@@ -25,6 +25,7 @@ using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -592,7 +593,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the service used. Returns blank if not processed or "(Deleted)" if the shipment has been deleted.
         /// </summary>
-        public static string GetServiceUsed(ShipmentEntity shipment)
+        public static string GetActualServiceUsed(ShipmentEntity shipment)
         {
             if (!shipment.Processed)
             {
@@ -624,6 +625,29 @@ namespace ShipWorks.Shipping
 
                 return "Unknown Service";
             }
+        }
+
+        /// <summary>
+        /// Get the service used from the shipment
+        /// </summary>
+        public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
+        {
+            // Global post is overwritten as USPS FirstClass and Priority via the USPS ShipmentType
+            // We want tango reporting to be correct so here we manually set the service used
+            IEnumerable<PostalServiceType> globalPostServiceTypes = new[]
+            {
+                PostalServiceType.GlobalPostEconomy,
+                PostalServiceType.GlobalPostPriority,
+                PostalServiceType.GlobalPostSmartSaverEconomy,
+                PostalServiceType.GlobalPostSmartSaverPriority
+            };
+
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps && globalPostServiceTypes.Contains((PostalServiceType)shipment.Postal.Service))
+            {
+                return $"USPS {EnumHelper.GetDescription((PostalServiceType)shipment.Postal.Service)}";
+            }
+
+            return GetActualServiceUsed(shipment);
         }
 
         /// <summary>

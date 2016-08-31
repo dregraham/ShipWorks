@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay.Factories
         public Shipment Create(ShipmentEntity shipment)
         {
             string carrierName = GetCarrierName(shipment);
-            string service = shippingManager.GetServiceUsed(shipment);
+            string service = shippingManager.GetOverriddenSerivceUsed(shipment);
 
             return new Shipment
             {
