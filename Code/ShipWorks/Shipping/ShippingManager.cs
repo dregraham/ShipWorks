@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
@@ -46,6 +40,12 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
