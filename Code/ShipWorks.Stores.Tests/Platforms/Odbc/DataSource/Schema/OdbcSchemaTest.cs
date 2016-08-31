@@ -1,13 +1,13 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Tests.Shared;
+using System;
+using System.Data;
+using System.Data.Common;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
@@ -34,7 +34,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
                 connection = mock.Mock<DbConnection>();
                 connection.Setup(c => c.GetSchema(It.IsAny<string>())).Returns(tableData);
 
-                var columnSourceMock = mock.MockFunc<string, IOdbcColumnSource>().FunctionOutput;
+                var mockedOdbcColumnSource = mock.MockRepository.Create<IOdbcColumnSource>();
+                mock.MockFunc<string, IOdbcColumnSource>(mockedOdbcColumnSource);
 
                 // Mock up the data source
                 Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
@@ -44,7 +45,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
 
                 testObject.Load(dataSource.Object);
 
-                Assert.Contains(columnSourceMock.Object, testObject.Tables);
+                Assert.Contains(mockedOdbcColumnSource.Object, testObject.Tables);
             }
         }
 

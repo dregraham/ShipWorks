@@ -132,18 +132,14 @@ namespace ShipWorks.Tests.Shared
         }
 
         /// <summary>
-        /// Mocks a LoggerFunc for the specified type T. 
-        /// The Func to create the logger is registered and the actual mocked logger is returned.
+        /// Mocks a Function with an input and output.
+        /// The Func to create the logger is registered and the passed in functionOutput is the output of the function
         /// </summary>
-        public static MockedFuncAndOutput<TInput, TOutput> MockFunc<TInput, TOutput>(this AutoMock mock) where TOutput : class
+        public static void MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
         {
-            Mock<TOutput> functionOutput = mock.MockRepository.Create<TOutput>();
-
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
             function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
             mock.Provide(function.Object);
-            
-            return new MockedFuncAndOutput<TInput, TOutput>(function, functionOutput);
         }
     }
 }
