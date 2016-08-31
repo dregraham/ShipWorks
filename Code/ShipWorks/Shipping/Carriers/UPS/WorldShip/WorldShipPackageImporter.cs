@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     public class WorldShipPackageImporter
     {
         private readonly IShippingManager shippingManager;
+        private readonly Func<ShipmentEntity, IUpsServiceManagerFactory> upsServiceManagerFactoryProvider;
         private readonly ILog log;
 
         /// <summary>
@@ -24,9 +25,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Initializes a new instance of the <see cref="WorldShipPackageImporter"/> class.
         /// </summary>
-        public WorldShipPackageImporter(Func<Type, ILog> logFactory, IShippingManager shippingManager)
+        public WorldShipPackageImporter(Func<Type, ILog> logFactory, IShippingManager shippingManager, Func<ShipmentEntity, IUpsServiceManagerFactory> upsServiceManagerFactoryProvider)
         {
             this.shippingManager = shippingManager;
+            this.upsServiceManagerFactoryProvider = upsServiceManagerFactoryProvider;
             log = logFactory(typeof(WorldShipPackageImporter));
 
             // WS returns the names of the packages differently, so create a mapping of WS package type names
@@ -84,12 +86,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // See if we can find a package that does not yet have a tracking number
 
                 upsPackage =
-                    upsShipment.Packages.FirstOrDefault(
-                        p =>
-                            (string.IsNullOrEmpty(SafeTrim(p.TrackingNumber)) &&
-                             !string.IsNullOrEmpty(SafeTrim(import.TrackingNumber))) ||
-                            (string.IsNullOrEmpty(SafeTrim(p.UspsTrackingNumber)) &&
-                             !string.IsNullOrEmpty(SafeTrim(import.UspsTrackingNumber))));
+                    upsShipment.Packages
+                        .FirstOrDefault(p =>
+                            string.IsNullOrEmpty(SafeTrim(p.TrackingNumber)) ^
+                            string.IsNullOrEmpty(SafeTrim(import.TrackingNumber)));
             }
 
             // This is the case where the user created a new package in WS, so create a new one and add to the shipment
@@ -99,11 +99,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 upsShipment.Packages.Add(upsPackage);
             }
 
-            // If we found the ups package, update it's properties
-            if (upsPackage != null)
-            {
-                UpdatePackage(shipment, upsPackage, import);
-            }
+            UpdatePackage(shipment, upsPackage, import);
 
             // Save the published charges
             upsShipment.PublishedCharges = (decimal) import.PublishedCharges;
@@ -181,9 +177,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 // The user may have changed the service type and package type in WS, update locally so we are in sync.
                 string worldShipServiceType = SafeTrim(import.ServiceType).ToUpperInvariant();
 
-                UpsServiceManagerFactory upsServiceManagerFactory = new UpsServiceManagerFactory(upsShipment.Shipment);
+                IUpsServiceManagerFactory upsServiceManagerFactory = upsServiceManagerFactoryProvider(upsShipment.Shipment);
                 IUpsServiceManager upsServiceManager = upsServiceManagerFactory.Create(upsShipment.Shipment);
-                UpsServiceMapping upsServiceMapping = null;
+                IUpsServiceMapping upsServiceMapping = null;
                 try
                 {
                     upsServiceMapping = upsServiceManager.GetServicesByWorldShipDescription(worldShipServiceType,
@@ -212,8 +208,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <param name="import">The WorldShipProcessed row with tracking information for this UPS Package</param>
         private static void SetTrackingNumbers(ShipmentEntity shipment, UpsShipmentEntity upsShipment, UpsPackageEntity upsPackage, WorldShipProcessedEntity import)
         {
-            string trackingNumber;
             string uspsTrackingNumber;
+            string trackingNumber;
             string leadTrackingNumber;
 
             // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.
@@ -222,8 +218,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             if (UpsUtility.IsUpsMiService((UpsServiceType)upsShipment.Service))
             {
                 uspsTrackingNumber = !string.IsNullOrWhiteSpace(import.UspsTrackingNumber) ? import.UspsTrackingNumber : (upsShipment.ReferenceNumber ?? string.Empty);
-                leadTrackingNumber = uspsTrackingNumber;
                 trackingNumber = string.Empty;
+                leadTrackingNumber = uspsTrackingNumber;
             }
             else if (UpsUtility.IsUpsSurePostService((UpsServiceType)upsShipment.Service))
             {
@@ -237,9 +233,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             else
             {
                 // We aren't mail innovations or sure post, so just get the regular tracking number
+                uspsTrackingNumber = string.Empty;
                 trackingNumber = import.TrackingNumber ?? string.Empty;
                 leadTrackingNumber = import.LeadTrackingNumber ?? trackingNumber;
-                uspsTrackingNumber = string.Empty;
             }
 
             upsPackage.UspsTrackingNumber = uspsTrackingNumber;

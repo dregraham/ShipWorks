@@ -139,10 +139,19 @@ namespace ShipWorks.Tests.Shared
         {
             Mock<TOutput> functionOutput = mock.MockRepository.Create<TOutput>();
 
+            return MockFunc<TInput, TOutput>(mock, functionOutput);
+        }
+
+        /// <summary>
+        /// Mocks a LoggerFunc for the specified type T. 
+        /// The Func to create the logger is registered and the actual mocked logger is returned.
+        /// </summary>
+        public static MockedFuncAndOutput<TInput, TOutput> MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
+        {
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
             function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
             mock.Provide(function.Object);
-            
+
             return new MockedFuncAndOutput<TInput, TOutput>(function, functionOutput);
         }
     }
