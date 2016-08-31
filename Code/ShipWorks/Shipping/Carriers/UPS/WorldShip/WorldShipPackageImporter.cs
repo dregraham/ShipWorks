@@ -1,13 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -16,6 +13,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public class WorldShipPackageImporter
     {
+        private readonly IShippingManager shippingManager;
         private readonly ILog log;
 
         /// <summary>
@@ -26,10 +24,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Initializes a new instance of the <see cref="WorldShipPackageImporter"/> class.
         /// </summary>
-        /// <param name="log">The log.</param>
-        public WorldShipPackageImporter(ILog log)
+        public WorldShipPackageImporter(Func<Type, ILog> logFactory, IShippingManager shippingManager)
         {
-            this.log = log;
+            this.shippingManager = shippingManager;
+            log = logFactory(typeof(WorldShipPackageImporter));
 
             // WS returns the names of the packages differently, so create a mapping of WS package type names
             // to our UpsPackagingType
@@ -66,86 +64,70 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Imports the package.
         /// </summary>
-        public void ImportPackage(UpsShipmentEntity upsShipment, WorldShipProcessedEntity import,
-            ShipmentEntity shipment, SqlAdapter adapter)
+        public void ImportPackageToShipment(ShipmentEntity shipment, WorldShipProcessedEntity import)
         {
-            try
+            shippingManager.EnsureShipmentLoaded(shipment);
+
+            UpsShipmentEntity upsShipment = shipment.Ups;
+
+            // Try to find the package by import.UpsPackageID
+            // Will not find a package if import.UpsPackageID is blank
+            UpsPackageEntity upsPackage =
+                upsShipment.Packages.FirstOrDefault(
+                    p =>
+                        !string.IsNullOrWhiteSpace(import.UpsPackageID) &&
+                        p.UpsPackageID.ToString() == import.UpsPackageID);
+
+            if (upsPackage == null)
             {
-                // Try to find the package by import.UpsPackageID
-                // Will not find a package if import.UpsPackageID is blank
-                UpsPackageEntity upsPackage =
+                // In case after the upgrade, WS still had entries with no UpsPackageId, we need to support them
+                // See if we can find a package that does not yet have a tracking number
+
+                upsPackage =
                     upsShipment.Packages.FirstOrDefault(
-                        p => !string.IsNullOrWhiteSpace(import.UpsPackageID) && p.UpsPackageID.ToString() == import.UpsPackageID);
-
-                if (upsPackage == null)
-                {
-                    // In case after the upgrade, WS still had entries with no UpsPackageId, we need to support them
-                    // See if we can find a package that does not yet have a tracking number
-
-                    upsPackage =
-                        upsShipment.Packages.FirstOrDefault(
-                            p =>
-                                (string.IsNullOrEmpty(SafeTrim(p.TrackingNumber)) &&
-                                 !string.IsNullOrEmpty(SafeTrim(import.TrackingNumber))) ||
-                                (string.IsNullOrEmpty(SafeTrim(p.UspsTrackingNumber)) &&
-                                 !string.IsNullOrEmpty(SafeTrim(import.UspsTrackingNumber))));
-                }
-
-                // This is the case where the user created a new package in WS, so create a new one and add to the shipment
-                if (upsPackage == null)
-                {
-                    upsPackage = UpsUtility.CreateDefaultPackage();
-                    upsShipment.Packages.Add(upsPackage);
-                }
-
-                // If we found the ups package, update it's properties
-                if (upsPackage != null)
-                {
-                    UpdatePackage(import, upsShipment, upsPackage, shipment);
-                }
-
-                // Save the published charges
-                upsShipment.PublishedCharges = (decimal) import.PublishedCharges;
-
-                // Figure out if there was a negotiated rate
-                if (import.NegotiatedCharges > 0)
-                {
-                    upsShipment.NegotiatedRate = true;
-
-                    shipment.ShipmentCost = (decimal) import.NegotiatedCharges;
-                }
-                else
-                {
-                    upsShipment.NegotiatedRate = false;
-                    shipment.ShipmentCost = upsShipment.PublishedCharges;
-                }
-
-                adapter.SaveAndRefetch(shipment);
+                        p =>
+                            (string.IsNullOrEmpty(SafeTrim(p.TrackingNumber)) &&
+                             !string.IsNullOrEmpty(SafeTrim(import.TrackingNumber))) ||
+                            (string.IsNullOrEmpty(SafeTrim(p.UspsTrackingNumber)) &&
+                             !string.IsNullOrEmpty(SafeTrim(import.UspsTrackingNumber))));
             }
-            catch (ObjectDeletedException)
-            {
-                log.WarnFormat($"Shipment {import.ShipmentID} has gone away since WorldShip processing.");
-            }
-            catch (SqlForeignKeyException)
-            {
-                log.WarnFormat($"Shipment {import.ShipmentID} has gone away since WorldShip processing.");
-            }
-            catch (ORMConcurrencyException ormConcurrencyException)
-            {
-                string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException(import,
-                    $"ShipmentID:{import.ShipmentID}",
-                    ormConcurrencyException);
 
-                throw new UpsException(ormConcurrencyExceptionMessage, ormConcurrencyException);
+            // This is the case where the user created a new package in WS, so create a new one and add to the shipment
+            if (upsPackage == null)
+            {
+                upsPackage = UpsUtility.CreateDefaultPackage();
+                upsShipment.Packages.Add(upsPackage);
+            }
+
+            // If we found the ups package, update it's properties
+            if (upsPackage != null)
+            {
+                UpdatePackage(shipment, upsPackage, import);
+            }
+
+            // Save the published charges
+            upsShipment.PublishedCharges = (decimal) import.PublishedCharges;
+
+            // Figure out if there was a negotiated rate
+            if (import.NegotiatedCharges > 0)
+            {
+                upsShipment.NegotiatedRate = true;
+
+                shipment.ShipmentCost = (decimal) import.NegotiatedCharges;
+            }
+            else
+            {
+                upsShipment.NegotiatedRate = false;
+                shipment.ShipmentCost = upsShipment.PublishedCharges;
             }
         }
 
         /// <summary>
         /// Updates the package.
         /// </summary>
-        private void UpdatePackage(WorldShipProcessedEntity import, UpsShipmentEntity upsShipment,
-            UpsPackageEntity upsPackage, ShipmentEntity shipment)
+        private void UpdatePackage(ShipmentEntity shipment, UpsPackageEntity upsPackage, WorldShipProcessedEntity import)
         {
+            UpsShipmentEntity upsShipment = shipment.Ups;
             UpdateServiceType(import, upsShipment);
 
             UpdatePackageType(import, upsPackage);

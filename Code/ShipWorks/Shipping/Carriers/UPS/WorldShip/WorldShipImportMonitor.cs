@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using Autofac;
+using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
@@ -18,8 +18,11 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;
 using ShipWorks.Users;
-using log4net;
 using ShipWorks.Users.Audit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -321,11 +324,26 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         throw new InvalidOperationException("How did it get processed by WorldShip if not a UPS shipment?");
                     }
 
-                    WorldShipPackageImporter importer = new WorldShipPackageImporter(LogManager.GetLogger(typeof(WorldShipPackageImporter)));
-
-                    foreach (WorldShipProcessedEntity import in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        importer.ImportPackage(upsShipment, import, shipment, adapter);
+                        WorldShipPackageImporter importer = scope.Resolve<WorldShipPackageImporter>();
+
+                        foreach (WorldShipProcessedEntity import in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
+                        {
+                            try
+                            {
+                                importer.ImportPackageToShipment(shipment, import);
+                                adapter.SaveAndRefetch(shipment);
+                            }
+                            catch (ObjectDeletedException)
+                            {
+                                log.WarnFormat($"Shipment {import.ShipmentID} has gone away since WorldShip processing.");
+                            }
+                            catch (SqlForeignKeyException)
+                            {
+                                log.WarnFormat($"Shipment {import.ShipmentID} has gone away since WorldShip processing.");
+                            }
+                        }
                     }
 
                     SaveWorldShipStatus(upsShipment, adapter, shipment);
