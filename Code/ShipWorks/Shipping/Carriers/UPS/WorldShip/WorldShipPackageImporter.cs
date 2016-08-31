@@ -31,36 +31,45 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             this.upsServiceManagerFactoryProvider = upsServiceManagerFactoryProvider;
             log = logFactory(typeof(WorldShipPackageImporter));
 
-            // WS returns the names of the packages differently, so create a mapping of WS package type names
-            // to our UpsPackagingType
-            upsPackageTypeNames = new Dictionary<string, UpsPackagingType>();
-            upsPackageTypeNames["BPM FLATS"] = UpsPackagingType.BPMFlats;
-            upsPackageTypeNames["BPM PARCEL"] = UpsPackagingType.BPMParcels;
-            upsPackageTypeNames["BPM"] = UpsPackagingType.BPM;
-            upsPackageTypeNames["FIRST CLASS"] = UpsPackagingType.FirstClassMail;
-            upsPackageTypeNames["FLATS"] = UpsPackagingType.Flats;
-            upsPackageTypeNames["IRREGULARS"] = UpsPackagingType.Irregulars;
-            upsPackageTypeNames["MACHINABLES"] = UpsPackagingType.Machinables;
-            upsPackageTypeNames["MEDIA MAIL"] = UpsPackagingType.MediaMail;
-            upsPackageTypeNames["PACKAGE"] = UpsPackagingType.Custom;
-            upsPackageTypeNames["PARCEL POST"] = UpsPackagingType.ParcelPost;
-            upsPackageTypeNames["PARCELS"] = UpsPackagingType.Parcels;
-            upsPackageTypeNames["PRIORITY"] = UpsPackagingType.PriorityMail;
-            upsPackageTypeNames["STANDARD FLATS"] = UpsPackagingType.StandardFlats;
-            upsPackageTypeNames["UPS 10 KG BOX"] = UpsPackagingType.Box10Kg;
-            upsPackageTypeNames["UPS 25 KG BOX"] = UpsPackagingType.Box25Kg;
-            upsPackageTypeNames["UPS EXPRESS BOX LARGE"] = UpsPackagingType.BoxExpressLarge;
-            upsPackageTypeNames["UPS EXPRESS BOX MEDIUM"] = UpsPackagingType.BoxExpressMedium;
-            upsPackageTypeNames["UPS EXPRESS BOX SMALL"] = UpsPackagingType.BoxExpressSmall;
-            upsPackageTypeNames["UPS LETTER"] = UpsPackagingType.Letter;
-            upsPackageTypeNames["UPS PAK"] = UpsPackagingType.Pak;
-            upsPackageTypeNames["UPS TUBE"] = UpsPackagingType.Tube;
+            upsPackageTypeNames = GetPackageTypeNames();
+        }
 
-            // Canada package types
-            upsPackageTypeNames["UPS EXPRESS"] = UpsPackagingType.BoxExpress;
-            upsPackageTypeNames["UPS EXPRESS PAK"] = UpsPackagingType.Pak;
-            upsPackageTypeNames["UPS EXPRESS TUBE"] = UpsPackagingType.Tube;
-            upsPackageTypeNames["UPS EXPRESS ENVELOPE"] = UpsPackagingType.ExpressEnvelope;
+        /// <summary>
+        /// WS returns the names of the packages differently, so create a mapping of WS package type names
+        /// to our UpsPackagingType
+        /// </summary>
+        private static Dictionary<string, UpsPackagingType> GetPackageTypeNames()
+        {
+            return new Dictionary<string, UpsPackagingType>
+            {
+                ["BPM FLATS"] = UpsPackagingType.BPMFlats,
+                ["BPM PARCEL"] = UpsPackagingType.BPMParcels,
+                ["BPM"] = UpsPackagingType.BPM,
+                ["FIRST CLASS"] = UpsPackagingType.FirstClassMail,
+                ["FLATS"] = UpsPackagingType.Flats,
+                ["IRREGULARS"] = UpsPackagingType.Irregulars,
+                ["MACHINABLES"] = UpsPackagingType.Machinables,
+                ["MEDIA MAIL"] = UpsPackagingType.MediaMail,
+                ["PACKAGE"] = UpsPackagingType.Custom,
+                ["PARCEL POST"] = UpsPackagingType.ParcelPost,
+                ["PARCELS"] = UpsPackagingType.Parcels,
+                ["PRIORITY"] = UpsPackagingType.PriorityMail,
+                ["STANDARD FLATS"] = UpsPackagingType.StandardFlats,
+                ["UPS 10 KG BOX"] = UpsPackagingType.Box10Kg,
+                ["UPS 25 KG BOX"] = UpsPackagingType.Box25Kg,
+                ["UPS EXPRESS BOX LARGE"] = UpsPackagingType.BoxExpressLarge,
+                ["UPS EXPRESS BOX MEDIUM"] = UpsPackagingType.BoxExpressMedium,
+                ["UPS EXPRESS BOX SMALL"] = UpsPackagingType.BoxExpressSmall,
+                ["UPS LETTER"] = UpsPackagingType.Letter,
+                ["UPS PAK"] = UpsPackagingType.Pak,
+                ["UPS TUBE"] = UpsPackagingType.Tube,
+
+                // Canada package types
+                ["UPS EXPRESS"] = UpsPackagingType.BoxExpress,
+                ["UPS EXPRESS PAK"] = UpsPackagingType.Pak,
+                ["UPS EXPRESS TUBE"] = UpsPackagingType.Tube,
+                ["UPS EXPRESS ENVELOPE"] = UpsPackagingType.ExpressEnvelope
+            };
         }
 
         /// <summary>
