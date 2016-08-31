@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers
             ShipmentEntity shipment = entity as ShipmentEntity;
 #pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
-            return shipment == null ? null : shippingManager.GetServiceUsed(shipment);
+            return shipment == null ? null : shippingManager.GetOverriddenSerivceUsed(shipment);
         }
     }
 }

@@ -136,15 +136,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Theory]
-        [InlineData(PostalServiceType.GlobalPostEconomy, "USPS International First")]
-        [InlineData(PostalServiceType.GlobalPostPriority, "USPS International Priority")]
+        [InlineData(PostalServiceType.GlobalPostEconomy, "USPS GlobalPost Economy")]
+        [InlineData(PostalServiceType.GlobalPostPriority, "USPS GlobalPost Priority")]
         [InlineData(PostalServiceType.InternationalFirst, "USPS International First")]
         [InlineData(PostalServiceType.InternationalPriority, "USPS International Priority")]
         [InlineData(PostalServiceType.FirstClass, "USPS First Class")]
         public void GetServiceDescription_ReturnsExpectedDescription(PostalServiceType serviceType, string expectedServiceDescription)
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) serviceType} };
-            
+
             Assert.Equal(expectedServiceDescription, testObject.GetServiceDescription(shipmentEntity));
         }
 

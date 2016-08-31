@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload.FieldValueResolvers
             OdbcShippingServiceFieldValueResolver testObject = mock.Create<OdbcShippingServiceFieldValueResolver>();
             testObject.GetValue(null, shipment);
 
-            shippingManager.Verify(s => s.GetServiceUsed(shipment));
+            shippingManager.Verify(s => s.GetOverriddenSerivceUsed(shipment));
         }
 
         public void Dispose()

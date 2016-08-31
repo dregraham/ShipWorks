@@ -229,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         private static string GetShippingService(ShipmentEntity shipment, string carrier)
         {
-            string service = ShippingManager.GetServiceUsed(shipment) ?? string.Empty;
+            string service = ShippingManager.GetOverriddenSerivceUsed(shipment) ?? string.Empty;
 
             // If the service starts with the carrier name, cut the carrier name off
             if (!string.IsNullOrEmpty(carrier) && service.ToLower().StartsWith(carrier))
