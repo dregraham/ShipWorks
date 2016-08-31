@@ -595,12 +595,32 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static string GetActualServiceUsed(ShipmentEntity shipment)
         {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            return GetServiceUsedInternal(shipment, shipmentType, shipmentType.GetServiceDescription);
+        }
+
+        /// <summary>
+        /// Get the service used overridden to ensure compatibility with marketplaces
+        /// </summary>
+        /// <remarks>
+        /// Override one off service types that are shipworks specific to
+        /// their more widely known counterparts
+        /// </remarks>
+        public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            return GetServiceUsedInternal(shipment, shipmentType, shipmentType.GetOveriddenServiceDescription);
+        }
+
+        /// <summary>
+        /// Gets the service used using the given method
+        /// </summary>
+        private static string GetServiceUsedInternal(ShipmentEntity shipment, ShipmentType shipmentType, Func<ShipmentEntity, string> descriptionFunc)
+        {
             if (!shipment.Processed)
             {
                 return "";
             }
-
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
             try
             {
@@ -617,7 +637,7 @@ namespace ShipWorks.Shipping
 
             try
             {
-                return shipmentType.GetServiceDescription(shipment);
+                return descriptionFunc(shipment);
             }
             catch (NotFoundException ex)
             {
@@ -625,44 +645,6 @@ namespace ShipWorks.Shipping
 
                 return "Unknown Service";
             }
-        }
-
-        /// <summary>
-        /// Get the service used overridden to ensure compatibility with marketplaces
-        /// </summary>
-        /// <remarks>
-        /// Override one off service types that are shipworks specific to
-        /// their more widely known counterparts
-        /// </remarks>
-        public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
-        {
-            if (!shipment.Processed)
-            {
-                return "";
-            }
-
-            // Global post is special service only offered by Stamps.com
-            // override GlobalPost shipments to First Class or Priority
-            IEnumerable<PostalServiceType> globalPostServiceTypes = new[]
-            {
-                PostalServiceType.GlobalPostEconomy,
-                PostalServiceType.GlobalPostPriority,
-                PostalServiceType.GlobalPostSmartSaverEconomy,
-                PostalServiceType.GlobalPostSmartSaverPriority
-            };
-
-            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps && globalPostServiceTypes.Contains((PostalServiceType)shipment.Postal.Service))
-            {
-                switch (shipment.Postal.Service)
-                {
-                    case (int)PostalServiceType.GlobalPostEconomy:
-                        return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
-                    case (int)PostalServiceType.GlobalPostPriority:
-                        return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
-                }
-            }
-
-            return GetActualServiceUsed(shipment);
         }
 
         /// <summary>
