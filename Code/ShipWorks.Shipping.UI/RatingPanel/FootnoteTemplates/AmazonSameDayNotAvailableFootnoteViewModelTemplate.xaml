@@ -7,8 +7,8 @@
 
     <DataTemplate x:Key="AmazonSameDayNotAvailableFootnoteViewModelTemplate">
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <Image  Style="{StaticResource Image.Icon}"
-                    Source="/Shipworks.Core;component/Resources/information2.png" />
+            <Image Style="{StaticResource Image.Icon}"
+                   Source="/Shipworks.Core;component/Resources/information2.png" />
             <TextBlock Margin="6,1,0,0">
                 Same day delivery rates are not available. For more info,
                 <Hyperlink Command="{Binding ShowDialog}">click here</Hyperlink>.

@@ -49,21 +49,21 @@
             this.infoLink.LinkArea = new System.Windows.Forms.LinkArea(51, 4);
             this.infoLink.Location = new System.Drawing.Point(25, 7);
             this.infoLink.Name = "infoLink";
-            this.infoLink.Size = new System.Drawing.Size(269, 17);
+            this.infoLink.Size = new System.Drawing.Size(322, 17);
             this.infoLink.TabIndex = 14;
             this.infoLink.TabStop = true;
             this.infoLink.Text = "Shipworks could not retrieve {0} rates. For more info, click here.";
             this.infoLink.UseCompatibleTextRendering = true;
             this.infoLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickInfoLink);
             // 
-            // AmazonUspsNotLinkedFootnoteControl
+            // AmazonNotLinkedFootnoteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.infoLink);
             this.Controls.Add(this.pictureBox);
             this.Name = "AmazonNotLinkedFootnoteControl";
-            this.Size = new System.Drawing.Size(396, 28);
+            this.Size = new System.Drawing.Size(396, 24);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

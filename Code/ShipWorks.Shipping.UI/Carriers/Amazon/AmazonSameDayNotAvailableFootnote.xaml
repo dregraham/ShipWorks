@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Carriers.Amazon"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             RenderOptions.BitmapScalingMode="NearestNeighbor"
+             d:DesignHeight="24" d:DesignWidth="360">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,5 +15,21 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ContentPresenter Content="{Binding .}"
-                      ContentTemplate="{StaticResource AmazonSameDayNotAvailableFootnoteViewModelTemplate}" />
+                      ContentTemplate="{StaticResource AmazonSameDayNotAvailableFootnoteViewModelTemplate}">
+        <ContentPresenter.Resources>
+            <Style TargetType="Hyperlink">
+                <Setter Property="Foreground" Value="Blue" />
+            </Style>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="FontFamily" Value="Tahoma" />
+                <Setter Property="FontSize" Value="8.25 pt" />
+                <Setter Property="FontStyle" Value="Normal" />
+                <Setter Property="FontStretch" Value="Normal" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="TextOptions.TextRenderingMode" Value="Aliased" />
+                <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+            </Style>
+        </ContentPresenter.Resources>
+    </ContentPresenter>
 </UserControl>
