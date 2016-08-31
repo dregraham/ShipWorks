@@ -550,5 +550,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
         }
+
+        /// <summary>
+        /// Get the service description for the shipment
+        /// overridden to provide a more compatible version for GlobalPost
+        /// </summary>
+        public override string GetOveriddenServiceDescription(ShipmentEntity shipment)
+        {
+            switch (shipment.Postal.Service)
+            {
+                case (int)PostalServiceType.GlobalPostEconomy:
+                    return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
+                case (int)PostalServiceType.GlobalPostPriority:
+                    return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
+                default:
+                    return base.GetServiceDescription(shipment);
+            }
+        }
     }
 }
