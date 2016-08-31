@@ -68,8 +68,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private void OnTermsClick(object sender, EventArgs e)
         {
             GetTerms();
-            WebHelper.OpenUrl(Uri.IsWellFormedUriString(promo.Terms.URL, UriKind.Absolute) && !promo.Terms.URL.StartsWith("http") ?
-                new Uri(promo.Terms.URL) : new Uri($"http://{promo.Terms.URL}"), this);
+            if (terms != null)
+            {
+                WebHelper.OpenUrl(
+                    Uri.IsWellFormedUriString(terms.URL, UriKind.Absolute) && !terms.URL.StartsWith("http") ?
+                    new Uri(terms.URL) :
+                    new Uri($"http://{terms.URL}"), this);
+            }
         }
 
         /// <summary>
