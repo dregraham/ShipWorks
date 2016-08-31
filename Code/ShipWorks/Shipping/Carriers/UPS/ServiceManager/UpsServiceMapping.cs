@@ -8,7 +8,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
     /// </summary>
     public class UpsServiceMapping : IUpsServiceMapping
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsServiceMapping"/> class.
         /// </summary>

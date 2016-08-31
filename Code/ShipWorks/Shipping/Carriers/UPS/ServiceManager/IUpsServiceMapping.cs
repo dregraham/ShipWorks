@@ -2,6 +2,9 @@
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
 {
+    /// <summary>
+    /// DTO class that contains mappings between UpsServiceType and Ship, Rate, and WorldShip codes and other properties.
+    /// </summary>
     public interface IUpsServiceMapping
     {
         /// <summary>

@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -63,7 +64,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 ["UPS LETTER"] = UpsPackagingType.Letter,
                 ["UPS PAK"] = UpsPackagingType.Pak,
                 ["UPS TUBE"] = UpsPackagingType.Tube,
-
                 // Canada package types
                 ["UPS EXPRESS"] = UpsPackagingType.BoxExpress,
                 ["UPS EXPRESS PAK"] = UpsPackagingType.Pak,
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Imports the package.
         /// </summary>
-        public void ImportPackageToShipment(ShipmentEntity shipment, WorldShipProcessedEntity import)
+        public void ImportPackageToShipment(ShipmentEntity shipment, IWorldShipProcessedEntity import)
         {
             shippingManager.EnsureShipmentLoaded(shipment);
 
@@ -130,11 +130,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Updates the package.
         /// </summary>
-        private void UpdatePackage(ShipmentEntity shipment, UpsPackageEntity upsPackage, WorldShipProcessedEntity import)
+        private void UpdatePackage(ShipmentEntity shipment, UpsPackageEntity upsPackage, IWorldShipProcessedEntity import)
         {
             UpsShipmentEntity upsShipment = shipment.Ups;
-            UpdateServiceType(import, upsShipment);
 
+            UpdateServiceType(import, upsShipment);
             UpdatePackageType(import, upsPackage);
 
             // To support old mappings, make sure we have a non null DeclaredValueOption
@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Updates the type of the package.
         /// </summary>
-        private void UpdatePackageType(WorldShipProcessedEntity import, UpsPackageEntity upsPackage)
+        private void UpdatePackageType(IWorldShipProcessedEntity import, UpsPackageEntity upsPackage)
         {
             // To support old mappings, make sure we have a non null PackageType
             if (import.PackageType != null)
@@ -169,8 +169,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 else
                 {
                     // WorldShip sent us a package type that doesn't match what we expected...log it and move on
-                    log.WarnFormat("WorldShip exported an unknown Package Type, '{0}', for ShipmentID '{1}'.",
-                        worldShipPackageType, import.ShipmentID);
+                    log.WarnFormat(
+                        $"WorldShip exported an unknown Package Type, '{worldShipPackageType}', for ShipmentID '{import.ShipmentID}'.");
                 }
             }
         }
@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Updates the type of the service.
         /// </summary>
-        private void UpdateServiceType(WorldShipProcessedEntity import, UpsShipmentEntity upsShipment)
+        private void UpdateServiceType(IWorldShipProcessedEntity import, UpsShipmentEntity upsShipment)
         {
             // To support old mappings, make sure we have a non null ServiceType
             if (import.ServiceType != null)
@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     // The description WorldShip returned isn't one we know about.  We don't want to crash SW, so we'll just leave the service type
                     // as is.  Just log and continue on.
-                    log.ErrorFormat("WorldShip returned an unknown description: '{0}'", worldShipServiceType);
+                    log.ErrorFormat($"WorldShip returned an unknown description: '{worldShipServiceType}'");
                 }
 
                 if (upsServiceMapping != null)
@@ -215,7 +215,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <param name="upsShipment">The UPS Shipment entity</param>
         /// <param name="upsPackage">The UPS Package upon which to set tracking number</param>
         /// <param name="import">The WorldShipProcessed row with tracking information for this UPS Package</param>
-        private static void SetTrackingNumbers(ShipmentEntity shipment, UpsShipmentEntity upsShipment, UpsPackageEntity upsPackage, WorldShipProcessedEntity import)
+        private static void SetTrackingNumbers(ShipmentEntity shipment, UpsShipmentEntity upsShipment, UpsPackageEntity upsPackage, IWorldShipProcessedEntity import)
         {
             string uspsTrackingNumber;
             string trackingNumber;
@@ -258,12 +258,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         private static string SafeTrim(string stringToTrim)
         {
-            if (!string.IsNullOrWhiteSpace(stringToTrim))
-            {
-                return stringToTrim.Trim();
-            }
-
-            return string.Empty;
+            return !string.IsNullOrWhiteSpace(stringToTrim) ?
+                stringToTrim.Trim() :
+                string.Empty;
         }
     }
 }

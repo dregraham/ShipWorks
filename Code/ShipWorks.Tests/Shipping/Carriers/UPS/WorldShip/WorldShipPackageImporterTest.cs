@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
 {
     public class WorldShipPackageImporterTest : IDisposable
     {
-        private AutoMock mock;
+        private readonly AutoMock mock;
 
         public WorldShipPackageImporterTest()
         {
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
             {
                 PublishedCharges = publishedCharge
             };
-            
+
             var testObject = mock.Create<WorldShipPackageImporter>();
             testObject.ImportPackageToShipment(shipment, worldShipProcessed);
             Assert.Equal((decimal) publishedCharge, shipment.Ups.PublishedCharges);
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
 
             var testObject = mock.Create<WorldShipPackageImporter>();
             testObject.ImportPackageToShipment(shipment, worldShipProcessed);
-           
+
             shippingManagerMock.Verify(s=>s.EnsureShipmentLoaded(shipment), Times.Once);
         }
 

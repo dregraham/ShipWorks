@@ -31,11 +31,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public static class WorldShipImportMonitor
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WorldShipImportMonitor));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(WorldShipImportMonitor));
 
         // Indicates if we are current in the process of checking
-        static ApplicationBusyToken busyToken = null;
-        static object busyLock = new object();
+        private static ApplicationBusyToken busyToken = null;
+        private static readonly object BusyLock = new object();
 
         // Indicates if the monitor has been started
         static bool started = false;
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             // See if we are already doing this, and if not, start it now
-            lock (busyLock)
+            lock (BusyLock)
             {
                 if (busyToken != null)
                 {
@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
             else
             {
-                lock (busyLock)
+                lock (BusyLock)
                 {
                     ApplicationBusyManager.OperationComplete(busyToken);
                     busyToken = null;
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Fetch the records to delete
             IRelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.AddWithAnd(WorldShipProcessedFields.ShipmentIdCalculated == System.DBNull.Value);
+            bucket.PredicateExpression.AddWithAnd(WorldShipProcessedFields.ShipmentIdCalculated == DBNull.Value);
             adapter.FetchEntityCollection(importList, bucket, 0);
 
             return importList;
@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             // Done, release the lock
-            lock (busyLock)
+            lock (BusyLock)
             {
                 ApplicationBusyManager.OperationComplete(busyToken);
                 busyToken = null;
@@ -172,9 +172,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Get a list of ws processed entries that are NOT Voids
             // To support the old mappings, include any where the VoidIndicator is null.  And if it is not null, then check that it is "N"
-            var worldShipShipments =
+            IEnumerable<WorldShipProcessedEntity> worldShipShipments =
                 toImport.Where(
-                    i => (i.VoidIndicator == null) || (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
+                    i =>
+                        (i.VoidIndicator == null) ||
+                        (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
 
             List<WorldShipProcessedGrouping> worldShipProcessedGroupings =
                 worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
@@ -195,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Now Process Voids
             // The old mappings did not support voids, so only include entries where VoidIndicator is not null and equals "Y"
-            var voidedWorldShipShipments =
+            IEnumerable<WorldShipProcessedGrouping> voidedWorldShipShipments =
                 toImport.Where(i => i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "Y")
                     .GroupBy(import => import.ShipmentIdCalculated,
                         (shipmentId, importEntries) =>
@@ -230,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     {
                         // This means that the processed entry was already deleted, so just eat the error and we'll delete any
                         // remaining abandoned entities the next time we check for updates
-                        log.Warn("Abandoned WorldShip processed entity was already deleted", ex);
+                        Log.Warn("Abandoned WorldShip processed entity was already deleted", ex);
                     }
                 }
             }
@@ -244,31 +246,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static ShipmentEntity GetShipment(long? shipmentIdToTest)
         {
             // First we need to find the shipment
-            long shipmentID = 0;
             ShipmentEntity shipment = null;
 
             // Try to convert the string shipment ID to a usable long
             if (shipmentIdToTest.HasValue)
             {
-                shipmentID = shipmentIdToTest.Value;
+                long shipmentID = shipmentIdToTest.Value;
 
                 // test to make sure we have a real shipment id
                 if (shipmentID % 1000 != EntityUtility.GetEntitySeed(EntityType.ShipmentEntity))
                 {
-                    log.ErrorFormat("Encountered invalid shipment ID '{0}' in WorldShipProcessed.ShipmentID.", shipmentID);
+                    Log.ErrorFormat("Encountered invalid shipment ID '{0}' in WorldShipProcessed.ShipmentID.", shipmentID);
                     return null;
                 }
 
                 shipment = ShippingManager.GetShipment(shipmentID);
                 if (shipment == null)
                 {
-                    log.WarnFormat("Shipment {0} has gone away since WorldShip processing.", shipmentIdToTest);
+                    Log.WarnFormat("Shipment {0} has gone away since WorldShip processing.", shipmentIdToTest);
                     return null;
                 }
             }
             else
             {
-                log.WarnFormat("ShipmentID was null");
+                Log.WarnFormat("ShipmentID was null");
                 return null;
             }
 
@@ -328,20 +329,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     {
                         WorldShipPackageImporter importer = scope.Resolve<WorldShipPackageImporter>();
 
-                        foreach (WorldShipProcessedEntity import in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
+                        foreach (WorldShipProcessedEntity packageToImport in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
                         {
                             try
                             {
-                                importer.ImportPackageToShipment(shipment, import);
+                                importer.ImportPackageToShipment(shipment, packageToImport);
                                 adapter.SaveAndRefetch(shipment);
                             }
                             catch (ObjectDeletedException)
                             {
-                                log.WarnFormat($"Shipment {import.ShipmentID} has gone away since WorldShip processing.");
+                                Log.WarnFormat($"Shipment {packageToImport.ShipmentID} has gone away since WorldShip processing.");
                             }
                             catch (SqlForeignKeyException)
                             {
-                                log.WarnFormat($"Shipment {import.ShipmentID} has gone away since WorldShip processing.");
+                                Log.WarnFormat($"Shipment {packageToImport.ShipmentID} has gone away since WorldShip processing.");
                             }
                         }
                     }
@@ -485,4 +486,3 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
     }
 }
-
