@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets a value indicating whether this instance is shipment type restricted.
         /// </summary>
-        /// 
+        ///
         /// Overridden to use dependency
         public override bool IsShipmentTypeRestricted
         {
@@ -297,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string trackingLink = string.Empty;
 
-            string serviceUsed = shippingManager.GetServiceUsed(shipment);
+            string serviceUsed = shippingManager.GetOverriddenSerivceUsed(shipment);
             if (serviceUsed.IndexOf("ups", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&" +

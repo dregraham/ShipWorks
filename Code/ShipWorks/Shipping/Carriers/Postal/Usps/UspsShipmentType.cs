@@ -553,14 +553,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         /// <summary>
         /// Get the service description for the shipment
+        /// overridden to provide a more compatible version for GlobalPost
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
+        public override string GetOveriddenServiceDescription(ShipmentEntity shipment)
         {
             switch (shipment.Postal.Service)
             {
-                case (int) PostalServiceType.GlobalPostEconomy:
+                case (int)PostalServiceType.GlobalPostEconomy:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
-                case (int) PostalServiceType.GlobalPostPriority:
+                case (int)PostalServiceType.GlobalPostPriority:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
                 default:
                     return base.GetServiceDescription(shipment);

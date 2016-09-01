@@ -863,6 +863,15 @@ namespace ShipWorks.Shipping
         public abstract string GetServiceDescription(ShipmentEntity shipment);
 
         /// <summary>
+        /// Get the carrier specific description of the shipping service used, overidden by shipment types to provide a
+        /// compatible description for special one off service types like USPS GlobalPost
+        /// </summary>
+        public virtual string GetOveriddenServiceDescription(ShipmentEntity shipment)
+        {
+            return GetServiceDescription(shipment);
+        }
+
+        /// <summary>
         /// Can be overridden by derived classes to provide common carrier details of shipments
         /// </summary>
         public virtual ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)

@@ -692,7 +692,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
-                postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));
+                postRequest.Variables.Add("service", ShippingManager.GetActualServiceUsed(shipment));
                 postRequest.Variables.Add("country", shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
                 postRequest.Variables.Add("tracking", tracking);
                 postRequest.Variables.Add("firstname", shipment.ShipFirstName);

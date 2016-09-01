@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     break;
             }
 
-            string title = ShippingManager.GetServiceUsed(shipment);
+            string title = ShippingManager.GetOverriddenSerivceUsed(shipment);
 
             return $"{code}|{title}";
         }
