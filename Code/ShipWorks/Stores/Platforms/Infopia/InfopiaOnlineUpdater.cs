@@ -17,11 +17,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// </summary>
     public class InfopiaOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(InfopiaOnlineUpdater));
 
         // store for which this updater is to operate
-        InfopiaStoreEntity store;
+        private readonly InfopiaStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
             OrderEntity order = shipment.Order;
             if (!order.IsManual)
             {
-                // Upload tracking number 
+                // Upload tracking number
                 InfopiaWebClient client = new InfopiaWebClient(store);
 
                 string trackingNumber = "";
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 decimal charge = shipment.ShipmentCost;
 
                 InfopiaUtility.GetShipmentUploadValues(shipment, out shipper, out trackingNumber);
-                
+
                 // upload the details
                 client.UploadShipmentDetails(order.OrderNumber, shipper, trackingNumber, charge);
             }

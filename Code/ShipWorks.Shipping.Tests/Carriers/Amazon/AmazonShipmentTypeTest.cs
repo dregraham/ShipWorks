@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
     {
         readonly AutoMock mock;
         private readonly ShipmentEntity trackedShipment;
-        
+
         public AmazonShipmentTypeTest()
         {
             mock = AutoMock.GetLoose();
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             orderManager.Setup(o => o.PopulateOrderDetails(shipment))
                 .Callback<ShipmentEntity>(s => s.Order = new AmazonOrderEntity())
                 .Verifiable();
-            
+
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
 
             testObject.IsAllowedFor(shipment);
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             };
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
-            
+
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))
                 .Returns(new AmazonStoreEntity { TypeCode = (int) StoreTypeCode.Amazon });
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public void TrackShipment_NoTrackingFound_NoTrackingNumber()
         {
             AmazonShipmentType testObject = mock.Create<AmazonShipmentType>();
-            
+
             Assert.Contains("no tracking number found", testObject.TrackShipment(new ShipmentEntity()).Summary, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public void SetGetServiceUsedReturn(string serviceToReturn)
         {
             mock.Mock<IShippingManager>()
-                .Setup(s => s.GetServiceUsed(It.IsAny<ShipmentEntity>()))
+                .Setup(s => s.GetOverriddenSerivceUsed(It.IsAny<ShipmentEntity>()))
                 .Returns(serviceToReturn);
         }
 

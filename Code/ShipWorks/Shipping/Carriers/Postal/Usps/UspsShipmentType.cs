@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -26,6 +22,11 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -548,6 +549,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
             return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
+        }
+
+        /// <summary>
+        /// Get the service description for the shipment
+        /// overridden to provide a more compatible version for GlobalPost
+        /// </summary>
+        public override string GetOveriddenServiceDescription(ShipmentEntity shipment)
+        {
+            switch (shipment.Postal.Service)
+            {
+                case (int)PostalServiceType.GlobalPostEconomy:
+                    return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
+                case (int)PostalServiceType.GlobalPostPriority:
+                    return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
+                default:
+                    return base.GetServiceDescription(shipment);
+            }
         }
     }
 }

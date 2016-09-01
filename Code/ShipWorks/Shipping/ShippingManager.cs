@@ -25,6 +25,7 @@ using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -593,14 +594,34 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the service used. Returns blank if not processed or "(Deleted)" if the shipment has been deleted.
         /// </summary>
-        public static string GetServiceUsed(ShipmentEntity shipment)
+        public static string GetActualServiceUsed(ShipmentEntity shipment)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            return GetServiceUsedInternal(shipment, shipmentType, shipmentType.GetServiceDescription);
+        }
+
+        /// <summary>
+        /// Get the service used overridden to ensure compatibility with marketplaces
+        /// </summary>
+        /// <remarks>
+        /// Override one off service types that are shipworks specific to
+        /// their more widely known counterparts
+        /// </remarks>
+        public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            return GetServiceUsedInternal(shipment, shipmentType, shipmentType.GetOveriddenServiceDescription);
+        }
+
+        /// <summary>
+        /// Gets the service used using the given method
+        /// </summary>
+        private static string GetServiceUsedInternal(ShipmentEntity shipment, ShipmentType shipmentType, Func<ShipmentEntity, string> descriptionFunc)
         {
             if (!shipment.Processed)
             {
                 return "";
             }
-
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
             try
             {
@@ -617,7 +638,7 @@ namespace ShipWorks.Shipping
 
             try
             {
-                return shipmentType.GetServiceDescription(shipment);
+                return descriptionFunc(shipment);
             }
             catch (NotFoundException ex)
             {
