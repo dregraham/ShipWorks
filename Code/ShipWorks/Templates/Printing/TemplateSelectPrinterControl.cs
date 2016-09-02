@@ -87,7 +87,7 @@ namespace ShipWorks.Templates.Printing
         private void OnUseDefault(object sender, EventArgs e)
         {
             var templateSettings = TemplateHelper.GetComputerSettings(template);
-            var printerSettings = new PrinterSettings();
+            var printerSettings = PrinterSettingFactory.GetDefaultPrinterSettings();
 
             if (printerSettings.IsValid)
             {
