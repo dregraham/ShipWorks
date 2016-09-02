@@ -56,7 +56,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             if (string.IsNullOrWhiteSpace(store.ApiUserKey))
             {
-                throw new ThreeDCartException(string.Format("The 3dcart Store API User Key is missing. Please enter your API User Key by going to Manage > Stores > {0} > Edit > Store Connection.  You will find instructions on how to find the API User Key there. ", store.StoreName));
+                throw new ThreeDCartException(
+                    "The 3dcart Store API User Key is missing. Please enter your API User Key by going to " +
+                    $"Manage > Stores > {store.StoreName} > Edit > Store Connection.  You will find instructions" +
+                    " on how to find the API User Key there. ");
             }
 
             this.store = store;
@@ -270,7 +273,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             XmlDocument doc;
             XmlNode errorNode = null;
 
-            if (responseToCheck == null || responseToCheck.OwnerDocument == null)
+            if (responseToCheck?.OwnerDocument == null)
             {
                 doc = new XmlDocument();
                 errorNode = doc.CreateElement("Error");
@@ -336,7 +339,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             if (errorNode != null)
             {
                 log.ErrorFormat("ShipWorks was unable to update the order status.  Error Message: {0}", errorNode.OuterXml);
-                throw new ThreeDCartException(string.Format("ShipWorks was unable to update the order status for order number {0}.", invoiceNumber), errorNode);
+                throw new ThreeDCartException(
+                    $"ShipWorks was unable to update the order status for order number {invoiceNumber}.", errorNode);
             }
         }
 
@@ -417,14 +421,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Track if we should send the invoice number prefix
             bool sendPrefix = false;
 
-            RequestThrottleParameters requestThrottleArgs;
             foreach (XmlNode orderNode in ordersToGet)
             {
                 // Get the invoice number (without prefix).  We'll be using this for the async user state unique id
                 string invoiceNumber = orderNode["invoicenum"].InnerText;
                 string invoiceNumberPrefix = orderNode["invoicenum_prefix"].InnerText;
                 XmlNode orderResultXml = null;
-                requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrder, null, progressReporter);
+                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetOrder, null, progressReporter);
 
                 // Sometimes 3dcart wants the invoice number prefix included in the request
                 string invoiceNumberToSend = sendPrefix ? $"{invoiceNumberPrefix}{invoiceNumber}" : invoiceNumber;
@@ -552,8 +555,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <param name="threeDCartOrderItemProductId">The 3dcart order item product ID</param>
         /// <param name="threeDCartOrderItemName">The 3dcart order item option value text</param>
         /// <returns>ThreeDCartProductDTO representing the cart product.  Null if an online product can't be found.</returns>
-        [NDependIgnoreLongMethod]
-        public ThreeDCartProductDTO GetProduct(long invoiceNumber, string threeDCartOrderItemProductId, string threeDCartOrderItemName)
+        public ThreeDCartProductDTO GetProduct(long invoiceNumber, string threeDCartOrderItemProductId,
+            string threeDCartOrderItemName)
         {
             // If we got a blank product name, just return
             if (string.IsNullOrWhiteSpace(threeDCartOrderItemProductId))
@@ -563,7 +566,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             // Build the cache key
             string cacheOrderItemName = threeDCartOrderItemName.ToUpperInvariant().Replace(" ", string.Empty);
-            string productCacheKey = string.Format("{0}-{1}-{2}", store.StoreID, threeDCartOrderItemProductId, cacheOrderItemName);
+            string productCacheKey = $"{store.StoreID}-{threeDCartOrderItemProductId}-{cacheOrderItemName}";
 
             // See if we've already tried to find this product, but were unable to.
             if (productNotFoundCache.Contains(productCacheKey))
@@ -579,21 +582,28 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 return foundProductDto;
             }
 
-            // The regular cart api does not return the actual product id; it returns the item id, but calls it ProductID.
-            // A call to getProduct using the item id yields no results
-            // So, we'll do an adavanced sql query to find the real product id based on the order item id.
-            XmlNode productQueryResultXml = null;
-            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetProduct, null, progressReporter);
+            ThreeDCartProductDTO productDto = LoadProduct(threeDCartOrderItemProductId, threeDCartOrderItemName,
+                cacheOrderItemName, invoiceNumber);
 
-            using (cartAPIAdvanced advancedApiWebService = CreateAdvancedApiWebService(string.Format("GetProduct ({0})", threeDCartOrderItemProductId)))
+            if (productDto != null)
             {
-                string queryProductSql = ApiQueryProvider.QueryProductsByItemID(invoiceNumber, threeDCartOrderItemProductId);
-
-                throttler.ExecuteRequest(requestThrottleArgs, () =>
-                {
-                    productQueryResultXml = MakeAdvancedCartApiQuery(advancedApiWebService, queryProductSql, "QueryProduct");
-                });
+                productCache[productCacheKey] = productDto;
             }
+            else
+            {
+                // Somehow we couldn't find the product at all...maybe it has been deleted
+                // Add it to the product NOT FOUND cache so we don't try to find it again until ShipWorks is re-launched
+                productNotFoundCache.Add(productCacheKey);
+            }
+
+            return productDto;
+        }
+
+        private ThreeDCartProductDTO LoadProduct(string threeDCartOrderItemProductId,
+            string threeDCartOrderItemName, string cacheOrderItemName, long invoiceNumber)
+        {
+
+            XmlNode productQueryResultXml = GetProductQueryResultXml(invoiceNumber, threeDCartOrderItemProductId);
 
             // Get a list of products matching that order item id
             XmlNodeList products = productQueryResultXml.SelectNodes("//runQueryRecord");
@@ -606,101 +616,148 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 // Now make a call to the regular api to get the full product info
                 XmlNode getProductResponseXml = GetProducts(ThreeDCartConstants.MaxResultsToReturn, 1, productId);
-                XmlNode errorNode = GetErrorFromResponse(getProductResponseXml);
-                if (errorNode != null)
-                {
-                    log.ErrorFormat("ShipWorks was unable to get product information from 3dcart.  Error Message: {0}.", errorNode.OuterXml);
-                    string errorMessage = string.Format("ShipWorks was unable to get product information from 3dcart for product ID/Sku '{0}'", productId);
-                    throw new ThreeDCartException(errorMessage, errorNode);
-                }
+
+                CheckResponseForErrors(getProductResponseXml, productId);
 
                 // Get the product from the result
-                XElement apiProduct = getProductResponseXml.ToXElement().XPathSelectElement("//GetProductDetailsResponse/Product");
+                XElement apiProduct =
+                    getProductResponseXml.ToXElement().XPathSelectElement("//GetProductDetailsResponse/Product");
+
+                // Create our product dto to return, setting the properties we know
+                ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
+                {
+                    ItemName = threeDCartOrderItemProductId,
+                    WarehouseBin = GetWarehouseBin(apiProduct)
+                };
+
+                LoadProductImages(productDto, apiProduct);
 
                 // get a list of all options for the product
                 IEnumerable<XElement> optionTypes = apiProduct.XPathSelectElements("Options/Option/OptionType");
 
-                // Get the WarehouseBin, if any
-                string warehouseBin = string.Empty;
-                XElement warehouseBinXElement = apiProduct.XPathSelectElement("WarehouseBin");
-                if (warehouseBinXElement != null)
-                {
-                    warehouseBin = warehouseBinXElement.Value;
-                }
-
-                // If no item  options were found or the item name that was passed in is blank we can skip checking options
+                // If no item options were found or the item name that was passed in is blank we can skip checking options
                 // A product could have no options when the order was placed, but it is possible that the product could now have options.
-                if (optionTypes == null || !optionTypes.Any() || string.IsNullOrWhiteSpace(threeDCartOrderItemName))
+                if (optionTypes.Any() && !string.IsNullOrWhiteSpace(threeDCartOrderItemName))
                 {
-                    // Create our product dto to return, setting the properties we know
-                    ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
+                    List<ThreeDCartOptionNode> optionNodes = GetOptionNodes(apiProduct, cacheOrderItemName);
+                    if (optionNodes.Any())
                     {
-                        ItemName = threeDCartOrderItemProductId,
-                        WarehouseBin = warehouseBin
-                    };
-
-                    LoadProductImages(productDto, apiProduct);
-
-                    // Add it to the cache
-                    productCache[productCacheKey] = productDto;
-
-                    return productDto;
-                }
-                else
-                {
-                    // 3dcart joins the attribute and value by a : in the item product name, so use that format to
-                    // create a string to check based on the store's products, removing spaces to get an accurate search.
-                    // The attribute/value combination could be anywhere in the product name, so just see if it's in there anywhere
-                    // If so, set the product, option, and value.
-                    var optionTypeValues =
-                        (from optionTypeElement in apiProduct.Descendants("OptionType")
-                         from optionValueNameElement in optionTypeElement.Parent.Descendants("Name")
-                         where cacheOrderItemName == string.Format("{0}:{1}",
-                                                                optionTypeElement.Value.Trim().Replace(" ", "").ToUpperInvariant(),
-                                                           optionValueNameElement.Value.Trim().Replace(" ", "").ToUpperInvariant())
-                         select new { OptionTypeNode = optionTypeElement, OptionValueNode = optionValueNameElement.Parent }).ToList();
-
-                    if (optionTypeValues != null && optionTypeValues.Any())
-                    {
-                        var optionTypeValue = optionTypeValues.First();
-
-                        // The item price could be different from the product xml option price since the item is a snapshot in time
-                        // But, if we can't get the price from the item, we'll go ahead and set the price to the product's current price
-                        // then below we'll try to get the item price and use it if we find it
-                        decimal optionPrice = 0m;
-                        XElement optionPriceXElement = optionTypeValue.OptionValueNode.XPathSelectElement("OptionPrice");
-                        if (optionPriceXElement != null && !string.IsNullOrWhiteSpace(optionPriceXElement.Value))
-                        {
-                            if (!decimal.TryParse(optionPriceXElement.Value, out optionPrice))
-                            {
-                                optionPrice = 0.0m;
-                            }
-                        }
-
-                        // Create the product dto to return
-                        ThreeDCartProductDTO productDto = new ThreeDCartProductDTO
-                        {
-                            ItemName = threeDCartOrderItemName,
-                            OptionDescription = optionTypeValue.OptionValueNode.XPathSelectElement("Name").Value,
-                            OptionName = optionTypeValue.OptionTypeNode.Value,
-                            OptionPrice = optionPrice,
-                            WarehouseBin = warehouseBin
-                        };
-
-                        LoadProductImages(productDto, apiProduct);
-
-                        // Add it to the cache
-                        productCache[productCacheKey] = productDto;
-
+                        LoadProductOptions(productDto, optionNodes);
                         return productDto;
                     }
                 }
+                else
+                {
+                    return productDto;
+                }
             }
 
-            // Somehow we couldn't find the product at all...maybe it has been deleted
-            // Add it to the product NOT FOUND cache so we don't try to find it again until ShipWorks is re-launched
-            productNotFoundCache.Add(productCacheKey);
             return null;
+        }
+
+        /// <summary>
+        /// Gets the warehouse bin.
+        /// </summary>
+        private string GetWarehouseBin(XElement apiProduct)
+        {
+            // Get the WarehouseBin, if any
+            string warehouseBin = string.Empty;
+            XElement warehouseBinXElement = apiProduct.XPathSelectElement("WarehouseBin");
+            if (warehouseBinXElement != null)
+            {
+                warehouseBin = warehouseBinXElement.Value;
+            }
+            return warehouseBin;
+        }
+
+        /// <summary>
+        /// Checks the response for errors.
+        /// </summary>
+        private void CheckResponseForErrors(XmlNode getProductResponseXml, string productId)
+        {
+            XmlNode errorNode = GetErrorFromResponse(getProductResponseXml);
+            if (errorNode != null)
+            {
+                log.ErrorFormat(
+                    $"ShipWorks was unable to get product information from 3dcart. Error Message: {errorNode.OuterXml}.");
+                string errorMessage =
+                    $"ShipWorks was unable to get product information from 3dcart for product ID/Sku '{productId}'";
+                throw new ThreeDCartException(errorMessage, errorNode);
+            }
+        }
+
+        /// <summary>
+        /// Find the real product id based on the order item id.
+        /// </summary>
+        /// <remarks>
+        /// The regular cart api does not return the actual product id; it returns the item id, but calls it ProductID.
+        /// A call to getProduct using the item id yields no results
+        /// So, we'll do an adavanced sql query to find the real product id based on the order item id.
+        /// </remarks>
+        private XmlNode GetProductQueryResultXml(long invoiceNumber, string threeDCartOrderItemProductId)
+        {
+            XmlNode productQueryResultXml = null;
+            RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(
+                ThreeDCartWebClientApiCall.GetProduct, null, progressReporter);
+
+            using (cartAPIAdvanced advancedApiWebService = CreateAdvancedApiWebService(
+                $"GetProduct ({threeDCartOrderItemProductId})"))
+            {
+                string queryProductSql = ApiQueryProvider.QueryProductsByItemID(invoiceNumber, threeDCartOrderItemProductId);
+
+                throttler.ExecuteRequest(requestThrottleArgs,
+                    () =>
+                    {
+                        productQueryResultXml = MakeAdvancedCartApiQuery(advancedApiWebService, queryProductSql, "QueryProduct");
+                    });
+            }
+
+            return productQueryResultXml;
+        }
+
+        /// <summary>
+        /// Loads the product options.
+        /// </summary>
+        private void LoadProductOptions(ThreeDCartProductDTO productDto, List<ThreeDCartOptionNode> optionTypeValues)
+        {
+            ThreeDCartOptionNode optionTypeValue = optionTypeValues.First();
+
+            // The item price could be different from the product xml option price since the item is a snapshot in time
+            // But, if we can't get the price from the item, we'll go ahead and set the price to the product's current price
+            // then below we'll try to get the item price and use it if we find it
+            decimal optionPrice = 0m;
+            XElement optionPriceXElement = optionTypeValue.OptionValueNode.XPathSelectElement("OptionPrice");
+            if (!string.IsNullOrWhiteSpace(optionPriceXElement?.Value))
+            {
+                if (!decimal.TryParse(optionPriceXElement.Value, out optionPrice))
+                {
+                    optionPrice = 0.0m;
+                }
+            }
+
+            // Add option details to Dto
+            productDto.OptionDescription = optionTypeValue.OptionValueNode.XPathSelectElement("Name").Value;
+            productDto.OptionName = optionTypeValue.OptionTypeNode.Value;
+            productDto.OptionPrice = optionPrice;
+        }
+
+        /// <summary>
+        /// Gets the option type values.
+        /// </summary>
+        private List<ThreeDCartOptionNode> GetOptionNodes(XElement apiProduct, string cacheOrderItemName)
+        {
+            // 3dcart joins the attribute and value by a : in the item product name, so use that format to
+            // create a string to check based on the store's products, removing spaces to get an accurate search.
+            // The attribute/value combination could be anywhere in the product name, so just see if it's in there anywhere
+            // If so, set the product, option, and value.
+            List<ThreeDCartOptionNode> optionTypeValues =
+                (from optionTypeElement in apiProduct.Descendants("OptionType")
+                    from optionValueNameElement in optionTypeElement.Parent?.Descendants("Name")
+                    where cacheOrderItemName == $"{optionTypeElement.Value.Trim().Replace(" ", "").ToUpperInvariant()}:" +
+                          $"{optionValueNameElement.Value.Trim().Replace(" ", "").ToUpperInvariant()}"
+                    select new ThreeDCartOptionNode {OptionTypeNode = optionTypeElement, OptionValueNode = optionValueNameElement.Parent}).ToList();
+
+            return optionTypeValues;
         }
 
         /// <summary>
@@ -719,15 +776,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             //Iterate through each image, finding a non blank url
             foreach (XElement image in product.XPathSelectElements("Images/Image/Url").Where(img => !string.IsNullOrWhiteSpace(img.Value)))
             {
-                imageUrl = string.Format("http://{0}/{1}", store.StoreDomain, image.Value.Trim());
+                imageUrl = $"http://{store.StoreDomain}/{image.Value.Trim()}";
                 break;
             }
 
             string thumbnailUrl = string.Empty;
             XElement thumbNail = product.XPathSelectElement("Images/Thumbnail");
-            if (thumbNail != null && !string.IsNullOrWhiteSpace(thumbNail.Value))
+            if (!string.IsNullOrWhiteSpace(thumbNail?.Value))
             {
-                thumbnailUrl = string.Format("http://{0}/{1}", store.StoreDomain, thumbNail.Value.Trim());
+                thumbnailUrl = $"http://{store.StoreDomain}/{thumbNail.Value.Trim()}";
             }
 
             productDto.ImageUrl = imageUrl;
@@ -753,7 +810,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ThreeDCartWebClientApiCall.GetProducts, null, progressReporter);
 
             string cacheProductId = productId.ToUpperInvariant().Replace(" ", string.Empty);
-            string productCacheKey = string.Format("GetProducts:{0}-{1}-{2}", store.StoreID, productId, cacheProductId);
+            string productCacheKey = $"GetProducts:{store.StoreID}-{productId}-{cacheProductId}";
 
             // See if we've already tried to find this product, but were unable to.
             if (productNotFoundCache.Contains(productCacheKey))
@@ -772,7 +829,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             try
             {
                 // Make the call to get the products by criteria
-                using (cartAPI api = CreateApiWebService(string.Format("GetProducts ({0},{1},{2})", batchSize, startNumber, productId)))
+                using (cartAPI api = CreateApiWebService($"GetProducts ({batchSize},{startNumber},{productId})"))
                 {
                     throttler.ExecuteRequest(requestThrottleArgs, () =>
                     {
@@ -785,7 +842,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     {
                         throttler.ExecuteRequest(requestThrottleArgs, () =>
                         {
-                            productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, string.Format("<![CDATA[{0}]]>", productId), string.Empty);
+                            productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber,
+                                $"<![CDATA[{productId}]]>", string.Empty);
                         });
                     }
                 }
@@ -838,9 +896,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 // FogBugz crash 262171.  The api returned invalid xml, which was converted into an InvalidOperationException with
                 // an inner exception of XmlException.  Check for these and don't crash ShipWorks, but give the user a fairly nice
                 // error message.
-                if (ex.InnerException != null && ex.InnerException is XmlException)
+                if (ex.InnerException is XmlException)
                 {
-                    throw new ThreeDCartException("An invalid response was returned from the 3dcart store.  Please try again later.", ex);
+                    throw new ThreeDCartException("An invalid response was returned from the 3dcart store. Please try again later.", ex);
                 }
 
                 // If it's not an inner exception of XmlException type, translate and throw.
@@ -876,7 +934,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 // If no results were returned, let the caller decide what to do
                 // "<Error><Id>99</Id><Description>SELECT statement returned no records</Description></Error>"
-                bool noRecordsFound = (errorNode.SelectSingleNode("//Id") != null && errorNode.SelectSingleNode("//Id").InnerText == "99");
+                bool noRecordsFound = errorNode.SelectSingleNode("//Id") != null && errorNode.SelectSingleNode("//Id")?.InnerText == "99";
 
                 if (!noRecordsFound)
                 {
@@ -884,7 +942,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     ThreeDCartException threeDCartException = new ThreeDCartException(apiRunQueryResultXml.OuterXml);
 
                     // Create an error message for the log file
-                    string logErrorMessage = string.Format("ShipWorks encountered an error while making an advanced api query of type '{0}'.", queryType);
+                    string logErrorMessage =
+                        $"ShipWorks encountered an error while making an advanced api query of type '{queryType}'.";
                     log.Error(logErrorMessage, threeDCartException);
 
                     // Throw a new 3dcart exception for the user
@@ -914,7 +973,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 // If no results were returned, let the caller decide what to do
                 // "<Error><Id>49</Id><Description>No Data Found</Description></Error>"
-                bool noRecordsFound = (errorNode.SelectSingleNode("//Id") != null && errorNode.SelectSingleNode("//Id").InnerText == "49");
+                bool noRecordsFound = errorNode.SelectSingleNode("//Id") != null && errorNode.SelectSingleNode("//Id")?.InnerText == "49";
 
                 if (!noRecordsFound)
                 {
@@ -922,7 +981,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     ThreeDCartException threeDCartException = new ThreeDCartException(apiResponse.OuterXml);
 
                     // Create an error message for the log file
-                    string logErrorMessage = string.Format("ShipWorks encountered an error while making an api query of type '{0}'.", queryType);
+                    string logErrorMessage =
+                        $"ShipWorks encountered an error while making an api query of type '{queryType}'.";
                     log.Error(logErrorMessage, threeDCartException);
 
                     // Throw a new 3dcart exception for the user
