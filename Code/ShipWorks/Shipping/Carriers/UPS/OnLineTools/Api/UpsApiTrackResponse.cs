@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     string statusCode = XPathUtility.Evaluate(activityNode, "Status/StatusType/Code", "");
 
                     // Update the overall status of the package
-                    if (overallStatusCode == "" || statusCode == "D")
+                    if (string.IsNullOrWhiteSpace(overallStatusCode) || statusCode == "D")
                     {
                         overallStatusCode = statusCode;
                     }
