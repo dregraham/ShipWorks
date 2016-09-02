@@ -315,7 +315,6 @@ namespace ShipWorks.Templates.Media
 
             // Create settings for selected printer
             IPrinterSetting settings = PrinterSettingFactory.GetPrinterSettings(printerInfo.Name);
-            //settings.PrinterName = printerInfo.Name;
 
             if (!settings.IsValid)
             {
