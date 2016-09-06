@@ -22027,6 +22027,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserFieldIndex.IsDeleted);}
 		}
+		/// <summary>Creates a new UserEntity.NextGlobalPostNotificationDate field instance</summary>
+		public static EntityField2 NextGlobalPostNotificationDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserFieldIndex.NextGlobalPostNotificationDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UserColumnSettingsEntity</summary>
