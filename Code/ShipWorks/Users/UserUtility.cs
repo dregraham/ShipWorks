@@ -112,7 +112,8 @@ namespace ShipWorks.Users
                 Password = HashPassword(password),
                 Email = email,
                 IsAdmin = admin,
-                IsDeleted = false
+                IsDeleted = false,
+                NextGlobalPostNotificationDate = new DateTime(1990, 01, 01)
             };
 
             try
