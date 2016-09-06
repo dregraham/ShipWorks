@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
@@ -26,6 +22,11 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -67,9 +68,6 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Process the list of shipments
         /// </summary>
-        /// <param name="filteredShipments">List of shipments to process</param>
-        /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
-        /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethod]
@@ -82,8 +80,9 @@ namespace ShipWorks.Shipping.Services
             owner = ownerRetriever();
 
             // Filter out the ones we know to be already processed, or are not ready
-            IEnumerable<ShipmentEntity> filteredShipments = shipmentsToProcess.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
-
+            IEnumerable<ShipmentEntity> shipmentEntities = shipmentsToProcess as IList<ShipmentEntity> ?? shipmentsToProcess.ToList();
+            IEnumerable<ShipmentEntity> filteredShipments = shipmentEntities.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
+            
             counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
             chosenRate = chosenRateResult;
 
@@ -92,11 +91,11 @@ namespace ShipWorks.Shipping.Services
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, owner);
 
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
-            filteredShipments = EntityUtility.CloneEntityCollection(filteredShipments);
-            shipmentCount = filteredShipments.Count();
-            shipmentRefresher.ProcessingShipments(filteredShipments);
+            List<ShipmentEntity> clonedShipments = EntityUtility.CloneEntityCollection(filteredShipments);
+            shipmentCount = clonedShipments.Count;
+            shipmentRefresher.ProcessingShipments(clonedShipments);
 
-            if (!filteredShipments.Any())
+            if (!clonedShipments.Any())
             {
                 MessageHelper.ShowMessage(owner, "There are no shipments to process.");
 
@@ -104,13 +103,13 @@ namespace ShipWorks.Shipping.Services
             }
 
             // Check restriction
-            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, filteredShipments.Count(), owner))
+            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, clonedShipments.Count, owner))
             {
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
 
             // Check for shipment type process shipment nudges
-            ShowShipmentTypeProcessingNudges(filteredShipments);
+            ShowShipmentTypeProcessingNudges(clonedShipments);
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(owner,
                 "Processing Shipments",
@@ -121,18 +120,20 @@ namespace ShipWorks.Shipping.Services
             ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRate);
 
             // What to do before it gets started (but is on the background thread)
-            executor.ExecuteStarting += (object s, EventArgs args) =>
+            executor.ExecuteStarting += (s, args) =>
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
-                executionState.ConcurrencyErrors = shippingManager.SaveShipmentsToDatabase(filteredShipments, true);
+                executionState.ConcurrencyErrors = shippingManager.SaveShipmentsToDatabase(clonedShipments, true);
 
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
                 showBestRateCounterRateSetupWizard = true;
             };
 
-            await executor.ExecuteAsync(ProcessShipment, filteredShipments, executionState);
+            await executor.ExecuteAsync(ProcessShipment, clonedShipments, executionState);
 
             HandleProcessingException(executionState);
+
+            ShowPostProcessingMessage(clonedShipments);
 
             // See if we are supposed to open WorldShip
             if (executionState.WorldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
@@ -140,7 +141,7 @@ namespace ShipWorks.Shipping.Services
                 WorldShipUtility.LaunchWorldShip(owner);
             }
 
-            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentsToProcess, executionState);
+            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, executionState);
 
             shipmentRefresher.FinishProcessing();
 
@@ -149,9 +150,32 @@ namespace ShipWorks.Shipping.Services
                 ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
             }
 
-            return filteredShipments
+            return clonedShipments
                 .Select(CreateResultFromShipment)
                 .ToList();
+        }
+
+        /// <summary>
+        /// Shows the post processing Message
+        /// </summary>
+        private void ShowPostProcessingMessage(IEnumerable<ShipmentEntity> processedShipments)
+        {
+            bool hasGlobalPost = processedShipments.Where(p => p.Processed)
+                .Where(s => s.ShipmentType == (int) ShipmentTypeCode.Usps)
+                .Where(s => s.Postal != null)
+                .Any(s => PostalUtility.IsGlobalPost((PostalServiceType) s.Postal.Service));
+
+            if (hasGlobalPost)
+            {
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    IGlobalPostLabelNotification globalPostLabelNotification = scope.Resolve<IGlobalPostLabelNotification>();
+                    if (globalPostLabelNotification.AppliesToSession())
+                    {
+                        globalPostLabelNotification.Show();
+                    }
+                }
+            }
         }
 
         /// <summary>
