@@ -834,6 +834,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IsDeleted", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("NextGlobalPostNotificationDate", fieldHashtable);
 		}
 		#endregion
 
@@ -1030,6 +1033,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserFieldIndex.IsDeleted, true); }
 			set	{ SetValue((int)UserFieldIndex.IsDeleted, value); }
+		}
+
+		/// <summary> The NextGlobalPostNotificationDate property of the Entity User<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "User"."NextGlobalPostNotificationDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.DateTime NextGlobalPostNotificationDate
+		{
+			get { return (System.DateTime)GetValue((int)UserFieldIndex.NextGlobalPostNotificationDate, true); }
+			set	{ SetValue((int)UserFieldIndex.NextGlobalPostNotificationDate, value); }
 		}
 
 

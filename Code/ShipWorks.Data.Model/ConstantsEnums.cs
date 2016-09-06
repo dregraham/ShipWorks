@@ -10236,6 +10236,8 @@ namespace ShipWorks.Data.Model
 		IsAdmin,
 		///<summary>IsDeleted. </summary>
 		IsDeleted,
+		///<summary>NextGlobalPostNotificationDate. </summary>
+		NextGlobalPostNotificationDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

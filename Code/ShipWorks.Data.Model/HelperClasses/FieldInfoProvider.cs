@@ -2737,6 +2737,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserEntity", "Email", typeof(System.String), false, false, false, false,  (int)UserFieldIndex.Email, 255, 0, 0);
 			base.AddElementFieldInfo("UserEntity", "IsAdmin", typeof(System.Boolean), false, false, false, false,  (int)UserFieldIndex.IsAdmin, 0, 0, 0);
 			base.AddElementFieldInfo("UserEntity", "IsDeleted", typeof(System.Boolean), false, false, false, false,  (int)UserFieldIndex.IsDeleted, 0, 0, 0);
+			base.AddElementFieldInfo("UserEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 		}
 		/// <summary>Inits UserColumnSettingsEntity's FieldInfo objects</summary>
 		private void InitUserColumnSettingsEntityInfos()

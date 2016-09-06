@@ -2886,7 +2886,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UserEntity's mappings</summary>
 		private void InitUserEntityMappings()
 		{
-			base.AddElementMapping( "UserEntity", "ShipWorksLocal", @"dbo", "User", 7 );
+			base.AddElementMapping( "UserEntity", "ShipWorksLocal", @"dbo", "User", 8 );
 			base.AddElementFieldMapping( "UserEntity", "UserID", "UserID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UserEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "UserEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2894,6 +2894,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UserEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "UserEntity", "IsAdmin", "IsAdmin", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
 			base.AddElementFieldMapping( "UserEntity", "IsDeleted", "IsDeleted", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
+			base.AddElementFieldMapping( "UserEntity", "NextGlobalPostNotificationDate", "NextGlobalPostNotificationDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 7 );
 		}
 		/// <summary>Inits UserColumnSettingsEntity's mappings</summary>
 		private void InitUserColumnSettingsEntityMappings()
