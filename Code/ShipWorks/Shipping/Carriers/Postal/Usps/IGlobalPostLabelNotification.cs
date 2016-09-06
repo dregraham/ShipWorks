@@ -8,7 +8,7 @@
         bool AppliesToSession();
 
         /// <summary>
-        /// Show the notification and save result in UserEntity NextGlobapPostNotificationDate
+        /// Show the notification and save result
         /// </summary>
         void Show();
     }
