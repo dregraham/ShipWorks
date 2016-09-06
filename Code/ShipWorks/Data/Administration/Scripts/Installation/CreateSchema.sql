@@ -874,7 +874,8 @@ CREATE TABLE [dbo].[User]
 [Password] [nvarchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsAdmin] [bit] NOT NULL,
-[IsDeleted] [bit] NOT NULL
+[IsDeleted] [bit] NOT NULL,
+[NextGlobalPostNotificationDate] [DateTime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_User] on [dbo].[User]'
