@@ -3,6 +3,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
 using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
 {
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private readonly Func<string, IDialog> browserFactory;
         private readonly IDismissableWebBrowserDlgViewModel browserViewModel;
         private readonly IUserSession userSession;
+        private readonly IWin32Window owner;
 
         private const string DisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
         private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
@@ -24,21 +26,22 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalPostLabelNotification"/> class.
         /// </summary>
-        /// <param name="browserFactory"></param>
-        /// <param name="browserViewModel">The browser view model.</param>
-        /// <param name="userSession">The user session.</param>
-        public GlobalPostLabelNotification(Func<string, IDialog> browserFactory, IDismissableWebBrowserDlgViewModel browserViewModel, IUserSession userSession)
+        public GlobalPostLabelNotification(Func<string, IDialog> browserFactory,
+            IDismissableWebBrowserDlgViewModel browserViewModel,
+            IUserSession userSession,
+            IWin32Window owner)
         {
             this.browserFactory = browserFactory;
             this.browserViewModel = browserViewModel;
             this.userSession = userSession;
+            this.owner = owner;
         }
 
         /// <summary>
         /// Check to see if we should show the notification based on the current user session
         /// </summary>
         public bool AppliesToSession() =>
-            userSession.User.Settings.NextGlobalPostNotificationDate.ToUniversalTime() < DateTime.UtcNow;
+            userSession.User.Settings.NextGlobalPostNotificationDate < DateTime.UtcNow;
 
         /// <summary>
         /// Show the notification and save result
@@ -49,8 +52,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             browserViewModel.Load(displayUri, BrowserDlgTitle, MoreInfoUrl);
 
             IDialog webBrowserDlg = browserFactory("DismissableWebBrowserDlg");
+            webBrowserDlg.LoadOwner(owner);
+            webBrowserDlg.Height = 680;
+            webBrowserDlg.Width = 1300;
             webBrowserDlg.DataContext = browserViewModel;
-
+            
             webBrowserDlg.ShowDialog();
 
             // As per SDC mockups, if the user does not dismiss the dialog, show them again after a day
