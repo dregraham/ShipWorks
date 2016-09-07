@@ -10236,8 +10236,6 @@ namespace ShipWorks.Data.Model
 		IsAdmin,
 		///<summary>IsDeleted. </summary>
 		IsDeleted,
-		///<summary>NextGlobalPostNotificationDate. </summary>
-		NextGlobalPostNotificationDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10300,6 +10298,8 @@ namespace ShipWorks.Data.Model
 		CustomerFilterLastActive,
 		///<summary>CustomerFilterExpandedFolders. </summary>
 		CustomerFilterExpandedFolders,
+		///<summary>NextGlobalPostNotificationDate. </summary>
+		NextGlobalPostNotificationDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
