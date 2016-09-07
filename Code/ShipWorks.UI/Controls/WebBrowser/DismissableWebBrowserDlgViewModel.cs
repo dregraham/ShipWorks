@@ -28,6 +28,18 @@ namespace ShipWorks.UI.Controls.WebBrowser
         }
 
         /// <summary>
+        /// Gets or sets a value indicating the client doesn't want to see the message again.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Dismissed { get; set; }
+
+        /// <summary>
+        /// Command that display moreInfoUrl in default browser
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand MoreInfoClickCommand { get; }
+
+        /// <summary>
         /// Loads the specified URL.
         /// </summary>
         public void Load(Uri url, string title, string moreInfoUrl)
@@ -35,18 +47,6 @@ namespace ShipWorks.UI.Controls.WebBrowser
             this.moreInfoUrl = moreInfoUrl;
             Load(url, title);
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating the client doesn't want to see the message again.
-        /// </summary>
-        [Obfuscation(Exclude=true)]
-        public bool Dismissed { get; set; }
-
-        /// <summary>
-        /// Command that display moreInfoUrl in default browser
-        /// </summary>
-        [Obfuscation(Exclude=true)]
-        public ICommand MoreInfoClickCommand { get; }
 
         /// <summary>
         /// Displays moreInfoUrl in default browser
