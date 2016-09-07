@@ -197,7 +197,6 @@
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
-    <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />

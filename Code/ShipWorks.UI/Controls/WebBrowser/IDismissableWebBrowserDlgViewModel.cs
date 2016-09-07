@@ -16,7 +16,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// <summary>
         /// Gets or sets a value indicating the client doesn't want to see the message again.
         /// </summary>
-        bool Dissmissed { get; set; }
+        bool Dismissed { get; set; }
 
         /// <summary>
         /// Command that display moreInfoUrl in default browser
