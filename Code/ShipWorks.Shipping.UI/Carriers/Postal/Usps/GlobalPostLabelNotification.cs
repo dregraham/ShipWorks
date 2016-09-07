@@ -1,8 +1,8 @@
-﻿using System;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
+using System;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
 {
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// Check to see if we should show the notification based on the current user session
         /// </summary>
         public bool AppliesToSession() =>
-            userSession.User.NextGlobalPostNotificationDate.ToUniversalTime() < DateTime.UtcNow;
+            userSession.User.Settings.NextGlobalPostNotificationDate.ToUniversalTime() < DateTime.UtcNow;
 
         /// <summary>
         /// Show the notification and save result
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             webBrowserDlg.ShowDialog();
 
             // As per SDC mockups, if the user does not dismiss the dialog, show them again after a day
-            userSession.User.NextGlobalPostNotificationDate = ((IDismissableWebBrowserDlgViewModel) webBrowserDlg.DataContext).Dismissed ?
+            userSession.User.Settings.NextGlobalPostNotificationDate = ((IDismissableWebBrowserDlgViewModel) webBrowserDlg.DataContext).Dismissed ?
                 DateTime.UtcNow.AddYears(200) :
                 DateTime.UtcNow.AddDays(1);
         }

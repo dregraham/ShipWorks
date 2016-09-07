@@ -2737,7 +2737,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserEntity", "Email", typeof(System.String), false, false, false, false,  (int)UserFieldIndex.Email, 255, 0, 0);
 			base.AddElementFieldInfo("UserEntity", "IsAdmin", typeof(System.Boolean), false, false, false, false,  (int)UserFieldIndex.IsAdmin, 0, 0, 0);
 			base.AddElementFieldInfo("UserEntity", "IsDeleted", typeof(System.Boolean), false, false, false, false,  (int)UserFieldIndex.IsDeleted, 0, 0, 0);
-			base.AddElementFieldInfo("UserEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 		}
 		/// <summary>Inits UserColumnSettingsEntity's FieldInfo objects</summary>
 		private void InitUserColumnSettingsEntityInfos()
@@ -2766,6 +2765,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
 			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterLastActive, 0, 0, 19);
 			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, 2147483647, 0, 0);
+			base.AddElementFieldInfo("UserSettingsEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

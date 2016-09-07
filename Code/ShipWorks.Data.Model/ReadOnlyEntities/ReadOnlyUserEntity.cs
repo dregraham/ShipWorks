@@ -43,7 +43,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Email = source.Email;
             IsAdmin = source.IsAdmin;
             IsDeleted = source.IsDeleted;
-            NextGlobalPostNotificationDate = source.NextGlobalPostNotificationDate;
             
             Settings = source.Settings?.AsReadOnly(objectMap);
             
@@ -95,12 +94,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean IsDeleted { get; }
-        /// <summary> The NextGlobalPostNotificationDate property of the Entity User<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "User"."NextGlobalPostNotificationDate"<br/>
-        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.DateTime NextGlobalPostNotificationDate { get; }
         
         public IUserSettingsEntity Settings { get; }
         
