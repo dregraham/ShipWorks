@@ -40,7 +40,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
         /// Gets or sets a value indicating the client doesn't want to see the message again.
         /// </summary>
         [Obfuscation(Exclude=true)]
-        public bool Dissmissed { get; set; }
+        public bool Dismissed { get; set; }
 
         /// <summary>
         /// Command that display moreInfoUrl in default browser
