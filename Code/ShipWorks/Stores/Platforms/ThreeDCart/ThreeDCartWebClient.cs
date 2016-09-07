@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         private static cartAPIAdvanced CreateAdvancedApiWebService(string logName)
         {
-            // Strip out characters that aren't allowed in a file system filename
+            // Strip out characters that aren't allowed in a file system file name
             logName = Regex.Replace(logName, "[^.0-9A-Za-z(),]", "");
 
             return new cartAPIAdvanced(new ApiLogEntry(ApiLogSource.ThreeDCart, logName));
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         private static cartAPI CreateApiWebService(string logName)
         {
-            // Strip out characters that aren't allowed in a file system filename
+            // Strip out characters that aren't allowed in a file system file name
             logName = Regex.Replace(logName, "[^.0-9A-Za-z(),]", "");
 
             return new cartAPI(new ApiLogEntry(ApiLogSource.ThreeDCart, logName));
@@ -240,7 +240,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <summary>
         /// Remove the ending post fix for split orders
         /// </summary>
-        /// <param name="invoiceNumber">The numberic invoice number</param>
+        /// <param name="invoiceNumber">The numeric invoice number</param>
         /// <param name="orderNumberComplete">The order number complete with 3dcart's prefix, if applicable, and SW's post fix for multiple orders, if applicable.</param>
         private static string FixInvoiceNumberForFulfillment(long invoiceNumber, string orderNumberComplete)
         {
@@ -581,10 +581,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 return foundProductDto;
             }
 
-            XmlNode productQueryResultXml = GetProductQueryResultXml(invoiceNumber, threeDCartOrderItemProductId);
+            // Get a list of products matching the order item id
+            XmlNodeList products = QueryOrderProducts(invoiceNumber, threeDCartOrderItemProductId);
 
-            // Get a list of products matching that order item id
-            XmlNodeList products = productQueryResultXml.SelectNodes("//runQueryRecord");
 
             ThreeDCartProductDTO productDto = LoadProduct(threeDCartOrderItemProductId, threeDCartOrderItemName,
                 products, cacheOrderItemName);
@@ -615,11 +614,6 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Iterate through each returned product so we can find the one with the appropriate attributes
             foreach (XmlNode sqlQueryProduct in products)
             {
-                if (productDto != null)
-                {
-                    break;
-                }
-
                 // Get the REAL product id
                 string productId = sqlQueryProduct["id"].InnerText;
 
@@ -632,6 +626,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 productDto = productLoader.LoadProduct(threeDCartOrderItemProductId,
                     threeDCartOrderItemName,
                     cacheOrderItemName, getProductResponseXml);
+
+                if (productDto != null)
+                {
+                    break;
+                }
             }
 
             return productDto;
@@ -643,9 +642,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <remarks>
         /// The regular cart api does not return the actual product id; it returns the item id, but calls it ProductID.
         /// A call to getProduct using the item id yields no results
-        /// So, we'll do an adavanced sql query to find the real product id based on the order item id.
+        /// So, we'll do an advanced sql query to find the real product id based on the order item id.
         /// </remarks>
-        private XmlNode GetProductQueryResultXml(long invoiceNumber, string threeDCartOrderItemProductId)
+        private XmlNodeList QueryOrderProducts(long invoiceNumber, string threeDCartOrderItemProductId)
         {
             XmlNode productQueryResultXml = null;
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(
@@ -663,7 +662,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     });
             }
 
-            return productQueryResultXml;
+            return productQueryResultXml.SelectNodes("//runQueryRecord");
         }
 
         /// <summary>
