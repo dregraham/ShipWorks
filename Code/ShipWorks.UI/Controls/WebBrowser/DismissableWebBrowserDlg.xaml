@@ -40,8 +40,7 @@
                       Grid.Column="0"
                       Margin="0 5 5 5"
                       VerticalAlignment="Center"
-                      Checked="{Binding Dismissed,
-                                        Mode=OneWayToSource}">
+                      IsChecked="{Binding Dismissed}">
                 Do not show this again
             </CheckBox>
 
@@ -58,14 +57,13 @@
             <Button Grid.Row="0"
                     Grid.Column="2"
                     Margin="0 5 5 5"
-                    Command="{Binding MoreInfoCommand}"
+                    Command="{Binding MoreInfoClickCommand}"
                     IsCancel="True"
                     Padding="5 5 5 5">
                 <StackPanel Orientation="Horizontal">
                     <Image Width="16"
                            Height="16"
-                           Source="/Shipworks.Core;component/Resources/Help16.png"
-                           Style="{StaticResource Image.Icon}" />
+                           Source="/Shipworks.Core;component/Resources/Help16.png" />
                     <TextBlock Margin="6, 0, 0, 0" VerticalAlignment="Center">More Info</TextBlock>
                 </StackPanel>
             </Button>
