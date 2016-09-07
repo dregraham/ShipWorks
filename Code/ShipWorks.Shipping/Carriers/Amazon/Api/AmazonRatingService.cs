@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
@@ -54,10 +55,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, amazonOrder);
+            bool wasSameDay = requestDetails.ShippingServiceOptions.CarrierWillPickUp;
 
-            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
+            RateGroup rateGroup = GetRates(shipment.Amazon, requestDetails);
 
-            return amazonRateGroupFactory.GetRateGroupFromResponse(response);
+            if (rateGroup.Rates.None() && rateGroup.FootnoteFactories.None() && wasSameDay)
+            {
+                requestDetails.ShippingServiceOptions.CarrierWillPickUp = false;
+                rateGroup = GetRates(shipment.Amazon, requestDetails);
+                rateGroup.AddFootnoteFactory(new AmazonSameDayNotAvailableFootnoteFactory());
+            }
+
+            return rateGroup;
         }
 
         /// <summary>
@@ -66,6 +75,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         public bool IsRateSelectedByShipment(RateResult rateResult, ICarrierShipmentAdapter shipmentAdapter)
         {
             throw new NotImplementedException("Amazon is not yet supported");
+        }
+
+        /// <summary>
+        /// Make the actual rate request
+        /// </summary>
+        private RateGroup GetRates(AmazonShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
+        {
+            GetEligibleShippingServicesResponse response =
+                webClient.GetRates(requestDetails, settingsFactory.Create(amazonShipment));
+            return amazonRateGroupFactory.GetRateGroupFromResponse(response);
         }
     }
 }

@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .As<IAmazonNotLinkedFootnoteFactory>()
                 .ExternallyOwned();
 
-            if (!(InterapptiveOnly.IsInterapptiveUser ^ InterapptiveOnly.MagicKeysDown))
+            if (!InterapptiveOnly.MagicKeysDown)
             {
                 builder.RegisterType<AmazonUspsRateFilter>()
                     .As<IAmazonRateGroupFilter>();
