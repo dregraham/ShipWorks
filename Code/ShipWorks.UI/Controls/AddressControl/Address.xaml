@@ -110,7 +110,8 @@
                                        Text="s" />
                         </StackPanel>
                     </Button>
-                    <Button Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}"
+                    <Button Margin="6,0,0,0"
+                            Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding ShowValidationMessageCommand}">
                         Details...
                     </Button>

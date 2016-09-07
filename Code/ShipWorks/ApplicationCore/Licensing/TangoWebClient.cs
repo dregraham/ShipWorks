@@ -1,3 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.Services.Protocols;
+using System.Xml;
+using System.Xml.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -22,16 +32,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Web.Services.Protocols;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -168,7 +168,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             StoreEntity store = StoreManager.GetEnabledStores().FirstOrDefault() ??
                                 StoreManager.GetAllStores().FirstOrDefault();
 
-            return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
+            try
+            {
+                return store != null ? GetLicenseStatus(store.License, store).TangoCustomerID : string.Empty;
+            }
+            catch (TangoException ex)
+            {
+                log.Error(ex);
+                return string.Empty;
+            }
         }
 
         /// <summary>
