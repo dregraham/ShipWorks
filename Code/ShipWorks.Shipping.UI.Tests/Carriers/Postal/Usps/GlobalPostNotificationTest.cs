@@ -1,13 +1,11 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
+using System;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
@@ -18,7 +16,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         private const string DisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
         private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
         private const string BrowserDlgTitle = "Your GlobalPost Label";
-
+        
         public GlobalPostNotificationTest()
         {
             mock = AutoMock.GetLoose();
@@ -28,7 +26,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void AppliesToSession_ReturnsTrue_WhenNextGlobalPostNotificationDateIsInPast()
         {
             var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User.NextGlobalPostNotificationDate)
+            userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
                 .Returns(new DateTime(1990, 01, 01));
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
@@ -40,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void AppliesToSession_ReturnsFalse_WhenNextGlobalPostNotificationDateIsInFuture()
         {
             var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User.NextGlobalPostNotificationDate)
+            userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
                 .Returns(new DateTime(2500, 01, 01));
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
@@ -59,7 +57,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             browserFactory.FunctionOutput.Setup(b => b.DataContext).Returns(viewModel.Object);
 
             var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User.NextGlobalPostNotificationDate)
+            userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
                 .Returns(new DateTime(1990, 01, 01));
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
@@ -80,8 +78,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var browserFactory = mock.MockFunc<string, IDialog>();
             browserFactory.FunctionOutput.Setup(b => b.DataContext).Returns(viewModel.Object);
 
-            var user = new UserEntity();
-            user.NextGlobalPostNotificationDate = notificationDate;
+            var user = new UserEntity
+            {
+                Settings = new UserSettingsEntity
+                {
+                    NextGlobalPostNotificationDate = notificationDate
+                }
+            };
 
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User)
@@ -90,7 +93,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var testObject = mock.Create<GlobalPostLabelNotification>();
             testObject.Show();
 
-            Assert.True(user.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddYears(200).Date));
+            Assert.True(user.Settings.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddYears(200).Date));
         }
 
         [Fact]
@@ -104,8 +107,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var browserFactory = mock.MockFunc<string, IDialog>();
             browserFactory.FunctionOutput.Setup(b => b.DataContext).Returns(viewModel.Object);
 
-            var user = new UserEntity();
-            user.NextGlobalPostNotificationDate = notificationDate;
+            var user = new UserEntity
+            {
+                Settings = new UserSettingsEntity
+                {
+                    NextGlobalPostNotificationDate = notificationDate
+                }
+            };
 
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User)
@@ -114,7 +122,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var testObject = mock.Create<GlobalPostLabelNotification>();
             testObject.Show();
 
-            Assert.True(userSession.Object.User.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddDays(1).Date));
+            Assert.True(userSession.Object.User.Settings.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddDays(1).Date));
         }
 
         public void Dispose()

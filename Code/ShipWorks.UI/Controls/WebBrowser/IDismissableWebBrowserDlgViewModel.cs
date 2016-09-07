@@ -6,7 +6,7 @@ namespace ShipWorks.UI.Controls.WebBrowser
     /// <summary>
     /// Interface for ViewModel for DismissableWebBrowserDlg
     /// </summary>
-    public interface IDismissableWebBrowserDlgViewModel
+    public interface IDismissableWebBrowserDlgViewModel : IWebBrowserDlgViewModel
     {
         /// <summary>
         /// Loads the specified URL.

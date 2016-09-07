@@ -10491,7 +10491,7 @@
     <None Include="Resources\groupon.png" />
     <None Include="Resources\globe16.png" />
     <Resource Include="Resources\information2_16.png" />
-    <None Include="Resources\help16.png" />
+    <Resource Include="Resources\help16.png" />
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
