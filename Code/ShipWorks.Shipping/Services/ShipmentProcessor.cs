@@ -4,7 +4,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
@@ -68,7 +67,10 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Process the list of shipments
         /// </summary>
-        /// <returns></returns>
+        /// <param name="shipmentsToProcess">The shipments to process.</param>
+        /// <param name="shipmentRefresher">The CarrierConfigurationShipmentRefresher</param>
+        /// <param name="chosenRateResult">Rate that was chosen to use, if there was any</param>
+        /// <param name="counterRateCarrierConfiguredWhileProcessingAction">Execute after a counter rate carrier was configured</param>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethod]
         public async Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipmentsToProcess,
@@ -120,7 +122,8 @@ namespace ShipWorks.Shipping.Services
             ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRate);
 
             // What to do before it gets started (but is on the background thread)
-            executor.ExecuteStarting += (s, args) =>
+            // sender is a ShipWorks.Common.Threading.BackgroundExecutor<ShipWorks.Data.Model.EntityClasses.ShipmentEntity>
+            executor.ExecuteStarting += (sender, args) =>
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
                 executionState.ConcurrencyErrors = shippingManager.SaveShipmentsToDatabase(clonedShipments, true);
@@ -156,26 +159,38 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Shows the post processing Message
+        /// Shows the post processing message
         /// </summary>
         private void ShowPostProcessingMessage(IEnumerable<ShipmentEntity> processedShipments)
         {
-            bool hasGlobalPost = processedShipments.Where(p => p.Processed)
-                .Where(s => s.ShipmentType == (int) ShipmentTypeCode.Usps)
-                .Where(s => s.Postal != null)
-                .Any(s => PostalUtility.IsGlobalPost((PostalServiceType) s.Postal.Service));
+            MethodConditions.EnsureArgumentIsNotNull(processedShipments);
+
+            bool hasGlobalPost = processedShipments.Any(IsProcessedGlobalPost);
 
             if (hasGlobalPost)
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                IGlobalPostLabelNotification globalPostLabelNotification = lifetimeScope.Resolve<IGlobalPostLabelNotification>();
+                if (globalPostLabelNotification.AppliesToSession())
                 {
-                    IGlobalPostLabelNotification globalPostLabelNotification = scope.Resolve<IGlobalPostLabelNotification>();
-                    if (globalPostLabelNotification.AppliesToSession())
-                    {
-                        globalPostLabelNotification.Show();
-                    }
+                    globalPostLabelNotification.Show();
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether the shipment is a Processed GlobalPost shipment.
+        /// </summary>
+        private static bool IsProcessedGlobalPost(ShipmentEntity shipment)
+        {
+            // First make sure it is a processed, USPS shipment with a postal entity.
+            if (!shipment.Processed ||
+                shipment.ShipmentType != (int) ShipmentTypeCode.Usps ||
+                shipment.Postal == null)
+            {
+                return false;
+            }
+
+            return PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
         }
 
         /// <summary>
