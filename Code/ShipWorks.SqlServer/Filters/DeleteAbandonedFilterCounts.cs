@@ -1,14 +1,7 @@
-using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
-using ShipWorks.Filters;
-using ShipWorks.SqlServer.Filters;
-using System.Collections.Generic;
 using ShipWorks.SqlServer.General;
-using System.Diagnostics;
-using System.Data.Common;
 
 public partial class StoredProcedures
 {
@@ -24,19 +17,13 @@ public partial class StoredProcedures
         {
             con.Open();
 
-            TimeSpan timeLimit = TimeSpan.FromSeconds(15);
-
             // Ensure there are no open transactions
             UtilityFunctions.EnsureNotTransacted(con);
-
-            // Only go for up to 15 seconds.  After that we'll just have to wait to do the rest the next time we're called.  We don't want
-            // ShipWorks waiting on us forever if for instance its trying to shutdown.
-            Stopwatch stopwatch = Stopwatch.StartNew();
 
             int deletedCount = 0;
 
             // We can keep getting more batches to delete until we run out of time
-            while (stopwatch.Elapsed < timeLimit)
+            while (true)
             {
                 // We'll select up to a certain amount of keys at a time - if there were tons of them, i wouldnt want this select taking too long
                 SqlCommand keyCommand = con.CreateCommand();
@@ -54,32 +41,14 @@ public partial class StoredProcedures
 
                 foreach (DataRow row in keyTable.Rows)
                 {
-                    // See if its time to get out
-                    if (stopwatch.Elapsed >= timeLimit)
-                    {
-                        return;
-                    }
+                    long contentID = (long) row[0];
 
-                    if (!ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(5)))
-                    {
-                        return;
-                    }
+                    SqlCommand deleteCmd = con.CreateCommand();
+                    deleteCmd.CommandText = "DELETE FilterNodeContent WHERE FilterNodeContentID = @contentID";
+                    deleteCmd.Parameters.AddWithValue("@contentID", contentID);
+                    deleteCmd.ExecuteNonQuery();
 
-                    try
-                    {
-                        long contentID = (long) row[0];
-
-                        SqlCommand deleteCmd = con.CreateCommand();
-                        deleteCmd.CommandText = "DELETE FilterNodeContent WHERE FilterNodeContentID = @contentID";
-                        deleteCmd.Parameters.AddWithValue("@contentID", contentID);
-                        deleteCmd.ExecuteNonQuery();
-
-                        deletedCount++;
-                    }
-                    finally
-                    {
-                        ActiveCalculationUtility.ReleaseCalculatingLock(con);
-                    }
+                    deletedCount++;
                 }
             }
 

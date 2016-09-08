@@ -527,6 +527,7 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
+    <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
     <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
@@ -597,6 +598,7 @@
     <Compile Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.Designer.cs">
       <DependentUpon>UserInitiatedImageChooserDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Triggers\EmptyTrigger.cs" />
     <Compile Include="Actions\Triggers\FilterContentActionTriggerException.cs" />
     <Compile Include="Actions\Triggers\UserInitiatedSelectionRequirement.cs" />
     <Compile Include="Actions\Triggers\UserInitiatedStockImages.Designer.cs">
@@ -664,6 +666,9 @@
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\KeyedComponent.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\RegistrationType.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\ResolveWithAttributes.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashDetailsDialog.xaml.cs">
       <DependentUpon>CrashDetailsDialog.xaml</DependentUpon>
     </Compile>

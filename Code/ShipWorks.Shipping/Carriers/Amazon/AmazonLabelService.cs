@@ -64,7 +64,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            
             amazonRequest[AmazonMwsApiCall.CancelShipment].Submit(shipment);
         }
 
@@ -110,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Save the cropped label
         /// </summary>
         private byte[] SaveCroppedLabel(MemoryStream stream)
-            // Try to crop the label 
+        // Try to crop the label
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {

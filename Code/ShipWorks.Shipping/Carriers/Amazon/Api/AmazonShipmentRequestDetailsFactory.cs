@@ -44,8 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 },
                 ShippingServiceOptions = new ShippingServiceOptions
                 {
-                    CarrierWillPickUp = false,
-                    DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType)shipment.Amazon.DeliveryExperience),
+                    CarrierWillPickUp = order.IsSameDay(),
+                    DeliveryExperience = EnumHelper.GetApiValue((AmazonDeliveryExperienceType) shipment.Amazon.DeliveryExperience),
                     DeclaredValue = new DeclaredValue
                     {
                         Amount = 0,
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 .Select(x => new Item
                 {
                     OrderItemId = x.AmazonOrderItemCode,
-                    Quantity = (int)x.Quantity
+                    Quantity = (int) x.Quantity
                 })
                 .ToList();
         }

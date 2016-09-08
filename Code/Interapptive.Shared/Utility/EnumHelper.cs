@@ -26,6 +26,7 @@ namespace Interapptive.Shared.Utility
             public bool Deprecated { get; set; }
             public int? SortOrder { get; set; }
             public string ApiValue { get; set; }
+            public bool Hidden { get; internal set; }
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace Interapptive.Shared.Utility
                     Value = x,
                     Metadata = GetEnumMetadata((Enum) (object) x)
                 })
-                .Where(x => !x.Metadata.Deprecated)
+                .Where(x => !x.Metadata.Deprecated && !x.Metadata.Hidden)
                 .OrderBy(x => GetSortOrder(x.Value))
                 .Select(x => new EnumEntry<T>(x.Value, x.Metadata.DescriptionAttribute))
                 .ToList();
@@ -222,6 +223,7 @@ namespace Interapptive.Shared.Utility
 
                     metadata.DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
                     metadata.DetailsAttribute = (DetailsAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute));
+                    metadata.Hidden = Attribute.GetCustomAttribute(fieldInfo, typeof(HiddenAttribute)) != null;
 
                     ImageResourceAttribute imageAttribute = (ImageResourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ImageResourceAttribute));
                     if (imageAttribute != null)
