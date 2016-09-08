@@ -129,7 +129,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 {"M", "Manifest Pickup"},
             };
 
-            return statusCodesAndNames.ContainsKey(statusCode) ? statusCodesAndNames[statusCode] : string.Empty;
+            return !string.IsNullOrWhiteSpace(statusCode) && statusCodesAndNames.ContainsKey(statusCode) ?
+                statusCodesAndNames[statusCode] :
+                "Status Unavailable";
         }
 
         /// <summary>
