@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Services
             if (hasGlobalPost)
             {
                 IGlobalPostLabelNotification globalPostLabelNotification = lifetimeScope.Resolve<IGlobalPostLabelNotification>();
-                if (globalPostLabelNotification.AppliesToSession())
+                if (globalPostLabelNotification.AppliesToCurrentUser())
                 {
                     globalPostLabelNotification.Show();
                 }
