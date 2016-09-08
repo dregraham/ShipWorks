@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Services
             // Filter out the ones we know to be already processed, or are not ready
             IEnumerable<ShipmentEntity> shipmentEntities = shipmentsToProcess as IList<ShipmentEntity> ?? shipmentsToProcess.ToList();
             IEnumerable<ShipmentEntity> filteredShipments = shipmentEntities.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
-            
+
             counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
             chosenRate = chosenRateResult;
 
@@ -182,15 +182,15 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private static bool IsProcessedGlobalPost(ShipmentEntity shipment)
         {
-            // First make sure it is a processed, USPS shipment with a postal entity.
-            if (!shipment.Processed ||
-                shipment.ShipmentType != (int) ShipmentTypeCode.Usps ||
-                shipment.Postal == null)
+            if (shipment.Processed &&
+                shipment.ShipmentType == (int) ShipmentTypeCode.Usps &&
+                shipment.Postal != null)
             {
-                return false;
+                // We have a processed USPS shipment. Now check for the GlobalPost service type
+                return PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
             }
 
-            return PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
+            return false;
         }
 
         /// <summary>
