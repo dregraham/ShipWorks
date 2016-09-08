@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         private const string DisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
         private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
         private const string BrowserDlgTitle = "Your GlobalPost Label";
-        
+
         public GlobalPostNotificationTest()
         {
             mock = AutoMock.GetLoose();
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
-            Assert.True(testObject.AppliesToSession());
+            Assert.True(testObject.AppliesToCurrentUser());
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
-            Assert.False(testObject.AppliesToSession());
+            Assert.False(testObject.AppliesToCurrentUser());
         }
 
         [Fact]
