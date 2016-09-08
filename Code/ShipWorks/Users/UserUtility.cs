@@ -16,6 +16,7 @@ using ShipWorks.Users.Security;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
@@ -212,7 +213,7 @@ namespace ShipWorks.Users
                 CustomerFilterExpandedFolders = null,
                 ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
                 TemplateLastSelected = 0,
-                NextGlobalPostNotificationDate = new DateTime(1990, 01, 01)
+                NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value
             };
 
             adapter.SaveAndRefetch(settings);

@@ -6,6 +6,7 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
 using System;
+using System.Data.SqlTypes;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
-                .Returns(new DateTime(1990, 01, 01));
+                .Returns(SqlDateTime.MinValue.Value);
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         {
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
-                .Returns(new DateTime(2500, 01, 01));
+                .Returns(SqlDateTime.MaxValue.Value);
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
@@ -58,7 +59,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
-                .Returns(new DateTime(1990, 01, 01));
+                .Returns(SqlDateTime.MinValue.Value);
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
@@ -70,7 +71,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         [Fact]
         public void Show_SetsNextGlobalPostNotificationDateToCurrentDatePlusTwoHundredYears_WhenDismissed()
         {
-            DateTime notificationDate = new DateTime(1990, 01, 01).ToUniversalTime();
+            DateTime notificationDate = SqlDateTime.MinValue.Value;
 
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
             viewModel.Setup(v => v.Dismissed).Returns(true);
@@ -99,7 +100,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         [Fact]
         public void Show_SetsNextGlobalPostNotificationDateToCurrentDatePlusOneDay_WhenNotDismissed()
         {
-            DateTime notificationDate = new DateTime(1990, 01, 01).ToUniversalTime();
+            DateTime notificationDate = SqlDateTime.MinValue.Value;
 
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
             viewModel.Setup(v => v.Dismissed).Returns(false);
