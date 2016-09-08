@@ -63,11 +63,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // selected confirmation type, we have a match in this scenario.
             // We'll check this OR'd with the actual check between the rate and shipment confirmation.
             List<PostalConfirmationType> availableConfirmationTypes = new UspsShipmentType().GetAvailableConfirmationTypes(shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service, (PostalPackagingType) shipment.Postal.PackagingType);
-            bool confirmationMatches = availableConfirmationTypes.Count == 1 && 
-                                       availableConfirmationTypes.First() == (PostalConfirmationType) shipment.Postal.Confirmation;
+            bool confirmationMatches = ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation ||
+                                       (availableConfirmationTypes.Count == 1 && availableConfirmationTypes.First() == (PostalConfirmationType) shipment.Postal.Confirmation);
 
-            return ServiceType == (PostalServiceType) shipment.Postal.Service && 
-                (confirmationMatches || ConfirmationType == (PostalConfirmationType) shipment.Postal.Confirmation);
+            return ServiceType == (PostalServiceType) shipment.Postal.Service && confirmationMatches;
         }
     }
 }
