@@ -1,6 +1,6 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using ShipWorks.UI.Controls.WebBrowser;
+using System;
 using Xunit;
 
 namespace ShipWorks.UI.Tests.Controls.WebBrowser
@@ -27,7 +27,7 @@ namespace ShipWorks.UI.Tests.Controls.WebBrowser
         {
             var testObject = mock.Create<DismissableWebBrowserDlgViewModel>();
 
-            var uri = new Uri("www.google.com");
+            var uri = new Uri("http://www.google.com");
             testObject.Load(uri, "Title");
 
             Assert.Equal(uri, testObject.Url);
@@ -38,7 +38,7 @@ namespace ShipWorks.UI.Tests.Controls.WebBrowser
         {
             var testObject = mock.Create<DismissableWebBrowserDlgViewModel>();
 
-            var uri = new Uri("www.google.com");
+            var uri = new Uri("http://www.google.com");
             testObject.Load(uri, "Title");
 
             Assert.Equal("Title", testObject.Title);
