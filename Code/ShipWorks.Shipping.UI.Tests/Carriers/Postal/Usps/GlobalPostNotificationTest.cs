@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Show_SetsNextGlobalPostNotificationDateToCurrentDatePlusTwoHundredYears_WhenDismissed()
+        public void Show_SetsNextGlobalPostNotificationDateToMaxSqlDate_WhenDismissed()
         {
             DateTime notificationDate = SqlDateTime.MinValue.Value;
 
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var testObject = mock.Create<GlobalPostLabelNotification>();
             testObject.Show();
 
-            Assert.True(user.Settings.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddYears(200).Date));
+            Assert.Equal(SqlDateTime.MaxValue.Value.Date, user.Settings.NextGlobalPostNotificationDate.Date);
         }
 
         [Fact]
