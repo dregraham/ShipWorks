@@ -1580,6 +1580,8 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCipherKey.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
