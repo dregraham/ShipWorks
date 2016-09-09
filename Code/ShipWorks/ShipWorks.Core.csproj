@@ -1129,6 +1129,8 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipPackageImporter.cs" />
     <Compile Include="Shipping\CustomsControlCache.cs" />
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
