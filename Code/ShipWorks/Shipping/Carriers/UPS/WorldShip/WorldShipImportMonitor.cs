@@ -325,27 +325,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         throw new InvalidOperationException("How did it get processed by WorldShip if not a UPS shipment?");
                     }
 
-                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                    {
-                        WorldShipPackageImporter importer = scope.Resolve<WorldShipPackageImporter>();
-
-                        foreach (WorldShipProcessedEntity packageToImport in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
-                        {
-                            try
-                            {
-                                importer.ImportPackageToShipment(shipment, packageToImport);
-                                adapter.SaveAndRefetch(shipment);
-                            }
-                            catch (ObjectDeletedException)
-                            {
-                                Log.WarnFormat($"Shipment {packageToImport.ShipmentID} has gone away since WorldShip processing.");
-                            }
-                            catch (SqlForeignKeyException)
-                            {
-                                Log.WarnFormat($"Shipment {packageToImport.ShipmentID} has gone away since WorldShip processing.");
-                            }
-                        }
-                    }
+                    ImportPackages(worldShipProcessedGrouping, shipment, adapter);
 
                     SaveWorldShipStatus(upsShipment, adapter, shipment);
                 }
@@ -358,6 +338,45 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             LogShipmentToTango(shipmentId);
+        }
+
+        /// <summary>
+        /// Imports packages from WorldShip
+        /// </summary>
+        private static void ImportPackages(WorldShipProcessedGrouping worldShipProcessedGrouping, ShipmentEntity shipment,
+            SqlAdapter adapter)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                WorldShipPackageImporter importer = scope.Resolve<WorldShipPackageImporter>();
+
+                foreach (WorldShipProcessedEntity packageToImport in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries
+                    )
+                {
+                    ImportPackage(importer, shipment, packageToImport, adapter);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Imports package from WorldShip
+        /// </summary>
+        private static void ImportPackage(WorldShipPackageImporter importer, ShipmentEntity shipment,
+            WorldShipProcessedEntity packageToImport, SqlAdapter adapter)
+        {
+            try
+            {
+                importer.ImportPackageToShipment(shipment, packageToImport);
+                adapter.SaveAndRefetch(shipment);
+            }
+            catch (ObjectDeletedException)
+            {
+                Log.WarnFormat($"Shipment {packageToImport.ShipmentID} has gone away since WorldShip processing.");
+            }
+            catch (SqlForeignKeyException)
+            {
+                Log.WarnFormat($"Shipment {packageToImport.ShipmentID} has gone away since WorldShip processing.");
+            }
         }
 
         /// <summary>
