@@ -224,7 +224,6 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDatasourceRepositoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactoryTest.cs" />
-    <Compile Include="EmbeddedResourceHelper.cs" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOnlineUpdaterTest.cs" />

@@ -516,6 +516,7 @@
     <Compile Include="Shipping\Carriers\RatingFieldsTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsApiTrackResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationAddressManipulatorTest.cs" />
@@ -756,6 +757,7 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OnLineTools\TrackResponse.xml" />
     <EmbeddedResource Include="Stores\Platforms\Newegg\Artifacts\OrderDownloadedWithEmptyInvoice.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
