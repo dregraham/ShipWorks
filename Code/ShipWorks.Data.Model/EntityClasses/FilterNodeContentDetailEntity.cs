@@ -23,18 +23,18 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
-	// __LLBLGENPRO_USER_CODE_REGION_END
+    // __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
+    // __LLBLGENPRO_USER_CODE_REGION_END
 	/// <summary>Entity class which represents the entity 'FilterNodeContentDetail'.<br/><br/></summary>
 	[Serializable]
 	public partial class FilterNodeContentDetailEntity : CommonEntityBase
-		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END	
+    // __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
+    // __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
-		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
-		// __LLBLGENPRO_USER_CODE_REGION_END
+        // __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
+        // __LLBLGENPRO_USER_CODE_REGION_END
 		#endregion
 
 		#region Statics
@@ -74,7 +74,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			InitClassEmpty(validator, null);
 		}
 				
+		/// <summary> CTor</summary>
+		/// <param name="filterNodeContentID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <param name="entityID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
+		public FilterNodeContentDetailEntity(System.Int64 filterNodeContentID, System.Int64 entityID):base("FilterNodeContentDetailEntity")
+		{
+			InitClassEmpty(null, null);
+			this.FilterNodeContentID = filterNodeContentID;
+			this.EntityID = entityID;
+		}
 
+		/// <summary> CTor</summary>
+		/// <param name="filterNodeContentID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <param name="entityID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <param name="validator">The custom validator object for this FilterNodeContentDetailEntity</param>
+		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
+		public FilterNodeContentDetailEntity(System.Int64 filterNodeContentID, System.Int64 entityID, IValidator validator):base("FilterNodeContentDetailEntity")
+		{
+			InitClassEmpty(validator, null);
+			this.FilterNodeContentID = filterNodeContentID;
+			this.EntityID = entityID;
+		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
@@ -86,8 +107,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
-			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
+            // __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
 		
@@ -216,8 +237,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 			}
-			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
@@ -281,8 +302,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			PerformDependencyInjection();
 			
-			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
+            // __LLBLGENPRO_USER_CODE_REGION_END
 			OnInitClassMembersComplete();
 		}
 
@@ -311,8 +332,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			this.Validator = validator;
 			InitClassMembers();
 
-			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
-			// __LLBLGENPRO_USER_CODE_REGION_END
+            // __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
+            // __LLBLGENPRO_USER_CODE_REGION_END
 
 			OnInitialized();
 
@@ -359,7 +380,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The FilterNodeContentID property of the Entity FilterNodeContentDetail<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FilterNodeContentDetail"."FilterNodeContentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int64 FilterNodeContentID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, true); }
@@ -369,7 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The EntityID property of the Entity FilterNodeContentDetail<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "FilterNodeContentDetail"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int64 EntityID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentDetailFieldIndex.EntityID, true); }
@@ -400,8 +421,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Custom Entity code
 		
-		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
-		// __LLBLGENPRO_USER_CODE_REGION_END
+        // __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
+        // __LLBLGENPRO_USER_CODE_REGION_END
 		#endregion
 
 		#region Included code

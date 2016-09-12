@@ -126,8 +126,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             get { return isSingleLineOrder; }
             set
             {
-                NumberOfItemsPerOrder = 1;
-                Items[0].DisplayName = value ? "Item 1" : "Item";
+                if (value)
+                {
+                    if (Items.Count > 0)
+                    {
+                        Items[0].DisplayName = "Item 1";
+                    }
+                }
+                else
+                {
+                    NumberOfItemsPerOrder = 1;
+                    Items[0].DisplayName = "Item";
+                }
 
                 handler.Set(nameof(IsSingleLineOrder), ref isSingleLineOrder, value);
                 handler.RaisePropertyChanged(nameof(Items));
@@ -234,16 +244,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             MethodConditions.EnsureArgumentIsNotNull(store);
 
             LoadColumnSource(store);
-            LoadMap(store.ImportMap);
+            LoadMap(store);
             LoadDownloadStrategy((OdbcImportStrategy)store.ImportStrategy);
         }
 
         /// <summary>
         /// Loads the import map from the store
         /// </summary>
-        private void LoadMap(string importMap)
+        private void LoadMap(OdbcStoreEntity store)
         {
-            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(importMap);
+            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
             loadedMapName = storeFieldMap.Name;
 
             EnsureExternalFieldsExistInColumnSource(storeFieldMap);
@@ -261,12 +271,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             {
                 LoadItemMappings(storeFieldMap);
             }
+            else
+            {
+                // Default to 1 item per order
+                NumberOfItemsPerOrder = 1;
+            }
 
             RecordIdentifier = new OdbcColumn(storeFieldMap.RecordIdentifierSource);
 
             IOdbcFieldMapEntry orderNumberEntry =
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
+            // First set IsSingleLineOrder based on store value
+            IsSingleLineOrder = store.ImportOrderItemStrategy == (int)OdbcImportOrderItemStrategy.SingleLine;
+            
+            // The store value may not be correct because this was introduced in v5.5, so just in case, correct it
+            // if, based on the map, it is not possibly a single line order (only 1 item per line and has a reccord identifier
+            // that is not the order number).
             int calculatedNumberOfEntries = storeFieldMap.Entries.Select(e=>e.Index).DefaultIfEmpty(0).Max() + 1;
 
             if (orderNumberEntry != null && 
@@ -345,9 +366,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
 
-            string columnSourceName = store.ImportColumnSourceType == (int)OdbcColumnSourceType.Table ?
-                store.ImportColumnSource :
-                CustomQueryColumnSourceName;
+            string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table
+                ? store.ImportColumnSource
+                : CustomQueryColumnSourceName;
 
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
@@ -386,6 +407,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             try
             {
                 store.ImportMap = map.Serialize();
+                store.ImportOrderItemStrategy = isSingleLineOrder
+                    ? (int) OdbcImportOrderItemStrategy.SingleLine
+                    : (int) OdbcImportOrderItemStrategy.MultiLine;
             }
             catch (ShipWorksOdbcException ex)
             {

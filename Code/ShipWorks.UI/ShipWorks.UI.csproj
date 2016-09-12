@@ -233,6 +233,8 @@
     <Compile Include="ValueConverters\ValueEqualToParameterConverter.cs" />
     <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="WpfViewAttribute.cs" />
+    <Compile Include="WpfViewTemplateSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

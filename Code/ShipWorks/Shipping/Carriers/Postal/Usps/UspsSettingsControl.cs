@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -29,6 +27,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Usps supports services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
+        /// Usps supports packages
+        /// </summary>
+        protected override bool SupportsPackages => true;
 
         /// <summary>
         /// Initialize the settings control
@@ -88,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (uspsResellerType == UspsResellerType.None)
             {
                 // Showing the insurance control is dependent on if its allowed in tango
-                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.UspsInsuranceProvider;
+                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.UspsInsuranceProvider;
 
                 // Specify the provider name here so we can use a constant
                 insuranceProviderChooser.CarrierProviderName = UspsUtility.StampsInsuranceDisplayName;
@@ -151,19 +159,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private static bool ShouldHideExpress1Controls()
         {
             log.Info("Checking whether to show Express1");
-            
+
             bool shouldHide = !UspsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
                     ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted;
-            
+
             log.InfoFormat("{0} Express1 controls", shouldHide ? "Hiding" : "Showing");
 
             return shouldHide;
         }
 
         /// <summary>
-        /// Save the settings 
+        /// Save the settings
         /// </summary>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             if (optionsControl == null)
             {
@@ -190,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (uspsResellerType == UspsResellerType.None)
             {
                 log.InfoFormat("Saving insurance provider {0} {1} {2}", settings == null, insuranceProviderChooser == null, insuranceProviderChooser.InsuranceProvider);
-                settings.UspsInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
+                settings.UspsInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
                 log.Info("Finished saving insurance provider");
             }
         }

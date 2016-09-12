@@ -169,6 +169,7 @@
           <Field Name="ActionVersion" Type="byte[]" MaxLength="8" FieldIndex="5" />
           <Field Name="ContextLock" Type="string" IsOptional="true" MaxLength="36" FieldIndex="13" />
           <Field Name="EntityID" Type="long" IsOptional="true" FieldIndex="10" />
+          <Field Name="ExtraData" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="InternalComputerLimitedList" Type="string" MaxLength="150" FieldIndex="9" />
           <Field Name="NextStep" Type="int" FieldIndex="12" />
           <Field Name="QueueVersion" Type="byte[]" IsReadOnly="true" MaxLength="8" FieldIndex="6" />
@@ -1153,8 +1154,8 @@
       </EntityDefinition>
       <EntityDefinition Name="FilterNodeContentDetail" ObjectID="7ab075a5-d2ec-44c0-99f5-304d43b7b1e0">
         <Fields>
-          <Field Name="EntityID" Type="long" FieldIndex="1" />
-          <Field Name="FilterNodeContentID" Type="long" FieldIndex="0" />
+          <Field Name="EntityID" Type="long" IsPrimaryKey="true" FieldIndex="1" />
+          <Field Name="FilterNodeContentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="FilterSequence" ObjectID="9144d3c4-f0bb-475f-b279-07fe2e609ec6">
@@ -1533,6 +1534,7 @@
           <Field Name="ImportColumnSourceType" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="ImportConnectionString" Type="string" MaxLength="2048" FieldIndex="0" />
           <Field Name="ImportMap" Type="string" MaxLength="2147483647" FieldIndex="1" />
+          <Field Name="ImportOrderItemStrategy" Type="int" Precision="10" FieldIndex="10" />
           <Field Name="ImportStrategy" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="UploadColumnSource" Type="string" MaxLength="2048" FieldIndex="8" />
           <Field Name="UploadColumnSourceType" Type="int" Precision="10" FieldIndex="7" />
@@ -3543,7 +3545,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-08-15T21:20:10.8498004Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-12T14:33:45.2615195Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -3589,6 +3591,7 @@
                     <Field Name="Status" Ordinal="12" DbType="8" Precision="10" />
                     <Field Name="NextStep" Ordinal="13" DbType="8" Precision="10" />
                     <Field Name="ContextLock" Ordinal="14" IsOptional="true" DbType="12" Length="36" />
+                    <Field Name="ExtraData" Ordinal="15" IsOptional="true" DbType="26" Length="2147483647" />
                   </Fields>
                 </Table>
                 <Table Name="ActionQueueSelection">
@@ -3756,7 +3759,7 @@
                     <Field Name="MarketplaceID" Ordinal="16" DbType="12" Length="50" />
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
-                    <Field Name="AmazonShippingToken" Ordinal="19" HasDefaultValue="true" DefaultValue="N'hlkH7XeEA5GehLVXyC7ZpSjpPQVzOciXTvoFKlnobEJblNvBlX/dasYvkTYKkOQfL5Oy6kfyeZI='" DbType="12" Length="500" />
+                    <Field Name="AmazonShippingToken" Ordinal="19" HasDefaultValue="true" DefaultValue="N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z'" DbType="12" Length="500" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
@@ -5330,9 +5333,10 @@
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDetail">
+                  <PkConstraintName Name="PK_FilterNodeContentDetail" />
                   <Fields>
-                    <Field Name="FilterNodeContentID" Ordinal="1" DbType="0" Precision="19" />
-                    <Field Name="ObjectID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="FilterNodeContentID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="2" IsPrimaryKey="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeContentDirty">
@@ -5364,24 +5368,27 @@
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeUpdateCustomer">
+                  <PkConstraintName Name="PK_FilterNodeUpdateCustomer" />
                   <Fields>
-                    <Field Name="ObjectID" Ordinal="1" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" DbType="23" Length="100" />
+                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeUpdateItem">
+                  <PkConstraintName Name="PK_FilterNodeUpdateItem" />
                   <Fields>
-                    <Field Name="ObjectID" Ordinal="1" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" DbType="23" Length="100" />
+                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeUpdateOrder">
+                  <PkConstraintName Name="PK_FilterNodeUpdateOrder" />
                   <Fields>
-                    <Field Name="ObjectID" Ordinal="1" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" DbType="23" Length="100" />
+                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeUpdatePending">
@@ -5394,10 +5401,11 @@
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeUpdateShipment">
+                  <PkConstraintName Name="PK_FilterNodeUpdateShipment" />
                   <Fields>
-                    <Field Name="ObjectID" Ordinal="1" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" DbType="23" Length="100" />
+                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FilterSequence">
@@ -5865,11 +5873,12 @@
                     <Field Name="ImportStrategy" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="ImportColumnSourceType" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="ImportColumnSource" Ordinal="6" DbType="12" Length="2048" />
-                    <Field Name="UploadStrategy" Ordinal="7" DbType="8" Precision="10" />
-                    <Field Name="UploadMap" Ordinal="8" DbType="12" Length="2147483647" />
-                    <Field Name="UploadColumnSourceType" Ordinal="9" DbType="8" Precision="10" />
-                    <Field Name="UploadColumnSource" Ordinal="10" DbType="12" Length="2048" />
-                    <Field Name="UploadConnectionString" Ordinal="11" DbType="12" Length="2048" />
+                    <Field Name="ImportOrderItemStrategy" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="UploadStrategy" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="UploadMap" Ordinal="9" DbType="12" Length="2147483647" />
+                    <Field Name="UploadColumnSourceType" Ordinal="10" DbType="8" Precision="10" />
+                    <Field Name="UploadColumnSource" Ordinal="11" DbType="12" Length="2048" />
+                    <Field Name="UploadConnectionString" Ordinal="12" DbType="12" Length="2048" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracAccount">
@@ -6564,7 +6573,7 @@
                     <Field Name="SearsEmail" Ordinal="2" DbType="12" Length="75" />
                     <Field Name="Password" Ordinal="3" DbType="12" Length="75" />
                     <Field Name="SecretKey" Ordinal="4" DbType="12" Length="255" />
-                    <Field Name="SellerID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="15" />
+                    <Field Name="SellerID" Ordinal="5" DbType="12" Length="15" />
                   </Fields>
                 </Table>
                 <Table Name="ServerMessage">
@@ -7143,8 +7152,18 @@
                   <PkConstraintName Name="PK_ThreeDCartStore" />
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="StoreUrl" Ordinal="2" DbType="12" Length="110" />
-                    <Field Name="ApiUserKey" Ordinal="3" DbType="12" Length="65" />
+                    <Field Name="StoreUrl" Ordinal="2" DbType="12" Length="110">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="Store URL" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="ApiUserKey" Ordinal="3" DbType="12" Length="65">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="User Key" />
+                      </CustomProperties>
+                    </Field>
                     <Field Name="TimeZoneID" Ordinal="4" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="StatusCodes" Ordinal="5" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="6" DbType="8" Precision="10" />
@@ -8720,6 +8739,7 @@
             <FieldMapping FieldName="ActionVersion" TargetFieldName="ActionVersion" />
             <FieldMapping FieldName="ContextLock" TargetFieldName="ContextLock" />
             <FieldMapping FieldName="EntityID" TargetFieldName="ObjectID" />
+            <FieldMapping FieldName="ExtraData" TargetFieldName="ExtraData" />
             <FieldMapping FieldName="InternalComputerLimitedList" TargetFieldName="ComputerLimitedList" />
             <FieldMapping FieldName="NextStep" TargetFieldName="NextStep" />
             <FieldMapping FieldName="QueueVersion" TargetFieldName="QueueVersion" />
@@ -10118,6 +10138,7 @@
             <FieldMapping FieldName="ImportColumnSourceType" TargetFieldName="ImportColumnSourceType" />
             <FieldMapping FieldName="ImportConnectionString" TargetFieldName="ImportConnectionString" />
             <FieldMapping FieldName="ImportMap" TargetFieldName="ImportMap" />
+            <FieldMapping FieldName="ImportOrderItemStrategy" TargetFieldName="ImportOrderItemStrategy" />
             <FieldMapping FieldName="ImportStrategy" TargetFieldName="ImportStrategy" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="UploadColumnSource" TargetFieldName="UploadColumnSource" />

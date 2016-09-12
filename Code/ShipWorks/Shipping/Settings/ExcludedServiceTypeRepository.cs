@@ -16,19 +16,24 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Saves the list of excluded service types.
         /// </summary>
-        public void Save(List<ExcludedServiceTypeEntity> excludedServiceTypes)
+        public void Save(ShipmentTypeCode shipmentType, IEnumerable<int> excludedServiceTypes)
         {
             // This will be a wipe and replace strategy based on the shipment types in the list
             // excludes service types
+            RelationPredicateBucket bucket = new RelationPredicateBucket(ExcludedServiceTypeFields.ShipmentType == (int) shipmentType);
 
-            RelationPredicateBucket bucket = new RelationPredicateBucket();
+            EntityCollection<ExcludedServiceTypeEntity> collection = excludedServiceTypes
+                .Select(x => new ExcludedServiceTypeEntity { ShipmentType = (int) shipmentType, ServiceType = x })
+                .ToEntityCollection();
 
-            using (EntityCollection<ExcludedServiceTypeEntity> collection = new EntityCollection<ExcludedServiceTypeEntity>(excludedServiceTypes))
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (collection)
             {
-                adapter.DeleteEntitiesDirectly(typeof(ExcludedServiceTypeEntity), bucket);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.DeleteEntitiesDirectly(typeof(ExcludedServiceTypeEntity), bucket);
 
-                adapter.SaveEntityCollection(collection);
+                    adapter.SaveEntityCollection(collection);
+                }
             }
         }
 
@@ -40,10 +45,12 @@ namespace ShipWorks.Shipping.Settings
             RelationPredicateBucket bucket = new RelationPredicateBucket(ExcludedServiceTypeFields.ShipmentType == (int) shipmentType.ShipmentTypeCode);
 
             using (ExcludedServiceTypeCollection excludedServices = new ExcludedServiceTypeCollection())
-            using (SqlAdapter adapter = SqlAdapter.Default)
             {
-                adapter.FetchEntityCollection(excludedServices, bucket);
-                return excludedServices.ToList();
+                using (SqlAdapter adapter = SqlAdapter.Default)
+                {
+                    adapter.FetchEntityCollection(excludedServices, bucket);
+                    return excludedServices.ToList();
+                }
             }
         }
     }

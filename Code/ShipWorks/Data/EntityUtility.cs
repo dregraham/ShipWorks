@@ -763,6 +763,16 @@ namespace ShipWorks.Data
         /// <summary>
         /// Mark the given entity, which may be in any state, as completely new
         /// </summary>
+        public static T CloneAsNew<T>(T entity) where T : EntityBase2
+        {
+            T clone = CloneEntity(entity);
+            MarkAsNew(clone);
+            return clone;
+        }
+
+        /// <summary>
+        /// Mark the given entity, which may be in any state, as completely new
+        /// </summary>
         public static void MarkAsNew(IEntityCore entity)
         {
             if (entity == null)

@@ -274,6 +274,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ActionQueueEntity", "Status", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.Status, 0, 0, 10);
 			this.AddElementFieldInfo("ActionQueueEntity", "NextStep", typeof(System.Int32), false, false, false, false,  (int)ActionQueueFieldIndex.NextStep, 0, 0, 10);
 			this.AddElementFieldInfo("ActionQueueEntity", "ContextLock", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ContextLock, 36, 0, 0);
+			this.AddElementFieldInfo("ActionQueueEntity", "ExtraData", typeof(System.String), false, false, false, true,  (int)ActionQueueFieldIndex.ExtraData, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ActionQueueSelectionEntity's FieldInfo objects</summary>
 		private void InitActionQueueSelectionEntityInfos()
@@ -1321,8 +1322,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitFilterNodeContentDetailEntityInfos()
 		{
 			this.AddFieldIndexEnumForElementName(typeof(FilterNodeContentDetailFieldIndex), "FilterNodeContentDetailEntity");
-			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "FilterNodeContentID", typeof(System.Int64), false, true, false, false,  (int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, 0, 0, 19);
-			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "EntityID", typeof(System.Int64), false, false, false, false,  (int)FilterNodeContentDetailFieldIndex.EntityID, 0, 0, 19);
+			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "FilterNodeContentID", typeof(System.Int64), true, true, false, false,  (int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, 0, 0, 19);
+			this.AddElementFieldInfo("FilterNodeContentDetailEntity", "EntityID", typeof(System.Int64), true, false, false, false,  (int)FilterNodeContentDetailFieldIndex.EntityID, 0, 0, 19);
 		}
 		/// <summary>Inits FilterSequenceEntity's FieldInfo objects</summary>
 		private void InitFilterSequenceEntityInfos()
@@ -1766,6 +1767,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSourceType", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSourceType, 0, 0, 10);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2048, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadConnectionString, 2048, 0, 0);
+			this.AddElementFieldInfo("OdbcStoreEntity", "ImportOrderItemStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportOrderItemStrategy, 0, 0, 10);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()

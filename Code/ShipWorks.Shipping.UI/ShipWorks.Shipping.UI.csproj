@@ -173,6 +173,10 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
+      <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
@@ -181,6 +185,15 @@
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
+    <Compile Include="RatingPanel\RateFootnoteControlContainer.xaml.cs">
+      <DependentUpon>RateFootnoteControlContainer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RatingPanel\GenericRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RatingPanel\GenericRateFootnoteControl.Designer.cs">
+      <DependentUpon>GenericRateFootnoteControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="RatingPanel\RatingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -446,6 +459,9 @@
     <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RatingPanel\GenericRateFootnoteControl.resx">
+      <DependentUpon>GenericRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RatingPanel\RatingPanel.resx">
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -454,6 +470,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\AmazonSameDayNotAvailableFootnoteViewModelTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="RatingPanel\FootnoteTemplates\BrokerExceptionsRateFootnoteViewModelTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -507,6 +531,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\FootnoteTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\RateFootnoteControlContainer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -54,6 +54,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 originalOdbcStoreEntity.ImportStrategy = storeToSave.ImportStrategy;
                 originalOdbcStoreEntity.ImportColumnSourceType = storeToSave.ImportColumnSourceType;
                 originalOdbcStoreEntity.ImportColumnSource = storeToSave.ImportColumnSource;
+                originalOdbcStoreEntity.ImportOrderItemStrategy = storeToSave.ImportOrderItemStrategy;
                 originalOdbcStoreEntity.UploadStrategy = storeToSave.UploadStrategy;
                 originalOdbcStoreEntity.UploadMap = storeToSave.UploadMap;
                 originalOdbcStoreEntity.UploadColumnSourceType = storeToSave.UploadColumnSourceType;

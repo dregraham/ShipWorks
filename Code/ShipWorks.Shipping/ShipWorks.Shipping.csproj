@@ -152,9 +152,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />

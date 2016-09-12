@@ -92,6 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Custom\AmazonOrderEntityTest.cs" />
+    <Compile Include="Custom\ChannelAdvisorOrderEntityTest.cs" />
     <Compile Include="Custom\EndicaAccountEntityTest.cs" />
     <Compile Include="Custom\FedExAccountEntityTest.cs" />
     <Compile Include="Custom\IParcelAccountEntityTest.cs" />
@@ -108,9 +110,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
+      <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
+      <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

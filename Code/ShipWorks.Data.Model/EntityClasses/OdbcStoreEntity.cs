@@ -349,6 +349,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UploadColumnSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UploadConnectionString", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ImportOrderItemStrategy", fieldHashtable);
 		}
 		#endregion
 
@@ -500,6 +502,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadConnectionString, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.UploadConnectionString, value); }
+		}
+
+		/// <summary> The ImportOrderItemStrategy property of the Entity OdbcStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."ImportOrderItemStrategy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ImportOrderItemStrategy
+		{
+			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, true); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

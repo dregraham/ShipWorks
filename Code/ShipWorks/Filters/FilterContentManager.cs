@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
@@ -32,19 +33,19 @@ namespace ShipWorks.Filters
         static readonly ILog log = LogManager.GetLogger(typeof(FilterContentManager));
 
         // A cache of all the filter counts for each node
-        static Dictionary<long, FilterCount> countCache = new Dictionary<long, FilterCount>();
+        static readonly Dictionary<long, FilterCount> countCache = new Dictionary<long, FilterCount>();
 
         // The max timestamp value we currently have loaded
         static long maxTimestamp = 0;
 
         // Event that lets us sync threads and know about when calculation is happening
-        static ManualResetEvent calculatingEvent = new ManualResetEvent(true);
+        static readonly ManualResetEvent calculatingEvent = new ManualResetEvent(true);
 
         // So we know when to recalc date filters when the day changes
         static DateTime dateFiltersLastUpdated;
 
         // Used to take lock so only one thread can check for changes at a time
-        static object checkChangesLock = new object();
+        static readonly object checkChangesLock = new object();
 
         /// <summary>
         /// Completely reload the count cache
@@ -75,7 +76,8 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Refresh our our count cache from what has changed since last time.  If any counts are in need of calcuations - initial or update - the calculations are kicked off.
+        /// Refresh our our count cache from what has changed since last time.  If any counts are in need of
+        /// calcuations - initial or update - the calculations are kicked off.
         /// Returns true if any changes were loaded or any calculations were initiated.
         /// </summary>
         public static bool CheckForChanges()
@@ -312,6 +314,7 @@ namespace ShipWorks.Filters
             {
                 return;
             }
+
             // Already calculating
             if (!calculatingEvent.WaitOne(TimeSpan.Zero, false))
             {
@@ -393,7 +396,17 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Delete any filter counts that have been abandoned from the database
         /// </summary>
+        /// <remarks>This method will just fire and forget.  We don't care if multiple operations get
+        /// started at the same time as the deletion process handles that well.</remarks>
         public static void DeleteAbandonedFilterCounts()
+        {
+            TaskEx.Run(() => DeleteAbandonedFilterCountsInternal());
+        }
+
+        /// <summary>
+        /// Delete any filter counts that have been abandoned from the database
+        /// </summary>
+        private static void DeleteAbandonedFilterCountsInternal()
         {
             log.InfoFormat("Deleting abandoned filter counts....");
 

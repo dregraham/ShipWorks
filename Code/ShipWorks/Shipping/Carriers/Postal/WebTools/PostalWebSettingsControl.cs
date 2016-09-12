@@ -18,6 +18,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
+        /// Carrier supports services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
+        /// Carrier supports packages
+        /// </summary>
+        protected override bool SupportsPackages => true;
+
+        /// <summary>
         /// Load the settings
         /// </summary>
         public override void LoadSettings()

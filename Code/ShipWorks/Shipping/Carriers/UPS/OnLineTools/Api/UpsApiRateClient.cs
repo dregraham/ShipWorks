@@ -33,32 +33,34 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private readonly ILog log;
         private ICarrierSettingsRepository settingsRepository;
         private ICertificateInspector certificateInspector;
+        private readonly UpsShipmentType shipmentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
         public UpsApiRateClient()
-            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository(), new TrustingCertificateInspector())
+            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository(), new TrustingCertificateInspector(), new UpsOltShipmentType())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
         public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
-            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
-            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector)
+            ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, UpsShipmentType shipmentType)
+            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector, shipmentType)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient" /> class.
         /// </summary>
         private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
-            ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+            ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, UpsShipmentType shipmentType)
         {
             this.accountRepository = accountRepository;
             this.log = log;
             this.settingsRepository = settingsRepository;
             this.certificateInspector = certificateInspector;
+            this.shipmentType = shipmentType;
         }
 
         /// <summary>
@@ -106,13 +108,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             if (GetSurePostRestrictionLevel() == EditionRestrictionLevel.None)
             {
-                // Get SurePost rates since SurePost is not restricted
-                UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
-                IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
-                IEnumerable<UpsServiceType> surePostServiceTypes =
-                    upsServiceManager.GetServices(shipment).Where(s => s.IsSurePost).Select(s => s.UpsServiceType);
-
-                foreach (UpsServiceType serviceType in surePostServiceTypes)
+                foreach (UpsServiceType serviceType in GetSurePostServiceTypes(shipment))
                 {
                     try
                     {
@@ -141,6 +137,39 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             return rates;
+        }
+
+        /// <summary>
+        /// Get the SurePost service types we should get rates for
+        /// </summary>
+        private IEnumerable<UpsServiceType> GetSurePostServiceTypes(ShipmentEntity shipment)
+        {
+            UpsServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
+            IUpsServiceManager upsServiceManager = serviceManagerFactory.Create(shipment);
+
+            UpsServiceType shipmentService = (UpsServiceType) shipment.Ups.Service;
+
+            UpsServiceType[] shipmentSpecificExclusions =
+            {
+                shipment.TotalWeight >= 1D ?
+                    UpsServiceType.UpsSurePostLessThan1Lb :
+                    UpsServiceType.UpsSurePost1LbOrGreater
+            };
+
+            List<UpsServiceType> surePostServices = upsServiceManager.GetServices(shipment)
+                        .Where(s => s.IsSurePost)
+                        .Select(s => s.UpsServiceType)
+                        .Except(shipmentType.GetExcludedServiceTypes().Cast<UpsServiceType>())
+                        .Except(shipmentSpecificExclusions)
+                        .ToList();
+
+            // If the shipment is a sure post service make sure we get rates for it
+            if (UpsUtility.IsUpsSurePostService(shipmentService) && !surePostServices.Contains(shipmentService))
+            {
+                surePostServices.Add(shipmentService);
+            }
+
+            return surePostServices;
         }
 
         /// <summary>

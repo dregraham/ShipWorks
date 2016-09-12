@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
+﻿using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping;
-using ShipWorks.Data.Model;
-using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -78,8 +71,11 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
 
             string title = ShippingManager.GetServiceUsed(shipment);
+            // Strip out everything except for alpha numeric, period and parenthesis
+            // 3dcart throws a 400 bad request when the request contains other characters
+            string alphaNumericTitle = new Regex("[^a-zA-Z0-9 .()-]").Replace(title, "");
 
-            return string.Format("{0}|{1}", code, title);
+            return string.Format("{0}|{1}", code, alphaNumericTitle);
         }
 
         /// <summary>

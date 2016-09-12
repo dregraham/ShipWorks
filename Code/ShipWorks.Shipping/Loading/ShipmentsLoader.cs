@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -13,6 +12,7 @@ using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Loading
         private static void TrackLoadShipments(ITrackedDurationEvent trackedDurationEvent, int orderCount, int totalShipments, int needsValidationCount, int newShipmentCount)
         {
             trackedDurationEvent.AddMetric("Orders", orderCount);
-            trackedDurationEvent.AddMetric("TotalShipments", totalShipments);
+            trackedDurationEvent.AddMetric(Telemetry.TotalShipmentsKey, totalShipments);
             trackedDurationEvent.AddMetric("PendingValidation", needsValidationCount);
             trackedDurationEvent.AddMetric("ShipmentsCreated", newShipmentCount);
         }
@@ -151,6 +151,7 @@ namespace ShipWorks.Shipping.Loading
                 }
 
                 shipment.CustomsItemsLoaded = shipment.CustomsItemsLoaded || shipment.CustomsItems.Any();
+                shipment.CustomsItems.RemovedEntitiesTracker = shipment.CustomsItems.RemovedEntitiesTracker ?? new ShipmentCustomsItemCollection();
 
                 globalShipments.Add(shipment.ShipmentID, shipment);
 

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -67,12 +62,42 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Save settings from the control
+        /// </summary>
+        public virtual void SaveSettings(ShippingSettingsEntity settings,
+            IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            IExcludedPackageTypeRepository excludedPackageTypeRepository)
+        {
+            SaveSettings(settings);
+
+            if (SupportsServices)
+            {
+                excludedServiceTypeRepository.Save(ShipmentTypeCode, GetExcludedServices());
+            }
+
+            if (SupportsPackages)
+            {
+                excludedPackageTypeRepository.Save(ShipmentTypeCode, GetExcludedPackageTypes());
+            }
+        }
+
+        /// <summary>
         /// Can be overridden in derived classes to save service settings
         /// </summary>
-        public virtual void SaveSettings(ShippingSettingsEntity settings)
+        protected virtual void SaveSettings(ShippingSettingsEntity settings)
         {
 
         }
+
+        /// <summary>
+        /// Does the carrier support services
+        /// </summary>
+        protected virtual bool SupportsServices => false;
+
+        /// <summary>
+        /// Does the carrier support packages
+        /// </summary>
+        protected virtual bool SupportsPackages => false;
 
         /// <summary>
         /// Called to notify the settings control to refresh itself due to an outside change

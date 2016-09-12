@@ -50,6 +50,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Status = source.Status;
             NextStep = source.NextStep;
             ContextLock = source.ContextLock;
+            ExtraData = source.ExtraData;
             
             
             
@@ -146,6 +147,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 36<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ContextLock { get; }
+        /// <summary> The ExtraData property of the Entity ActionQueue<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ActionQueue"."ExtraData"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ExtraData { get; }
         
         
         

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
@@ -9,6 +10,7 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -613,29 +615,29 @@ namespace ShipWorks.Filters
         private void RegenerateFilterSql(List<FilterEntity> filters, SqlAdapter adapter)
         {
             // Ordered list of affected nodes, from children up, so folders are accurate
-            List<FilterNodeEntity> affectedNodes = new List<FilterNodeEntity>();
-
-            // Look at all filters
-            foreach (FilterEntity filter in filters)
+            OrderedDictionary affectedNodes = new OrderedDictionary();
+            
+            using (new LoggedStopwatch(log, "RegenerateFilterSql-GetAffectedNodesList"))
             {
-                foreach (FilterNodeEntity node in GetNodesAffectedByDefinition(filter))
+                // Look at all filters
+                foreach (FilterEntity filter in filters)
                 {
-                    log.DebugFormat("  Adding node {0} ({1})", node.FilterNodeID, node.Filter.Name);
-
-                    // The nodes are ordered from children -> parent.  We need to make sure
-                    // all parents stay to the right of children for the counts to work.
-                    if (affectedNodes.Contains(node))
+                    foreach (FilterNodeEntity node in GetNodesAffectedByDefinition(filter))
                     {
-                        log.DebugFormat("    already present, moving to end");
-                        affectedNodes.Remove(node);
+                        // The nodes are ordered from children -> parent.  We need to make sure
+                        // all parents stay to the right of children for the counts to work.
+                        if (affectedNodes.Contains(node.FilterNodeID))
+                        {
+                            affectedNodes.Remove(node.FilterNodeID);
+                        }
+                        
+                        affectedNodes.Add(node.FilterNodeID, node);
                     }
-
-                    affectedNodes.Add(node);
                 }
             }
 
             // Now we have a unique list of affected nodes, ordered from children -> parent
-            foreach (FilterNodeEntity node in affectedNodes)
+            foreach (FilterNodeEntity node in affectedNodes.Values)
             {
                 log.InfoFormat("Regenerating sql for node {0} ({1})", node.FilterNodeID, node.Filter.Name);
 
