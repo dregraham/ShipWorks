@@ -1646,6 +1646,9 @@
     </Compile>
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Printing\IPrinterSetting.cs" />
+    <Compile Include="Templates\Printing\PrinterSetting.cs" />
+    <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
