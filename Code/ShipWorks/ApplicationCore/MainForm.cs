@@ -812,7 +812,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks(GetCustomerIdForTelemetry(), ShipWorksSession.InstanceID.ToString("D"));
+            Telemetry.TrackStartShipworks();
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -825,15 +825,6 @@ namespace ShipWorks
             }
 
             ForceHeartbeat();
-        }
-
-        /// <summary>
-        /// Get a customer id that can be used for telemetry
-        /// </summary>
-        private string GetCustomerIdForTelemetry()
-        {
-            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-            return tangoWebClient.GetTangoCustomerId();
         }
 
         /// <summary>
