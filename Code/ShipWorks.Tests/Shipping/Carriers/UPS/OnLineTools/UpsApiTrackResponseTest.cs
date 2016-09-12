@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools
         {
             testObject.LoadResponse(trackingResponse, shipment);
 
-            Assert.Contains("on 6/10/2010 6:30:00 AM", testObject.TrackingResult.Summary);
+            Assert.Contains("on 6/10/2010 06:30:00 AM", testObject.TrackingResult.Summary);
         }
 
         [Fact]
