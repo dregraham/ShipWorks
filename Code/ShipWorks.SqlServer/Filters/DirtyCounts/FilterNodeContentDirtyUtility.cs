@@ -161,23 +161,32 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         private static void MergeIntoFilterDirty(string table, string primaryKey, string parentID, int type, byte[] columnsUpdated, SqlConnection con)
         {
             long computerID = UtilityFunctions.GetComputerID(con);
-
-            // Insert everything into the dirty table.  Dupes will be dealt with when we update the counts.
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = string.Format(@"
-
-                INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                  SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
             
-            ",
+            // Insert everything into the dirty table.  Dupes will be dealt with when we update the counts.
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = string.Format(@"
+                        IF OBJECT_ID('tempdb..#FNCDTemp') IS NOT NULL DROP TABLE #FNCDTemp
 
-            primaryKey, parentID, table);
+                        SELECT {0} as [ObjectID], {1} as [ParentID], @type as [ObjectType], @computerID as [ComputerID], @columns as [ColumnsUpdated] 
+                            INTO #FNCDTemp FROM {2} 
 
-            cmd.Parameters.AddWithValue("@computerID", computerID);
-            cmd.Parameters.AddWithValue("@type", type);
-            cmd.Parameters.AddWithValue("@columns", columnsUpdated);
+                        INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
 
-            cmd.ExecuteNonQuery();
+                        INSERT INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
+            
+                        DROP TABLE tempdb..#FNCDTemp
+                    ",
+                    primaryKey, parentID, table);
+
+                cmd.Parameters.AddWithValue("@computerID", computerID);
+                cmd.Parameters.AddWithValue("@type", type);
+                cmd.Parameters.AddWithValue("@columns", columnsUpdated);
+
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>

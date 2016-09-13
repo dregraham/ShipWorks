@@ -33,6 +33,7 @@ namespace ShipWorks.SqlServer.Filters
         // Indicates if we've discovered we have to truncate with DELETE due to missing permissions
         static bool truncateWithDelete;
 
+        protected string filterNodeContentDirtyTableName = "FilterNodeContentDirty";
         protected string filterNodeUpdateCheckpointTableName = "FilterNodeUpdateCheckpoint";
         protected string filterNodeUpdatePendingTableName = "FilterNodeUpdatePending";
         protected string filterNodeUpdateCustomerTableName = "FilterNodeUpdateCustomer";
@@ -139,11 +140,12 @@ namespace ShipWorks.SqlServer.Filters
                                     int updated;
                                     using (SqlCommand fillParentKeyCmd = con.CreateCommand())
                                     {
-                                        fillParentKeyCmd.CommandText = @"
-                                        UPDATE FilterNodeContentDirty
+                                        fillParentKeyCmd.CommandText = string.Format(@"
+                                        UPDATE {0}
                                             SET ParentID = o.CustomerID
                                             FROM [Order] o 
-                                            WHERE ObjectType = 6 AND ParentID IS NULL AND o.OrderID = ObjectID;";
+                                            WHERE ObjectType = 6 AND ParentID IS NULL AND o.OrderID = ObjectID;",
+                                            filterNodeContentDirtyTableName);
                                         updated = fillParentKeyCmd.ExecuteNonQuery();
                                     }
 
@@ -156,12 +158,13 @@ namespace ShipWorks.SqlServer.Filters
                                     int updated;
                                     using (SqlCommand fillParentKeyCmd = con.CreateCommand())
                                     {
-                                        fillParentKeyCmd.CommandText = @"
-                                        UPDATE FilterNodeContentDirty
+                                        fillParentKeyCmd.CommandText = string.Format(@"
+                                        UPDATE {0}
                                             SET ParentID = s.OrderID
                                             FROM [Shipment] s 
-                                            WHERE ObjectType = 31 AND ParentID IS NULL AND s.ShipmentID = ObjectID;";
-                                        updated = fillParentKeyCmd.ExecuteNonQuery();
+                                            WHERE ObjectType = 31 AND ParentID IS NULL AND s.ShipmentID = ObjectID;",
+                                            filterNodeContentDirtyTableName);
+                                            updated = fillParentKeyCmd.ExecuteNonQuery();
                                     }
 
                                     DebugMessage(string.Format("Updated {0} shipment ID's with their order ID's", updated));
@@ -207,7 +210,8 @@ namespace ShipWorks.SqlServer.Filters
                                 int deletedCount;
                                 using (SqlCommand clearDirtyCmd = con.CreateCommand())
                                 {
-                                    clearDirtyCmd.CommandText = "DELETE FilterNodeContentDirty WITH (READPAST) WHERE FilterNodeContentDirtyID <= @maxDirtyID; SELECT @@ROWCOUNT";
+                                    clearDirtyCmd.CommandText = string.Format("DELETE {0} WITH (READPAST) WHERE FilterNodeContentDirtyID <= @maxDirtyID; SELECT @@ROWCOUNT", 
+                                        filterNodeContentDirtyTableName);
                                     clearDirtyCmd.Parameters.AddWithValue("@maxDirtyID", checkpoint.MaxDirtyID);
                                     deletedCount = (int)clearDirtyCmd.ExecuteScalar();
                                 }
@@ -273,7 +277,7 @@ namespace ShipWorks.SqlServer.Filters
             object maxID;
             using (SqlCommand anyDirty = con.CreateCommand())
             {
-                anyDirty.CommandText = "SELECT MAX(FilterNodeContentDirtyID) FROM FilterNodeContentDirty WITH (NOLOCK)";
+                anyDirty.CommandText = string.Format("SELECT MAX(FilterNodeContentDirtyID) FROM {0} WITH (NOLOCK)", filterNodeContentDirtyTableName);
 
                 maxID = anyDirty.ExecuteScalar();
 
@@ -288,8 +292,9 @@ namespace ShipWorks.SqlServer.Filters
             {
                 insertCmd.CommandText = string.Format(
                     @"INSERT INTO {0} (MaxDirtyID, DirtyCount, State, Duration) 
-                    VALUES (@maxDirtyID, (SELECT COUNT(ObjectID) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE FilterNodeContentDirtyID <= @maxDirtyID), {1}, 0)",
+                    VALUES (@maxDirtyID, (SELECT COUNT(ObjectID) FROM {1} WITH (NOLOCK) WHERE FilterNodeContentDirtyID <= @maxDirtyID), {2}, 0)",
                     filterNodeUpdateCheckpointTableName,
+                    filterNodeContentDirtyTableName,
                     (int)states[0]);
                 insertCmd.Parameters.AddWithValue("@maxDirtyID", (long)maxID);
                 insertCmd.ExecuteNonQuery();
@@ -390,8 +395,9 @@ namespace ShipWorks.SqlServer.Filters
 						                    INNER JOIN Filter f ON s.FilterID = f.FilterID 
 						                    INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
 	                      WHERE f.[State] = 1 AND c.UpdateCalculation != '' AND (c.Status != 0 AND c.Status != 2)
-                                AND (SELECT COUNT(*) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE dbo.BitwiseAnd(ColumnsUpdated, c.ColumnMask) != 0x0) > 0",
-                    filterNodeUpdatePendingTableName);
+                                AND (SELECT COUNT(*) FROM {1} WITH (NOLOCK) WHERE dbo.BitwiseAnd(ColumnsUpdated, c.ColumnMask) != 0x0) > 0",
+                    filterNodeUpdatePendingTableName,
+                    filterNodeContentDirtyTableName);
 
                 // We want to know what masks each target uses, so we know what the dependencies are
                 targetNodeData[FilterTarget.Customers] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
@@ -423,7 +429,7 @@ namespace ShipWorks.SqlServer.Filters
                 int removed;
                 using (SqlCommand unneededCmd = con.CreateCommand())
                 {
-                    unneededCmd.CommandText = "DELETE FilterNodeContentDirty WHERE FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) = 0x0";
+                    unneededCmd.CommandText = string.Format("DELETE {0} WHERE FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) = 0x0", filterNodeContentDirtyTableName);
                     unneededCmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(allMasks));
                     unneededCmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
 
@@ -459,9 +465,10 @@ namespace ShipWorks.SqlServer.Filters
                 cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated 
-                   FROM FilterNodeContentDirty WITH (NOLOCK)
+                   FROM {1} WITH (NOLOCK)
                    WHERE ObjectType = 12 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateCustomerTableName);
+                   filterNodeUpdateCustomerTableName,
+                   filterNodeContentDirtyTableName);
                 cmd.ExecuteNonQuery();
 
                 // If a customer filter joins to orders, we need the customer ID of each edited order
@@ -472,9 +479,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ParentID, ComputerID, ColumnsUpdated
-                   FROM FilterNodeContentDirty WITH (NOLOCK)
+                   FROM {1} WITH (NOLOCK)
                    WHERE ObjectType = 6 AND ParentID IS NOT NULL AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateCustomerTableName);
+                   filterNodeUpdateCustomerTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -486,9 +494,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT o.CustomerID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.OrderID = d.ParentID 
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.OrderID = d.ParentID 
                        WHERE ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateCustomerTableName);
+                   filterNodeUpdateCustomerTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -500,9 +509,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT o.CustomerID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.OrderID = d.ParentID 
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.OrderID = d.ParentID 
                    WHERE ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateCustomerTableName);
+                   filterNodeUpdateCustomerTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -531,9 +541,10 @@ namespace ShipWorks.SqlServer.Filters
                 cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated
-                   FROM FilterNodeContentDirty WITH (NOLOCK) 
+                   FROM {1} WITH (NOLOCK) 
                    WHERE ObjectType = 6 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                 cmd.ExecuteNonQuery();
 
                 // If we join to a customer that joins to orders, we need the customer ID of each edited order
@@ -544,9 +555,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT o.OrderID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID
                    WHERE d.ObjectType = 6 AND d.ParentID IS NOT NULL AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -558,9 +570,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT o2.OrderID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -572,9 +585,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT o2.OrderID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -586,9 +600,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT o.OrderID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID
                    WHERE d.ObjectType = 12 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -600,9 +615,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT d.ParentID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK)
+                       FROM {1} d WITH (NOLOCK)
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND d.ParentID IS NOT NULL AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -614,9 +630,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT d.ParentID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK)
+                   FROM {1} d WITH (NOLOCK)
                    WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND d.ParentID IS NOT NULL AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                   filterNodeUpdateOrderTableName);
+                   filterNodeUpdateOrderTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -645,9 +662,10 @@ namespace ShipWorks.SqlServer.Filters
                 cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated
-                   FROM FilterNodeContentDirty WITH (NOLOCK) 
+                   FROM {1} WITH (NOLOCK) 
                    WHERE ObjectType = 13 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                 cmd.ExecuteNonQuery();
 
                 // If we join to a customer that joins to orders, we need the items of each customer with an edited order
@@ -658,9 +676,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o.OrderID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o.OrderID
                    WHERE d.ObjectType = 6 AND d.ParentID IS NOT NULL AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -672,9 +691,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o2.OrderID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o2.OrderID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -686,9 +706,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o2.OrderID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o2.OrderID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -700,9 +721,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ParentID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ParentID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -714,9 +736,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ParentID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ParentID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -728,9 +751,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ObjectID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ObjectID
                    WHERE d.ObjectType = 6 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateItemTableName);
+                filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -742,9 +766,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o.OrderID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o.OrderID
                    WHERE d.ObjectType = 12 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                        filterNodeUpdateItemTableName);
+                        filterNodeUpdateItemTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -773,9 +798,10 @@ namespace ShipWorks.SqlServer.Filters
                 cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated
-                   FROM FilterNodeContentDirty WITH (NOLOCK) 
+                   FROM {1} WITH (NOLOCK) 
                    WHERE ObjectType = 31 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                 cmd.ExecuteNonQuery();
 
                 // If we join to a customer that joins to orders, we need the shipments of each customer with an edited order
@@ -786,9 +812,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o.OrderID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o.OrderID
                    WHERE d.ObjectType = 6 AND d.ParentID IS NOT NULL AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -800,9 +827,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o2.OrderID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o2.OrderID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -814,9 +842,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o2.OrderID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o2.OrderID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -828,9 +857,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ParentID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ParentID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -842,9 +872,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                       FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ParentID
+                       FROM {1} d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ParentID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -856,9 +887,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ObjectID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ObjectID
                    WHERE d.ObjectType = 6 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -870,9 +902,10 @@ namespace ShipWorks.SqlServer.Filters
                     cmd.CommandText = string.Format(@"
                 INSERT INTO {0} (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
-                   FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o.OrderID
+                   FROM {1} d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o.OrderID
                    WHERE d.ObjectType = 12 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;",
-                filterNodeUpdateShipmentTableName);
+                filterNodeUpdateShipmentTableName,
+                   filterNodeContentDirtyTableName);
                     cmd.ExecuteNonQuery();
                 }
             }
