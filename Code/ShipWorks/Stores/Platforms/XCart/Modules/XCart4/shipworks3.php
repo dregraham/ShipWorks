@@ -254,6 +254,9 @@
             writeElement("Tracking", $trackingNumber);
         writeCloseTag("Parameters");
 
+		// In 4.7.6, tracking numbers started being stored in a order_tracking_numbers table.  
+		// When updating, we are checking to see if the table is there and writing to it. 
+		// If not, we revert to previously functionality and update the orders table.
         $updateShipmentQuery = '';
         if(func_query_first_cell("SELECT 1 FROM information_schema.tables WHERE table_schema ='$sql_db' AND table_name='$sql_tbl[order_tracking_numbers]'"))
         {
