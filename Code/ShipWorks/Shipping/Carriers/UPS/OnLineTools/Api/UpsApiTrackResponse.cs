@@ -43,7 +43,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                 if (overallStatusDescription == "Delivered")
                 {
-                    summary += " on " + deliveryDateTime;
+                    if (deliveryDateTime != null)
+                    {
+                        summary += " on " + deliveryDateTime.Value.ToString("M/dd/yyyy HH:mm tt");
+                    }
                 }
                 else if (deliveryEstimate.HasValue)
                 {
