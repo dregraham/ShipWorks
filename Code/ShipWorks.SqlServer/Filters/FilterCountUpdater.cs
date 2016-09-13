@@ -33,6 +33,8 @@ namespace ShipWorks.SqlServer.Filters
         // Indicates if we've discovered we have to truncate with DELETE due to missing permissions
         static bool truncateWithDelete;
 
+        protected string acquiringCountsLockName = ActiveCalculationUtility.DefaultLockName;
+
         protected string filterNodeContentDirtyTableName = "FilterNodeContentDirty";
         protected string filterNodeUpdateCheckpointTableName = "FilterNodeUpdateCheckpoint";
         protected string filterNodeUpdatePendingTableName = "FilterNodeUpdatePending";
@@ -79,7 +81,7 @@ namespace ShipWorks.SqlServer.Filters
                 while (true)
                 {
                     // We'll need to have the lock to do the next stop of the checkpoint
-                    if (!ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(5)))
+                    if (!ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(5), acquiringCountsLockName))
                     {
                         DebugMessage("UpdateCounts: Could not get lock.");
                         return;
@@ -244,7 +246,7 @@ namespace ShipWorks.SqlServer.Filters
                     }
                     finally
                     {
-                        ActiveCalculationUtility.ReleaseCalculatingLock(con);
+                        ActiveCalculationUtility.ReleaseCalculatingLock(con, acquiringCountsLockName);
                     }
                 }
             }
