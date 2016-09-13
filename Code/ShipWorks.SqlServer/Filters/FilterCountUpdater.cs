@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data.SqlClient;
-using ShipWorks.SqlServer.General;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.SqlServer.Server;
 using ShipWorks.Filters;
-using System.Data;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
-using System.Threading;
-using System.Runtime.CompilerServices;
+using ShipWorks.SqlServer.General;
 
 namespace ShipWorks.SqlServer.Filters
 {
@@ -21,20 +18,20 @@ namespace ShipWorks.SqlServer.Filters
     public class FilterCountUpdater
     {
         // Get out as soon after this as possible
-        TimeSpan timeLimit = TimeSpan.FromSeconds(15);
+        readonly TimeSpan timeLimit = TimeSpan.FromSeconds(15);
 
         // Ordered list of states
-        List<FilterCountCheckpointState> states = new List<FilterCountCheckpointState>();
+        readonly List<FilterCountCheckpointState> states = new List<FilterCountCheckpointState>();
 
         // Maps states to required data
-        Dictionary<FilterCountCheckpointState, FilterTarget> updateFilterTargetMap = new Dictionary<FilterCountCheckpointState, FilterTarget>();
-        Dictionary<FilterCountCheckpointState, string> updateDirtyTableMap = new Dictionary<FilterCountCheckpointState, string>();
+        readonly Dictionary<FilterCountCheckpointState, FilterTarget> updateFilterTargetMap = new Dictionary<FilterCountCheckpointState, FilterTarget>();
+        readonly Dictionary<FilterCountCheckpointState, string> updateDirtyTableMap = new Dictionary<FilterCountCheckpointState, string>();
 
         // Indicates if we've updated the root counts so far this session
-        bool rootCountsUpdated = false;
+        bool rootCountsUpdated;
 
         // Indicates if we've discovered we have to truncate with DELETE due to missing permissions
-        static bool truncateWithDelete = false;
+        static bool truncateWithDelete;
 
         class FilterTargetNodeData
         {
@@ -97,7 +94,7 @@ namespace ShipWorks.SqlServer.Filters
                         // We have to reget the checkpoint each time through the loop, b\c another it could have been updated by another
                         // process while we were waiting to acquire the lock for this loop iteration.
                         FilterCountCheckpoint checkpoint = GetCheckpoint(con);
-                        
+
                         // If null it means there are no dirty records to deal with
                         if (checkpoint == null)
                         {
@@ -124,7 +121,7 @@ namespace ShipWorks.SqlServer.Filters
                             // Capture the filter nodes that will be updated and prepare the dirty tables
                             case FilterCountCheckpointState.Prepare:
                             {
-                                var targetMasks = CaptureNodesForUpdate(checkpoint.MaxDirtyID, con);
+                                Dictionary<FilterTarget, FilterTargetNodeData> targetMasks = CaptureNodesForUpdate(checkpoint.MaxDirtyID, con);
 
                                 // Shortcut - if there are no nodes to update (we'd have a mask for each node) then just to straight to being done
                                 if (!targetMasks.Any(tm => tm.Value.ColumnMasks.Count > 0))
@@ -211,7 +208,7 @@ namespace ShipWorks.SqlServer.Filters
                                 deleteCheckpointCmd.CommandText = "DELETE FilterNodeUpdateCheckpoint";
                                 deleteCheckpointCmd.ExecuteNonQuery();
 
-                                DebugMessage(string.Format("Finished update counts for checkpoint {0}.  Dirty: {1}, Cleaned {2}, Time {3}", 
+                                DebugMessage(string.Format("Finished update counts for checkpoint {0}.  Dirty: {1}, Cleaned {2}, Time {3}",
                                     checkpoint.MaxDirtyID,
                                     checkpoint.DirtyCount,
                                     deletedCount,
@@ -241,7 +238,7 @@ namespace ShipWorks.SqlServer.Filters
         /// <summary>
         /// Get the current checkpoint.  If there are no current dirty objects and no current checkpoint, this will return null.
         /// </summary>
-        private FilterCountCheckpoint GetCheckpoint(SqlConnection con)
+        FilterCountCheckpoint GetCheckpoint(SqlConnection con)
         {
             SqlCommand selectCmd = con.CreateCommand();
             selectCmd.CommandText = "SELECT MaxDirtyID, DirtyCount, State, Duration FROM FilterNodeUpdateCheckpoint";
@@ -252,9 +249,9 @@ namespace ShipWorks.SqlServer.Filters
                 {
                     FilterCountCheckpoint checkpoint = new FilterCountCheckpoint();
                     checkpoint.MaxDirtyID = (long) reader.GetSqlInt64(0);
-                    checkpoint.DirtyCount = (int) reader.GetInt32(1);
+                    checkpoint.DirtyCount = reader.GetInt32(1);
                     checkpoint.State = (FilterCountCheckpointState) reader.GetInt32(2);
-                    checkpoint.Duration = (int) reader.GetInt32(3);
+                    checkpoint.Duration = reader.GetInt32(3);
 
                     return checkpoint;
                 }
@@ -266,7 +263,7 @@ namespace ShipWorks.SqlServer.Filters
             object maxID = anyDirty.ExecuteScalar();
 
             // If none are dirty, no need for a checkpoint
-            if (maxID == null || maxID is DBNull)
+            if ((maxID == null) || maxID is DBNull)
             {
                 return null;
             }
@@ -274,7 +271,7 @@ namespace ShipWorks.SqlServer.Filters
             SqlCommand insertCmd = con.CreateCommand();
             insertCmd.CommandText = string.Format(
                 @"INSERT INTO FilterNodeUpdateCheckpoint (MaxDirtyID, DirtyCount, State, Duration) 
-                    VALUES (@maxDirtyID, (SELECT COUNT(ObjectID) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE FilterNodeContentDirtyID <= @maxDirtyID), {0}, 0)", 
+                    VALUES (@maxDirtyID, (SELECT COUNT(ObjectID) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE FilterNodeContentDirtyID <= @maxDirtyID), {0}, 0)",
                 (int) states[0]);
             insertCmd.Parameters.AddWithValue("@maxDirtyID", (long) maxID);
             insertCmd.ExecuteNonQuery();
@@ -284,9 +281,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Move the checkpoint state to the next in sequence
+        ///     Move the checkpoint state to the next in sequence
         /// </summary>
-        private void UpdateCheckpoint(FilterCountCheckpoint checkpoint, bool moveToNextState, Stopwatch iterationTimer, SqlConnection con)
+        void UpdateCheckpoint(FilterCountCheckpoint checkpoint, bool moveToNextState, Stopwatch iterationTimer, SqlConnection con)
         {
             if (moveToNextState)
             {
@@ -307,9 +304,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Root nodes are treated specially for performance reasons.
+        ///     Root nodes are treated specially for performance reasons.
         /// </summary>
-        private static void UpdateRootNodeCounts(FilterTarget target, SqlConnection con)
+        static void UpdateRootNodeCounts(FilterTarget target, SqlConnection con)
         {
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = @"
@@ -343,7 +340,7 @@ namespace ShipWorks.SqlServer.Filters
 
                 SET XACT_ABORT OFF;
             ";
-             
+
             cmd.Parameters.AddWithValue("@FilterNodeContentID", BuiltinFilter.GetTopLevelKey(target));
             cmd.ExecuteNonQuery();
         }
@@ -351,7 +348,7 @@ namespace ShipWorks.SqlServer.Filters
         /// <summary>
         /// Capture all the nodes that are ready for updating. Returns false if there are no needs that need calculating.
         /// </summary>
-        private static Dictionary<FilterTarget, FilterTargetNodeData> CaptureNodesForUpdate(long maxDirtyID, SqlConnection con)
+        static Dictionary<FilterTarget, FilterTargetNodeData> CaptureNodesForUpdate(long maxDirtyID, SqlConnection con)
         {
             // In case we partially finished last time
             TruncateTable("FilterNodeUpdatePending", con);
@@ -374,10 +371,10 @@ namespace ShipWorks.SqlServer.Filters
 
             // We want to know what masks each target uses, so we know what the dependencies are
             Dictionary<FilterTarget, FilterTargetNodeData> targetNodeData = new Dictionary<FilterTarget, FilterTargetNodeData>();
-            targetNodeData[FilterTarget.Customers] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
-            targetNodeData[FilterTarget.Orders] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
-            targetNodeData[FilterTarget.Items] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
-            targetNodeData[FilterTarget.Shipments] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
+            targetNodeData[FilterTarget.Customers] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
+            targetNodeData[FilterTarget.Orders] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
+            targetNodeData[FilterTarget.Items] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
+            targetNodeData[FilterTarget.Shipments] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
 
             // Load all the masks, sorted by what FilterTarget they apply to
             using (SqlDataReader reader = readyToCountCmd.ExecuteReader())
@@ -413,9 +410,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Create the dirty customers table and returns how many were dirty.
+        ///     Create the dirty customers table and returns how many were dirty.
         /// </summary>
-        private static void PrepareDirtyCustomers(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
+        static void PrepareDirtyCustomers(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
         {
             // Incase we partically finished last time
             TruncateTable("FilterNodeUpdateCustomer", con);
@@ -479,9 +476,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Create a table that contains all dirty orders
+        ///     Create a table that contains all dirty orders
         /// </summary>
-        private static void PrepareDirtyOrders(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
+        static void PrepareDirtyOrders(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
         {
             // Incase we partically finished last time
             TruncateTable("FilterNodeUpdateOrder", con);
@@ -557,7 +554,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             // If a order filter joins to items, we need the order ID of each edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0))
             {
                 DebugMessage("Rolling items -> orders");
 
@@ -570,7 +567,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             // If a order filter joins to shipments, we need the order ID of each edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0))
             {
                 DebugMessage("Rolling shipments -> orders");
 
@@ -584,9 +581,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Create a table that contains all dirty items
+        ///     Create a table that contains all dirty items
         /// </summary>
-        private static void PrepareDirtyItems(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
+        static void PrepareDirtyItems(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
         {
             // Incase we partically finished last time
             TruncateTable("FilterNodeUpdateItem", con);
@@ -649,7 +646,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             //  If we join to orders that joins to items, we need the items of each order with an edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0))
             {
                 DebugMessage("Rolling items -> orders -> items");
 
@@ -662,7 +659,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             //  If we join to orders that joins to shipments, we need all items of each order with an edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0))
             {
                 DebugMessage("Rolling shipments -> orders -> items");
 
@@ -675,7 +672,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             // If we join to a order, we need the items of each edited order
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.ItemToOrder) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.ItemToOrder) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) == 0))
             {
                 DebugMessage("Rolling orders -> items");
 
@@ -702,9 +699,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Create a table that contains all dirty shipments
+        ///     Create a table that contains all dirty shipments
         /// </summary>
-        private static void PrepareDirtyShipments(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
+        static void PrepareDirtyShipments(FilterTargetNodeData nodeData, long maxDirtyID, SqlConnection con)
         {
             // Incase we partically finished last time
             TruncateTable("FilterNodeUpdateShipment", con);
@@ -767,7 +764,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             //  If we join to orders that joins to items, we need the shipments of each order with an edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0))
             {
                 DebugMessage("Rolling items -> orders -> shipments");
 
@@ -780,7 +777,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             //  If we join to orders that joins to shipments, we need all shipments of each order with an edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0))
             {
                 DebugMessage("Rolling shipments -> orders -> shipments");
 
@@ -793,7 +790,7 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             // If we join to a order, we need the shipments of each edited order
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.ShipmentToOrder) != 0 && (nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) == 0)
+            if (((nodeData.JoinMask & (int) FilterNodeJoinType.ShipmentToOrder) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) == 0))
             {
                 DebugMessage("Rolling orders -> shipments");
 
@@ -820,9 +817,10 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Perform the calculation on the record actively pointed to by the reader.  Returns false if there weren't anymore to process.
+        ///     Perform the calculation on the record actively pointed to by the reader.  Returns false if there weren't anymore to
+        ///     process.
         /// </summary>
-        private static bool PerformNextCalculation(FilterTarget filterTarget, string dirtyTable, SqlConnection con)
+        static bool PerformNextCalculation(FilterTarget filterTarget, string dirtyTable, SqlConnection con)
         {
             // Get the next count to do for the given target
             SqlCommand selectCmd = con.CreateCommand();
@@ -922,9 +920,9 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Truncate the given table contents
+        ///     Truncate the given table contents
         /// </summary>
-        private static void TruncateTable(string table, SqlConnection con)
+        static void TruncateTable(string table, SqlConnection con)
         {
             if (!truncateWithDelete)
             {
@@ -939,7 +937,6 @@ namespace ShipWorks.SqlServer.Filters
                 }
                 catch (SqlException)
                 {
-
                 }
             }
 
@@ -952,7 +949,7 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
-        /// Send the given message to the SQL pipe
+        ///     Send the given message to the SQL pipe
         /// </summary>
         [Conditional("DEBUG")]
         public static void DebugMessage(string message)
