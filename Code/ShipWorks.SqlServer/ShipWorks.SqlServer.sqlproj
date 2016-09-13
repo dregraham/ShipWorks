@@ -226,6 +226,7 @@
     <Compile Include="Shipping\OrderShipSenseRecognitionStatusTrigger.cs" />
     <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
     <Compile Include="Maintenance\RebuildTableIndex.cs" />
+    <Compile Include="Filters\FilterTargetNodeData.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
