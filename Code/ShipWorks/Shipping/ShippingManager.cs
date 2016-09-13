@@ -1,4 +1,10 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
@@ -40,12 +46,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -863,7 +863,11 @@ namespace ShipWorks.Shipping
                     }
 
                     // Void the shipment in tango
-                    TangoWebClient.VoidShipment(store, shipment);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
+                        tangoWebClient.VoidShipment(store, shipment);
+                    }
 
                     // Re-throw the insurance exception if there was one
                     if (voidInsuranceException != null)
@@ -1232,7 +1236,8 @@ namespace ShipWorks.Shipping
                     // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                     if (!shipmentType.ProcessingCompletesExternally)
                     {
-                        shipment.OnlineShipmentID = new TangoWebClientFactory().CreateWebClient()
+                        lifetimeScope.Resolve<ITangoWebClientFactory>()
+                            .CreateWebClient()
                             .LogShipment(storeEntity, shipment);
 
                         log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
