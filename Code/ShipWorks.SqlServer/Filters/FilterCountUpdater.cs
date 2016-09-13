@@ -135,13 +135,16 @@ namespace ShipWorks.SqlServer.Filters
                                 // If any of the masks require going getting customerID's for each orderID... we need to make sure all orderID's are filled in
                                 if (targetMasks.Values.Any(data => (data.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) != 0))
                                 {
-                                    SqlCommand fillParentKeyCmd = con.CreateCommand();
-                                    fillParentKeyCmd.CommandText = @"
+                                    int updated;
+                                    using (SqlCommand fillParentKeyCmd = con.CreateCommand())
+                                    {
+                                        fillParentKeyCmd.CommandText = @"
                                         UPDATE FilterNodeContentDirty
                                             SET ParentID = o.CustomerID
                                             FROM [Order] o 
                                             WHERE ObjectType = 6 AND ParentID IS NULL AND o.OrderID = ObjectID;";
-                                    int updated = fillParentKeyCmd.ExecuteNonQuery();
+                                        updated = fillParentKeyCmd.ExecuteNonQuery();
+                                    }
 
                                     DebugMessage(string.Format("Updated {0} order ID's with their customer ID's", updated));
                                 }
@@ -149,13 +152,16 @@ namespace ShipWorks.SqlServer.Filters
                                 // If any masks require getting the OrderID's for each ShipmentID... we need to make sure all the OrderID's are filled in
                                 if (targetMasks.Values.Any(data => ((data.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) != 0) || ((data.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0)))
                                 {
-                                    SqlCommand fillParentKeyCmd = con.CreateCommand();
-                                    fillParentKeyCmd.CommandText = @"
+                                    int updated;
+                                    using (SqlCommand fillParentKeyCmd = con.CreateCommand())
+                                    {
+                                        fillParentKeyCmd.CommandText = @"
                                         UPDATE FilterNodeContentDirty
                                             SET ParentID = s.OrderID
                                             FROM [Shipment] s 
                                             WHERE ObjectType = 31 AND ParentID IS NULL AND s.ShipmentID = ObjectID;";
-                                    int updated = fillParentKeyCmd.ExecuteNonQuery();
+                                        updated = fillParentKeyCmd.ExecuteNonQuery();
+                                    }
 
                                     DebugMessage(string.Format("Updated {0} shipment ID's with their order ID's", updated));
                                 }
@@ -168,7 +174,6 @@ namespace ShipWorks.SqlServer.Filters
 
                                 break;
                             }
-
 
                             // Do the updates
                             case FilterCountCheckpointState.UpdateCustomers:
@@ -198,15 +203,20 @@ namespace ShipWorks.SqlServer.Filters
                                 //            - it can't get the update lock, sinc the ShipWorks TRAN is holding it.
                                 //       c) ShipWorks adds an Order, and needs to update FilterNodeContentDirty again.  So it needs a lock on IX_FilterNodeContentDiryt, but
                                 //          it can't, b\c the delete already took it.
-                                SqlCommand clearDirtyCmd = con.CreateCommand();
-                                clearDirtyCmd.CommandText = "DELETE FilterNodeContentDirty WITH (READPAST) WHERE FilterNodeContentDirtyID <= @maxDirtyID; SELECT @@ROWCOUNT";
-                                clearDirtyCmd.Parameters.AddWithValue("@maxDirtyID", checkpoint.MaxDirtyID);
-                                int deletedCount = (int) clearDirtyCmd.ExecuteScalar();
+                                int deletedCount;
+                                using (SqlCommand clearDirtyCmd = con.CreateCommand())
+                                {
+                                    clearDirtyCmd.CommandText = "DELETE FilterNodeContentDirty WITH (READPAST) WHERE FilterNodeContentDirtyID <= @maxDirtyID; SELECT @@ROWCOUNT";
+                                    clearDirtyCmd.Parameters.AddWithValue("@maxDirtyID", checkpoint.MaxDirtyID);
+                                    deletedCount = (int)clearDirtyCmd.ExecuteScalar();
+                                }
 
                                 // And finally, clear our checkpoint
-                                SqlCommand deleteCheckpointCmd = con.CreateCommand();
-                                deleteCheckpointCmd.CommandText = "DELETE FilterNodeUpdateCheckpoint";
-                                deleteCheckpointCmd.ExecuteNonQuery();
+                                using (SqlCommand deleteCheckpointCmd = con.CreateCommand())
+                                {
+                                    deleteCheckpointCmd.CommandText = "DELETE FilterNodeUpdateCheckpoint";
+                                    deleteCheckpointCmd.ExecuteNonQuery();
+                                }
 
                                 DebugMessage(string.Format("Finished update counts for checkpoint {0}.  Dirty: {1}, Cleaned {2}, Time {3}",
                                     checkpoint.MaxDirtyID,
@@ -240,41 +250,48 @@ namespace ShipWorks.SqlServer.Filters
         /// </summary>
         FilterCountCheckpoint GetCheckpoint(SqlConnection con)
         {
-            SqlCommand selectCmd = con.CreateCommand();
-            selectCmd.CommandText = "SELECT MaxDirtyID, DirtyCount, State, Duration FROM FilterNodeUpdateCheckpoint";
-
-            using (SqlDataReader reader = selectCmd.ExecuteReader())
+            using (SqlCommand selectCmd = con.CreateCommand())
             {
-                if (reader.Read())
-                {
-                    FilterCountCheckpoint checkpoint = new FilterCountCheckpoint();
-                    checkpoint.MaxDirtyID = (long) reader.GetSqlInt64(0);
-                    checkpoint.DirtyCount = reader.GetInt32(1);
-                    checkpoint.State = (FilterCountCheckpointState) reader.GetInt32(2);
-                    checkpoint.Duration = reader.GetInt32(3);
+                selectCmd.CommandText = "SELECT MaxDirtyID, DirtyCount, State, Duration FROM FilterNodeUpdateCheckpoint";
 
-                    return checkpoint;
+                using (SqlDataReader reader = selectCmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        FilterCountCheckpoint checkpoint = new FilterCountCheckpoint();
+                        checkpoint.MaxDirtyID = (long)reader.GetSqlInt64(0);
+                        checkpoint.DirtyCount = reader.GetInt32(1);
+                        checkpoint.State = (FilterCountCheckpointState)reader.GetInt32(2);
+                        checkpoint.Duration = reader.GetInt32(3);
+
+                        return checkpoint;
+                    }
                 }
             }
 
-            SqlCommand anyDirty = con.CreateCommand();
-            anyDirty.CommandText = "SELECT MAX(FilterNodeContentDirtyID) FROM FilterNodeContentDirty WITH (NOLOCK)";
-
-            object maxID = anyDirty.ExecuteScalar();
-
-            // If none are dirty, no need for a checkpoint
-            if ((maxID == null) || maxID is DBNull)
+            object maxID;
+            using (SqlCommand anyDirty = con.CreateCommand())
             {
-                return null;
+                anyDirty.CommandText = "SELECT MAX(FilterNodeContentDirtyID) FROM FilterNodeContentDirty WITH (NOLOCK)";
+
+                maxID = anyDirty.ExecuteScalar();
+
+                // If none are dirty, no need for a checkpoint
+                if ((maxID == null) || maxID is DBNull)
+                {
+                    return null;
+                }
             }
 
-            SqlCommand insertCmd = con.CreateCommand();
-            insertCmd.CommandText = string.Format(
-                @"INSERT INTO FilterNodeUpdateCheckpoint (MaxDirtyID, DirtyCount, State, Duration) 
+            using (SqlCommand insertCmd = con.CreateCommand())
+            {
+                insertCmd.CommandText = string.Format(
+                    @"INSERT INTO FilterNodeUpdateCheckpoint (MaxDirtyID, DirtyCount, State, Duration) 
                     VALUES (@maxDirtyID, (SELECT COUNT(ObjectID) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE FilterNodeContentDirtyID <= @maxDirtyID), {0}, 0)",
-                (int) states[0]);
-            insertCmd.Parameters.AddWithValue("@maxDirtyID", (long) maxID);
-            insertCmd.ExecuteNonQuery();
+                    (int)states[0]);
+                insertCmd.Parameters.AddWithValue("@maxDirtyID", (long)maxID);
+                insertCmd.ExecuteNonQuery();
+            }
 
             // It will now be there
             return GetCheckpoint(con);
@@ -296,11 +313,13 @@ namespace ShipWorks.SqlServer.Filters
 
             DebugMessage(string.Format("  [Iteration took {0}]", iterationTimer.Elapsed.TotalSeconds));
 
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = "UPDATE FilterNodeUpdateCheckpoint SET State = @state, Duration = Duration + @duration";
-            cmd.Parameters.AddWithValue("@state", (int) checkpoint.State);
-            cmd.Parameters.AddWithValue("@duration", iterationTimer.ElapsedMilliseconds);
-            cmd.ExecuteNonQuery();
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = "UPDATE FilterNodeUpdateCheckpoint SET State = @state, Duration = Duration + @duration";
+                cmd.Parameters.AddWithValue("@state", (int)checkpoint.State);
+                cmd.Parameters.AddWithValue("@duration", iterationTimer.ElapsedMilliseconds);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -308,8 +327,9 @@ namespace ShipWorks.SqlServer.Filters
         /// </summary>
         static void UpdateRootNodeCounts(FilterTarget target, SqlConnection con)
         {
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = @"
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = @"
 
                 SET XACT_ABORT ON;
 
@@ -338,11 +358,11 @@ namespace ShipWorks.SqlServer.Filters
 
                 COMMIT;
 
-                SET XACT_ABORT OFF;
-            ";
+                SET XACT_ABORT OFF;";
 
-            cmd.Parameters.AddWithValue("@FilterNodeContentID", BuiltinFilter.GetTopLevelKey(target));
-            cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("@FilterNodeContentID", BuiltinFilter.GetTopLevelKey(target));
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -350,14 +370,17 @@ namespace ShipWorks.SqlServer.Filters
         /// </summary>
         static Dictionary<FilterTarget, FilterTargetNodeData> CaptureNodesForUpdate(long maxDirtyID, SqlConnection con)
         {
+            Dictionary<FilterTarget, FilterTargetNodeData> targetNodeData = new Dictionary<FilterTarget, FilterTargetNodeData>();
+
             // In case we partially finished last time
             TruncateTable("FilterNodeUpdatePending", con);
 
             // Select all counts, filters before folders, from least to greatest cost, where initial counts have already completed.
             // We know that no new rows where the initial counts are completed will happen during this procedure due to the lock
             // we take with ActiveCalculationUtility.
-            SqlCommand readyToCountCmd = con.CreateCommand();
-            readyToCountCmd.CommandText = string.Format(@"
+            using (SqlCommand readyToCountCmd = con.CreateCommand())
+            {
+                readyToCountCmd.CommandText = string.Format(@"
                     INSERT INTO FilterNodeUpdatePending (FilterNodeContentID, FilterTarget, ColumnMask, JoinMask, Position)
 		                OUTPUT inserted.FilterTarget, inserted.ColumnMask, inserted.JoinMask
 	                    SELECT c.FilterNodeContentID, f.FilterTarget, c.ColumnMask, c.JoinMask, ROW_NUMBER() OVER(ORDER BY f.IsFolder ASC, c.Cost ASC)
@@ -366,27 +389,27 @@ namespace ShipWorks.SqlServer.Filters
 						                    INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
 	                      WHERE f.[State] = 1 AND c.UpdateCalculation != '' AND (c.Status != {0} AND c.Status != {1})
                                 AND (SELECT COUNT(*) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE dbo.BitwiseAnd(ColumnsUpdated, c.ColumnMask) != 0x0) > 0",
-                (int) FilterCountStatus.NeedsInitialCount,
-                (int) FilterCountStatus.RunningInitialCount);
+                    (int)FilterCountStatus.NeedsInitialCount,
+                    (int)FilterCountStatus.RunningInitialCount);
 
-            // We want to know what masks each target uses, so we know what the dependencies are
-            Dictionary<FilterTarget, FilterTargetNodeData> targetNodeData = new Dictionary<FilterTarget, FilterTargetNodeData>();
-            targetNodeData[FilterTarget.Customers] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
-            targetNodeData[FilterTarget.Orders] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
-            targetNodeData[FilterTarget.Items] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
-            targetNodeData[FilterTarget.Shipments] = new FilterTargetNodeData {ColumnMasks = new List<byte[]>()};
+                // We want to know what masks each target uses, so we know what the dependencies are
+                targetNodeData[FilterTarget.Customers] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
+                targetNodeData[FilterTarget.Orders] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
+                targetNodeData[FilterTarget.Items] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
+                targetNodeData[FilterTarget.Shipments] = new FilterTargetNodeData { ColumnMasks = new List<byte[]>() };
 
-            // Load all the masks, sorted by what FilterTarget they apply to
-            using (SqlDataReader reader = readyToCountCmd.ExecuteReader())
-            {
-                while (reader.Read())
+                // Load all the masks, sorted by what FilterTarget they apply to
+                using (SqlDataReader reader = readyToCountCmd.ExecuteReader())
                 {
-                    FilterTarget target = (FilterTarget) reader[0];
-                    byte[] columnMask = (byte[]) reader[1];
-                    int joinMask = (int) reader[2];
+                    while (reader.Read())
+                    {
+                        FilterTarget target = (FilterTarget)reader[0];
+                        byte[] columnMask = (byte[])reader[1];
+                        int joinMask = (int)reader[2];
 
-                    targetNodeData[target].ColumnMasks.Add(columnMask);
-                    targetNodeData[target].JoinMask |= joinMask;
+                        targetNodeData[target].ColumnMasks.Add(columnMask);
+                        targetNodeData[target].JoinMask |= joinMask;
+                    }
                 }
             }
 
@@ -396,12 +419,15 @@ namespace ShipWorks.SqlServer.Filters
             if (allMasks.Count > 0)
             {
                 // We don't even need to look at dirty rows that we have no filters that care about them
-                SqlCommand unneededCmd = con.CreateCommand();
-                unneededCmd.CommandText = "DELETE FilterNodeContentDirty WHERE FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) = 0x0";
-                unneededCmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(allMasks));
-                unneededCmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
+                int removed;
+                using (SqlCommand unneededCmd = con.CreateCommand())
+                {
+                    unneededCmd.CommandText = "DELETE FilterNodeContentDirty WHERE FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) = 0x0";
+                    unneededCmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(allMasks));
+                    unneededCmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
 
-                int removed = unneededCmd.ExecuteNonQuery();
+                    removed = unneededCmd.ExecuteNonQuery();
+                }
 
                 DebugMessage(string.Format("Removed {0} unneeded dirty counts", removed));
             }
@@ -423,55 +449,57 @@ namespace ShipWorks.SqlServer.Filters
                 return;
             }
 
-            SqlCommand cmd = con.CreateCommand();
-            cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
-            cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
+                cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
 
-            // Of course we need the actual dirty customers
-            cmd.CommandText = @"
+                // Of course we need the actual dirty customers
+                cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateCustomer (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated 
                    FROM FilterNodeContentDirty WITH (NOLOCK)
                    WHERE ObjectType = 12 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;";
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
-            // If a customer filter joins to orders, we need the customer ID of each edited order
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) != 0)
-            {
-                DebugMessage("Rolling orders up to customers");
+                // If a customer filter joins to orders, we need the customer ID of each edited order
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToOrder) != 0)
+                {
+                    DebugMessage("Rolling orders up to customers");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateCustomer (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ParentID, ComputerID, ColumnsUpdated
                    FROM FilterNodeContentDirty WITH (NOLOCK)
                    WHERE ObjectType = 6 AND ParentID IS NOT NULL AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If a customer filter joins to items, we need the customer ID of each edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) != 0)
-            {
-                DebugMessage("Rolling items up to customers");
+                // If a customer filter joins to items, we need the customer ID of each edited item
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) != 0)
+                {
+                    DebugMessage("Rolling items up to customers");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateCustomer (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT o.CustomerID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.OrderID = d.ParentID 
                        WHERE ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If a customer filter joins to shipments, we need the customer ID of each edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) != 0)
-            {
-                DebugMessage("Rolling shipments up to customers");
+                // If a customer filter joins to shipments, we need the customer ID of each edited shipment
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) != 0)
+                {
+                    DebugMessage("Rolling shipments up to customers");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateCustomer (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT o.CustomerID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.OrderID = d.ParentID 
                    WHERE ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -489,94 +517,96 @@ namespace ShipWorks.SqlServer.Filters
                 return;
             }
 
-            SqlCommand cmd = con.CreateCommand();
-            cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
-            cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
+                cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
 
-            // Of course we need the actual dirty orders
-            cmd.CommandText = @"
+                // Of course we need the actual dirty orders
+                cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated
                    FROM FilterNodeContentDirty WITH (NOLOCK) 
                    WHERE ObjectType = 6 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;";
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
-            // If we join to a customer that joins to orders, we need the customer ID of each edited order
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) != 0)
-            {
-                DebugMessage("Rolling orders -> Customers -> orders");
+                // If we join to a customer that joins to orders, we need the customer ID of each edited order
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToOrder) != 0)
+                {
+                    DebugMessage("Rolling orders -> Customers -> orders");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT o.OrderID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID
                    WHERE d.ObjectType = 6 AND d.ParentID IS NOT NULL AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to a customer that joins to items, we need the orders of each customer with an edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) != 0)
-            {
-                DebugMessage("Rolling items -> Customers -> orders");
+                //  If we join to a customer that joins to items, we need the orders of each customer with an edited item
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) != 0)
+                {
+                    DebugMessage("Rolling items -> Customers -> orders");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT o2.OrderID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to a customer that joins to shipments, we need the customer ID of each edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) != 0)
-            {
-                DebugMessage("Rolling shipments -> Customers -> orders");
+                //  If we join to a customer that joins to shipments, we need the customer ID of each edited shipment
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) != 0)
+                {
+                    DebugMessage("Rolling shipments -> Customers -> orders");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT o2.OrderID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If the order refers to customers, we need any dirty customers order's
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToCustomer) != 0)
-            {
-                DebugMessage("Rolling Customers -> orders");
+                // If the order refers to customers, we need any dirty customers order's
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToCustomer) != 0)
+                {
+                    DebugMessage("Rolling Customers -> orders");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT o.OrderID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID
                    WHERE d.ObjectType = 12 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If a order filter joins to items, we need the order ID of each edited item
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0))
-            {
-                DebugMessage("Rolling items -> orders");
+                // If a order filter joins to items, we need the order ID of each edited item
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) == 0))
+                {
+                    DebugMessage("Rolling items -> orders");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT d.ParentID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK)
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND d.ParentID IS NOT NULL AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If a order filter joins to shipments, we need the order ID of each edited shipment
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0))
-            {
-                DebugMessage("Rolling shipments -> orders");
+                // If a order filter joins to shipments, we need the order ID of each edited shipment
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) == 0))
+                {
+                    DebugMessage("Rolling shipments -> orders");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT d.ParentID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK)
                    WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND d.ParentID IS NOT NULL AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -594,107 +624,109 @@ namespace ShipWorks.SqlServer.Filters
                 return;
             }
 
-            SqlCommand cmd = con.CreateCommand();
-            cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
-            cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
+                cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
 
-            // Of course we need the actual dirty items
-            cmd.CommandText = @"
+                // Of course we need the actual dirty items
+                cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated
                    FROM FilterNodeContentDirty WITH (NOLOCK) 
                    WHERE ObjectType = 13 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;";
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
-            // If we join to a customer that joins to orders, we need the items of each customer with an edited order
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) != 0)
-            {
-                DebugMessage("Rolling orders -> Customers -> items");
+                // If we join to a customer that joins to orders, we need the items of each customer with an edited order
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToOrder) != 0)
+                {
+                    DebugMessage("Rolling orders -> Customers -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o.OrderID
                    WHERE d.ObjectType = 6 AND d.ParentID IS NOT NULL AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to a customer that joins to items, we need the items of each customer with an edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) != 0)
-            {
-                DebugMessage("Rolling items -> Customers -> items");
+                //  If we join to a customer that joins to items, we need the items of each customer with an edited item
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) != 0)
+                {
+                    DebugMessage("Rolling items -> Customers -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o2.OrderID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to a customer that joins to shipments, we need all items of each customer with an edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) != 0)
-            {
-                DebugMessage("Rolling shipments -> Customers -> items");
+                //  If we join to a customer that joins to shipments, we need all items of each customer with an edited shipment
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) != 0)
+                {
+                    DebugMessage("Rolling shipments -> Customers -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o2.OrderID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to orders that joins to items, we need the items of each order with an edited item
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0))
-            {
-                DebugMessage("Rolling items -> orders -> items");
+                //  If we join to orders that joins to items, we need the items of each order with an edited item
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) == 0))
+                {
+                    DebugMessage("Rolling items -> orders -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ParentID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to orders that joins to shipments, we need all items of each order with an edited shipment
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0))
-            {
-                DebugMessage("Rolling shipments -> orders -> items");
+                //  If we join to orders that joins to shipments, we need all items of each order with an edited shipment
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) == 0))
+                {
+                    DebugMessage("Rolling shipments -> orders -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ParentID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If we join to a order, we need the items of each edited order
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.ItemToOrder) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) == 0))
-            {
-                DebugMessage("Rolling orders -> items");
+                // If we join to a order, we need the items of each edited order
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.ItemToOrder) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToOrder) == 0))
+                {
+                    DebugMessage("Rolling orders -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = d.ObjectID
                    WHERE d.ObjectType = 6 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If we join to a customer, we need the items of each edited customer
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.ItemToCustomer) != 0)
-            {
-                DebugMessage("Rolling customers -> items");
+                // If we join to a customer, we need the items of each edited customer
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.ItemToCustomer) != 0)
+                {
+                    DebugMessage("Rolling customers -> items");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateItem (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT i.OrderItemID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID INNER JOIN [OrderItem] i WITH (NOLOCK) ON i.OrderID = o.OrderID
                    WHERE d.ObjectType = 12 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -712,107 +744,109 @@ namespace ShipWorks.SqlServer.Filters
                 return;
             }
 
-            SqlCommand cmd = con.CreateCommand();
-            cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
-            cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.Parameters.AddWithValue("@maxDirtyID", maxDirtyID);
+                cmd.Parameters.AddWithValue("@columnMask", FilterNodeColumnMaskUtility.CreateUnionedBitmask(nodeData.ColumnMasks));
 
-            // Of course we need the actual dirty shipments
-            cmd.CommandText = @"
+                // Of course we need the actual dirty shipments
+                cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT ObjectID, ComputerID, ColumnsUpdated
                    FROM FilterNodeContentDirty WITH (NOLOCK) 
                    WHERE ObjectType = 31 AND FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(ColumnsUpdated, @columnMask) != 0x0;";
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
-            // If we join to a customer that joins to orders, we need the shipments of each customer with an edited order
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) != 0)
-            {
-                DebugMessage("Rolling orders -> Customers -> shipments");
+                // If we join to a customer that joins to orders, we need the shipments of each customer with an edited order
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToOrder) != 0)
+                {
+                    DebugMessage("Rolling orders -> Customers -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ParentID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o.OrderID
                    WHERE d.ObjectType = 6 AND d.ParentID IS NOT NULL AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to a customer that joins to items, we need the shipments of each customer with an edited item
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) != 0)
-            {
-                DebugMessage("Rolling items -> Customers -> shipments");
+                //  If we join to a customer that joins to items, we need the shipments of each customer with an edited item
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) != 0)
+                {
+                    DebugMessage("Rolling items -> Customers -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o2.OrderID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to a customer that joins to shipments, we need all shipments of each customer with an edited shipment
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) != 0)
-            {
-                DebugMessage("Rolling shipments -> Customers -> shipments");
+                //  If we join to a customer that joins to shipments, we need all shipments of each customer with an edited shipment
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) != 0)
+                {
+                    DebugMessage("Rolling shipments -> Customers -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o1 WITH (NOLOCK) ON o1.OrderID = d.ParentID INNER JOIN [Order] o2 WITH (NOLOCK) ON o1.CustomerID = o2.CustomerID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o2.OrderID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to orders that joins to items, we need the shipments of each order with an edited item
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToItem) == 0))
-            {
-                DebugMessage("Rolling items -> orders -> shipments");
+                //  If we join to orders that joins to items, we need the shipments of each order with an edited item
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToItem) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToItem) == 0))
+                {
+                    DebugMessage("Rolling items -> orders -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ParentID
                        WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            //  If we join to orders that joins to shipments, we need all shipments of each order with an edited shipment
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToShipment) == 0))
-            {
-                DebugMessage("Rolling shipments -> orders -> shipments");
+                //  If we join to orders that joins to shipments, we need all shipments of each order with an edited shipment
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.OrderToShipment) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToShipment) == 0))
+                {
+                    DebugMessage("Rolling shipments -> orders -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                     INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ParentID
                        WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If we join to a order, we need the shipments of each edited order
-            if (((nodeData.JoinMask & (int) FilterNodeJoinType.ShipmentToOrder) != 0) && ((nodeData.JoinMask & (int) FilterNodeJoinType.CustomerToOrder) == 0))
-            {
-                DebugMessage("Rolling orders -> shipments");
+                // If we join to a order, we need the shipments of each edited order
+                if (((nodeData.JoinMask & (int)FilterNodeJoinType.ShipmentToOrder) != 0) && ((nodeData.JoinMask & (int)FilterNodeJoinType.CustomerToOrder) == 0))
+                {
+                    DebugMessage("Rolling orders -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = d.ObjectID
                    WHERE d.ObjectType = 6 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
-            }
+                    cmd.ExecuteNonQuery();
+                }
 
-            // If we join to a customer, we need the shipments of each edited customer
-            if ((nodeData.JoinMask & (int) FilterNodeJoinType.ShipmentToCustomer) != 0)
-            {
-                DebugMessage("Rolling customers -> shipments");
+                // If we join to a customer, we need the shipments of each edited customer
+                if ((nodeData.JoinMask & (int)FilterNodeJoinType.ShipmentToCustomer) != 0)
+                {
+                    DebugMessage("Rolling customers -> shipments");
 
-                cmd.CommandText = @"
+                    cmd.CommandText = @"
                 INSERT INTO FilterNodeUpdateShipment (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT s.ShipmentID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK) INNER JOIN [Order] o WITH (NOLOCK) ON o.CustomerID = d.ObjectID INNER JOIN [Shipment] s WITH (NOLOCK) ON s.OrderID = o.OrderID
                    WHERE d.ObjectType = 12 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -823,10 +857,13 @@ namespace ShipWorks.SqlServer.Filters
         static bool PerformNextCalculation(FilterTarget filterTarget, string dirtyTable, SqlConnection con)
         {
             // Get the next count to do for the given target
-            SqlCommand selectCmd = con.CreateCommand();
-            selectCmd.CommandText = "SELECT TOP(1) FilterNodeContentID FROM FilterNodeUpdatePending WHERE FilterTarget = @target ORDER BY Position ASC";
-            selectCmd.Parameters.AddWithValue("@target", (int) filterTarget);
-            object nodeResult = selectCmd.ExecuteScalar();
+            object nodeResult;
+            using (SqlCommand selectCmd = con.CreateCommand())
+            {
+                selectCmd.CommandText = "SELECT TOP(1) FilterNodeContentID FROM FilterNodeUpdatePending WHERE FilterTarget = @target ORDER BY Position ASC";
+                selectCmd.Parameters.AddWithValue("@target", (int)filterTarget);
+                nodeResult = selectCmd.ExecuteScalar();
+            }
 
             // If null, then there are no more to do for this filter target
             if (nodeResult == null)
@@ -839,23 +876,27 @@ namespace ShipWorks.SqlServer.Filters
 
             // Now we lookup the calculation SQL at the same time we verify this content still belongs in a filternode.  If it doesn't, there's no need
             // to calculate it.
-            SqlCommand retrieveCmd = con.CreateCommand();
-            retrieveCmd.CommandText = @"
+            long filterNodeID;
+            string calculationSql;
+            using (SqlCommand retrieveCmd = con.CreateCommand())
+            {
+                retrieveCmd.CommandText = @"
                 SELECT n.FilterNodeID, c.UpdateCalculation 
                     FROM FilterNode n INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
                     WHERE c.FilterNodeContentID = @contentID";
-            retrieveCmd.Parameters.AddWithValue("@contentID", filterNodeContentID);
+                retrieveCmd.Parameters.AddWithValue("@contentID", filterNodeContentID);
 
-            long filterNodeID = -1;
-            string calculationSql = null;
+                filterNodeID = -1;
+                calculationSql = null;
 
-            using (SqlDataReader reader = retrieveCmd.ExecuteReader())
-            {
-                // May not have any records if the content is no longer apart of a filter and\or get deleted
-                if (reader.Read())
+                using (SqlDataReader reader = retrieveCmd.ExecuteReader())
                 {
-                    filterNodeID = reader.GetInt64(0);
-                    calculationSql = reader.GetString(1);
+                    // May not have any records if the content is no longer apart of a filter and\or get deleted
+                    if (reader.Read())
+                    {
+                        filterNodeID = reader.GetInt64(0);
+                        calculationSql = reader.GetString(1);
+                    }
                 }
             }
 
@@ -868,14 +909,16 @@ namespace ShipWorks.SqlServer.Filters
                     UtilityFunctions.SetDeadlockPriority(con, -5);
 
                     // Mark it as calculating so the UI can update
-                    SqlCommand activeCmd = con.CreateCommand();
-                    activeCmd.CommandText = string.Format(@"
+                    using (SqlCommand activeCmd = con.CreateCommand())
+                    {
+                        activeCmd.CommandText = string.Format(@"
                     UPDATE FilterNodeContent
                     SET Status = {0}
                     WHERE FilterNodeContentID = @contentID",
-                        (int) FilterCountStatus.RunningUpdateCount);
-                    activeCmd.Parameters.AddWithValue("@contentID", filterNodeContentID);
-                    activeCmd.ExecuteNonQuery();
+                            (int)FilterCountStatus.RunningUpdateCount);
+                        activeCmd.Parameters.AddWithValue("@contentID", filterNodeContentID);
+                        activeCmd.ExecuteNonQuery();
+                    }
 
                     // The calculation string is designed to take a single replacement value of the FilterNodeID. Didn't use {0} notation though
                     // since a user could have that in their actual filter content
@@ -883,9 +926,11 @@ namespace ShipWorks.SqlServer.Filters
                     calculationSql = calculationSql.Replace("#DirtyObjects", dirtyTable);
 
                     // Run the actual calculation.  Any required transactions are taken care of within the SQL
-                    SqlCommand calculateCmd = con.CreateCommand();
-                    calculateCmd.CommandText = calculationSql;
-                    calculateCmd.ExecuteNonQuery();
+                    using (SqlCommand calculateCmd = con.CreateCommand())
+                    {
+                        calculateCmd.CommandText = calculationSql;
+                        calculateCmd.ExecuteNonQuery();
+                    }
 
                     // Reset the deadlock priority
                     UtilityFunctions.SetDeadlockPriority(con, 0);
@@ -898,10 +943,12 @@ namespace ShipWorks.SqlServer.Filters
                 }
 
                 // We are now done processing this entry 
-                SqlCommand deleteCmd = con.CreateCommand();
-                deleteCmd.CommandText = "DELETE FilterNodeUpdatePending WHERE FilterNodeContentID = @contentID";
-                deleteCmd.Parameters.AddWithValue("@contentID", filterNodeContentID);
-                deleteCmd.ExecuteNonQuery();
+                using (SqlCommand deleteCmd = con.CreateCommand())
+                {
+                    deleteCmd.CommandText = "DELETE FilterNodeUpdatePending WHERE FilterNodeContentID = @contentID";
+                    deleteCmd.Parameters.AddWithValue("@contentID", filterNodeContentID);
+                    deleteCmd.ExecuteNonQuery();
+                }
             }
             catch (SqlException ex)
             {
@@ -929,9 +976,11 @@ namespace ShipWorks.SqlServer.Filters
                 // Try TRUNCATE for optimal performance
                 try
                 {
-                    SqlCommand truncateCmd = con.CreateCommand();
-                    truncateCmd.CommandText = "TRUNCATE TABLE " + table;
-                    truncateCmd.ExecuteNonQuery();
+                    using (SqlCommand truncateCmd = con.CreateCommand())
+                    {
+                        truncateCmd.CommandText = "TRUNCATE TABLE " + table;
+                        truncateCmd.ExecuteNonQuery();
+                    }
 
                     return;
                 }
@@ -941,9 +990,11 @@ namespace ShipWorks.SqlServer.Filters
             }
 
             // Fallback to DELETE in case user doesn't have permission
-            SqlCommand deleteCmd = con.CreateCommand();
-            deleteCmd.CommandText = "DELETE " + table;
-            deleteCmd.ExecuteNonQuery();
+            using (SqlCommand deleteCmd = con.CreateCommand())
+            {
+                deleteCmd.CommandText = "DELETE " + table;
+                deleteCmd.ExecuteNonQuery();
+            }
 
             truncateWithDelete = true;
         }
