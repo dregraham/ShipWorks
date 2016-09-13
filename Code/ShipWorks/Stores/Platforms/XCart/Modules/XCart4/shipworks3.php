@@ -27,6 +27,10 @@
     # Required XCart setup 
     require "../top.inc.php";
     include "./auth.php";
+    if(!@include_once($xcart_dir.'/include/func/func.crypt.php'))
+    {
+        include_once($xcart_dir.'/include/func.php');
+    }
 
     define("AREA_TYPE", "A");
     x_session_register("login");
@@ -217,8 +221,11 @@
     function action_UpdateShipment()
     {
         global $sql_tbl;
+        global $sql_db;
+
         $orderid = 0;
         $trackingNumber = '';
+        $carrier = '';
 
         if (!isset($_POST['order']) || !isset($_POST['tracking']))
         {
@@ -236,14 +243,27 @@
             $trackingNumber = $_POST['tracking'];
         }
 
+        if (isset($_POST['carrier']))
+        {
+            $carrier = $_POST['carrier'];
+        }
+
         // write the params for easier diagnostics
         writeStartTag("Parameters");
             writeElement("OrderID", $order);	
             writeElement("Tracking", $trackingNumber);
         writeCloseTag("Parameters");
 
-        // execute sql statement 
-        db_query("update $sql_tbl[orders] set tracking='$trackingNumber' where orderid='$orderid'");
+        $updateShipmentQuery = '';
+        if(func_query_first_cell("SELECT 1 FROM information_schema.tables WHERE table_schema ='$sql_db' AND table_name='$sql_tbl[order_tracking_numbers]'"))
+        {
+            $updateShipmentQuery = "INSERT $sql_tbl[order_tracking_numbers] (tracking, orderid, carrier_code) VALUES ('$trackingNumber','$orderid', '$carrier');";
+        } 
+        else 
+        {
+            $updateShipmentQuery ="UPDATE $sql_tbl[orders] SET tracking='$trackingNumber' WHERE orderid='$orderid';";
+        }       
+        db_query($updateShipmentQuery);
 
         echo "<UpdateSuccess/>";	
     }
@@ -768,7 +788,7 @@
                 }
                 else
                 {
-                    if ($password == $storedPassword)
+                    if (text_verify($password, $storedPassword))
                     {
                         $loginOk = true;
 
