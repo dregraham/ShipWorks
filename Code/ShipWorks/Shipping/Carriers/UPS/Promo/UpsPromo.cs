@@ -18,9 +18,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private readonly IUpsPromoPolicy promoPolicy;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly UpsAccountEntity account;
+        private readonly ICarrierSettingsRepository upsSettingsRepository;
         private PromoAcceptanceTerms terms;
 
-        private const string ContinentalUSPromoCode = "P090029838";
+        private const string TestPromoCode = "BVOGIGNA7";
+        private const string ContinentalUsPromoCode = "P090029838";
         private const string AlaskaPromoCode = "P950029472";
         private const string HawaiiPromoCode = "P780029996";
 
@@ -39,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             this.promoPolicy = promoPolicy;
             this.upsAccountRepository = upsAccountRepository;
             account = upsAccount;
+            this.upsSettingsRepository = upsSettingsRepository;
         }
 
         /// <summary>
@@ -165,6 +168,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 return string.Empty;
             }
 
+            if (upsSettingsRepository.UseTestServer)
+            {
+                return TestPromoCode;
+            }
+
             string stateCode = account.StateProvCode;
 
             if (stateCode.Equals("AK", StringComparison.InvariantCultureIgnoreCase))
@@ -177,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 return HawaiiPromoCode;
             }
 
-            return ContinentalUSPromoCode;
+            return ContinentalUsPromoCode;
         }
     }
 }

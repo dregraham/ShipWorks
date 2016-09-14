@@ -1,5 +1,6 @@
 using log4net;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
+using System.Net;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
@@ -34,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             }
 
             URL = response.PromoAgreement.AgreementURL;
-            Description = response.PromoDescription;
+            Description = WebUtility.HtmlDecode(response.PromoDescription);
             AcceptanceCode = response.PromoAgreement.AcceptanceCode;
             IsAccepted = false;
         }

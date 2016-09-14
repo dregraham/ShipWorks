@@ -25,9 +25,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private void OnEnrollClick(object sender, EventArgs e)
         {
-            // Get terms and conditions
-            GetTerms();
+            if (!GetTerms())
+            {
+                return;
+            }
 
+            // Get terms and conditions
             try
             {
                 // Apply the promo
@@ -67,13 +70,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         /// </summary>
         private void OnTermsClick(object sender, EventArgs e)
         {
-            GetTerms();
-            if (terms != null)
+            if (!GetTerms())
             {
-                WebHelper.OpenUrl(
-                    Uri.IsWellFormedUriString(terms.URL, UriKind.Absolute) && !terms.URL.StartsWith("http") ?
-                    new Uri(terms.URL) :
-                    new Uri($"http://{terms.URL}"), this);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(terms?.URL))
+            {
+                MessageHelper.ShowError(this,
+                    "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
+            }
+            else
+            {
+                WebHelper.OpenUrl(new Uri(terms.URL), this);
             }
         }
 
@@ -86,21 +95,29 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             enroll.Focus();
         }
 
-        private void GetTerms()
+        /// <summary>
+        /// Gets the terms - If there is an error, show dialog and return false.
+        /// </summary>
+        private bool GetTerms()
         {
+            bool success = true;
+
             if (terms == null)
             {
                 try
                 {
                     terms = promo.Terms;
                 }
-                catch (UpsPromoException )
+                catch (UpsPromoException)
                 {
                     MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
                     promo.RemindMe();
                     Close();
+                    success = false;
                 }
             }
+
+            return success;
         }
     }
 }

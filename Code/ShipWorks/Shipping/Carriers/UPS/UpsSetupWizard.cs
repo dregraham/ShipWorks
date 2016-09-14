@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Hide/show pharmacutical control based on industry selected.
+        /// Hide/show pharmaceutical control based on industry selected.
         /// </summary>
         private void IndustryChanged(UpsBusinessIndustry upsBusinessIndustry)
         {
@@ -1112,13 +1112,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (promo?.Terms?.URL == null)
+            if (string.IsNullOrWhiteSpace(promo?.Terms?.URL))
             {
-                throw new Exception("Promo Not Set");
+                MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
             }
-
-            WebHelper.OpenUrl(Uri.IsWellFormedUriString(promo.Terms.URL, UriKind.Absolute) && !promo.Terms.URL.StartsWith("http") ?
-                new Uri(promo.Terms.URL) : new Uri($"http://{promo.Terms.URL}"), this);
+            else
+            {
+                WebHelper.OpenUrl(new Uri(promo.Terms.URL), this);
+            }
         }
 
         /// <summary>
