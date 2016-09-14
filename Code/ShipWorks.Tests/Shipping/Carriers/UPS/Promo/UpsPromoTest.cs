@@ -166,13 +166,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var promoActivation = new PromoActivation(discountResponse);
 
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                client.Setup(c => c.Activate(It.IsAny<string>())).Returns(promoActivation);
+                client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
                 var testObject = CreateUpsPromo(mock, client);
                 testObject.Terms.AcceptTerms();
 
                 testObject.Apply();
 
-                client.Verify(c => c.Activate(It.IsAny<string>()), Times.Once);
+                client.Verify(c => c.Activate(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             }
         }
 
@@ -198,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var promoActivation = new PromoActivation(discountResponse);
 
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                client.Setup(c => c.Activate(It.IsAny<string>())).Returns(promoActivation);
+                client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 
@@ -230,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var promoActivation = new PromoActivation(discountResponse);
                 var accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                client.Setup(c => c.Activate(It.IsAny<string>())).Returns(promoActivation);
+                client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 
@@ -262,7 +262,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 var promoActivation = new PromoActivation(discountResponse);
 
                 Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                client.Setup(c => c.Activate(It.IsAny<string>())).Returns(promoActivation);
+                client.Setup(c => c.Activate(It.IsAny<string>(), It.IsAny<string>())).Returns(promoActivation);
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 testObject.Terms.AcceptTerms();
 

@@ -8,11 +8,11 @@
         /// <summary>
         /// Activates the UPS Promo using the given code
         /// </summary>
-        PromoActivation Activate(string acceptanceCode);
+        PromoActivation Activate(string acceptanceCode, string upsAccountNumber);
 
         /// <summary>
         /// Gets the Promo Acceptance Terms
         /// </summary>
-        PromoAcceptanceTerms GetAgreement(string promoCode);
+        PromoAcceptanceTerms GetAgreement();
     }
 }

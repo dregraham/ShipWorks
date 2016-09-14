@@ -40,6 +40,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         PromoAcceptanceTerms Terms { get; }
 
         /// <summary>
+        /// Gets the promo code
+        /// </summary>
+        string PromoCode { get; }
+
+        /// <summary>
         /// Activates the Promo Code
         /// </summary>
         void Apply();

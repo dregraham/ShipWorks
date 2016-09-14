@@ -80,6 +80,39 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         public PromoAcceptanceTerms Terms => terms ?? (terms = GetAgreementTerms());
 
         /// <summary>
+        /// Gets the promo code to send, based on the state from the UPS account's address
+        /// </summary>
+        public string PromoCode
+        {
+            get
+            {
+                if (!CountryCode.Equals("US", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return string.Empty;
+                }
+
+                if (upsSettingsRepository.UseTestServer)
+                {
+                    return TestPromoCode;
+                }
+
+                string stateCode = account.StateProvCode;
+
+                if (stateCode.Equals("AK", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return AlaskaPromoCode;
+                }
+
+                if (stateCode.Equals("HI", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return HawaiiPromoCode;
+                }
+
+                return ContinentalUsPromoCode;
+            }
+        }
+
+        /// <summary>
         /// Applies the Promo Code
         /// </summary>
         public void Apply()
@@ -91,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             }
 
             IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-            PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode);
+            PromoActivation promoActivation = client.Activate(Terms.AcceptanceCode, account.AccountNumber);
 
             // If the activation was successful save it to the UpsAccount Entity
             // Otherwise throw exception containing the info about the failure
@@ -129,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private PromoAcceptanceTerms GetAgreementTerms()
         {
             IUpsApiPromoClient client = promoClientFactory.CreatePromoClient(this);
-            return client.GetAgreement(GetPromoCode());
+            return client.GetAgreement();
         }
 
         /// <summary>
@@ -156,36 +189,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Gets the promo code to send, based on the state from the UPS account's address
-        /// </summary>
-        private string GetPromoCode()
-        {
-            if (!CountryCode.Equals("US", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return string.Empty;
-            }
-
-            if (upsSettingsRepository.UseTestServer)
-            {
-                return TestPromoCode;
-            }
-
-            string stateCode = account.StateProvCode;
-
-            if (stateCode.Equals("AK", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return AlaskaPromoCode;
-            }
-
-            if (stateCode.Equals("HI", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return HawaiiPromoCode;
-            }
-
-            return ContinentalUsPromoCode;
         }
     }
 }

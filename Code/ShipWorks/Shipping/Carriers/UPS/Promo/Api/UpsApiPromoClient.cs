@@ -12,6 +12,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
     {
         private const string LiveEndpoint = "https://onlinetools.ups.com/webservices/PromoDiscount";
         private const string TestingEndpoint = "https://wwwcie.ups.com/webservices/PromoDiscount";
+        private readonly IUpsPromo upsPromo;
+        private readonly LocaleType locale;
 
         /// <summary>
         /// Constructor
@@ -19,28 +21,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
         /// <param name="upsPromo"></param>
         public UpsApiPromoClient(IUpsPromo upsPromo)
         {
-            UpsPromo = upsPromo;
-            Locale = new LocaleType()
+            this.upsPromo = upsPromo;
+            locale = new LocaleType()
             {
                 CountryCode = upsPromo.CountryCode,
                 LanguageCode = "en"
             };
         }
-
-        /// <summary>
-        /// Ups Promo code information
-        /// </summary>
-        private IUpsPromo UpsPromo { get; }
-
-        /// <summary>
-        /// Locale information for the request
-        /// </summary>
-        private LocaleType Locale { get; }
-
-        /// <summary>
-        /// The promo code.
-        /// </summary>
-        private string PromoCode { get; set; }
 
         /// <summary>
         /// Indicates if the test server should be used instead of the live server
@@ -55,14 +42,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
         /// Requests Terms and Conditions for UPS Promo Api
         /// </summary>
         /// <returns></returns>
-        public PromoAcceptanceTerms GetAgreement(string promoCode)
+        public PromoAcceptanceTerms GetAgreement()
         {
-            PromoCode = promoCode;
-
             PromoDiscountAgreementRequest request = new PromoDiscountAgreementRequest
             {
-                Locale = Locale,
-                PromoCode = PromoCode
+                Locale = locale,
+                PromoCode = upsPromo.PromoCode
             };
 
             try
@@ -75,12 +60,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
                     {
                         ServiceAccessToken = new UPSSecurityServiceAccessToken()
                         {
-                            AccessLicenseNumber = UpsPromo.AccessLicenseNumber
+                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
                         },
                         UsernameToken = new UPSSecurityUsernameToken()
                         {
-                            Username = UpsPromo.Username,
-                            Password = UpsPromo.Password
+                            Username = upsPromo.Username,
+                            Password = upsPromo.Password
                         }
                     };
 
@@ -97,13 +82,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
         /// <summary>
         /// Activates the UPS Promo with the given acceptance code
         /// </summary>
-        public PromoActivation Activate(string acceptanceCode)
+        public PromoActivation Activate(string acceptanceCode, string upsAccountNumber)
         {
             PromoDiscountRequest request = new PromoDiscountRequest()
             {
-                Locale = Locale,
+                AccountInfo = new AccountInfoType()
+                {
+                    AccountNumber = upsAccountNumber
+                },
+                Locale = locale,
                 AgreementAcceptanceCode = acceptanceCode,
-                PromoCode = PromoCode
+                PromoCode = upsPromo.PromoCode
             };
 
             try
@@ -116,12 +105,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
                     {
                         ServiceAccessToken = new UPSSecurityServiceAccessToken()
                         {
-                            AccessLicenseNumber = UpsPromo.AccessLicenseNumber
+                            AccessLicenseNumber = upsPromo.AccessLicenseNumber
                         },
                         UsernameToken = new UPSSecurityUsernameToken()
                         {
-                            Username = UpsPromo.Username,
-                            Password = UpsPromo.Password
+                            Username = upsPromo.Username,
+                            Password = upsPromo.Password
                         }
                     };
 
