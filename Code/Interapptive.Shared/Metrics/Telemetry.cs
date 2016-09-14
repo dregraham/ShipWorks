@@ -26,6 +26,8 @@ namespace Interapptive.Shared.Metrics
     public static class Telemetry
     {
         private static readonly TelemetryClient telemetryClient;
+        public const string TotalShipmentsKey = "TotalShipments";
+        public const string TotalSuccessfulShipmentsKey = "TotalSuccessfulShipments";
 
         /// <summary>
         /// Static constructor
@@ -64,6 +66,8 @@ namespace Interapptive.Shared.Metrics
             telemetryClient.Context.Properties.Add("CurrentUICulture", Thread.CurrentThread.CurrentUICulture.ToString());
 
             telemetryClient.Context.Properties.Add("StartupPath", Application.StartupPath);
+
+            GetCustomerID = () => "Unset";
         }
 
         /// <summary>
@@ -75,6 +79,32 @@ namespace Interapptive.Shared.Metrics
         /// The user id being used by the telemetry client.
         /// </summary>
         public static string SessionId => telemetryClient.Context.Session.Id;
+
+        /// <summary>
+        /// Function to retrieve a customer ID
+        /// </summary>
+        public static Func<string> GetCustomerID { get; set; }
+
+        /// <summary>
+        /// Set execution mode
+        /// </summary>
+        public static void SetExecutionMode(string executionMode)
+        {
+            telemetryClient.Context.Properties.Add("ExecutionMode", executionMode);
+        }
+
+        /// <summary>
+        /// Set the instance ID
+        /// </summary>
+        public static void SetInstance(string instanceID)
+        {
+            telemetryClient.Context.Device.Id = instanceID;
+
+            if (!telemetryClient.Context.Properties.ContainsKey("Instance"))
+            {
+                telemetryClient.Context.Properties.Add("Instance", instanceID);
+            }
+        }
 
         /// <summary>
         /// Get the storage connection string
@@ -89,16 +119,9 @@ namespace Interapptive.Shared.Metrics
         /// <summary>
         /// Track when ShipWorks as started
         /// </summary>
-        public static void TrackStartShipworks(string tangoCustomerID, string instanceID)
+        public static void TrackStartShipworks()
         {
-            telemetryClient.Context.User.Id = tangoCustomerID;
-            telemetryClient.Context.User.AuthenticatedUserId = tangoCustomerID;
-            telemetryClient.Context.Device.Id = instanceID;
-
-            if (!telemetryClient.Context.Properties.ContainsKey("Instance"))
-            {
-                telemetryClient.Context.Properties.Add("Instance", instanceID);
-            }
+            SetCustomerID();
 
             EventTelemetry eventTelemetry = new EventTelemetry("StartShipWorks")
             {
@@ -115,17 +138,29 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// Set the customer ID on the context
+        /// </summary>
+        private static void SetCustomerID()
+        {
+            string tangoCustomerID = GetCustomerID();
+
+            telemetryClient.Context.User.Id = tangoCustomerID;
+            telemetryClient.Context.User.AuthenticatedUserId = tangoCustomerID;
+        }
+
+        /// <summary>
         /// Track an exception
         /// </summary>
         public static void TrackException(Exception ex, Dictionary<string, string> properties)
         {
             Dictionary<string, string> commonProperties = CommonProperties();
-            
+
             foreach (KeyValuePair<string, string> keyValuePair in commonProperties.Where(kvp => !properties.ContainsKey(kvp.Key)))
             {
                 properties.Add(keyValuePair.Key, keyValuePair.Value);
             }
 
+            SetCustomerID();
             telemetryClient.TrackException(ex, properties);
 
             // Flush so that this exception gets sent immediately!
@@ -137,6 +172,7 @@ namespace Interapptive.Shared.Metrics
         /// </summary>
         public static void TrackEvent(EventTelemetry eventTelemetry)
         {
+            SetCustomerID();
             telemetryClient.TrackEvent(eventTelemetry);
         }
 

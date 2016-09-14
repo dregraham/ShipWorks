@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
@@ -45,6 +49,8 @@ namespace ShipWorks.Stores.Content.Panels
 
         // So we don't race condition on fast selection changes to auto-create more than one shipment for an order
         static HashSet<long> autoCreatingShipments = new HashSet<long>();
+
+        private OrderEntity loadedOrder;
 
         /// <summary>
         /// Constructor
@@ -80,7 +86,9 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(lifetimeScope.Resolve<ISchedulerProvider>().WindowsFormsEventLoop)
-                .Subscribe(x => ReloadContent());
+                .Do(LoadSelectedOrder)
+                .Do(x => ReloadContent())
+                .Subscribe();
 
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
@@ -96,20 +104,36 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
+        /// Loads the order that has been selected
+        /// </summary>
+        /// <remarks>if more than one order is selected, set loaded order to null</remarks>
+        /// <param name="orderSelectionChangedMessage"></param>
+        private void LoadSelectedOrder(OrderSelectionChangedMessage orderSelectionChangedMessage)
+        {
+            // If a single order is selected set loaded order to that order
+            if (orderSelectionChangedMessage.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
+            {
+                LoadedOrderSelection orderSelection =
+                    orderSelectionChangedMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().FirstOrDefault();
+
+                loadedOrder = orderSelection.Order;
+            }
+            else
+            {
+                // More than one or no order has been selected
+                loadedOrder = null;
+            }
+        }
+
+        /// <summary>
         /// EntityType displayed by this panel
         /// </summary>
-        public override EntityType EntityType
-        {
-            get { return EntityType.ShipmentEntity; }
-        }
+        public override EntityType EntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         /// The targets this supports
         /// </summary>
-        public override FilterTarget[] SupportedTargets
-        {
-            get { return new FilterTarget[] { FilterTarget.Orders, FilterTarget.Customers }; }
-        }
+        public override FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Customers };
 
         /// <summary>
         /// Update the gateway query filter and reload the grid
@@ -271,7 +295,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             if (action == GridLinkAction.Edit)
             {
-                EditShipments(new List<long> { entityID });
+                EditShipments(new List<long> { entityID }, InitialShippingTabDisplay.Shipping);
             }
         }
 
@@ -280,7 +304,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         protected override void OnEntityDoubleClicked(long entityID)
         {
-            EditShipments(new long[] { entityID });
+            EditShipments(new[] { entityID } , InitialShippingTabDisplay.Shipping);
         }
 
         /// <summary>
@@ -290,7 +314,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count > 0)
             {
-                EditShipments(entityGrid.Selection.Keys);
+                EditShipments(entityGrid.Selection.Keys, InitialShippingTabDisplay.Shipping);
             }
         }
 
@@ -312,7 +336,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count == 1)
             {
-                ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
+                ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
                 if (shipment != null)
                 {
                     try
@@ -359,20 +383,19 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count == 1)
             {
-                ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
-                if (shipment != null)
-                {
-                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, initialTab));
-                }
+                EditShipments(new [] {entityGrid.Selection.Keys.First()}, initialTab);
             }
         }
 
         /// <summary>
         /// Edit the shipment with the given ID
         /// </summary>
-        private void EditShipments(IEnumerable<long> shipmentKeys)
+        private void EditShipments(IEnumerable<long> shipmentKeys, InitialShippingTabDisplay initialTab)
         {
-            Messenger.Current.Send(new OpenShippingDialogWithOrdersMessage(this, shipmentKeys));
+            // Get the entities from the grid because the local loadedOrder
+            // shipment entities could be out of sync with whats stored locally
+            IEnumerable<ShipmentEntity> shipments = shipmentKeys.Select(entityGrid.EntityGateway.GetEntityFromKey).OfType<ShipmentEntity>();
+            Messenger.Current.Send(new OpenShippingDialogMessage(this, shipments, initialTab));
         }
 
         /// <summary>
@@ -392,24 +415,26 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void DeleteShipment(long shipmentID)
         {
-            DialogResult result = MessageHelper.ShowQuestion(this, "Delete the selected shipment?");
-
-            if (result == DialogResult.OK)
+            if (loadedOrder != null)
             {
-                ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
-                long orderID = shipment.OrderID;
+                DialogResult result = MessageHelper.ShowQuestion(this, "Delete the selected shipment?");
 
-                if (shipment == null)
+                if (result == DialogResult.OK)
                 {
-                    MessageHelper.ShowMessage(this, "The shipment has already been deleted.");
-                }
-                else
-                {
-                    ShippingManager.DeleteShipment(shipment);
-                    Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { orderID }));
-                }
+                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == shipmentID);
 
-                ReloadContent();
+                    if (shipment == null)
+                    {
+                        MessageHelper.ShowMessage(this, "The shipment has already been deleted.");
+                    }
+                    else
+                    {
+                        ShippingManager.DeleteShipment(EntityUtility.CloneEntity(shipment, false));
+                        Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { loadedOrder.OrderID }));
+                    }
+
+                    ReloadContent();
+                }
             }
         }
 
@@ -439,7 +464,7 @@ namespace ShipWorks.Stores.Content.Panels
                 // reason than I'm being lazy right now.
                 if (entityGrid.Selection.Count == 1)
                 {
-                    ShipmentEntity shipment = (ShipmentEntity) DataProvider.GetEntity(entityGrid.Selection.Keys.First());
+                    ShipmentEntity shipment = loadedOrder?.Shipments.FirstOrDefault(s => s.ShipmentID == entityGrid.Selection.Keys.First());
                     if (shipment != null)
                     {
                         if (shipment.Processed || shipment.Voided)

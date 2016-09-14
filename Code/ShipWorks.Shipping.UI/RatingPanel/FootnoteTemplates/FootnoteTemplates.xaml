@@ -2,6 +2,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="AmazonNotLinkedFootnoteViewModelTemplate.xaml" />
+        <ResourceDictionary Source="AmazonSameDayNotAvailableFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="BrokerExceptionsRateFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="CounterRatesInvalidStoreAddressFootnoteViewModelTemplate.xaml" />
         <ResourceDictionary Source="ExceptionsRateFootnoteViewModelTemplate.xaml" />

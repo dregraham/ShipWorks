@@ -9,8 +9,14 @@ using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Settings control for OnTrac
+    /// </summary>
     public partial class OnTracSettingsControl : SettingsControlBase
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OnTracSettingsControl()
         {
             InitializeComponent();
@@ -19,6 +25,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             insuranceProviderChooser.ProviderChanged += OnInsuranceProviderChanged;
         }
+
+        /// <summary>
+        /// Carrier supports services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
+        /// Carrier supports packages
+        /// </summary>
+        protected override bool SupportsPackages => true;
 
         /// <summary>
         /// Load the settings
@@ -32,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.OnTracInsuranceProvider;
+            insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.OnTracInsuranceProvider;
             pennyOne.Checked = settings.OnTracInsurancePennyOne;
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
@@ -72,11 +88,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Save the settings
         /// </summary>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             optionsControl.SaveSettings();
 
-            settings.OnTracInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
+            settings.OnTracInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             settings.OnTracInsurancePennyOne = pennyOne.Checked;
         }
 

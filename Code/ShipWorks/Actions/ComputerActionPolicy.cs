@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Actions
@@ -57,10 +55,11 @@ namespace ShipWorks.Actions
         {
             if (allowedComputerIDs.Count == 0)
             {
-                return true;   
+                return true;
             }
 
-            return allowedComputerIDs.Contains(computer.ComputerID);
+            // This can be called in any thread and may happen after a user has logged out
+            return computer != null ? allowedComputerIDs.Contains(computer.ComputerID) : false;
         }
     }
 }

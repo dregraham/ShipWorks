@@ -558,6 +558,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ContextLock", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ExtraData", fieldHashtable);
 		}
 		#endregion
 
@@ -799,6 +802,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ActionQueueFieldIndex.ContextLock, true); }
 			set	{ SetValue((int)ActionQueueFieldIndex.ContextLock, value); }
+		}
+
+		/// <summary> The ExtraData property of the Entity ActionQueue<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ActionQueue"."ExtraData"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ExtraData
+		{
+			get { return (System.String)GetValue((int)ActionQueueFieldIndex.ExtraData, true); }
+			set	{ SetValue((int)ActionQueueFieldIndex.ExtraData, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ActionQueueSelectionEntity' which are related to this entity via a relation of type '1:n'.

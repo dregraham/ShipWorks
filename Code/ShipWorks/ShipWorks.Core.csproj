@@ -543,6 +543,7 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
+    <Compile Include="Actions\Tasks\Common\FinishProcessingBatchTask.cs" />
     <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
@@ -613,6 +614,7 @@
     <Compile Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.Designer.cs">
       <DependentUpon>UserInitiatedImageChooserDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Triggers\EmptyTrigger.cs" />
     <Compile Include="Actions\Triggers\FilterContentActionTriggerException.cs" />
     <Compile Include="Actions\Triggers\UserInitiatedSelectionRequirement.cs" />
     <Compile Include="Actions\Triggers\UserInitiatedStockImages.Designer.cs">
@@ -680,6 +682,9 @@
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\KeyedComponent.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\RegistrationType.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\ResolveWithAttributes.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashDetailsDialog.xaml.cs">
       <DependentUpon>CrashDetailsDialog.xaml</DependentUpon>
     </Compile>
@@ -1138,6 +1143,7 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
@@ -1146,6 +1152,8 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipPackageImporter.cs" />
     <Compile Include="Shipping\CustomsControlCache.cs" />
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
@@ -1616,6 +1624,8 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCipherKey.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
@@ -1680,6 +1690,9 @@
     </Compile>
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
+    <Compile Include="Templates\Printing\IPrinterSetting.cs" />
+    <Compile Include="Templates\Printing\PrinterSetting.cs" />
+    <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />

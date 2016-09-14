@@ -103,6 +103,8 @@ namespace ShipWorks.Data.Model
 		NextStep,
 		///<summary>ContextLock. </summary>
 		ContextLock,
+		///<summary>ExtraData. </summary>
+		ExtraData,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6445,6 +6447,8 @@ namespace ShipWorks.Data.Model
 		ImportColumnSourceType,
 		///<summary>ImportColumnSource. </summary>
 		ImportColumnSource,
+		///<summary>ImportOrderItemStrategy. </summary>
+		ImportOrderItemStrategy,
 		///<summary>UploadStrategy. </summary>
 		UploadStrategy,
 		///<summary>UploadMap. </summary>

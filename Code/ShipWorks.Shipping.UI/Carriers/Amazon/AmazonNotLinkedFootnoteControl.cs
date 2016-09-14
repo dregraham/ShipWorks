@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void SetLinkText()
         {
             infoLink.Text = string.Format(infoLink.Text, EnumHelper.GetDescription(shipmentTypeCode));
-            int startLink = infoLink.Text.IndexOf("here", StringComparison.OrdinalIgnoreCase);
+            int startLink = infoLink.Text.IndexOf("click here", StringComparison.OrdinalIgnoreCase);
             int linkLength = infoLink.Text.Length - startLink - 1;
             infoLink.LinkArea = new LinkArea(startLink, linkLength);
         }

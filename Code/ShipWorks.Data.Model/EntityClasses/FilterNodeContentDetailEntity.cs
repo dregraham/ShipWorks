@@ -88,6 +88,29 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 				
 
+		/// <summary> CTor</summary>
+		/// <param name="filterNodeContentID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <param name="objectID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
+		public FilterNodeContentDetailEntity(System.Int64 filterNodeContentID, System.Int64 objectID):base("FilterNodeContentDetailEntity")
+		{
+			InitClassEmpty(null, CreateFields());
+			this.FilterNodeContentID = filterNodeContentID;
+			this.ObjectID = objectID;
+		}
+
+		/// <summary> CTor</summary>
+		/// <param name="filterNodeContentID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <param name="objectID">PK value for FilterNodeContentDetail which data should be fetched into this FilterNodeContentDetail object</param>
+		/// <param name="validator">The custom validator object for this FilterNodeContentDetailEntity</param>
+		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
+		public FilterNodeContentDetailEntity(System.Int64 filterNodeContentID, System.Int64 objectID, IValidator validator):base("FilterNodeContentDetailEntity")
+		{
+			InitClassEmpty(validator, CreateFields());
+			this.FilterNodeContentID = filterNodeContentID;
+			this.ObjectID = objectID;
+		}
+
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
@@ -490,7 +513,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FilterNodeContentDetail"."FilterNodeContentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int64 FilterNodeContentID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentDetailFieldIndex.FilterNodeContentID, true); }
@@ -501,7 +524,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FilterNodeContentDetail"."ObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.Int64 ObjectID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentDetailFieldIndex.ObjectID, true); }

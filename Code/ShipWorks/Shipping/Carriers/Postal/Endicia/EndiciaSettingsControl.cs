@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
-using System.Collections;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Shipping.Insurance;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -43,6 +36,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Carrier supports services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
+        /// Carrier supports packages
+        /// </summary>
+        protected override bool SupportsPackages => true;
+
+        /// <summary>
         /// Load the settings into the control
         /// </summary>
         public override void LoadSettings()
@@ -61,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (endiciaReseller == EndiciaReseller.None)
             {
                 // Showing the insurance control is dependent on if its allowed in tango
-                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.EndiciaInsuranceProvider;
+                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.EndiciaInsuranceProvider;
 
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
@@ -119,16 +122,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Save the settings 
+        /// Save the settings
         /// </summary>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             optionsControl.SaveSettings(settings);
 
             if (endiciaReseller == EndiciaReseller.None)
             {
                 this.settings.SaveSettings(settings);
-                settings.EndiciaInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
+                settings.EndiciaInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             }
             else
             {

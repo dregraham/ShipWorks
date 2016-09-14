@@ -130,7 +130,7 @@ namespace ShipWorks.Templates.Media
                 // Otherwise default to the system default
                 else if (installedPrinters.Count > 0)
                 {
-                    printer.SelectedValue = new PrinterSettings().PrinterName;
+                    printer.SelectedValue = PrinterSettingFactory.GetDefaultPrinterSettings().PrinterName;
                 }
             }
             else
@@ -149,8 +149,7 @@ namespace ShipWorks.Templates.Media
             // If there is now a valid printer selected, also select the paper source
             if (selectedInfo.IsValid)
             {
-                PrinterSettings printerSettings = new PrinterSettings();
-                printerSettings.PrinterName = selectedInfo.Name;
+                IPrinterSetting printerSettings = PrinterSettingFactory.GetPrinterSettings(selectedInfo.Name);
 
                 if (!printerSettings.IsValid)
                 {
@@ -315,8 +314,7 @@ namespace ShipWorks.Templates.Media
             }
 
             // Create settings for selected printer
-            PrinterSettings settings = new PrinterSettings();
-            settings.PrinterName = printerInfo.Name;
+            IPrinterSetting settings = PrinterSettingFactory.GetPrinterSettings(printerInfo.Name);
 
             if (!settings.IsValid)
             {

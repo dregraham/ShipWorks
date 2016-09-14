@@ -182,6 +182,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ContextLock);}
 		}
+		/// <summary>Creates a new ActionQueueEntity.ExtraData field instance</summary>
+		public static EntityField2 ExtraData
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ActionQueueFieldIndex.ExtraData);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ActionQueueSelectionEntity</summary>
@@ -13921,6 +13926,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ImportColumnSource
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportColumnSource);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.ImportOrderItemStrategy field instance</summary>
+		public static EntityField2 ImportOrderItemStrategy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportOrderItemStrategy);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.UploadStrategy field instance</summary>
 		public static EntityField2 UploadStrategy

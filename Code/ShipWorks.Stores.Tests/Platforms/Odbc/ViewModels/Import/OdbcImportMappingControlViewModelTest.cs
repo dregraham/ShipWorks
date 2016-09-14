@@ -9,6 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
+using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,7 +19,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 {
-    public class OdbcImportFieldMappingControlViewModelTest
+    public class OdbcImportMappingControlViewModelTest
     {
         [Fact]
         public void Load_ThrowsArgumentNullException_WhenDataSourceIsNull()
@@ -124,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
                 testObject.Load(new OdbcStoreEntity());
 
-                testObject.NumberOfItemsPerOrder = 0;
+                testObject.NumberOfItemsPerOrder = 1;
                 testObject.IsSingleLineOrder = true;
                 var expectedMapNames = new List<string>() { "Order", "Address", "Item 1" };
                 var actualMapNames = new List<string>()
@@ -135,23 +136,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 };
 
                 Assert.Equal(expectedMapNames, actualMapNames);
-            }
-        }
-
-        [Fact]
-        public void SetSingleLineItemTrue_SetsNumberOfItemsBackToOne()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var mapFactory = mock.Create<OdbcFieldMapFactory>();
-                var testObject = mock.Create<OdbcImportMappingControlViewModel>(new TypedParameter(typeof(IOdbcFieldMapFactory), mapFactory));
-                testObject.Load(new OdbcStoreEntity());
-
-                testObject.NumberOfItemsPerOrder = 5;
-
-                testObject.IsSingleLineOrder = true;
-
-                Assert.Equal(1, testObject.Items.Count);
             }
         }
 
@@ -590,7 +574,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 ImportMap = EmbeddedResourceHelper.GetEmbeddedResourceString(mapPath),
                 ImportColumnSourceType = (int)OdbcColumnSourceType.Table,
                 ImportColumnSource = "Table",
-                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime
+                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
+                ImportOrderItemStrategy = (int)OdbcImportOrderItemStrategy.SingleLine
             };
 
             Mock<IOdbcDataSourceService> dataSourceService = mock.Mock<IOdbcDataSourceService>();

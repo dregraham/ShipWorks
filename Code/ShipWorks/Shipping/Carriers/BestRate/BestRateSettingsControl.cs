@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Settings;
@@ -19,7 +22,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.PostalWebTools,
             ShipmentTypeCode.Express1Endicia,
             ShipmentTypeCode.Express1Usps,
-            ShipmentTypeCode.UpsOnLineTools,
             ShipmentTypeCode.UpsWorldShip,
             ShipmentTypeCode.Amazon,
             ShipmentTypeCode.iParcel
@@ -58,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Save the settings
         /// </summary>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             // If there are no changes, don't do anything
             if (!isDirty)
@@ -85,11 +87,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void RefreshContent()
         {
             base.RefreshContent();
-
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             List<ShipmentTypeCode> carriersHiddenByShipmentPolicy = new List<ShipmentTypeCode>();
-            ShippingPolicies.Current.Apply(ShipmentTypeCode.BestRate, carriersHiddenByShipmentPolicy);
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                license?.ApplyShippingPolicy(ShipmentTypeCode.BestRate, carriersHiddenByShipmentPolicy);
+            }
 
             panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes
                 .Where(c => !carriersHiddenByShipmentPolicy.Contains(c.ShipmentTypeCode) && IsCarrierShippingType(c)),

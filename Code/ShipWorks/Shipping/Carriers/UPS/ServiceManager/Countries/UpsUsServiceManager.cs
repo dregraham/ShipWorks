@@ -1,20 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Settings;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
 {
@@ -109,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <param name="destinationCountryCode">The destination country code.</param>
         /// <returns>An UpsServiceMapping object.</returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public UpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode)
+        public IUpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode)
         {
             UpsServiceMapping mapping = LoadUpsServiceMappings().FirstOrDefault(m => m.DestinationCountryCode == destinationCountryCode.Trim().ToUpperInvariant()
                                                                && m.WorldShipDescription.ToUpperInvariant() == description.Trim().ToUpperInvariant());

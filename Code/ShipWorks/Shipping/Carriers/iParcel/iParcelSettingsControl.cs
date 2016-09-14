@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Settings;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -28,6 +24,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Carrier supports services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
         /// Loads the shippings settings for i-parcel.
         /// </summary>
         public override void LoadSettings()
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Load up the service picker based on the excluded service types
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<iParcelServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (iParcelServiceType)exclusion).ToList();
+            List<iParcelServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (iParcelServiceType) exclusion).ToList();
 
             List<iParcelServiceType> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => e.Value).ToList();
             servicePicker.Initialize(allServices, excludedServices);
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Save the shipping settings for i-parcel.
         /// </summary>
         /// <param name="settings"></param>
-        public override void SaveSettings(ShippingSettingsEntity settings)
+        protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             base.SaveSettings(settings);
             optionsControl.SaveSettings();

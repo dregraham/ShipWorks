@@ -210,7 +210,7 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQueryTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommandTest.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploaderTest.cs" />
-    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportFieldMappingControlViewModelTest.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\TestOdbcMapSettingsControlViewModel.cs" />
@@ -224,7 +224,6 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDatasourceRepositoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactoryTest.cs" />
-    <Compile Include="EmbeddedResourceHelper.cs" />
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetProductResponse.json" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOnlineUpdaterTest.cs" />

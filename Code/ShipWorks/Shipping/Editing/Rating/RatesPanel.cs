@@ -8,6 +8,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -302,8 +303,12 @@ namespace ShipWorks.Shipping.Editing.Rating
                 rateControl.ResetCollapsibleState();
             }
 
-            // Apply any applicable policies to the rate control prior to loading the rates
-            ShippingPolicies.Current.Apply((ShipmentTypeCode) rateGroup.Shipment.ShipmentType, rateControl);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
+                license?.ApplyShippingPolicy((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
+            }
+
             rateControl.LoadRates(rateGroup);
         }
 

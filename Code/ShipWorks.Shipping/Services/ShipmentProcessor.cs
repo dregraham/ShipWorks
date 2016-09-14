@@ -8,6 +8,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
@@ -75,10 +76,12 @@ namespace ShipWorks.Shipping.Services
             ICarrierConfigurationShipmentRefresher shipmentRefresher,
             RateResult chosenRateResult, Action counterRateCarrierConfiguredWhileProcessingAction)
         {
+            DateTime startingTime = DateTime.UtcNow;
+
             owner = ownerRetriever();
 
             // Filter out the ones we know to be already processed, or are not ready
-            IEnumerable<ShipmentEntity> filteredShipments = shipmentsToProcess.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
+            IEnumerable<ShipmentEntity> filteredShipments = shipmentsToProcess.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
 
             counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
             chosenRate = chosenRateResult;
@@ -140,6 +143,11 @@ namespace ShipWorks.Shipping.Services
 
             shipmentRefresher.FinishProcessing();
 
+            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            {
+                ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
+            }
+
             return filteredShipments
                 .Select(CreateResultFromShipment)
                 .ToList();
@@ -175,7 +183,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void ProcessShipment(ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder)
         {
-            ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState)state;
+            ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
 
             // Processing was canceled by the best rate processing dialog
             if (cancelProcessing)
@@ -196,13 +204,13 @@ namespace ShipWorks.Shipping.Services
 
                 executionState.OrderHashes.Add(shipment.Order.ShipSenseHashKey);
 
-                Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int)ShipmentTypeCode.BestRate ?
-                    (Func<CounterRatesProcessingArgs, DialogResult>)BestRateCounterRatesProcessing :
+                Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ?
+                    (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing :
                     CounterRatesProcessing;
 
                 GenericResult<ShipmentEntity> result = ShippingManager.ProcessShipment(shipment,
                     executionState.LicenseCheckResults,
-                    x => (DialogResult)owner.Invoke(ratesProcessing, x),
+                    x => (DialogResult) owner.Invoke(ratesProcessing, x),
                     executionState.SelectedRate, lifetimeScope);
 
                 // Clear any previous errors
@@ -214,7 +222,7 @@ namespace ShipWorks.Shipping.Services
                 }
 
                 // Special case - could refactor to abstract if necessary
-                executionState.WorldshipExported |= shipment.ShipmentType == (int)ShipmentTypeCode.UpsWorldShip;
+                executionState.WorldshipExported |= shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip;
             }
             catch (Exception ex) when (ex is ORMConcurrencyException ||
                                        ex is ObjectDeletedException ||
@@ -306,7 +314,7 @@ namespace ShipWorks.Shipping.Services
         private void ShowShipmentTypeProcessingNudges(IEnumerable<ShipmentEntity> shipments)
         {
             // Get a distinct list of shipment types from the list of shipments to process
-            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode)s.ShipmentType).Distinct().ToList();
+            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode) s.ShipmentType).Distinct().ToList();
 
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
             if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))

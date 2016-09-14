@@ -36,5 +36,10 @@ namespace ShipWorks.Shipping
         /// Remove the specific shipping error
         /// </summary>
         void Remove(long shipmentID);
+
+        /// <summary>
+        /// How many shipments have errors?
+        /// </summary>
+        int ShipmentCount();
     }
 }

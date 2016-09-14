@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.UI.Utility;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Controls;
-using ShipWorks.Templates.Controls;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Printing;
-using log4net;
-using ShipWorks.ApplicationCore;
-using Autofac;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -53,7 +43,7 @@ namespace ShipWorks.Shipping.Settings
             this.lifetimeScope = lifetimeScope;
             this.shipmentType = shipmentType;
 
-            // Hide 
+            // Hide
             Enum.GetValues(typeof(Page))
                 .OfType<Page>()
                 .Where(shipmentType.IsSettingsTabHidden)
@@ -168,7 +158,9 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Save the settings of the shipment type to the database.
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public void SaveSettings(ShippingSettingsEntity settings,
+            IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            IExcludedPackageTypeRepository excludedPackageTypeRepository)
         {
             log.InfoFormat("Preparing to save settings to defaults, printing, and automation for {0}", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
 
@@ -181,7 +173,7 @@ namespace ShipWorks.Shipping.Settings
             SettingsControlBase settingsControl = GeneralSettingsControl;
             if (settingsControl != null)
             {
-                settingsControl.SaveSettings(settings);
+                settingsControl.SaveSettings(settings, excludedServiceTypeRepository, excludedPackageTypeRepository);
             }
         }
 
@@ -194,7 +186,7 @@ namespace ShipWorks.Shipping.Settings
             if (settingsControl != null)
             {
                 return settingsControl.GetExcludedServices()
-                    .Select(x => new ExcludedServiceTypeEntity {ShipmentType = (int) shipmentType.ShipmentTypeCode, ServiceType = x});
+                    .Select(x => new ExcludedServiceTypeEntity { ShipmentType = (int) shipmentType.ShipmentTypeCode, ServiceType = x });
             }
 
             return Enumerable.Empty<ExcludedServiceTypeEntity>();
@@ -209,7 +201,7 @@ namespace ShipWorks.Shipping.Settings
             if (settingsControl != null)
             {
                 return settingsControl.GetExcludedPackageTypes()
-                    .Select(x => new ExcludedPackageTypeEntity { ShipmentType = (int)shipmentType.ShipmentTypeCode, PackageType = x });
+                    .Select(x => new ExcludedPackageTypeEntity { ShipmentType = (int) shipmentType.ShipmentTypeCode, PackageType = x });
             }
 
             return Enumerable.Empty<ExcludedPackageTypeEntity>();
