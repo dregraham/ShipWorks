@@ -136,8 +136,6 @@ namespace ShipWorks.Shipping.Services
 
             HandleProcessingException(executionState);
 
-            ShowPostProcessingMessage(clonedShipments);
-
             // See if we are supposed to open WorldShip
             if (executionState.WorldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
             {
@@ -152,6 +150,8 @@ namespace ShipWorks.Shipping.Services
             {
                 ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
             }
+
+            ShowPostProcessingMessage(clonedShipments);
 
             return clonedShipments
                 .Select(CreateResultFromShipment)
