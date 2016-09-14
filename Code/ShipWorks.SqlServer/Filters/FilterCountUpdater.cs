@@ -17,8 +17,14 @@ namespace ShipWorks.SqlServer.Filters
     [CompilerGenerated]
     public class FilterCountUpdater
     {
-        // Get out as soon after this as possible
-        readonly TimeSpan timeLimit = TimeSpan.FromSeconds(15);
+        // Time allowed to complete the count update
+        protected TimeSpan timeLimit = TimeSpan.FromSeconds(15);
+
+        // Should the time limite be enforced?
+        protected bool enforceTimeLimit = true;
+
+        // Time allowed to acquire a count update lock
+        protected TimeSpan acquireLockTimeLimit = TimeSpan.FromSeconds(5);
 
         // Ordered list of states
         readonly List<FilterCountCheckpointState> states = new List<FilterCountCheckpointState>();
@@ -43,6 +49,8 @@ namespace ShipWorks.SqlServer.Filters
         protected string filterNodeUpdateItemTableName = "FilterNodeUpdateItem";
         protected string filterNodeUpdateShipmentTableName = "FilterNodeUpdateShipment";
 
+        protected string purposeInParam = "0, 1";
+
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -54,7 +62,13 @@ namespace ShipWorks.SqlServer.Filters
             updateFilterTargetMap[FilterCountCheckpointState.UpdateOrders] = FilterTarget.Orders;
             updateFilterTargetMap[FilterCountCheckpointState.UpdateItems] = FilterTarget.Items;
             updateFilterTargetMap[FilterCountCheckpointState.UpdateShipments] = FilterTarget.Shipments;
+        }
 
+        /// <summary>
+        /// Initialize the class after having made any local updates
+        /// </summary>
+        protected void Initialize()
+        {
             updateDirtyTableMap[FilterCountCheckpointState.UpdateCustomers] = filterNodeUpdateCustomerTableName;
             updateDirtyTableMap[FilterCountCheckpointState.UpdateOrders] = filterNodeUpdateOrderTableName;
             updateDirtyTableMap[FilterCountCheckpointState.UpdateItems] = filterNodeUpdateItemTableName;
@@ -66,6 +80,8 @@ namespace ShipWorks.SqlServer.Filters
         /// </summary>
         public void CalculateUpdateFilterCounts()
         {
+            Initialize();
+
             // Attach to the connection
             using (SqlConnection con = new SqlConnection("Context connection = true"))
             {
@@ -81,7 +97,7 @@ namespace ShipWorks.SqlServer.Filters
                 while (true)
                 {
                     // We'll need to have the lock to do the next stop of the checkpoint
-                    if (!ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(5), acquiringCountsLockName))
+                    if (!ActiveCalculationUtility.AcquireCalculatingLock(con, acquireLockTimeLimit, acquiringCountsLockName))
                     {
                         DebugMessage("UpdateCounts: Could not get lock.");
                         return;
@@ -89,7 +105,7 @@ namespace ShipWorks.SqlServer.Filters
 
                     try
                     {
-                        if (timer.Elapsed >= timeLimit)
+                        if (enforceTimeLimit && timer.Elapsed >= timeLimit)
                         {
                             DebugMessage("UpdateCounts: Ran out of time.");
                             return;
@@ -396,9 +412,13 @@ namespace ShipWorks.SqlServer.Filters
 	                      FROM FilterNode n INNER JOIN FilterSequence s ON n.FilterSequenceID = s.FilterSequenceID 
 						                    INNER JOIN Filter f ON s.FilterID = f.FilterID 
 						                    INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
-	                      WHERE f.[State] = 1 AND c.UpdateCalculation != '' AND (c.Status != 0 AND c.Status != 2)
-                                AND (SELECT COUNT(*) FROM {1} WITH (NOLOCK) WHERE dbo.BitwiseAnd(ColumnsUpdated, c.ColumnMask) != 0x0) > 0",
+	                      WHERE f.[State] = 1 
+                            AND n.Purpose IN ({1})
+                            AND c.UpdateCalculation != '' 
+                            AND (c.Status != 0 AND c.Status != 2)
+                            AND (SELECT COUNT(*) FROM {2} WITH (NOLOCK) WHERE dbo.BitwiseAnd(ColumnsUpdated, c.ColumnMask) != 0x0) > 0",
                     filterNodeUpdatePendingTableName,
+                    purposeInParam,
                     filterNodeContentDirtyTableName);
 
                 // We want to know what masks each target uses, so we know what the dependencies are

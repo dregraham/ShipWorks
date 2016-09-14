@@ -161,7 +161,9 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         private static void MergeIntoFilterDirty(string table, string primaryKey, string parentID, int type, byte[] columnsUpdated, SqlConnection con)
         {
             long computerID = UtilityFunctions.GetComputerID(con);
-            
+
+            DateTime start = DateTime.Now;
+
             // Insert everything into the dirty table.  Dupes will be dealt with when we update the counts.
             using (SqlCommand cmd = con.CreateCommand())
             {
@@ -172,10 +174,26 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
                             INTO #FNCDTemp FROM {2} 
 
                         INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
+                            SELECT t.[ObjectID], t.[ParentID], t.[ObjectType], t.[ComputerID], t.[ColumnsUpdated]  
+	                        FROM   #FNCDTemp t
+	                        WHERE  NOT EXISTS (SELECT 1 
+					                           FROM FilterNodeContentDirty as d 
+					                           WHERE d.ObjectID = t.ObjectID
+					                             and (d.ParentID = t.ParentID or (d.parentid is null AND t.ParentID is null))
+						                         and d.ObjectType = t.ObjectType
+						                         and d.ComputerID = t.ComputerID
+						                         and d.ColumnsUpdated = t.ColumnsUpdated)
 
                         INSERT INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
+                            SELECT t.[ObjectID], t.[ParentID], t.[ObjectType], t.[ComputerID], t.[ColumnsUpdated]  
+	                        FROM   #FNCDTemp t
+	                        WHERE  NOT EXISTS (SELECT 1 
+					                           FROM QuickFilterNodeContentDirty as d 
+					                           WHERE d.ObjectID = t.ObjectID
+					                             and (d.ParentID = t.ParentID or (d.parentid is null AND t.ParentID is null))
+						                         and d.ObjectType = t.ObjectType
+						                         and d.ComputerID = t.ComputerID
+						                         and d.ColumnsUpdated = t.ColumnsUpdated)
             
                         DROP TABLE tempdb..#FNCDTemp
                     ",
@@ -187,6 +205,10 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
 
                 cmd.ExecuteNonQuery();
             }
+
+            DateTime end = DateTime.Now;
+
+            SqlContext.Pipe.Send("MergeIntoFilterDirty time to run allowing duplicates: " + (end - start).TotalMilliseconds);
         }
 
         /// <summary>

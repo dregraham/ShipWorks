@@ -170,13 +170,41 @@ namespace ShipWorks.Data.Adapter
 			returnValue = (int)parameters[0].Value;
 			return toReturn;
 		}
-	
 
-		/// <summary>
-		/// Delegate definition for stored procedure 'DeleteAbandonedFilterCounts' to be used in combination of a UnitOfWork2 object. 
-		/// </summary>
-		public delegate int DeleteAbandonedFilterCountsCallBack(DataAccessAdapter adapter);
+        /// <summary>
+        /// Calls stored procedure 'CalculateUpdateQuickFilterCounts'.<br/><br/>
+        /// 
+        /// </summary>
+        /// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+        public static int CalculateUpdateQuickFilterCounts()
+        {
+            using (DataAccessAdapter adapter = new DataAccessAdapter())
+            {
+                return CalculateUpdateQuickFilterCounts(adapter);
+            }
+        }
 
+        /// <summary>
+        /// Calls stored procedure 'CalculateUpdateQuickFilterCounts'.<br/><br/>
+        /// 
+        /// </summary>
+        /// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+        /// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+        public static int CalculateUpdateQuickFilterCounts(DataAccessAdapter adapter)
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+
+
+            int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateUpdateQuickFilterCounts]", parameters);
+
+            return toReturn;
+        }
+
+        /// <summary>
+        /// Delegate definition for stored procedure 'DeleteAbandonedFilterCounts' to be used in combination of a UnitOfWork2 object. 
+        /// </summary>
+        public delegate int DeleteAbandonedFilterCountsCallBack(DataAccessAdapter adapter);
+        
 		/// <summary>
 		/// Calls stored procedure 'DeleteAbandonedFilterCounts'.<br/><br/>
 		/// 

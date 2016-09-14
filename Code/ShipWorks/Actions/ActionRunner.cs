@@ -448,14 +448,27 @@ namespace ShipWorks.Actions
             step.AttemptError = "";
 
             // See if it will be skipped due to a filter condition
-            bool filtersUpdated;
-            bool skipStep = !CheckStepFilterCondition(step, queue.ObjectID, out filtersUpdated);
+            bool filtersUpdatedForFilterCondition;
+            bool skipStep = !CheckStepFilterCondition(step, queue.ObjectID, out filtersUpdatedForFilterCondition);
 
             // Create an instance of the task that created this step - we need information from it
             ActionTask actionTask = ActionManager.InstantiateTask(step.TaskIdentifier, step.TaskSettings);
 
+            bool filtersUpdated = true;
+            if (actionTask.ReadsFilterContents)
+            {
+                if (step.FilterCondition || step.InputFilterNodeID > 0 || step.FilterConditionNodeID > 0)
+                {
+                    filtersUpdated = FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion);
+                }
+                else
+                {
+                    filtersUpdated = FilterHelper.EnsureQuickFiltersUpToDate(queue.QueueVersion);
+                }
+            }
+
             // If the task reads filter contents as a part of its execution, and we've not yet made sure filters are updated, we need to do it now
-            if (!skipStep && actionTask.ReadsFilterContents && !filtersUpdated && !FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion))
+            if (!skipStep && !filtersUpdatedForFilterCondition && !filtersUpdated)
             {
                 throw new ActionRunnerFilterUpdateException("Filters were busy updating and the step was postponed.");
             }
@@ -746,7 +759,7 @@ namespace ShipWorks.Actions
                     return false;
                 }
 
-                if (!FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), step.ActionQueue.QueueVersion))
+                if (!FilterHelper.EnsureQuickFiltersUpToDate(step.ActionQueue.QueueVersion))
                 {
                     throw new ActionRunnerFilterUpdateException("Filters were busy updating so the task was postponed.");
                 }

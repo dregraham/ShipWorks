@@ -17,4 +17,11 @@ public partial class StoredProcedures
         FilterCountUpdater updater = new FilterCountUpdater();
         updater.CalculateUpdateFilterCounts();
     }
+
+    [SqlProcedure]
+    public static void CalculateUpdateQuickFilterCounts()
+    {
+        QuickFilterCountUpdater updater = new QuickFilterCountUpdater();
+        updater.CalculateUpdateFilterCounts();
+    }
 }
