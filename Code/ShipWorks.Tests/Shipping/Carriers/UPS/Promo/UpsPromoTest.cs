@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 {
     public class UpsPromoTest
     {
-        private const string ContinentalUSPromoCode = "P090029838";
+        private const string ContinentalUsPromoCode = "P090029838";
         private const string AlaskaPromoCode = "P950029472";
         private const string HawaiiPromoCode = "P780029996";
 
@@ -279,12 +279,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 
                 var testObject = CreateUpsPromo(mock, client);
                 var terms = testObject.Terms;
-                client.Verify(c => c.GetAgreement(It.IsAny<string>()), Times.Once);
+                client.Verify(c => c.GetAgreement(), Times.Once);
             }
         }
 
         [Fact]
-        public void GetTerms_UsesAlaskaPromoCode_WhenAccountStateIsAlaska()
+        public void PromoCode_ReturnsAlaskaPromoCode_WhenAccountStateIsAlaska()
         {
             using (var mock = GetLooseThatReturnsMocks())
             {
@@ -296,13 +296,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "AK"
                 };
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
-                var terms = testObject.Terms;
-                client.Verify(c => c.GetAgreement(AlaskaPromoCode), Times.Once);
+                Assert.Equal(AlaskaPromoCode, testObject.PromoCode);
             }
         }
 
         [Fact]
-        public void GetTerms_UsesHawaiiPromoCode_WhenAccountStateIsHawaii()
+        public void PromoCode_ReturnsHawaiiPromoCode_WhenAccountStateIsHawaii()
         {
             using (var mock = GetLooseThatReturnsMocks())
             {
@@ -314,13 +313,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "HI"
                 };
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
-                var terms = testObject.Terms;
-                client.Verify(c => c.GetAgreement(HawaiiPromoCode), Times.Once);
+                Assert.Equal(HawaiiPromoCode, testObject.PromoCode);
             }
         }
 
         [Fact]
-        public void GetTerms_UsesContinentalUSPromoCode_WhenAccountStateIsContinentalUSState()
+        public void PromoCode_ReturnsContinentalUSPromoCode_WhenAccountStateIsContinentalUSState()
         {
             using (var mock = GetLooseThatReturnsMocks())
             {
@@ -332,13 +330,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "MO"
                 };
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
-                var terms = testObject.Terms;
-                client.Verify(c => c.GetAgreement(ContinentalUSPromoCode), Times.Once);
+                Assert.Equal(ContinentalUsPromoCode, testObject.PromoCode);
             }
         }
 
         [Fact]
-        public void GetTerms_UsesEmptyPromoCode_WhenAccountCountryIsNotUnitedStates()
+        public void PromoCode_ReturnsEmptyPromoCode_WhenAccountCountryIsNotUnitedStates()
         {
             using (var mock = GetLooseThatReturnsMocks())
             {
@@ -349,8 +346,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     CountryCode = "CA"
                 };
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
-                var terms = testObject.Terms;
-                client.Verify(c => c.GetAgreement(string.Empty), Times.Once);
+                Assert.Empty(testObject.PromoCode);
             }
         }
 
@@ -459,7 +455,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 
             PromoAcceptanceTerms acceptanceTerms = new PromoAcceptanceTerms(response);
 
-            client.Setup(c => c.GetAgreement(It.IsAny<string>())).Returns(acceptanceTerms);
+            client.Setup(c => c.GetAgreement()).Returns(acceptanceTerms);
 
             mock.Mock<IPromoClientFactory>()
                 .Setup(x => x.CreatePromoClient(It.IsAny<UpsPromo>()))
