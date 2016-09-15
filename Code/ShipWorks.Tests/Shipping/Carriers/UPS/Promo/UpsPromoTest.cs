@@ -19,6 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         private const string ContinentalUsPromoCode = "P090029838";
         private const string AlaskaPromoCode = "P950029472";
         private const string HawaiiPromoCode = "P780029996";
+        private const string TestPromoCode = "BVOGIGNA7";
 
         public static AutoMock GetLooseThatReturnsMocks() =>
             AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) {DefaultValue = DefaultValue.Mock});
@@ -314,6 +315,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 };
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
                 Assert.Equal(HawaiiPromoCode, testObject.PromoCode);
+            }
+        }
+
+        [Fact]
+        public void FactMethodName()
+        {
+            using (var mock = GetLooseThatReturnsMocks())
+            {
+                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
+                UpsAccountEntity upsAccount = new UpsAccountEntity
+                {
+                    PromoStatus = (int) UpsPromoStatus.None,
+                    CountryCode = "US",
+                    StateProvCode = "MO"
+                };
+
+                mock.Mock<ICarrierSettingsRepository>().Setup(s=>s.UseTestServer).Returns(true);
+
+                var testObject = CreateUpsPromo(mock, client, upsAccount);
+                Assert.Equal(TestPromoCode, testObject.PromoCode);
             }
         }
 
