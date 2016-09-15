@@ -45,5 +45,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
                 Assert.False(PostalUtility.IsMilitaryPostalCode(postalCode));
             }
         }
+
+        [Fact]
+        public void IsGlobalPost_ReturnsTrue_WhenServiceTypeIsGlobablPost()
+        {
+            Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostEconomy));
+        }
+
+        [Fact]
+        public void IsGlobalPost_ReturnsFalse_WhenServiceTypeIsNotGlobablPost()
+        {
+            Assert.False(PostalUtility.IsGlobalPost(PostalServiceType.AsendiaGeneric));
+        }
     }
 }

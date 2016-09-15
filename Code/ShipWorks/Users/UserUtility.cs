@@ -1,10 +1,3 @@
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography;
-using System.Text;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -20,6 +13,14 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users.Security;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ShipWorks.Users
 {
@@ -194,27 +195,26 @@ namespace ShipWorks.Users
         /// </summary>
         private static void CreateDefaultSettings(UserEntity user, SqlAdapter adapter)
         {
-            UserSettingsEntity settings = new UserSettingsEntity();
-            settings.User = user;
+            long topLevelOrderFilter = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
 
-            settings.DisplayColorScheme = (int) ColorScheme.Blue;
-            settings.DisplaySystemTray = false;
-
-            settings.WindowLayout = WindowLayoutProvider.GetDefaultLayout();
-            settings.GridMenuLayout = null;
-
-            settings.FilterInitialUseLastActive = false;
-            settings.OrderFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
-            settings.FilterInitialSpecified = settings.OrderFilterLastActive;
-            settings.FilterInitialSortType = (int) FilterInitialSortType.CurrentSort;
-            settings.OrderFilterExpandedFolders = null;
-
-            settings.CustomerFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Customers);
-            settings.CustomerFilterExpandedFolders = null;
-
-            settings.ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds;
-
-            settings.TemplateLastSelected = 0;
+            UserSettingsEntity settings = new UserSettingsEntity
+            {
+                User = user,
+                DisplayColorScheme = (int) ColorScheme.Blue,
+                DisplaySystemTray = false,
+                WindowLayout = WindowLayoutProvider.GetDefaultLayout(),
+                GridMenuLayout = null,
+                FilterInitialUseLastActive = false,
+                OrderFilterLastActive = topLevelOrderFilter,
+                FilterInitialSpecified = topLevelOrderFilter,
+                FilterInitialSortType = (int) FilterInitialSortType.CurrentSort,
+                OrderFilterExpandedFolders = null,
+                CustomerFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Customers),
+                CustomerFilterExpandedFolders = null,
+                ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
+                TemplateLastSelected = 0,
+                NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value
+            };
 
             adapter.SaveAndRefetch(settings);
         }

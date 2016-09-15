@@ -156,6 +156,8 @@
     <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
+    <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
+    <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
@@ -191,6 +193,11 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
+      <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IDismissableWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
       <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
@@ -299,6 +306,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

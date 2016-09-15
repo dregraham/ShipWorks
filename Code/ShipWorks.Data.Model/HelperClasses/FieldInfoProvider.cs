@@ -2765,6 +2765,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
 			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterLastActive, 0, 0, 19);
 			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, 2147483647, 0, 0);
+			base.AddElementFieldInfo("UserSettingsEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

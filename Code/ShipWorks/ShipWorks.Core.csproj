@@ -1106,6 +1106,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostLabelNotification.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
@@ -10490,7 +10491,7 @@
     <None Include="Resources\groupon.png" />
     <None Include="Resources\globe16.png" />
     <Resource Include="Resources\information2_16.png" />
-    <None Include="Resources\help16.png" />
+    <Resource Include="Resources\help16.png" />
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
