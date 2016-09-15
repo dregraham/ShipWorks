@@ -21,7 +21,6 @@ namespace ShipWorks.SqlServer.Filters
         protected TimeSpan timeLimit = TimeSpan.FromSeconds(15);
 
         // Should the time limite be enforced?
-        protected bool enforceTimeLimit = true;
 
         // Time allowed to acquire a count update lock
         protected TimeSpan acquireLockTimeLimit = TimeSpan.FromSeconds(5);
@@ -40,7 +39,6 @@ namespace ShipWorks.SqlServer.Filters
         static bool truncateWithDelete;
 
         protected string acquiringCountsLockName = ActiveCalculationUtility.DefaultLockName;
-
         protected string filterNodeContentDirtyTableName = "FilterNodeContentDirty";
         protected string filterNodeUpdateCheckpointTableName = "FilterNodeUpdateCheckpoint";
         protected string filterNodeUpdatePendingTableName = "FilterNodeUpdatePending";
@@ -49,7 +47,9 @@ namespace ShipWorks.SqlServer.Filters
         protected string filterNodeUpdateItemTableName = "FilterNodeUpdateItem";
         protected string filterNodeUpdateShipmentTableName = "FilterNodeUpdateShipment";
 
-        protected string purposeInParam = "0, 1";
+        // This is the FilterNodePurpose types that this updated should process.  It is in SQL "IN" clause
+        // format.
+        protected string purposeInParam = $"{ (int) FilterNodePurpose.Standard }, { (int) FilterNodePurpose.Search }";
 
         /// <summary>
         /// Static constructor
@@ -65,6 +65,11 @@ namespace ShipWorks.SqlServer.Filters
         }
 
         /// <summary>
+        /// Should the time limit be enforced?
+        /// </summary>
+        protected bool EnforceTimeLimit { get; set; } = true;
+
+        /// <summary>
         /// Initialize the class after having made any local updates
         /// </summary>
         protected void Initialize()
@@ -78,7 +83,35 @@ namespace ShipWorks.SqlServer.Filters
         /// <summary>
         /// Entry point for calculating update filter counts
         /// </summary>
-        public void CalculateUpdateFilterCounts()
+        public void CalculateUpdateAllFilterCounts()
+        {
+            // Start the timer
+            Stopwatch timer = Stopwatch.StartNew();
+
+            // First do quick fitlers.  We want it to adhere to the time limit, so
+            // set that property so it gets enforced.
+            QuickFilterCountUpdater quickFilterCountUpdater = new QuickFilterCountUpdater()
+            {
+                EnforceTimeLimit = true
+            };
+            quickFilterCountUpdater.CalculateUpdateFilterCountsInternal(timer);
+
+            CalculateUpdateFilterCountsInternal(timer);
+        }
+
+        /// <summary>
+        /// Entry point for calculating update quick filter counts
+        /// </summary>
+        public void CalculateUpdateQuickFilterCounts()
+        {
+            // Start the timer
+            CalculateUpdateFilterCountsInternal(Stopwatch.StartNew());
+        }
+
+        /// <summary>
+        /// Entry point for calculating update filter counts
+        /// </summary>
+        protected void CalculateUpdateFilterCountsInternal(Stopwatch timer)
         {
             Initialize();
 
@@ -89,9 +122,6 @@ namespace ShipWorks.SqlServer.Filters
 
                 // Can't have an open transaction going in
                 UtilityFunctions.EnsureNotTransacted(con);
-
-                // Start the timer
-                Stopwatch timer = Stopwatch.StartNew();
 
                 // Do out state processing loop
                 while (true)
@@ -105,7 +135,7 @@ namespace ShipWorks.SqlServer.Filters
 
                     try
                     {
-                        if (enforceTimeLimit && timer.Elapsed >= timeLimit)
+                        if (EnforceTimeLimit && timer.Elapsed >= timeLimit)
                         {
                             DebugMessage("UpdateCounts: Ran out of time.");
                             return;

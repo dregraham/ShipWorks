@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Filters;
 
 namespace ShipWorks.SqlServer.Filters
 {
@@ -12,7 +13,7 @@ namespace ShipWorks.SqlServer.Filters
         /// </summary>
         public QuickFilterCountUpdater()
         {
-            enforceTimeLimit = false;
+            EnforceTimeLimit = false;
             acquireLockTimeLimit = TimeSpan.FromMilliseconds(5);
             acquiringCountsLockName = ActiveCalculationUtility.QuickFilterLockName;
 
@@ -24,7 +25,7 @@ namespace ShipWorks.SqlServer.Filters
             filterNodeUpdateItemTableName = "QuickFilterNodeUpdateItem";
             filterNodeUpdateShipmentTableName = "QuickFilterNodeUpdateShipment";
 
-            purposeInParam = "2";
+            purposeInParam = $"{ (int) FilterNodePurpose.Quick }";
         }
     }
 }

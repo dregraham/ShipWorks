@@ -628,7 +628,7 @@ namespace ShipWorks.Filters
         /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
         /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
         /// </summary>
-        public static bool EnsureQuickFiltersUpToDate()
+        public static void EnsureQuickFiltersUpToDate()
         {
             byte[] rowVersion;
 
@@ -644,7 +644,7 @@ namespace ShipWorks.Filters
                 }
             }
 
-            return EnsureQuickFiltersUpToDate(rowVersion);
+            EnsureQuickFiltersUpToDate(rowVersion);
         }
 
         /// <summary>
@@ -652,7 +652,7 @@ namespace ShipWorks.Filters
         /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
         /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
         /// </summary>
-        public static bool EnsureQuickFiltersUpToDate(byte[] rowVersion)
+        public static void EnsureQuickFiltersUpToDate(byte[] rowVersion)
         {
             // Can't calculate filters within a transaction - would hose everything up
             using (new TransactionScope(TransactionScopeOption.Suppress))
@@ -667,7 +667,7 @@ namespace ShipWorks.Filters
                     if (result == null || ((byte[])result).Length == 0)
                     {
                         log.InfoFormat("There are no dirty objects, QUICK filters are up to date.");
-                        return true;
+                        return;
                     }
 
                     // Still some dirty - but they are all edited after we first entered this method, which means they are
@@ -675,7 +675,7 @@ namespace ShipWorks.Filters
                     if (SqlUtility.GetTimestampValue((byte[])result) > SqlUtility.GetTimestampValue(rowVersion))
                     {
                         log.InfoFormat("Still some dirty objets, but all are up-to-date from the time of the request.");
-                        return true;
+                        return;
                     }
 
                     log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[])result), SqlUtility.GetTimestampValue(rowVersion));
@@ -684,8 +684,6 @@ namespace ShipWorks.Filters
                 // Ensure counts are running
                 FilterContentManager.CalculateUpdateQuickFilterCounts();
             }
-
-            return true;
         }
 
         /// <summary>

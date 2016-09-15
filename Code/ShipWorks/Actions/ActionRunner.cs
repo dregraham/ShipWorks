@@ -450,20 +450,30 @@ namespace ShipWorks.Actions
             // See if it will be skipped due to a filter condition
             bool filtersUpdatedForFilterCondition;
             bool skipStep = !CheckStepFilterCondition(step, queue.ObjectID, out filtersUpdatedForFilterCondition);
+            bool filtersUpdated = true;
 
             // Create an instance of the task that created this step - we need information from it
             ActionTask actionTask = ActionManager.InstantiateTask(step.TaskIdentifier, step.TaskSettings);
 
-            bool filtersUpdated = true;
-            if (actionTask.ReadsFilterContents)
+            // If we aren't skipping this step and filter contents need read, do further investigation.
+            if (!skipStep && actionTask.ReadsFilterContents)
             {
                 if (step.FilterCondition || step.InputFilterNodeID > 0 || step.FilterConditionNodeID > 0)
                 {
+                    log.Info($@"Action task, {step.StepName} - {step.TaskIdentifier}, is set to ReadsFilterContents 
+                                and has a FilterCondition or InputFilterNode,  so we must ensure all filters are up to date.");
+
                     filtersUpdated = FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion);
                 }
                 else
                 {
-                    filtersUpdated = FilterHelper.EnsureQuickFiltersUpToDate(queue.QueueVersion);
+                    log.Info($@"Action task, {step.StepName} - {step.TaskIdentifier}, is set to ReadsFilterContents 
+                                and,  so we must ensure Quick filters are up to date.");
+
+                    FilterHelper.EnsureQuickFiltersUpToDate(queue.QueueVersion);
+
+                    // Quick filter counts always run to completion, so filtersUpdated will always be true in this case.
+                    filtersUpdated = true;
                 }
             }
 
@@ -759,7 +769,7 @@ namespace ShipWorks.Actions
                     return false;
                 }
 
-                if (!FilterHelper.EnsureQuickFiltersUpToDate(step.ActionQueue.QueueVersion))
+                if (!FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), step.ActionQueue.QueueVersion))
                 {
                     throw new ActionRunnerFilterUpdateException("Filters were busy updating so the task was postponed.");
                 }

@@ -9,8 +9,14 @@ namespace ShipWorks.SqlServer
     /// </summary>
     public class FilterTargetNodeData
     {
+        /// <summary>
+        /// Column masks
+        /// </summary>
         public List<byte[]> ColumnMasks { get; set; }
 
+        /// <summary>
+        /// Join mask
+        /// </summary>
         public int JoinMask { get; set; }
     }
 }

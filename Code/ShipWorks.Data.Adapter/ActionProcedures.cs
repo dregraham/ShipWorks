@@ -117,7 +117,6 @@ namespace ShipWorks.Data.Adapter
 			}
 		}
 
-
 		/// <summary>
 		/// Calls stored procedure 'CalculateUpdateFilterCounts'.<br/><br/>
 		/// 
@@ -128,12 +127,10 @@ namespace ShipWorks.Data.Adapter
 		{
 			SqlParameter[] parameters = new SqlParameter[0];
 
-
 			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateUpdateFilterCounts]", parameters);
 
 			return toReturn;
 		}
-		
 
 		/// <summary>
 		/// Calls stored procedure 'CalculateUpdateFilterCounts'.<br/><br/>
@@ -148,7 +145,6 @@ namespace ShipWorks.Data.Adapter
 				return CalculateUpdateFilterCounts(ref returnValue, adapter);
 			}
 		}
-
 		
 		/// <summary>
 		/// Calls stored procedure 'CalculateUpdateFilterCounts'.<br/><br/>
@@ -162,10 +158,8 @@ namespace ShipWorks.Data.Adapter
 			// create parameters. Add 1 to make room for the return value parameter.
 			SqlParameter[] parameters = new SqlParameter[0 + 1];
 
-
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
 			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateUpdateFilterCounts]", parameters);
-
 			
 			returnValue = (int)parameters[0].Value;
 			return toReturn;
@@ -193,7 +187,6 @@ namespace ShipWorks.Data.Adapter
         public static int CalculateUpdateQuickFilterCounts(DataAccessAdapter adapter)
         {
             SqlParameter[] parameters = new SqlParameter[0];
-
 
             int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateUpdateQuickFilterCounts]", parameters);
 

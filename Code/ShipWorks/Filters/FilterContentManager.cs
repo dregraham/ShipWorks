@@ -118,7 +118,6 @@ namespace ShipWorks.Filters
                 if (IsUpdateCountsNeeded() || IsUpdateQuickFilterCountsNeeded())
                 {
                     // Don't wait for them to complete
-                    CalculateUpdateQuickFilterCounts();
                     CalculateUpdateCounts();
 
                     changesOrCalculations = true;
@@ -309,7 +308,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public static void CalculateUpdateCounts()
         {
-            InitiateCalculation(TimeSpan.Zero, false, false);
+            InitiateCalculation(TimeSpan.Zero, false);
         }
 
         /// <summary>
@@ -318,18 +317,18 @@ namespace ShipWorks.Filters
         /// </summary>
         private static void CalculateInitialCounts(TimeSpan wait)
         {
-            InitiateCalculation(wait, true, false);
+            InitiateCalculation(wait, true);
         }
 
         /// <summary>
         /// Initiate a calculation for either an initial count or update count
         /// </summary>
-        private static void InitiateCalculation(TimeSpan wait, bool initial, bool quickFilters)
+        private static void InitiateCalculation(TimeSpan wait, bool initial)
         {
             // Since we need to register an operation with the ApplicationBusyManager, we've got to start our work from the UI thread.
             if (Program.ExecutionMode.IsUIDisplayed && Program.MainForm.InvokeRequired)
             {
-                Program.MainForm.BeginInvoke((MethodInvoker) delegate { InitiateCalculation(wait, initial, quickFilters); });
+                Program.MainForm.BeginInvoke((MethodInvoker) delegate { InitiateCalculation(wait, initial); });
                 return;
             }
 
@@ -357,7 +356,7 @@ namespace ShipWorks.Filters
             // Queue the work to a background thread
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InitiateCalculationThread),
-                new object[] {initial, operationToken, quickFilters});
+                new object[] {initial, operationToken});
 
             // Wait for it to finish.  It's ok if it doesnt.
             calculatingEvent.WaitOne(wait, false);
@@ -371,7 +370,6 @@ namespace ShipWorks.Filters
             object[] castedState = (object[])state;
             bool initial = (bool)castedState[0];
             ApplicationBusyToken token = (ApplicationBusyToken)castedState[1];
-            bool quickFilters = (bool)castedState[2];
 
             // Get a connection that will not timeout
             using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
