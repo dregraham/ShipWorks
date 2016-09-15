@@ -179,6 +179,8 @@
     <Compile Include="Custom\EntityClasses\ShippingOriginEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ShippingOriginEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\ShippingOriginEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingProfileEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingProfileEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProfileEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingProviderRuleEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />

@@ -3,7 +3,7 @@
 namespace ShipWorks.Data.Model.EntityClasses
 {
     /// <summary>
-    /// Partial class extention of the LLBLGen ShippingProfileEntity
+    /// Partial class extension of the LLBLGen ShippingProfileEntity
     /// </summary>
     public partial class ShippingProfileEntity
     {
@@ -12,8 +12,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode
         {
-            get { return (ShipmentTypeCode)ShipmentType; }
-            set { ShipmentType = (int)value; }
+            get { return (ShipmentTypeCode) ShipmentType; }
+            set { ShipmentType = (int) value; }
         }
     }
 }
