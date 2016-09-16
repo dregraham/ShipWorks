@@ -1128,6 +1128,7 @@
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Response\UpsLinkNewAccountToProfileResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypePreProcessor.cs" />
     <Compile Include="Shipping\CustomsControlCache.cs" />
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
