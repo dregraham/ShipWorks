@@ -223,7 +223,7 @@ public partial class StoredProcedures
                         AND Shipment.ProcessedDate < @olderThan	
                         AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 
-                -- find all of the iParcel labels we want to wipe out
+                -- find all of the Amazon labels we want to wipe out
                 INSERT INTO #LabelsToCleanUp		
                     SELECT 
                         [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
