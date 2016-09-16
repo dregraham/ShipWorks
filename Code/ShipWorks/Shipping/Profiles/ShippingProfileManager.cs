@@ -93,7 +93,21 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Return the active list of all profiles
         /// </summary>
-        public static IEnumerable<IShippingProfileEntity> ProfilesReadOnly => readOnlyEntities;
+        public static IEnumerable<IShippingProfileEntity> ProfilesReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyEntities;
+                }
+            }
+        }
 
         /// <summary>
         /// Get the profile with the specified ID, or null if it does not exist
