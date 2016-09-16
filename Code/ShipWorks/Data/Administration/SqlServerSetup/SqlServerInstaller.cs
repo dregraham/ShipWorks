@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -561,7 +562,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 // Detatch the database from LocalDb
                 log.InfoFormat("Detaching mdf-ldf from LocalDB");
-                using (SqlConnection con = localDbSession.OpenConnection())
+                using (DbConnection con = localDbSession.OpenConnection())
                 {
                     fileInfo = ShipWorksDatabaseUtility.DetachDatabase(localDbSession.Configuration.DatabaseName, con);
                 }
@@ -570,7 +571,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 string newFilePath;
 
                 // Figure out the path where they are going to go
-                using (SqlConnection con = newSession.OpenConnection())
+                using (DbConnection con = newSession.OpenConnection())
                 {
                     newFilePath = SqlUtility.GetMasterDataFilePath(con);
                 }
@@ -597,9 +598,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 log.InfoFormat("Attaching database {0} into newly installed SQL instance.", fileInfo.Database);
 
                 // Now we attach the db files into the full instance
-                using (SqlConnection con = newSession.OpenConnection())
+                using (DbConnection con = newSession.OpenConnection())
                 {
-                    SqlCommandProvider.ExecuteNonQuery(con, string.Format(
+                    DbCommandProvider.ExecuteNonQuery(con, string.Format(
                                     @"CREATE DATABASE {0}
                                     ON (FILENAME = '{1}'),
                                        (FILENAME = '{2}')
@@ -692,7 +693,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                 SqlSession session = new SqlSession(SqlInstanceUtility.DetermineCredentials(SqlInstanceUtility.AutomaticServerInstance));
 
-                using (SqlConnection con = session.OpenConnection())
+                using (DbConnection con = session.OpenConnection())
                 {
                     string databaseName = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
 
@@ -800,12 +801,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             // If we are not using windows auth we have to be sure builtin\admins has access, so that we can connect using windows auth
             try
             {
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     try
                     {
                         log.InfoFormat("Ensuring [{0}] has login.", WindowsIdentity.GetCurrent().Name);
-                        SqlCommandProvider.ExecuteNonQuery(con, string.Format("CREATE LOGIN [{0}] FROM WINDOWS", WindowsIdentity.GetCurrent().Name));
+                        DbCommandProvider.ExecuteNonQuery(con, string.Format("CREATE LOGIN [{0}] FROM WINDOWS", WindowsIdentity.GetCurrent().Name));
                     }
                     catch (SqlException ex)
                     {
@@ -813,7 +814,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     }
 
                     log.InfoFormat("Ensuring is sysadmin");
-                    SqlCommandProvider.ExecuteNonQuery(con, string.Format(@"EXEC sp_addsrvrolemember @loginame = N'{0}', @rolename = N'sysadmin'", WindowsIdentity.GetCurrent().Name));
+                    DbCommandProvider.ExecuteNonQuery(con, string.Format(@"EXEC sp_addsrvrolemember @loginame = N'{0}', @rolename = N'sysadmin'", WindowsIdentity.GetCurrent().Name));
                 }
             }
             catch (SqlException ex)

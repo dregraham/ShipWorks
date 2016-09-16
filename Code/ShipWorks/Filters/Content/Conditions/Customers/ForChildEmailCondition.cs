@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters.Content.SqlGeneration;
+﻿using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
-using ShipWorks.Data.Connection;
+using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 
 namespace ShipWorks.Filters.Content.Conditions.Customers
@@ -58,7 +54,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
                 parentScope.TableAlias,
                 context.GetColumnName(parentScope.PrimaryKey),
                 context.GetColumnName(EmailOutboundRelationFields.RelationType),
-                context.GetColumnName(EmailOutboundRelationFields.ObjectID)
+                context.GetColumnName(EmailOutboundRelationFields.EntityID)
                 );
 
             string orderAlias = context.RegisterTableAlias(EntityType.OrderEntity);
@@ -79,7 +75,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
                 parentScope.TableAlias,
                 context.GetColumnName(CustomerFields.CustomerID),
                 context.GetColumnName(EmailOutboundRelationFields.RelationType),
-                context.GetColumnName(EmailOutboundRelationFields.ObjectID)
+                context.GetColumnName(EmailOutboundRelationFields.EntityID)
                );
 
             // We need to manually record that we related down to orders

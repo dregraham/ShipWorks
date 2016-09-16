@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
 using Divelements.SandGrid;
-using ShipWorks.Data;
-using ShipWorks.Filters.Controls;
-using ShipWorks.UI.Controls.SandGrid;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Controls;
 
 namespace ShipWorks.Filters.Management
 {
@@ -111,7 +101,7 @@ namespace ShipWorks.Filters.Management
             // Load into the grid, alphabetized
             foreach (FilterNodeEntity filterNode in localNodes.OrderBy(n => n.Filter.Name))
             {
-                List<string> reasons = ObjectReferenceManager.GetReferenceReasons(new List<long> { filterNode.FilterNodeID } );
+                List<string> reasons = ObjectReferenceManager.GetReferenceReasons(new List<long> { filterNode.FilterNodeID });
 
                 FilterTreeGridRow row = new FilterTreeGridRow(filterNode);
                 row.Cells.Add(new GridCell(string.Join("\n", reasons.ToArray())));

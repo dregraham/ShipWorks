@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Users.Security;
-using ShipWorks.Users;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -25,7 +20,7 @@ namespace ShipWorks.Stores.Content
         {
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                if (DataProvider.GetEntity(note.ObjectID) == null)
+                if (DataProvider.GetEntity(note.EntityID) == null)
                 {
                     throw new SqlForeignKeyException("The related entity has been deleted.");
                 }
@@ -33,7 +28,7 @@ namespace ShipWorks.Stores.Content
                 // If its new, we have to increment reference counts
                 if (note.IsNew)
                 {
-                    AdjustNoteCount(adapter, note.ObjectID, 1);
+                    AdjustNoteCount(adapter, note.EntityID, 1);
                 }
 
                 adapter.SaveAndRefetch(note);
@@ -52,7 +47,7 @@ namespace ShipWorks.Stores.Content
                 NoteEntity note = (NoteEntity) DataProvider.GetEntity(noteID);
                 if (note != null)
                 {
-                    AdjustNoteCount(adapter, note.ObjectID, -1);
+                    AdjustNoteCount(adapter, note.EntityID, -1);
 
                     // We do it this way since it was from the cache
                     adapter.DeleteEntity(new NoteEntity(note.NoteID));
@@ -73,10 +68,10 @@ namespace ShipWorks.Stores.Content
             if (relatedType == EntityType.CustomerEntity)
             {
                 // Delete all the notes directly related to this entity
-                adapter.DeleteEntitiesDirectly(typeof(NoteEntity), new RelationPredicateBucket(NoteFields.ObjectID == entityID));
+                adapter.DeleteEntitiesDirectly(typeof(NoteEntity), new RelationPredicateBucket(NoteFields.EntityID == entityID));
 
                 RelationPredicateBucket customersOrders = new RelationPredicateBucket(
-                    new FieldCompareSetPredicate(NoteFields.ObjectID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.CustomerID == entityID, false));
+                    new FieldCompareSetPredicate(NoteFields.EntityID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.CustomerID == entityID, false));
 
                 // For customer's, we also have to delete all the order notes
                 adapter.DeleteEntitiesDirectly(typeof(NoteEntity), customersOrders);
@@ -86,7 +81,7 @@ namespace ShipWorks.Stores.Content
             if (relatedType == EntityType.OrderEntity)
             {
                 // Delete all the notes directly related to this entity
-                int deleted = adapter.DeleteEntitiesDirectly(typeof(NoteEntity), new RelationPredicateBucket(NoteFields.ObjectID == entityID));
+                int deleted = adapter.DeleteEntitiesDirectly(typeof(NoteEntity), new RelationPredicateBucket(NoteFields.EntityID == entityID));
 
                 CustomerEntity customer = new CustomerEntity();
                 customer.Fields[(int) CustomerFieldIndex.RollupNoteCount].ExpressionToApply = CustomerFields.RollupNoteCount - deleted;
@@ -104,15 +99,15 @@ namespace ShipWorks.Stores.Content
         public static void DeleteNotesForDeletedStore(RelationPredicateBucket customerBucket, SqlAdapter adapter)
         {
             // Delete all notes for the customers
-            adapter.DeleteEntitiesDirectly(typeof(NoteEntity), 
+            adapter.DeleteEntitiesDirectly(typeof(NoteEntity),
                 new RelationPredicateBucket(
-                    new FieldCompareSetPredicate(NoteFields.ObjectID, null, CustomerFields.CustomerID, 
+                    new FieldCompareSetPredicate(NoteFields.EntityID, null, CustomerFields.CustomerID,
                         null, SetOperator.In, customerBucket.PredicateExpression, false)));
 
             // Delete all notes for the orders
             adapter.DeleteEntitiesDirectly(typeof(NoteEntity),
                 new RelationPredicateBucket(
-                    new FieldCompareSetPredicate(NoteFields.ObjectID, null, OrderFields.OrderID,
+                    new FieldCompareSetPredicate(NoteFields.EntityID, null, OrderFields.OrderID,
                         null, SetOperator.In, customerBucket.PredicateExpression, new RelationCollection(CustomerEntity.Relations.OrderEntityUsingCustomerID), false)));
         }
 
@@ -174,13 +169,13 @@ namespace ShipWorks.Stores.Content
             EntityType entityType = EntityUtility.GetEntityType(entityID);
 
             RelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(NoteFields.ObjectID == entityID);
+            bucket.PredicateExpression.Add(NoteFields.EntityID == entityID);
 
             // For orders, add in the related customer
             if (entityType == EntityType.OrderEntity)
             {
                 FieldCompareSetPredicate predicate = new FieldCompareSetPredicate(
-                    NoteFields.ObjectID, null, OrderFields.CustomerID, null, SetOperator.In, OrderFields.OrderID == entityID);
+                    NoteFields.EntityID, null, OrderFields.CustomerID, null, SetOperator.In, OrderFields.OrderID == entityID);
 
                 bucket.PredicateExpression.AddWithOr(predicate);
             }
@@ -189,7 +184,7 @@ namespace ShipWorks.Stores.Content
             else if (entityType == EntityType.CustomerEntity)
             {
                 FieldCompareSetPredicate predicate = new FieldCompareSetPredicate(
-                    NoteFields.ObjectID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.CustomerID == entityID);
+                    NoteFields.EntityID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.CustomerID == entityID);
 
                 bucket.PredicateExpression.AddWithOr(predicate);
             }

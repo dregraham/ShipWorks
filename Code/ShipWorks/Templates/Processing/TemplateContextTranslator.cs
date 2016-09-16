@@ -1,17 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using log4net;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using System.Data;
-using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data;
 using ShipWorks.Data.Model;
-using System.Linq;
-using ShipWorks.Shipping;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -86,16 +78,16 @@ namespace ShipWorks.Templates.Processing
         {
             switch (entityType)
             {
-                case EntityType.CustomerEntity: 
+                case EntityType.CustomerEntity:
                     return TemplateInputContext.Customer;
 
-                case EntityType.OrderEntity: 
+                case EntityType.OrderEntity:
                     return TemplateInputContext.Order;
 
                 case EntityType.OrderItemEntity:
                     return TemplateInputContext.OrderItem;
 
-                case EntityType.ShipmentEntity: 
+                case EntityType.ShipmentEntity:
                     return TemplateInputContext.Shipment;
             }
 

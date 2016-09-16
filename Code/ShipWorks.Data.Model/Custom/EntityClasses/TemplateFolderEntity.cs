@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Collections;
-using ShipWorks.Templates;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data;
+using System.Text;
+using ShipWorks.Templates;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -120,7 +116,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// A field value is changing
         /// </summary>
-        protected override void OnFieldValueChanged(object originalValue, IEntityField2 field)
+        protected override void OnFieldValueChanged(object originalValue, int field)
         {
             if (readOnly)
             {

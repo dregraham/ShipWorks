@@ -320,9 +320,9 @@ namespace ShipWorks.Filters.Content.Conditions
             return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
                 cmd.CommandText = "SELECT dbo.DateToUniversalTime(@dateTime)";
-                cmd.Parameters.AddWithValue("@dateTime", dateTime);
+                cmd.AddParameterWithValue("@dateTime", dateTime);
 
-                return (DateTime) SqlCommandProvider.ExecuteScalar(cmd);
+                return (DateTime) DbCommandProvider.ExecuteScalar(cmd);
             });
         }
 

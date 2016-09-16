@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data.SqlClient;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
+using System.Data.Common;
 using System.Transactions;
+using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.Stores.Communication
@@ -15,7 +12,7 @@ namespace ShipWorks.Stores.Communication
     /// </summary>
     public class CustomerAcquisitionLock : IDisposable
     {
-        SqlConnection con;
+        DbConnection con;
         static string lockName = "CustomerAcquisition";
 
         /// <summary>

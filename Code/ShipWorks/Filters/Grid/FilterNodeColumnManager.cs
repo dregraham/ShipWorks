@@ -1,26 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Divelements.SandGrid;
-using Divelements.SandGrid.Specialized;
-using ShipWorks.Filters;
-using System.Xml.XPath;
-using System.IO;
-using System.Reflection;
-using Interapptive.Shared;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Users;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data;
 using log4net;
-using Interapptive.Shared.Utility;
-using System.Data.SqlClient;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Linq;
-using ShipWorks.Data.Grid;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Search;
+using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Grid
 {
@@ -37,7 +20,7 @@ namespace ShipWorks.Filters.Grid
         static Dictionary<long, FilterNodeColumnSettings> defaultSettings = new Dictionary<long, FilterNodeColumnSettings>();
 
         /// <summary>
-        /// Load user column data. 
+        /// Load user column data.
         /// </summary>
         public static void InitializeForCurrentSession()
         {
@@ -75,7 +58,7 @@ namespace ShipWorks.Filters.Grid
 
                 // Create the grid settings for the node and user
                 settings = new FilterNodeColumnSettings(
-                    filterNode, 
+                    filterNode,
                     UserSession.User);
 
                 userSettings[filterNode.FilterNodeID] = settings;
@@ -109,7 +92,7 @@ namespace ShipWorks.Filters.Grid
 
                 // Create the grid settings for the node and null-user (default)
                 settings = new FilterNodeColumnSettings(
-                    filterNode, 
+                    filterNode,
                     null);
 
                 defaultSettings[filterNode.FilterNodeID] = settings;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -18,6 +19,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Email;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
@@ -63,7 +65,7 @@ namespace ShipWorks.Data.Administration
         {
             if (SqlSession.Current.DetermineMissingPermissions(SqlSessionPermissionSet.Upgrade).Count > 0)
             {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
                     MessageHelper.ShowError(owner,
                         string.Format(
@@ -135,7 +137,7 @@ namespace ShipWorks.Data.Administration
                     log.InfoFormat("Replaying upgrade SQL Server after install success needed reboot.");
 
                     // Since we installed it, we can do this without asking
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
                         SqlUtility.SetSql2008CompatibilityLevel(con);
                         SqlUtility.EnableClr(con);
@@ -181,9 +183,10 @@ namespace ShipWorks.Data.Administration
             labelDatabaseList.Text = "";
 
             // Show them a list of databases that will be affected
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlDataAdapter dataAdapter = new SqlDataAdapter("select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')", con);
+                DbDataAdapter dataAdapter = DataAccessAdapter.CreateDataAdapter(
+                    "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')", con);
                 DataTable namesTable = new DataTable();
                 dataAdapter.Fill(namesTable);
 
@@ -535,7 +538,7 @@ namespace ShipWorks.Data.Administration
             if (sqlInstaller.LastExitCode == 0 && SqlSession.Current.IsSqlServer2008OrLater())
             {
                 // Since we installed it, we can do this without asking
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
                     SqlUtility.SetSql2008CompatibilityLevel(con);
                     SqlUtility.EnableClr(con);

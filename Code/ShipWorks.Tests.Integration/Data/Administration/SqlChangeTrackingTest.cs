@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using Interapptive.Shared.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -107,9 +107,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
                     FROM SYS.CHANGE_TRACKING_DATABASES
                     WHERE database_id = DB_ID('{0}')";
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = string.Format(changeTrackingQueryFormat, cmd.Connection.Database);
                     int count = (int) cmd.ExecuteScalar();
@@ -126,9 +126,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         /// </summary>
         private void DisableChangeTrackingOnAllTables()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = string.Format(DisableChangeTrackingOnAllTablesQuery, cmd.Connection.Database);
                     cmd.ExecuteNonQuery();
@@ -141,9 +141,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         /// </summary>
         private void DisableChangeTrackingOnDatabase()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = string.Format("ALTER DATABASE {0} SET CHANGE_TRACKING = OFF", cmd.Connection.Database);
                     cmd.ExecuteNonQuery();
@@ -158,9 +158,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         {
             List<string> tableNames = new List<string>();
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = string.Format(TablesWithChangeTrackingQuery, cmd.Connection.Database);
 

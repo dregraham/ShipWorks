@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters.Content.SqlGeneration;
+﻿using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
 using ShipWorks.Email;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
@@ -14,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// Base condition for entering a child email scope
     /// </summary>
     public class ForChildEmailedCondition : ContainerCondition
-    {        
+    {
         /// <summary>
         /// We introduce a new scope target
         /// </summary>
@@ -55,7 +51,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
                 SqlAdapter.GetTableName(EntityType.EmailOutboundRelationEntity),
                 context.GetColumnName(EmailOutboundRelationFields.RelationType),
                 (int) EmailOutboundRelationType.RelatedObject,
-                context.GetColumnName(EmailOutboundRelationFields.ObjectID),
+                context.GetColumnName(EmailOutboundRelationFields.EntityID),
                 parentScope.TableAlias,
                 context.GetColumnName(parentScope.PrimaryKey)
                 );

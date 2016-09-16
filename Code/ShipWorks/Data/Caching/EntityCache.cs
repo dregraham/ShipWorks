@@ -1,23 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Web.Caching;
-using System.ComponentModel;
 using System.Diagnostics;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using log4net;
-using System.Web;
-using System.Threading;
-using Interapptive.Shared.Utility;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using Interapptive.Shared.Collections;
+using System.Linq;
 using System.Runtime.Caching;
-using ShipWorks.Data.Model;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -216,9 +205,9 @@ namespace ShipWorks.Data.Caching
             policy.SlidingExpiration = TimeSpan.FromMinutes(30);
             policy.ChangeMonitors.Add(new EntityTypeChangeMonitor(changeNotifiers[entityType]));
 
-            #if DEBUG
-                policy.RemovedCallback = new CacheEntryRemovedCallback(OnCacheItemRemoved);
-            #endif
+#if DEBUG
+            policy.RemovedCallback = new CacheEntryRemovedCallback(OnCacheItemRemoved);
+#endif
 
             cache.Set(
                 GetCacheKey(entityID),

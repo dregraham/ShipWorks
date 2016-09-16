@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
+﻿using System.Data.Common;
 using Interapptive.Shared.Utility;
-using Microsoft.SqlServer.Server;
-using ShipWorks.Actions.Tasks.Common;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Common.Data;
-using ShipWorks.SqlServer.General;
-using ShipWorks.SqlServer.Purge;
-using log4net;
 
 namespace ShipWorks.Data.Administration
 {
@@ -31,7 +23,7 @@ namespace ShipWorks.Data.Administration
             {
 
                 // Attach to the connection
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
                     SqlAppLockUtility.RunLockedCommand(con, "ShrinkDatabaseTaskLock", command =>
                         {

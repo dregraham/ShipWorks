@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -299,9 +300,9 @@ namespace ShipWorks.Data.Administration
             progressItem.Starting();
             progressItem.Detail = "Connecting to SQL Server";
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
 
                 cmd.CommandText =
@@ -309,28 +310,32 @@ namespace ShipWorks.Data.Administration
                     " TO DISK = @FilePath      " +
                     " WITH INIT, NOUNLOAD, SKIP, STATS = 2, NOFORMAT";
 
-                cmd.Parameters.AddWithValue("@Database", database);
-                cmd.Parameters.AddWithValue("@FilePath", backupFile);
+                cmd.AddParameterWithValue("@Database", database);
+                cmd.AddParameterWithValue("@FilePath", backupFile);
 
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                con.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                SqlConnection sqlConn = con.AsSqlConnection();
+                if (sqlConn != null)
                 {
-                    Match match = percentRegex.Match(e.Message);
-                    if (match.Success)
+                    sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                     {
-                        progressItem.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
-                        progressItem.Detail = string.Format("{0}% complete", progressItem.PercentComplete);
-                    }
-                };
+                        Match match = percentRegex.Match(e.Message);
+                        if (match.Success)
+                        {
+                            progressItem.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
+                            progressItem.Detail = string.Format("{0}% complete", progressItem.PercentComplete);
+                        }
+                    };
+                }
 
                 progressItem.Detail = "";
 
                 try
                 {
                     // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                    SqlCommandProvider.ExecuteScalar(cmd);
+                    DbCommandProvider.ExecuteScalar(cmd);
                 }
                 catch (SqlException ex)
                 {
@@ -508,7 +513,7 @@ namespace ShipWorks.Data.Administration
 
             log.InfoFormat("Restoring '{0}'...", database.DatabaseName);
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // Change into the database we are restoring into
                 con.ChangeDatabase(database.DatabaseName);
@@ -530,14 +535,14 @@ namespace ShipWorks.Data.Administration
 
                 // We have to move the original logical files to the the file locations we are restoring to.  First we find
                 // the current logical file names.
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = "restore filelistonly from disk = @FilePath";
-                cmd.Parameters.AddWithValue("@FilePath", database.BackupFile);
+                cmd.AddParameterWithValue("@FilePath", database.BackupFile);
 
                 try
                 {
                     // Determine logical names in the backup source
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                     {
                         while (reader.Read())
                         {
@@ -588,9 +593,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Gets the physical locations of the database files of the active database on the connection
         /// </summary>
-        private static void GetPhysicalFileLocations(SqlConnection con, out string targetPhysDb, out string targetPhysLog)
+        private static void GetPhysicalFileLocations(DbConnection con, out string targetPhysDb, out string targetPhysLog)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "sp_helpfile";
             cmd.CommandType = CommandType.StoredProcedure;
 
@@ -599,7 +604,7 @@ namespace ShipWorks.Data.Administration
             targetPhysLog = null;
 
             // Determine current physical files
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
             {
                 while (reader.Read())
                 {
@@ -623,7 +628,7 @@ namespace ShipWorks.Data.Administration
         /// Execute the restore operation
         /// </summary>
         [NDependIgnoreTooManyParams]
-        private void ExecuteSqlRestore(SqlConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
+        private void ExecuteSqlRestore(DbConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
         {
             RestoreStarting?.Invoke(this, EventArgs.Empty);
 
@@ -638,7 +643,7 @@ namespace ShipWorks.Data.Administration
             try
             {
                 // Determine physical names of the backup target
-                SqlCommand cmdRestore = SqlCommandProvider.Create(con);
+                DbCommand cmdRestore = DbCommandProvider.Create(con);
                 cmdRestore.CommandText =
                     "RESTORE DATABASE @Database  " +
                     " FROM DISK = @FilePath      " +
@@ -646,27 +651,31 @@ namespace ShipWorks.Data.Administration
                     "  MOVE '" + sourceLogicalDb + "' TO '" + targetPhysDb + "', " +
                     "  MOVE '" + sourceLogicalLog + "' TO '" + targetPhysLog + "'";
 
-                cmdRestore.Parameters.AddWithValue("@FilePath", backupFilePath);
-                cmdRestore.Parameters.AddWithValue("@Database", databaseName);
+                cmdRestore.AddParameterWithValue("@FilePath", backupFilePath);
+                cmdRestore.AddParameterWithValue("@Database", databaseName);
 
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
-                con.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                SqlConnection sqlConn = con.AsSqlConnection();
+                if (sqlConn != null)
                 {
-                    Match match = percentRegex.Match(e.Message);
-                    if (match.Success)
+                    sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                     {
-                        progress.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
-                        progress.Detail = string.Format("{0}% complete", progress.PercentComplete);
-                    }
-                };
+                        Match match = percentRegex.Match(e.Message);
+                        if (match.Success)
+                        {
+                            progress.PercentComplete = Convert.ToInt32(match.Groups[1].Value);
+                            progress.Detail = string.Format("{0}% complete", progress.PercentComplete);
+                        }
+                    };
+                }
 
                 progress.Detail = "Initiating restore";
 
                 // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
                 cmdRestore.CommandTimeout = 1800;
-                SqlCommandProvider.ExecuteScalar(cmdRestore);
+                DbCommandProvider.ExecuteScalar(cmdRestore);
             }
             finally
             {
@@ -735,9 +744,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private int GetTableCount()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                return (int) SqlCommandProvider.ExecuteScalar(con, "select count(*) from sys.tables");
+                return (int) DbCommandProvider.ExecuteScalar(con, "select count(*) from sys.tables");
             }
         }
 

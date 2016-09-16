@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: Store. </summary>
+	/// <summary>Implements the relations factory for the entity: Store. </summary>
 	public partial class StoreRelations : IRelationFactory
 	{
 		/// <summary>CTor</summary>
@@ -33,8 +33,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.DownloadEntityUsingStoreID);
 			toReturn.Add(this.OrderEntityUsingStoreID);
 			toReturn.Add(this.StatusPresetEntityUsingStoreID);
-
-
 			return toReturn;
 		}
 
@@ -87,448 +85,295 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and AmazonStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - AmazonStore.StoreID
-		/// </summary>
+
+
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and AmazonStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeAmazonStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, AmazonStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and AmeriCommerceStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - AmeriCommerceStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and AmeriCommerceStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeAmeriCommerceStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, AmeriCommerceStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and BigCommerceStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - BigCommerceStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and BigCommerceStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeBigCommerceStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, BigCommerceStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and BuyDotComStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - BuyDotComStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and BuyDotComStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeBuyDotComStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, BuyDotComStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ChannelAdvisorStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - ChannelAdvisorStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ChannelAdvisorStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeChannelAdvisorStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, ChannelAdvisorStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and EbayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - EbayStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and EbayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeEbayStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, EbayStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and EtsyStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - EtsyStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and EtsyStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeEtsyStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, EtsyStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GenericFileStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - GenericFileStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GenericFileStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeGenericFileStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, GenericFileStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GenericModuleStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - GenericModuleStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GenericModuleStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeGenericModuleStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, GenericModuleStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GrouponStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - GrouponStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and GrouponStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeGrouponStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, GrouponStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and InfopiaStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - InfopiaStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and InfopiaStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeInfopiaStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, InfopiaStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and LemonStandStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - LemonStandStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and LemonStandStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeLemonStandStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, LemonStandStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and MarketplaceAdvisorStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - MarketplaceAdvisorStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and MarketplaceAdvisorStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeMarketplaceAdvisorStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, MarketplaceAdvisorStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and NetworkSolutionsStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - NetworkSolutionsStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and NetworkSolutionsStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeNetworkSolutionsStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, NetworkSolutionsStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and NeweggStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - NeweggStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and NeweggStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeNeweggStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, NeweggStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OdbcStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - OdbcStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OdbcStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeOdbcStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, OdbcStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OrderMotionStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - OrderMotionStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and OrderMotionStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeOrderMotionStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, OrderMotionStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and PayPalStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - PayPalStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and PayPalStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypePayPalStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, PayPalStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ProStoresStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - ProStoresStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ProStoresStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeProStoresStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, ProStoresStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SearsStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - SearsStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SearsStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeSearsStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, SearsStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ShopifyStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - ShopifyStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ShopifyStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeShopifyStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, ShopifyStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ShopSiteStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - ShopSiteStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ShopSiteStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeShopSiteStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, ShopSiteStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SparkPayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - SparkPayStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and SparkPayStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeSparkPayStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, SparkPayStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ThreeDCartStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - ThreeDCartStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and ThreeDCartStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeThreeDCartStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, ThreeDCartStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and VolusionStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - VolusionStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and VolusionStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeVolusionStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, VolusionStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and YahooStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Store.StoreID - YahooStore.StoreID
-		/// </summary>
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and YahooStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeYahooStoreEntity
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
 				relation.AddEntityFieldPair(StoreFields.StoreID, YahooStoreFields.StoreID);
-	
-	
-	
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
 		}
+		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
 		/// <returns>relation which makes the current entity a supertype of the subtype entity with the name specified, or null if not applicable/found</returns>
@@ -593,7 +438,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 		
-		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with its supertype, if applicable.</summary>
 		/// <returns>relation which makes the current entity a subtype of its supertype entity or null if not applicable/found</returns>
 		public virtual IEntityRelation GetSuperTypeRelation()
@@ -606,5 +450,18 @@ namespace ShipWorks.Data.Model.RelationClasses
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticStoreRelations
+	{
+		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new StoreRelations().DownloadEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new StoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new StoreRelations().StatusPresetEntityUsingStoreID;
+
+		/// <summary>CTor</summary>
+		static StaticStoreRelations()
+		{
+		}
 	}
 }

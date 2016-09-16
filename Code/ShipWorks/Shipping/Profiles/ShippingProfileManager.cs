@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using ShipWorks.Data.Adapter.Custom;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -116,9 +116,9 @@ namespace ShipWorks.Shipping.Profiles
         {
             // Get the shipment type of the profile
             ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
-            
+
             bool rootDirty = profile.IsDirty;
-            bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList(profile).Any(e => e.IsDirty);
+            bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(profile).Any(e => e.IsDirty);
 
             // Transaction
             using (SqlAdapter adapter = new SqlAdapter(false))

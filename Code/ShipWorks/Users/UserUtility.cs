@@ -1,6 +1,6 @@
 using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
@@ -10,9 +10,9 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
@@ -39,13 +39,13 @@ namespace ShipWorks.Users
         /// </summary>
         public static bool HasAdminUsers()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = "SELECT COUNT(*) FROM [User] WHERE IsAdmin = 1 and IsDeleted = 0 and UserID != @superID";
-                cmd.Parameters.AddWithValue("@superID", SuperUser.UserID);
+                cmd.AddParameterWithValue("@superID", SuperUser.UserID);
 
-                return (int) SqlCommandProvider.ExecuteScalar(cmd) > 0;
+                return (int) DbCommandProvider.ExecuteScalar(cmd) > 0;
             }
         }
 
@@ -251,14 +251,14 @@ namespace ShipWorks.Users
         /// </summary>
         public static long GetShipWorksUserID(string username, string password)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = "SELECT UserID FROM [User] WHERE Username = @Username and Password = @Password and IsDeleted = 0";
-                cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", HashPassword(password));
+                cmd.AddParameterWithValue("@Username", username);
+                cmd.AddParameterWithValue("@Password", HashPassword(password));
 
-                object result = SqlCommandProvider.ExecuteScalar(cmd);
+                object result = DbCommandProvider.ExecuteScalar(cmd);
                 if (result == null || result is DBNull)
                 {
                     return -1;

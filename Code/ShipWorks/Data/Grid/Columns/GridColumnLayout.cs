@@ -1,27 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using Divelements.SandGrid;
-using ShipWorks.Users;
-using System.Windows.Forms;
-using System.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.ComponentModel;
-using System.Diagnostics;
-using ShipWorks.Data.Adapter;
-using System.Data.SqlClient;
+using System.Data;
+using System.Linq;
+using Divelements.SandGrid;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.DetailView;
-using System.Linq;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores;
-using System.Collections;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -104,7 +91,7 @@ namespace ShipWorks.Data.Grid.Columns
             detailViewSettings = new DetailViewSettings(layoutEntity.DetailViewSettings);
 
             columnPositions = new GridColumnPositionList(
-                layoutEntity, 
+                layoutEntity,
                 new List<GridColumnDefinition>(GridColumnDefinitionManager.GetColumnDefinitions(definitionSet)));
         }
 
@@ -168,7 +155,7 @@ namespace ShipWorks.Data.Grid.Columns
 
             // Copy the column settings (Needs to be a lower case "c" here (Dont use the ColumnPositions property) - we want the non-inherited columns, in the case that
             // inheritance is on.
-            columnPositions.CopyFrom(copyFromLayout.columnPositions);            
+            columnPositions.CopyFrom(copyFromLayout.columnPositions);
         }
 
         /// <summary>

@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter.Custom;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
 {
@@ -36,7 +31,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             StoreType storeType = GetStoreType(formattedValue);
             EntityField2 field = formattedValue.PrimaryField;
 
-            if (storeType == null || (object)field == null)
+            if (storeType == null || (object) field == null)
             {
                 return false;
             }
@@ -81,7 +76,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     }
 
                     // Try to get the order from cache
-                    order = (OrderEntity)DataProvider.GetEntity(item.OrderID);
+                    order = (OrderEntity) DataProvider.GetEntity(item.OrderID);
                 }
             }
 
@@ -128,12 +123,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             // TODO
             // Add more as more rollup column support is wanted
 
-            if ((object)childField == null)
+            if ((object) childField == null)
             {
                 return null;
             }
 
-            return new RollupInfo { ChildCount = (int)entity.GetCurrentFieldValue(countField.FieldIndex), ChildField = childField };
+            return new RollupInfo { ChildCount = (int) entity.GetCurrentFieldValue(countField.FieldIndex), ChildField = childField };
         }
 
         /// <summary>
@@ -153,7 +148,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     Cursor.Current = Cursors.WaitCursor;
 
                     List<EntityBase2> children = DataProvider.GetRelatedEntities(
-                        (long)formattedValue.Entity.GetCurrentFieldValue(0),
+                        (long) formattedValue.Entity.GetCurrentFieldValue(0),
                         EntityTypeProvider.GetEntityType(rollupInfo.ChildField.ContainingObjectName));
 
                     if (children.Count == 1)
@@ -208,7 +203,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             var manualField = entity.Fields["IsManual"];
             if (manualField != null)
             {
-                return (bool)manualField.CurrentValue;
+                return (bool) manualField.CurrentValue;
             }
             else
             {

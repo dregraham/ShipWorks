@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
 using System.ComponentModel;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
+using System.Linq;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Data.Grid.Paging
@@ -22,7 +19,7 @@ namespace ShipWorks.Data.Grid.Paging
 
         List<T> entities;
         EntityCollection<T> sortedEntities;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

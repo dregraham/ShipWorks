@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: TemplateFolder. </summary>
+	/// <summary>Implements the relations factory for the entity: TemplateFolder. </summary>
 	public partial class TemplateFolderRelations
 	{
 		/// <summary>CTor</summary>
@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.TemplateEntityUsingParentFolderID);
 			toReturn.Add(this.TemplateFolderEntityUsingParentFolderID);
-
 			toReturn.Add(this.TemplateFolderEntityUsingTemplateFolderIDParentFolderID);
 			return toReturn;
 		}
@@ -84,16 +83,27 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticTemplateFolderRelations
+	{
+		internal static readonly IEntityRelation TemplateEntityUsingParentFolderIDStatic = new TemplateFolderRelations().TemplateEntityUsingParentFolderID;
+		internal static readonly IEntityRelation TemplateFolderEntityUsingParentFolderIDStatic = new TemplateFolderRelations().TemplateFolderEntityUsingParentFolderID;
+		internal static readonly IEntityRelation TemplateFolderEntityUsingTemplateFolderIDParentFolderIDStatic = new TemplateFolderRelations().TemplateFolderEntityUsingTemplateFolderIDParentFolderID;
+
+		/// <summary>CTor</summary>
+		static StaticTemplateFolderRelations()
+		{
+		}
 	}
 }

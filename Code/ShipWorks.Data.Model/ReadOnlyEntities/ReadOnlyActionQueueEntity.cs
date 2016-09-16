@@ -1,7 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code.
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             TriggerDate = source.TriggerDate;
             TriggerComputerID = source.TriggerComputerID;
             InternalComputerLimitedList = source.InternalComputerLimitedList;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             Status = source.Status;
             NextStep = source.NextStep;
             ContextLock = source.ContextLock;
@@ -72,7 +72,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The RowVersion property of the Entity ActionQueue<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ActionQueue"."RowVersion"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte[] RowVersion { get; }
         /// <summary> The ActionID property of the Entity ActionQueue<br/><br/>
@@ -123,12 +123,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String InternalComputerLimitedList { get; }
-        /// <summary> The ObjectID property of the Entity ActionQueue<br/><br/>
+        /// <summary> The EntityID property of the Entity ActionQueue<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ActionQueue"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ObjectID { get; }
+        public Nullable<System.Int64> EntityID { get; }
         /// <summary> The Status property of the Entity ActionQueue<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ActionQueue"."Status"<br/>

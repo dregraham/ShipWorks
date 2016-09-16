@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
 
 namespace ShipWorks.Stores.Content
 {

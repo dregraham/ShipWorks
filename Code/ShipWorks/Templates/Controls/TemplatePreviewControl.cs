@@ -2,31 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
+using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Templates.Processing;
-using ShipWorks.UI;
-using ShipWorks.UI.Utility;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared;
 using ShipWorks.UI.Controls.Html;
-using ShipWorks.Data.Model;
 using ShipWorks.UI.Controls.Html.Core;
-using System.Data.SqlClient;
+using ShipWorks.UI.Utility;
 using SandContextPopup = Divelements.SandRibbon.ContextPopup;
-using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using SandMenu = Divelements.SandRibbon.Menu;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Templates.Controls
 {
@@ -274,11 +273,11 @@ namespace ShipWorks.Templates.Controls
 
             htmlControl.AllowActivation = false;
 
-            #if DEBUG
-                htmlControl.AllowContextMenu = true;
-            #else
+#if DEBUG
+            htmlControl.AllowContextMenu = true;
+#else
                 htmlControl.AllowContextMenu = false;
-            #endif
+#endif
 
             backgroundPanel.Controls.Add(htmlControl);
 
@@ -691,7 +690,7 @@ namespace ShipWorks.Templates.Controls
                 {
                     // We need the filter object pk type to be the object id in the count match
                     // This does a WHERE (FilterPKField(i.e. OrderID) IN SELECT (ObjectID FROM FilterNodeContentDetail WHERE FilterNodeContentID = filterNode.FilterNodeContentID))
-                    bucket.PredicateExpression.AddWithAnd(new FieldCompareSetPredicate(filterPkField, null, FilterNodeContentDetailFields.ObjectID, null, SetOperator.In,
+                    bucket.PredicateExpression.AddWithAnd(new FieldCompareSetPredicate(filterPkField, null, FilterNodeContentDetailFields.EntityID, null, SetOperator.In,
                         FilterNodeContentDetailFields.FilterNodeContentID == filterNode.FilterNodeContentID));
                 }
 
@@ -890,8 +889,8 @@ namespace ShipWorks.Templates.Controls
                 htmlControl.ZoomToExact(zoom);
                 lastAutoZoom = 0;
             }
-        }        
-        
+        }
+
         /// <summary>
         /// Update the GUI controls to reflect the current state of the zoom
         /// </summary>
@@ -920,7 +919,7 @@ namespace ShipWorks.Templates.Controls
 
             zoomCombo.SelectedIndexChanged += new EventHandler(OnZoomSpecific);
         }
-    
+
         /// <summary>
         /// User want to zoom
         /// </summary>

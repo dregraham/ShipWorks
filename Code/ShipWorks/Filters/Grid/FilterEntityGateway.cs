@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Diagnostics;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
-using Interapptive.Shared.Collections;
-using log4net;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Filters.Grid
@@ -107,7 +100,7 @@ namespace ShipWorks.Filters.Grid
             {
                 // Cache for next time
                 filterContentCache[GetCacheKey(sortDefinition)] = new FilterContentCacheEntry { SortedKeys = sortedKeys, FilterCountVersion = filterCount.CountVersion };
-            }*/ 
+            }*/
 
             return sortedKeys;
         }
@@ -131,7 +124,7 @@ namespace ShipWorks.Filters.Grid
 
                 // PrimaryKey in (SELECT ObjectID FROM FilterNodeContentDetail WHERE FilterNodeContentID = @filterNodeContentID)
                 bucket.PredicateExpression.Add(new FieldCompareSetPredicate(
-                    PrimaryKeyField, null, FilterNodeContentDetailFields.ObjectID, null,
+                    PrimaryKeyField, null, FilterNodeContentDetailFields.EntityID, null,
                     SetOperator.In, (FilterNodeContentDetailFields.FilterNodeContentID == filterCount.FilterNodeContentID)));
 
                 return bucket;

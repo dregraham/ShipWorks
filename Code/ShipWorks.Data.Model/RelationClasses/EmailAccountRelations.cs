@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: EmailAccount. </summary>
+	/// <summary>Implements the relations factory for the entity: EmailAccount. </summary>
 	public partial class EmailAccountRelations
 	{
 		/// <summary>CTor</summary>
@@ -31,8 +31,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.OrderMotionStoreEntityUsingOrderMotionEmailAccountID);
-
-
+			toReturn.Add(this.YahooStoreEntityUsingYahooEmailAccountID);
 			return toReturn;
 		}
 
@@ -53,17 +52,42 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between EmailAccountEntity and YahooStoreEntity over the 1:n relation they have, using the relation between the fields:
+		/// EmailAccount.EmailAccountID - YahooStore.YahooEmailAccountID
+		/// </summary>
+		public virtual IEntityRelation YahooStoreEntityUsingYahooEmailAccountID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(EmailAccountFields.EmailAccountID, YahooStoreFields.YahooEmailAccountID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EmailAccountEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("YahooStoreEntity", false);
+				return relation;
+			}
+		}
 
 
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticEmailAccountRelations
+	{
+		internal static readonly IEntityRelation OrderMotionStoreEntityUsingOrderMotionEmailAccountIDStatic = new EmailAccountRelations().OrderMotionStoreEntityUsingOrderMotionEmailAccountID;
+		internal static readonly IEntityRelation YahooStoreEntityUsingYahooEmailAccountIDStatic = new EmailAccountRelations().YahooStoreEntityUsingYahooEmailAccountID;
+
+		/// <summary>CTor</summary>
+		static StaticEmailAccountRelations()
+		{
+		}
 	}
 }
