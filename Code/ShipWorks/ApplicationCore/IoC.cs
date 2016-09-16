@@ -23,7 +23,6 @@ using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
@@ -250,9 +249,6 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipWorksLicense>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<SqlSchemaVersion>()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentTypeSetupActivity>()
