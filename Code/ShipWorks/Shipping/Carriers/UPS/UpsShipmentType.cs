@@ -1,4 +1,9 @@
-﻿using Interapptive.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -28,11 +33,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -867,8 +867,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() => 
-            new UpsShipmentProcessingSynchronizer(ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode));
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new UpsShipmentProcessingSynchronizer();
+        }
 
         /// <summary>
         /// Determines whether [is mail innovations enabled] for OLT.

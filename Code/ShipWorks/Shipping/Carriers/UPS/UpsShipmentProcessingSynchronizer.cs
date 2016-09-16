@@ -1,31 +1,27 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
-    /// <summary>
-    /// Handles Pre-processing of Ups Shipments
-    /// </summary>
     public class UpsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly bool isShipmentTypeConfigured;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsShipmentProcessingSynchronizer"/> class.
         /// </summary>
-        public UpsShipmentProcessingSynchronizer(bool isShipmentTypeConfigured)
-            : this(new UpsAccountRepository(), isShipmentTypeConfigured)
-        {}
+        public UpsShipmentProcessingSynchronizer()
+            : this(new UpsAccountRepository())
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsShipmentProcessingSynchronizer"/> class.
         /// </summary>
-        public UpsShipmentProcessingSynchronizer(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, bool isShipmentTypeConfigured)
+        /// <param name="accountRepository">The account repository.</param>
+        public UpsShipmentProcessingSynchronizer(ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
-            this.isShipmentTypeConfigured = isShipmentTypeConfigured;
         }
 
 
@@ -35,7 +31,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <value>
         ///   <c>true</c> if [has accounts]; otherwise, <c>false</c>.
         /// </value>
-        public bool HasAccounts => isShipmentTypeConfigured && accountRepository.Accounts.Any();
+        public bool HasAccounts
+        {
+            get { return accountRepository.Accounts.Any(); }
+        }
 
         /// <summary>
         /// Saves the first account ID found to the shipment. The presumption here is that a new
@@ -46,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="UpsException">An UPS account must be created to process this shipment.</exception>
         public void SaveAccountToShipment(ShipmentEntity shipment)
         {
-            if (HasAccounts)
+            if (accountRepository.Accounts.Any())
             {
                 // Grab the first account in the repository to set the account ID
                 shipment.Ups.UpsAccountID = accountRepository.Accounts.First().UpsAccountID;
