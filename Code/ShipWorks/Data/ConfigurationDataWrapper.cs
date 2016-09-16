@@ -1,6 +1,6 @@
 ﻿using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Data
 {
@@ -18,8 +18,8 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get the current configuration instance
         /// </summary>
-        public ConfigurationEntity Fetch() =>
-            ConfigurationData.Fetch();
+        public IConfigurationEntity FetchReadOnly() =>
+            ConfigurationData.FetchReadOnly();
 
         /// <summary>
         /// Load the configuration from the database
