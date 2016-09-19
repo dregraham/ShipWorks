@@ -61,6 +61,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response
                 {
                     throw new FedExException("There are no FedEx services available for the selected shipment options.");
                 }
+
+                throw new FedExException("FedEx did not return any rates for the shipment.");
             }
         }
 
