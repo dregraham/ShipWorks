@@ -61,10 +61,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             IEnumerable<UpsServiceRate> serviceRates;
             IEnumerable<UpsTransitTime> transitTimes;
 
+            UpsAccountEntity account = null;
+
             try
             {
-                UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
-                
                 // If there are no UPS Accounts then use the counter rates
                 if (!accountRepository.Accounts.Any() && !shipmentType.IsShipmentTypeRestricted)
                 {
@@ -76,6 +76,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else
                 {
+                    account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
+
                     // Get the transit times and services
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
                     serviceRates = upsApiRateClient.GetRates(shipment, false);
@@ -99,7 +101,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
-                AddUpsPromoFootnoteFactory(account, finalGroup);
+                if (account != null)
+                {
+                    AddUpsPromoFootnoteFactory(account, finalGroup);
+                }
 
                 return finalGroup;
             }
