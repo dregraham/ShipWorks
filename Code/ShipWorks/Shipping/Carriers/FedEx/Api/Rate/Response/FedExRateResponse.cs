@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response
     {
         private readonly CarrierRequest request;
         private readonly RateReply rateReply;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRateResponse" /> class.
         /// </summary>
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response
             this.request = request;
             this.rateReply = rateReply;
         }
-        
+
         /// <summary>
         /// Gets the request the was used to generate the response.
         /// </summary>
@@ -44,9 +44,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response
         /// </summary>
         public void Process()
         {
-            // Nothing really to process within the response other than checking for any errors 
+            // Nothing really to process within the response other than checking for any errors
             if (rateReply.HighestSeverity == NotificationSeverityType.ERROR || rateReply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
+                if (rateReply.Notifications.Any(n => n.Code == "521"))
+                {
+                    throw new FedExException("No services returned due to invalid postal code.");
+                }
+
                 throw new FedExApiCarrierException(rateReply.Notifications);
             }
 
@@ -56,8 +61,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response
                 {
                     throw new FedExException("There are no FedEx services available for the selected shipment options.");
                 }
-
-                throw new FedExException("FedEx did not return any rates for the shipment.");
             }
         }
 
