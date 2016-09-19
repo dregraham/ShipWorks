@@ -1,13 +1,14 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes
+namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     public class UpsPromoFootnoteViewModel : IUpsPromoFootnoteViewModel
     {
