@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using System;
 
@@ -13,15 +14,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
         private const string LiveEndpoint = "https://onlinetools.ups.com/webservices/PromoDiscount";
         private const string TestingEndpoint = "https://wwwcie.ups.com/webservices/PromoDiscount";
         private readonly IUpsPromo upsPromo;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly LocaleType locale;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="upsPromo"></param>
-        public UpsApiPromoClient(IUpsPromo upsPromo)
+        public UpsApiPromoClient(IUpsPromo upsPromo, ILogEntryFactory logEntryFactory)
         {
             this.upsPromo = upsPromo;
+            this.logEntryFactory = logEntryFactory;
             locale = new LocaleType()
             {
                 CountryCode = upsPromo.CountryCode,
@@ -52,7 +54,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 
             try
             {
-                using (PromoDiscountService service = new PromoDiscountService())
+                IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UPS, "GetPromoAgreement", LogActionType.Other);
+
+                using (PromoDiscountService service = new PromoDiscountService(apiLogEntry))
                 {
                     // Point the service to the correct endpoint
                     service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;
@@ -97,7 +101,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo.Api
 
             try
             {
-                using (PromoDiscountService service = new PromoDiscountService())
+                IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UPS, "AcceptPromoAgreement", LogActionType.Other);
+                using (PromoDiscountService service = new PromoDiscountService(apiLogEntry))
                 {
                     // Point the service to the correct endpoint
                     service.Url = UseTestServer ? TestingEndpoint : LiveEndpoint;

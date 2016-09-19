@@ -16,6 +16,7 @@
 		"ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService", "CustomerService",
 		"ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService", "EwsLabelService",
 		"ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration", "RegisterMgrAcctService",
+		"ShipWorks.Shipping.Carriers.UPS.WebServices.Promo", "PromoDiscountService",
 		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping", "ShippingService",
 		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order", "OrderService",
 		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory", "InventoryService",
@@ -46,7 +47,6 @@
 using System.Xml;
 using System.Web.Services.Protocols;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 
 <#
