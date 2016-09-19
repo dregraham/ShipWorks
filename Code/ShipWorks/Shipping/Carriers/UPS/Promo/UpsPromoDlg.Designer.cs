@@ -33,13 +33,15 @@
             this.decline = new System.Windows.Forms.Button();
             this.acceptTerms = new System.Windows.Forms.RadioButton();
             this.declineTerms = new System.Windows.Forms.RadioButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.promoDescription = new System.Windows.Forms.Label();
             this.termsLink = new ShipWorks.UI.Controls.LinkControl();
             this.SuspendLayout();
             // 
             // remindMe
             // 
             this.remindMe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remindMe.Location = new System.Drawing.Point(272, 447);
+            this.remindMe.Location = new System.Drawing.Point(272, 138);
             this.remindMe.Name = "remindMe";
             this.remindMe.Size = new System.Drawing.Size(75, 23);
             this.remindMe.TabIndex = 2;
@@ -51,7 +53,7 @@
             // 
             this.enroll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.enroll.Enabled = false;
-            this.enroll.Location = new System.Drawing.Point(353, 447);
+            this.enroll.Location = new System.Drawing.Point(353, 138);
             this.enroll.Name = "enroll";
             this.enroll.Size = new System.Drawing.Size(75, 23);
             this.enroll.TabIndex = 3;
@@ -62,7 +64,7 @@
             // decline
             // 
             this.decline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.decline.Location = new System.Drawing.Point(191, 447);
+            this.decline.Location = new System.Drawing.Point(191, 138);
             this.decline.Name = "decline";
             this.decline.Size = new System.Drawing.Size(75, 23);
             this.decline.TabIndex = 4;
@@ -73,11 +75,11 @@
             // acceptTerms
             // 
             this.acceptTerms.AutoSize = true;
-            this.acceptTerms.Location = new System.Drawing.Point(15, 371);
+            this.acceptTerms.Location = new System.Drawing.Point(15, 83);
             this.acceptTerms.Name = "acceptTerms";
-            this.acceptTerms.Size = new System.Drawing.Size(211, 17);
+            this.acceptTerms.Size = new System.Drawing.Size(206, 17);
             this.acceptTerms.TabIndex = 6;
-            this.acceptTerms.Text = "Yes, I accept the Terms and Conditions";
+            this.acceptTerms.Text = "Yes, I accept the terms and conditions";
             this.acceptTerms.UseVisualStyleBackColor = true;
             this.acceptTerms.CheckedChanged += new System.EventHandler(this.OnAcceptTermsChanged);
             // 
@@ -85,13 +87,33 @@
             // 
             this.declineTerms.AutoSize = true;
             this.declineTerms.Checked = true;
-            this.declineTerms.Location = new System.Drawing.Point(15, 394);
+            this.declineTerms.Location = new System.Drawing.Point(15, 106);
             this.declineTerms.Name = "declineTerms";
-            this.declineTerms.Size = new System.Drawing.Size(239, 17);
+            this.declineTerms.Size = new System.Drawing.Size(235, 17);
             this.declineTerms.TabIndex = 7;
             this.declineTerms.TabStop = true;
-            this.declineTerms.Text = "No, I do not accept the Terms and conditions";
+            this.declineTerms.Text = "No, I do not accept the terms and conditions";
             this.declineTerms.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(352, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "You are eligible for a ShipWorks exclusive promotional price!";
+            // 
+            // promoDescription
+            // 
+            this.promoDescription.AutoSize = true;
+            this.promoDescription.Location = new System.Drawing.Point(12, 31);
+            this.promoDescription.MaximumSize = new System.Drawing.Size(400, 0);
+            this.promoDescription.Name = "promoDescription";
+            this.promoDescription.Size = new System.Drawing.Size(89, 13);
+            this.promoDescription.TabIndex = 9;
+            this.promoDescription.Text = "promoDescription";
             // 
             // termsLink
             // 
@@ -99,19 +121,21 @@
             this.termsLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.termsLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.termsLink.ForeColor = System.Drawing.Color.Blue;
-            this.termsLink.Location = new System.Drawing.Point(12, 355);
+            this.termsLink.Location = new System.Drawing.Point(13, 67);
             this.termsLink.Name = "termsLink";
-            this.termsLink.Size = new System.Drawing.Size(110, 13);
+            this.termsLink.Size = new System.Drawing.Size(108, 13);
             this.termsLink.TabIndex = 5;
-            this.termsLink.Text = "Terms and Conditions";
+            this.termsLink.Text = "Terms and conditions";
             this.termsLink.Click += new System.EventHandler(this.OnTermsClick);
             // 
             // UpsPromoDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 478);
+            this.ClientSize = new System.Drawing.Size(443, 169);
             this.ControlBox = false;
+            this.Controls.Add(this.promoDescription);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.declineTerms);
             this.Controls.Add(this.acceptTerms);
             this.Controls.Add(this.termsLink);
@@ -121,7 +145,7 @@
             this.Name = "UpsPromoDlg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Activate Ups Promo";
+            this.Text = "Activate UPS Promo";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,5 +159,7 @@
         private UI.Controls.LinkControl termsLink;
         private System.Windows.Forms.RadioButton acceptTerms;
         private System.Windows.Forms.RadioButton declineTerms;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label promoDescription;
     }
 }

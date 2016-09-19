@@ -18,6 +18,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         {
             this.promo = promo;
             InitializeComponent();
+
+            GetTerms();
+            promoDescription.Text = terms.Description;
         }
 
         /// <summary>

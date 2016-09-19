@@ -100,6 +100,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
             this.wizardPagePromo = new ShipWorks.UI.Wizard.WizardPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.promoControls = new System.Windows.Forms.Panel();
             this.promoTermsLink = new System.Windows.Forms.LinkLabel();
             this.promoNo = new System.Windows.Forms.RadioButton();
@@ -133,8 +134,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageOpenAccountPickupLocation.SuspendLayout();
             this.wizardPageFinishCreateAccountRegistrationFailed.SuspendLayout();
             this.wizardPagePromo.SuspendLayout();
-            this.wizardPageInvoiceAuthentication.SuspendLayout();
             this.promoControls.SuspendLayout();
+            this.wizardPageInvoiceAuthentication.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageRates);
+            this.mainPanel.Controls.Add(this.wizardPagePromo);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -870,43 +871,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelCreateAccountRegistrationFailed1.TabIndex = 3;
             this.labelCreateAccountRegistrationFailed1.Text = "You have successfully created a UPS account within ShipWorks!";
             // 
-            // wizardPageInvoiceAuthentication
-            // 
-            this.wizardPageInvoiceAuthentication.Controls.Add(this.upsInvoiceAuthorizationControl);
-            this.wizardPageInvoiceAuthentication.Controls.Add(this.invoiceAuthenticationInstructions);
-            this.wizardPageInvoiceAuthentication.Description = "Account invoice authentication required";
-            this.wizardPageInvoiceAuthentication.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageInvoiceAuthentication.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageInvoiceAuthentication.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageInvoiceAuthentication.Name = "wizardPageInvoiceAuthentication";
-            this.wizardPageInvoiceAuthentication.Size = new System.Drawing.Size(579, 474);
-            this.wizardPageInvoiceAuthentication.TabIndex = 0;
-            this.wizardPageInvoiceAuthentication.Title = "Account Registration";
-            this.wizardPageInvoiceAuthentication.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInvoiceAuthentication);
-            this.wizardPageInvoiceAuthentication.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnStepIntoInvoiceAuthentication);
-            // 
-            // upsInvoiceAuthorizationControl
-            // 
-            this.upsInvoiceAuthorizationControl.Location = new System.Drawing.Point(23, 54);
-            this.upsInvoiceAuthorizationControl.Name = "upsInvoiceAuthorizationControl";
-            this.upsInvoiceAuthorizationControl.Size = new System.Drawing.Size(357, 135);
-            this.upsInvoiceAuthorizationControl.TabIndex = 0;
-            // 
-            // invoiceAuthenticationInstructions
-            // 
-            this.invoiceAuthenticationInstructions.ForeColor = System.Drawing.Color.Black;
-            this.invoiceAuthenticationInstructions.Location = new System.Drawing.Point(20, 5);
-            this.invoiceAuthenticationInstructions.Name = "invoiceAuthenticationInstructions";
-            this.invoiceAuthenticationInstructions.Size = new System.Drawing.Size(402, 49);
-            this.invoiceAuthenticationInstructions.TabIndex = 21;
-            this.invoiceAuthenticationInstructions.Text = "You must validate your account by providing information from a valid invoice.\r\n\r\n" +
-    "You must use any of the last 3 invoices issued within the past {days} days.";
-            // 
             // wizardPagePromo
             // 
+            this.wizardPagePromo.Controls.Add(this.label2);
             this.wizardPagePromo.Controls.Add(this.promoControls);
             this.wizardPagePromo.Controls.Add(this.promoDescription);
-            this.wizardPagePromo.Description = "You are eligible for a Shipworks exclusive promotional price!";
+            this.wizardPagePromo.Description = "ShipWorks exclusive promotion from UPS.";
             this.wizardPagePromo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPagePromo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePromo.Location = new System.Drawing.Point(0, 0);
@@ -917,12 +887,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPagePromo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnWizardPagePromoStepNext);
             this.wizardPagePromo.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnWizardPagePromoSteppingInto);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(23, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(347, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "You are eligible for a ShipWorks exclusive promotional price!";
+            // 
             // promoControls
             // 
             this.promoControls.Controls.Add(this.promoTermsLink);
             this.promoControls.Controls.Add(this.promoNo);
             this.promoControls.Controls.Add(this.promoYes);
-            this.promoControls.Location = new System.Drawing.Point(23, 29);
+            this.promoControls.Location = new System.Drawing.Point(23, 63);
             this.promoControls.Name = "promoControls";
             this.promoControls.Size = new System.Drawing.Size(328, 100);
             this.promoControls.TabIndex = 5;
@@ -930,7 +910,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // promoTermsLink
             // 
             this.promoTermsLink.AutoSize = true;
-            this.promoTermsLink.Location = new System.Drawing.Point(3, 4);
+            this.promoTermsLink.Location = new System.Drawing.Point(1, 4);
             this.promoTermsLink.Name = "promoTermsLink";
             this.promoTermsLink.Size = new System.Drawing.Size(110, 13);
             this.promoTermsLink.TabIndex = 1;
@@ -965,11 +945,45 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // promoDescription
             // 
-            this.promoDescription.Location = new System.Drawing.Point(26, 5);
+            this.promoDescription.AutoSize = true;
+            this.promoDescription.Location = new System.Drawing.Point(23, 27);
+            this.promoDescription.MaximumSize = new System.Drawing.Size(500, 0);
             this.promoDescription.Name = "promoDescription";
-            this.promoDescription.Size = new System.Drawing.Size(530, 21);
+            this.promoDescription.Size = new System.Drawing.Size(90, 13);
             this.promoDescription.TabIndex = 0;
-            this.promoDescription.Text = "label2";
+            this.promoDescription.Text = "promoDescription";
+            // 
+            // wizardPageInvoiceAuthentication
+            // 
+            this.wizardPageInvoiceAuthentication.Controls.Add(this.upsInvoiceAuthorizationControl);
+            this.wizardPageInvoiceAuthentication.Controls.Add(this.invoiceAuthenticationInstructions);
+            this.wizardPageInvoiceAuthentication.Description = "Account invoice authentication required";
+            this.wizardPageInvoiceAuthentication.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageInvoiceAuthentication.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageInvoiceAuthentication.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageInvoiceAuthentication.Name = "wizardPageInvoiceAuthentication";
+            this.wizardPageInvoiceAuthentication.Size = new System.Drawing.Size(579, 474);
+            this.wizardPageInvoiceAuthentication.TabIndex = 0;
+            this.wizardPageInvoiceAuthentication.Title = "Account Registration";
+            this.wizardPageInvoiceAuthentication.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInvoiceAuthentication);
+            this.wizardPageInvoiceAuthentication.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnStepIntoInvoiceAuthentication);
+            // 
+            // upsInvoiceAuthorizationControl
+            // 
+            this.upsInvoiceAuthorizationControl.Location = new System.Drawing.Point(23, 54);
+            this.upsInvoiceAuthorizationControl.Name = "upsInvoiceAuthorizationControl";
+            this.upsInvoiceAuthorizationControl.Size = new System.Drawing.Size(357, 135);
+            this.upsInvoiceAuthorizationControl.TabIndex = 0;
+            // 
+            // invoiceAuthenticationInstructions
+            // 
+            this.invoiceAuthenticationInstructions.ForeColor = System.Drawing.Color.Black;
+            this.invoiceAuthenticationInstructions.Location = new System.Drawing.Point(20, 5);
+            this.invoiceAuthenticationInstructions.Name = "invoiceAuthenticationInstructions";
+            this.invoiceAuthenticationInstructions.Size = new System.Drawing.Size(402, 49);
+            this.invoiceAuthenticationInstructions.TabIndex = 21;
+            this.invoiceAuthenticationInstructions.Text = "You must validate your account by providing information from a valid invoice.\r\n\r\n" +
+    "You must use any of the last 3 invoices issued within the past {days} days.";
             // 
             // UpsSetupWizard
             // 
@@ -1041,10 +1055,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).EndInit();
             this.wizardPageOpenAccountPickupLocation.ResumeLayout(false);
             this.wizardPageFinishCreateAccountRegistrationFailed.ResumeLayout(false);
-            this.wizardPageInvoiceAuthentication.ResumeLayout(false);
             this.wizardPagePromo.ResumeLayout(false);
+            this.wizardPagePromo.PerformLayout();
             this.promoControls.ResumeLayout(false);
             this.promoControls.PerformLayout();
+            this.wizardPageInvoiceAuthentication.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1126,5 +1141,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private UI.Wizard.WizardPage wizardPageInvoiceAuthentication;
         private UpsInvoiceAuthorizationControl upsInvoiceAuthorizationControl;
         private System.Windows.Forms.Label invoiceAuthenticationInstructions;
+        private System.Windows.Forms.Label label2;
     }
 }
