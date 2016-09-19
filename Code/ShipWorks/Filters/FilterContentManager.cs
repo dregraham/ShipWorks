@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -14,9 +15,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -170,17 +171,17 @@ namespace ShipWorks.Filters
         /// </summary>
         private static List<FilterCount> GetFilterCountList()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = @"
                     SELECT n.FilterNodeID, c.FilterNodeContentID, n.Purpose, c.Status, c.Count, c.CountVersion, CAST(c.RowVersion as bigint) AS 'RowVersion', c.Cost
                         FROM FilterNode n WITH (NOLOCK) INNER JOIN FilterNodeContent c WITH (NOLOCK) ON n.FilterNodeContentID = c.FilterNodeContentID
                         WHERE c.RowVersion > @MaxRowVersion";
-                    cmd.Parameters.AddWithValue("@MaxRowVersion", maxTimestamp);
+                    cmd.AddParameterWithValue("@MaxRowVersion", maxTimestamp);
 
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                     {
                         List<FilterCount> filterCountList = new List<FilterCount>();
 
@@ -218,16 +219,16 @@ namespace ShipWorks.Filters
 
             List<long> okList = new List<long>();
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // Select all the counts that are in the count list and not abandoned
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = string.Format(@"
                     SELECT FilterNodeContentID
                     FROM FilterNodeContent
                     WHERE FilterNodeContentID IN (SELECT FilterNodeContentID FROM FilterNode) AND FilterNodeContentID IN ({0})", ArrayUtility.FormatCommaSeparatedList(counts.Select(c => c.FilterNodeContentID).ToArray()));
 
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                 {
                     while (reader.Read())
                     {
@@ -276,9 +277,9 @@ namespace ShipWorks.Filters
         /// </summary>
         private static bool IsUpdateCountsNeeded()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                return (SqlCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM FilterNodeContentDirty WITH (NOLOCK)") != null);
+                return (DbCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM FilterNodeContentDirty WITH (NOLOCK)") != null);
             }
         }
 
@@ -287,9 +288,9 @@ namespace ShipWorks.Filters
         /// </summary>
         private static bool IsUpdateQuickFilterCountsNeeded()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                return (SqlCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM QuickFilterNodeContentDirty WITH (NOLOCK)") != null);
+                return (DbCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM QuickFilterNodeContentDirty WITH (NOLOCK)") != null);
             }
         }
 
@@ -372,7 +373,7 @@ namespace ShipWorks.Filters
             ApplicationBusyToken token = (ApplicationBusyToken)castedState[1];
 
             // Get a connection that will not timeout
-            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
                 // Create a new connection
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
@@ -467,7 +468,7 @@ namespace ShipWorks.Filters
             ApplicationBusyToken token = (ApplicationBusyToken)castedState[0];
 
             // Get a connection that will not timeout
-            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
                 // Create a new connection
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
@@ -514,7 +515,7 @@ namespace ShipWorks.Filters
             log.InfoFormat("Deleting abandoned filter counts....");
 
             // Get a connection that will not timeout
-            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
                 // Create a new connection
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))

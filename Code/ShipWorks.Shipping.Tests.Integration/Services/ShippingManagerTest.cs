@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -220,14 +221,24 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void CreateShipment_DelegatesToValidatedAddressManager_ToCopyValidatedAddresses()
+        public void CreateShipment_CopiesValidatedAddresses()
         {
-            mock.Override<IValidatedAddressManager>();
+            Create.Entity<ValidatedAddressEntity>()
+                .Set(x => x.City, "Foo")
+                .Set(x => x.ConsumerID, context.Order.OrderID)
+                .Set(x => x.AddressPrefix, "Ship")
+                .Save();
+
+            Create.Entity<ValidatedAddressEntity>()
+                .Set(x => x.City, "Bar")
+                .Set(x => x.ConsumerID, context.Order.OrderID)
+                .Set(x => x.AddressPrefix, "Bill")
+                .Save();
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 
-            mock.Mock<IValidatedAddressManager>()
-                .Verify(x => x.CopyValidatedAddresses(It.IsAny<SqlAdapter>(), context.Order.OrderID, "Ship", shipment.ShipmentID, "Ship"));
+            Assert.True(shipment.ValidatedAddress.Any(x => x.City == "Foo"));
+            Assert.True(shipment.ValidatedAddress.None(x => x.City == "Bar"));
         }
 
         [Fact]
@@ -941,7 +952,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Create.Entity<FilterNodeContentDetailEntity>()
                 .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
-                .Set(x => x.ObjectID, objectID)
+                .Set(x => x.EntityID, objectID)
                 .Save();
 
             return Create.Entity<FilterNodeEntity>()

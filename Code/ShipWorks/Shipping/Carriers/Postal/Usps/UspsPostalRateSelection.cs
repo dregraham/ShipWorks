@@ -56,8 +56,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ArgumentNullException("shipment");
             }
 
-            return ServiceType == (PostalServiceType) shipment.Postal.Service && 
-                ConfirmationType == (PostalConfirmationType) shipment.Postal.Confirmation;
+            // For international flat rate envelope, customers get delivery confirmation for free.  So that they know this,
+            // we display it in the service control drop down.  However, we do not receive a confirmation type in the rate 
+            // from USPS.  
+            // So check the available confirmation types for the shipment, and if there is only 1 and it matches the shipment
+            // selected confirmation type, we have a match in this scenario.
+            // We'll check this OR'd with the actual check between the rate and shipment confirmation.
+            List<PostalConfirmationType> availableConfirmationTypes = new UspsShipmentType().GetAvailableConfirmationTypes(shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service, (PostalPackagingType) shipment.Postal.PackagingType);
+            bool confirmationMatches = ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation ||
+                                       (availableConfirmationTypes.Count == 1 && availableConfirmationTypes.First() == (PostalConfirmationType) shipment.Postal.Confirmation);
+
+            return ServiceType == (PostalServiceType) shipment.Postal.Service && confirmationMatches;
         }
     }
 }

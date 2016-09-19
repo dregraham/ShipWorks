@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Data;
 using log4net;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.HelperClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing;
-using ShipWorks.Data;
-using System.Diagnostics;
-using ShipWorks.Data.Model;
-using System.ComponentModel;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Adapter.Custom;
-using System.Data;
-using Interapptive.Shared.Data;
 
 namespace ShipWorks.Templates
 {
@@ -342,7 +338,7 @@ namespace ShipWorks.Templates
         }
 
         /// <summary>
-        /// Create the XSL content for importing 
+        /// Create the XSL content for importing
         /// </summary>
         private string CreateSnippetsImportXsl()
         {

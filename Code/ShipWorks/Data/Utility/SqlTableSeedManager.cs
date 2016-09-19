@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using log4net;
+using System.Data.Common;
 using Interapptive.Shared.Data;
+using log4net;
 
 namespace ShipWorks.Data.Utility
 {
@@ -20,16 +16,16 @@ namespace ShipWorks.Data.Utility
         /// <summary>
         /// Get the current collection of seeds from identity columns
         /// </summary>
-        public static List<SqlTableSeed> GetSeeds(SqlConnection con)
+        public static List<SqlTableSeed> GetSeeds(DbConnection con)
         {
             List<SqlTableSeed> seeds = new List<SqlTableSeed>();
 
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = @"
                 select OBJECT_ID(t.name, 'TABLE') as object_id, t.name as table_name, c.seed_value, c.last_value
                   from sys.tables t inner join sys.identity_columns c on c.object_id = t.object_id";
 
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
             {
                 while (reader.Read())
                 {

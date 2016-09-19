@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: User. </summary>
+	/// <summary>Implements the relations factory for the entity: User. </summary>
 	public partial class UserRelations
 	{
 		/// <summary>CTor</summary>
@@ -37,12 +37,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.GridColumnFormatEntityUsingUserID);
 			toReturn.Add(this.NoteEntityUsingUserID);
 			toReturn.Add(this.PermissionEntityUsingUserID);
-			toReturn.Add(this.ShipmentEntityUsingVoidedUserID);
 			toReturn.Add(this.ShipmentEntityUsingProcessedUserID);
+			toReturn.Add(this.ShipmentEntityUsingVoidedUserID);
 			toReturn.Add(this.TemplateUserSettingsEntityUsingUserID);
 			toReturn.Add(this.UserColumnSettingsEntityUsingUserID);
 			toReturn.Add(this.UserSettingsEntityUsingUserID);
-
 			return toReturn;
 		}
 
@@ -154,21 +153,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between UserEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
-		/// User.UserID - Shipment.VoidedUserID
-		/// </summary>
-		public virtual IEntityRelation ShipmentEntityUsingVoidedUserID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
-				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.VoidedUserID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between UserEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
 		/// User.UserID - Shipment.ProcessedUserID
 		/// </summary>
 		public virtual IEntityRelation ShipmentEntityUsingProcessedUserID
@@ -177,6 +161,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
 				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.ProcessedUserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between UserEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// User.UserID - Shipment.VoidedUserID
+		/// </summary>
+		public virtual IEntityRelation ShipmentEntityUsingVoidedUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.VoidedUserID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
 				return relation;
@@ -232,16 +231,36 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticUserRelations
+	{
+		internal static readonly IEntityRelation AuditEntityUsingUserIDStatic = new UserRelations().AuditEntityUsingUserID;
+		internal static readonly IEntityRelation DownloadEntityUsingUserIDStatic = new UserRelations().DownloadEntityUsingUserID;
+		internal static readonly IEntityRelation FilterLayoutEntityUsingUserIDStatic = new UserRelations().FilterLayoutEntityUsingUserID;
+		internal static readonly IEntityRelation FilterNodeColumnSettingsEntityUsingUserIDStatic = new UserRelations().FilterNodeColumnSettingsEntityUsingUserID;
+		internal static readonly IEntityRelation GridColumnFormatEntityUsingUserIDStatic = new UserRelations().GridColumnFormatEntityUsingUserID;
+		internal static readonly IEntityRelation NoteEntityUsingUserIDStatic = new UserRelations().NoteEntityUsingUserID;
+		internal static readonly IEntityRelation PermissionEntityUsingUserIDStatic = new UserRelations().PermissionEntityUsingUserID;
+		internal static readonly IEntityRelation ShipmentEntityUsingProcessedUserIDStatic = new UserRelations().ShipmentEntityUsingProcessedUserID;
+		internal static readonly IEntityRelation ShipmentEntityUsingVoidedUserIDStatic = new UserRelations().ShipmentEntityUsingVoidedUserID;
+		internal static readonly IEntityRelation TemplateUserSettingsEntityUsingUserIDStatic = new UserRelations().TemplateUserSettingsEntityUsingUserID;
+		internal static readonly IEntityRelation UserColumnSettingsEntityUsingUserIDStatic = new UserRelations().UserColumnSettingsEntityUsingUserID;
+		internal static readonly IEntityRelation UserSettingsEntityUsingUserIDStatic = new UserRelations().UserSettingsEntityUsingUserID;
+
+		/// <summary>CTor</summary>
+		static StaticUserRelations()
+		{
+		}
 	}
 }

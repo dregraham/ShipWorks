@@ -1,4 +1,10 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
@@ -15,9 +21,9 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
@@ -40,12 +46,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -243,6 +243,11 @@ namespace ShipWorks.Shipping
             // Go ahead and create customs if needed
             lifetimeScope.Resolve<ICustomsManager>().GenerateCustomsItems(shipment);
 
+            IEnumerable<ValidatedAddressEntity> addressSuggestions = lifetimeScope.Resolve<IValidatedAddressScope>()
+                .LoadValidatedAddresses(shipment.OrderID, "Ship")
+                .Select(EntityUtility.CloneAsNew);
+            shipment.ValidatedAddress.AddRange(addressSuggestions);
+
             if (shipment.ShipSenseStatus != (int) ShipSenseStatus.NotApplied)
             {
                 // Make sure the status is correct in case a rule/profile changed a shipment after ShipSense was applied
@@ -253,10 +258,7 @@ namespace ShipWorks.Shipping
             // Explicitly save the shipment here to delete any entities in the Removed buckets of the
             // entity collections; after applying ShipSense (where customs items are first loaded in
             // this path), and entities were removed, they were still being persisted to the database.
-            SaveShipment(shipment,
-                lifetimeScope.Resolve<IOrderManager>(),
-                shipmentTypeManager,
-                lifetimeScope.Resolve<IValidatedAddressManager>());
+            SaveShipment(shipment, lifetimeScope.Resolve<IOrderManager>(), shipmentTypeManager);
 
             return shipment;
         }
@@ -392,8 +394,7 @@ namespace ShipWorks.Shipping
             {
                 SaveShipment(shipment,
                     lifetimeScope.Resolve<IOrderManager>(),
-                    lifetimeScope.Resolve<IShipmentTypeManager>(),
-                    lifetimeScope.Resolve<IValidatedAddressManager>());
+                    lifetimeScope.Resolve<IShipmentTypeManager>());
             }
         }
 
@@ -401,7 +402,7 @@ namespace ShipWorks.Shipping
         /// Save the given shipment.
         /// </summary>
         [NDependIgnoreLongMethod]
-        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager, IShipmentTypeManager shipmentTypeManager, IValidatedAddressManager validatedAddressManager)
+        private static void SaveShipment(ShipmentEntity shipment, IOrderManager orderManager, IShipmentTypeManager shipmentTypeManager)
         {
             // Ensure the latest ShipSense data is recorded for this shipment before saving
             SaveShipSenseFieldsToShipment(shipment, orderManager, shipmentTypeManager);
@@ -416,7 +417,7 @@ namespace ShipWorks.Shipping
                 shipment.Order = null;
 
                 // Get all the recursive entities that have the potential to be saved
-                List<IEntity2> saveList = new ObjectGraphUtils().ProduceTopologyOrderedList(shipment);
+                List<IEntity2> saveList = new ObjectGraphUtils().ProduceTopologyOrderedList<IEntity2>(shipment);
 
                 // Determine if any of them are dirty
                 bool anyDirty = saveList.Any(e => e.IsDirty);
@@ -450,8 +451,6 @@ namespace ShipWorks.Shipping
                 try
                 {
                     adapter.SaveAndRefetch(shipment);
-
-                    validatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
 
                     // Delete everything that had been tracked to be deleted
                     foreach (IEntity2 entity in deleteList)
@@ -864,7 +863,11 @@ namespace ShipWorks.Shipping
                     }
 
                     // Void the shipment in tango
-                    TangoWebClient.VoidShipment(store, shipment);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
+                        tangoWebClient.VoidShipment(store, shipment);
+                    }
 
                     // Re-throw the insurance exception if there was one
                     if (voidInsuranceException != null)
@@ -1233,7 +1236,8 @@ namespace ShipWorks.Shipping
                     // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                     if (!shipmentType.ProcessingCompletesExternally)
                     {
-                        shipment.OnlineShipmentID = new TangoWebClientFactory().CreateWebClient()
+                        lifetimeScope.Resolve<ITangoWebClientFactory>()
+                            .CreateWebClient()
                             .LogShipment(storeEntity, shipment);
 
                         log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);

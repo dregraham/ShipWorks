@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.Xml;
 using Interapptive.Shared.Utility;
-using System.Xml.XPath;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
-using System.ComponentModel;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Templates.Media
 {
@@ -35,7 +33,7 @@ namespace ShipWorks.Templates.Media
 
         /// <summary>
         /// Initialize LabelSheetManager
-        /// </summary> 
+        /// </summary>
         public static void InitializeForCurrentSession()
         {
             sheetSynchronizer = new TableSynchronizer<LabelSheetEntity>();
@@ -173,7 +171,7 @@ namespace ShipWorks.Templates.Media
                 EnsureBuiltinBrand(brand).Sheets.Add(sheet);
             }
 
-            builtinBrands.Sort(new Comparison<LabelSheetBrand>(delegate(LabelSheetBrand left, LabelSheetBrand right)
+            builtinBrands.Sort(new Comparison<LabelSheetBrand>(delegate (LabelSheetBrand left, LabelSheetBrand right)
             {
                 return left.Name.CompareTo(right.Name);
             }));

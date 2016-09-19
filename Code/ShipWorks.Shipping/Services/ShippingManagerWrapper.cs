@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -7,7 +8,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -107,8 +107,6 @@ namespace ShipWorks.Shipping.Services
             {
                 try
                 {
-                    shipment.ResetDirtyFlagOnUnchangedEntityFields();
-
                     // Force the shipment to look dirty so it's forced to save. This is to make sure that if any other
                     // changes had been made by other users we pick up the concurrency violation.
                     if (forceSave && !shipment.IsDirty)
@@ -197,15 +195,12 @@ namespace ShipWorks.Shipping.Services
 
             configuration?.Invoke(copy);
 
-            // save
+            IEnumerable<ValidatedAddressEntity> addressSuggestions = validatedAddressScope
+                .LoadValidatedAddresses(shipment.OrderID, "Ship")
+                .Select(EntityUtility.CloneAsNew);
+            shipment.ValidatedAddress.AddRange(addressSuggestions);
+
             ShippingManager.SaveShipment(copy);
-
-            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
-            {
-                validatedAddressManager.CopyValidatedAddresses(sqlAdapter, shipment.ShipmentID, "Ship", copy.ShipmentID, "Ship");
-
-                sqlAdapter.Commit();
-            }
 
             return copy;
         }

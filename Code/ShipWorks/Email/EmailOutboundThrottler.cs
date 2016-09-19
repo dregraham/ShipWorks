@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using Rebex.Net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
 using System.Threading;
 using log4net;
-using System.Diagnostics;
+using Rebex.Net;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Email
 {

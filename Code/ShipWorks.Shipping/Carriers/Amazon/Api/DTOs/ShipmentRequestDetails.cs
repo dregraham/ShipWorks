@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 {
@@ -14,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public CurrencyAmount Insurance { get; set; }
         public DateTime? MustArriveByDate { get; set; }
         public bool SendDateMustArriveBy { get; set; }
-        public ShippingServiceOptions ShippingServiceOptions { get; set; }
+        public virtual ShippingServiceOptions ShippingServiceOptions { get; set; }
     }
 
     public class CurrencyAmount

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using Interapptive.Shared;
@@ -7,6 +8,7 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data.Connection
@@ -156,9 +158,9 @@ namespace ShipWorks.Data.Connection
         {
             try
             {
-                using (SqlConnection con = Current.OpenConnection())
+                using (DbConnection con = Current.OpenConnection())
                 {
-                    return SqlCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
+                    return DbCommandProvider.ExecuteScalar<Guid>(con, "exec GetDatabaseGuid");
                 }
             }
             catch (Exception ex)
@@ -183,9 +185,9 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Open a connection using the current properties of the SqlSession
         /// </summary>
-        public SqlConnection OpenConnection()
+        public DbConnection OpenConnection()
         {
-            SqlConnection con = new SqlConnection(Configuration.GetConnectionString());
+            DbConnection con = DataAccessAdapter.CreateConnection(Configuration.GetConnectionString());
 
             ConnectionMonitor.OpenConnection(con);
 
@@ -196,10 +198,10 @@ namespace ShipWorks.Data.Connection
         /// Open a connection using the current properties of the SqlSession, but with
         /// a timeout based on timeoutInSeconds
         /// </summary>
-        public SqlConnection OpenConnection(int timeoutInSeconds)
+        public DbConnection OpenConnection(int timeoutInSeconds)
         {
             string sqlConnectionString = ConnectionStringWithTimeout(timeoutInSeconds);
-            SqlConnection con = new SqlConnection(sqlConnectionString);
+            DbConnection con = DataAccessAdapter.CreateConnection(Configuration.GetConnectionString());
 
             ConnectionMonitor.OpenConnection(con);
 
@@ -222,7 +224,7 @@ namespace ShipWorks.Data.Connection
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(Configuration.GetConnectionString());
             csb.ConnectTimeout = (int) timeout.TotalSeconds;
 
-            using (SqlConnection con = new SqlConnection(csb.ToString()))
+            using (DbConnection con = DataAccessAdapter.CreateConnection(csb.ToString()))
             {
                 con.Open();
 
@@ -262,7 +264,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public bool IsSqlServer2008OrLater()
         {
-            using (SqlConnection con = OpenConnection())
+            using (DbConnection con = OpenConnection())
             {
                 log.InfoFormat("Connected to '{0}', ServerVersion: '{1}'", Configuration.ServerInstance, con.ServerVersion);
 
@@ -276,9 +278,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public bool Is64Bit()
         {
-            using (SqlConnection con = OpenConnection())
+            using (DbConnection con = OpenConnection())
             {
-                string version = (string) SqlCommandProvider.ExecuteScalar(con, "SELECT @@Version");
+                string version = (string) DbCommandProvider.ExecuteScalar(con, "SELECT @@Version");
                 log.InfoFormat("SQL Server version: {0}", version);
 
                 return !version.ToLower().Contains("x86");
@@ -292,7 +294,7 @@ namespace ShipWorks.Data.Connection
         {
             if (serverVersion == null)
             {
-                using (SqlConnection con = OpenConnection())
+                using (DbConnection con = OpenConnection())
                 {
                     serverVersion = new Version(con.ServerVersion);
                 }
@@ -314,7 +316,7 @@ namespace ShipWorks.Data.Connection
 
                 try
                 {
-                    using (SqlConnection con = OpenConnection())
+                    using (DbConnection con = OpenConnection())
                     {
                         sqlUser = SqlUtility.GetUsername(con);
                     }
@@ -361,9 +363,9 @@ namespace ShipWorks.Data.Connection
                 // Make sure we can view server state
                 try
                 {
-                    using (SqlConnection con = OpenConnection())
+                    using (DbConnection con = OpenConnection())
                     {
-                        SqlCommandProvider.ExecuteNonQuery(con, "SELECT transaction_id FROM sys.dm_tran_current_transaction");
+                        DbCommandProvider.ExecuteNonQuery(con, "SELECT transaction_id FROM sys.dm_tran_current_transaction");
                     }
                 }
                 catch (SqlException ex)
@@ -385,15 +387,15 @@ namespace ShipWorks.Data.Connection
                 try
                 {
                     // Try to read it
-                    using (SqlConnection con = OpenConnection())
+                    using (DbConnection con = OpenConnection())
                     {
-                        SqlCommandProvider.ExecuteScalar(con, "SELECT SystemDataID FROM SystemData");
+                        DbCommandProvider.ExecuteScalar(con, "SELECT SystemDataID FROM SystemData");
                     }
 
                     // Now try to write it
-                    using (SqlConnection con = OpenConnection())
+                    using (DbConnection con = OpenConnection())
                     {
-                        SqlCommandProvider.ExecuteScalar(con, "UPDATE SystemData SET TemplateVersion = TemplateVersion");
+                        DbCommandProvider.ExecuteScalar(con, "UPDATE SystemData SET TemplateVersion = TemplateVersion");
                     }
                 }
                 catch (SqlException ex)
@@ -418,7 +420,7 @@ namespace ShipWorks.Data.Connection
                 if (isValidDatabase)
                 {
                     // Have to be able to execute stored procedures and functions
-                    using (SqlConnection con = OpenConnection())
+                    using (DbConnection con = OpenConnection())
                     {
                         // Check for being able to execute sprocs
                         if (!SqlUtility.CheckDatabasePermission(con, "EXECUTE"))
@@ -428,7 +430,7 @@ namespace ShipWorks.Data.Connection
                     }
 
                     // Have to be able to VIEW CHANGE TRACKING on change-tracked tables
-                    using (SqlConnection con = OpenConnection())
+                    using (DbConnection con = OpenConnection())
                     {
                         // Check for being able to view change tracking.  We just check the 'User' table, but assume that if they don't have it on that they won't on any.
                         if (!SqlUtility.CheckObjectPermission(con, "User", "VIEW CHANGE TRACKING"))
@@ -442,7 +444,7 @@ namespace ShipWorks.Data.Connection
             // For upgrading we need alter
             if (permissionSet == SqlSessionPermissionSet.Upgrade)
             {
-                using (SqlConnection con = OpenConnection())
+                using (DbConnection con = OpenConnection())
                 {
                     // Check for being able to execute sprocs
                     if (!SqlUtility.CheckDatabasePermission(con, "ALTER"))
@@ -460,9 +462,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public bool IsClrEnabled()
         {
-            using (SqlConnection con = OpenConnection())
+            using (DbConnection con = OpenConnection())
             {
-                return 0 != (int) SqlCommandProvider.ExecuteScalar(con, "select value_in_use from sys.configurations where name = 'clr enabled'");
+                return 0 != (int) DbCommandProvider.ExecuteScalar(con, "select value_in_use from sys.configurations where name = 'clr enabled'");
             }
         }
 
@@ -473,9 +475,9 @@ namespace ShipWorks.Data.Connection
         {
             if (string.IsNullOrWhiteSpace(serverMachineName))
             {
-                using (SqlConnection con = OpenConnection())
+                using (DbConnection con = OpenConnection())
                 {
-                    serverMachineName = (string) SqlCommandProvider.ExecuteScalar(con, "SELECT SERVERPROPERTY( 'MachineName' )");
+                    serverMachineName = (string) DbCommandProvider.ExecuteScalar(con, "SELECT SERVERPROPERTY( 'MachineName' )");
                 }
             }
 

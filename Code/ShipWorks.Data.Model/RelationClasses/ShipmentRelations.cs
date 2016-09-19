@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: Shipment. </summary>
+	/// <summary>Implements the relations factory for the entity: Shipment. </summary>
 	public partial class ShipmentRelations
 	{
 		/// <summary>CTor</summary>
@@ -41,11 +41,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.OtherShipmentEntityUsingShipmentID);
 			toReturn.Add(this.PostalShipmentEntityUsingShipmentID);
 			toReturn.Add(this.UpsShipmentEntityUsingShipmentID);
-			toReturn.Add(this.ComputerEntityUsingVoidedComputerID);
 			toReturn.Add(this.ComputerEntityUsingProcessedComputerID);
+			toReturn.Add(this.ComputerEntityUsingVoidedComputerID);
 			toReturn.Add(this.OrderEntityUsingOrderID);
-			toReturn.Add(this.UserEntityUsingVoidedUserID);
 			toReturn.Add(this.UserEntityUsingProcessedUserID);
+			toReturn.Add(this.UserEntityUsingVoidedUserID);
 			return toReturn;
 		}
 
@@ -253,20 +253,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
-		/// Shipment.VoidedComputerID - Computer.ComputerID
-		/// </summary>
-		public virtual IEntityRelation ComputerEntityUsingVoidedComputerID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
-				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.VoidedComputerID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
-				return relation;
-			}
-		}
-		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
 		/// Shipment.ProcessedComputerID - Computer.ComputerID
 		/// </summary>
 		public virtual IEntityRelation ComputerEntityUsingProcessedComputerID
@@ -275,6 +261,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.ProcessedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				return relation;
+			}
+		}
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and ComputerEntity over the m:1 relation they have, using the relation between the fields:
+		/// Shipment.VoidedComputerID - Computer.ComputerID
+		/// </summary>
+		public virtual IEntityRelation ComputerEntityUsingVoidedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.VoidedComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				return relation;
@@ -295,20 +295,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and UserEntity over the m:1 relation they have, using the relation between the fields:
-		/// Shipment.VoidedUserID - User.UserID
-		/// </summary>
-		public virtual IEntityRelation UserEntityUsingVoidedUserID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
-				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.VoidedUserID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
-				return relation;
-			}
-		}
-		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and UserEntity over the m:1 relation they have, using the relation between the fields:
 		/// Shipment.ProcessedUserID - User.UserID
 		/// </summary>
 		public virtual IEntityRelation UserEntityUsingProcessedUserID
@@ -322,16 +308,54 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and UserEntity over the m:1 relation they have, using the relation between the fields:
+		/// Shipment.VoidedUserID - User.UserID
+		/// </summary>
+		public virtual IEntityRelation UserEntityUsingVoidedUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "", false);
+				relation.AddEntityFieldPair(UserFields.UserID, ShipmentFields.VoidedUserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticShipmentRelations
+	{
+		internal static readonly IEntityRelation ShipmentCustomsItemEntityUsingShipmentIDStatic = new ShipmentRelations().ShipmentCustomsItemEntityUsingShipmentID;
+		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ShipmentRelations().ValidatedAddressEntityUsingConsumerID;
+		internal static readonly IEntityRelation AmazonShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().AmazonShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation BestRateShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().BestRateShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation FedExShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().FedExShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation InsurancePolicyEntityUsingShipmentIDStatic = new ShipmentRelations().InsurancePolicyEntityUsingShipmentID;
+		internal static readonly IEntityRelation IParcelShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().IParcelShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation OnTracShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().OnTracShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation OtherShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().OtherShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation PostalShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().PostalShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation UpsShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().UpsShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation ComputerEntityUsingProcessedComputerIDStatic = new ShipmentRelations().ComputerEntityUsingProcessedComputerID;
+		internal static readonly IEntityRelation ComputerEntityUsingVoidedComputerIDStatic = new ShipmentRelations().ComputerEntityUsingVoidedComputerID;
+		internal static readonly IEntityRelation OrderEntityUsingOrderIDStatic = new ShipmentRelations().OrderEntityUsingOrderID;
+		internal static readonly IEntityRelation UserEntityUsingProcessedUserIDStatic = new ShipmentRelations().UserEntityUsingProcessedUserID;
+		internal static readonly IEntityRelation UserEntityUsingVoidedUserIDStatic = new ShipmentRelations().UserEntityUsingVoidedUserID;
+
+		/// <summary>CTor</summary>
+		static StaticShipmentRelations()
+		{
+		}
 	}
 }

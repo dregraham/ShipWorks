@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace ShipWorks.SqlServer.Common.Data
 {
@@ -20,7 +16,7 @@ namespace ShipWorks.SqlServer.Common.Data
         /// who is using the filter).  If the consumer already has a referenced object
         /// under the given key, the reason is updated.
         /// </summary>
-        public static long SetReference(long consumerID, string key, long objectID, string reason, SqlConnection con)
+        public static long SetReference(long consumerID, string key, long objectID, string reason, DbConnection con)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -32,7 +28,7 @@ namespace ShipWorks.SqlServer.Common.Data
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandText = @"
                 MERGE INTO ObjectReference as T
                   USING (SELECT @consumerID as 'ConsumerID', @key as 'ReferenceKey', @objectID as 'ObjectID', @reason as 'Reason') AS S
@@ -42,10 +38,10 @@ namespace ShipWorks.SqlServer.Common.Data
                 WHEN NOT MATCHED THEN
                   INSERT (ConsumerID, ReferenceKey, ObjectID, Reason) VALUES (S.ConsumerID, S.ReferenceKey, S.ObjectID, S.Reason)
                 OUTPUT INSERTED.ObjectReferenceID;";
-            cmd.Parameters.AddWithValue("@consumerID", consumerID);
-            cmd.Parameters.AddWithValue("@key", key);
-            cmd.Parameters.AddWithValue("@objectID", objectID);
-            cmd.Parameters.AddWithValue("@reason", reason ?? (object) DBNull.Value);
+            cmd.AddParameterWithValue("@consumerID", consumerID);
+            cmd.AddParameterWithValue("@key", key);
+            cmd.AddParameterWithValue("@objectID", objectID);
+            cmd.AddParameterWithValue("@reason", reason ?? (object) DBNull.Value);
 
             return (long) cmd.ExecuteScalar();
         }
@@ -53,49 +49,49 @@ namespace ShipWorks.SqlServer.Common.Data
         /// <summary>
         /// Release all references of the given consumer
         /// </summary>
-        public static void ClearReferences(long consumerID, SqlConnection con)
+        public static void ClearReferences(long consumerID, DbConnection con)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandText = "DELETE ObjectReference WHERE ConsumerID = @consumerID";
-            cmd.Parameters.AddWithValue("@consumerID", consumerID);
+            cmd.AddParameterWithValue("@consumerID", consumerID);
             cmd.ExecuteNonQuery();
         }
 
         /// <summary>
         /// Clear the usage of the given consumer and the specified key
         /// </summary>
-        public static void ClearReference(long consumerID, string key, SqlConnection con)
+        public static void ClearReference(long consumerID, string key, DbConnection con)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandText = "DELETE ObjectReference WHERE ConsumerID = @consumerID AND ReferenceKey = @key";
-            cmd.Parameters.AddWithValue("@consumerID", consumerID);
-            cmd.Parameters.AddWithValue("@key", key);
+            cmd.AddParameterWithValue("@consumerID", consumerID);
+            cmd.AddParameterWithValue("@key", key);
             cmd.ExecuteNonQuery();
         }
 
         /// <summary>
         /// Clear the specific ObjectReferenceID
         /// </summary>
-        public static void ClearReference(long referenceID, SqlConnection con)
+        public static void ClearReference(long referenceID, DbConnection con)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandText = "DELETE ObjectReference WHERE ObjectReferenceID = @referenceID";
-            cmd.Parameters.AddWithValue("@referenceID", referenceID);
+            cmd.AddParameterWithValue("@referenceID", referenceID);
             cmd.ExecuteNonQuery();
         }
     }

@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             var names =
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Name/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
-            
+
             Assert.Equal(new[] { package.VerbalConfirmationName }, names);
         }
 

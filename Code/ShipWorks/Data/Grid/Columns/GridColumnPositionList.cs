@@ -1,19 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Collections;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using log4net;
-using System.Diagnostics;
-using System.Data;
-using ShipWorks.Data.Adapter;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -35,7 +32,7 @@ namespace ShipWorks.Data.Grid.Columns
         bool suspendPositionChanged = false;
 
         /// <summary>
-        /// Instantiate the column collection that belongs to 
+        /// Instantiate the column collection that belongs to
         /// </summary>
         public GridColumnPositionList(GridColumnLayoutEntity layoutEntity, ICollection<GridColumnDefinition> definitions)
         {
@@ -121,7 +118,7 @@ namespace ShipWorks.Data.Grid.Columns
 
             // Load all the ones we know about
             foreach (GridColumnPositionEntity positionEntity in new List<GridColumnPositionEntity>(entities))
-            { 
+            {
                 // Find the definition that represents this column
                 GridColumnDefinition definition = FindDefinition(positionEntity.ColumnGuid, definitionsToUse);
 
@@ -382,7 +379,7 @@ namespace ShipWorks.Data.Grid.Columns
         /// </summary>
         private void SortByPosition()
         {
-            columnPositions.Sort(new Comparison<GridColumnPosition>(delegate(GridColumnPosition left, GridColumnPosition right)
+            columnPositions.Sort(new Comparison<GridColumnPosition>(delegate (GridColumnPosition left, GridColumnPosition right)
             {
                 return left.Position.CompareTo(right.Position);
             }));

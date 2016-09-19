@@ -1,24 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.UI;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions.Triggers;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model;
-using ShipWorks.Filters;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
 using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -80,7 +76,7 @@ namespace ShipWorks.Actions.Tasks
             // The filter selection for input can be anything, and get's loaded one time
             inputSourceFilter.LoadLayouts(FilterTarget.Orders, FilterTarget.Customers, FilterTarget.Shipments, FilterTarget.Items);
             inputSourceFilter.SelectedFilterNodeID = task.Entity.InputFilterNodeID;
-            
+
             // As it changes, update the task
             inputSourceFilter.SelectedFilterNodeChanged += new EventHandler(OnInputSourceFilterChanged);
 
@@ -112,7 +108,7 @@ namespace ShipWorks.Actions.Tasks
         private void CreateTaskEditor()
         {
             ActionTaskEditor editor = task.CreateEditor();
-            
+
             // We have to ensure the contorl is created, to make sure its OnLoad is called, which is where it may change
             // its height.
             IntPtr handle = editor.Handle;
@@ -146,7 +142,7 @@ namespace ShipWorks.Actions.Tasks
             {
                 panelTaskSettings.Height = editor.Height;
 
-                RaiseBubbleChanged();                
+                RaiseBubbleChanged();
             }
         }
 
@@ -202,7 +198,7 @@ namespace ShipWorks.Actions.Tasks
         {
             ActionTask oldTask = task;
 
-            // The binding of the new task 
+            // The binding of the new task
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) taskTypes.SelectedMenuObject;
 
             // See if we have cached settings for it, if not create them
@@ -292,12 +288,12 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         private EntityType? GetEffectiveInputEntityType()
         {
-            if (task.Entity.InputSource == (int)ActionTaskInputSource.Nothing)
+            if (task.Entity.InputSource == (int) ActionTaskInputSource.Nothing)
             {
                 return null;
             }
 
-            if (task.Entity.InputSource == (int)ActionTaskInputSource.TriggeringRecord)
+            if (task.Entity.InputSource == (int) ActionTaskInputSource.TriggeringRecord)
             {
                 return trigger.TriggeringEntityType;
             }
@@ -313,7 +309,7 @@ namespace ShipWorks.Actions.Tasks
                 return null;
             }
 
-            return FilterHelper.GetEntityType((FilterTarget)filterNode.Filter.FilterTarget);
+            return FilterHelper.GetEntityType((FilterTarget) filterNode.Filter.FilterTarget);
         }
 
         /// <summary>
@@ -382,7 +378,7 @@ namespace ShipWorks.Actions.Tasks
             {
                 AddInputSourceMenuItem(ActionTaskInputSource.Nothing, "No Input");
             }
-            
+
             labelInput.Text = task.InputLabel;
             inputSourceLink.Left = labelInput.Right;
 
@@ -399,9 +395,9 @@ namespace ShipWorks.Actions.Tasks
             ToolStripMenuItem item = new ToolStripMenuItem(label);
             item.Click += OnChangeInputSource;
             item.Tag = inputSource;
-            inputSourceMenu.Items.Add(item);  
+            inputSourceMenu.Items.Add(item);
         }
-        
+
         /// <summary>
         /// Select the given input source as the current one for the task
         /// </summary>

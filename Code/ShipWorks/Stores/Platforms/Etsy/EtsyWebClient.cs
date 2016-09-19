@@ -11,8 +11,8 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -382,11 +382,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
         private OAuth GetNewOAuth(Uri url)
         {
             return new OAuth(EtsyEndpoints.EncryptedConsumerKey, EtsyEndpoints.EncryptedConsumerSecretKey)
-                {
-                    Url = url,
-                    Token = SecureText.Decrypt(store.OAuthToken, "token"),
-                    TokenSecret = SecureText.Decrypt(store.OAuthTokenSecret, "token")
-                };
+            {
+                Url = url,
+                Token = SecureText.Decrypt(store.OAuthToken, "token"),
+                TokenSecret = SecureText.Decrypt(store.OAuthTokenSecret, "token")
+            };
         }
 
         /// <summary>
@@ -477,8 +477,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             JArray receipts = GetOrderStatuses(orderNumbers);
 
             return from x in receipts
-                       where (bool)x[etsyFieldName] != currentStatus
-                       select (long)x["receipt_id"];
+                   where (bool) x[etsyFieldName] != currentStatus
+                   select (long) x["receipt_id"];
         }
 
         /// <summary>

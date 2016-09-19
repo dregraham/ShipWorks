@@ -1,4 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using Autofac;
 using Autofac.Core;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
@@ -34,10 +38,6 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -178,6 +178,9 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             ComponentAttribute.Register(builder, allAssemblies);
+            ServiceAttribute.Register(builder, allAssemblies);
+            KeyedComponentAttribute.Register(builder, allAssemblies);
+            ResolveWithAttributesAttribute.Register(builder, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()

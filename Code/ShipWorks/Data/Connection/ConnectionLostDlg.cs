@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -7,6 +8,7 @@ using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Data.Model;
 using ShipWorks.UI;
 
 namespace ShipWorks.Data.Connection
@@ -21,7 +23,7 @@ namespace ShipWorks.Data.Connection
 
         int timeToConnect = 30;
 
-        SqlConnection connectionToOpen;
+        DbConnection connectionToOpen;
         bool closeOnSuccess = false;
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Constrcutor. The reconnection will be attempted on the specified connection.
         /// </summary>
-        public ConnectionLostDlg(SqlConnection connectionToOpen)
+        public ConnectionLostDlg(DbConnection connectionToOpen)
         {
             log.Info("Lost connection to the database.");
 
@@ -45,7 +47,7 @@ namespace ShipWorks.Data.Connection
 
             if (this.connectionToOpen == null)
             {
-                this.connectionToOpen = new SqlConnection(SqlSession.Current.Configuration.GetConnectionString());
+                this.connectionToOpen = DataAccessAdapter.CreateConnection(SqlSession.Current.Configuration.GetConnectionString());
                 this.closeOnSuccess = true;
             }
         }

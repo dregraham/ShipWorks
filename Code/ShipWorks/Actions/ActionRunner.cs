@@ -11,9 +11,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
@@ -205,10 +205,10 @@ namespace ShipWorks.Actions
                 if (action.TriggerType == (int) ActionTriggerType.FilterContentChanged)
                 {
                     // See if this action is store limited, and there is an object to test against
-                    if (action.StoreLimited && queue.ObjectID != null)
+                    if (action.StoreLimited && queue.EntityID != null)
                     {
-                        // Get the store(s) represented by this ObjectID.  Should be only 1, except for customers
-                        List<long> storeKeys = DataProvider.GetRelatedKeys(queue.ObjectID.Value, EntityType.StoreEntity);
+                        // Get the store(s) represented by this EntityID.  Should be only 1, except for customers
+                        List<long> storeKeys = DataProvider.GetRelatedKeys(queue.EntityID.Value, EntityType.StoreEntity);
 
                         if (storeKeys.Intersect(action.StoreLimitedList).Count() == 0)
                         {
@@ -449,7 +449,7 @@ namespace ShipWorks.Actions
 
             // See if it will be skipped due to a filter condition
             bool filtersUpdatedForFilterCondition;
-            bool skipStep = !CheckStepFilterCondition(step, queue.ObjectID, out filtersUpdatedForFilterCondition);
+            bool skipStep = !CheckStepFilterCondition(step, queue.EntityID, out filtersUpdatedForFilterCondition);
             bool filtersUpdated = true;
 
             // Create an instance of the task that created this step - we need information from it
@@ -502,7 +502,7 @@ namespace ShipWorks.Actions
                         {
                             log.InfoFormat("ActionStep - Getting input");
 
-                            List<long> inputKeys = GetStepInputKeys(step, actionTask, queue.ObjectID);
+                            List<long> inputKeys = GetStepInputKeys(step, actionTask, queue.EntityID);
 
                             // Run the task.  If it requires input, and there is no input, don't even try to run it
                             if (step.InputSource != (int) ActionTaskInputSource.Nothing && inputKeys.Count == 0)
@@ -806,7 +806,7 @@ namespace ShipWorks.Actions
                 return input;
             }
 
-            // Use the ObjectID as the input
+            // Use the EntityID as the input
             if (inputSource == ActionTaskInputSource.TriggeringRecord)
             {
                 if (objectID == null)
@@ -825,7 +825,7 @@ namespace ShipWorks.Actions
             else if (inputSource == ActionTaskInputSource.Selection)
             {
                 ResultsetFields resultFields = new ResultsetFields(1);
-                resultFields.DefineField(ActionQueueSelectionFields.ObjectID, 0, "ObjectID", "");
+                resultFields.DefineField(ActionQueueSelectionFields.EntityID, 0, "EntityID", "");
 
                 // The dispatcher adds the selection in user-sort order, so they get assigned lowest ActionQueueSelectionID's first
                 SortExpression sort = new SortExpression(ActionQueueSelectionFields.ActionQueueSelectionID | SortOperator.Ascending);
@@ -856,7 +856,7 @@ namespace ShipWorks.Actions
                     }
 
                     // Load all ID's in the filter.
-                    resultFields.DefineField(FilterNodeContentDetailFields.ObjectID, 0, "ObjectID", "");
+                    resultFields.DefineField(FilterNodeContentDetailFields.EntityID, 0, "EntityID", "");
                     bucketToUse = new RelationPredicateBucket(FilterNodeContentDetailFields.FilterNodeContentID == contentID);
                 }
                 else
@@ -864,14 +864,14 @@ namespace ShipWorks.Actions
                     // Load directly from the orders table
                     if (BuiltinFilter.GetTopLevelKey(FilterTarget.Orders) == inputFilterNodeID)
                     {
-                        resultFields.DefineField(OrderFields.OrderID, 0, "ObjectID", "");
+                        resultFields.DefineField(OrderFields.OrderID, 0, "EntityID", "");
                         bucketToUse = new RelationPredicateBucket();
 
                     }
                     // Load directly from the customers table
                     else if (BuiltinFilter.GetTopLevelKey(FilterTarget.Customers) == inputFilterNodeID)
                     {
-                        resultFields.DefineField(CustomerFields.CustomerID, 0, "ObjectID", "");
+                        resultFields.DefineField(CustomerFields.CustomerID, 0, "EntityID", "");
                         bucketToUse = new RelationPredicateBucket();
                     }
                 }

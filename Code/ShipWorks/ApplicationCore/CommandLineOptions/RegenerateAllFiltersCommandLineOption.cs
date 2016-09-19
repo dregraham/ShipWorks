@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using log4net;
@@ -61,7 +62,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     FilterContentManager.CheckForChanges();
 
                     // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
                         SqlUtility.TruncateTable("FilterNodeContentDirty", con);
                         SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", con);

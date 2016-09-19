@@ -9,7 +9,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class OrderItemEntity
     {
         // We cache this so we only have to look it up once
-        static string baseObjectName = new OrderItemEntity().LLBLGenProEntityName;
+        static string baseObjectName = ((IEntityCore) new OrderItemEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderItemEntity"/> class.
@@ -20,7 +20,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             MethodConditions.EnsureArgumentIsNotNull(order);
 
-            ((IEntity2)order).SetRelatedEntity(this, "OrderItems");
+            ((IEntity2) order).SetRelatedEntity(this, "OrderItems");
 
             InitializeNullsToDefault();
         }

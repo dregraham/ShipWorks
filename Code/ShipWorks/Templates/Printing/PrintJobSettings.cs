@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing.Printing;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -99,17 +101,8 @@ namespace ShipWorks.Templates.Printing
                 {
                     _paperSourceName = string.Empty;
 
-                    PrinterSettings settings = new PrinterSettings();
-                    settings.PrinterName = printerName;
-
-                    foreach (System.Drawing.Printing.PaperSource source in settings.PaperSources)
-                    {
-                        if (source.RawKind == paperSource)
-                        {
-                            _paperSourceName = source.SourceName;
-                            break;
-                        }
-                    }
+                    IPrinterSetting settings = PrinterSettingFactory.GetPrinterSettings(printerName);
+                    _paperSourceName = settings.PaperSourceName;
                 }
 
                 return _paperSourceName;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Collections;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -39,7 +34,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Post-process a value right before being returned via a property getter
         /// </summary>
-        protected override void PostProcessValueToGet(IEntityField2 fieldToGet, ref object valueToReturn)
+        protected override void PostProcessValueToGet(IFieldInfo fieldToGet, ref object valueToReturn)
         {
             base.PostProcessValueToGet(fieldToGet, ref valueToReturn);
 

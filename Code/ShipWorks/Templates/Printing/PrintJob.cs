@@ -337,13 +337,15 @@ namespace ShipWorks.Templates.Printing
                 printProgress.Starting();
                 printProgress.Detail = "Preparing printer...";
 
+                BrowserPageSettings browserPageSettings = EffectivePageSettings;
+
                 // First we have to ensure that the printer settings on the computer are what we need them to be
                 using (PrinterConfigurationContext configContext = PrinterConfigurationContext.Activate(
                     PrintJobPriority.Normal,
                     Settings.PrinterName,
                     Settings.PaperSource,
-                    (decimal) EffectivePageSettings.PageWidth,
-                    (decimal) EffectivePageSettings.PageHeight))
+                    (decimal) browserPageSettings.PageWidth,
+                    (decimal) browserPageSettings.PageHeight))
                 {
                     // Create the communication bridge to the browser
                     BrowserCommunicationBridge browserBridge = CreateCommmunicationBridge();

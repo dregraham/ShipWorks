@@ -1,7 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code.
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
@@ -33,12 +33,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 EmailOutboundID { get; }
-        /// <summary> The ObjectID property of the Entity EmailOutboundRelation<br/><br/>
+        /// <summary> The EntityID property of the Entity EmailOutboundRelation<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EmailOutboundRelation"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 ObjectID { get; }
+        System.Int64 EntityID { get; }
         /// <summary> The RelationType property of the Entity EmailOutboundRelation<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EmailOutboundRelation"."RelationType"<br/>

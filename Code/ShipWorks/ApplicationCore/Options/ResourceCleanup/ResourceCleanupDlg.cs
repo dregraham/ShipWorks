@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -91,11 +91,11 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
             script = script.Replace("{DATABASENAME}", SqlSession.Current.Configuration.DatabaseName);
 
             progressItem.Detail = "Connecting...";
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlCommandProvider.ExecuteNonQuery(con, "SET XACT_ABORT ON");
+                DbCommandProvider.ExecuteNonQuery(con, "SET XACT_ABORT ON");
 
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandText = script;
 
@@ -103,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
                     progressItem.Detail = "Deleting labels...";
                     cmd.CommandTimeout = (int) TimeSpan.FromHours(1).TotalSeconds;
 
-                    SqlCommandProvider.ExecuteNonQuery(cmd);
+                    DbCommandProvider.ExecuteNonQuery(cmd);
                 }
             }
 
@@ -205,14 +205,14 @@ namespace ShipWorks.ApplicationCore.Options.ResourceCleanup
 
             estimateScript = estimateScript.Replace("{CUTOFFDATE}", selectedDate.ToShortDateString());
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandTimeout = (int) TimeSpan.FromMinutes(5).TotalSeconds;
                     cmd.CommandText = estimateScript;
 
-                    object result = SqlCommandProvider.ExecuteScalar(cmd);
+                    object result = DbCommandProvider.ExecuteScalar(cmd);
                     long byteCount = 0;
                     if (result != null && result != DBNull.Value)
                     {
