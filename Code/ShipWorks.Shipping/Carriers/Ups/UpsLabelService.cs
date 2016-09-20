@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates the label
         /// </summary>
-        public virtual void Create(ShipmentEntity shipment)
+        public virtual IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             UpsShipmentEntity upsShipmentEntity = shipment.Ups;
             UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
@@ -33,6 +34,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ValidatePackageDimensions(shipment);
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Autofac.Features.Indexed;
+﻿using System;
+using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -26,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Creates the label
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             IShippingClerk shippingClerk = shippingClerkFactory.CreateShippingClerk(shipment, settingsRepository[ShipmentTypeCode.FedEx]);
 
@@ -38,6 +39,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 throw new ShippingException(ex.Message, ex);
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

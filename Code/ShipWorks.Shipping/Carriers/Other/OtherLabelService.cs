@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Creates an Other label
         /// </summary>
         /// <param name="shipment"></param>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
             {
@@ -22,6 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Other
             {
                 throw new ShippingException("No service is specified.");
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

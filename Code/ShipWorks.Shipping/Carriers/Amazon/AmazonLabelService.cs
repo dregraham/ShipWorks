@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Create the label
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -57,6 +57,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             SaveLabel(labelResponse.Label.FileContents, shipment.ShipmentID);
 
             VerifyShipment(shipment);
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

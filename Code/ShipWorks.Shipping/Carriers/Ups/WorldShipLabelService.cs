@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Connection;
+﻿using System;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates the label
         /// </summary>
-        public override void Create(ShipmentEntity shipment)
+        public override IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             try
             {
@@ -34,6 +35,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException("ShipWorks encountered an error attempting to process the shipment.", templateTokenException);
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Processes the OnTrac shipment
         /// </summary>
         /// <param name="shipment"></param>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             try
             {
@@ -62,6 +63,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 throw new ShippingException(ex.Message, ex);
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

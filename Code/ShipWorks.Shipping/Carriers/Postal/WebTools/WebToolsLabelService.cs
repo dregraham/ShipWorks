@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Creates a WebTools label for the given Shipment
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             if (shipment.ShipPerson.IsDomesticCountry() && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
             {
@@ -34,6 +35,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             // Process the shipment
             PostalWebClientShipping.ProcessShipment(shipment.Postal);
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

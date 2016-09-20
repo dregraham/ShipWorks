@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Creates an Endicia label
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             endiciaShipmentType.ValidateShipment(shipment);
             bool useExpress1 = ShouldUsedExpress1(shipment);
@@ -106,6 +107,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException(ex.Message, ex);
                 }
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

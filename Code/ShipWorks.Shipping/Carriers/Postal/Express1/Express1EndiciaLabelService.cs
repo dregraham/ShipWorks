@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Creates the Endicia Express1 label
         /// </summary>
         /// <param name="shipment"></param>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             express1EndiciaShipmentType.ValidateShipment(shipment);
 
@@ -36,6 +37,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             {
                 throw new ShippingException(ex.Message, ex);
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

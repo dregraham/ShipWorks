@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,9 +32,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Process the shipment for iParcel
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             ProcessShipmentAndReturnResponse(shipment);
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

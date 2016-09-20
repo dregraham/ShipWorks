@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Creates a label for the given Shipment
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             uspsShipmentType.ValidateShipment(shipment);
 
@@ -58,6 +58,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 throw new ShippingException(ex.Message, ex);
             }
+
+            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>
@@ -98,10 +100,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    if (account.UspsReseller == (int)UspsResellerType.Express1)
+                    if (account.UspsReseller == (int) UspsResellerType.Express1)
                     {
-                        shipment.ShipmentType = (int)ShipmentTypeCode.Express1Usps;
-                        
+                        shipment.ShipmentType = (int) ShipmentTypeCode.Express1Usps;
+
                         shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
