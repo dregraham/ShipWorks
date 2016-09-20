@@ -12,13 +12,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     public class Express1UspsLabelService : ILabelService
     {
         private readonly Express1UspsShipmentType express1UspsShipmentType;
+        private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1UspsLabelService(Express1UspsShipmentType express1UspsShipmentType)
+        public Express1UspsLabelService(Express1UspsShipmentType express1UspsShipmentType,
+            Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData)
         {
             this.express1UspsShipmentType = express1UspsShipmentType;
+            this.createDownloadedLabelData = createDownloadedLabelData;
         }
 
         /// <summary>
@@ -27,6 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <param name="shipment"></param>
         public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
+            IDownloadedLabelData uspsDownloadedLabelData;
+
             express1UspsShipmentType.ValidateShipment(shipment);
 
             try
@@ -34,14 +39,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 // Express1 for USPS requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Usps.HidePostage = true;
-                new Express1UspsWebClient().ProcessShipment(shipment);
+                UspsLabelResponse uspsLabelResponse = new Express1UspsWebClient().ProcessShipment(shipment);
+                uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
             }
             catch (UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
 
-            throw new NotImplementedException("Return a valid ILabelService");
+            return uspsDownloadedLabelData;
         }
 
         /// <summary>

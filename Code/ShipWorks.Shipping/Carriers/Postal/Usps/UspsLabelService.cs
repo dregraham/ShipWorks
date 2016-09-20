@@ -18,18 +18,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly Func<Express1UspsShipmentType> express1UspsShipmentType;
         private readonly Func<Express1UspsLabelService> express1UspsLabelService;
         private readonly UspsRatingService uspsRatingService;
-
+        private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
+         
         /// <summary>
         ///     Constructor
         /// </summary>
         public UspsLabelService(UspsShipmentType uspsShipmentType,
             Func<Express1UspsShipmentType> express1UspsShipmentType,
-            Func<Express1UspsLabelService> express1UspsLabelService, UspsRatingService uspsRatingService)
+            Func<Express1UspsLabelService> express1UspsLabelService, 
+            UspsRatingService uspsRatingService,
+            Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData)
         {
             this.uspsShipmentType = uspsShipmentType;
             this.express1UspsShipmentType = express1UspsShipmentType;
             this.express1UspsLabelService = express1UspsLabelService;
             this.uspsRatingService = uspsRatingService;
+            this.createDownloadedLabelData = createDownloadedLabelData;
         }
 
         /// <summary>
@@ -37,17 +41,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
-            uspsShipmentType.ValidateShipment(shipment);
+            IDownloadedLabelData uspsDownloadedLabelData;
 
+            uspsShipmentType.ValidateShipment(shipment);
             try
             {
                 if (uspsShipmentType.ShouldRateShop(shipment) || uspsShipmentType.ShouldTestExpress1Rates(shipment))
                 {
-                    ProcessShipmentWithRates(shipment);
+                    uspsDownloadedLabelData = ProcessShipmentWithRates(shipment);
                 }
                 else
                 {
-                    uspsShipmentType.CreateWebClient().ProcessShipment(shipment);
+                    UspsLabelResponse uspsLabelResponse = uspsShipmentType.CreateWebClient().ProcessShipment(shipment);
+                    uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
                 }
             }
             catch (UspsException ex)
@@ -59,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new ShippingException(ex.Message, ex);
             }
 
-            throw new NotImplementedException("Return a valid ILabelService");
+            return uspsDownloadedLabelData;
         }
 
         /// <summary>
@@ -80,8 +86,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Process the shipment using the account with the cheapest rate for the requested service
         /// </summary>
-        private void ProcessShipmentWithRates(ShipmentEntity shipment)
+        private IDownloadedLabelData ProcessShipmentWithRates(ShipmentEntity shipment)
         {
+            IDownloadedLabelData uspsDownloadedLabelData = null;
+
             IUspsWebClient client = uspsShipmentType.CreateWebClient();
             IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
@@ -108,12 +116,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
                         express1UspsShipmentType().UpdateDynamicShipmentData(shipment);
-                        express1UspsLabelService().Create(shipment);
+                        uspsDownloadedLabelData = express1UspsLabelService().Create(shipment);
                     }
                     else
                     {
                         uspsShipmentType.UseAccountForShipment(account, shipment);
-                        client.ProcessShipment(shipment);
+                        UspsLabelResponse uspsLabelResponse = client.ProcessShipment(shipment);
+                        uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
                     }
 
                     break;
@@ -126,6 +135,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     }
                 }
             }
+
+            return uspsDownloadedLabelData;
         }
     }
 }
