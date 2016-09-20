@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Other
                 throw new ShippingException("No service is specified.");
             }
 
-            throw new NotImplementedException("Return a valid ILabelService");
+            return new NullDownloadedLabelData();
         }
 
         /// <summary>

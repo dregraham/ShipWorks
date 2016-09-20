@@ -184,6 +184,7 @@
     <Compile Include="Carriers\OnTrac\OnTracShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapter.cs" />
+    <Compile Include="Carriers\NullDownloadedLabelData.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
