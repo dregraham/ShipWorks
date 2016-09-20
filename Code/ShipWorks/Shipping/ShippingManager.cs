@@ -987,16 +987,7 @@ namespace ShipWorks.Shipping
                             // real time if it was originally best rate
                             EnsureShipmentTypesAreAllowed(shipmentToTry.ShipmentTypeCode, licenseService);
 
-                            using (new LoggedStopwatch(log, "ShippingManager.ProcessShipment (outter) transaction committed."))
-                            {
-                                using (SqlAdapter adapter = new SqlAdapter(true))
-                                {
-                                    adapter.SaveAndRefetch(shipmentToTry);
-                                    ProcessShipmentHelper(shipmentToTry, storeEntity, licenseCheckCache);
-
-                                    adapter.Commit();
-                                }
-                            }
+                            ProcessShipmentHelper(shipmentToTry, storeEntity, licenseCheckCache);
 
                             success = true;
                             processedShipment = shipmentToTry;
@@ -1173,18 +1164,26 @@ namespace ShipWorks.Shipping
                             shipment.ShipSenseStatus = (int) ShipSenseStatus.Overwritten;
                         }
                     }
-                    using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper (inner) transaction committed."))
+
+                    log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
+                    DateTime shipmentDate;
+
+                    ILabelService labelService =
+                        lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                    Debug.Assert(System.Transactions.Transaction.Current == null, "No transaction should exist at this point.");
+                    IDownloadedLabelData downloadedLabelData = labelService.Create(shipment);
+
+                    // Check to see if the label service DownloadLabel started a transaction.
+                    Debug.Assert(System.Transactions.Transaction.Current == null, "No transaction should exist at this point.  Did labelService.DownloadLabel create one?");
+
+                    using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper transaction committed."))
                     {
                         // Transacted
                         using (SqlAdapter adapter = new SqlAdapter(true))
                         {
-                            log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                            DateTime shipmentDate;
-
-                            ILabelService labelService =
-                                lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
-
-                            labelService.Create(shipment);
+                            // Save the label data.
+                            downloadedLabelData.Save();
 
                             shipmentDate = lifetimeScope.Resolve<IDateTimeProvider>().UtcNow;
 
