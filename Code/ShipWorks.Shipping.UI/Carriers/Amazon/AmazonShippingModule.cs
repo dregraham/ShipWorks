@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
@@ -113,12 +112,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
-
-            builder.RegisterType<AmazonCreateShipmentRequest>()
-                .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CreateShipment);
-
-            builder.RegisterType<AmazonCancelShipmentRequest>()
-                .Keyed<IAmazonShipmentRequest>(AmazonMwsApiCall.CancelShipment);
 
             builder.RegisterType<AmazonRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Amazon)

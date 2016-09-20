@@ -160,10 +160,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonDownloadedLabelData.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonCancelShipmentRequest.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
@@ -291,7 +294,6 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />

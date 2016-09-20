@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -12,7 +13,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Class for handling requests to the Amazon shipping api
     /// </summary>
-    public class AmazonCreateShipmentRequest : IAmazonShipmentRequest
+    [Component]
+    public class AmazonCreateShipmentRequest : IAmazonCreateShipmentRequest
     {
         private readonly IOrderManager orderManager;
         private readonly IAmazonShippingWebClient webClient;
