@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Stamps.com Web Services for Individual Meters (SWS/IM) Version 51</wsdl:documentation>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Stamps.com Web Services for Individual Meters (SWS/IM) Version 55</wsdl:documentation>
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51">
+    <s:schema elementFormDefault="qualified" targetNamespace="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55">
       <s:import namespace="http://microsoft.com/wsdl/types/" />
       <s:element name="CreateIndicium">
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="TrackingNumber" type="tns:string-0-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
             <s:element minOccurs="1" maxOccurs="1" name="From" type="tns:Address" />
             <s:element minOccurs="1" maxOccurs="1" name="To" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="tns:string-1-64" />
@@ -44,6 +44,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ReturnLabelExpirationDays" nillable="true" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" default="ImageDpiDefault" name="ImageDpi" type="tns:ImageDpi" />
             <s:element minOccurs="0" maxOccurs="1" name="RateToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OrderId" type="tns:string-0-100" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -54,7 +55,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="Password" type="s:string" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="RateV19">
+      <s:complexType name="RateV20">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="FromZIPCode" type="tns:string-3-10" />
           <s:element minOccurs="0" maxOccurs="1" name="ToZIPCode" type="tns:string-3-10" />
@@ -135,6 +136,8 @@
           <s:enumeration value="RRD-GNRC" />
           <s:enumeration value="SC-GPE" />
           <s:enumeration value="SC-GPP" />
+          <s:enumeration value="SC-GPESS" />
+          <s:enumeration value="SC-GPPSS" />
         </s:restriction>
       </s:simpleType>
       <s:simpleType name="PackageTypeV6">
@@ -357,7 +360,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="TrackingNumber" type="tns:string-0-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
             <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
             <s:element minOccurs="1" maxOccurs="1" name="URL" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
@@ -386,7 +389,7 @@
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
             <s:element minOccurs="0" maxOccurs="1" name="From" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" name="To" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="tns:string-1-64" />
@@ -395,6 +398,7 @@
             <s:element minOccurs="0" maxOccurs="1" default="0" name="CostCodeId" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" default="false" name="HideFIM" type="s:boolean" />
             <s:element minOccurs="0" maxOccurs="1" name="RateToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OrderId" type="tns:string-0-100" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -412,7 +416,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="TrackingNumber" type="tns:string-0-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
             <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
             <s:element minOccurs="1" maxOccurs="1" name="URL" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
@@ -430,7 +434,7 @@
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="TrackingNumber" type="tns:string-0-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
             <s:element minOccurs="1" maxOccurs="1" name="From" type="tns:Address" />
             <s:element minOccurs="1" maxOccurs="1" name="To" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" name="CustomerID" type="tns:string-1-64" />
@@ -456,7 +460,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="TrackingNumber" type="tns:string-0-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
             <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
             <s:element minOccurs="1" maxOccurs="1" name="URL" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
@@ -467,10 +471,10 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
-            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -478,13 +482,13 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="Rates" type="tns:ArrayOfRateV19" />
+            <s:element minOccurs="1" maxOccurs="1" name="Rates" type="tns:ArrayOfRateV20" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfRateV19">
+      <s:complexType name="ArrayOfRateV20">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="Rate" nillable="true" type="tns:RateV19" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Rate" nillable="true" type="tns:RateV20" />
         </s:sequence>
       </s:complexType>
       <s:element name="CreateNetStampsIndicia">
@@ -496,7 +500,7 @@
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="IntegratorTxId" type="tns:string-1-128" />
             <s:element minOccurs="0" maxOccurs="1" name="Layout" type="tns:string-0-128" />
-            <s:element minOccurs="1" maxOccurs="1" name="NetStamps" type="tns:ArrayOfNetStampV15" />
+            <s:element minOccurs="1" maxOccurs="1" name="NetStamps" type="tns:ArrayOfNetStampV16" />
             <s:element minOccurs="0" maxOccurs="1" name="From" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" default="false" name="SampleOnly" type="s:boolean" />
             <s:element minOccurs="0" maxOccurs="1" default="Auto" name="ImageType" type="tns:ImageType" />
@@ -507,16 +511,16 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfNetStampV15">
+      <s:complexType name="ArrayOfNetStampV16">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="NetStampV15" nillable="true" type="tns:NetStampV15" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NetStampV16" nillable="true" type="tns:NetStampV16" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="NetStampV15">
+      <s:complexType name="NetStampV16">
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="Row" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="Column" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+          <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
         </s:sequence>
       </s:complexType>
       <s:element name="CreateNetStampsIndiciaResponse">
@@ -565,21 +569,21 @@
             <s:element minOccurs="0" maxOccurs="1" default="false" name="PrintAddress" type="s:boolean" />
             <s:element minOccurs="0" maxOccurs="1" default="0" name="StartRow" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" default="0" name="StartColumn" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="IndiciumInfo" type="tns:ArrayOfIndiciumInfoV11" />
+            <s:element minOccurs="1" maxOccurs="1" name="IndiciumInfo" type="tns:ArrayOfIndiciumInfoV12" />
             <s:element minOccurs="0" maxOccurs="1" default="Normal" name="Mode" type="tns:CreateIndiciumModeV1" />
             <s:element minOccurs="0" maxOccurs="1" default="Auto" name="ImageType" type="tns:ImageType" />
             <s:element minOccurs="0" maxOccurs="1" name="RateToken" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfIndiciumInfoV11">
+      <s:complexType name="ArrayOfIndiciumInfoV12">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="IndiciumInfoV11" nillable="true" type="tns:IndiciumInfoV11" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IndiciumInfoV12" nillable="true" type="tns:IndiciumInfoV12" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="IndiciumInfoV11">
+      <s:complexType name="IndiciumInfoV12">
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV19" />
+          <s:element minOccurs="1" maxOccurs="1" name="Rate" type="tns:RateV20" />
           <s:element minOccurs="0" maxOccurs="1" name="To" type="tns:Address" />
           <s:element minOccurs="0" maxOccurs="1" default="0" name="CostCodeId" type="s:int" />
         </s:sequence>
@@ -603,12 +607,290 @@
           <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
         </s:sequence>
       </s:complexType>
-      <s:element name="GetURL">
+      <s:element name="ChangePlan">
+        <s:complexType>
+          <s:sequence>
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+            </s:choice>
+            <s:element minOccurs="0" maxOccurs="1" default="0" name="PlanId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="PromoCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SendEmail" nillable="true" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangePlanResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="PurchaseStatus" type="tns:PurchaseStatus" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="RejectionReason" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="PurchaseStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Pending" />
+          <s:enumeration value="Processing" />
+          <s:enumeration value="Success" />
+          <s:enumeration value="Rejected" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetBalanceHistory">
+        <s:complexType>
+          <s:sequence>
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+            </s:choice>
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionsPerPage" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransactionDateMin" type="s:date" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionDateMax" nillable="true" type="s:date" />
+            <s:element minOccurs="1" maxOccurs="1" name="Filters" type="tns:ArrayOfTransactionType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTransactionType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TransactionType" type="tns:TransactionType" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="TransactionType">
+        <s:restriction base="s:string">
+          <s:enumeration value="All" />
+          <s:enumeration value="Purchase" />
+          <s:enumeration value="Credit" />
+          <s:enumeration value="Print" />
+          <s:enumeration value="Adjustment" />
+          <s:enumeration value="Refund" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetBalanceHistoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="BalanceHistoryToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="TotalTransactions" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="TotalPages" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Transactions" type="tns:ArrayOfTransaction" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTransaction">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Transaction" nillable="true" type="tns:Transaction" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Transaction">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Date" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Cost" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Credit" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Balance" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="Type" type="tns:TransactionType" />
+          <s:element minOccurs="1" maxOccurs="1" name="Brand" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetBalanceHistoryByToken">
+        <s:complexType>
+          <s:sequence>
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+            </s:choice>
+            <s:element minOccurs="1" maxOccurs="1" name="BalanceHistoryToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" default="1" name="PageNumber" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBalanceHistoryByTokenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="BalanceHistoryToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransactionsPerPage" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="TotalTransactions" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Transactions" type="tns:ArrayOfTransaction" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PurchasePostage">
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+            </s:choice>
+            <s:element minOccurs="1" maxOccurs="1" name="PurchaseAmount" type="s:decimal" />
+            <s:element minOccurs="1" maxOccurs="1" name="ControlTotal" type="s:decimal" />
+            <s:element minOccurs="0" maxOccurs="1" name="MI" type="tns:MachineInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
+            <s:element minOccurs="0" maxOccurs="1" name="SendEmail" nillable="true" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" default="Stamps.com" name="Merchant" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MachineInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IPAddress" type="tns:string-0-15" />
+          <s:element minOccurs="0" maxOccurs="1" name="MacAddress" type="tns:string-0-12" />
+          <s:element minOccurs="0" maxOccurs="1" name="FP" type="tns:FP" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FP">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FP1" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="FP2" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="FP3" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="FP4" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="FP5" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="PurchasePostageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="PurchaseStatus" type="tns:PurchaseStatus" />
+            <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
+            <s:element minOccurs="0" maxOccurs="1" name="RejectionReason" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="MIRequired" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="RejectionCode" nillable="true" type="tns:PurchaseRejectionCode" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="PurchaseRejectionCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="CustomerActionRequired" />
+          <s:enumeration value="SystemFailure" />
+          <s:enumeration value="RejectedDueToFraud" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="CancelIndicium">
+        <s:complexType>
+          <s:sequence>
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+            </s:choice>
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
+            </s:choice>
+            <s:element minOccurs="0" maxOccurs="1" name="SendEmail" nillable="true" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelIndiciumResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RegisterAccount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="IntegrationID" type="s1:guid" />
+            <s:element minOccurs="1" maxOccurs="1" name="UserName" type="tns:string-0-40" />
+            <s:element minOccurs="1" maxOccurs="1" name="Password" type="tns:string-6-20" />
+            <s:element minOccurs="0" maxOccurs="1" name="Codeword1Type" type="tns:CodewordType" />
+            <s:element minOccurs="0" maxOccurs="1" name="Codeword1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Codeword2Type" type="tns:CodewordType" />
+            <s:element minOccurs="0" maxOccurs="1" name="Codeword2" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="PhysicalAddress" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="MailingAddress" type="tns:Address" />
+            <s:element minOccurs="1" maxOccurs="1" name="MachineInfo" type="tns:MachineInfo" />
+            <s:element minOccurs="1" maxOccurs="1" name="Email" type="tns:string-0-41" />
+            <s:element minOccurs="1" maxOccurs="1" name="AccountType" type="tns:AccountType" />
+            <s:element minOccurs="0" maxOccurs="1" name="PromoCode" type="tns:string-0-50" />
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="CreditCard" type="tns:CreditCard" />
+              <s:element minOccurs="0" maxOccurs="1" name="AchAccount" type="tns:AchAccount" />
+            </s:choice>
+            <s:element minOccurs="0" maxOccurs="1" name="SendEmail" nillable="true" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="CodewordType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Undefined" />
+          <s:enumeration value="MothersMaidenName" />
+          <s:enumeration value="PetsName" />
+          <s:enumeration value="BirthCity" />
+          <s:enumeration value="HighSchoolMascot" />
+          <s:enumeration value="FathersBirthplace" />
+          <s:enumeration value="StreetName" />
+          <s:enumeration value="FirstSchoolsName" />
+          <s:enumeration value="FirstCarsMakeModel" />
+          <s:enumeration value="Last4SocialSecurityNumber" />
+          <s:enumeration value="Last4DriversLicense" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AccountType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Individual" />
+          <s:enumeration value="HomeOffice" />
+          <s:enumeration value="HomeBasedBusiness" />
+          <s:enumeration value="OfficeBasedBusiness" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="CreditCard">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="CreditCardType" type="tns:CreditCardType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CVN" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ExpirationDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingAddress" type="tns:Address" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="CreditCardType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Visa" />
+          <s:enumeration value="MasterCard" />
+          <s:enumeration value="AmericanExpress" />
+          <s:enumeration value="Discover" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="AchAccount">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AchAccountType" type="tns:AchAccountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RouteID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountHolderName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="AchAccountType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Checking" />
+          <s:enumeration value="Savings" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="RegisterAccountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RegistrationStatus" type="tns:RegistrationStatus" />
+            <s:element minOccurs="1" maxOccurs="1" name="SuggestedUserName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="UserId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="PromoUrl" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="RegistrationStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Success" />
+          <s:enumeration value="Fail" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GetURL">
+        <s:complexType>
+          <s:sequence>
+            <s:choice minOccurs="1" maxOccurs="1">
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="URLType" type="tns:UrlType" />
             <s:element minOccurs="1" maxOccurs="1" name="ApplicationContext" type="s:string" />
@@ -694,8 +976,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="0" maxOccurs="1" default="50" name="ShipmentsPerPage" type="tns:integer-ge-1-le-500" />
             <s:element minOccurs="1" maxOccurs="1" name="Filters" type="tns:Filters" />
@@ -754,16 +1036,16 @@
             <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="ShipmentListToken" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="TotalPages" type="s:int" />
-            <s:element minOccurs="0" maxOccurs="1" name="Shipments" type="tns:ArrayOfShipmentV8" />
+            <s:element minOccurs="0" maxOccurs="1" name="Shipments" type="tns:ArrayOfShipmentV10" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="ArrayOfShipmentV8">
+      <s:complexType name="ArrayOfShipmentV10">
         <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="ShipmentV8" nillable="true" type="tns:ShipmentV8" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ShipmentV10" nillable="true" type="tns:ShipmentV10" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="ShipmentV8">
+      <s:complexType name="ShipmentV10">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="StampsTxId" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="ShipmentStatus" nillable="true" type="tns:ShipmentStatusV1" />
@@ -772,17 +1054,17 @@
           <s:element minOccurs="0" maxOccurs="1" name="DeliveredDate" nillable="true" type="s:dateTime" />
           <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="tns:string-1-128" />
           <s:element minOccurs="0" maxOccurs="1" name="ScanFormId" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="Service" type="tns:ServicesV6" />
+          <s:element minOccurs="0" maxOccurs="1" name="Service" type="tns:ServicesV7" />
           <s:element minOccurs="0" maxOccurs="1" name="AddOns" type="tns:ArrayOfAddOnV7" />
           <s:element minOccurs="0" maxOccurs="1" name="FromZIPCode" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="ReturnTo" type="tns:Address" />
           <s:element minOccurs="0" maxOccurs="1" name="ShipTo" type="tns:Address" />
           <s:element minOccurs="0" maxOccurs="1" name="PackageInfo" type="tns:PackageInfoV1" />
-          <s:element minOccurs="0" maxOccurs="1" name="References" type="tns:ReferencesV1" />
+          <s:element minOccurs="0" maxOccurs="1" name="References" type="tns:ReferencesV2" />
           <s:element minOccurs="0" maxOccurs="1" name="RefundType" nillable="true" type="tns:RefundTypeV1" />
           <s:element minOccurs="0" maxOccurs="1" name="RefundStatus" type="tns:RefundStatusV1" />
           <s:element minOccurs="0" maxOccurs="1" name="ExpiryDate" nillable="true" type="s:dateTime" />
-          <s:element minOccurs="0" maxOccurs="1" name="Reserved" type="tns:ServicesV6" />
+          <s:element minOccurs="0" maxOccurs="1" name="Reserved" type="tns:ServicesV7" />
         </s:sequence>
       </s:complexType>
       <s:simpleType name="ShipmentStatusV1">
@@ -798,7 +1080,7 @@
           <s:enumeration value="Expired" />
         </s:restriction>
       </s:simpleType>
-      <s:complexType name="ServicesV6">
+      <s:complexType name="ServicesV7">
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="ServiceType" type="tns:ServiceType" />
           <s:element minOccurs="1" maxOccurs="1" name="Amount" type="s:decimal" />
@@ -814,11 +1096,12 @@
           <s:element minOccurs="0" maxOccurs="1" default="0" name="WeightOz" type="s:double" />
         </s:sequence>
       </s:complexType>
-      <s:complexType name="ReferencesV1">
+      <s:complexType name="ReferencesV2">
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="UserName" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="CostCode" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Memo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderId" type="s:string" />
         </s:sequence>
       </s:complexType>
       <s:simpleType name="RefundTypeV1">
@@ -855,8 +1138,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
             <s:element minOccurs="0" maxOccurs="1" name="Codeword1Type" type="tns:CodewordType" />
             <s:element minOccurs="0" maxOccurs="1" name="Codeword1" type="s:string" />
@@ -865,21 +1148,6 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:simpleType name="CodewordType">
-        <s:restriction base="s:string">
-          <s:enumeration value="Undefined" />
-          <s:enumeration value="MothersMaidenName" />
-          <s:enumeration value="PetsName" />
-          <s:enumeration value="BirthCity" />
-          <s:enumeration value="HighSchoolMascot" />
-          <s:enumeration value="FathersBirthplace" />
-          <s:enumeration value="StreetName" />
-          <s:enumeration value="FirstSchoolsName" />
-          <s:enumeration value="FirstCarsMakeModel" />
-          <s:enumeration value="Last4SocialSecurityNumber" />
-          <s:enumeration value="Last4DriversLicense" />
-        </s:restriction>
-      </s:simpleType>
       <s:element name="SetCodeWordsResponse">
         <s:complexType>
           <s:sequence>
@@ -887,101 +1155,6 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="RegisterAccount">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="IntegrationID" type="s1:guid" />
-            <s:element minOccurs="1" maxOccurs="1" name="UserName" type="tns:string-0-40" />
-            <s:element minOccurs="1" maxOccurs="1" name="Password" type="tns:string-6-20" />
-            <s:element minOccurs="0" maxOccurs="1" name="Codeword1Type" type="tns:CodewordType" />
-            <s:element minOccurs="0" maxOccurs="1" name="Codeword1" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="Codeword2Type" type="tns:CodewordType" />
-            <s:element minOccurs="0" maxOccurs="1" name="Codeword2" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="PhysicalAddress" type="tns:Address" />
-            <s:element minOccurs="0" maxOccurs="1" name="MailingAddress" type="tns:Address" />
-            <s:element minOccurs="1" maxOccurs="1" name="MachineInfo" type="tns:MachineInfo" />
-            <s:element minOccurs="1" maxOccurs="1" name="Email" type="tns:string-0-41" />
-            <s:element minOccurs="1" maxOccurs="1" name="AccountType" type="tns:AccountType" />
-            <s:element minOccurs="0" maxOccurs="1" name="PromoCode" type="tns:string-0-50" />
-            <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="CreditCard" type="tns:CreditCard" />
-              <s:element minOccurs="0" maxOccurs="1" name="AchAccount" type="tns:AchAccount" />
-            </s:choice>
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:complexType name="MachineInfo">
-        <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="IPAddress" type="tns:string-0-15" />
-          <s:element minOccurs="0" maxOccurs="1" name="MacAddress" type="tns:string-0-12" />
-          <s:element minOccurs="0" maxOccurs="1" name="FP" type="tns:FP" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="FP">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="1" name="FP1" type="s:base64Binary" />
-          <s:element minOccurs="0" maxOccurs="1" name="FP2" type="s:base64Binary" />
-          <s:element minOccurs="0" maxOccurs="1" name="FP3" type="s:base64Binary" />
-          <s:element minOccurs="0" maxOccurs="1" name="FP4" type="s:base64Binary" />
-          <s:element minOccurs="0" maxOccurs="1" name="FP5" type="s:base64Binary" />
-        </s:sequence>
-      </s:complexType>
-      <s:simpleType name="AccountType">
-        <s:restriction base="s:string">
-          <s:enumeration value="Individual" />
-          <s:enumeration value="HomeOffice" />
-          <s:enumeration value="HomeBasedBusiness" />
-          <s:enumeration value="OfficeBasedBusiness" />
-        </s:restriction>
-      </s:simpleType>
-      <s:complexType name="CreditCard">
-        <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="CreditCardType" type="tns:CreditCardType" />
-          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="CVN" type="s:string" />
-          <s:element minOccurs="1" maxOccurs="1" name="ExpirationDate" type="s:dateTime" />
-          <s:element minOccurs="0" maxOccurs="1" name="BillingAddress" type="tns:Address" />
-        </s:sequence>
-      </s:complexType>
-      <s:simpleType name="CreditCardType">
-        <s:restriction base="s:string">
-          <s:enumeration value="Visa" />
-          <s:enumeration value="MasterCard" />
-          <s:enumeration value="AmericanExpress" />
-          <s:enumeration value="Discover" />
-        </s:restriction>
-      </s:simpleType>
-      <s:complexType name="AchAccount">
-        <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="AchAccountType" type="tns:AchAccountType" />
-          <s:element minOccurs="0" maxOccurs="1" name="BankName" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="RouteID" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="AccountHolderName" type="s:string" />
-        </s:sequence>
-      </s:complexType>
-      <s:simpleType name="AchAccountType">
-        <s:restriction base="s:string">
-          <s:enumeration value="Checking" />
-          <s:enumeration value="Savings" />
-        </s:restriction>
-      </s:simpleType>
-      <s:element name="RegisterAccountResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="RegistrationStatus" type="tns:RegistrationStatus" />
-            <s:element minOccurs="1" maxOccurs="1" name="SuggestedUserName" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="UserId" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="PromoUrl" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:simpleType name="RegistrationStatus">
-        <s:restriction base="s:string">
-          <s:enumeration value="Success" />
-          <s:enumeration value="Fail" />
-        </s:restriction>
-      </s:simpleType>
       <s:element name="CarrierPickup">
         <s:complexType>
           <s:sequence>
@@ -1036,42 +1209,12 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="ChangePlan">
-        <s:complexType>
-          <s:sequence>
-            <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
-            </s:choice>
-            <s:element minOccurs="0" maxOccurs="1" default="0" name="PlanId" type="s:int" />
-            <s:element minOccurs="0" maxOccurs="1" name="PromoCode" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="ChangePlanResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="PurchaseStatus" type="tns:PurchaseStatus" />
-            <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
-            <s:element minOccurs="0" maxOccurs="1" name="RejectionReason" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:simpleType name="PurchaseStatus">
-        <s:restriction base="s:string">
-          <s:enumeration value="Pending" />
-          <s:enumeration value="Processing" />
-          <s:enumeration value="Success" />
-          <s:enumeration value="Rejected" />
-        </s:restriction>
-      </s:simpleType>
       <s:element name="SetAutoBuy">
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="AutoBuySettings" type="tns:AutoBuySettings" />
           </s:sequence>
@@ -1153,8 +1296,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="Address" type="tns:Address" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="FromZIPCode" type="tns:string-0-5" />
@@ -1172,7 +1315,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="IsPOBox" nillable="true" type="s:boolean" />
             <s:element minOccurs="1" maxOccurs="1" name="CandidateAddresses" type="tns:ArrayOfAddress" />
             <s:element minOccurs="1" maxOccurs="1" name="StatusCodes" type="tns:StatusCodes" />
-            <s:element minOccurs="0" maxOccurs="1" name="Rates" type="tns:ArrayOfRateV19" />
+            <s:element minOccurs="0" maxOccurs="1" name="Rates" type="tns:ArrayOfRateV20" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -1226,8 +1369,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="ShipmentListToken" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="PageNumber" type="s:int" />
@@ -1241,7 +1384,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="ShipmentListToken" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="ShipmentsPerPage" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="TotalPages" type="s:int" />
-            <s:element minOccurs="0" maxOccurs="1" name="Shipments" type="tns:ArrayOfShipmentV8" />
+            <s:element minOccurs="0" maxOccurs="1" name="Shipments" type="tns:ArrayOfShipmentV10" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -1259,8 +1402,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
           </s:sequence>
         </s:complexType>
@@ -1307,8 +1450,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="Skus" type="tns:ArrayOfSku" />
             <s:element minOccurs="0" maxOccurs="1" default="" name="PromoCode" type="s:string" />
@@ -1389,8 +1532,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
           </s:sequence>
         </s:complexType>
@@ -1443,8 +1586,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
           </s:sequence>
@@ -1459,38 +1602,12 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="PurchasePostage">
-        <s:complexType>
-          <s:sequence>
-            <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
-            </s:choice>
-            <s:element minOccurs="1" maxOccurs="1" name="PurchaseAmount" type="s:decimal" />
-            <s:element minOccurs="1" maxOccurs="1" name="ControlTotal" type="s:decimal" />
-            <s:element minOccurs="0" maxOccurs="1" name="MI" type="tns:MachineInfo" />
-            <s:element minOccurs="0" maxOccurs="1" name="IntegratorTxID" type="tns:string-1-128" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="PurchasePostageResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="PurchaseStatus" type="tns:PurchaseStatus" />
-            <s:element minOccurs="1" maxOccurs="1" name="TransactionID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
-            <s:element minOccurs="0" maxOccurs="1" name="RejectionReason" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="MIRequired" type="s:boolean" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="ResubmitPurchase">
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="ResubmitCookie" type="s:string" />
           </s:sequence>
@@ -1513,8 +1630,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
           </s:sequence>
         </s:complexType>
@@ -1597,27 +1714,6 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="CancelIndicium">
-        <s:complexType>
-          <s:sequence>
-            <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
-            </s:choice>
-            <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
-              <s:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="s:string" />
-            </s:choice>
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="CancelIndiciumResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="Authenticator" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="StartPasswordReset">
         <s:complexType>
           <s:sequence>
@@ -1664,8 +1760,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
             </s:choice>
             <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
           </s:sequence>
@@ -1751,7 +1847,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="CostCodeLimit" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="MonthlyPostagePurchaseLimit" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="MaxUsers" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="Capabilities" type="tns:CapabilitiesV9" />
+          <s:element minOccurs="1" maxOccurs="1" name="Capabilities" type="tns:CapabilitiesV11" />
           <s:element minOccurs="1" maxOccurs="1" name="MeterPhysicalAddress" type="tns:Address" />
           <s:element minOccurs="1" maxOccurs="1" name="ResubmitStatus" type="tns:ResubmissionStatus" />
           <s:element minOccurs="0" maxOccurs="1" default="" name="ResubmitCookie" type="s:string" />
@@ -1765,6 +1861,24 @@
           <s:element minOccurs="0" maxOccurs="1" name="CustomerData" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Terms" type="tns:Terms" />
         </s:sequence>
+      </s:complexType>
+      <s:complexType name="CapabilitiesV11">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CapabilitiesV10">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CanPrintGPSmartSaver" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="CapabilitiesV10">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:CapabilitiesV9">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="CanCreateUnlimitedStores" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
       </s:complexType>
       <s:complexType name="CapabilitiesV9">
         <s:complexContent mixed="false">
@@ -1915,6 +2029,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
             <s:element minOccurs="0" maxOccurs="1" name="RejectionReason" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="MIRequired" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="RejectionCode" nillable="true" type="tns:PurchaseRejectionCode" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -1922,8 +2037,8 @@
         <s:complexType>
           <s:sequence>
             <s:choice minOccurs="1" maxOccurs="1">
-              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
               <s:element minOccurs="0" maxOccurs="1" name="Authenticator" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Credentials" type="tns:Credentials" />
             </s:choice>
             <s:choice minOccurs="1" maxOccurs="1">
               <s:element minOccurs="1" maxOccurs="1" name="StampsTxID" type="s1:guid" />
@@ -1987,7 +2102,7 @@
           <s:enumeration value="PickedUpByShippingPartner" />
           <s:enumeration value="ArrivedAtShippingPartner" />
           <s:enumeration value="DepartedFromShippingPartner" />
-          <s:enumeration value="UnrecognizedEvent" />
+          <s:enumeration value="USPS Event" />
           <s:enumeration value="ArriveSortFacility_A1" />
           <s:enumeration value="AcceptedAtDestination" />
           <s:enumeration value="ArrivedUSPSSortFacility" />
@@ -2163,6 +2278,11 @@
           <s:maxLength value="35" />
         </s:restriction>
       </s:simpleType>
+      <s:simpleType name="string-0-100">
+        <s:restriction base="s:string">
+          <s:maxLength value="100" />
+        </s:restriction>
+      </s:simpleType>
       <s:simpleType name="string-1-1">
         <s:restriction base="s:string">
           <s:minLength value="1" />
@@ -2184,12 +2304,6 @@
           <s:maxLength value="40" />
         </s:restriction>
       </s:simpleType>
-      <s:simpleType name="integer-ge-1-le-500">
-        <s:restriction base="s:integer">
-          <s:minInclusive value="1" />
-          <s:maxInclusive value="500" />
-        </s:restriction>
-      </s:simpleType>
       <s:simpleType name="string-6-20">
         <s:restriction base="s:string">
           <s:minLength value="6" />
@@ -2199,6 +2313,12 @@
       <s:simpleType name="string-0-41">
         <s:restriction base="s:string">
           <s:maxLength value="41" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="integer-ge-1-le-500">
+        <s:restriction base="s:integer">
+          <s:minInclusive value="1" />
+          <s:maxInclusive value="500" />
         </s:restriction>
       </s:simpleType>
       <s:simpleType name="string-1-50">
@@ -2293,6 +2413,42 @@
   <wsdl:message name="CreateMailingLabelIndiciaSoapOut">
     <wsdl:part name="parameters" element="tns:CreateMailingLabelIndiciaResponse" />
   </wsdl:message>
+  <wsdl:message name="ChangePlanSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangePlan" />
+  </wsdl:message>
+  <wsdl:message name="ChangePlanSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangePlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHistorySoapIn">
+    <wsdl:part name="parameters" element="tns:GetBalanceHistory" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHistorySoapOut">
+    <wsdl:part name="parameters" element="tns:GetBalanceHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHistoryByTokenSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBalanceHistoryByToken" />
+  </wsdl:message>
+  <wsdl:message name="GetBalanceHistoryByTokenSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBalanceHistoryByTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="PurchasePostageSoapIn">
+    <wsdl:part name="parameters" element="tns:PurchasePostage" />
+  </wsdl:message>
+  <wsdl:message name="PurchasePostageSoapOut">
+    <wsdl:part name="parameters" element="tns:PurchasePostageResponse" />
+  </wsdl:message>
+  <wsdl:message name="CancelIndiciumSoapIn">
+    <wsdl:part name="parameters" element="tns:CancelIndicium" />
+  </wsdl:message>
+  <wsdl:message name="CancelIndiciumSoapOut">
+    <wsdl:part name="parameters" element="tns:CancelIndiciumResponse" />
+  </wsdl:message>
+  <wsdl:message name="RegisterAccountSoapIn">
+    <wsdl:part name="parameters" element="tns:RegisterAccount" />
+  </wsdl:message>
+  <wsdl:message name="RegisterAccountSoapOut">
+    <wsdl:part name="parameters" element="tns:RegisterAccountResponse" />
+  </wsdl:message>
   <wsdl:message name="GetURLSoapIn">
     <wsdl:part name="parameters" element="tns:GetURL" />
   </wsdl:message>
@@ -2311,23 +2467,11 @@
   <wsdl:message name="SetCodeWordsSoapOut">
     <wsdl:part name="parameters" element="tns:SetCodeWordsResponse" />
   </wsdl:message>
-  <wsdl:message name="RegisterAccountSoapIn">
-    <wsdl:part name="parameters" element="tns:RegisterAccount" />
-  </wsdl:message>
-  <wsdl:message name="RegisterAccountSoapOut">
-    <wsdl:part name="parameters" element="tns:RegisterAccountResponse" />
-  </wsdl:message>
   <wsdl:message name="CarrierPickupSoapIn">
     <wsdl:part name="parameters" element="tns:CarrierPickup" />
   </wsdl:message>
   <wsdl:message name="CarrierPickupSoapOut">
     <wsdl:part name="parameters" element="tns:CarrierPickupResponse" />
-  </wsdl:message>
-  <wsdl:message name="ChangePlanSoapIn">
-    <wsdl:part name="parameters" element="tns:ChangePlan" />
-  </wsdl:message>
-  <wsdl:message name="ChangePlanSoapOut">
-    <wsdl:part name="parameters" element="tns:ChangePlanResponse" />
   </wsdl:message>
   <wsdl:message name="SetAutoBuySoapIn">
     <wsdl:part name="parameters" element="tns:SetAutoBuy" />
@@ -2401,12 +2545,6 @@
   <wsdl:message name="GetChangePlanStatusSoapOut">
     <wsdl:part name="parameters" element="tns:GetChangePlanStatusResponse" />
   </wsdl:message>
-  <wsdl:message name="PurchasePostageSoapIn">
-    <wsdl:part name="parameters" element="tns:PurchasePostage" />
-  </wsdl:message>
-  <wsdl:message name="PurchasePostageSoapOut">
-    <wsdl:part name="parameters" element="tns:PurchasePostageResponse" />
-  </wsdl:message>
   <wsdl:message name="ResubmitPurchaseSoapIn">
     <wsdl:part name="parameters" element="tns:ResubmitPurchase" />
   </wsdl:message>
@@ -2430,12 +2568,6 @@
   </wsdl:message>
   <wsdl:message name="AuthenticateWithTransferAuthenticatorSoapOut">
     <wsdl:part name="parameters" element="tns:AuthenticateWithTransferAuthenticatorResponse" />
-  </wsdl:message>
-  <wsdl:message name="CancelIndiciumSoapIn">
-    <wsdl:part name="parameters" element="tns:CancelIndicium" />
-  </wsdl:message>
-  <wsdl:message name="CancelIndiciumSoapOut">
-    <wsdl:part name="parameters" element="tns:CancelIndiciumResponse" />
   </wsdl:message>
   <wsdl:message name="StartPasswordResetSoapIn">
     <wsdl:part name="parameters" element="tns:StartPasswordReset" />
@@ -2491,7 +2623,7 @@
   <wsdl:message name="TrackShipmentSoapOut">
     <wsdl:part name="parameters" element="tns:TrackShipmentResponse" />
   </wsdl:message>
-  <wsdl:portType name="SwsimV51Soap">
+  <wsdl:portType name="SwsimV55Soap">
     <wsdl:operation name="CreateIndicium">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Generate an indicium.</wsdl:documentation>
       <wsdl:input message="tns:CreateIndiciumSoapIn" />
@@ -2522,6 +2654,36 @@
       <wsdl:input message="tns:CreateMailingLabelIndiciaSoapIn" />
       <wsdl:output message="tns:CreateMailingLabelIndiciaSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="ChangePlan">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Plan.</wsdl:documentation>
+      <wsdl:input message="tns:ChangePlanSoapIn" />
+      <wsdl:output message="tns:ChangePlanSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBalanceHistory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get list of transactions.</wsdl:documentation>
+      <wsdl:input message="tns:GetBalanceHistorySoapIn" />
+      <wsdl:output message="tns:GetBalanceHistorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBalanceHistoryByToken">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get list of transactions.</wsdl:documentation>
+      <wsdl:input message="tns:GetBalanceHistoryByTokenSoapIn" />
+      <wsdl:output message="tns:GetBalanceHistoryByTokenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PurchasePostage">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Purchase additional postage.</wsdl:documentation>
+      <wsdl:input message="tns:PurchasePostageSoapIn" />
+      <wsdl:output message="tns:PurchasePostageSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelIndicium">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Cancel a previously issued indicium.</wsdl:documentation>
+      <wsdl:input message="tns:CancelIndiciumSoapIn" />
+      <wsdl:output message="tns:CancelIndiciumSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RegisterAccount">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Register a new Stamps.com account.</wsdl:documentation>
+      <wsdl:input message="tns:RegisterAccountSoapIn" />
+      <wsdl:output message="tns:RegisterAccountSoapOut" />
+    </wsdl:operation>
     <wsdl:operation name="GetURL">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get URL for a Stamps.com web page.</wsdl:documentation>
       <wsdl:input message="tns:GetURLSoapIn" />
@@ -2537,20 +2699,10 @@
       <wsdl:input message="tns:SetCodeWordsSoapIn" />
       <wsdl:output message="tns:SetCodeWordsSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="RegisterAccount">
-      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Register a new Stamps.com account.</wsdl:documentation>
-      <wsdl:input message="tns:RegisterAccountSoapIn" />
-      <wsdl:output message="tns:RegisterAccountSoapOut" />
-    </wsdl:operation>
     <wsdl:operation name="CarrierPickup">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Request carrier pickup from USPS.</wsdl:documentation>
       <wsdl:input message="tns:CarrierPickupSoapIn" />
       <wsdl:output message="tns:CarrierPickupSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="ChangePlan">
-      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Plan.</wsdl:documentation>
-      <wsdl:input message="tns:ChangePlanSoapIn" />
-      <wsdl:output message="tns:ChangePlanSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SetAutoBuy">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Set auto-buy settings</wsdl:documentation>
@@ -2612,11 +2764,6 @@
       <wsdl:input message="tns:GetChangePlanStatusSoapIn" />
       <wsdl:output message="tns:GetChangePlanStatusSoapOut" />
     </wsdl:operation>
-    <wsdl:operation name="PurchasePostage">
-      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Purchase additional postage.</wsdl:documentation>
-      <wsdl:input message="tns:PurchasePostageSoapIn" />
-      <wsdl:output message="tns:PurchasePostageSoapOut" />
-    </wsdl:operation>
     <wsdl:operation name="ResubmitPurchase">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Resubmit Purchase.</wsdl:documentation>
       <wsdl:input message="tns:ResubmitPurchaseSoapIn" />
@@ -2636,11 +2783,6 @@
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Authenticate with transfer authenticator.</wsdl:documentation>
       <wsdl:input message="tns:AuthenticateWithTransferAuthenticatorSoapIn" />
       <wsdl:output message="tns:AuthenticateWithTransferAuthenticatorSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="CancelIndicium">
-      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Cancel a previously issued indicium.</wsdl:documentation>
-      <wsdl:input message="tns:CancelIndiciumSoapIn" />
-      <wsdl:output message="tns:CancelIndiciumSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="StartPasswordReset">
       <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Start a password reset by sending a temporary password to the e-mail address on file.</wsdl:documentation>
@@ -2688,10 +2830,10 @@
       <wsdl:output message="tns:TrackShipmentSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="SwsimV51Soap" type="tns:SwsimV51Soap">
+  <wsdl:binding name="SwsimV55Soap" type="tns:SwsimV55Soap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CreateIndicium">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateIndicium" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateIndicium" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2700,7 +2842,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateEnvelopeIndicium">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateEnvelopeIndicium" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateEnvelopeIndicium" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2709,7 +2851,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateUnfundedIndicium">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateUnfundedIndicium" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateUnfundedIndicium" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2718,7 +2860,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetRates">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetRates" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetRates" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2727,7 +2869,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateNetStampsIndicia">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateNetStampsIndicia" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateNetStampsIndicia" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2736,52 +2878,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateMailingLabelIndicia">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateMailingLabelIndicia" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetURL">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetURL" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetShipmentList">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetShipmentList" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetCodeWords">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/SetCodeWords" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="RegisterAccount">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/RegisterAccount" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CarrierPickup">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CarrierPickup" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateMailingLabelIndicia" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2790,7 +2887,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="ChangePlan">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/ChangePlan" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/ChangePlan" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2798,8 +2895,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SetAutoBuy">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/SetAutoBuy" style="document" />
+    <wsdl:operation name="GetBalanceHistory">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetBalanceHistory" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2807,98 +2904,8 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CreateScanForm">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateScanForm" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnumCodeWordTypes">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/EnumCodeWordTypes" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CleanseAddress">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CleanseAddress" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetShipmentListByToken">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetShipmentListByToken" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="RecoverUsername">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/RecoverUsername" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSupportedCountries">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetSupportedCountries" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangePassword">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/ChangePassword" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PriceOrder">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/PriceOrder" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PlaceOrder">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/PlaceOrder" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetNetStampsImages">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetNetStampsImages" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetChangePlanStatus">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetChangePlanStatus" style="document" />
+    <wsdl:operation name="GetBalanceHistoryByToken">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetBalanceHistoryByToken" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2907,43 +2914,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="PurchasePostage">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/PurchasePostage" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ResubmitPurchase">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/ResubmitPurchase" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnumNetStampsLayouts">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/EnumNetStampsLayouts" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnumCostCodes">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/EnumCostCodes" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="AuthenticateWithTransferAuthenticator">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/AuthenticateWithTransferAuthenticator" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/PurchasePostage" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2952,7 +2923,196 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CancelIndicium">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CancelIndicium" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CancelIndicium" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterAccount">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/RegisterAccount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetURL">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetURL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShipmentList">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetShipmentList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCodeWords">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/SetCodeWords" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CarrierPickup">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CarrierPickup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetAutoBuy">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/SetAutoBuy" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateScanForm">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateScanForm" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumCodeWordTypes">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/EnumCodeWordTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CleanseAddress">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CleanseAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShipmentListByToken">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetShipmentListByToken" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecoverUsername">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/RecoverUsername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSupportedCountries">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetSupportedCountries" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PriceOrder">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/PriceOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlaceOrder">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/PlaceOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNetStampsImages">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetNetStampsImages" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChangePlanStatus">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetChangePlanStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResubmitPurchase">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/ResubmitPurchase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumNetStampsLayouts">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/EnumNetStampsLayouts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumCostCodes">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/EnumCostCodes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateWithTransferAuthenticator">
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/AuthenticateWithTransferAuthenticator" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2961,7 +3121,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="StartPasswordReset">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/StartPasswordReset" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/StartPasswordReset" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2970,7 +3130,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="FinishPasswordReset">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/FinishPasswordReset" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/FinishPasswordReset" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2979,7 +3139,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetCodewordQuestions">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetCodewordQuestions" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetCodewordQuestions" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2988,7 +3148,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="VoidUnfundedIndicium">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/VoidUnfundedIndicium" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/VoidUnfundedIndicium" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -2997,7 +3157,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="FundUnfundedIndicium">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/FundUnfundedIndicium" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/FundUnfundedIndicium" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -3006,7 +3166,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="AuthenticateUser">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/AuthenticateUser" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/AuthenticateUser" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -3015,7 +3175,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetAccountInfo">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetAccountInfo" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetAccountInfo" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -3024,7 +3184,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetPurchaseStatus">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetPurchaseStatus" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetPurchaseStatus" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -3033,7 +3193,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="TrackShipment">
-      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/TrackShipment" style="document" />
+      <soap:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/TrackShipment" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -3042,10 +3202,10 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:binding name="SwsimV51Soap12" type="tns:SwsimV51Soap">
+  <wsdl:binding name="SwsimV55Soap12" type="tns:SwsimV55Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CreateIndicium">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateIndicium" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateIndicium" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3054,7 +3214,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateEnvelopeIndicium">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateEnvelopeIndicium" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateEnvelopeIndicium" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3063,7 +3223,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateUnfundedIndicium">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateUnfundedIndicium" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateUnfundedIndicium" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3072,7 +3232,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetRates">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetRates" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetRates" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3081,7 +3241,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateNetStampsIndicia">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateNetStampsIndicia" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateNetStampsIndicia" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3090,52 +3250,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CreateMailingLabelIndicia">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateMailingLabelIndicia" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetURL">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetURL" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetShipmentList">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetShipmentList" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SetCodeWords">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/SetCodeWords" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="RegisterAccount">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/RegisterAccount" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CarrierPickup">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CarrierPickup" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateMailingLabelIndicia" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3144,7 +3259,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="ChangePlan">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/ChangePlan" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/ChangePlan" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3152,8 +3267,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SetAutoBuy">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/SetAutoBuy" style="document" />
+    <wsdl:operation name="GetBalanceHistory">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetBalanceHistory" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3161,98 +3276,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CreateScanForm">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CreateScanForm" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnumCodeWordTypes">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/EnumCodeWordTypes" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CleanseAddress">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CleanseAddress" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetShipmentListByToken">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetShipmentListByToken" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="RecoverUsername">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/RecoverUsername" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSupportedCountries">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetSupportedCountries" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ChangePassword">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/ChangePassword" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PriceOrder">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/PriceOrder" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="PlaceOrder">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/PlaceOrder" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetNetStampsImages">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetNetStampsImages" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetChangePlanStatus">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetChangePlanStatus" style="document" />
+    <wsdl:operation name="GetBalanceHistoryByToken">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetBalanceHistoryByToken" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3261,43 +3286,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="PurchasePostage">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/PurchasePostage" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ResubmitPurchase">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/ResubmitPurchase" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnumNetStampsLayouts">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/EnumNetStampsLayouts" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="EnumCostCodes">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/EnumCostCodes" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="AuthenticateWithTransferAuthenticator">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/AuthenticateWithTransferAuthenticator" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/PurchasePostage" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3306,7 +3295,196 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CancelIndicium">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/CancelIndicium" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CancelIndicium" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RegisterAccount">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/RegisterAccount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetURL">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetURL" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShipmentList">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetShipmentList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCodeWords">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/SetCodeWords" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CarrierPickup">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CarrierPickup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetAutoBuy">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/SetAutoBuy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateScanForm">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CreateScanForm" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumCodeWordTypes">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/EnumCodeWordTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CleanseAddress">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/CleanseAddress" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShipmentListByToken">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetShipmentListByToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RecoverUsername">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/RecoverUsername" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSupportedCountries">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetSupportedCountries" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PriceOrder">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/PriceOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlaceOrder">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/PlaceOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNetStampsImages">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetNetStampsImages" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetChangePlanStatus">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetChangePlanStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResubmitPurchase">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/ResubmitPurchase" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumNetStampsLayouts">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/EnumNetStampsLayouts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumCostCodes">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/EnumCostCodes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateWithTransferAuthenticator">
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/AuthenticateWithTransferAuthenticator" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3315,7 +3493,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="StartPasswordReset">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/StartPasswordReset" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/StartPasswordReset" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3324,7 +3502,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="FinishPasswordReset">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/FinishPasswordReset" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/FinishPasswordReset" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3333,7 +3511,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetCodewordQuestions">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetCodewordQuestions" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetCodewordQuestions" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3342,7 +3520,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="VoidUnfundedIndicium">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/VoidUnfundedIndicium" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/VoidUnfundedIndicium" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3351,7 +3529,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="FundUnfundedIndicium">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/FundUnfundedIndicium" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/FundUnfundedIndicium" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3360,7 +3538,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="AuthenticateUser">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/AuthenticateUser" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/AuthenticateUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3369,7 +3547,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetAccountInfo">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetAccountInfo" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetAccountInfo" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3378,7 +3556,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetPurchaseStatus">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/GetPurchaseStatus" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/GetPurchaseStatus" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3387,7 +3565,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="TrackShipment">
-      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/01/swsim/swsimv51/TrackShipment" style="document" />
+      <soap12:operation soapAction="http://stamps.com/xml/namespace/2016/09/swsim/swsimv55/TrackShipment" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3396,13 +3574,13 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="SwsimV51">
-    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Stamps.com Web Services for Individual Meters (SWS/IM) Version 51</wsdl:documentation>
-    <wsdl:port name="SwsimV51Soap" binding="tns:SwsimV51Soap">
-      <soap:address location="https://swsim.stamps.com/swsim/swsimv51.asmx" />
+  <wsdl:service name="SwsimV55">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Stamps.com Web Services for Individual Meters (SWS/IM) Version 55</wsdl:documentation>
+    <wsdl:port name="SwsimV55Soap" binding="tns:SwsimV55Soap">
+      <soap:address location="https://swsim041.qacc.stamps.com/swsim/swsimv55.asmx" />
     </wsdl:port>
-    <wsdl:port name="SwsimV51Soap12" binding="tns:SwsimV51Soap12">
-      <soap12:address location="https://swsim.stamps.com/swsim/swsimv51.asmx" />
+    <wsdl:port name="SwsimV55Soap12" binding="tns:SwsimV55Soap12">
+      <soap12:address location="https://swsim041.qacc.stamps.com/swsim/swsimv55.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
