@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -16,6 +13,9 @@ using ShipWorks.Startup;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
@@ -117,8 +117,8 @@ namespace ShipWorks.Tests.Integration.MSTest
                     case "john3610-pc":
                         instance = Guid.Parse("{a721d9e4-fb3b-4a64-a612-8579b1251c95}");
                         break;
-                    case "kevin-pc":
-                        instance = Guid.Parse("{6db3aa02-32bb-430e-95d2-0c59b3b7417a}");
+                    case "kevin":
+                        instance = Guid.Parse("{1393db92-517a-48ae-afb1-8f9d4edda751}");
                         break;
                     case "MSTest-vm":
                         instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
