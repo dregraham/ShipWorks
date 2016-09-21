@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.Reflection;
-using ShipWorks.ApplicationCore.Appearance;
-using System.Windows.Forms;
-using Interapptive.Shared;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using ShipWorks.UI.Utility;
 
@@ -16,7 +11,7 @@ namespace ShipWorks.UI
     /// <summary>
     /// Provides utility functions used for display.
     /// </summary>
-    static class DisplayHelper
+    public static class DisplayHelper
     {
         /// <summary>
         /// Darken the given color by the specified factor.
@@ -100,7 +95,7 @@ namespace ShipWorks.UI
         /// <summary>
         /// Resize the given image to the new size
         /// </summary>
-        /// 
+        ///
         public static Image ResizeImage(Image image, Size size)
         {
             Bitmap newImage = new Bitmap(size.Width, size.Height);

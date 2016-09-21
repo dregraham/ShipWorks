@@ -1,23 +1,30 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
     /// <summary>
     /// Label Service for Express1 Endicia
     /// </summary>
+    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.Endicia)]
+    [Component(RegistrationType.Self)]
     public class Express1EndiciaLabelService : ILabelService
     {
+        private readonly Func<ShipmentEntity, LabelRequestResponse, EndiciaDownloadedLabelData> createDownloadedLabelData;
         private readonly Express1EndiciaShipmentType express1EndiciaShipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1EndiciaLabelService(Express1EndiciaShipmentType express1EndiciaShipmentType)
+        public Express1EndiciaLabelService(Express1EndiciaShipmentType express1EndiciaShipmentType,
+            Func<ShipmentEntity, LabelRequestResponse, EndiciaDownloadedLabelData> createDownloadedLabelData)
         {
             this.express1EndiciaShipmentType = express1EndiciaShipmentType;
+            this.createDownloadedLabelData = createDownloadedLabelData;
         }
 
         /// <summary>
@@ -30,15 +37,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             try
             {
-                (new EndiciaApiClient(express1EndiciaShipmentType.AccountRepository, express1EndiciaShipmentType.LogEntryFactory,
-                    express1EndiciaShipmentType.CertificateInspector)).ProcessShipment(shipment, express1EndiciaShipmentType);
+                EndiciaApiClient client = new EndiciaApiClient(express1EndiciaShipmentType.AccountRepository,
+                    express1EndiciaShipmentType.LogEntryFactory,
+                    express1EndiciaShipmentType.CertificateInspector);
+                LabelRequestResponse response = client.ProcessShipment(shipment, express1EndiciaShipmentType);
+                return createDownloadedLabelData(shipment, response);
             }
             catch (EndiciaException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
-
-            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>
