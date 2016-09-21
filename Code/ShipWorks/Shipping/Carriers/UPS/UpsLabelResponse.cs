@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.XPath;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// DTO for passing UPS label data around
