@@ -26,7 +26,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo.RateFootnotes
                     PromoStatus = (int)UpsPromoStatus.Applied
                 };
 
-                mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings().UpsAccessKey).Returns("blahh");
+                var settings = new ShippingSettingsEntity() {UpsAccessKey = "blah"};
+
+                mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings()).Returns(settings);
                 var upsPromo = mock.Create<UpsPromo>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
 
                 UpsPromoFootnote footnote = new UpsPromoFootnote(null, upsPromo);

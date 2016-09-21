@@ -131,8 +131,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                 {
                     PromoStatus = (int)UpsPromoStatus.Applied
                 };
+                mock.Mock<ICarrierSettingsRepository>()
+                    .Setup(s => s.GetShippingSettings())
+                    .Returns(new ShippingSettingsEntity() {UpsAccessKey = "blahh"});
 
-                mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings().UpsAccessKey).Returns("blahh");
                 var upsPromo = mock.Create<UpsPromo>(new TypedParameter(typeof (UpsAccountEntity), upsAccount));
 
                 Assert.Equal(UpsPromoStatus.Applied, upsPromo.GetStatus());
@@ -466,7 +468,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 
         private static UpsPromo CreateUpsPromo(AutoMock mock, Mock<IUpsApiPromoClient> client, UpsAccountEntity upsAccount)
         {
-            mock.Mock<ICarrierSettingsRepository>().Setup(s => s.GetShippingSettings().UpsAccessKey).Returns("itWof6javyE=");
+            mock.Mock<ICarrierSettingsRepository>()
+                .Setup(s => s.GetShippingSettings())
+                .Returns(new ShippingSettingsEntity() {UpsAccessKey = "itWof6javyE="});
 
             PromoDiscountAgreementResponse response = new PromoDiscountAgreementResponse()
             {
