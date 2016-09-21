@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using Autofac;
@@ -9,16 +10,11 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
 using log4net;
 using NDesk.Options;
-using ShipWorks.Actions;
-using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.VersionSpeicifcUpdates;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 
@@ -67,15 +63,15 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static Version GetInstalledAssemblyVersion()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con, "GetAssemblySchemaVersion"))
+                    using (DbCommand cmd = DbCommandProvider.Create(con, "GetAssemblySchemaVersion"))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+                        return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
                     }
                 }
                 catch (SqlException ex)
@@ -106,7 +102,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static Version GetInstalledSchemaVersion()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
@@ -184,8 +180,6 @@ namespace ShipWorks.Data.Administration
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
 
-                            HandleUpdateDatabaseForV3(installed);
-
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
@@ -196,9 +190,7 @@ namespace ShipWorks.Data.Administration
                                 SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
                             }
 
-                            HandleUpdateDatabaseForV4(installed);
-
-                            HandleUpdateDatabaseForV5(installed);
+                            ApplyVersionSpecificUpdates(installed);
                         }
                     }
                 }
@@ -211,203 +203,20 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Run v3 specific update database logic
+        /// Apply version specific updates
         /// </summary>
-        private static void HandleUpdateDatabaseForV3(Version installed)
+        private static void ApplyVersionSpecificUpdates(Version installed)
         {
-            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-            if (installed <= new Version(3, 9, 3, 0))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                IEnumerable<IVersionSpecificUpdate> applicableUpdates =
+                    lifetimeScope.Resolve<IEnumerable<IVersionSpecificUpdate>>()
+                        .Where(x => installed < x.AppliesTo)
+                        .OrderBy(x => x.AppliesTo);
+
+                foreach (IVersionSpecificUpdate versionSpecificUpdate in applicableUpdates)
                 {
-                    cmd.CommandText = @"
-
-                                        DECLARE @dbName nvarchar(100)
-                                        DECLARE @isAutoShrink int
-
-                                        SET @dbName = DB_NAME()
-
-                                        SELECT @isAutoShrink = CONVERT(int,DATABASEPROPERTYEX([Name] , 'IsAutoShrink'))
-                                        FROM master.dbo.sysdatabases
-                                        where name = @dbName
-
-                                        IF(@isAutoShrink = 1)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' SET AUTO_SHRINK OFF')";
-
-                    cmd.ExecuteNonQuery();
-                });
-
-                // Update size and growth of shipworks database
-                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                {
-                    cmd.CommandText = @"
-                                        DECLARE @logSize int
-                                        DECLARE @dataSize int
-                                        DECLARE @dataFileGrowth int
-                                        DECLARE @logFileGrowth int
-                                        DECLARE @dataName nvarchar(100)
-                                        DECLARE @logName nvarchar(100)
-                                        DECLARE @dbName nvarchar(100)
-
-                                        SET @dbName = DB_NAME()
-
-                                        SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
-                                               @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
-                                               @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
-                                               @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
-                                               @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
-                                               @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-                                        FROM sys.master_files
-                                        where DB_NAME(database_id) = @dbName
-
-                                        IF (@logSize < 25600)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataSize < 25600)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataFileGrowth < 25600 OR @dataFileGrowth >= 64000)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 200MB)' )
-
-                                        IF (@logFileGrowth < 25600 OR @logFileGrowth >= 64000)
-                                            EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
-                                    ";
-
-                    cmd.ExecuteNonQuery();
-                });
-
-                // Update size and growth of tempdb
-                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                {
-                    cmd.CommandText = @"
-                                        DECLARE @logSize int
-                                        DECLARE @dataSize int
-                                        DECLARE @dataFileGrowth int
-                                        DECLARE @logFileGrowth int
-                                        DECLARE @dataName nvarchar(100)
-                                        DECLARE @logName nvarchar(100)
-
-                                        SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
-                                               @dataName = MAX(CASE WHEN type_desc = 'ROWS' THEN name END),
-                                               @dataFileGrowth = SUM(CASE WHEN type_desc = 'ROWS' AND is_percent_growth=1 THEN growth ELSE 0 END),
-                                               @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
-                                               @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
-                                               @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-                                        FROM sys.master_files
-                                        where DB_NAME(database_id) = 'tempdb'
-
-                                        IF (@logSize < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataSize < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @dataName + ''', SIZE = 200MB)' )
-
-                                        IF (@dataFileGrowth < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 200MB)' )
-
-                                        IF (@logFileGrowth < 25600)
-                                            EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
-                                    ";
-
-                    cmd.ExecuteNonQuery();
-                });
-            }
-
-            // If we were upgrading from this version, add AddressValidation filters.
-            if (installed < new Version(3, 12, 0, 0))
-            {
-                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
-                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
-            }
-        }
-
-        /// <summary>
-        /// Run v4 specific update database logic
-        /// </summary>
-        private static void HandleUpdateDatabaseForV4(Version installed)
-        {
-            // If we were upgrading from this version, Regenerate scheduled actions
-            // To fix issue caused by breaking out assemblies
-            if (installed < new Version(4, 5, 0, 0))
-            {
-                // Grab all of the actions that are enabled and schedule based
-                ActionManager.InitializeForCurrentSession();
-                IEnumerable<ActionEntity> actions = ActionManager.Actions.Where(a => a.Enabled && a.TriggerType == (int) ActionTriggerType.Scheduled);
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    foreach (ActionEntity action in actions)
-                    {
-                        // Some trigger's state depend on the enabled state of the action
-                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
-
-                        if (scheduledTrigger?.Schedule != null)
-                        {
-                            // Check to see if the action is a One Time action and in the past, if so we disable it
-                            if (scheduledTrigger.Schedule.StartDateTimeInUtc < DateTime.UtcNow &&
-                                scheduledTrigger.Schedule.ScheduleType == ActionScheduleType.OneTime)
-                            {
-                                action.Enabled = false;
-                            }
-                            else
-                            {
-                                scheduledTrigger.SaveExtraState(action, adapter);
-                            }
-                        }
-
-                        ActionManager.SaveAction(action, adapter);
-                    }
-
-                    adapter.Commit();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Run v5 specific update database logic
-        /// </summary>
-        private static void HandleUpdateDatabaseForV5(Version installed)
-        {
-            // update Configuration table Key column to have an encrypted empty string
-            // using the GetDatabaseGuid stored procedure as the salt.
-            if (installed < new Version(5, 0, 0, 0))
-            {
-                using (ILifetimeScope iocScope = IoC.BeginLifetimeScope())
-                {
-                    // Resolve a CustomerLicense passing in an empty string as the key parameter
-                    ICustomerLicense customerLicense = iocScope.Resolve<ICustomerLicense>(new TypedParameter(typeof(string), string.Empty));
-
-                    // Save the license
-                    customerLicense.Save();
-                }
-            }
-
-            // If we were upgrading from this version, Regenerate scheduled actions
-            // To fix issue caused by breaking out assemblies
-            if (installed < new Version(5, 4, 0, 0))
-            {
-                // Grab all of the actions that are enabled and schedule based
-                ActionManager.InitializeForCurrentSession();
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    foreach (ActionEntity action in ActionManager.Actions)
-                    {
-                        // Some trigger's state depend on the enabled state of the action
-                        ScheduledTrigger scheduledTrigger = ActionManager.LoadTrigger(action) as ScheduledTrigger;
-
-                        if (scheduledTrigger?.Schedule != null)
-                        {
-                            // Check to see if the action is a One Time action and in the past, if so we disable it
-                            if (scheduledTrigger.Schedule.StartDateTimeInUtc >= DateTime.UtcNow ||
-                                scheduledTrigger.Schedule.ScheduleType != ActionScheduleType.OneTime)
-                            {
-                                scheduledTrigger.SaveExtraState(action, adapter);
-                            }
-                        }
-
-                        ActionManager.SaveAction(action, adapter);
-                    }
-
-                    adapter.Commit();
+                    versionSpecificUpdate.Update();
                 }
             }
         }
@@ -430,7 +239,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version store procedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con)
+        public static void UpdateSchemaVersionStoredProcedure(DbConnection con)
         {
             UpdateSchemaVersionStoredProcedure(con, GetRequiredSchemaVersion());
         }
@@ -438,9 +247,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, Version version)
+        public static void UpdateSchemaVersionStoredProcedure(DbConnection con, Version version)
         {
-            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            using (DbCommand cmd = DbCommandProvider.Create(con))
             {
                 UpdateSchemaVersionStoredProcedure(cmd, version);
             }
@@ -449,7 +258,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(SqlCommand cmd, Version version)
+        public static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
         {
             UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion");
         }
@@ -457,7 +266,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the assembly version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateAssemblyVersionStoredProcedure(SqlCommand cmd)
+        public static void UpdateAssemblyVersionStoredProcedure(DbCommand cmd)
         {
             UpdateVersionStoredProcedure(cmd, GetRequiredSchemaVersion(), "GetAssemblySchemaVersion");
         }
@@ -465,7 +274,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update a stored procedure for checking a version
         /// </summary>
-        private static void UpdateVersionStoredProcedure(SqlCommand cmd, Version version, string procedureName)
+        private static void UpdateVersionStoredProcedure(DbCommand cmd, Version version, string procedureName)
         {
             if (version == null)
             {
@@ -475,7 +284,7 @@ namespace ShipWorks.Data.Administration
             cmd.CommandText = string.Format(@"
                 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[{0}]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
                     DROP PROCEDURE [dbo].[{0}]", procedureName);
-            SqlCommandProvider.ExecuteNonQuery(cmd);
+            DbCommandProvider.ExecuteNonQuery(cmd);
 
 #if DEBUG
             string withEncryption = "";
@@ -488,7 +297,7 @@ namespace ShipWorks.Data.Administration
                 {0}
                 AS
                 SELECT '{1}' AS 'SchemaVersion'", withEncryption, version.ToString(4), procedureName);
-            SqlCommandProvider.ExecuteNonQuery(cmd);
+            DbCommandProvider.ExecuteNonQuery(cmd);
         }
 
         /// <summary>
@@ -502,23 +311,18 @@ namespace ShipWorks.Data.Administration
             // Get all the update scripts
             List<SqlUpdateScript> updateScripts = GetUpdateScripts().Where(s => s.SchemaVersion > installed).ToList();
 
-            // Start with generic progress msg
+            // Start with generic progress message
             progress.Detail = "Updating...";
 
             // Store the event handler in a variable so it can be removed easily later
-            SqlInfoMessageEventHandler infoMessageHandler = (sender, e) =>
-            {
-                if (progress.Status == ProgressItemStatus.Running)
-                {
-                    if (!e.Message.StartsWith("Caution"))
-                    {
-                        progress.Detail = e.Message;
-                    }
-                }
-            };
+            SqlInfoMessageEventHandler infoMessageHandler = CreateInfoMessageHandler(progress);
 
             // Listen for script messages to display to the user
-            ExistingConnectionScope.ScopedConnection.InfoMessage += infoMessageHandler;
+            SqlConnection sqlConn = ExistingConnectionScope.ScopedConnection.AsSqlConnection();
+            if (sqlConn != null)
+            {
+                sqlConn.InfoMessage += infoMessageHandler;
+            }
 
             // Determine the percent-value of each update script
             double scriptProgressValue = 100.0 / (double) updateScripts.Count;
@@ -526,38 +330,61 @@ namespace ShipWorks.Data.Administration
             // Go through each update script (they are already sorted in version order)
             foreach (SqlUpdateScript script in updateScripts)
             {
-                ExistingConnectionScope.BeginTransaction();
-
-                log.InfoFormat("Updating to {0}", script.SchemaVersion);
-
-                // How many scripts we've finished with so far
-                int scriptsCompleted = updateScripts.IndexOf(script);
-
-                // Execute the script
-                SqlScript executor = sqlLoader[script.ScriptName];
-
-                // Update the progress as we complete each batch in the script
-                executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
-                {
-                    // Update the progress
-                    progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
-                };
-
-                // Run all the batches in the script
-                ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
-
-                ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
-
-                ExistingConnectionScope.Commit();
+                ExecuteUpdateScript(progress, updateScripts, scriptProgressValue, script);
             }
 
             // Since we have a single, long-lived connection, we want to remove the message handler so future messages
             // get handled normally
-            ExistingConnectionScope.ScopedConnection.InfoMessage -= infoMessageHandler;
+            if (sqlConn != null)
+            {
+                sqlConn.InfoMessage -= infoMessageHandler;
+            }
 
             progress.PercentComplete = 100;
             progress.Detail = "Done";
             progress.Completed();
+        }
+
+        /// <summary>
+        /// Execute an individual update script
+        /// </summary>
+        private static void ExecuteUpdateScript(ProgressItem progress, List<SqlUpdateScript> updateScripts, double scriptProgressValue, SqlUpdateScript script)
+        {
+            ExistingConnectionScope.BeginTransaction();
+
+            log.InfoFormat("Updating to {0}", script.SchemaVersion);
+
+            // How many scripts we've finished with so far
+            int scriptsCompleted = updateScripts.IndexOf(script);
+
+            // Execute the script
+            SqlScript executor = sqlLoader[script.ScriptName];
+
+            // Update the progress as we complete each batch in the script
+            executor.BatchCompleted += delegate (object sender, SqlScriptBatchCompletedEventArgs args)
+            {
+                // Update the progress
+                progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
+            };
+
+            // Run all the batches in the script
+            ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
+            ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
+            ExistingConnectionScope.Commit();
+        }
+
+        /// <summary>
+        /// Create a SQL info message handler
+        /// </summary>
+        private static SqlInfoMessageEventHandler CreateInfoMessageHandler(ProgressItem progress)
+        {
+            return (sender, e) =>
+            {
+                if (progress.Status == ProgressItemStatus.Running && !e.Message.StartsWith("Caution"))
+                {
+                    progress.Detail = e.Message;
+                }
+            };
         }
 
         /// <summary>
@@ -574,7 +401,7 @@ namespace ShipWorks.Data.Administration
         /// Since our filters use column masks that are exactly dependent on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
-        private static void UpdateFilters(ProgressItem progress, SqlConnection connection, SqlTransaction transaction)
+        private static void UpdateFilters(ProgressItem progress, DbConnection connection, DbTransaction transaction)
         {
             progress.Detail = "Updating filters...";
 
@@ -600,13 +427,13 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the schema version of the ShipWorks database on the given connection
         /// </summary>
-        public static Version GetInstalledSchemaVersion(SqlConnection con)
+        public static Version GetInstalledSchemaVersion(DbConnection con)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+            return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
         }
 
         /// <summary>

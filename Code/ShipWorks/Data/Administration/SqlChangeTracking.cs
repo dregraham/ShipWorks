@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 using Interapptive.Shared.Data;
@@ -15,14 +16,14 @@ namespace ShipWorks.Data.Administration
     public class SqlChangeTracking
     {
         private readonly ILog log;
-        private readonly List<string> tablesRequiringChangeTracking;        
-        
+        private readonly List<string> tablesRequiringChangeTracking;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlChangeTracking" /> class.
         /// </summary>
         public SqlChangeTracking()
         {
-            log = LogManager.GetLogger(typeof (SqlChangeTracking));
+            log = LogManager.GetLogger(typeof(SqlChangeTracking));
 
             tablesRequiringChangeTracking = new List<string>
             {
@@ -100,24 +101,24 @@ namespace ShipWorks.Data.Administration
         {
             const string changeTrackingQueryFormat =
                     @"SELECT COUNT(0)
-                    FROM SYS.CHANGE_TRACKING_DATABASES 
+                    FROM SYS.CHANGE_TRACKING_DATABASES
                     WHERE database_id = DB_ID('{0}')";
 
             try
             {
                 bool isDisabled = false;
                 log.InfoFormat("Checking whether change tracking is enabled for database {0}.", SqlSession.Current.Configuration.DatabaseName);
-                
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                    using (DbCommand cmd = DbCommandProvider.Create(con))
                     {
                         cmd.CommandText = string.Format(changeTrackingQueryFormat, cmd.Connection.Database);
-                        int count = (int)cmd.ExecuteScalar();
+                        int count = (int) cmd.ExecuteScalar();
 
-                        // Consider change tracking disabled if the current database was not in the list of 
+                        // Consider change tracking disabled if the current database was not in the list of
                         // change tracking databases in SQL Server
-                       isDisabled = count == 0;
+                        isDisabled = count == 0;
                     }
                 }
 
@@ -126,13 +127,13 @@ namespace ShipWorks.Data.Administration
             }
             catch (InvalidOperationException ex)
             {
-                // Log the error and assume that change tracking is enabled, so ShipWorks continues 
+                // Log the error and assume that change tracking is enabled, so ShipWorks continues
                 log.Error(string.Format("An error occurred checking the status of change tracking for database '{0}'. ", SqlSession.Current.Configuration.DatabaseName), ex);
                 return false;
             }
             catch (SqlException ex)
             {
-                // Log the error and assume that change tracking is enabled, so ShipWorks continues 
+                // Log the error and assume that change tracking is enabled, so ShipWorks continues
                 log.Error(string.Format("An error occurred checking the status of change tracking for database '{0}'. ", SqlSession.Current.Configuration.DatabaseName), ex);
                 return false;
             }
@@ -146,9 +147,9 @@ namespace ShipWorks.Data.Administration
             try
             {
                 log.InfoFormat("Change tracking is being enabled for database {0}.", SqlSession.Current.Configuration.DatabaseName);
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                    using (DbCommand cmd = DbCommandProvider.Create(con))
                     {
                         cmd.CommandText = string.Format("ALTER DATABASE [{0}] SET CHANGE_TRACKING = ON", cmd.Connection.Database);
                         cmd.ExecuteNonQuery();
@@ -172,21 +173,21 @@ namespace ShipWorks.Data.Administration
             const string enableTableChangeTrackingFormat =
                 @"IF NOT EXISTS
                 (
-	                SELECT SYS.TABLES.NAME 
-	
-	                FROM sys.change_tracking_tables
+                    SELECT SYS.TABLES.NAME
 
-	                INNER JOIN sys.tables 
-		                ON sys.tables.object_id = sys.change_tracking_tables.object_id
-	                INNER JOIN sys.schemas 
-		                ON sys.schemas.schema_id = sys.tables.schema_id
-	
-	                WHERE sys.tables.name = '{0}'
+                    FROM sys.change_tracking_tables
+
+                    INNER JOIN sys.tables
+                        ON sys.tables.object_id = sys.change_tracking_tables.object_id
+                    INNER JOIN sys.schemas
+                        ON sys.schemas.schema_id = sys.tables.schema_id
+
+                    WHERE sys.tables.name = '{0}'
                 )
-                
+
                     ALTER TABLE [{0}] ENABLE CHANGE_TRACKING
                 ";
-            
+
             // Build up the SQL for enabling change tracking on all the tables that require change tracking
             StringBuilder query = new StringBuilder();
             foreach (string table in TablesRequiringChangeTracking)
@@ -197,9 +198,9 @@ namespace ShipWorks.Data.Administration
             try
             {
                 log.InfoFormat("Enabling change tracking on {0} ShipWorks tables.", TablesRequiringChangeTracking.Count);
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                    using (DbCommand cmd = DbCommandProvider.Create(con))
                     {
                         cmd.CommandText = query.ToString();
                         cmd.ExecuteNonQuery();

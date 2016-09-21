@@ -22,7 +22,9 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             this.log = log;
             this.name = name;
-            this.stopwatch = Stopwatch.StartNew();
+            log.Debug($"Stopwatch {name} starting...");
+
+            stopwatch = Stopwatch.StartNew();
         }
 
         /// <summary>

@@ -1,0 +1,76 @@
+﻿using System;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.RelationClasses;
+using ShipWorks.Data.Model;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+
+namespace <[RootNamespace]>.Custom
+{	
+	/// <summary>
+	/// Utility functions for creating entities and retrieving EntityType information.
+	/// </summary>
+	public static class EntityTypeProvider
+	{ 
+        /// <summary>
+        /// Gets the EntityType based on the given entity type name.
+        /// </summary>
+		public static EntityType GetEntityType(string entityTypeName)
+		{
+			switch (entityTypeName)
+			{<[Foreach Entity]>
+				case "<[CurrentEntityName]>Entity": return EntityType.<[CurrentEntityName]>Entity;<[NextForeach]>
+			}
+
+			throw new ArgumentException($"Entity type name 'entityTypeName' is not valid.");
+		}
+
+        /// <summary>
+        /// Gets the entity type name based on the given EntityType.
+        /// </summary>
+		public static string GetEntityTypeName(EntityType entityType)
+		{
+			IEntity2 entity = GeneralEntityFactory.Create(entityType);
+			return entity.LLBLGenProEntityName;
+		}
+
+		/// <summary>
+        /// Gets the System.Type based on the given entity type name.
+        /// </summary>
+		public static Type GetSystemType(string entityTypeName)
+		{
+			return GetSystemType(GetEntityType(entityTypeName));
+		}
+
+        /// <summary>
+        /// Gets the System.Type based on the given EntityType.
+        /// </summary>
+		public static Type GetSystemType(EntityType entityType)
+		{
+			IEntity2 entity = GeneralEntityFactory.Create(entityType);
+			return entity.GetType();
+		}
+
+        /// <summary>
+        /// Creates an entity instance based on the given name.
+        /// </summary>
+		public static IEntity2 CreateEntity(string entityTypeName)
+		{
+			return GeneralEntityFactory.Create(GetEntityType(entityTypeName));
+		}
+
+        /// <summary>
+        /// Get the IRelationFactory that provides inheritance relationship information for the specified EntityType.
+        /// </summary>
+		public static IRelationFactory GetInheritanceRelationFactory(EntityType entityType)
+		{
+			switch (entityType)
+			{<[Foreach Entity]><[If IsInHierarchyType TargetPerEntity]>
+				case EntityType.<[CurrentEntityName]>Entity: return new <[CurrentEntityName]>Relations();<[EndIf]><[NextForeach]>
+			}
+
+			throw new ArgumentException($"Entity type '{entityType}' is not valid or is not a part of a TargetPerEntity hierarchy.");
+		}
+	}
+}

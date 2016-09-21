@@ -9,6 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
+using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -1,21 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Data.SqlClient;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
-using System.Collections;
 using Interapptive.Shared;
-using ShipWorks.SqlServer.Filters.DirtyCounts;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.EntityClasses;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.SqlServer.Filters.DirtyCounts;
 
 namespace ShipWorks.Filters.Content.SqlGeneration
 {
@@ -39,7 +38,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         [NDependIgnoreLongMethod]
         static FilterSqlResult()
         {
-            columnMaskTableMap = new Dictionary<EntityType,FilterNodeColumnMaskTable>();
+            columnMaskTableMap = new Dictionary<EntityType, FilterNodeColumnMaskTable>();
             columnMaskTableMap[EntityType.CustomerEntity] = FilterNodeColumnMaskTable.Customer;
             columnMaskTableMap[EntityType.OrderEntity] = FilterNodeColumnMaskTable.Order;
             columnMaskTableMap[EntityType.OrderItemEntity] = FilterNodeColumnMaskTable.OrderItem;
@@ -89,7 +88,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 // For derived types (like AmazonOrder / Order)... all the fields for AmazonOrder and Order are in the enity... we want to make sure we only
                 // count the ones relative to the entity we care about.
                 int fieldCount = GeneralEntityFactory.Create(entityType).Fields.OfType<EntityField2>().Count(field => field.ContainingObjectName == entityName);
-                
+
                 // OrderItem has TotalWeight, which is a computed field, which isn't in the entity
                 if (entityType == EntityType.OrderItemEntity)
                 {
@@ -288,8 +287,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             sb.AppendLine("DECLARE @filterNodeContentID bigint");
             sb.AppendLine("DECLARE @filterNodeID bigint");
 
-            // Declare the column mask
-            sb.AppendLine(string.Format("DECLARE @columnMask binary({0})", columnMask.Length));
+            // Declare the column mask.  Currently, all our column masks are 100 in size.  But in case we change that later,
+            // use the max of 100 or the actual length.
+            sb.AppendLine(string.Format("DECLARE @columnMask varbinary({0})", Math.Max(100, columnMask.Length)));
 
             // Declare all variables
             foreach (SqlParameter parameter in parameters)
@@ -413,7 +413,10 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
                 case SqlDbType.Binary:
                 case SqlDbType.VarBinary:
-                    return string.Format("varbinary({0})", parameter.Size);
+                    // Currently, all our column masks are 100 in size.But in case we change that later,
+                    // use the max of 100 or the actual length.  Also, this could be used for one of the other varbinary
+                    // columns that have a larger size.
+                    return string.Format("varbinary({0})", Math.Max(100, parameter.Size));
             }
 
             throw new InvalidOperationException(string.Format("Invalid parameter type: {0}.", parameter.SqlDbType));

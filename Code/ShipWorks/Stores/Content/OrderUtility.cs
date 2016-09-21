@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using Interapptive.Shared.Collections;
@@ -311,7 +310,10 @@ namespace ShipWorks.Stores.Content
                 clonedShipment.Order = toOrder;
 
                 // Mark all the carrier-specific stuff as new
-                clonedShipment.GetDependingRelatedEntities().ForEach(e => EntityUtility.MarkAsNew(e));
+                foreach (IEntityCore entity in ((IEntityCore) clonedShipment).GetDependingRelatedEntities())
+                {
+                    EntityUtility.MarkAsNew(entity);
+                }
 
                 // And all the customers stuff as new
                 foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)

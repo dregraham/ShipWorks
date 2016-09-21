@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: FilterSequence. </summary>
+	/// <summary>Implements the relations factory for the entity: FilterSequence. </summary>
 	public partial class FilterSequenceRelations
 	{
 		/// <summary>CTor</summary>
@@ -31,9 +31,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.FilterNodeEntityUsingFilterSequenceID);
-
-			toReturn.Add(this.FilterEntityUsingParentFilterID);
 			toReturn.Add(this.FilterEntityUsingFilterID);
+			toReturn.Add(this.FilterEntityUsingParentFilterID);
 			return toReturn;
 		}
 
@@ -56,20 +55,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 		/// <summary>Returns a new IEntityRelation object, between FilterSequenceEntity and FilterEntity over the m:1 relation they have, using the relation between the fields:
-		/// FilterSequence.ParentFilterID - Filter.FilterID
-		/// </summary>
-		public virtual IEntityRelation FilterEntityUsingParentFilterID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Parent", false);
-				relation.AddEntityFieldPair(FilterFields.FilterID, FilterSequenceFields.ParentFilterID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FilterEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FilterSequenceEntity", true);
-				return relation;
-			}
-		}
-		/// <summary>Returns a new IEntityRelation object, between FilterSequenceEntity and FilterEntity over the m:1 relation they have, using the relation between the fields:
 		/// FilterSequence.FilterID - Filter.FilterID
 		/// </summary>
 		public virtual IEntityRelation FilterEntityUsingFilterID
@@ -83,16 +68,41 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
+		/// <summary>Returns a new IEntityRelation object, between FilterSequenceEntity and FilterEntity over the m:1 relation they have, using the relation between the fields:
+		/// FilterSequence.ParentFilterID - Filter.FilterID
+		/// </summary>
+		public virtual IEntityRelation FilterEntityUsingParentFilterID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Parent", false);
+				relation.AddEntityFieldPair(FilterFields.FilterID, FilterSequenceFields.ParentFilterID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FilterEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FilterSequenceEntity", true);
+				return relation;
+			}
+		}
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticFilterSequenceRelations
+	{
+		internal static readonly IEntityRelation FilterNodeEntityUsingFilterSequenceIDStatic = new FilterSequenceRelations().FilterNodeEntityUsingFilterSequenceID;
+		internal static readonly IEntityRelation FilterEntityUsingFilterIDStatic = new FilterSequenceRelations().FilterEntityUsingFilterID;
+		internal static readonly IEntityRelation FilterEntityUsingParentFilterIDStatic = new FilterSequenceRelations().FilterEntityUsingParentFilterID;
+
+		/// <summary>CTor</summary>
+		static StaticFilterSequenceRelations()
+		{
+		}
 	}
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Security;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Licensing;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Users.Logon
 {

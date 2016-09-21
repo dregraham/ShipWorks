@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
 using System.Data;
-using Microsoft.SqlServer.Server;
+using System.Data.Common;
 
 namespace ShipWorks.SqlServer.Common.Data
 {
@@ -17,7 +15,7 @@ namespace ShipWorks.SqlServer.Common.Data
         /// Acquire a session, exclusive lock with the specified name.  Returns false immediately if the lock
         /// cannot be obtained.
         /// </summary>
-        public static bool AcquireLock(SqlConnection con, string name)
+        public static bool AcquireLock(DbConnection con, string name)
         {
             return AcquireLock(con, name, TimeSpan.Zero);
         }
@@ -26,27 +24,29 @@ namespace ShipWorks.SqlServer.Common.Data
         /// Acquire a session, exclusive lock with the specified name.  If the lock cannot be obtained,
         /// the method waits for the specified time before returning false.
         /// </summary>
-        public static bool AcquireLock(SqlConnection con, string name, TimeSpan wait)
+        public static bool AcquireLock(DbConnection con, string name, TimeSpan wait)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_getapplock";
 
             // Ensure we don't have a SQL timeout before the applock timeout
             cmd.CommandTimeout = Math.Max(30, (int) wait.TotalSeconds + 30);
 
-            SqlParameter returnValue = cmd.Parameters.Add("@ReturnValue", SqlDbType.Int);
+            DbParameter returnValue = cmd.CreateParameter();
+            returnValue.ParameterName = "@ReturnValue";
+            returnValue.DbType = DbType.Int32;
             returnValue.Direction = ParameterDirection.ReturnValue;
 
-            cmd.Parameters.AddWithValue("@Resource", name);
-            cmd.Parameters.AddWithValue("@LockMode", "Exclusive");
-            cmd.Parameters.AddWithValue("@LockOwner", "Session");
-            cmd.Parameters.AddWithValue("@LockTimeout", (int) wait.TotalMilliseconds);
+            cmd.AddParameterWithValue("@Resource", name);
+            cmd.AddParameterWithValue("@LockMode", "Exclusive");
+            cmd.AddParameterWithValue("@LockOwner", "Session");
+            cmd.AddParameterWithValue("@LockTimeout", (int) wait.TotalMilliseconds);
 
             cmd.ExecuteNonQuery();
 
@@ -63,22 +63,22 @@ namespace ShipWorks.SqlServer.Common.Data
         /// <summary>
         /// Release the lock previously taken with the specified name
         /// </summary>
-        public static void ReleaseLock(SqlConnection con, string name)
+        public static void ReleaseLock(DbConnection con, string name)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_releaseapplock";
 
-            SqlParameter returnValue = cmd.Parameters.Add("@ReturnValue", SqlDbType.Int);
+            DbParameter returnValue = cmd.AddParameter("@ReturnValue", DbType.Int32);
             returnValue.Direction = ParameterDirection.ReturnValue;
 
-            cmd.Parameters.AddWithValue("@Resource", name);
-            cmd.Parameters.AddWithValue("@LockOwner", "Session");
+            cmd.AddParameterWithValue("@Resource", name);
+            cmd.AddParameterWithValue("@LockOwner", "Session");
 
             try
             {
@@ -109,19 +109,19 @@ namespace ShipWorks.SqlServer.Common.Data
         /// <remarks>
         /// If the current connection has the lock, this will return false.
         /// </remarks>
-        public static bool IsLocked(SqlConnection con, string name)
+        public static bool IsLocked(DbConnection con, string name)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = con.CreateCommand();
+            DbCommand cmd = con.CreateCommand();
             cmd.CommandText = "SELECT APPLOCK_TEST('public', @Resource, @LockMode, @LockOwner)";
 
-            cmd.Parameters.AddWithValue("@Resource", name);
-            cmd.Parameters.AddWithValue("@LockMode", "Exclusive");
-            cmd.Parameters.AddWithValue("@LockOwner", "Session");
+            cmd.AddParameterWithValue("@Resource", name);
+            cmd.AddParameterWithValue("@LockMode", "Exclusive");
+            cmd.AddParameterWithValue("@LockOwner", "Session");
 
             // A null reference exception is being thrown from this method and since the connection is being checked for null,
             // I put checks in for the result of ExecuteScalar.  SELECT APPLOCK_TEST should always return a value, but casting
@@ -142,12 +142,12 @@ namespace ShipWorks.SqlServer.Common.Data
         }
 
         /// <summary>
-        /// Runs a SqlCommand from the given connection that is locked using the specified lock name.
+        /// Runs a DbCommand from the given connection that is locked using the specified lock name.
         /// </summary>
         /// <param name="connection">Connection to use for locking and to create the command</param>
         /// <param name="lockName">Name of the lock that should be used</param>
         /// <param name="commandMethod">Action that will be called with the locked command</param>
-        public static void RunLockedCommand(SqlConnection connection, string lockName, Action<SqlCommand> commandMethod)
+        public static void RunLockedCommand(DbConnection connection, string lockName, Action<DbCommand> commandMethod)
         {
             bool needsClosing = false;
 
@@ -165,7 +165,7 @@ namespace ShipWorks.SqlServer.Common.Data
                 {
                     try
                     {
-                        using (SqlCommand command = connection.CreateCommand())
+                        using (DbCommand command = connection.CreateCommand())
                         {
                             commandMethod(command);
                         }
@@ -189,7 +189,6 @@ namespace ShipWorks.SqlServer.Common.Data
                     connection.Close();
                 }
             }
-                
         }
     }
 }

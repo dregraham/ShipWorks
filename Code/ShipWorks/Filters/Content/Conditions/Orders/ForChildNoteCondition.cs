@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters.Content.SqlGeneration;
+﻿using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
+using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 
 namespace ShipWorks.Filters.Content.Conditions.Orders
@@ -31,7 +27,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
             {
                 return scope.Adorn(base.GenerateSql(context));
             }
-        } 
+        }
 
         /// <summary>
         /// Get the child predicate to use to push down into the child scope
@@ -45,7 +41,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
             // get replaces by the scope once the alias is created.
             string orderNotes = string.Format("{0}.{1} = {2}.{3}",
                 "{0}",
-                context.GetColumnName(NoteFields.ObjectID),
+                context.GetColumnName(NoteFields.EntityID),
                 parentScope.TableAlias,
                 context.GetColumnName(OrderFields.OrderID));
 
@@ -53,7 +49,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
             // get replaces by the scope once the alias is created.
             string customerNotes = string.Format("{0}.{1} = {2}.{3}",
                 "{0}",
-                context.GetColumnName(NoteFields.ObjectID),
+                context.GetColumnName(NoteFields.EntityID),
                 parentScope.TableAlias,
                 context.GetColumnName(OrderFields.CustomerID));
 

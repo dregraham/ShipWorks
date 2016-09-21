@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Moq;
+﻿using Moq;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -8,6 +6,9 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
+using ShipWorks.Tests.Shared;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Yahoo

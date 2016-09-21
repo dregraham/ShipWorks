@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using Interapptive.Shared;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -17,9 +19,9 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -44,13 +46,6 @@ namespace ShipWorks.Data
 
         // Sometimes we will want to query without getting the data fields
         static ExcludeIncludeFieldsList excludeDataFields = new ExcludeIncludeFieldsList((IList) new IEntityFieldCore[] { ResourceFields.Data, ResourceFields.Checksum });
-
-        /// <summary>
-        /// Static constructor
-        /// </summary>
-        static DataResourceManager()
-        {
-        }
 
         /// <summary>
         /// Provide method for background process to register thread to clean up resource cache
@@ -315,7 +310,7 @@ namespace ShipWorks.Data
 
             foreach (ObjectReferenceEntity reference in ObjectReferenceCollection.Fetch(SqlAdapter.Default, ObjectReferenceFields.ConsumerID == consumerID))
             {
-                if (EntityUtility.GetEntityType(reference.ObjectID) == EntityType.ResourceEntity)
+                if (EntityUtility.GetEntityType(reference.EntityID) == EntityType.ResourceEntity)
                 {
                     references.Add(reference.ObjectReferenceID);
                 }
@@ -357,7 +352,7 @@ namespace ShipWorks.Data
 
                         // See if we can find the resource.  The only way we wouldn't is if someone manually removed it from the DB
                         ResourceCollection resources = new ResourceCollection();
-                        adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.ResourceID == objectReference.ObjectID), 1, null, null, excludeDataFields);
+                        adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.ResourceID == objectReference.EntityID), 1, null, null, excludeDataFields);
 
                         if (resources.Count > 0)
                         {
@@ -412,18 +407,18 @@ namespace ShipWorks.Data
                     // we always want this call to be the deadlock victim
                     using (new SqlDeadlockPriorityScope(-5))
                     {
-                        using (SqlConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
+                        using (DbConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
                         {
                             try
                             {
-                                using (SqlCommand command = connection.CreateCommand())
+                                using (DbCommand command = connection.CreateCommand())
                                 {
                                     command.CommandType = CommandType.StoredProcedure;
                                     command.CommandText = scriptName;
                                     // Disable the command timeout since the scripts should take care of timing themselves out
                                     command.CommandTimeout = timeoutSeconds;
-                                    command.Parameters.AddWithValue("@olderThan", DateTime.UtcNow);
-                                    command.Parameters.AddWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
+                                    command.AddParameterWithValue("@olderThan", DateTime.UtcNow);
+                                    command.AddParameterWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
 
                                     command.ExecuteNonQuery();
                                 }

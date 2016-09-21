@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,6 +5,9 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
@@ -127,6 +127,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
             // Just make sure this is assigned correctly since it's being populated by a separate class
             Assert.NotNull(nativeRequest.AccountShippingAddress);
+        }
+
+        [Fact]
+        public void Manipulate_SetsAccountShippingAddressToUnitedStates_WhenStateIsPR()
+        {
+            account.StateProvCode = "PR";
+            account.CountryCode = "PR";
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Equal("US", nativeRequest.AccountShippingAddress.CountryCode);
+        }
+
+        [Fact]
+        public void Manipulate_SetsSubscriberAddressToUnitedStates_WhenStateIsPR()
+        {
+            account.StateProvCode = "PR";
+            account.CountryCode = "PR";
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Equal("US", nativeRequest.Subscriber.Address.CountryCode);
         }
 
         [Fact]

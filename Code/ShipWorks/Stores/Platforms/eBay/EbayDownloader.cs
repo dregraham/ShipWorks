@@ -1,4 +1,5 @@
-﻿using Common.Logging;
+﻿using System.Data.Common;
+using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -324,7 +325,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 sqlDeadlockRetry.ExecuteWithRetry(() =>
                 {
-                    using (SqlTransaction transaction = connection.BeginTransaction())
+                    using (DbTransaction transaction = connection.BeginTransaction())
                     {
                         using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                         {

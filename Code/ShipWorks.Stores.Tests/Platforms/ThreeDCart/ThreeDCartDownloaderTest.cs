@@ -5,6 +5,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi.DTO;
+using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;

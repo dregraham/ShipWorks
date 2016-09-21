@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
+using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
-using log4net;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
 {
@@ -33,16 +34,16 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 log.Info("Processing request to redeploy assemblies.");
 
                 SqlSession.Initialize();
-                using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
+                using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlTransaction transaction = sqlConnection.BeginTransaction())
+                    using (DbTransaction transaction = sqlConnection.BeginTransaction())
                     {
                         SqlAssemblyDeployer.DropAssemblies(sqlConnection, transaction);
                         SqlAssemblyDeployer.DeployAssemblies(sqlConnection, transaction);
 
                         transaction.Commit();
 
-                        log.Info("Successfully redeployed assemblies.");   
+                        log.Info("Successfully redeployed assemblies.");
                     }
                 }
             }

@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model.HelperClasses;
-using Divelements.SandGrid;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data.Model;
-using ShipWorks.Users;
-using ShipWorks.Stores;
-using ShipWorks.Users.Security;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
-using ShipWorks.Properties;
-using ShipWorks.Data.Grid.Columns.SortProviders;
+﻿using Divelements.SandGrid;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.SortProviders;
+using ShipWorks.Data.Grid.Columns.ValueProviders;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
+using ShipWorks.Stores.Content;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -23,7 +17,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
     /// </summary>
     public static class NoteColumnDefinitionFactory
     {
-         /// <summary>
+        /// <summary>
         /// Create the default grid column definitions for all possible note columns.
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
@@ -32,11 +26,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                      {
                         new GridColumnDefinition("{62768936-EAF6-4d36-B7E3-6FD0335B6878}", true,
                             new GridEntityDisplayType(), "Related To", new GridEntityDisplayInfo(6, EntityType.OrderEntity, "Order 1028"),
-                            new GridColumnFieldValueProvider(NoteFields.ObjectID),
-                            new GridColumnObjectLabelSortProvider(NoteFields.ObjectID)) { DefaultWidth = 24 },
+                            new GridColumnFieldValueProvider(NoteFields.EntityID),
+                            new GridColumnObjectLabelSortProvider(NoteFields.EntityID)) { DefaultWidth = 24 },
 
-                        new GridColumnDefinition("{80C02876-F115-436c-AADC-F12912D0B7D3}", true, 
-                            new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None }, 
+                        new GridColumnDefinition("{80C02876-F115-436c-AADC-F12912D0B7D3}", true,
+                            new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None },
                             "Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30").ToUniversalTime(),
                             NoteFields.Edited) { DefaultWidth = 80 },
 
@@ -58,27 +52,27 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             NoteFields.Text) { AutoSizeMode = ColumnAutoSizeMode.Spring, AutoWrap = true},
 
                         new GridColumnDefinition("{BF48FE0C-D46E-44e2-8A8E-EB24435CF1F5}", true,
-                            new GridActionDisplayType(o => 
+                            new GridActionDisplayType(o =>
                                 {
                                     return o == null || UserSession.Security.HasPermission(PermissionType.EntityTypeEditNotes, (long) o) ? "Edit" : "";
-                                }, 
+                                },
                                 GridLinkAction.Edit), "Edit", "Edit",
-                            NoteFields.ObjectID,
+                            NoteFields.EntityID,
                             NoteFields.NoteID)
-                            { 
+                            {
                                 DefaultWidth = 31,
                                 ApplicableTest = (data) => data != null ? UserSession.Security.HasPermission(PermissionType.EntityTypeEditNotes, (long) data) : true
                             },
 
                          new GridColumnDefinition("{AABA7DE6-8976-49de-9662-E7B6EB5089AC}", true,
-                            new GridActionDisplayType(o => 
+                            new GridActionDisplayType(o =>
                                 {
                                     return o == null || UserSession.Security.HasPermission(PermissionType.EntityTypeEditNotes, (long) o) ? "Delete" : "";
-                                }, 
+                                },
                                 GridLinkAction.Delete), "Delete", "Delete",
-                            NoteFields.ObjectID,
+                            NoteFields.EntityID,
                             NoteFields.NoteID)
-                            { 
+                            {
                                 DefaultWidth = 45,
                                 ApplicableTest = (data) => data != null ? UserSession.Security.HasPermission(PermissionType.EntityTypeEditNotes, (long) data) : true
                             },

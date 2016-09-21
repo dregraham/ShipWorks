@@ -8,9 +8,11 @@ using System.Windows.Forms;
 using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
@@ -91,10 +93,14 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due
             // to people's machines just not being able to handle the load, and 30 seconds just wasn't enough.
-            SqlCommandProvider.DefaultTimeout = TimeSpan.FromSeconds(Debugger.IsAttached ? 300 : 120);
+            DbCommandProvider.DefaultTimeout = TimeSpan.FromSeconds(Debugger.IsAttached ? 300 : 120);
 
             // Do initial edition initialization
             EditionManager.Initialize();
+
+            Telemetry.GetCustomerID = BuildCustromerIDRetrievalFunction();
+            Telemetry.SetExecutionMode(Name?.Replace("ExecutionMode", ""));
+            Telemetry.SetInstance(ShipWorksSession.InstanceID.ToString("D"));
         }
 
         /// <summary>
@@ -127,7 +133,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 if (MyComputer.IsWindowsVista)
                 {
                     // Vista will allow the protocols to be added to the available list, but does not actually support them.
-                    // The only reason we call this out seperately is to avoid confusion where we say support is loaded, but actually isn't available
+                    // The only reason we call this out separately is to avoid confusion where we say support is loaded, but actually isn't available
                     log.Info("Could not add TLS1.1 and 1.2 protocols: Windows Vista does not support these protocols");
                 }
                 else
@@ -144,6 +150,35 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             }
 
             log.Debug("Supported security protocols: " + ServicePointManager.SecurityProtocol);
+        }
+
+        /// <summary>
+        /// Build a function that will retrieve the customer ID from Tango, caching the results
+        /// </summary>
+        private Func<string> BuildCustromerIDRetrievalFunction()
+        {
+            string customerID = null;
+
+            return () => customerID ?? (customerID = GetCustomerIdForTelemetry()) ?? "Not Retrieved";
+        }
+
+        /// <summary>
+        /// Get a customer id that can be used for telemetry
+        /// </summary>
+        private string GetCustomerIdForTelemetry()
+        {
+            try
+            {
+                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                string customerID = tangoWebClient.GetTangoCustomerId();
+                return string.IsNullOrEmpty(customerID) ? null : customerID;
+            }
+            catch (Exception ex)
+            {
+                // Catch everything because we don't want telemetry to crash ShipWorks
+                log.Warn("Could not get customer id for telemetry", ex);
+                return null;
+            }
         }
     }
 }
