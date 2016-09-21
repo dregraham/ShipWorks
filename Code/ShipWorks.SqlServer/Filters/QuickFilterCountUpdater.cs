@@ -25,7 +25,7 @@ namespace ShipWorks.SqlServer.Filters
             filterNodeUpdateItemTableName = "QuickFilterNodeUpdateItem";
             filterNodeUpdateShipmentTableName = "QuickFilterNodeUpdateShipment";
 
-            purposeInParam = $"{ (int) FilterNodePurpose.Quick }";
+            purposeInParam = string.Format("{0}", (int) FilterNodePurpose.Quick);
         }
     }
 }
