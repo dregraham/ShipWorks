@@ -1,10 +1,10 @@
-using System;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
@@ -51,12 +51,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
                 throw new CarrierException("An invalid carrier account was provided.");
             }
 
-            PersonAdapter person = new PersonAdapter(account, string.Empty);
-
             nativeRequest.Subscriber.AccountNumber = account.AccountNumber;
-            nativeRequest.Subscriber.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
+
+            PersonAdapter person = new PersonAdapter(account, string.Empty);
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
+
+            // Since FedExRequestManipulatorUtilities correctly changes the country code to PR in
+            // other cases, I'm treating this a one off. A customer wasn't able to add their 
+            // FedEx account to ShipWorks unless we sent US as the country code...
+            if (address.CountryCode == "PR")
+            {
+                address.CountryCode = "US";
+            }
+
+            nativeRequest.Subscriber.Address = address;
+            nativeRequest.AccountShippingAddress = address;
             nativeRequest.Subscriber.Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(person);
-            nativeRequest.AccountShippingAddress = FedExRequestManipulatorUtilities.CreateAddress<Address>(person);
 
             // CSP 
             nativeRequest.CspSolutionId = settings.CspSolutionId;

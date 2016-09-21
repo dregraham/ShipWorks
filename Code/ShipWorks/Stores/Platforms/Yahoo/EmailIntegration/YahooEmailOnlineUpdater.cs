@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using Interapptive.Shared;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using Quartz.Util;
@@ -10,9 +12,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Shipping;
@@ -140,8 +139,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 email.ContextType = EntityUtility.GetEntitySeed(EntityType.ShipmentEntity);
 
                 // Add the relations
-                email.RelatedObjects.Add(new EmailOutboundRelationEntity { ObjectID = shipment.ShipmentID, RelationType = (int) EmailOutboundRelationType.ContextObject });
-                email.RelatedObjects.Add(new EmailOutboundRelationEntity { ObjectID = order.OrderID, RelationType = (int) EmailOutboundRelationType.RelatedObject });
+                email.RelatedObjects.Add(new EmailOutboundRelationEntity { EntityID = shipment.ShipmentID, RelationType = (int) EmailOutboundRelationType.ContextObject });
+                email.RelatedObjects.Add(new EmailOutboundRelationEntity { EntityID = order.OrderID, RelationType = (int) EmailOutboundRelationType.RelatedObject });
 
                 adapter.SaveAndRefetch(email);
 
@@ -219,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             string tempTrackingNumber = shipment.TrackingNumber;
             string tempShipperString = GetShipperString(shipment);
 
-            if (ShipmentTypeManager.IsUps((ShipmentTypeCode)shipment.ShipmentType) &&
+            if (ShipmentTypeManager.IsUps((ShipmentTypeCode) shipment.ShipmentType) &&
                 UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service) &&
                 !shipment.Ups.UspsTrackingNumber.IsNullOrWhiteSpace())
             {
@@ -262,7 +261,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service) && !shipment.Ups.UspsTrackingNumber.IsNullOrWhiteSpace())
+                    if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service) && !shipment.Ups.UspsTrackingNumber.IsNullOrWhiteSpace())
                     {
                         return "Usps";
                     }

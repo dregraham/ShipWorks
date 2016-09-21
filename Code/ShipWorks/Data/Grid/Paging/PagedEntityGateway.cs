@@ -1,29 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.ComponentModel;
 using System.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using log4net;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters;
-using Interapptive.Shared;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.ApplicationCore.Crashes;
-using System.Collections;
+using System.Linq;
 using System.Threading;
-using ShipWorks.Data.Adapter.Custom;
+using System.Threading.Tasks;
+using Interapptive.Shared;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using ShipWorks.ApplicationCore;
-using System.Linq;
-using Interapptive.Shared.Data;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Data.Grid.Paging
 {
@@ -32,7 +20,7 @@ namespace ShipWorks.Data.Grid.Paging
     /// it will be utilized to ensure the entity is up-to-date each time it is requested.
     /// </summary>
     public abstract class PagedEntityGateway : IEntityGateway
-    {        
+    {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PagedEntityGateway));
 
@@ -172,7 +160,7 @@ namespace ShipWorks.Data.Grid.Paging
 
             // Index into the page of sorted rows to determine the ID we are looking for
             long entityID = sortedKeys.GetKeyFromIndex(row, timeout) ?? -1;
-                
+
             // If null (in whish case we would have set to -1 above) was returned then it indicates an invalid row index
             if (entityID == -1)
             {
@@ -225,7 +213,7 @@ namespace ShipWorks.Data.Grid.Paging
                             return entityProvider.GetEntities(keysInPage);
                         });
 
-                    // SpinWait until its completed, or until the timeout expires.  Don't use events here, b\c they pump (due to COM STA), which 
+                    // SpinWait until its completed, or until the timeout expires.  Don't use events here, b\c they pump (due to COM STA), which
                     // can then make this re-entrant.
                     SpinWait.SpinUntil(() => task.IsCompleted || (timeout - timer.Elapsed) < TimeSpan.Zero);
 

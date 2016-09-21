@@ -952,7 +952,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Create.Entity<FilterNodeContentDetailEntity>()
                 .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
-                .Set(x => x.ObjectID, objectID)
+                .Set(x => x.EntityID, objectID)
                 .Save();
 
             return Create.Entity<FilterNodeEntity>()

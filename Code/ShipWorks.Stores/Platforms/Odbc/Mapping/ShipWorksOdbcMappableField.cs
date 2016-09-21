@@ -1,15 +1,15 @@
-using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Stores.Platforms.Odbc.Upload.FieldValueResolvers;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 {
@@ -145,7 +145,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             MethodConditions.EnsureArgumentIsNotNull(valueResolver, "Value Resolver");
             MethodConditions.EnsureArgumentIsNotNull(entity, "Entity");
 
-            if (Value==null)
+            if (Value == null)
             {
                 Value = valueResolver.GetValue(this, entity);
             }

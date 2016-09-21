@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using Rebex.Net;
-using System.Windows.Forms;
 using System.Collections;
-using ShipWorks.Email.Accounts;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using log4net;
+using Rebex.Mime;
+using Rebex.Mime.Headers;
+using Rebex.Net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data;
-using Interapptive.Shared.UI;
-using Rebex.Mime.Headers;
-using Rebex.Mime;
-using log4net;
-using System.Data.SqlClient;
-using Interapptive.Shared.Security;
+using ShipWorks.Email.Accounts;
 
 namespace ShipWorks.Email
 {
@@ -145,7 +145,7 @@ namespace ShipWorks.Email
 
             try
             {
-                smtp.Connect(account.OutgoingServer, account.OutgoingPort, tls, (SmtpSecurity)account.OutgoingSecurityType);
+                smtp.Connect(account.OutgoingServer, account.OutgoingPort, tls, (SmtpSecurity) account.OutgoingSecurityType);
             }
             catch (UriFormatException ex)
             {
@@ -391,7 +391,7 @@ namespace ShipWorks.Email
         public static List<long> GetRelatedKeys(long emailID, EmailOutboundRelationType relationType)
         {
             ResultsetFields resultFields = new ResultsetFields(1);
-            resultFields.DefineField(EmailOutboundRelationFields.ObjectID, 0, "ObjectID", "");
+            resultFields.DefineField(EmailOutboundRelationFields.EntityID, 0, "EntityID", "");
 
             RelationPredicateBucket bucket = new RelationPredicateBucket(
                 EmailOutboundRelationFields.EmailOutboundID == emailID &

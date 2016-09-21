@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: FilterNode. </summary>
+	/// <summary>Implements the relations factory for the entity: FilterNode. </summary>
 	public partial class FilterNodeRelations
 	{
 		/// <summary>CTor</summary>
@@ -33,7 +33,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.FilterLayoutEntityUsingFilterNodeID);
 			toReturn.Add(this.FilterNodeEntityUsingParentFilterNodeID);
 			toReturn.Add(this.FilterNodeColumnSettingsEntityUsingFilterNodeID);
-
 			toReturn.Add(this.FilterNodeEntityUsingFilterNodeIDParentFilterNodeID);
 			toReturn.Add(this.FilterNodeContentEntityUsingFilterNodeContentID);
 			toReturn.Add(this.FilterSequenceEntityUsingFilterSequenceID);
@@ -130,16 +129,30 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticFilterNodeRelations
+	{
+		internal static readonly IEntityRelation FilterLayoutEntityUsingFilterNodeIDStatic = new FilterNodeRelations().FilterLayoutEntityUsingFilterNodeID;
+		internal static readonly IEntityRelation FilterNodeEntityUsingParentFilterNodeIDStatic = new FilterNodeRelations().FilterNodeEntityUsingParentFilterNodeID;
+		internal static readonly IEntityRelation FilterNodeColumnSettingsEntityUsingFilterNodeIDStatic = new FilterNodeRelations().FilterNodeColumnSettingsEntityUsingFilterNodeID;
+		internal static readonly IEntityRelation FilterNodeEntityUsingFilterNodeIDParentFilterNodeIDStatic = new FilterNodeRelations().FilterNodeEntityUsingFilterNodeIDParentFilterNodeID;
+		internal static readonly IEntityRelation FilterNodeContentEntityUsingFilterNodeContentIDStatic = new FilterNodeRelations().FilterNodeContentEntityUsingFilterNodeContentID;
+		internal static readonly IEntityRelation FilterSequenceEntityUsingFilterSequenceIDStatic = new FilterNodeRelations().FilterSequenceEntityUsingFilterSequenceID;
+
+		/// <summary>CTor</summary>
+		static StaticFilterNodeRelations()
+		{
+		}
 	}
 }

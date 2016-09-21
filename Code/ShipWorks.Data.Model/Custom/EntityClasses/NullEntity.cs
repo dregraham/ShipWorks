@@ -26,7 +26,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Custom Properties of type
         /// </summary>
-        public override Dictionary<string, string> CustomPropertiesOfType
+        protected override Dictionary<string, string> CustomPropertiesOfType
         {
             get { return new Dictionary<string, string>(); }
         }
@@ -34,7 +34,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Field custom properties of type
         /// </summary>
-        public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
+        protected override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
         {
             get { return new Dictionary<string, Dictionary<string, string>>(); }
         }
@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Set related entity property
         /// </summary>
-        public override void SetRelatedEntityProperty(string propertyName, IEntity2 entity)
+        protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
         {
 
         }
@@ -50,7 +50,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Get all relations
         /// </summary>
-        public override List<IEntityRelation> GetAllRelations()
+        protected override List<IEntityRelation> GetAllRelations()
         {
             return new List<IEntityRelation>();
         }
@@ -58,7 +58,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Get relations for field of type
         /// </summary>
-        public override RelationCollection GetRelationsForFieldOfType(string fieldName)
+        protected override RelationCollection GetRelationsForFieldOfType(string fieldName)
         {
             return new RelationCollection();
         }
@@ -66,7 +66,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Get related data
         /// </summary>
-        public override Dictionary<string, object> GetRelatedData()
+        protected override Dictionary<string, object> GetRelatedData()
         {
             return new Dictionary<string, object>();
         }
@@ -74,7 +74,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Set related entity
         /// </summary>
-        public override void SetRelatedEntity(IEntity2 relatedEntity, string fieldName)
+        protected override void SetRelatedEntity(IEntityCore relatedEntity, string fieldName)
         {
 
         }
@@ -82,7 +82,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Unset related entity
         /// </summary>
-        public override void UnsetRelatedEntity(IEntity2 relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
+        protected override void UnsetRelatedEntity(IEntityCore relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
         {
 
         }
@@ -90,7 +90,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Get depending related entities
         /// </summary>
-        public override List<IEntity2> GetDependingRelatedEntities()
+        protected override List<IEntity2> GetDependingRelatedEntities()
         {
             return new List<IEntity2>();
         }
@@ -98,7 +98,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Get dependent related entities
         /// </summary>
-        public override List<IEntity2> GetDependentRelatedEntities()
+        protected override List<IEntity2> GetDependentRelatedEntities()
         {
             return new List<IEntity2>();
         }
@@ -106,7 +106,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// <summary>
         /// Get member entity collections
         /// </summary>
-        public override List<IEntityCollection2> GetMemberEntityCollections()
+        protected override List<IEntityCollection2> GetMemberEntityCollections()
         {
             return new List<IEntityCollection2>();
         }

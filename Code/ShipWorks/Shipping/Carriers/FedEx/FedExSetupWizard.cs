@@ -38,23 +38,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Constructor for specifying the account to be configured
-        /// </summary>
-        public FedExSetupWizard(FedExAccountEntity account)
-        {
-            InitializeComponent();
-            
-            this.account = account;
-        }
 
-        /// <summary>
         /// Initialization
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
-
-            // Some values are already configured via the SW upgrade
             account.CountryCode = "US";
             account.SmartPostHubList = "<Root />";
             account.InitializeNullsToDefault();
@@ -72,20 +61,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 Pages.Add(new ShippingWizardPagePrinting(shipmentType));
                 Pages.Add(new ShippingWizardPageAutomation(shipmentType));
 
-                // If we are not migrating a specific account - but all accounts are not migrated, that means we're here JUST to go through configuration,
-                // and not specific account setup.
-                if (FedExAccountManager.Accounts.Any())
-                {
-                    Pages.Remove(wizardPageInitial);
-                    Pages.Remove(wizardPageContactInfo);
-                    Pages.Remove(wizardPageSettings);
-
-                    account = null;
-                }
-                else
-                {
-                    optionsControl.LoadSettings();
-                }
+                optionsControl.LoadSettings();
             }
             // Otherwise it will just be to setup the account
             else
@@ -95,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
-            Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+            Pages[Pages.Count - 1].SteppingInto += OnSteppingIntoFinish;
 
             licenseAgreement.Rtf = ResourceUtility.ReadString("ShipWorks.Shipping.Carriers.FedEx.FedExEULA.rtf");
 

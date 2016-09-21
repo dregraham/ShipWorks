@@ -9,10 +9,10 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         // Indicates if the monitor has been started
         static bool started = false;
+            // WS returns the names of the packages differently, so create a mapping of WS package type names 
 
         /// <summary>
         /// Starts monitoring for WorldShip shipments processed from WorldShip
@@ -178,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         (i.VoidIndicator == null) ||
                         (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
 
-            List<WorldShipProcessedGrouping> worldShipProcessedGroupings =
+                        List<WorldShipProcessedGrouping> worldShipProcessedGroupings = 
                 worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
                     (shipmentId, importEntries) =>
                         new WorldShipProcessedGrouping(shipmentId,
@@ -385,7 +386,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static void SaveWorldShipStatus(UpsShipmentEntity upsShipment, SqlAdapter adapter, ShipmentEntity shipment)
         {
             // Mark the shipment as completed
-            upsShipment.WorldShipStatus = (int) WorldShipStatusType.Completed;
+                    upsShipment.WorldShipStatus = (int)WorldShipStatusType.Completed;
 
             // Save the updated ups world ship status
             adapter.SaveAndRefetch(shipment);
@@ -436,6 +437,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     }
                 }
             }
+            // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.  
         }
 
         /// <summary>
@@ -461,7 +463,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     //   WorldShipProcessed entries.
                     //   If we commit the worldship status and ShippingManager.VoidShipment throws, the WorldShipProcessed entries still
                     //   exist and will get deleted on the next run of the importer.
-                    shipment.Ups.WorldShipStatus = (int)WorldShipStatusType.Voided;
+                    shipment.Ups.WorldShipStatus = (int) WorldShipStatusType.Voided;
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
                         adapter.SaveEntity(shipment.Ups);
@@ -503,5 +505,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 adapter.Commit();
             }
         }
+             
     }
 }

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.ComponentModel;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -50,7 +48,7 @@ namespace ShipWorks.Data.Model.EntityClasses
             {
                 return retrievalAction(sequence);
             }
-            
+
             log.Warn("FilterSequence is null");
             return default(T);
         }
@@ -58,7 +56,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// A related entity is being set
         /// </summary>
-        protected override void OnRelatedEntitySet(IEntity2 relatedEntity, string fieldName)
+        protected override void OnRelatedEntitySet(IEntityCore relatedEntity, string fieldName)
         {
             base.OnRelatedEntitySet(relatedEntity, fieldName);
 
@@ -80,7 +78,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// A related entity is being unset
         /// </summary>
-        protected override void OnRelatedEntityUnset(IEntity2 relatedEntity, string fieldName)
+        protected override void OnRelatedEntityUnset(IEntityCore relatedEntity, string fieldName)
         {
             base.OnRelatedEntityUnset(relatedEntity, fieldName);
 

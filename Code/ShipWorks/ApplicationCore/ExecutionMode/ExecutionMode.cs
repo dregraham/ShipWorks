@@ -93,7 +93,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due
             // to people's machines just not being able to handle the load, and 30 seconds just wasn't enough.
-            SqlCommandProvider.DefaultTimeout = TimeSpan.FromSeconds(Debugger.IsAttached ? 300 : 120);
+            DbCommandProvider.DefaultTimeout = TimeSpan.FromSeconds(Debugger.IsAttached ? 300 : 120);
 
             // Do initial edition initialization
             EditionManager.Initialize();

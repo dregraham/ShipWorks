@@ -25,14 +25,16 @@ namespace ShipWorks.SqlServer.Purge
         {
             using (SqlConnection connection = new SqlConnection("context connection=true"))
             {
-                SqlAppLockUtility.RunLockedCommand(connection, purgeAppLockName, command =>
+                SqlAppLockUtility.RunLockedCommand(connection, purgeAppLockName, com =>
                 {
+                    SqlCommand command = (SqlCommand) com;
+
                     command.CommandText = script;
 
                     command.Parameters.Add(new SqlParameter(OlderThanParameterName, olderThan));
                     command.Parameters.Add(new SqlParameter(RunUntilParameterName, runUntil));
 
-                    // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed 
+                    // Use ExecuteAndSend instead of ExecuteNonQuery when debuggging to see output printed
                     // to the console of client (i.e. SQL Management Studio)
                     if (SqlContext.Pipe != null)
                     {

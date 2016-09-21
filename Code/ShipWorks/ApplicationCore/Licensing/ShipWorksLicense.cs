@@ -114,16 +114,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Try to decode it as the new metered version first.
             RawLicense license = LicenseDecoder.Decode(key, "3.m");
 
-            // Then try the old ShipWorks 2 version
-            if (license == null)
-            {
-                license = LicenseDecoder.Decode(key, "2.m");
-            }
-
             // Now see if its a freemium license
             if (license == null)
             {
                 license = LicenseDecoder.Decode(key, "2.f");
+            }
+
+	        // Now see if its a freemium license
+            if (license == null)
+            {
+                license = LicenseDecoder.Decode(key, "2.m");
             }
 
             // Try the new UPS Only salt

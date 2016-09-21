@@ -107,8 +107,6 @@ namespace ShipWorks.Shipping.Services
             {
                 try
                 {
-                    shipment.ResetDirtyFlagOnUnchangedEntityFields();
-
                     // Force the shipment to look dirty so it's forced to save. This is to make sure that if any other
                     // changes had been made by other users we pick up the concurrency violation.
                     if (forceSave && !shipment.IsDirty)

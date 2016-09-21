@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Templates;
 using ShipWorks.UI.Controls.Design;
 
@@ -99,7 +96,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             foreach (ObjectLabelEntity label in deleted)
             {
                 ToolStripItem menuItem = contextMenuDeleted.Items.Add(label.Label);
-                menuItem.Tag = label.ObjectID;
+                menuItem.Tag = label.EntityID;
                 menuItem.Click += new EventHandler(OnSelectDeletedTemplate);
             }
 

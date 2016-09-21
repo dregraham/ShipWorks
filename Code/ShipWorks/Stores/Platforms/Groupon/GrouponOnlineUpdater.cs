@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// </summary>
     public class GrouponOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponOnlineUpdater));
 
         // the store this instance for
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             foreach(long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-                
+
                 // Check to see if shipment exists
                 if (shipment == null)
                 {
@@ -84,6 +84,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             OrderEntity order = shipment.Order;
 
+            if (order.IsManual)
+            {
+                return new List<GrouponTracking>();
+            }
+
             List<GrouponTracking> tracking = new List<GrouponTracking>();
             // Fetch the order items
             using (SqlAdapter adapter = new SqlAdapter())
@@ -94,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             foreach (GrouponOrderItemEntity item in order.OrderItems)
             {
                 //Need to have a CI_LineItemID to upload tracking
-                if(item.GrouponLineItemID != null && item.GrouponLineItemID.Length != 0)
+                if(!string.IsNullOrEmpty(item.GrouponLineItemID))
                 {
                     string trackingNumber = shipment.TrackingNumber;
                     string carrier = GrouponCarrier.GetCarrierCode(shipment);

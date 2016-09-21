@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Templates.Controls;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates.Management;
-using ShipWorks.Data.Connection;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Data.Model;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Xml.Linq;
-using ShipWorks.Data;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using Interapptive.Shared;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Controls;
+using ShipWorks.Templates.Management;
+using ShipWorks.Templates.Processing;
 
 namespace ShipWorks.Templates
 {

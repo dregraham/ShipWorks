@@ -1,25 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using log4net;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using System.ComponentModel;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Templates.Controls;
-using ShipWorks.Templates.Management;
-using System.Diagnostics;
-using ShipWorks.Templates.Processing;
-using System.Threading;
-using System.Linq;
-using System.Xml.Linq;
-using System.IO;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter.Custom;
-using log4net;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Templates
 {
@@ -136,8 +123,8 @@ namespace ShipWorks.Templates
 
                     using (SqlAdapter adapter = new SqlAdapter())
                     {
-                        deletedTemplateLabels.AddRange(ObjectLabelCollection.Fetch(adapter, 
-                            ObjectLabelFields.IsDeleted == true & 
+                        deletedTemplateLabels.AddRange(ObjectLabelCollection.Fetch(adapter,
+                            ObjectLabelFields.IsDeleted == true &
                             ObjectLabelFields.ObjectType == EntityUtility.GetEntitySeed(EntityType.TemplateEntity)));
                     }
                 }

@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Divelements.SandGrid;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns;
-using Divelements.SandGrid.Rendering;
-using System.Drawing;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.UI.Controls.SandGrid;
-using ShipWorks.Data.Grid;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Editing
 {

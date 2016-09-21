@@ -28,8 +28,6 @@ namespace ShipWorks.Tests.Integration.Data
             order.BillCity = new string('x', 20);
             order.BillCity = existingCity;
 
-            order.ResetDirtyFlagOnUnchangedEntityFields();
-
             Assert.False(order.Fields[OrderFields.BillCity.FieldIndex].IsChanged);
             Assert.False(order.IsDirty);
         }
@@ -51,8 +49,6 @@ namespace ShipWorks.Tests.Integration.Data
 
             order.BillCity = existingCity;
 
-            order.ResetDirtyFlagOnUnchangedEntityFields();
-
             Assert.True(order.Fields[OrderFields.BillCity.FieldIndex].IsChanged);
             Assert.True(order.IsDirty);
         }
@@ -64,8 +60,6 @@ namespace ShipWorks.Tests.Integration.Data
             var existingCity = order.BillCity;
             order.BillCity = new string('x', 20);
             order.BillCity = existingCity;
-
-            order.ResetDirtyFlagOnUnchangedEntityFields();
 
             Assert.True(order.Fields[OrderFields.BillCity.FieldIndex].IsChanged);
             Assert.True(order.IsDirty);

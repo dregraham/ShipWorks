@@ -132,11 +132,9 @@ Source: {#AppArtifacts}\Rebex.Security.dll; DestDir: {app}; Flags: overwriteread
 Source: {#AppArtifacts}\Rebex.Sftp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\RestSharp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\SandDock.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\SD.LLBLGen.Pro.DQE.SqlServer.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\SD.LLBLGen.Pro.ORMSupportClasses.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Core.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\ShipWorks.Data.Adapter.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Data.Model.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Res.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -166,11 +164,9 @@ Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overw
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\ShipWorks.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\ShipWorks.Data.Model.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
-    Source: {#AppArtifacts}\ShipWorks.Data.Adapter.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\ShipWorks.SqlServer.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
     Source: {#AppArtifacts}\Interapptive.Shared.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
 #endif
-
 
 [Tasks]
 Name: desktopicon; Description: Create a &Desktop icon; GroupDescription: Additional shortcuts:

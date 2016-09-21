@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
     /// <summary>
     /// Custom behavior for the EbayOrderItem entity
     /// </summary>
-    public partial class EbayOrderItemEntity 
+    public partial class EbayOrderItemEntity
     {
         static Func<EbayOrderItemEntity, int> effectivePaymentMethodAlgorithm = null;
         static Func<EbayOrderItemEntity, int> effectiveCheckoutStatusAltorithm = null;
@@ -45,7 +40,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// The value of a field has changed
         /// </summary>
-        protected override void OnFieldValueChanged(object originalValue, IEntityField2 field)
+        protected override void OnFieldValueChanged(object originalValue, int field)
         {
             EffectiveCheckoutStatus = effectiveCheckoutStatusAltorithm(this);
             EffectivePaymentMethod = effectivePaymentMethodAlgorithm(this);

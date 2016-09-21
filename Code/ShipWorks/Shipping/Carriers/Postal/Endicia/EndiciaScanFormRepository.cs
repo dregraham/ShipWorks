@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Shipping.ScanForms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     EndiciaScanFormEntity endiciaScanFormEntity = scanForm.ScanFormEntity as EndiciaScanFormEntity;
                     scanForm.ScanFormId = endiciaScanFormEntity.EndiciaScanFormID;
 
-                    // Should have the scan form ID populated now so save the image to the data source. The Endicia-based 
+                    // Should have the scan form ID populated now so save the image to the data source. The Endicia-based
                     // APIs always generates a single image for the SCAN form
                     DataResourceManager.CreateFromBytes(scanForm.Images.FirstOrDefault(), endiciaScanFormEntity.EndiciaScanFormID, "SCAN Form");
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             return batchEntity;
         }
-        
+
         /// <summary>
         /// Gets existing scan forms for a carrier.
         /// </summary>
@@ -138,9 +138,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // We just need shipment ID's
             ResultsetFields resultFields = new ResultsetFields(1);
             resultFields.DefineField(ShipmentFields.ShipmentID, 0, "ShipmentID", "");
-                        
+
             // Do the fetch
-            using (SqlDataReader reader = (SqlDataReader)SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
             {
                 List<long> keys = new List<long>();
 

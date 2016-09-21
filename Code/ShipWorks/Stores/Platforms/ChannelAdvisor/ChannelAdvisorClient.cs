@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using caOrderService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using caShippingService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping;
-using caInventoryService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
-using caAdminService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin;
-using ShipWorks.ApplicationCore.Logging;
-using log4net;
-using Interapptive.Shared.Net;
 using Interapptive.Shared;
-using ShipWorks.Data.Adapter.Custom;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Security;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
+using caAdminService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin;
+using caInventoryService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
+using caOrderService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
+using caShippingService = ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -643,7 +643,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     caAdminService.APIResultOfArrayOfAuthorizationResponse result = service.GetAuthorizationList(profileId.ToString());
                     if (result.Status == caAdminService.ResultStatus.Failure)
                     {
-                            throw new ChannelAdvisorException(result.MessageCode, result.Message);
+                        throw new ChannelAdvisorException(result.MessageCode, result.Message);
                     }
 
                     if (result.ResultData != null && result.ResultData.Length > 0)

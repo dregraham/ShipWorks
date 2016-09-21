@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using log4net;
@@ -27,7 +28,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load detailed database information about the given database
         /// </summary>
-        public static SqlDatabaseDetail Load(string database, SqlConnection con)
+        public static SqlDatabaseDetail Load(string database, DbConnection con)
         {
             SqlDatabaseDetail detail = new SqlDatabaseDetail();
             detail.name = database;
@@ -36,7 +37,7 @@ namespace ShipWorks.Data.Administration
             {
                 con.ChangeDatabase(database);
 
-                bool isShipWorksDb = (int) SqlCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('GetSchemaVersion'), 0)") > 0;
+                bool isShipWorksDb = (int) DbCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('GetSchemaVersion'), 0)") > 0;
                 if (!isShipWorksDb)
                 {
                     detail.status = SqlDatabaseStatus.NonShipWorks;
@@ -68,13 +69,13 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the schema version of the ShipWorks database associated with the given connection
         /// </summary>
-        private static void LoadSchemaVersion(SqlDatabaseDetail detail, SqlConnection con)
+        private static void LoadSchemaVersion(SqlDatabaseDetail detail, DbConnection con)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.schemaVersion = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+            detail.schemaVersion = new Version((string) DbCommandProvider.ExecuteScalar(cmd));
 
             detail.status = SqlDatabaseStatus.ShipWorks;
         }
@@ -82,22 +83,22 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last user to use the given ShipWorsk database
         /// </summary>
-        private static void LoadLastUsedBy(SqlDatabaseDetail detail, SqlConnection con)
+        private static void LoadLastUsedBy(SqlDatabaseDetail detail, DbConnection con)
         {
             detail.lastUsedBy = "";
             detail.lastUsedOn = DateTime.MinValue;
 
             // We can only load this if the Audit table exists (it wont for 2.x databases)
-            if ((int) SqlCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('Audit'), 0)") > 0)
+            if ((int) DbCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('Audit'), 0)") > 0)
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText =
                     "SELECT TOP (1) u.Username, a.Date " +
                     "  FROM Audit a INNER JOIN [User] u ON a.UserID = u.UserID " +
                     "  WHERE a.UserID != 1027309002 " +
                     "  ORDER BY a.AuditID DESC";
 
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                 {
                     if (reader.Read())
                     {
@@ -111,12 +112,12 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Load the last order found in the given ShipWorks database
         /// </summary>
-        private static void LoadLastOrderNumber(SqlDatabaseDetail detail, SqlConnection con)
+        private static void LoadLastOrderNumber(SqlDatabaseDetail detail, DbConnection con)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
 
             // 2x and 3x store it differently
-            if ((int) SqlCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('[Order]'), 0)") > 0)
+            if ((int) DbCommandProvider.ExecuteScalar(con, "SELECT COALESCE(OBJECT_ID('[Order]'), 0)") > 0)
             {
                 cmd.CommandText =
                     "SELECT TOP (1) OrderNumberComplete as OrderNumber, OrderDate " +
@@ -131,7 +132,7 @@ namespace ShipWorks.Data.Administration
                     "  ORDER BY OrderID DESC";
             }
 
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
             {
                 if (reader.Read())
                 {

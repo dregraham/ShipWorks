@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public static class ShipmentsLoaderConstants
     {
-        private static readonly IEnumerable<int> maxAllowedOrderOptions = new[] { 1000, 5000, 10000, 50000, 100000 };
+        private static readonly IEnumerable<int> maxAllowedOrderOptions = new[] { 500, 1000, 5000, 10000, 50000, 100000 };
 
         /// <summary>
         /// The maximum number of orders that we support loading at a time.
@@ -18,10 +18,11 @@ namespace ShipWorks.Shipping
         {
             get
             {
-                int? maxAllowedOrders = ShippingSettings.Fetch()?.ShipmentEditLimit;
+                int? maxAllowedOrders = ShippingSettings.FetchReadOnly()?.ShipmentEditLimit;
 
                 return maxAllowedOrders.HasValue && MaxAllowedOrderOptions.Contains(maxAllowedOrders.Value) ?
-                    maxAllowedOrders.Value : MaxAllowedOrderOptions.First();
+                    maxAllowedOrders.Value :
+                    DefaultMaxAllowedOrders;
             }
         }
 

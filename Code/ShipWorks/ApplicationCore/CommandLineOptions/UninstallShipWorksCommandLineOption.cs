@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Interaction;
-using log4net;
-using ShipWorks.Data.Connection;
+using System.Data.Common;
 using System.Data.SqlClient;
-using ShipWorks.Data.Administration;
 using System.IO;
-using System.Diagnostics;
-using ShipWorks.ApplicationCore.Services.Installers;
+using System.Linq;
 using System.Threading;
+using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Services.Installers;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
 {
@@ -49,7 +48,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             {
                 try
                 {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
                         ShipWorksDatabaseUtility.DetachDatabase(con.Database, con);
                     }

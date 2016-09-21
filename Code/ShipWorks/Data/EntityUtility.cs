@@ -9,9 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -126,7 +125,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Get the seed value that can be used to identifiy the specified entity.  Each table in the database has a unique starting seed value.
+        /// Get the seed value that can be used to identify the specified entity.  Each table in the database has a unique starting seed value.
         /// </summary>
         public static int GetEntitySeed(long entityID)
         {
@@ -197,7 +196,7 @@ namespace ShipWorks.Data
             }
             else
             {
-                T clone = (T) GeneralEntityFactory.Create((EntityType) entity.LLBLGenProEntityTypeValue);
+                T clone = (T) GeneralEntityFactory.Create((EntityType) ((IEntityCore) entity).LLBLGenProEntityTypeValue);
                 clone.Fields = entity.Fields.Clone();
                 clone.IsNew = entity.IsNew;
                 clone.IsDirty = entity.IsDirty;
@@ -257,12 +256,12 @@ namespace ShipWorks.Data
         /// Get the value of the given field for the specified entity.  If the field does not belong to the entity (like a Yahoo field and an eBay entity),
         /// then return null.
         /// </summary>
-        public static object GetFieldValue(EntityBase2 entity, EntityField2 field)
+        public static object GetFieldValue(IEntityCore entity, EntityField2 field)
         {
             EntityType fieldType = EntityTypeProvider.GetEntityType(field.ContainingObjectName);
             EntityType entityType = EntityTypeProvider.GetEntityType(entity.GetEntityFactory().ForEntityName);
 
-            // If the field entity type does not match the given entity type, return a null value.  This is a legitamate situation,
+            // If the field entity type does not match the given entity type, return a null value.  This is a legitimate situation,
             // for example when we have both eBay and Yahoo stores, a Yahoo entity could be passed in, but wants the data for an
             // ebay specific column.
             if (fieldType != entityType)
@@ -289,7 +288,7 @@ namespace ShipWorks.Data
         /// Get the value of the given field for the specified entity.  This overloaded version will also check depending relations if requested.  For example,
         /// if a ShipmentEntity is passed in but the field is a FedExField, it will try to find shipment.FedEx's field.
         /// </summary>
-        public static object GetFieldValue(EntityBase2 entity, EntityField2 field, bool checkDependingRelations)
+        public static object GetFieldValue(IEntityCore entity, EntityField2 field, bool checkDependingRelations)
         {
             // Try to get the field value on this entity.
             object fieldValue = GetFieldValue(entity, field);
@@ -298,7 +297,7 @@ namespace ShipWorks.Data
             if (checkDependingRelations && fieldValue == null)
             {
                 // Get the lest of depending entities
-                List<IEntity2> entitiesToSearch = entity.GetDependingRelatedEntities();
+                IEnumerable<IEntityCore> entitiesToSearch = entity.GetDependingRelatedEntities();
 
                 // Try to find the value for each depending entity
                 foreach (IEntity2 entity2 in entitiesToSearch)
@@ -350,7 +349,7 @@ namespace ShipWorks.Data
                     {
                         // Find the 'reversed' version of this relation.  What was the end, we now want to be the start
                         EntityType reverseEntityType = EntityTypeProvider.GetEntityType(relation.StartEntityIsPkSide ? relation.GetFKEntityFieldCore(0).ContainingObjectName : relation.GetPKEntityFieldCore(0).ContainingObjectName);
-                        EntityBase2 reverseEntity = (EntityBase2) GeneralEntityFactory.Create(reverseEntityType);
+                        IEntityCore reverseEntity = GeneralEntityFactory.Create(reverseEntityType);
 
                         EntityRelation reverseRelation = null;
                         IInheritanceInfo inheritanceInfo = reverseEntity.GetInheritanceInfo();
@@ -448,13 +447,13 @@ namespace ShipWorks.Data
 
             if (fromEntity == EntityType.OrderEntity && toEntity == EntityType.NoteEntity)
             {
-                EntityRelation relation = new EntityRelation(OrderFields.OrderID, NoteFields.ObjectID, RelationType.OneToMany, true, string.Empty);
+                EntityRelation relation = new EntityRelation(OrderFields.OrderID, NoteFields.EntityID, RelationType.OneToMany, true, string.Empty);
                 return new RelationCollection(relation);
             }
 
             if (fromEntity == EntityType.CustomerEntity && toEntity == EntityType.NoteEntity)
             {
-                EntityRelation relation = new EntityRelation(CustomerFields.CustomerID, NoteFields.ObjectID, RelationType.OneToMany, true, string.Empty);
+                EntityRelation relation = new EntityRelation(CustomerFields.CustomerID, NoteFields.EntityID, RelationType.OneToMany, true, string.Empty);
                 return new RelationCollection(relation);
             }
 
@@ -517,7 +516,7 @@ namespace ShipWorks.Data
                 }
             }
 
-            EntityBase2 fromEntity = (EntityBase2) GeneralEntityFactory.Create(fromEntityType);
+            IEntityCore fromEntity = GeneralEntityFactory.Create(fromEntityType);
 
             // We will need to check inheritance info
             IInheritanceInfo inheritanceInfo = fromEntity.GetInheritanceInfo();
@@ -774,7 +773,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Mark the given entity, which may be in any state, as completely new
         /// </summary>
-        public static void MarkAsNew(IEntity2 entity)
+        public static void MarkAsNew(IEntityCore entity)
         {
             if (entity == null)
             {
@@ -788,15 +787,18 @@ namespace ShipWorks.Data
                 field.IsChanged = true;
             }
 
-            entity.GetDependingRelatedEntities().ForEach(e => MarkAsNew(e));
+            foreach (IEntityCore related in entity.GetDependingRelatedEntities())
+            {
+                MarkAsNew(related);
+            }
 
-            entity.GetMemberEntityCollections().ForEach(c =>
+            foreach (IEntityCollectionCore memberCollection in entity.GetMemberEntityCollections())
+            {
+                foreach (IEntityCore member in memberCollection)
                 {
-                    foreach (IEntity2 e2 in c)
-                    {
-                        MarkAsNew(e2);
-                    }
-                });
+                    MarkAsNew(member);
+                }
+            }
         }
 
         /// <summary>
@@ -820,26 +822,6 @@ namespace ShipWorks.Data
             }
 
             return 0;
-        }
-
-        /// <summary>
-        /// Reset the dirty flag on an entity graph and its fields when the fields have not changed
-        /// </summary>
-        public static void ResetDirtyFlagOnUnchangedEntityFields(this IEntity2 entity)
-        {
-            foreach (KeyValuePair<IEntity2, IEnumerable<IEntityField2>> entityAndFields in entity.GetDirtyGraph().Where(x => !x.Key.IsNew))
-            {
-                foreach (IEntityField2 field in entityAndFields.Value.Where(x => x.IsChanged && FieldUtilities.ValuesAreEqual(x.DbValue, x.CurrentValue)))
-                {
-                    field.IsChanged = false;
-                }
-
-                if (entityAndFields.Value.None(x => x.IsChanged))
-                {
-                    entityAndFields.Key.Fields.IsDirty = false;
-                    entityAndFields.Key.IsDirty = false;
-                }
-            }
         }
 
         /// <summary>
