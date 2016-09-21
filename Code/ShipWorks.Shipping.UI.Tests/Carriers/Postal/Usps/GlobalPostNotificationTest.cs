@@ -53,10 +53,10 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             Uri displayUri = new Uri(DisplayUrl);
 
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
-
-            var browserFactory = mock.MockFunc<string, IDialog>();
-            browserFactory.FunctionOutput.Setup(b => b.DataContext).Returns(viewModel.Object);
-
+            var dialog = mock.MockRepository.Create<IDialog>();
+            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
+            mock.MockFunc<string, IDialog>(dialog);
+            
             var userSession = mock.Mock<IUserSession>();
             userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
                 .Returns(SqlDateTime.MinValue.Value);
@@ -76,8 +76,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
             viewModel.Setup(v => v.Dismissed).Returns(true);
 
-            var browserFactory = mock.MockFunc<string, IDialog>();
-            browserFactory.FunctionOutput.Setup(b => b.DataContext).Returns(viewModel.Object);
+            var dialog = mock.MockRepository.Create<IDialog>();
+            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
+            mock.MockFunc<string, IDialog>(dialog);
 
             var user = new UserEntity
             {
@@ -105,8 +106,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
             viewModel.Setup(v => v.Dismissed).Returns(false);
 
-            var browserFactory = mock.MockFunc<string, IDialog>();
-            browserFactory.FunctionOutput.Setup(b => b.DataContext).Returns(viewModel.Object);
+            var dialog = mock.MockRepository.Create<IDialog>();
+            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
+            mock.MockFunc<string, IDialog>(dialog);
 
             var user = new UserEntity
             {
