@@ -1,27 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Templates.Management;
 using System.Drawing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Properties;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Users;
-using ShipWorks.Filters;
-using ShipWorks.Templates.Controls;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Data.Connection;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using Interapptive.Shared;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.UI.Controls.Html;
-using ShipWorks.Templates.Management.Skeletons;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Properties;
+using ShipWorks.Templates.Controls;
+using ShipWorks.Templates.Management;
 using ShipWorks.Templates.Media;
+using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Saving;
+using ShipWorks.UI.Controls.Html;
+using ShipWorks.Users;
 
 namespace ShipWorks.Templates
 {
@@ -379,7 +376,7 @@ namespace ShipWorks.Templates
                 return @"
                     <html>
                     <body style='font: normal 9pt tahoma; color: rgb(50, 50, 50); padding-left: 15px;' >"
-                    + HtmlControl.ZoomDivStartTag + 
+                    + HtmlControl.ZoomDivStartTag +
                     @"This template is for printing thermal labels.<br/><br/>
                     Thermal label data must be sent directly to a thermal printer, and cannot be previewed.
                     </div>
@@ -433,7 +430,7 @@ namespace ShipWorks.Templates
         {
             get { return "The template name 'System\\Snippets' is reserved as a shortcut for importing all templates."; }
         }
-        
+
         /// <summary>
         /// The maximum memory we want to reach for storing template processing results in memory.  If processing would
         /// result in more memory required than this, we output to file instead.

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
-using ShipWorks.Shipping;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data
 {
@@ -65,7 +63,7 @@ namespace ShipWorks.Data
         /// </summary>
         public bool IsNew
         {
-            get { return label.ObjectID < 0; }
+            get { return label.EntityID < 0; }
         }
 
         /// <summary>
@@ -101,7 +99,7 @@ namespace ShipWorks.Data
 
             if (includeParent)
             {
-                string parentText = GetParentText(label.ObjectID, label.ParentID, includeTypePrefix);
+                string parentText = GetParentText(label.EntityID, label.ParentID, includeTypePrefix);
 
                 if (!string.IsNullOrEmpty(parentText))
                 {
@@ -158,18 +156,18 @@ namespace ShipWorks.Data
         private static string GetTextWithPrefix(ObjectLabelEntity label, bool includeTypePrefix)
         {
             // If its new, or expclitly asked not to, don't include prefix
-            if (label.ObjectID < 0 || !includeTypePrefix)
+            if (label.EntityID < 0 || !includeTypePrefix)
             {
                 return label.Label;
             }
 
-            EntityType entityType = EntityUtility.GetEntityType(label.ObjectID);
+            EntityType entityType = EntityUtility.GetEntityType(label.EntityID);
 
             bool hasFormat = prefixFormats.Any(p => p.Key == entityType);
 
             if (!hasFormat)
             {
-                throw new InvalidOperationException(string.Format("No ObjectLabel support added for {0} in code yet.", label.ObjectID));
+                throw new InvalidOperationException(string.Format("No ObjectLabel support added for {0} in code yet.", label.EntityID));
             }
 
             return string.Format(prefixFormats.Single(p => p.Key == entityType).Value, label.Label);

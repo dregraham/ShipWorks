@@ -1,7 +1,8 @@
+using System;
+using Interapptive.Shared.Collections;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
-using System;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -90,21 +91,21 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// PreProcess a value before it gets set.
         /// </summary>
-        protected override void PreProcessValueToSet(IEntityField2 fieldToSet, ref object valueToSet)
+        protected override void PreProcessValueToSet(IFieldInfo fieldToSet, ref object valueToSet)
         {
             //
             // Truncate so that we don't get string overflow exceptions.
             //
             // At first I really wanted to avoid doing this so that instead of truncations we'd see the crashes
             // and then we could better deal with it.  But dealing with real world data just seemed to make this not possible.
-            // Some data was just soo much longer than we should allow for certain fields, that we couldnt just "make it big enough", 
+            // Some data was just soo much longer than we should allow for certain fields, that we couldnt just "make it big enough",
             // and since we're not going to make it big enough - the only other option is to truncate.
             string text = valueToSet as string;
             if (text != null && fieldToSet.MaxLength > 0 && text.Length > fieldToSet.MaxLength)
             {
                 string truncated = text.Substring(0, fieldToSet.MaxLength);
 
-                string warning = string.Format("Truncating {6}.{7} from {0} to {1} - {2}.{3} from '{4}' to '{5}'", text.Length, fieldToSet.MaxLength, fieldToSet.ContainingObjectName, fieldToSet.Name, text, truncated, ((EntityField2) fieldToSet).ContainingObjectName, fieldToSet.Name);
+                string warning = string.Format("Truncating {6}.{7} from {0} to {1} - {2}.{3} from '{4}' to '{5}'", text.Length, fieldToSet.MaxLength, fieldToSet.ContainingObjectName, fieldToSet.Name, text, truncated, fieldToSet.ContainingObjectName, fieldToSet.Name);
 
                 log.Warn(warning);
 
@@ -159,7 +160,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// This entity has been deleted
         /// </summary>
-        public override void OnAuditDeleteOfEntity()
+        protected override void OnAuditDeleteOfEntity()
         {
             base.OnAuditDeleteOfEntity();
 
@@ -167,15 +168,32 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
+        /// After a value has been set
+        /// </summary>
+        /// <remarks>This will reset the dirty flag if the new value matches what we expect is in the db</remarks>
+        protected override void OnSetValueComplete(int fieldIndex)
+        {
+            base.OnSetValueComplete(fieldIndex);
+
+            IEntityField2 field = Fields[fieldIndex];
+            if (!IsNew && field.IsChanged && FieldUtilities.ValuesAreEqual(field.DbValue, field.CurrentValue))
+            {
+                field.IsChanged = false;
+
+                if (Fields.None(x => x.IsChanged))
+                {
+                    Fields.IsDirty = false;
+                    IsDirty = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Raise the EntityPersisted event
         /// </summary>
         private static void RaiseEntityPersisted(CommonEntityBase entity, EntityPersistedAction action)
         {
-            EntityPersistedEventHandler handler = EntityPersisted;
-            if (handler != null)
-            {
-                handler(entity, new EntityPersistedEventArgs(action));
-            }
+            EntityPersisted?.Invoke(entity, new EntityPersistedEventArgs(action));
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <templateBindings name="ShipWorks" description="" precedenceLevel="10" databaseDriverID="2D18D138-1DD2-467E-86CC-4838250611AE" xmlns="http://sd/llblgen/pro/templateBindingsDefinition.xsd">
 	<supportedPlatforms>
-		<platform name=".NET 3.5" />
+		<platform name=".NET 4.0" />
 	</supportedPlatforms>
 	<language name="C#">
-		<templateBinding templateID="ShipWorks_EntityCollections" filename="EntityCollections.lpt" templateLanguage="C#" />
-		<templateBinding templateID="ShipWorks_EntityTypeProvider" filename="EntityTypeProvider.lpt" templateLanguage="C#" />
+		<templateBinding templateID="ShipWorks_EntityCollections" filename="EntityCollections.template" templateLanguage="C#" />
+		<templateBinding templateID="ShipWorks_EntityTypeProvider" filename="EntityTypeProvider.template" templateLanguage="C#" />
 		<templateBinding templateID="ShipWorks_EntityInterfaces" filename="entityInterface.template" templateLanguage="C#" />
 		<templateBinding templateID="ShipWorks_ReadOnlyEntities" filename="entityReadOnly.template" templateLanguage="C#" />
 		<templateBinding templateID="SD_ConstantsEnumsTemplate" filename="constantsEnums.template" templateLanguage="C#" />

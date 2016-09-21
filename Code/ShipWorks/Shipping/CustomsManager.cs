@@ -1,17 +1,11 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Linq;
 using System.Transactions;
-using Autofac;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping
@@ -81,7 +75,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Generate customs for a shipment.  If the shipment is processed, or doesn't require customs,
         /// or customs have already been generated, nothing will be done.
-        /// 
+        ///
         /// Customs items are not persisted to the database, as that is the caller's responsibility.
         /// </summary>
         public static void GenerateCustomsItems(ShipmentEntity shipment)
@@ -118,7 +112,7 @@ namespace ShipWorks.Shipping
                     UnitPriceAmount = priceAndValue
                 };
 
-                customsValue += ((decimal)customsItem.Quantity * customsItem.UnitValue);
+                customsValue += ((decimal) customsItem.Quantity * customsItem.UnitValue);
             }
 
             shipment.CustomsValue = customsValue;

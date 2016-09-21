@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Data.Administration.Indexing
 {
@@ -14,7 +16,7 @@ namespace ShipWorks.Data.Administration.Indexing
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(IndexMonitor));
         private const int timeoutHours = 3;
-        private static readonly int timeoutSeconds = (int)TimeSpan.FromHours(timeoutHours).TotalSeconds;
+        private static readonly int timeoutSeconds = (int) TimeSpan.FromHours(timeoutHours).TotalSeconds;
         private static string sqlConnectionString;
 
         /// <summary>
@@ -29,43 +31,43 @@ namespace ShipWorks.Data.Administration.Indexing
 
             using (new LoggedStopwatch(log, "Finished determinging indexes to rebuild."))
             {
-                using (SqlConnection con = new SqlConnection(ConnectionString))
+                using (DbConnection con = DataAccessAdapter.CreateConnection(ConnectionString))
                 {
                     con.Open();
 
                     string sql = @"
-                    --Table to hold results 
-                    DECLARE @tablevar TABLE(lngid INT IDENTITY(1,1), objectid INT, index_id INT) 
- 
-                    INSERT INTO @tablevar (objectid, index_id) 
-                         SELECT [object_id],index_id 
-                         FROM sys.dm_db_index_physical_stats (DB_ID(db_name()) 
-                              ,NULL -- NULL to view all tables 
-                              ,NULL -- NULL to view all indexes; otherwise, input index number 
-                              ,NULL -- NULL to view all partitions of an index 
-                              ,'LIMITED') --We want all information 
-	                     WHERE 
-		                     avg_fragmentation_in_percent > 15 -- Logical fragmentation
-                         AND page_count > 8 -- We do not want indexes less than 1 extent in size 
-                         AND index_id NOT IN (0) --Only clustered and nonclustered indexes 
- 
-                    SELECT distinct '[' + OBJECT_NAME(objectid) + ']' as 'TableName', ind.[name] as 'IndexName'  
-                    FROM @tablevar tv 
-                    INNER JOIN sys.indexes ind 
-                    ON tv.objectid = ind.[object_id] 
-                    AND tv.index_id = ind.index_id 
-                    INNER JOIN sys.objects ob 
-                    ON tv.objectid = ob.[object_id] 
-                    INNER JOIN sys.schemas sc 
+                    --Table to hold results
+                    DECLARE @tablevar TABLE(lngid INT IDENTITY(1,1), objectid INT, index_id INT)
+
+                    INSERT INTO @tablevar (objectid, index_id)
+                         SELECT [object_id],index_id
+                         FROM sys.dm_db_index_physical_stats (DB_ID(db_name())
+                              ,NULL -- NULL to view all tables
+                              ,NULL -- NULL to view all indexes; otherwise, input index number
+                              ,NULL -- NULL to view all partitions of an index
+                              ,'LIMITED') --We want all information
+                         WHERE
+                             avg_fragmentation_in_percent > 15 -- Logical fragmentation
+                         AND page_count > 8 -- We do not want indexes less than 1 extent in size
+                         AND index_id NOT IN (0) --Only clustered and nonclustered indexes
+
+                    SELECT distinct '[' + OBJECT_NAME(objectid) + ']' as 'TableName', ind.[name] as 'IndexName'
+                    FROM @tablevar tv
+                    INNER JOIN sys.indexes ind
+                    ON tv.objectid = ind.[object_id]
+                    AND tv.index_id = ind.index_id
+                    INNER JOIN sys.objects ob
+                    ON tv.objectid = ob.[object_id]
+                    INNER JOIN sys.schemas sc
                     ON sc.schema_id = ob.schema_id";
 
                     try
                     {
-                        using (SqlCommand sqlCommand = con.CreateCommand())
+                        using (DbCommand sqlCommand = con.CreateCommand())
                         {
                             sqlCommand.CommandTimeout = timeoutSeconds;
                             sqlCommand.CommandText = sql;
-                            SqlDataReader resultsToRebuild = sqlCommand.ExecuteReader();
+                            DbDataReader resultsToRebuild = sqlCommand.ExecuteReader();
 
                             while (resultsToRebuild.Read())
                             {
@@ -98,11 +100,11 @@ namespace ShipWorks.Data.Administration.Indexing
 
             using (new LoggedStopwatch(log, string.Format("Finished rebuilding index.  SQL Statement: {0}", rebuildIndexSql)))
             {
-                using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+                using (DbConnection sqlConnection = DataAccessAdapter.CreateConnection(ConnectionString))
                 {
                     sqlConnection.Open();
 
-                    using (SqlCommand sqlCommand = sqlConnection.CreateCommand())
+                    using (DbCommand sqlCommand = sqlConnection.CreateCommand())
                     {
                         sqlCommand.CommandTimeout = timeoutSeconds;
                         sqlCommand.CommandText = rebuildIndexSql;

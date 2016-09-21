@@ -1,7 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code.
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReasonDetail = source.ReasonDetail;
             Date = source.Date;
             Action = source.Action;
-            ObjectID = source.ObjectID;
+            EntityID = source.EntityID;
             HasEvents = source.HasEvents;
             
             
@@ -68,7 +68,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The RowVersion property of the Entity Audit<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Audit"."RowVersion"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte[] RowVersion { get; }
         /// <summary> The TransactionID property of the Entity Audit<br/><br/>
@@ -113,12 +113,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 Action { get; }
-        /// <summary> The ObjectID property of the Entity Audit<br/><br/>
+        /// <summary> The EntityID property of the Entity Audit<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Audit"."ObjectID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ObjectID { get; }
+        public Nullable<System.Int64> EntityID { get; }
         /// <summary> The HasEvents property of the Entity Audit<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Audit"."HasEvents"<br/>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -258,7 +259,7 @@ namespace ShipWorks.Data.Administration
 
                         // Since we installed it, we can do this without asking.  We didn't do it right after install completed because
                         // a reboot was required (which is why we are here now)
-                        using (SqlConnection con = sqlSession.OpenConnection())
+                        using (DbConnection con = sqlSession.OpenConnection())
                         {
                             SqlUtility.EnableClr(con);
                         }
@@ -537,7 +538,7 @@ namespace ShipWorks.Data.Administration
                 installedInstances.Add(localDbUpgradedInstance);
 
                 // Since we installed it, we can do this without asking
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     SqlUtility.EnableClr(con);
                 }
@@ -1125,7 +1126,7 @@ namespace ShipWorks.Data.Administration
 
                 if (configuration != null)
                 {
-                    using (SqlConnection con = new SqlSession(configuration).OpenConnection())
+                    using (DbConnection con = new SqlSession(configuration).OpenConnection())
                     {
                         return Tuple.Create(configuration, ShipWorksDatabaseUtility.GetDatabaseDetails(con));
                     }
@@ -1396,7 +1397,7 @@ namespace ShipWorks.Data.Administration
 
                 string database = ((SqlDatabaseDetail) gridDatabses.SelectedElements[0].Tag).Name;
 
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     SqlDatabaseDetail detail = ShipWorksDatabaseUtility.GetDatabaseDetail(database, con);
 
@@ -1568,7 +1569,7 @@ namespace ShipWorks.Data.Administration
                 installedInstances.Add(instanceName.Text);
 
                 // Since we installed it, we can do this without asking
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     SqlUtility.EnableClr(con);
                 }
@@ -1642,7 +1643,7 @@ namespace ShipWorks.Data.Administration
                 panelDatabaseGivenName.Visible = true;
                 panelDatabaseChooseName.Visible = false;
 
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     givenDatabaseName.Text = ShipWorksDatabaseUtility.GetFirstAvailableDatabaseName(con);
                     databaseName.Text = givenDatabaseName.Text;
@@ -1679,7 +1680,7 @@ namespace ShipWorks.Data.Administration
 
                 Cursor.Current = Cursors.WaitCursor;
 
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     ShipWorksDatabaseUtility.CreateDatabase(name, pathDataFiles.Text, con);
                 }

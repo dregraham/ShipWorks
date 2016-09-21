@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -795,19 +794,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 // Filter out any we really don't care about
                 .Where(e =>
+                {
+                    EndiciaApiException apiEx = e as EndiciaApiException;
+                    if (apiEx != null)
                     {
-                        EndiciaApiException apiEx = e as EndiciaApiException;
-                        if (apiEx != null)
-                        {
-                            // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
-                            // user just won't get the rate for it (which makes sense)
-                            return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    })
+                        // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
+                        // user just won't get the rate for it (which makes sense)
+                        return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                })
 
                 .ToList();
 
@@ -1175,7 +1174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             PostalShipmentEntity postal = shipment.Postal;
             EndiciaAccountEntity account = GetAccount(postal);
-            PostalServiceType serviceType = (PostalServiceType)postal.Service;
+            PostalServiceType serviceType = (PostalServiceType) postal.Service;
 
             LabelRequest request = GenerateLabelRequest(shipment, endiciaShipmentType, account, serviceType);
 
@@ -1233,7 +1232,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private LabelRequest GenerateLabelRequest(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, EndiciaAccountEntity account, PostalServiceType serviceType)
         {
             PostalShipmentEntity postal = shipment.Postal;
-            PostalPackagingType packagingType = (PostalPackagingType)postal.PackagingType;
+            PostalPackagingType packagingType = (PostalPackagingType) postal.PackagingType;
 
             // Create the request
             LabelRequest request = new LabelRequest();
@@ -1486,7 +1485,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private static void ApplyToAddress(ShipmentEntity shipment, LabelRequest request, PersonAdapter from, PersonAdapter recipient)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
 
             // POZipCode is always required for ParcelSelect if EntryFacility is not 'Other'.
             if (string.IsNullOrWhiteSpace(request.POZipCode) && PostalUtility.IsEntryFacilityRequired(serviceType))
@@ -1607,7 +1606,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             shipment.ActualLabelFormat = (int?) thermalType;
             request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
         }
-        
+
         /// <summary>
         /// For APO/FPO shipments, add appropriate label format.
         /// </summary>
@@ -1638,8 +1637,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private static ThermalLanguage? ApplyInternationalLabelFormat(ShipmentEntity shipment, LabelRequest request, ThermalLanguage? thermalType)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
             request.LabelType = "International";
             request.LabelSubtype = "Integrated";
@@ -1717,9 +1716,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // If this is an Express1 shipment, and Single-Source is turned on, we need to make sure it is a packaging type Express1 supports or
                 if (settings.Express1EndiciaSingleSource)
                 {
-                    // If its not a postage saving service, express1 would automatically reroute to Endicia.  
+                    // If its not a postage saving service, express1 would automatically reroute to Endicia.
                     // It's only when the service could save, but the packaging is goofed that there's a problem.
-                    if (Express1Utilities.IsPostageSavingService(serviceType) && 
+                    if (Express1Utilities.IsPostageSavingService(serviceType) &&
                         !Express1Utilities.IsValidPackagingType(serviceType, packagingType))
                     {
                         request.Provider = "Endicia";

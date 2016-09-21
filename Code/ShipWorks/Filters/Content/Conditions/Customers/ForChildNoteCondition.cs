@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Data.Model;
+﻿using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 
 namespace ShipWorks.Filters.Content.Conditions.Customers
@@ -45,7 +41,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
             // get replaces by the scope once the alias is created.
             string customerNotes = string.Format("{0}.{1} = {2}.{3}",
                 "{0}",
-                context.GetColumnName(NoteFields.ObjectID),
+                context.GetColumnName(NoteFields.EntityID),
                 parentScope.TableAlias,
                 context.GetColumnName(CustomerFields.CustomerID));
 
@@ -55,7 +51,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
             // get replaces by the scope once the alias is created.
             string orderNotes = string.Format("{0}.{1} IN (SELECT {2}.{3} FROM [Order] {2} WHERE {2}.{4} = {5}.{4})",
                 "{0}",
-                context.GetColumnName(NoteFields.ObjectID),
+                context.GetColumnName(NoteFields.EntityID),
                 orderAlias,
                 context.GetColumnName(OrderFields.OrderID),
                 context.GetColumnName(OrderFields.CustomerID),

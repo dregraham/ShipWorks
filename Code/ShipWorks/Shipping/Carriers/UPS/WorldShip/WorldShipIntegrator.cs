@@ -6,9 +6,9 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Text.Ini;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
 using log4net;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     return false;
                 }
-                
+
                 // Yes means, delete the entries
                 // No means, don't delete, but create mappings.
                 if (dialogResult == DialogResult.Yes)
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             try
             {
-                // Create the maps 
+                // Create the maps
                 CreateMaps(exportDatPathAndFilename, importDatPathAndFilename, importForKeyedDataPathAndFilename);
             }
             catch (ResourceUtilityException ex)

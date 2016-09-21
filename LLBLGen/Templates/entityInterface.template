@@ -21,7 +21,7 @@ namespace <[RootNamespace]>.EntityInterfaces
     /// </summary>
     public <[If UsePartialClasses]>partial <[EndIf]>interface I<[CurrentEntityName]>Entity<[ If IsSubType ]>: I<[ SuperTypeName ]>Entity<[ EndIf ]>
     {
-        <[Foreach EntityField]><[If Not EntityFieldOverrides]>
+        <[Foreach EntityField]>
         /// <summary> The <[EntityFieldName]> property of the Entity <[CurrentEntityName]><br/><br/>
         /// <[Foreach CustomProperty EntityField]>
         /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]></summary>
@@ -29,12 +29,12 @@ namespace <[RootNamespace]>.EntityInterfaces
         /// <[ TargetType ]> field type characteristics (type, precision, scale, length): <[SourceColumnDbType]>, <[SourceColumnPrecision]>, <[SourceColumnScale]>, <[SourceColumnMaxLength]><br/>
         /// <[ TargetType ]> field behavior characteristics (is nullable, is PK, is identity): <[SourceColumnIsNullable]>, <[IsPrimaryKey]>, <[IsIdentity]></remarks>
         <[If GenerateAsNullableType]>Nullable<<[TypeOfField]>><[Else]><[TypeOfField]><[EndIf]> <[EntityFieldName]> { get; }<[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
-        I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
-        I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
-        IEnumerable<I<[RelationEndPointName]>Entity> <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        I<[RelatedEntityName]>Entity <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity ManyToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        I<[RelatedEntityName]>Entity <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToMany]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        IEnumerable<I<[RelatedEntityName]>Entity> <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
 
         /// <summary>
         /// Get a read only version of the entity
@@ -59,12 +59,12 @@ namespace <[RootNamespace]>.EntityClasses
     /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]>
     /// </summary>
     public <[If UsePartialClasses]>partial <[EndIf]>class <[CurrentEntityName]>Entity : I<[CurrentEntityName]>Entity
-    {<[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
-        I<[RelationEndPointName]>Entity I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
-        I<[RelationEndPointName]>Entity I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
-        IEnumerable<I<[RelationEndPointName]>Entity> I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
+    {<[Foreach RelatedEntity OneToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        I<[RelatedEntityName]>Entity I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity ManyToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        I<[RelatedEntityName]>Entity I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
+        <[Foreach RelatedEntity OneToMany]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        IEnumerable<I<[RelatedEntityName]>Entity> I<[CurrentEntityName]>Entity.<[MappedFieldNameRelation]> => <[MappedFieldNameRelation]>;<[EndIf]><[NextForeach]>
 
         /// <summary>
         /// Get a read only version of the entity

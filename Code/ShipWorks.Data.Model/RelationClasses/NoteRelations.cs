@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: Note. </summary>
+	/// <summary>Implements the relations factory for the entity: Note. </summary>
 	public partial class NoteRelations
 	{
 		/// <summary>CTor</summary>
@@ -30,9 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
-
-
-			toReturn.Add(this.OrderEntityUsingObjectID);
+			toReturn.Add(this.OrderEntityUsingEntityID);
 			toReturn.Add(this.UserEntityUsingUserID);
 			return toReturn;
 		}
@@ -42,14 +40,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 		/// <summary>Returns a new IEntityRelation object, between NoteEntity and OrderEntity over the m:1 relation they have, using the relation between the fields:
-		/// Note.ObjectID - Order.OrderID
+		/// Note.EntityID - Order.OrderID
 		/// </summary>
-		public virtual IEntityRelation OrderEntityUsingObjectID
+		public virtual IEntityRelation OrderEntityUsingEntityID
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Order", false);
-				relation.AddEntityFieldPair(OrderFields.OrderID, NoteFields.ObjectID);
+				relation.AddEntityFieldPair(OrderFields.OrderID, NoteFields.EntityID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NoteEntity", true);
 				return relation;
@@ -69,16 +67,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticNoteRelations
+	{
+		internal static readonly IEntityRelation OrderEntityUsingEntityIDStatic = new NoteRelations().OrderEntityUsingEntityID;
+		internal static readonly IEntityRelation UserEntityUsingUserIDStatic = new NoteRelations().UserEntityUsingUserID;
+
+		/// <summary>CTor</summary>
+		static StaticNoteRelations()
+		{
+		}
 	}
 }

@@ -222,7 +222,17 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
                 CrashDialog crashDialog = new CrashDialog(exception, guiThread, userEmail, recoveryCount);
 
-                new WindowInteropHelper(crashDialog).Owner = Program.MainForm.Handle;
+                try
+                {
+                    new WindowInteropHelper(crashDialog).Owner = Program.MainForm.Handle;
+                }
+                catch (ObjectDisposedException)
+                {
+                    // If the main form was disposed, we can't get its handle.
+                    // That's ok, just open the dialog with no owner
+                    crashDialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                }
+
                 sendReportTask = crashDialog.CreateLogTask;
                 shouldReopen = crashDialog.ShowDialog().GetValueOrDefault();
             }

@@ -36,20 +36,20 @@ namespace <[RootNamespace]>.ReadOnlyEntityClasses
             {
                 objectMap[source] = this;
             }
-            <[Foreach EntityField]><[If Not EntityFieldOverrides]>
-            <[EntityFieldName]> = source.<[EntityFieldName]>;<[EndIf]><[NextForeach]>
-            <[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
+            <[Foreach EntityField]>
+            <[EntityFieldName]> = source.<[EntityFieldName]>;<[NextForeach]>
+            <[Foreach RelatedEntity OneToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
             <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
-            <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
+            <[Foreach RelatedEntity ManyToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
             <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
-            <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
+            <[Foreach RelatedEntity OneToMany]><[If Not StringValueEquals MappedFieldNameRelation ""]>
             <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
-                Enumerable.Empty<I<[RelationEndPointName]>Entity>();<[EndIf]><[NextForeach]>
+                Enumerable.Empty<I<[RelatedEntityName]>Entity>();<[EndIf]><[NextForeach]>
 
             CopyCustom<[CurrentEntityName]>Data(source);
         }
 
-        <[Foreach EntityField]><[If Not EntityFieldOverrides]>
+        <[Foreach EntityField]>
         /// <summary> The <[EntityFieldName]> property of the Entity <[CurrentEntityName]><br/><br/>
         /// <[Foreach CustomProperty EntityField]>
         /// <[CustomPropertyName]>: <[CustomPropertyValue]><br/><[NextForeach]></summary>
@@ -57,14 +57,14 @@ namespace <[RootNamespace]>.ReadOnlyEntityClasses
         /// <[ TargetType ]> field type characteristics (type, precision, scale, length): <[SourceColumnDbType]>, <[SourceColumnPrecision]>, <[SourceColumnScale]>, <[SourceColumnMaxLength]><br/>
         /// <[ TargetType ]> field behavior characteristics (is nullable, is PK, is identity): <[SourceColumnIsNullable]>, <[IsPrimaryKey]>, <[IsIdentity]></remarks>
         public <[If GenerateAsNullableType]>Nullable<<[TypeOfField]>><[Else]><[TypeOfField]><[EndIf]> <[EntityFieldName]> { get; }<[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity OneToOne]><[If Not MappedFieldRelationIsHidden]>
-        public I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }
+        <[Foreach RelatedEntity OneToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        public I<[RelatedEntityName]>Entity <[MappedFieldNameRelation]> { get; }
         <[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity ManyToOne]><[If Not MappedFieldRelationIsHidden]>
-        public I<[RelationEndPointName]>Entity <[MappedFieldNameRelation]> { get; }
+        <[Foreach RelatedEntity ManyToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        public I<[RelatedEntityName]>Entity <[MappedFieldNameRelation]> { get; }
         <[EndIf]><[NextForeach]>
-        <[Foreach RelatedEntity OneToMany]><[If Not MappedFieldRelationIsHidden]>
-        public IEnumerable<I<[RelationEndPointName]>Entity> <[MappedFieldNameRelation]> { get; }
+        <[Foreach RelatedEntity OneToMany]><[If Not StringValueEquals MappedFieldNameRelation ""]>
+        public IEnumerable<I<[RelatedEntityName]>Entity> <[MappedFieldNameRelation]> { get; }
         <[EndIf]><[NextForeach]>
         /// <summary>
         /// Get a read only version of the entity

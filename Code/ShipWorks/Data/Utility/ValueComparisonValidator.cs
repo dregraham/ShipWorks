@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Data;
 using Interapptive.Shared.Utility;
 using Microsoft.XmlDiffPatch;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Adapter;
-using System.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Data.Utility
 {
@@ -27,7 +23,7 @@ namespace ShipWorks.Data.Utility
             IFieldPersistenceInfo persistInfo = DataAccessAdapter.GetPersistenceInfo(field);
 
             // XML
-            if (persistInfo.SourceColumnDbType == (int) SqlDbType.Xml)
+            if (persistInfo.SourceColumnDbType == SqlDbType.Xml.ToString())
             {
                 string newXml = (string) value;
                 string oldXml = (string) involvedEntity.GetCurrentFieldValue(fieldIndex);
@@ -36,7 +32,7 @@ namespace ShipWorks.Data.Utility
             }
 
             // Binary
-            if (persistInfo.SourceColumnDbType == (int) SqlDbType.VarBinary)
+            if (persistInfo.SourceColumnDbType == SqlDbType.VarBinary.ToString())
             {
                 byte[] newBytes = (byte[]) value;
                 byte[] oldBytes = (byte[]) involvedEntity.GetCurrentFieldValue(fieldIndex);

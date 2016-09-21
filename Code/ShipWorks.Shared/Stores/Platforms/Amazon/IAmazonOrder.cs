@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -22,5 +21,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// List of IAmazonOrderItem representing the Amazon order items
         /// </summary>
         IEnumerable<IAmazonOrderItem> AmazonOrderItems { get; }
+
+        /// <summary>
+        /// Should the order be treated as same day
+        /// </summary>
+        bool IsSameDay();
     }
 }

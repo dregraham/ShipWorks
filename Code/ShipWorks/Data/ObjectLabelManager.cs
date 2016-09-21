@@ -64,7 +64,7 @@ namespace ShipWorks.Data
                     }
                     else if (objectID < 0)
                     {
-                        label = new ObjectLabel(new ObjectLabelEntity { ObjectID = objectID, Label = GetNewEntityLabelText(EntityUtility.GetEntityType(objectID)) });
+                        label = new ObjectLabel(new ObjectLabelEntity { EntityID = objectID, Label = GetNewEntityLabelText(EntityUtility.GetEntityType(objectID)) });
                     }
                     else
                     {
@@ -98,7 +98,7 @@ namespace ShipWorks.Data
                 //
 
                 // Can't use EntityUtility.GetEntityType here, b\c we have no idea what type of object this may be - if its even one we know about or not.
-                return new ObjectLabel(new ObjectLabelEntity { ObjectID = objectID, Label = "Unknown", IsDeleted = true });
+                return new ObjectLabel(new ObjectLabelEntity { EntityID = objectID, Label = "Unknown", IsDeleted = true });
             }
         }
 

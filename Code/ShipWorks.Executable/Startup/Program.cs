@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using SD.Tools.OrmProfiler.Interceptor;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Startup
 {
@@ -17,6 +19,12 @@ namespace ShipWorks.Startup
             Justification = "The main program method cannot be async")]
         static void Main(string[] args)
         {
+#if DEBUG
+            if (InterapptiveOnly.MagicKeysDown)
+            {
+                InterceptorCore.Initialize("ShipWorks");
+            }
+#endif
             ContainerInitializer.Initialize();
 
             ShipWorks.Program.Main();

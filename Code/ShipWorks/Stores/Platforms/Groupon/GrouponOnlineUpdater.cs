@@ -79,6 +79,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             OrderEntity order = shipment.Order;
 
+            if (order.IsManual)
+            {
+                return new List<GrouponTracking>();
+            }
+
             List<GrouponTracking> tracking = new List<GrouponTracking>();
             // Fetch the order items
             using (SqlAdapter adapter = new SqlAdapter())

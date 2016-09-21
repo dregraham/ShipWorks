@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -23,16 +23,11 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
-	/// <summary>
-	/// Entity class which represents the entity 'EbayStore'.<br/><br/>
-	/// 
-	/// </summary>
+	/// <summary>Entity class which represents the entity 'EbayStore'.<br/><br/></summary>
 	[Serializable]
-	public partial class EbayStoreEntity : StoreEntity, ISerializable
+	public partial class EbayStoreEntity : StoreEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -40,8 +35,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<EbayCombinedOrderRelationEntity> _ebayCombinedOrderRelation;
 		private EntityCollection<EbayOrderEntity> _ebayOrderCollectionViaEbayCombinedOrderRelation;
 
-
-		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
 		#endregion
@@ -53,18 +46,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
-
-
 			/// <summary>Member name EbayCombinedOrderRelation</summary>
 			public static readonly string EbayCombinedOrderRelation = "EbayCombinedOrderRelation";
-
-
-
-
 			/// <summary>Member name EbayOrderCollectionViaEbayCombinedOrderRelation</summary>
 			public static readonly string EbayOrderCollectionViaEbayCombinedOrderRelation = "EbayOrderCollectionViaEbayCombinedOrderRelation";
-
-
 		}
 		#endregion
 		
@@ -73,10 +58,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			SetupCustomPropertyHashtables();
 		}
-
+		
 		/// <summary> CTor</summary>
 		public EbayStoreEntity()
 		{
+			InitClassEmpty();
 			SetName("EbayStoreEntity");
 		}
 
@@ -85,6 +71,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
 		public EbayStoreEntity(IEntityFields2 fields):base(fields)
 		{
+			InitClassEmpty();
 			SetName("EbayStoreEntity");
 		}
 
@@ -92,15 +79,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="validator">The custom validator object for this EbayStoreEntity</param>
 		public EbayStoreEntity(IValidator validator):base(validator)
 		{
+			InitClassEmpty();
 			SetName("EbayStoreEntity");
 		}
 				
-
 		/// <summary> CTor</summary>
 		/// <param name="storeID">PK value for EbayStore which data should be fetched into this EbayStore object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public EbayStoreEntity(System.Int64 storeID):base(storeID)
 		{
+			InitClassEmpty();
+
 			SetName("EbayStoreEntity");
 		}
 
@@ -110,6 +99,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public EbayStoreEntity(System.Int64 storeID, IValidator validator):base(storeID, validator)
 		{
+			InitClassEmpty();
+
 			SetName("EbayStoreEntity");
 		}
 
@@ -123,45 +114,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_ebayCombinedOrderRelation = (EntityCollection<EbayCombinedOrderRelationEntity>)info.GetValue("_ebayCombinedOrderRelation", typeof(EntityCollection<EbayCombinedOrderRelationEntity>));
 				_ebayOrderCollectionViaEbayCombinedOrderRelation = (EntityCollection<EbayOrderEntity>)info.GetValue("_ebayOrderCollectionViaEbayCombinedOrderRelation", typeof(EntityCollection<EbayOrderEntity>));
-
-
-				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
+				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		
-		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
-		/// <param name="fieldIndex">The fieldindex.</param>
-		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
-		{
-			switch((EbayStoreFieldIndex)fieldIndex)
-			{
-				default:
-					base.PerformDesyncSetupFKFieldChange(fieldIndex);
-					break;
-			}
-		}
-				
-		/// <summary>Gets the inheritance info provider instance of the project this entity instance is located in. </summary>
-		/// <returns>ready to use inheritance info provider instance.</returns>
-		protected override IInheritanceInfoProvider GetInheritanceInfoProvider()
-		{
-			return InheritanceInfoProviderSingleton.GetInstance();
-		}
-		
+
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
 		/// <param name="entity">Entity to set as an related entity</param>
 		/// <remarks>Used by prefetch path logic.</remarks>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntityProperty(string propertyName, IEntity2 entity)
+		protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
 		{
 			switch(propertyName)
 			{
-
 				case "EbayCombinedOrderRelation":
 					this.EbayCombinedOrderRelation.Add((EbayCombinedOrderRelationEntity)entity);
 					break;
@@ -170,9 +137,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 					this.EbayOrderCollectionViaEbayCombinedOrderRelation.Add((EbayOrderEntity)entity);
 					this.EbayOrderCollectionViaEbayCombinedOrderRelation.IsReadOnly = true;
 					break;
-
 				default:
-						base.SetRelatedEntityProperty(propertyName, entity);
+					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
 			}
 		}
@@ -180,28 +146,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
+		protected override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return EbayStoreEntity.GetRelationsForField(fieldName);
+			return GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public static new RelationCollection GetRelationsForField(string fieldName)
+		internal static new RelationCollection GetRelationsForField(string fieldName)
 		{
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
 				case "EbayCombinedOrderRelation":
-					toReturn.Add(EbayStoreEntity.Relations.EbayCombinedOrderRelationEntityUsingStoreID);
+					toReturn.Add(Relations.EbayCombinedOrderRelationEntityUsingStoreID);
 					break;
 				case "EbayOrderCollectionViaEbayCombinedOrderRelation":
-					toReturn.Add(EbayStoreEntity.Relations.EbayCombinedOrderRelationEntityUsingStoreID, "EbayStoreEntity__", "EbayCombinedOrderRelation_", JoinHint.None);
+					toReturn.Add(Relations.EbayCombinedOrderRelationEntityUsingStoreID, "EbayStoreEntity__", "EbayCombinedOrderRelation_", JoinHint.None);
 					toReturn.Add(EbayCombinedOrderRelationEntity.Relations.EbayOrderEntityUsingOrderID, "EbayCombinedOrderRelation_", string.Empty, JoinHint.None);
 					break;
-
 				default:
 					toReturn = StoreEntity.GetRelationsForField(fieldName);
 					break;				
@@ -209,21 +173,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return toReturn;
 		}
 #if !CF
-		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it
-		/// will return true if the entity has any single-sided relation</summary>
+		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it/ will return true if the entity has any single-sided relation</summary>
 		/// <param name="propertyName">Name of the property which is mapped onto the relation to check, or null to check if the entity has any relation/ which is single sided</param>
 		/// <returns>true if the relation is single sided / one way (so the opposite relation isn't present), false otherwise</returns>
-		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
-			// use template trick to calculate the # of single-sided / oneway relations
 			int numberOfOneWayRelations = 0;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-
-
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -232,16 +191,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Sets the internal parameter related to the fieldname passed to the instance relatedEntity. </summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntity(IEntity2 relatedEntity, string fieldName)
+		protected override void SetRelatedEntity(IEntityCore relatedEntity, string fieldName)
 		{
 			switch(fieldName)
 			{
-
 				case "EbayCombinedOrderRelation":
 					this.EbayCombinedOrderRelation.Add((EbayCombinedOrderRelationEntity)relatedEntity);
 					break;
-
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -252,16 +208,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="relatedEntity">Instance to unset as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
 		/// <param name="signalRelatedEntityManyToOne">if set to true it will notify the manytoone side, if applicable.</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void UnsetRelatedEntity(IEntity2 relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
+		protected override void UnsetRelatedEntity(IEntityCore relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
 		{
 			switch(fieldName)
 			{
-
 				case "EbayCombinedOrderRelation":
-					base.PerformRelatedEntityRemoval(this.EbayCombinedOrderRelation, relatedEntity, signalRelatedEntityManyToOne);
+					this.PerformRelatedEntityRemoval(this.EbayCombinedOrderRelation, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -270,10 +223,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets a collection of related entities referenced by this entity which depend on this entity (this entity is the PK side of their FK fields). These entities will have to be persisted after this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependingRelatedEntities()
+		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
 			toReturn.AddRange(base.GetDependingRelatedEntities());
 			return toReturn;
 		}
@@ -281,33 +233,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets a collection of related entities referenced by this entity which this entity depends on (this entity is the FK side of their PK fields). These
 		/// entities will have to be persisted before this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependentRelatedEntities()
+		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
-
 			toReturn.AddRange(base.GetDependentRelatedEntities());
 			return toReturn;
 		}
 		
-		/// <summary>Gets a list of all entity collections stored as member variables in this entity. The contents of the ArrayList is used by the DataAccessAdapter to perform recursive saves. Only 1:n related collections are returned.</summary>
+		/// <summary>Gets a list of all entity collections stored as member variables in this entity. Only 1:n related collections are returned.</summary>
 		/// <returns>Collection with 0 or more IEntityCollection2 objects, referenced by this entity</returns>
-		public override List<IEntityCollection2> GetMemberEntityCollections()
+		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.EbayCombinedOrderRelation);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
-		
-		/// <summary>Gets the inheritance info for this entity, if applicable (it's then overriden) or null if not.</summary>
-		/// <returns>InheritanceInfo object if this entity is in a hierarchy of type TargetPerEntity, or null otherwise</returns>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override IInheritanceInfo GetInheritanceInfo()
-		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayStoreEntity", false);
-		}
-		
+
 		/// <summary>Gets a predicateexpression which filters on this entity</summary>
 		/// <returns>ready to use predicateexpression</returns>
 		/// <remarks>Only useful in entity fetches.</remarks>
@@ -329,58 +271,35 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		protected override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_ebayCombinedOrderRelation", ((_ebayCombinedOrderRelation!=null) && (_ebayCombinedOrderRelation.Count>0) && !this.MarkedForDeletion)?_ebayCombinedOrderRelation:null);
 				info.AddValue("_ebayOrderCollectionViaEbayCombinedOrderRelation", ((_ebayOrderCollectionViaEbayCombinedOrderRelation!=null) && (_ebayOrderCollectionViaEbayCombinedOrderRelation.Count>0) && !this.MarkedForDeletion)?_ebayOrderCollectionViaEbayCombinedOrderRelation:null);
-
-
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
-		/// <summary>Returns true if the original value for the field with the fieldIndex passed in, read from the persistent storage was NULL, false otherwise.
-		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
-		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
-		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(EbayStoreFieldIndex fieldIndex)
-		{
-			return base.Fields[(int)fieldIndex].IsNull;
-		}
-		
-		/// <summary>Returns true if the current value for the field with the fieldIndex passed in represents null/not defined, false otherwise.
-		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
-		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
-		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(EbayStoreFieldIndex fieldIndex)
-		{
-			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
-		}
 		
 		/// <summary>Determines whether this entity is a subType of the entity represented by the passed in enum value, which represents a value in the ShipWorks.Data.Model.EntityType enum</summary>
 		/// <param name="typeOfEntity">Type of entity.</param>
 		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override bool CheckIfIsSubTypeOf(int typeOfEntity)
+		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
 		{
 			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("EbayStoreEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
 		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
-		public override List<IEntityRelation> GetAllRelations()
+		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new EbayStoreRelations().GetAllRelations();
 		}
-		
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'EbayCombinedOrderRelation' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'EbayCombinedOrderRelation' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoEbayCombinedOrderRelation()
 		{
@@ -389,8 +308,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'EbayOrder' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'EbayOrder' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoEbayOrderCollectionViaEbayCombinedOrderRelation()
 		{
@@ -399,24 +317,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(EbayStoreFields.StoreID, null, ComparisonOperator.Equal, this.StoreID, "EbayStoreEntity__"));
 			return bucket;
 		}
-
-
-	
 		
-		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
-		protected override IEntityFields2 CreateFields()
-		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.EbayStoreEntity);
-		}
-
-		/// <summary>
-		/// Creates the ITypeDefaultValue instance used to provide default values for value types which aren't of type nullable(of T)
-		/// </summary>
-		/// <returns></returns>
-		protected override ITypeDefaultValue CreateTypeDefaultValueProvider()
-		{
-			return new TypeDefaultValue();
-		}
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
@@ -440,21 +341,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._ebayCombinedOrderRelation = (EntityCollection<EbayCombinedOrderRelationEntity>) collectionsQueue.Dequeue();
 			this._ebayOrderCollectionViaEbayCombinedOrderRelation = (EntityCollection<EbayOrderEntity>) collectionsQueue.Dequeue();
+
 		}
 		
 		/// <summary>Determines whether the entity has populated member collections</summary>
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
-			if (this._ebayCombinedOrderRelation != null)
-			{
-				return true;
-			}
-			if (this._ebayOrderCollectionViaEbayCombinedOrderRelation != null)
-			{
-				return true;
-			}
-			return base.HasPopulatedMemberEntityCollections();
+			bool toReturn = false;
+			toReturn |=(this._ebayCombinedOrderRelation != null);
+			toReturn |= (this._ebayOrderCollectionViaEbayCombinedOrderRelation != null);
+			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
 		/// <summary>Creates the member entity collections queue.</summary>
@@ -467,50 +364,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EbayOrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayOrderEntityFactory))) : null);
 		}
 #endif
-		/// <summary>
-		/// Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element. 
-		/// </summary>
+		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
 		/// <returns>Dictionary with per name the related referenced data element, which can be an entity collection or an entity or null</returns>
-		public override Dictionary<string, object> GetRelatedData()
+		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
-
 			toReturn.Add("EbayCombinedOrderRelation", _ebayCombinedOrderRelation);
 			toReturn.Add("EbayOrderCollectionViaEbayCombinedOrderRelation", _ebayOrderCollectionViaEbayCombinedOrderRelation);
-
 			return toReturn;
-		}
-		
-		/// <summary> Adds the internals to the active context. </summary>
-		protected override void AddInternalsToContext()
-		{
-			if(_ebayCombinedOrderRelation!=null)
-			{
-				_ebayCombinedOrderRelation.ActiveContext = base.ActiveContext;
-			}
-			if(_ebayOrderCollectionViaEbayCombinedOrderRelation!=null)
-			{
-				_ebayOrderCollectionViaEbayCombinedOrderRelation.ActiveContext = base.ActiveContext;
-			}
-
-
-			base.AddInternalsToContext();
 		}
 
 		/// <summary> Initializes the class members</summary>
-		protected override void InitClassMembers()
+		private void InitClassMembers()
 		{
-			base.InitClassMembers();
-			_ebayCombinedOrderRelation = null;
-			_ebayOrderCollectionViaEbayCombinedOrderRelation = null;
-
-
-
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-
 		}
+
 
 		#region Custom Property Hashtable Setup
 		/// <summary> Initializes the hashtables for the entity type and entity field custom properties. </summary>
@@ -518,70 +389,46 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			_customProperties = new Dictionary<string, string>();
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
-
-			Dictionary<string, string> fieldHashtable = null;
+			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("EBayUserID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("EBayToken", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("EBayTokenExpire", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("AcceptedPaymentList", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DownloadItemDetails", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DownloadOlderOrders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DownloadPayPalDetails", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PayPalApiCredentialType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PayPalApiUserName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PayPalApiPassword", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PayPalApiSignature", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PayPalApiCertificate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DomesticShippingService", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InternationalShippingService", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FeedbackUpdatedThrough", fieldHashtable);
 		}
 		#endregion
 
-
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this EbayStoreEntity</param>
-		/// <param name="fields">Fields of this entity</param>
-		protected override void InitClassEmpty(IValidator validator, IEntityFields2 fields)
+		private void InitClassEmpty()
 		{
+			InitClassMembers();
 
-			base.InitClassEmpty(validator, fields);
-
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
@@ -602,26 +449,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EbayCombinedOrderRelation' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EbayCombinedOrderRelation' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathEbayCombinedOrderRelation
 		{
-			get
-			{
-				return new PrefetchPathElement2( new EntityCollection<EbayCombinedOrderRelationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayCombinedOrderRelationEntityFactory))),
-					(IEntityRelation)GetRelationsForField("EbayCombinedOrderRelation")[0], (int)ShipWorks.Data.Model.EntityType.EbayStoreEntity, (int)ShipWorks.Data.Model.EntityType.EbayCombinedOrderRelationEntity, 0, null, null, null, null, "EbayCombinedOrderRelation", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
-			}
+			get	{ return new PrefetchPathElement2( new EntityCollection<EbayCombinedOrderRelationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayCombinedOrderRelationEntityFactory))), (IEntityRelation)GetRelationsForField("EbayCombinedOrderRelation")[0], (int)ShipWorks.Data.Model.EntityType.EbayStoreEntity, (int)ShipWorks.Data.Model.EntityType.EbayCombinedOrderRelationEntity, 0, null, null, null, null, "EbayCombinedOrderRelation", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EbayOrder' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EbayOrder' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathEbayOrderCollectionViaEbayCombinedOrderRelation
 		{
 			get
 			{
-				IEntityRelation intermediateRelation = EbayStoreEntity.Relations.EbayCombinedOrderRelationEntityUsingStoreID;
+				IEntityRelation intermediateRelation = Relations.EbayCombinedOrderRelationEntityUsingStoreID;
 				intermediateRelation.SetAliases(string.Empty, "EbayCombinedOrderRelation_");
 				return new PrefetchPathElement2(new EntityCollection<EbayOrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayOrderEntityFactory))), intermediateRelation,
 					(int)ShipWorks.Data.Model.EntityType.EbayStoreEntity, (int)ShipWorks.Data.Model.EntityType.EbayOrderEntity, 0, null, null, GetRelationsForField("EbayOrderCollectionViaEbayCombinedOrderRelation"), null, "EbayOrderCollectionViaEbayCombinedOrderRelation", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToMany);
@@ -629,17 +470,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 
-
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, string> CustomPropertiesOfType
+		protected override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return EbayStoreEntity.CustomProperties;}
+			get { return CustomProperties;}
 		}
 
-		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
-		/// pairs. </summary>
+		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		public new static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
 		{
@@ -649,24 +488,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The custom properties for the fields of the type of this entity instance. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
+		protected override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return EbayStoreEntity.FieldsCustomProperties;}
+			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The StoreID property of the Entity EbayStore<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayStore"."StoreID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public override System.Int64 StoreID
-		{
-			get { return (System.Int64)GetValue((int)EbayStoreFieldIndex.StoreID, true); }
-			set	{ SetValue((int)EbayStoreFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The EBayUserID property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The EBayUserID property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."eBayUserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -676,8 +503,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.EBayUserID, value); }
 		}
 
-		/// <summary> The EBayToken property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The EBayToken property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."eBayToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Text, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -687,8 +513,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.EBayToken, value); }
 		}
 
-		/// <summary> The EBayTokenExpire property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The EBayTokenExpire property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."eBayTokenExpire"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -698,8 +523,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.EBayTokenExpire, value); }
 		}
 
-		/// <summary> The AcceptedPaymentList property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The AcceptedPaymentList property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."AcceptedPaymentList"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -709,8 +533,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.AcceptedPaymentList, value); }
 		}
 
-		/// <summary> The DownloadItemDetails property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The DownloadItemDetails property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."DownloadItemDetails"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -720,8 +543,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.DownloadItemDetails, value); }
 		}
 
-		/// <summary> The DownloadOlderOrders property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The DownloadOlderOrders property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."DownloadOlderOrders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -731,8 +553,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.DownloadOlderOrders, value); }
 		}
 
-		/// <summary> The DownloadPayPalDetails property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The DownloadPayPalDetails property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."DownloadPayPalDetails"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -742,8 +563,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.DownloadPayPalDetails, value); }
 		}
 
-		/// <summary> The PayPalApiCredentialType property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The PayPalApiCredentialType property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."PayPalApiCredentialType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -753,8 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.PayPalApiCredentialType, value); }
 		}
 
-		/// <summary> The PayPalApiUserName property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The PayPalApiUserName property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."PayPalApiUserName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -764,8 +583,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.PayPalApiUserName, value); }
 		}
 
-		/// <summary> The PayPalApiPassword property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The PayPalApiPassword property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."PayPalApiPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -775,8 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.PayPalApiPassword, value); }
 		}
 
-		/// <summary> The PayPalApiSignature property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The PayPalApiSignature property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."PayPalApiSignature"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -786,8 +603,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.PayPalApiSignature, value); }
 		}
 
-		/// <summary> The PayPalApiCertificate property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The PayPalApiCertificate property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."PayPalApiCertificate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -797,8 +613,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.PayPalApiCertificate, value); }
 		}
 
-		/// <summary> The DomesticShippingService property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The DomesticShippingService property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."DomesticShippingService"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -808,8 +623,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.DomesticShippingService, value); }
 		}
 
-		/// <summary> The InternationalShippingService property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The InternationalShippingService property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."InternationalShippingService"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -819,8 +633,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.InternationalShippingService, value); }
 		}
 
-		/// <summary> The FeedbackUpdatedThrough property of the Entity EbayStore<br/><br/>
-		/// </summary>
+		/// <summary> The FeedbackUpdatedThrough property of the Entity EbayStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."FeedbackUpdatedThrough"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -830,41 +643,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.FeedbackUpdatedThrough, value); }
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'EbayCombinedOrderRelationEntity' which are related to this entity via a relation of type '1:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		/// <summary> Gets the EntityCollection with the related entities of type 'EbayCombinedOrderRelationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EbayCombinedOrderRelationEntity))]
 		public virtual EntityCollection<EbayCombinedOrderRelationEntity> EbayCombinedOrderRelation
 		{
-			get
-			{
-				if(_ebayCombinedOrderRelation==null)
-				{
-					_ebayCombinedOrderRelation = new EntityCollection<EbayCombinedOrderRelationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayCombinedOrderRelationEntityFactory)));
-					_ebayCombinedOrderRelation.SetContainingEntityInfo(this, "EbayStore");
-				}
-				return _ebayCombinedOrderRelation;
-			}
+			get { return GetOrCreateEntityCollection<EbayCombinedOrderRelationEntity, EbayCombinedOrderRelationEntityFactory>("EbayStore", true, false, ref _ebayCombinedOrderRelation);	}
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'EbayOrderEntity' which are related to this entity via a relation of type 'm:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		/// <summary> Gets the EntityCollection with the related entities of type 'EbayOrderEntity' which are related to this entity via a relation of type 'm:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EbayOrderEntity))]
 		public virtual EntityCollection<EbayOrderEntity> EbayOrderCollectionViaEbayCombinedOrderRelation
 		{
-			get
-			{
-				if(_ebayOrderCollectionViaEbayCombinedOrderRelation==null)
-				{
-					_ebayOrderCollectionViaEbayCombinedOrderRelation = new EntityCollection<EbayOrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayOrderEntityFactory)));
-					_ebayOrderCollectionViaEbayCombinedOrderRelation.IsReadOnly=true;
-				}
-				return _ebayOrderCollectionViaEbayCombinedOrderRelation;
-			}
+			get { return GetOrCreateEntityCollection<EbayOrderEntity, EbayOrderEntityFactory>("EbayStoreCollectionViaEbayCombinedOrderRelation", false, true, ref _ebayOrderCollectionViaEbayCombinedOrderRelation);	}
 		}
-
-
 	
-		
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
@@ -879,10 +671,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		/// <summary>Returns the ShipWorks.Data.Model.EntityType enum value for this entity.</summary>
 		[Browsable(false), XmlIgnore]
-		public override int LLBLGenProEntityTypeValue 
+		protected override int LLBLGenProEntityTypeValue 
 		{ 
 			get { return (int)ShipWorks.Data.Model.EntityType.EbayStoreEntity; }
 		}
+
 		#endregion
 
 

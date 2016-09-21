@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Users;
-using ShipWorks.Data.Model;
-using ShipWorks.Users.Audit;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
-using ShipWorks.Properties;
-using ShipWorks.Users.Audit.CoreExtensions.Grid;
 using ShipWorks.Data.Grid.Columns.SortProviders;
-using Interapptive.Shared.Utility;
+using ShipWorks.Data.Grid.Columns.ValueProviders;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Properties;
+using ShipWorks.Users.Audit;
+using ShipWorks.Users.Audit.CoreExtensions.Grid;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -37,7 +32,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         AuditFields.UserID,
                         UserFields.Username),
 
-                    new GridColumnDefinition("{D53A9004-D600-4c0e-86AA-596C9D0887B1}", true, 
+                    new GridColumnDefinition("{D53A9004-D600-4c0e-86AA-596C9D0887B1}", true,
                         new GridDateDisplayType { UseDescriptiveDates = true }, "Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
                         AuditFields.Date),
 
@@ -52,9 +47,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{35A2E5F2-88F8-4559-912D-1C7FA36A34BA}", true,
                         new GridEntityDisplayType(), "Related To", new GridEntityDisplayInfo(6, EntityType.OrderEntity, "Order 1028"),
-                        new GridColumnFieldValueProvider(AuditFields.ObjectID),
-                        new GridColumnObjectLabelSortProvider(AuditFields.ObjectID)) { DefaultWidth = 225 },
-                        
+                        new GridColumnFieldValueProvider(AuditFields.EntityID),
+                        new GridColumnObjectLabelSortProvider(AuditFields.EntityID)) { DefaultWidth = 225 },
+
                     new GridColumnDefinition("{31D4314A-F071-41c7-8E7E-EB4EEDCC3265}", true,
                         new AuditDetailDisplayType(), "Detail", new AuditEntity { HasEvents = true },
                         AuditFields.AuditID) { DefaultWidth = 45 },

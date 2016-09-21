@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: WorldShipShipment. </summary>
+	/// <summary>Implements the relations factory for the entity: WorldShipShipment. </summary>
 	public partial class WorldShipShipmentRelations
 	{
 		/// <summary>CTor</summary>
@@ -32,9 +32,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.WorldShipGoodsEntityUsingShipmentID);
 			toReturn.Add(this.WorldShipPackageEntityUsingShipmentID);
-			toReturn.Add(this.WorldShipProcessedEntityUsingShipmentID);
+			toReturn.Add(this.WorldShipProcessedEntityUsingShipmentIdCalculated);
 			toReturn.Add(this.UpsShipmentEntityUsingShipmentID);
-
 			return toReturn;
 		}
 
@@ -71,14 +70,14 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between WorldShipShipmentEntity and WorldShipProcessedEntity over the 1:n relation they have, using the relation between the fields:
-		/// WorldShipShipment.ShipmentID - WorldShipProcessed.ShipmentID
+		/// WorldShipShipment.ShipmentID - WorldShipProcessed.ShipmentIdCalculated
 		/// </summary>
-		public virtual IEntityRelation WorldShipProcessedEntityUsingShipmentID
+		public virtual IEntityRelation WorldShipProcessedEntityUsingShipmentIdCalculated
 		{
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "WorldShipProcessed" , true);
-				relation.AddEntityFieldPair(WorldShipShipmentFields.ShipmentID, WorldShipProcessedFields.ShipmentID);
+				relation.AddEntityFieldPair(WorldShipShipmentFields.ShipmentID, WorldShipProcessedFields.ShipmentIdCalculated);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WorldShipShipmentEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("WorldShipProcessedEntity", false);
 				return relation;
@@ -104,16 +103,28 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticWorldShipShipmentRelations
+	{
+		internal static readonly IEntityRelation WorldShipGoodsEntityUsingShipmentIDStatic = new WorldShipShipmentRelations().WorldShipGoodsEntityUsingShipmentID;
+		internal static readonly IEntityRelation WorldShipPackageEntityUsingShipmentIDStatic = new WorldShipShipmentRelations().WorldShipPackageEntityUsingShipmentID;
+		internal static readonly IEntityRelation WorldShipProcessedEntityUsingShipmentIdCalculatedStatic = new WorldShipShipmentRelations().WorldShipProcessedEntityUsingShipmentIdCalculated;
+		internal static readonly IEntityRelation UpsShipmentEntityUsingShipmentIDStatic = new WorldShipShipmentRelations().UpsShipmentEntityUsingShipmentID;
+
+		/// <summary>CTor</summary>
+		static StaticWorldShipShipmentRelations()
+		{
+		}
 	}
 }

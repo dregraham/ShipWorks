@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -22,14 +17,14 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// The value of a field has changed
         /// </summary>
-        protected override void OnFieldValueChanged(object originalValue, IEntityField2 field)
+        protected override void OnFieldValueChanged(object originalValue, int fieldIndex)
         {
-            if (field.FieldIndex == (int)EtsyOrderFieldIndex.WasPaid || field.FieldIndex == (int)EtsyOrderFieldIndex.WasShipped)
+            if (fieldIndex == (int) EtsyOrderFieldIndex.WasPaid || fieldIndex == (int) EtsyOrderFieldIndex.WasShipped)
             {
                 effectiveOnlineStatusAlgorithm(this);
             }
 
-            base.OnFieldValueChanged(originalValue, field);
+            base.OnFieldValueChanged(originalValue, fieldIndex);
         }
     }
 }

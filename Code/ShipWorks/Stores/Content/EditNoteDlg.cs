@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users;
-using ShipWorks.Data;
-using ShipWorks.UI;
-using ShipWorks.Users.Security;
-using ShipWorks.Stores.Content.Panels;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content.Panels;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Content
 {
@@ -54,7 +48,7 @@ namespace ShipWorks.Stores.Content
         {
             if (dataMode == PanelDataMode.LiveDatabase)
             {
-                UserSession.Security.DemandPermission(PermissionType.EntityTypeEditNotes, note.ObjectID);
+                UserSession.Security.DemandPermission(PermissionType.EntityTypeEditNotes, note.EntityID);
             }
 
             visibility.DisplayMember = "Key";
@@ -62,10 +56,10 @@ namespace ShipWorks.Stores.Content
             visibility.DataSource = EnumHelper.GetEnumList<NoteVisibility>().ToList();
             visibility.SelectedValue = (NoteVisibility) note.Visibility;
 
-            ObjectLabel label = ObjectLabelManager.GetLabel(note.ObjectID);
+            ObjectLabel label = ObjectLabelManager.GetLabel(note.EntityID);
             labelName.Text = label.GetCustomText(true, false, true);
 
-            pictureBox.Image = EntityUtility.GetEntityImage(EntityUtility.GetEntityType(note.ObjectID), 32);
+            pictureBox.Image = EntityUtility.GetEntityImage(EntityUtility.GetEntityType(note.EntityID), 32);
 
             noteText.Text = note.Text;
 

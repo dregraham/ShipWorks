@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -548,11 +548,11 @@ namespace ShipWorks.Users
             // This will get the database guid.
             SystemDataEntity systemData = SystemData.Fetch();
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // The guid isn't enough.  They could restore the database to a different path, essentially copying it.  In which
                 // case the guid will be the same, but the path will be different.
-                string targetPhysDb = (string) SqlCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
+                string targetPhysDb = (string) DbCommandProvider.ExecuteScalar(con, "select physical_name from sys.database_files where type_desc = 'ROWS'");
 
                 // Of course, they could also copy the same database, on two different machines, that would have the same path. So to
                 // uniqueify that, we use the machine name.

@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Voids the shipment
         /// </summary>
-        CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, string amazonShipmentId);
+        CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, AmazonShipmentEntity amazonShipment);
 
         /// <summary>
         /// Validates the CreateShipmentREsponse

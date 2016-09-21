@@ -1,21 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
-using ShipWorks.Properties;
-using ShipWorks.Data.Connection;
-using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Properties;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Users
 {
@@ -104,7 +98,7 @@ namespace ShipWorks.Users
         }
 
         /// <summary>
-        /// Load 
+        /// Load
         /// </summary>
         private void LoadUserGrid()
         {
@@ -285,11 +279,11 @@ namespace ShipWorks.Users
         private void OnOpeningMenuCopyRightsFrom(object sender, CancelEventArgs e)
         {
             PermissionUtility.PopulateCopyRightsFromMenu(
-                menuCopyRightsFrom, 
-                GetUsersSansSelected(), 
+                menuCopyRightsFrom,
+                GetUsersSansSelected(),
                 new EventHandler(OnCopyRightsFromUser));
         }
-        
+
         /// <summary>
         /// Get a list of users that excludes the selected user
         /// </summary>

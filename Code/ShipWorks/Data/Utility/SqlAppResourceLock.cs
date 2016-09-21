@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using ShipWorks.Data.Connection;
 using ShipWorks.SqlServer.Common.Data;
 
@@ -11,7 +11,7 @@ namespace ShipWorks.Data.Utility
     /// </summary>
     public class SqlAppResourceLock : IDisposable
     {
-        private SqlConnection con;
+        private DbConnection con;
         private readonly bool ownedConnection;
         private readonly string lockName;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Utility
         /// connection also requesting a lock from working with the resource name.
         /// Throws a SqlAppResourceLockException if the lock cannot be taken.
         /// </summary>
-        public SqlAppResourceLock(SqlConnection con, string resourceName)
+        public SqlAppResourceLock(DbConnection con, string resourceName)
         {
             this.con = con;
             ownedConnection = false;

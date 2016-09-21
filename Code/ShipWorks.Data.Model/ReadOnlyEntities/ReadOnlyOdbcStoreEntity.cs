@@ -1,7 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code.
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
@@ -41,12 +41,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ImportStrategy = source.ImportStrategy;
             ImportColumnSourceType = source.ImportColumnSourceType;
             ImportColumnSource = source.ImportColumnSource;
-            ImportOrderItemStrategy = source.ImportOrderItemStrategy;
             UploadStrategy = source.UploadStrategy;
             UploadMap = source.UploadMap;
             UploadColumnSourceType = source.UploadColumnSourceType;
             UploadColumnSource = source.UploadColumnSource;
             UploadConnectionString = source.UploadConnectionString;
+            ImportOrderItemStrategy = source.ImportOrderItemStrategy;
             
             
             
@@ -85,12 +85,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ImportColumnSource { get; }
-        /// <summary> The ImportOrderItemStrategy property of the Entity OdbcStore<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OdbcStore"."ImportOrderItemStrategy"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 ImportOrderItemStrategy { get; }
         /// <summary> The UploadStrategy property of the Entity OdbcStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OdbcStore"."UploadStrategy"<br/>
@@ -121,6 +115,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String UploadConnectionString { get; }
+        /// <summary> The ImportOrderItemStrategy property of the Entity OdbcStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OdbcStore"."ImportOrderItemStrategy"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 ImportOrderItemStrategy { get; }
         
         
         

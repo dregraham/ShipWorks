@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
@@ -11,9 +11,9 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
@@ -257,9 +257,9 @@ namespace ShipWorks.Filters
             return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
                 cmd.CommandText = "SELECT dbo.GetFilterNodeLevels(@FilterLayoutID)";
-                cmd.Parameters.AddWithValue("@FilterLayoutID", layoutID);
+                cmd.AddParameterWithValue("@FilterLayoutID", layoutID);
 
-                return (int) SqlCommandProvider.ExecuteScalar(cmd);
+                return (int) DbCommandProvider.ExecuteScalar(cmd);
             });
         }
 
@@ -348,17 +348,17 @@ namespace ShipWorks.Filters
         /// </summary>
         public bool IsLayoutDirty()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // We need to detect any changes to sequences or nodes
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = @"
                     SELECT CAST(MAX(RowVersion) as bigint)
                       FROM FilterLayout";
 
                 // We're using this version of ExecuteScalar because it will throw a better exception if the returned value cannot be cast.
                 // A customer was crashing on a NullReferenceException and the original cast to long was one possible location of the crash.
-                long dbTimestamp = SqlCommandProvider.ExecuteScalar<long>(cmd);
+                long dbTimestamp = DbCommandProvider.ExecuteScalar<long>(cmd);
 
                 // Get the local timestamp
                 long localTimestamp = layouts.Max(l => SqlUtility.GetTimestampValue(l.RowVersion));
