@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
+﻿using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 
@@ -15,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Api
     /// An interface intended to act as a facade for carrying out shipping related tasks supported by ShipWorks
     /// (shipping a package, voiding a shipment, tracking a package, etc.) for a specific carrier and managing
     /// any ancillary details associated with those transactions such as authentication/handshakes, saving labels,
-    /// exception handling, etc. The metaphor here is that of a clerk that a customer would interact with if he/she 
+    /// exception handling, etc. The metaphor here is that of a clerk that a customer would interact with if he/she
     /// went to a carrier's physical store to accomplish these tasks.
     /// </summary>
     public interface IShippingClerk
@@ -26,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// entity accordingly.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
-        void Ship(ShipmentEntity shipmentEntity);
+        IEnumerable<ICarrierResponse> Ship(ShipmentEntity shipmentEntity);
 
         /// <summary>
         /// Void/Cancel/Delete a shipment
@@ -35,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Api
         void Void(ShipmentEntity shipmentEntity);
 
         /// <summary>
-        /// Registers a carrier account account for use with the carrier API.
+        /// Registers a carrier account for use with the carrier API.
         /// </summary>
         /// <param name="account">The carrier specific account.</param>
         void RegisterAccount(EntityBase2 account);

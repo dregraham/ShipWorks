@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
-        public void Ship(ShipmentEntity shipmentEntity)
+        public IEnumerable<ICarrierResponse> Ship(ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -107,15 +107,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 labelRepository.ClearReferences(shipmentEntity);
 
                 // Each package in the shipment must be submitted to FedEx in an individual request
-                for (int packageSequenceNumber = 0; packageSequenceNumber < packageCount; packageSequenceNumber++)
-                {
-                    CarrierRequest shippingRequest = requestFactory.CreateShipRequest(shipmentEntity);
-                    shippingRequest.SequenceNumber = packageSequenceNumber;
+                return Enumerable.Range(0, packageCount)
+                    .Select(x =>
+                    {
+                        CarrierRequest shippingRequest = requestFactory.CreateShipRequest(shipmentEntity);
+                        shippingRequest.SequenceNumber = x;
 
-                    // Submit the request and have the response save the labels and update the shipment entity based on the data from FedEx
-                    ICarrierResponse response = shippingRequest.Submit();
-                    response.Process();
-                }
+                        return shippingRequest.Submit();
+                    })
+                    .ToList();
             }
             catch (Exception ex)
             {

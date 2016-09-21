@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-
-namespace ShipWorks.Shipping.Carriers.Api
+﻿namespace ShipWorks.Shipping.Carriers.Api
 {
     /// <summary>
     /// Interface for object that processes Carrier Responses
