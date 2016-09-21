@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static string ServiceUrl
         {
-            get { return UseTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV51.asmx" : "https://swsim.stamps.com/swsim/SwsimV51.asmx"; }
+            get { return UseTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV55.asmx" : "https://swsim.stamps.com/swsim/SwsimV55.asmx"; }
         }
 
         /// <summary>
