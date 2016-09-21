@@ -378,10 +378,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CustomerFilterLastActive", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CustomerFilterExpandedFolders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("NextGlobalPostNotificationDate", fieldHashtable);
 		}
 		#endregion
@@ -631,8 +629,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, value); }
 		}
 
-		/// <summary> The NextGlobalPostNotificationDate property of the Entity UserSettings<br/><br/>
-		/// </summary>
+		/// <summary> The NextGlobalPostNotificationDate property of the Entity UserSettings<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UserSettings"."NextGlobalPostNotificationDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>

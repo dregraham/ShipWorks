@@ -2610,6 +2610,7 @@
           <Field Name="FilterInitialSpecified" Type="long" FieldIndex="6" />
           <Field Name="FilterInitialUseLastActive" Type="bool" FieldIndex="5" />
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
+          <Field Name="NextGlobalPostNotificationDate" Type="datetime" FieldIndex="15" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
@@ -3545,7 +3546,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-12T14:33:45.2615195Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-21T19:21:45.0349887Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7501,6 +7502,7 @@
                     <Field Name="TemplateLastSelected" Ordinal="13" DbType="0" Precision="19" />
                     <Field Name="CustomerFilterLastActive" Ordinal="14" DbType="0" Precision="19" />
                     <Field Name="CustomerFilterExpandedFolders" Ordinal="15" IsOptional="true" DbType="26" Length="2147483647" />
+                    <Field Name="NextGlobalPostNotificationDate" Ordinal="16" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -11226,6 +11228,7 @@
             <FieldMapping FieldName="FilterInitialSpecified" TargetFieldName="FilterInitialSpecified" />
             <FieldMapping FieldName="FilterInitialUseLastActive" TargetFieldName="FilterInitialUseLastActive" />
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
+            <FieldMapping FieldName="NextGlobalPostNotificationDate" TargetFieldName="NextGlobalPostNotificationDate" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
