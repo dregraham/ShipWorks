@@ -410,7 +410,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
                 case SqlDbType.NChar:
                 case SqlDbType.NVarChar:
-                    return string.Format("nvarchar({0})", parameter.Size);
+                    return string.Format("nvarchar({0})", parameter.Size == 0 ? "max" : parameter.Size.ToString());
 
                 case SqlDbType.Binary:
                 case SqlDbType.VarBinary:
