@@ -2489,7 +2489,6 @@
     <Compile Include="Shipping\Carriers\OnTrac\Enums\OnTracServiceType.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Authentication\OnTracAuthentication.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\OnTracRequest.cs" />
-    <Compile Include="Shipping\Carriers\OnTrac\Net\Shipment\DatabaseOnTracShipmentRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Shipment\OnTracDTOAdapter.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Shipment\OnTracShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Track\OnTracTrackedShipment.cs" />

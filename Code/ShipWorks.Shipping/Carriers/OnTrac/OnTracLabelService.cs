@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -12,16 +13,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// OnTrac Label Service
     /// </summary>
+    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.OnTrac)]
     public class OnTracLabelService : ILabelService
     {
+        private readonly Func<ShipmentEntity, ShipmentResponse, OnTracDownloadedLabelData> createDownloadedLabelData;
         private readonly ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracLabelService(ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository)
+        public OnTracLabelService(ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> onTracAccountRepository,
+            Func<ShipmentEntity, ShipmentResponse, OnTracDownloadedLabelData> createDownloadedLabelData)
         {
             this.onTracAccountRepository = onTracAccountRepository;
+            this.createDownloadedLabelData = createDownloadedLabelData;
         }
 
         /// <summary>
@@ -34,10 +39,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-                OnTracAccountEntity account = GetAccountForShipment(shipment);
-
+                IOnTracAccountEntity account = GetAccountForShipment(shipment);
                 OnTracShipmentRequest onTracShipmentRequest = new OnTracShipmentRequest(account);
-                DatabaseOnTracShipmentRepository onTracShipmentRepository = new DatabaseOnTracShipmentRepository();
 
                 // None is only an option if an invalid country is selected.
                 if (shipment.OnTrac.Service == (int) OnTracServiceType.None)
@@ -46,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
 
                 shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ?
-                    shipment.RequestedLabelFormat
-                    : (int?) null;
+                    shipment.RequestedLabelFormat :
+                    (int?) null;
 
                 // Transform shipment to OnTrac DTO
                 ShipmentRequestList shipmentRequestList = OnTracDtoAdapter.CreateShipmentRequestList(
@@ -57,14 +60,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // Get new shipment from OnTrac and save the shipment info
                 ShipmentResponse shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequestList);
 
-                onTracShipmentRepository.SaveShipmentFromOnTrac(shipmentResponse, shipment);
+                return createDownloadedLabelData(shipment, shipmentResponse);
             }
             catch (OnTracException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
-
-            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>
@@ -79,9 +80,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get the OnTrac account to be used for the given shipment
         /// </summary>
-        private OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
+        private IOnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)
         {
-            OnTracAccountEntity account = onTracAccountRepository.GetAccount(shipment.OnTrac.OnTracAccountID);
+            IOnTracAccountEntity account = onTracAccountRepository.GetAccountReadOnly(shipment.OnTrac.OnTracAccountID);
 
             if (account == null)
             {
