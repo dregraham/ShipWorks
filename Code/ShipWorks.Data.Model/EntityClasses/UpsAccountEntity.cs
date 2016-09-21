@@ -339,10 +339,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Website", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PromoStatus", fieldHashtable);
 		}
 		#endregion
@@ -622,8 +620,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UpsAccountFieldIndex.Website, value); }
 		}
 
-		/// <summary> The PromoStatus property of the Entity UpsAccount<br/><br/>
-		/// </summary>
+		/// <summary> The PromoStatus property of the Entity UpsAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsAccount"."PromoStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -632,12 +629,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return (System.Byte)GetValue((int)UpsAccountFieldIndex.PromoStatus, true); }
 			set	{ SetValue((int)UpsAccountFieldIndex.PromoStatus, value); }
 		}
-
-
-
-
 	
-		
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{

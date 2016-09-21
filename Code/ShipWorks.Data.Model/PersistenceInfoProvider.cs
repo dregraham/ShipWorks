@@ -2849,7 +2849,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UpsAccountEntity's mappings</summary>
 		private void InitUpsAccountEntityMappings()
 		{
-			this.AddElementMapping("UpsAccountEntity", @"ShipWorksLocal", @"dbo", "UpsAccount", 22, 0);
+			this.AddElementMapping("UpsAccountEntity", @"ShipWorksLocal", @"dbo", "UpsAccount", 23, 0);
 			this.AddElementFieldMapping("UpsAccountEntity", "UpsAccountID", "UpsAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("UpsAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -2872,6 +2872,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UpsAccountEntity", "Phone", "Phone", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 19);
 			this.AddElementFieldMapping("UpsAccountEntity", "Email", "Email", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 20);
 			this.AddElementFieldMapping("UpsAccountEntity", "Website", "Website", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 21);
+			this.AddElementFieldMapping("UpsAccountEntity", "PromoStatus", "PromoStatus", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 22);
 		}
 
 		/// <summary>Inits UpsPackageEntity's mappings</summary>
