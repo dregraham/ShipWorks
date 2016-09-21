@@ -4,6 +4,7 @@ using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Insurance;
@@ -15,6 +16,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsLabelService : ILabelService
     {
+        protected readonly Func<UpsLabelResponse, IDownloadedLabelData> createDownloadedLabelData;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpsLabelService(Func<UpsLabelResponse, IDownloadedLabelData> createDownloadedLabelData)
+        {
+            this.createDownloadedLabelData = createDownloadedLabelData;
+        }
+
         /// <summary>
         /// Creates the label
         /// </summary>
@@ -35,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
 
-            throw new NotImplementedException("Return a valid ILabelService");
+            return new NullDownloadedLabelData();
         }
 
         /// <summary>

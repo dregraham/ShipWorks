@@ -1,6 +1,7 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
@@ -16,8 +17,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="upsOltShipmentValidator"></param>
-        public UpsOltLabelService(IUpsOltShipmentValidator upsOltShipmentValidator)
+        public UpsOltLabelService(IUpsOltShipmentValidator upsOltShipmentValidator, Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData) 
+            : base(createDownloadedLabelData)
         {
             this.upsOltShipmentValidator = upsOltShipmentValidator;
         }
@@ -35,7 +36,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsOltShipmentValidator.ValidateShipment(shipment);
 
                 UpsServicePackageTypeSetting.Validate(shipment);
-                UpsApiShipClient.ProcessShipment(shipment);
+                UpsLabelResponse upsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
+
+                return createDownloadedLabelData(upsLabelResponse);
             }
             catch (UpsApiException ex)
             {

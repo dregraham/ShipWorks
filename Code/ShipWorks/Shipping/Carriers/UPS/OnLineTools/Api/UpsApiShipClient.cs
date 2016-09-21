@@ -30,6 +30,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.Ups;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -41,14 +42,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the given UPS shipment
         /// </summary>
-        public static void ProcessShipment(ShipmentEntity shipment)
+        public static UpsLabelResponse ProcessShipment(ShipmentEntity shipment)
         {
             XmlDocument confirmResponse = ProcessShipConfirm(shipment);
 
             // Create the XPath engine and get the digest
             XPathNavigator xpath = confirmResponse.CreateNavigator();
 
-            ProcessShipAccept(shipment, xpath);
+            return CallShipAccept(shipment, xpath);
         }
 
         /// <summary>
@@ -978,8 +979,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the accept phase of the ship request
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private static void ProcessShipAccept(ShipmentEntity shipment, XPathNavigator shipConfirmNavigator)
+        private static UpsLabelResponse CallShipAccept(ShipmentEntity shipment, XPathNavigator shipConfirmNavigator)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
@@ -989,6 +989,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("ShipmentDigest", shipmentDigest);
 
             XmlDocument acceptResponse = UpsWebClient.ProcessRequest(xmlWriter);
+
+            UpsLabelResponse upsLabelResponse = new UpsLabelResponse()
+            {
+                Shipment = shipment,
+                ShipConfirmNavigator = shipConfirmNavigator,
+                AcceptResponse = acceptResponse,
+                Account = account
+            };
+
+            return upsLabelResponse;
+        }
+
+        /// <summary>
+        /// Finish processing the ship accept for the given UpsLabelResponse
+        /// </summary>
+        public static void ProcessShipAccept(UpsLabelResponse upsLabelResponse)
+        {
+            ShipmentEntity shipment = upsLabelResponse.Shipment;
+            XPathNavigator shipConfirmNavigator = upsLabelResponse.ShipConfirmNavigator;
+            XmlDocument acceptResponse = upsLabelResponse.AcceptResponse;
+            UpsAccountEntity account = upsLabelResponse.Account;
 
             // Create the XPath engine
             XPathNavigator xpath = acceptResponse.CreateNavigator();
