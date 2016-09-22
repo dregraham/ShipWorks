@@ -9,6 +9,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     /// </summary>
     public class WebToolsLabelService : ILabelService
     {
+        protected readonly Func<PostalWebToolsLabelResponse, PostalWebToolsDownloadedLabelData> createDownloadedLabelData;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public WebToolsLabelService(Func<PostalWebToolsLabelResponse, PostalWebToolsDownloadedLabelData> createDownloadedLabelData)
+        {
+            this.createDownloadedLabelData = createDownloadedLabelData;
+        }
+
         /// <summary>
         /// Creates a WebTools label for the given Shipment
         /// </summary>
@@ -34,9 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             // Process the shipment
-            PostalWebClientShipping.ProcessShipment(shipment.Postal);
-
-            throw new NotImplementedException("Return a valid ILabelService");
+            return createDownloadedLabelData(PostalWebClientShipping.ProcessShipment(shipment.Postal));
         }
 
         /// <summary>
