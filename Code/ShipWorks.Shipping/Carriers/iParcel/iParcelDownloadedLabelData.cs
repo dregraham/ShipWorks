@@ -59,8 +59,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void Save()
         {
-            SaveLabel(shipment, response);
-            SaveTrackingInfoToEntity(shipment, response);
+            try
+            {
+                SaveLabel(shipment, response);
+                SaveTrackingInfoToEntity(shipment, response);
+            }
+            catch (iParcelException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
         }
 
         /// <summary>
