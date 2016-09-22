@@ -561,10 +561,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 List<RateResult> overallResults = new List<RateResult>();
 
-                // Retrieve the rates from FedEx
-                overallResults.AddRange(GetBasicRates(shipment));
-                overallResults.AddRange(GetSmartPostRates(shipment));
-                overallResults.AddRange(GetOneRateRates(shipment));
+                IEnumerable<RateResult> smartPostRates = null;
+
+                try
+                {
+                    // Retrieve the rates from FedEx
+                    overallResults.AddRange(GetBasicRates(shipment));
+                    overallResults.AddRange(GetOneRateRates(shipment));
+                }
+                catch (FedExException ex)
+                {
+                    // Exception seems to occur when rates are retrieved for valid APO/FPO postal codes.
+                    // But since FedEx only uses SmartPost for military addresses, and the basic rate call
+                    // does not include the SmartPost information, this error is returned.
+                    // A different error is returned for fake postal codes.
+                    // Just log the exception so we can proceed to GetSmartPostRates
+                    log.Warn(ex.Message);
+
+                    smartPostRates = GetSmartPostRates(shipment);
+
+                    // If we didn't get any smart post rates, we probably got a legitimate exception.
+                    if (smartPostRates == null || !smartPostRates.Any())
+                    {
+                        throw;
+                    }
+                }
+
+                if (smartPostRates == null)
+                {
+                    smartPostRates = GetSmartPostRates(shipment);
+                }
+
+                overallResults.AddRange(smartPostRates);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
