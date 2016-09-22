@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Linq;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
 {
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <param name="destinationCountryCode">The destination country code.</param>
         /// <returns>An UpsServiceMapping object.</returns>
         /// <exception cref="UpsException"></exception>
-        public UpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode)
+        public IUpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode)
         {
             UpsServiceMapping mapping = serviceMappings.FirstOrDefault(m => m.WorldShipDescription.ToUpperInvariant() == description.ToUpperInvariant() 
                                                 && m.DestinationCountryCode.ToUpperInvariant() == destinationCountryCode.ToUpperInvariant());

@@ -1,34 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Filters;
+using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Data;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Diagnostics;
-using ShipWorks.Data.Grid;
-using ShipWorks.UI;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
 using ShipWorks.Email.Outlook;
+using ShipWorks.Filters;
 using ShipWorks.Properties;
 using ShipWorks.Templates.Controls;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users;
 using ShipWorks.Templates.Emailing;
+using ShipWorks.UI;
+using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.ApplicationCore.Appearance;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -84,12 +78,12 @@ namespace ShipWorks.Stores.Content.Panels
                 EmailOutboundFields.Visibility == (int) EmailOutboundVisibility.Visible);
             bucket.Relations.Add(EmailOutboundEntity.Relations.EmailOutboundRelationEntityUsingEmailOutboundID);
 
-            PredicateExpression objectKeyExpression = new PredicateExpression(EmailOutboundRelationFields.ObjectID == entityID);
+            PredicateExpression objectKeyExpression = new PredicateExpression(EmailOutboundRelationFields.EntityID == entityID);
 
             if (EntityUtility.GetEntityType(entityID) == EntityType.CustomerEntity)
             {
                 FieldCompareSetPredicate predicate = new FieldCompareSetPredicate(
-                    EmailOutboundRelationFields.ObjectID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.CustomerID == entityID);
+                    EmailOutboundRelationFields.EntityID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.CustomerID == entityID);
 
                 objectKeyExpression.AddWithOr(predicate);
             }
@@ -269,9 +263,9 @@ namespace ShipWorks.Stores.Content.Panels
         private void DeleteEmail(long emailID)
         {
             EmailUtility.DeleteOutboundEmail(
-                new long[] { emailID }, 
-                this, 
-                delegate 
+                new long[] { emailID },
+                this,
+                delegate
                     {
                         ReloadContent();
                     });

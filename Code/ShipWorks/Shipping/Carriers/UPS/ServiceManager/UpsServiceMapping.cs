@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared;
+﻿using Interapptive.Shared;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
@@ -10,9 +6,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
     /// <summary>
     /// DTO class that contains mappings between UpsServiceType and Ship, Rate, and WorldShip codes and other properties.
     /// </summary>
-    public class UpsServiceMapping
+    public class UpsServiceMapping : IUpsServiceMapping
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsServiceMapping"/> class.
         /// </summary>

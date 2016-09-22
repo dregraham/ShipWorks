@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates.Tokens;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Filters;
+using ShipWorks.Templates.Processing;
+using ShipWorks.Templates.Tokens;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -70,7 +67,7 @@ namespace ShipWorks.Templates.Emailing
             foreach (long contextKey in contextKeys)
             {
                 EmailOutboundRelationEntity relation = new EmailOutboundRelationEntity();
-                relation.ObjectID = contextKey;
+                relation.EntityID = contextKey;
                 relation.RelationType = (int) EmailOutboundRelationType.ContextObject;
 
                 emailOutbound.RelatedObjects.Add(relation);
@@ -99,7 +96,7 @@ namespace ShipWorks.Templates.Emailing
                 UserSession.Security.DemandPermission(PermissionType.EntityTypeSendEmail, relatedKey);
 
                 EmailOutboundRelationEntity relation = new EmailOutboundRelationEntity();
-                relation.ObjectID = relatedKey;
+                relation.EntityID = relatedKey;
                 relation.RelationType = (int) EmailOutboundRelationType.RelatedObject;
 
                 emailOutbound.RelatedObjects.Add(relation);

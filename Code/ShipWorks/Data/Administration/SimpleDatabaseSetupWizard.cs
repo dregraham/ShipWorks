@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Windows.Forms;
@@ -310,12 +311,12 @@ namespace ShipWorks.Data.Administration
                 Invoke((MethodInvoker) delegate { progressPreparing.Value = 90; });
 
                 // Since we installed it, we can do this without asking
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     SqlUtility.EnableClr(con);
                 }
 
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     ShipWorksDatabaseUtility.CreateDatabase(ShipWorksDatabaseUtility.AutomaticDatabaseName, con);
                     sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.AutomaticDatabaseName;

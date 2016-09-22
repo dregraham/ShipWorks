@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries;
-using log4net;
+﻿using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 {
@@ -260,7 +260,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpress_WhenDestinationCountryIsCanada_AndRateCodeIs01()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("01", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("01", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpress, mapping.UpsServiceType);
         }
@@ -268,7 +268,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpedited_WhenDestinationCountryIsCanada_AndRateCodeIs02()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -276,7 +276,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsStandard_WhenDestinationCountryIsCanada_AndRateCodeIs11()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("11", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("11", "CA");
 
             Assert.Equal(UpsServiceType.UpsStandard, mapping.UpsServiceType);
         }
@@ -284,7 +284,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpressSaver_WhenDestinationCountryIsCanada_AndRateCodeIs13()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("13", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("13", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
@@ -292,7 +292,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpressEarlyAm_WhenDestinationCountryIsCanada_AndRateCodeIs14()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("14", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("14", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -302,7 +302,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpedited_WhenDestinationCountryIsUnitedStates_AndRateCodeIs02()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "US");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -310,7 +310,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpress_WhenDestinationCountryIsUnitedStates_AndRateCodeIs07()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("07", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("07", "US");
 
             Assert.Equal(UpsServiceType.UpsExpress, mapping.UpsServiceType);
         }
@@ -318,7 +318,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsStandard_WhenDestinationCountryIsUnitedStates_AndRateCodeIs11()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("11", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("11", "US");
 
             Assert.Equal(UpsServiceType.UpsStandard, mapping.UpsServiceType);
         }
@@ -326,7 +326,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUps3DaySelectFromCanada_WhenDestinationCountryIsUnitedStates_AndRateCodeIs12()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("12", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("12", "US");
 
             Assert.Equal(UpsServiceType.Ups3DaySelectFromCanada, mapping.UpsServiceType);
         }
@@ -334,7 +334,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpressSaver_WhenDestinationCountryIsUnitedStates_AndRateCodeIs13()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("13", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("13", "US");
 
             Assert.Equal(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
@@ -342,7 +342,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpressEarlyAm_WhenDestinationCountryIsUnitedStates_AndRateCodeIs54()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("54", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("54", "US");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -350,7 +350,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpedited_WhenDestinationCountryIsPuertoRico_AndRateCodeIs02()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "PR");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "PR");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -358,7 +358,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpressSaver_WhenDestinationCountryIsPuertoRico_AndRateCodeIs65()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("65", "PR");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("65", "PR");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -368,7 +368,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsCaWorldWideExpress_WhenDestinationCountryIsInternational_AndRateCodeIs07()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("07", "RU");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("07", "RU");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpress, mapping.UpsServiceType);
         }
@@ -376,7 +376,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsCaWorldWideExpressPlus_WhenDestinationCountryIsInternational_AndRateCodeIs21()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("21", "RU");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("21", "RU");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressPlus, mapping.UpsServiceType);
         }
@@ -384,7 +384,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByRateCode_ReturnsUpsCaWorldWideExpressSaver_WhenDestinationCountryIsInternational_AndRateCodeIs65()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByRateCode("65", "RU");
+            IUpsServiceMapping mapping = testObject.GetServicesByRateCode("65", "RU");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -393,7 +393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         //[Fact]
         //public void GetServicesByRateCode_ReturnsUpsExpressEarlyAm_WhenDestinationCountryIsInternational_AndRateCodeIs14()
         //{
-        //    UpsServiceMapping mapping = testObject.GetServicesByRateCode("14", "RU");
+        //    IUpsServiceMapping mapping = testObject.GetServicesByRateCode("14", "RU");
 
         //    Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         //}
@@ -427,7 +427,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpress_WhenCountryCodeIsCanada_AndDescriptionIsExpress()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpress, mapping.UpsServiceType);
         }
@@ -435,7 +435,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpedited_WhenCountryCodeIsCanada_AndDescriptionIsUpsExpedited()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Expedited", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Expedited", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -443,7 +443,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsStandard_WhenCountryCodeIsCanada_AndDescriptionIsStandard()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Standard", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Standard", "CA");
 
             Assert.Equal(UpsServiceType.UpsStandard, mapping.UpsServiceType);
         }
@@ -451,7 +451,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressSaver_WhenCountryCodeIsCanada_AndDescriptionIsExpressSaver()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
@@ -459,7 +459,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressEarlyAm_WhenCountryCodeIsCanada_AndDescriptionIsExpressEarlyAM()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Early AM", "CA");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Early AM", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -467,7 +467,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressEarlyAm_WhenCountryCodeIsLowerCaseCanada_AndDescriptionIsExpressEarlyAM()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Early AM", "ca");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Early AM", "ca");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -483,7 +483,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpedited_WhenCountryCodeIsUnitedStates_AndDescriptionIsUpsExpedited()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Expedited", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Expedited", "US");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -491,7 +491,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsStandard_WhenCountryCodeIsUnitedStates_AndDescriptionIsStandard()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Standard", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Standard", "US");
 
             Assert.Equal(UpsServiceType.UpsStandard, mapping.UpsServiceType);
         }
@@ -499,7 +499,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUps3DaySelect_WhenCountryCodeIsUnitedStates_AndDescriptionIs3DaySelect()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("3 Day Select", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("3 Day Select", "US");
 
             Assert.Equal(UpsServiceType.Ups3DaySelectFromCanada, mapping.UpsServiceType);
         }
@@ -507,7 +507,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressSaver_WhenCountryCodeIsUnitedStates_AndDescriptionIsExpressSaver()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "US");
 
             Assert.Equal(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
@@ -515,7 +515,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressEarlyAm_WhenCountryCodeIsUnitedStates_AndDescriptionIsExpressEarlyAM()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("EXPRESS EARLY AM", "US");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("EXPRESS EARLY AM", "US");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -523,7 +523,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressEarlyAm_WhenCountryCodeIsLowerCaseUnitedStates_AndDescriptionIsExpressEarlyAM()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("EXPRESS EARLY AM", "us");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("EXPRESS EARLY AM", "us");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -539,7 +539,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpedited_WhenCountryCodeIsPuertoRico_AndDescriptionIsUpsExpedited()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Expedited", "PR");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Expedited", "PR");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -547,7 +547,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressSaver_WhenCountryCodeIsPuertoRico_AndDescriptionIsExpressSaver()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "PR");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "PR");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -555,7 +555,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressSaver_WhenCountryCodeIsLowerCasePuertoRico_AndDescriptionIsExpressSaver()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "pr");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "pr");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -571,7 +571,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsCaWorldWideExpress_WhenCountryCodeIsInternational_AndDescriptionIsUpsExpress()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express", "FR");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express", "FR");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpress, mapping.UpsServiceType);
         }
@@ -579,7 +579,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsCaWorldWideExpressPlus_WhenCountryCodeIsInternational_AndDescriptionIsUpsExpedited()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("WORLDWIDE EXPRESS PLUS", "RU");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("WORLDWIDE EXPRESS PLUS", "RU");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressPlus, mapping.UpsServiceType);
         }
@@ -587,7 +587,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsCAWorldWideExpressSaver_WhenCountryCodeIsInternational_AndDescriptionIsExpressSaver()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "RU");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("Express Saver", "RU");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -596,7 +596,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         //[Fact]
         //public void GetServicesByWorldShipDescription_ReturnsUpsExpressSaver_WhenCountryCodeIsInternational_AndDescriptionIsExpressEarlyAM()
         //{
-        //    UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("EXPRESS EARLY AM", "RU");
+        //    IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("EXPRESS EARLY AM", "RU");
 
         //    Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         //}
@@ -604,7 +604,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsCaWorldWideExpressSaver_WhenCountryCodeIsInternational_AndDescriptionIsAllLowerCase()
         {
-            UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("express saver", "RU");
+            IUpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription("express saver", "RU");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -624,7 +624,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpress_WhenCountryIsCanada_AndTransitCodeIs24()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("24", "CA");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("24", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpress, mapping.UpsServiceType);
         }
@@ -632,7 +632,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpedited_WhenCountryIsCanada_AndTransitCodeIs19()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("19", "CA");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("19", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -640,7 +640,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsStandard_WhenCountryIsCanada_AndTransitCodeIs25()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("25", "CA");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("25", "CA");
 
             Assert.Equal(UpsServiceType.UpsStandard, mapping.UpsServiceType);
         }
@@ -648,7 +648,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpressSaver_WhenCountryIsCanada_AndTransitCodeIs20()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("20", "CA");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("20", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
@@ -656,7 +656,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpressEarlyAm_WhenCountryIsCanada_AndTransitCodeIs23()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("23", "CA");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("23", "CA");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -665,7 +665,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         public void GetServiceByTransitCode_ReturnsUpsExpressEarlyAm_WhenCountryIsLowerCaseCanada_AndTransitCodeIs23()
         {
             // Primarily testing that casing doesn't matter for the country code
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("23", "ca");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("23", "ca");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -681,7 +681,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpedited_WhenCountryIsUnitedStates_AndTransitCodeIs05()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "US");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "US");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -689,7 +689,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpress_WhenCountryIsUnitedStates_AndTransitCodeIs01()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "US");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "US");
 
             Assert.Equal(UpsServiceType.UpsExpress, mapping.UpsServiceType);
         }
@@ -697,7 +697,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsStandard_WhenCountryIsUnitedStates_AndTransitCodeIs03()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("03", "US");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("03", "US");
 
             Assert.Equal(UpsServiceType.UpsStandard, mapping.UpsServiceType);
         }
@@ -705,7 +705,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUps3DaySelectFromCanada_WhenCountryIsUnitedStates_AndTransitCodeIs33()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("33", "US");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("33", "US");
 
             Assert.Equal(UpsServiceType.Ups3DaySelectFromCanada, mapping.UpsServiceType);
         }
@@ -713,7 +713,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpressSaver_WhenCountryIsUnitedStates_AndTransitCodeIs28()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("28", "US");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("28", "US");
 
             Assert.Equal(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
@@ -721,7 +721,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpressEarlyAm_WhenCountryIsUnitedStates_AndTransitCodeIs21()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("21", "US");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("21", "US");
 
             Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         }
@@ -730,7 +730,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         public void GetServiceByTransitCode_ReturnsUpsExpedited_WhenCountryIsLowerCaseUnitedStates_AndTransitCodeIs05()
         {
             // Just provide a valid trasit code and lower case country code for US
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "us");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "us");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -746,7 +746,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsCAWorldWideExpressSaver_WhenCountryIsPuertoRico_AndTransitCodeIs65()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("65", "PR");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("65", "PR");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -754,7 +754,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpedited_WhenCountryIsPuertoRico_AndTransitCodeIs05()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "PR");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "PR");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -763,7 +763,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         public void GetServiceByTransitCode_ReturnsUpsExpedited_WhenCountryIsLowerCasePuertoRico_AndTransitCodeIs05()
         {
             // Just provide a valid trasit code and lower case country code for PR
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "pr");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "pr");
 
             Assert.Equal(UpsServiceType.UpsExpedited, mapping.UpsServiceType);
         }
@@ -779,7 +779,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsCaWorldWideExpress_WhenCountryIsInternational_AndTransitCodeIs01()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "GB");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "GB");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpress, mapping.UpsServiceType);
         }
@@ -787,7 +787,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsWorldWideExpress_WhenCountryIsInternational_AndTransitCodeIs21()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("21", "GB");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("21", "GB");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressPlus, mapping.UpsServiceType);
         }
@@ -795,7 +795,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpressSaver_WhenCountryIsInternational_AndTransitCodeIs28()
         {
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("28", "GB");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("28", "GB");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpressSaver, mapping.UpsServiceType);
         }
@@ -804,7 +804,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         //[Fact]
         //public void GetServiceByTransitCode_ReturnsUpsExpressEarlyAm_WhenCountryIsInternational_AndTransitCodeIs54()
         //{
-        //    UpsServiceMapping mapping = testObject.GetServiceByTransitCode("54", "RU");
+        //    IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("54", "RU");
 
         //    Assert.Equal(UpsServiceType.UpsExpressEarlyAm, mapping.UpsServiceType);
         //}
@@ -813,7 +813,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         public void GetServiceByTransitCode_ReturnsUpsCaWorldWideExpress_WhenCountryIsLowerCaseInternational_AndTransitCodeIs01()
         {
             // Just provide a valid trasit code and lower case country code for PR
-            UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "gb");
+            IUpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "gb");
 
             Assert.Equal(UpsServiceType.UpsCaWorldWideExpress, mapping.UpsServiceType);
         }

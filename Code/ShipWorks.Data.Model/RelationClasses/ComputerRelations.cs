@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: Computer. </summary>
+	/// <summary>Implements the relations factory for the entity: Computer. </summary>
 	public partial class ComputerRelations
 	{
 		/// <summary>CTor</summary>
@@ -36,12 +36,10 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.PrintResultEntityUsingComputerID);
 			toReturn.Add(this.ServerMessageSignoffEntityUsingComputerID);
 			toReturn.Add(this.ServiceStatusEntityUsingComputerID);
-			toReturn.Add(this.ShipmentEntityUsingVoidedComputerID);
 			toReturn.Add(this.ShipmentEntityUsingProcessedComputerID);
+			toReturn.Add(this.ShipmentEntityUsingVoidedComputerID);
 			toReturn.Add(this.TemplateComputerSettingsEntityUsingComputerID);
 			toReturn.Add(this.VersionSignoffEntityUsingComputerID);
-
-
 			return toReturn;
 		}
 
@@ -138,21 +136,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
-		/// Computer.ComputerID - Shipment.VoidedComputerID
-		/// </summary>
-		public virtual IEntityRelation ShipmentEntityUsingVoidedComputerID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
-				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.VoidedComputerID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
 		/// Computer.ComputerID - Shipment.ProcessedComputerID
 		/// </summary>
 		public virtual IEntityRelation ShipmentEntityUsingProcessedComputerID
@@ -161,6 +144,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
 				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.ProcessedComputerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ComputerEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// Computer.ComputerID - Shipment.VoidedComputerID
+		/// </summary>
+		public virtual IEntityRelation ShipmentEntityUsingVoidedComputerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "" , true);
+				relation.AddEntityFieldPair(ComputerFields.ComputerID, ShipmentFields.VoidedComputerID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ComputerEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
 				return relation;
@@ -198,16 +196,34 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticComputerRelations
+	{
+		internal static readonly IEntityRelation ActionQueueEntityUsingTriggerComputerIDStatic = new ComputerRelations().ActionQueueEntityUsingTriggerComputerID;
+		internal static readonly IEntityRelation AuditEntityUsingComputerIDStatic = new ComputerRelations().AuditEntityUsingComputerID;
+		internal static readonly IEntityRelation DownloadEntityUsingComputerIDStatic = new ComputerRelations().DownloadEntityUsingComputerID;
+		internal static readonly IEntityRelation PrintResultEntityUsingComputerIDStatic = new ComputerRelations().PrintResultEntityUsingComputerID;
+		internal static readonly IEntityRelation ServerMessageSignoffEntityUsingComputerIDStatic = new ComputerRelations().ServerMessageSignoffEntityUsingComputerID;
+		internal static readonly IEntityRelation ServiceStatusEntityUsingComputerIDStatic = new ComputerRelations().ServiceStatusEntityUsingComputerID;
+		internal static readonly IEntityRelation ShipmentEntityUsingProcessedComputerIDStatic = new ComputerRelations().ShipmentEntityUsingProcessedComputerID;
+		internal static readonly IEntityRelation ShipmentEntityUsingVoidedComputerIDStatic = new ComputerRelations().ShipmentEntityUsingVoidedComputerID;
+		internal static readonly IEntityRelation TemplateComputerSettingsEntityUsingComputerIDStatic = new ComputerRelations().TemplateComputerSettingsEntityUsingComputerID;
+		internal static readonly IEntityRelation VersionSignoffEntityUsingComputerIDStatic = new ComputerRelations().VersionSignoffEntityUsingComputerID;
+
+		/// <summary>CTor</summary>
+		static StaticComputerRelations()
+		{
+		}
 	}
 }

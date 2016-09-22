@@ -1,21 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.UI;
-using ShipWorks.Templates.Processing;
-using System.Collections;
-using ShipWorks.Email;
-using ShipWorks.Email.Accounts;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email.Accounts;
+using ShipWorks.Templates.Processing;
 
 namespace ShipWorks.Templates.Emailing
 {

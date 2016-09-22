@@ -41,12 +41,12 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 var outOfSyncEntity = mock.MockRepository.Create<ConfigurationEntity>();
                 outOfSyncEntity.Setup(c => c.CustomerKey)
-                    .Throws(new ORMEntityOutOfSyncException("out of sync"));
+                    .Throws(new ORMEntityOutOfSyncException("out of sync", outOfSyncEntity.Object));
 
                 var configurationData = mock.Mock<IConfigurationData>();
                 configurationData.SetupSequence(c => c.Fetch())
                     .Returns(outOfSyncEntity.Object)
-                    .Returns(new ConfigurationEntity {CustomerKey = EncryptedCustomerKey});
+                    .Returns(new ConfigurationEntity { CustomerKey = EncryptedCustomerKey });
 
 
                 var testObject = mock.Create<CustomerLicenseReader>();
@@ -65,13 +65,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 var config = mock.Mock<IConfigurationData>();
                 config.Setup(c => c.Fetch())
-                    .Returns(new ConfigurationEntity {CustomerKey = EncryptedCustomerKey});
+                    .Returns(new ConfigurationEntity { CustomerKey = EncryptedCustomerKey });
 
                 var testObject = mock.Create<CustomerLicenseReader>();
 
                 testObject.Read();
 
-                config.Verify(c=>c.CheckForChangesNeeded(), Times.Never);
+                config.Verify(c => c.CheckForChangesNeeded(), Times.Never);
             }
         }
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 mock.Mock<IConfigurationData>()
                     .Setup(c => c.Fetch())
-                    .Returns(new ConfigurationEntity {CustomerKey = EncryptedCustomerKey});
+                    .Returns(new ConfigurationEntity { CustomerKey = EncryptedCustomerKey });
 
                 var testObject = mock.Create<CustomerLicenseReader>();
 

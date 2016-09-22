@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using Interapptive.Shared.Data;
 using log4net;
@@ -69,7 +69,7 @@ namespace ShipWorks.Data.Connection
             {
                 cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
 
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                 {
                     reader.Read();
 

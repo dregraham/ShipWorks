@@ -228,7 +228,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     .Select(entry => new KeyValuePair<FedExServiceType, string>((FedExServiceType) entry.Key, entry.Value)).ToList();
             }
 
-            UpdatePackagingChoices(allServicesSame ? serviceType.Value : (FedExServiceType?) null);
+            UpdatePackagingChoices(allServicesSame && serviceType.HasValue ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
 
             // Make it visible if any of them have saturday dates

@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email;
@@ -287,7 +287,7 @@ namespace ShipWorks.Users.Security
 
                         NoteEntity note = (NoteEntity) DataProvider.GetEntity(entityID);
 
-                        return note != null && HasPermission(PermissionType.EntityTypeEditNotes, note.ObjectID);
+                        return note != null && HasPermission(PermissionType.EntityTypeEditNotes, note.EntityID);
                     }
 
                 case PermissionType.RelatedObjectSendEmail:

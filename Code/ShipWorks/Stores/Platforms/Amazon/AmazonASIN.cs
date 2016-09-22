@@ -1,28 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using Interapptive.Shared.IO.Text.Csv;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Common.Threading;
-using Interapptive.Shared.Utility;
-using System.Threading;
-using System.Windows.Forms;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Transactions;
-using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
     /// Handles dealing with the Amazon inventory exports and weight/asin/sku lookups.
-    /// </summary> 
+    /// </summary>
     public static class AmazonAsin
     {
-        // cache of loaded ASINs, keyed on SKU and storeID 
+        // cache of loaded ASINs, keyed on SKU and storeID
         static Dictionary<string, string> skuAsinMap = new Dictionary<string, string>();
 
         // cache of amazon item details, keyed on ASIN
@@ -183,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 inventoryItem.SKU = sku;
                 inventoryItem.AmazonASIN = asin;
 
-                // insert or update 
+                // insert or update
                 adapter.SaveEntity(inventoryItem);
 
                 adapter.Commit();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create a database with the given name in the default SQL server data path
         /// </summary>
-        public static void CreateDatabase(string name, SqlConnection con)
+        public static void CreateDatabase(string name, DbConnection con)
         {
             CreateDatabase(name, SqlUtility.GetMasterDataFilePath(con), con);
         }
@@ -40,9 +41,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Create a database with the given name in the given path
         /// </summary>
-        public static void CreateDatabase(string name, string path, SqlConnection con)
+        public static void CreateDatabase(string name, string path, DbConnection con)
         {
-            object result = SqlCommandProvider.ExecuteScalar(con, string.Format("SELECT name FROM master.dbo.sysdatabases WHERE name = N'{0}'", name));
+            object result = DbCommandProvider.ExecuteScalar(con, string.Format("SELECT name FROM master.dbo.sysdatabases WHERE name = N'{0}'", name));
 
             var resultString = result as string;
 
@@ -99,12 +100,12 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void CreateSchemaAndData()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // Create the ShipWorks schema
                 sqlLoader["CreateSchema"].Execute(con);
 
-                using (SqlTransaction transaction = con.BeginTransaction())
+                using (DbTransaction transaction = con.BeginTransaction())
                 {
                     SqlAssemblyDeployer.DeployAssemblies(con, transaction);
                     transaction.Commit();
@@ -119,7 +120,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Add the initial data and version stored procedure
         /// </summary>
-        public static void AddInitialDataAndVersion(SqlConnection con)
+        public static void AddInitialDataAndVersion(DbConnection con)
         {
             // Add any initial data via script
             sqlLoader["InitialData"].Execute(con);
@@ -146,14 +147,14 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void DropDatabase(SqlSession sqlSession, string databaseName)
         {
-            using (SqlConnection con = sqlSession.OpenConnection())
+            using (DbConnection con = sqlSession.OpenConnection())
             {
                 con.ChangeDatabase("master");
 
                 // This frees any existing connections so the db is not marked as in use
                 SqlConnection.ClearAllPools();
 
-                SqlCommandProvider.ExecuteNonQuery(con, "drop database " + databaseName);
+                DbCommandProvider.ExecuteNonQuery(con, "drop database " + databaseName);
             }
         }
 
@@ -283,14 +284,14 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get all of the details about all of the databases on the instance of the connection
         /// </summary>
-        public static List<SqlDatabaseDetail> GetDatabaseDetails(SqlConnection con)
+        public static List<SqlDatabaseDetail> GetDatabaseDetails(DbConnection con)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "select name from master..sysdatabases where name not in ('master', 'model', 'msdb', 'tempdb')";
 
             List<string> names = new List<string>();
 
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
             {
                 while (reader.Read())
                 {
@@ -312,7 +313,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get detailed information about the given database
         /// </summary>
-        public static SqlDatabaseDetail GetDatabaseDetail(string database, SqlConnection con)
+        public static SqlDatabaseDetail GetDatabaseDetail(string database, DbConnection con)
         {
             return SqlDatabaseDetail.Load(database, con);
         }
@@ -320,7 +321,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the first available database name that doesn't conflict with any other databases on the server represented by the given connection
         /// </summary>
-        public static string GetFirstAvailableDatabaseName(SqlConnection con)
+        public static string GetFirstAvailableDatabaseName(DbConnection con)
         {
             string baseName = "ShipWorks";
             string databaseName = baseName;
@@ -339,18 +340,18 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Detach the database found on the given connection, and return the physical file information about it
         /// </summary>
-        public static DatabaseFileInfo DetachDatabase(string database, SqlConnection con)
+        public static DatabaseFileInfo DetachDatabase(string database, DbConnection con)
         {
             // sp_helpfile acts on the current database
             con.ChangeDatabase(database);
 
             // We should use sys.database_files... but, this may be MSDE... it may not exist!
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "EXEC sp_helpfile";
 
             DatabaseFileInfo databaseInfo = new DatabaseFileInfo() { Database = database };
 
-            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
             {
                 while (reader.Read())
                 {
@@ -381,7 +382,7 @@ namespace ShipWorks.Data.Administration
             // Have to get out of the db to detach
             con.ChangeDatabase("master");
 
-            SqlCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
+            DbCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
 
             return databaseInfo;
         }

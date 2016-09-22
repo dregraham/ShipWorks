@@ -1,5 +1,6 @@
 using System;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -12,7 +13,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         string preSetupCompleteUserName = null;
 
         // We cache this so we only have to look it up once
-        static string baseObjectName = new StoreEntity().LLBLGenProEntityName;
+        static string baseObjectName = ((IEntityCore) new StoreEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// By default we will assume that setup is complete.  This is so that if we use StoreEntity as a 'Prototype' for saving a field or two only, that the code thinking

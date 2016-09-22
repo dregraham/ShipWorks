@@ -1,41 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Model.HelperClasses;
 using Divelements.SandGrid;
-using ShipWorks.Data.Grid;
-using ShipWorks.UI.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI.Controls;
-using ShipWorks.Users.Security;
-using ShipWorks.Properties;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Caching;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using System.Diagnostics;
-using System.Threading;
-using log4net;
-using ShipWorks.ApplicationCore.Crashes;
-using System.Globalization;
-using Interapptive.Shared;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Caching;
+using ShipWorks.Properties;
+using ShipWorks.UI.Controls;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Users.Audit
 {
@@ -111,7 +106,7 @@ namespace ShipWorks.Users.Audit
             UpdateSearchOptionsCriteria();
 
             // Start the refresh timer.
-            timer.Interval = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+            timer.Interval = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             timer.Start();
 
             // Create the gating event for the search thread
@@ -124,7 +119,7 @@ namespace ShipWorks.Users.Audit
             searchThread.Start();
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -266,7 +261,7 @@ namespace ShipWorks.Users.Audit
                 catch (Exception ex)
                 {
                     // For some reason, the SqlException was not being caught and a customer was still getting a deadlock crash.  So checking the inner exception
-                    // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions 
+                    // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions
                     // handled there.
                     if (ex.InnerException != null && ex.InnerException is SqlException)
                     {
@@ -314,17 +309,17 @@ namespace ShipWorks.Users.Audit
             }
 
             // Look for any changes directly to the order
-            PredicateExpression expression = new PredicateExpression(AuditFields.ObjectID == orderID);
+            PredicateExpression expression = new PredicateExpression(AuditFields.EntityID == orderID);
 
             // Look for changes to order's customer
             List<long> customerID = DataProvider.GetRelatedKeys(orderID, EntityType.CustomerEntity);
             if (customerID.Count == 1)
             {
-                expression.AddWithOr(AuditFields.ObjectID == customerID[0]);
+                expression.AddWithOr(AuditFields.EntityID == customerID[0]);
             }
 
             // Look for any of the order's shipments (that still exist)
-            expression.AddWithOr(new FieldCompareSetPredicate(AuditFields.ObjectID, null, ShipmentFields.ShipmentID, null, SetOperator.In,
+            expression.AddWithOr(new FieldCompareSetPredicate(AuditFields.EntityID, null, ShipmentFields.ShipmentID, null, SetOperator.In,
                 ShipmentFields.OrderID == orderID));
 
             Stopwatch sw = Stopwatch.StartNew();
@@ -335,15 +330,15 @@ namespace ShipWorks.Users.Audit
                     AuditChangeDetailFields.VariantNew == orderID));
 
             List<long> shipmentKeys = new List<long>();
-            foreach (AuditChangeEntity change in auditChanges.Where(c => EntityUtility.GetEntityType(c.ObjectID) == EntityType.ShipmentEntity))
+            foreach (AuditChangeEntity change in auditChanges.Where(c => EntityUtility.GetEntityType(c.EntityID) == EntityType.ShipmentEntity))
             {
-                shipmentKeys.Add(change.ObjectID);
+                shipmentKeys.Add(change.EntityID);
             }
 
             Debug.WriteLine("Get audit shipment keys: " + sw.Elapsed.TotalSeconds);
 
-            expression.AddWithOr(AuditFields.ObjectID == shipmentKeys);
-            
+            expression.AddWithOr(AuditFields.EntityID == shipmentKeys);
+
             // Set the new criteria
             lockedSearchTextCriteria = expression;
 
@@ -487,7 +482,7 @@ namespace ShipWorks.Users.Audit
             catch (Exception ex)
             {
                 // For some reason, the SqlException was not being caught and a customer was still getting a deadlock crash.  So checking the inner exception
-                // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions 
+                // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions
                 // handled there.
                 if (ex.InnerException != null && ex.InnerException is SqlException)
                 {
@@ -603,9 +598,9 @@ namespace ShipWorks.Users.Audit
                     searchChangedEvent.WaitOne();
 
                     // Have to get the text from the UI
-                    string text = (string) Program.MainForm.Invoke(new Func<string>(() => 
-                        { 
-                            return searchTerminated ? null : searchBox.Text; 
+                    string text = (string) Program.MainForm.Invoke(new Func<string>(() =>
+                        {
+                            return searchTerminated ? null : searchBox.Text;
                         }));
 
                     // Search was terminated
@@ -617,7 +612,7 @@ namespace ShipWorks.Users.Audit
                     log.InfoFormat("Processing search change, {0}", text);
 
                     // Update the icon to searching...
-                    Program.MainForm.Invoke(new MethodInvoker(() => 
+                    Program.MainForm.Invoke(new MethodInvoker(() =>
                         {
                             if (!searchTerminated)
                             {
@@ -659,7 +654,7 @@ namespace ShipWorks.Users.Audit
                             // LLBL % is shorthand for a FieldLikePredicate object
                             PredicateExpression orderNumberExpression = new PredicateExpression(OrderFields.OrderNumberComplete % (text + "%"));
 
-                            expression.AddWithOr(new FieldCompareSetPredicate(AuditFields.ObjectID, null, OrderFields.OrderID, null, SetOperator.In, orderNumberExpression));
+                            expression.AddWithOr(new FieldCompareSetPredicate(AuditFields.EntityID, null, OrderFields.OrderID, null, SetOperator.In, orderNumberExpression));
                         }
                     }
 
@@ -670,15 +665,17 @@ namespace ShipWorks.Users.Audit
                     }
 
                     // Update the icon back to not searching
-                    Program.MainForm.Invoke(new MethodInvoker(() => {
-                        if (!searchTerminated) 
-                        { 
+                    Program.MainForm.Invoke(new MethodInvoker(() =>
+                    {
+                        if (!searchTerminated)
+                        {
                             buttonSearching.ImageStates.ImageDisabled = searchImageReady;
 
                             UpdateQueryFilter();
 
                             timer.Start();
-                        } }));
+                        }
+                    }));
                 }
             }
             catch (ObjectDisposedException)

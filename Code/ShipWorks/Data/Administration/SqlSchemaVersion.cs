@@ -1,9 +1,9 @@
-﻿using Interapptive.Shared.Data;
-using ShipWorks.Data.Connection;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Transactions;
+using Interapptive.Shared.Data;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
 {
@@ -19,12 +19,16 @@ namespace ShipWorks.Data.Administration
         {
             using (new TransactionScope(TransactionScopeOption.Suppress))
             {
-                SqlConnection con = SqlSession.Current.OpenConnection();
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = "GetSchemaVersion";
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    using (DbCommand cmd = DbCommandProvider.Create(con))
+                    {
+                        cmd.CommandText = "GetSchemaVersion";
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+                        return new Version((string) DbCommandProvider.ExecuteScalar(cmd));
+                    }
+                }
             }
         }
 

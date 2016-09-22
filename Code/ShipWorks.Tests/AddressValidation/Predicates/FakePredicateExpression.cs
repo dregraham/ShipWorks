@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Linq;
+using System.Xml;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Tests.AddressValidation.Predicates
@@ -41,17 +42,17 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
             throw new NotImplementedException();
         }
 
-        public string ToQueryText(ref int uniqueMarker)
+        public string ToQueryText()
         {
             throw new NotImplementedException();
         }
 
-        public string ToQueryText(ref int uniqueMarker, bool inHavingClause)
+        public string ToQueryText(bool inHavingClause)
         {
             throw new NotImplementedException();
         }
 
-        public List<IDataParameter> Parameters { get; private set; }
+        public List<DbParameter> Parameters { get; private set; }
         public bool Negate { get; set; }
         public IDbSpecificCreator DatabaseSpecificCreator { get; set; }
         public int InstanceType { get; set; }
@@ -82,6 +83,16 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         public void Clear()
         {
             Predicates.Clear();
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            throw new NotImplementedException();
         }
 
         public IPredicateExpressionElement this[int index]

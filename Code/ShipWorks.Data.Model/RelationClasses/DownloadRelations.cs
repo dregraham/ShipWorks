@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: Download. </summary>
+	/// <summary>Implements the relations factory for the entity: Download. </summary>
 	public partial class DownloadRelations
 	{
 		/// <summary>CTor</summary>
@@ -31,7 +31,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.DownloadDetailEntityUsingDownloadID);
-
 			toReturn.Add(this.ComputerEntityUsingComputerID);
 			toReturn.Add(this.StoreEntityUsingStoreID);
 			toReturn.Add(this.UserEntityUsingUserID);
@@ -98,16 +97,28 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticDownloadRelations
+	{
+		internal static readonly IEntityRelation DownloadDetailEntityUsingDownloadIDStatic = new DownloadRelations().DownloadDetailEntityUsingDownloadID;
+		internal static readonly IEntityRelation ComputerEntityUsingComputerIDStatic = new DownloadRelations().ComputerEntityUsingComputerID;
+		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new DownloadRelations().StoreEntityUsingStoreID;
+		internal static readonly IEntityRelation UserEntityUsingUserIDStatic = new DownloadRelations().UserEntityUsingUserID;
+
+		/// <summary>CTor</summary>
+		static StaticDownloadRelations()
+		{
+		}
 	}
 }

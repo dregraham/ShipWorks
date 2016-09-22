@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +14,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Users;
@@ -244,7 +246,7 @@ namespace ShipWorks.ApplicationCore.Services
                     // If the database is in SINGLE_USER, don't even try to connect
                     SqlSession master = new SqlSession(SqlSession.Current);
                     master.Configuration.DatabaseName = "master";
-                    using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
                     {
                         testConnection.Open();
 

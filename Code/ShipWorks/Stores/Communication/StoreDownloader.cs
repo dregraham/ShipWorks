@@ -1,34 +1,30 @@
 using System;
 using System.Collections.Generic;
-using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore.Options;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Stores.Content;
-using log4net;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Data.Common;
 using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using ShipWorks.Common.Threading;
 using System.Linq;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.Data.Model;
-using ShipWorks.Actions;
-using Interapptive.Shared.Business;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Users.Audit;
 using System.Reflection;
 using Interapptive.Shared;
-using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore.Crashes;
-using ShipWorks.Data.Utility;
-using ShipWorks.SqlServer.Common.Data;
-using System.Data.SqlClient;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions;
+using ShipWorks.AddressValidation;
+using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Stores.Content;
+using ShipWorks.Templates.Tokens;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -43,7 +39,7 @@ namespace ShipWorks.Stores.Communication
         StoreEntity store;
         IProgressReporter progress;
         long downloadLogID;
-        protected SqlConnection connection;
+        protected DbConnection connection;
 
         StoreType storeType;
 
@@ -148,7 +144,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download data from the configured store.
         /// </summary>
-        public void Download(IProgressReporter progress, long downloadLogID, SqlConnection connection)
+        public void Download(IProgressReporter progress, long downloadLogID, DbConnection connection)
         {
             if (progress == null)
             {
@@ -510,7 +506,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
-            using (SqlTransaction transaction = connection.BeginTransaction())
+            using (DbTransaction transaction = connection.BeginTransaction())
             {
                 SaveDownloadedOrder(order, transaction);
             }
@@ -520,8 +516,8 @@ namespace ShipWorks.Stores.Communication
         /// Save the given order that has been downloaded.
         /// </summary>
         [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
-        protected virtual void SaveDownloadedOrder(OrderEntity order, SqlTransaction transaction)
+        [NDependIgnoreComplexMethod]
+        protected virtual void SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -684,8 +680,8 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }

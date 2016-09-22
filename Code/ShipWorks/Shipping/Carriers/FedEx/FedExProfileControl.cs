@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Adapter.Custom;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -171,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 delivery.Checked = (value.Value & (int) FedExEmailNotificationType.Deliver) != 0;
             }
         }
-        
+
         /// <summary>
         /// Read the effective state of the email notification values
         /// </summary>
@@ -460,7 +456,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Ensure each one has a UI control
             foreach (FedExProfilePackageEntity package in packages)
-            {   
+            {
                 FedExProfilePackageControl control;
 
                 // If there is a control for it already, it should match up with this package

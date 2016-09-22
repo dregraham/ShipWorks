@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
+﻿using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.SortProviders;
+using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
-using ShipWorks.Data.Grid.Columns.SortProviders;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -24,8 +20,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 {
                     new GridColumnDefinition("{5FC64EB7-CE5F-4fce-B2EC-5C0DF72BDC13}", true,
                         new GridEntityDisplayType(), "Related To", new GridEntityDisplayInfo(6, EntityType.OrderEntity, "Order 1028"),
-                        new GridColumnFieldValueProvider(EmailOutboundRelationFields.ObjectID),
-                        new GridColumnObjectLabelSortProvider(EmailOutboundRelationFields.ObjectID)) { DefaultWidth = 150 },
+                        new GridColumnFieldValueProvider(EmailOutboundRelationFields.EntityID),
+                        new GridColumnObjectLabelSortProvider(EmailOutboundRelationFields.EntityID)) { DefaultWidth = 150 },
                 };
 
             return definitions;

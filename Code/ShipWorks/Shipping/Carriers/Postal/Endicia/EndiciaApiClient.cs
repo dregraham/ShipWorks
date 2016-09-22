@@ -717,19 +717,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 // Filter out any we really don't care about
                 .Where(e =>
+                {
+                    EndiciaApiException apiEx = e as EndiciaApiException;
+                    if (apiEx != null)
                     {
-                        EndiciaApiException apiEx = e as EndiciaApiException;
-                        if (apiEx != null)
-                        {
-                            // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
-                            // user just won't get the rate for it (which makes sense)
-                            return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    })
+                        // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
+                        // user just won't get the rate for it (which makes sense)
+                        return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                })
 
                 .ToList();
 

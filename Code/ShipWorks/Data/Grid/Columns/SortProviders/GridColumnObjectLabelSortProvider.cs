@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Grid.Columns.SortProviders
 {
@@ -18,7 +15,7 @@ namespace ShipWorks.Data.Grid.Columns.SortProviders
         /// Constructor, takes the field of the displayed table with the object key
         /// </summary>
         public GridColumnObjectLabelSortProvider(EntityField2 objectKeyField)
-            : base(ObjectLabelFields.Label, ObjectLabelFields.ObjectID, objectKeyField, JoinHint.Right)
+            : base(ObjectLabelFields.Label, ObjectLabelFields.EntityID, objectKeyField, JoinHint.Right)
         {
 
         }
@@ -51,7 +48,7 @@ namespace ShipWorks.Data.Grid.Columns.SortProviders
                 );
 
             labelSortField.ExpressionToApply = new DbFunctionCall(
-                padExpression, 
+                padExpression,
                 new object[] { ObjectLabelFields.ObjectType, ObjectLabelFields.Label });
 
             return labelSortField;

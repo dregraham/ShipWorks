@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace ShipWorks.Stores.Tests
+namespace ShipWorks.Tests.Shared
 {
     /// <summary>
     /// Helper class for getting embedded resources.
@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Tests
         public static string GetEmbeddedResourceString(string embeddedResourceName)
         {
             string txt;
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName))
+            using (Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(embeddedResourceName))
             {
                 if (stream == null)
                 {
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests
         /// </summary>
         public static Stream GetEmbeddedResourceStream(string embeddedResourceName)
         {
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResourceName);
+            Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(embeddedResourceName);
 
             if (stream == null)
             {

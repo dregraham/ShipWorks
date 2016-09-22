@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data;
+using System.Text;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -82,7 +80,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// A field value is changing
         /// </summary>
-        protected override void OnFieldValueChanged(object originalValue, IEntityField2 field)
+        protected override void OnFieldValueChanged(object originalValue, int field)
         {
             if (readOnly)
             {

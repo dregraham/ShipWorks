@@ -14,7 +14,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -32,6 +31,9 @@ namespace ShipWorks.Stores
     /// </summary>
     public static class StoreManager
     {
+        private static readonly string orderEntityName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
+        private static readonly string orderItemEntityName = ((IEntityCore) new OrderItemEntity()).LLBLGenProEntityName;
+
         static readonly ILog log = LogManager.GetLogger(typeof(StoreManager));
 
         static TableSynchronizer<StoreEntity> storeSynchronizer;
@@ -127,42 +129,28 @@ namespace ShipWorks.Stores
         /// <summary>
         /// The change version of the stores.  Increments every time the stores are refreshed from the database.
         /// </summary>
-        public static int ChangeVersion
-        {
-            get { return version; }
-        }
+        public static int ChangeVersion => version;
 
         /// <summary>
         /// Update the tables that should be considered when doing polymorphic fetches based on active store types
         /// </summary>
         private static void UpdateInheritanceActiveTables()
         {
-            List<string> orderTables = new List<string>();
-            List<string> itemTables = new List<string>();
+            UpdateInheritanceActiveTable(orderEntityName, x => x.CreateOrder());
+            UpdateInheritanceActiveTable(orderItemEntityName, x => x.CreateOrderItemInstance());
+        }
 
-            foreach (StoreType storeType in uniqueStoreTypes)
-            {
-                OrderEntity order = storeType.CreateOrder();
-                if (order.GetType() != typeof(OrderEntity))
-                {
-                    if (!orderTables.Contains(order.LLBLGenProEntityName))
-                    {
-                        orderTables.Add(order.LLBLGenProEntityName);
-                    }
-                }
+        /// <summary>
+        /// Update the tales that should be considered when doing polymorphic fetches on the given entity
+        /// </summary>
+        private static void UpdateInheritanceActiveTable(string tableName, Func<StoreType, IEntityCore> getEntity)
+        {
+            IEnumerable<string> tables = uniqueStoreTypes.Select(getEntity)
+                .Select(x => x.LLBLGenProEntityName)
+                .Distinct()
+                .Except(new[] { tableName });
 
-                OrderItemEntity item = storeType.CreateOrderItemInstance();
-                if (item.GetType() != typeof(OrderItemEntity))
-                {
-                    if (!itemTables.Contains(item.LLBLGenProEntityName))
-                    {
-                        itemTables.Add(item.LLBLGenProEntityName);
-                    }
-                }
-            }
-
-            ActiveTableInheritanceManager.SetActiveTables(new OrderEntity().LLBLGenProEntityName, orderTables);
-            ActiveTableInheritanceManager.SetActiveTables(new OrderItemEntity().LLBLGenProEntityName, itemTables);
+            ActiveTableInheritanceManager.SetActiveTables(tableName, tables);
         }
 
         /// <summary>
@@ -197,14 +185,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public static IList<StoreType> GetUniqueStoreTypes(bool enabledOnly = false)
         {
-            if (enabledOnly)
-            {
-                return uniqueStoreTypesEnabled.AsReadOnly();
-            }
-            else
-            {
-                return uniqueStoreTypes.AsReadOnly();
-            }
+            return enabledOnly ? uniqueStoreTypesEnabled.AsReadOnly() : uniqueStoreTypes.AsReadOnly();
         }
 
         /// <summary>

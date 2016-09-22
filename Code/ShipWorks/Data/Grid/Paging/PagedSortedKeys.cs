@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Threading;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Shipping;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Data.Grid.Paging
 {
@@ -30,7 +28,7 @@ namespace ShipWorks.Data.Grid.Paging
         volatile bool loadingComplete;
         volatile bool canceled;
 
-        // Don't allow too many to be fetching at once or we can end up just stalling out completely 
+        // Don't allow too many to be fetching at once or we can end up just stalling out completely
         static SemaphoreSlim semaphore = new SemaphoreSlim(2);
 
         // Special single insance of an empty key set
@@ -112,9 +110,9 @@ namespace ShipWorks.Data.Grid.Paging
 
             Stopwatch timer = Stopwatch.StartNew();
 
-            SpinWait.SpinUntil(() => 
-                loadingComplete || 
-                index < loadedKeyCount || 
+            SpinWait.SpinUntil(() =>
+                loadingComplete ||
+                index < loadedKeyCount ||
                 (timeout != null && timer.Elapsed > timeout));
 
             // If we've already loaded enough, go ahead and return it directly from our list
@@ -240,7 +238,7 @@ namespace ShipWorks.Data.Grid.Paging
                             ResultsetFields resultFields = new ResultsetFields(1);
                             resultFields.DefineField(keyField, 0, "EntityID", "");
 
-                            using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.CloseConnection, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
+                            using (IDataReader reader = adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.CloseConnection, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
                             {
                                 while (!canceled && reader.Read())
                                 {

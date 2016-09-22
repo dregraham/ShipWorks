@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Utility;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Filters;
 using System.Diagnostics;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Users;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Grid;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Content.Controls;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using Divelements.SandGrid;
-using ShipWorks.Users.Security;
+using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using ShipWorks.Data;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -115,7 +102,7 @@ namespace ShipWorks.Stores.Content.Panels
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override FilterTarget[] SupportedTargets
         {
-            get { return new FilterTarget[] { FilterTarget.Orders, FilterTarget.Customers };  }
+            get { return new FilterTarget[] { FilterTarget.Orders, FilterTarget.Customers }; }
         }
 
         /// <summary>
@@ -148,7 +135,7 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             NoteEntity note = new NoteEntity();
-            note.ObjectID = EntityID.Value;
+            note.EntityID = EntityID.Value;
             note.UserID = UserSession.User.UserID;
             note.Edited = DateTime.UtcNow;
             note.Text = "";

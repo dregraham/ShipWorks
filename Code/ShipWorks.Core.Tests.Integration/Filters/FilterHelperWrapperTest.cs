@@ -34,7 +34,7 @@ namespace ShipWorks.Core.Tests.Integration.Filters
 
             Create.Entity<FilterNodeContentDetailEntity>()
                 .Set(x => x.FilterNodeContentID, content.FilterNodeContentID)
-                .Set(x => x.ObjectID, context.Order.OrderID)
+                .Set(x => x.EntityID, context.Order.OrderID)
                 .Save();
 
             var node = Create.Entity<FilterNodeEntity>()

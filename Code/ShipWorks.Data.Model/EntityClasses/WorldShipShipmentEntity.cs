@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -23,16 +23,11 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
-	/// <summary>
-	/// Entity class which represents the entity 'WorldShipShipment'.<br/><br/>
-	/// 
-	/// </summary>
+	/// <summary>Entity class which represents the entity 'WorldShipShipment'.<br/><br/></summary>
 	[Serializable]
-	public partial class WorldShipShipmentEntity : CommonEntityBase, ISerializable
+	public partial class WorldShipShipmentEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -41,9 +36,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<WorldShipPackageEntity> _packages;
 		private EntityCollection<WorldShipProcessedEntity> _worldShipProcessed;
 
-
-
-		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
 		#endregion
@@ -55,15 +47,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-
 			/// <summary>Member name Goods</summary>
 			public static readonly string Goods = "Goods";
 			/// <summary>Member name Packages</summary>
 			public static readonly string Packages = "Packages";
 			/// <summary>Member name WorldShipProcessed</summary>
 			public static readonly string WorldShipProcessed = "WorldShipProcessed";
-
-
 		}
 		#endregion
 		
@@ -72,11 +61,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			SetupCustomPropertyHashtables();
 		}
-
+		
 		/// <summary> CTor</summary>
 		public WorldShipShipmentEntity():base("WorldShipShipmentEntity")
 		{
-			InitClassEmpty(null, CreateFields());
+			InitClassEmpty(null, null);
 		}
 
 		/// <summary> CTor</summary>
@@ -91,16 +80,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="validator">The custom validator object for this WorldShipShipmentEntity</param>
 		public WorldShipShipmentEntity(IValidator validator):base("WorldShipShipmentEntity")
 		{
-			InitClassEmpty(validator, CreateFields());
+			InitClassEmpty(validator, null);
 		}
 				
-
 		/// <summary> CTor</summary>
 		/// <param name="shipmentID">PK value for WorldShipShipment which data should be fetched into this WorldShipShipment object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public WorldShipShipmentEntity(System.Int64 shipmentID):base("WorldShipShipmentEntity")
 		{
-			InitClassEmpty(null, CreateFields());
+			InitClassEmpty(null, null);
 			this.ShipmentID = shipmentID;
 		}
 
@@ -110,7 +98,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public WorldShipShipmentEntity(System.Int64 shipmentID, IValidator validator):base("WorldShipShipmentEntity")
 		{
-			InitClassEmpty(validator, CreateFields());
+			InitClassEmpty(validator, null);
 			this.ShipmentID = shipmentID;
 		}
 
@@ -125,12 +113,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				_goods = (EntityCollection<WorldShipGoodsEntity>)info.GetValue("_goods", typeof(EntityCollection<WorldShipGoodsEntity>));
 				_packages = (EntityCollection<WorldShipPackageEntity>)info.GetValue("_packages", typeof(EntityCollection<WorldShipPackageEntity>));
 				_worldShipProcessed = (EntityCollection<WorldShipProcessedEntity>)info.GetValue("_worldShipProcessed", typeof(EntityCollection<WorldShipProcessedEntity>));
-
-
-
-				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
+				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
@@ -150,24 +134,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 			}
 		}
-				
-		/// <summary>Gets the inheritance info provider instance of the project this entity instance is located in. </summary>
-		/// <returns>ready to use inheritance info provider instance.</returns>
-		protected override IInheritanceInfoProvider GetInheritanceInfoProvider()
-		{
-			return InheritanceInfoProviderSingleton.GetInstance();
-		}
-		
+
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
 		/// <param name="entity">Entity to set as an related entity</param>
 		/// <remarks>Used by prefetch path logic.</remarks>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntityProperty(string propertyName, IEntity2 entity)
+		protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
 		{
 			switch(propertyName)
 			{
-
 				case "Goods":
 					this.Goods.Add((WorldShipGoodsEntity)entity);
 					break;
@@ -177,9 +152,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "WorldShipProcessed":
 					this.WorldShipProcessed.Add((WorldShipProcessedEntity)entity);
 					break;
-
-
 				default:
+					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
 			}
 		}
@@ -187,53 +161,44 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
+		protected override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return WorldShipShipmentEntity.GetRelationsForField(fieldName);
+			return GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public static RelationCollection GetRelationsForField(string fieldName)
+		internal static RelationCollection GetRelationsForField(string fieldName)
 		{
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
 				case "Goods":
-					toReturn.Add(WorldShipShipmentEntity.Relations.WorldShipGoodsEntityUsingShipmentID);
+					toReturn.Add(Relations.WorldShipGoodsEntityUsingShipmentID);
 					break;
 				case "Packages":
-					toReturn.Add(WorldShipShipmentEntity.Relations.WorldShipPackageEntityUsingShipmentID);
+					toReturn.Add(Relations.WorldShipPackageEntityUsingShipmentID);
 					break;
 				case "WorldShipProcessed":
-					toReturn.Add(WorldShipShipmentEntity.Relations.WorldShipProcessedEntityUsingShipmentID);
+					toReturn.Add(Relations.WorldShipProcessedEntityUsingShipmentIdCalculated);
 					break;
-
-
 				default:
-
 					break;				
 			}
 			return toReturn;
 		}
 #if !CF
-		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it
-		/// will return true if the entity has any single-sided relation</summary>
+		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it/ will return true if the entity has any single-sided relation</summary>
 		/// <param name="propertyName">Name of the property which is mapped onto the relation to check, or null to check if the entity has any relation/ which is single sided</param>
 		/// <returns>true if the relation is single sided / one way (so the opposite relation isn't present), false otherwise</returns>
-		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
-			// use template trick to calculate the # of single-sided / oneway relations
 			int numberOfOneWayRelations = 0;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-
-
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -242,18 +207,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Sets the internal parameter related to the fieldname passed to the instance relatedEntity. </summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntity(IEntity2 relatedEntity, string fieldName)
+		protected override void SetRelatedEntity(IEntityCore relatedEntity, string fieldName)
 		{
 			switch(fieldName)
 			{
-
-
 				case "Packages":
 					this.Packages.Add((WorldShipPackageEntity)relatedEntity);
 					break;
-
-
+				case "WorldShipProcessed":
+					this.WorldShipProcessed.Add((WorldShipProcessedEntity)relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -263,18 +226,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="relatedEntity">Instance to unset as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
 		/// <param name="signalRelatedEntityManyToOne">if set to true it will notify the manytoone side, if applicable.</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void UnsetRelatedEntity(IEntity2 relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
+		protected override void UnsetRelatedEntity(IEntityCore relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
 		{
 			switch(fieldName)
 			{
-
-
 				case "Packages":
-					base.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
+					this.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-
-
+				case "WorldShipProcessed":
+					this.PerformRelatedEntityRemoval(this.WorldShipProcessed, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					break;
 			}
@@ -282,88 +243,59 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets a collection of related entities referenced by this entity which depend on this entity (this entity is the PK side of their FK fields). These entities will have to be persisted after this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependingRelatedEntities()
+		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
 			return toReturn;
 		}
 		
 		/// <summary> Gets a collection of related entities referenced by this entity which this entity depends on (this entity is the FK side of their PK fields). These
 		/// entities will have to be persisted before this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependentRelatedEntities()
+		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
-
 			return toReturn;
 		}
 		
-		/// <summary>Gets a list of all entity collections stored as member variables in this entity. The contents of the ArrayList is used by the DataAccessAdapter to perform recursive saves. Only 1:n related collections are returned.</summary>
+		/// <summary>Gets a list of all entity collections stored as member variables in this entity. Only 1:n related collections are returned.</summary>
 		/// <returns>Collection with 0 or more IEntityCollection2 objects, referenced by this entity</returns>
-		public override List<IEntityCollection2> GetMemberEntityCollections()
+		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.Goods);
 			toReturn.Add(this.Packages);
 			toReturn.Add(this.WorldShipProcessed);
-
 			return toReturn;
 		}
-		
-
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		protected override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_goods", ((_goods!=null) && (_goods.Count>0) && !this.MarkedForDeletion)?_goods:null);
 				info.AddValue("_packages", ((_packages!=null) && (_packages.Count>0) && !this.MarkedForDeletion)?_packages:null);
 				info.AddValue("_worldShipProcessed", ((_worldShipProcessed!=null) && (_worldShipProcessed.Count>0) && !this.MarkedForDeletion)?_worldShipProcessed:null);
-
-
-
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
-		/// <summary>Returns true if the original value for the field with the fieldIndex passed in, read from the persistent storage was NULL, false otherwise.
-		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
-		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
-		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(WorldShipShipmentFieldIndex fieldIndex)
-		{
-			return base.Fields[(int)fieldIndex].IsNull;
-		}
-		
-		/// <summary>Returns true if the current value for the field with the fieldIndex passed in represents null/not defined, false otherwise.
-		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
-		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
-		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(WorldShipShipmentFieldIndex fieldIndex)
-		{
-			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
-		}
 
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
-		public override List<IEntityRelation> GetAllRelations()
+		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new WorldShipShipmentRelations().GetAllRelations();
 		}
-		
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'WorldShipGoods' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'WorldShipGoods' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoGoods()
 		{
@@ -372,8 +304,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'WorldShipPackage' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'WorldShipPackage' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoPackages()
 		{
@@ -382,34 +313,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entities of type 'WorldShipProcessed' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'WorldShipProcessed' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoWorldShipProcessed()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(WorldShipProcessedFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(WorldShipProcessedFields.ShipmentIdCalculated, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
-
-
-
-	
 		
-		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
-		protected virtual IEntityFields2 CreateFields()
-		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity);
-		}
-
-		/// <summary>
-		/// Creates the ITypeDefaultValue instance used to provide default values for value types which aren't of type nullable(of T)
-		/// </summary>
-		/// <returns></returns>
-		protected override ITypeDefaultValue CreateTypeDefaultValueProvider()
-		{
-			return new TypeDefaultValue();
-		}
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
@@ -425,7 +337,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(this._goods);
 			collectionsQueue.Enqueue(this._packages);
 			collectionsQueue.Enqueue(this._worldShipProcessed);
-
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -443,20 +354,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
-			if (this._goods != null)
-			{
-				return true;
-			}
-			if (this._packages != null)
-			{
-				return true;
-			}
-			if (this._worldShipProcessed != null)
-			{
-				return true;
-			}
-
-			return base.HasPopulatedMemberEntityCollections();
+			bool toReturn = false;
+			toReturn |=(this._goods != null);
+			toReturn |=(this._packages != null);
+			toReturn |=(this._worldShipProcessed != null);
+			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
 		/// <summary>Creates the member entity collections queue.</summary>
@@ -468,55 +370,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<WorldShipGoodsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipGoodsEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<WorldShipPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipPackageEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<WorldShipProcessedEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipProcessedEntityFactory))) : null);
-
 		}
 #endif
-		/// <summary>
-		/// Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element. 
-		/// </summary>
+		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
 		/// <returns>Dictionary with per name the related referenced data element, which can be an entity collection or an entity or null</returns>
-		public override Dictionary<string, object> GetRelatedData()
+		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-
 			toReturn.Add("Goods", _goods);
 			toReturn.Add("Packages", _packages);
 			toReturn.Add("WorldShipProcessed", _worldShipProcessed);
-
-
 			return toReturn;
-		}
-		
-		/// <summary> Adds the internals to the active context. </summary>
-		protected override void AddInternalsToContext()
-		{
-			if(_goods!=null)
-			{
-				_goods.ActiveContext = base.ActiveContext;
-			}
-			if(_packages!=null)
-			{
-				_packages.ActiveContext = base.ActiveContext;
-			}
-			if(_worldShipProcessed!=null)
-			{
-				_worldShipProcessed.ActiveContext = base.ActiveContext;
-			}
-
-
-
 		}
 
 		/// <summary> Initializes the class members</summary>
-		protected virtual void InitClassMembers()
+		private void InitClassMembers()
 		{
-
-			_goods = null;
-			_packages = null;
-			_worldShipProcessed = null;
-
-
-
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
@@ -524,233 +393,164 @@ namespace ShipWorks.Data.Model.EntityClasses
 			OnInitClassMembersComplete();
 		}
 
+
 		#region Custom Property Hashtable Setup
 		/// <summary> Initializes the hashtables for the entity type and entity field custom properties. </summary>
 		private static void SetupCustomPropertyHashtables()
 		{
 			_customProperties = new Dictionary<string, string>();
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
-
-			Dictionary<string, string> fieldHashtable = null;
+			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("OrderNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromCompanyOrName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromAttention", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromAddress1", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromAddress2", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromAddress3", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromCountryCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromPostalCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromCity", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromStateProvCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromTelephone", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromEmail", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FromAccountNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToCustomerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToCompanyOrName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToAttention", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToAddress1", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToAddress2", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToAddress3", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToCountryCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToPostalCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToCity", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToStateProvCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToTelephone", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToEmail", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToAccountNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ToResidential", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ServiceType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("BillTransportationTo", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("SaturdayDelivery", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("QvnOption", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("QvnFrom", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("QvnSubjectLine", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("QvnMemo", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn1ShipNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn1DeliveryNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn1ExceptionNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn1ContactName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn1Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn2ShipNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn2DeliveryNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn2ExceptionNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn2ContactName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn2Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn3ShipNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn3DeliveryNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn3ExceptionNotify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn3ContactName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Qvn3Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CustomsDescriptionOfGoods", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CustomsDocumentsOnly", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipperNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("PackageCount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DeliveryConfirmation", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("DeliveryConfirmationAdult", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceTermsOfSale", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceReasonForExport", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceComments", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceCurrencyCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceChargesFreight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceChargesInsurance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InvoiceChargesOther", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipmentProcessedOnComputerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("UspsEndorsement", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("CarbonNeutral", fieldHashtable);
 		}
 		#endregion
 
-
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this WorldShipShipmentEntity</param>
 		/// <param name="fields">Fields of this entity</param>
-		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
+		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
 			OnInitializing();
-			base.Fields = fields;
-			base.IsNew=true;
-			base.Validator = validator;
+			this.Fields = fields ?? CreateFields();
+			this.Validator = validator;
 			InitClassMembers();
 
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
 			OnInitialized();
+
 		}
 
 		#region Class Property Declarations
@@ -767,53 +567,37 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipGoods' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipGoods' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathGoods
 		{
-			get
-			{
-				return new PrefetchPathElement2( new EntityCollection<WorldShipGoodsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipGoodsEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Goods")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity, 0, null, null, null, null, "Goods", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
-			}
+			get	{ return new PrefetchPathElement2( new EntityCollection<WorldShipGoodsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipGoodsEntityFactory))), (IEntityRelation)GetRelationsForField("Goods")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity, 0, null, null, null, null, "Goods", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipPackage' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipPackage' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathPackages
 		{
-			get
-			{
-				return new PrefetchPathElement2( new EntityCollection<WorldShipPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipPackageEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Packages")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipPackageEntity, 0, null, null, null, null, "Packages", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
-			}
+			get	{ return new PrefetchPathElement2( new EntityCollection<WorldShipPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipPackageEntityFactory))), (IEntityRelation)GetRelationsForField("Packages")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipPackageEntity, 0, null, null, null, null, "Packages", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipProcessed' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipProcessed' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathWorldShipProcessed
 		{
-			get
-			{
-				return new PrefetchPathElement2( new EntityCollection<WorldShipProcessedEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipProcessedEntityFactory))),
-					(IEntityRelation)GetRelationsForField("WorldShipProcessed")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipProcessedEntity, 0, null, null, null, null, "WorldShipProcessed", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
-			}
+			get	{ return new PrefetchPathElement2( new EntityCollection<WorldShipProcessedEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipProcessedEntityFactory))), (IEntityRelation)GetRelationsForField("WorldShipProcessed")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipProcessedEntity, 0, null, null, null, null, "WorldShipProcessed", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
-
-
 
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, string> CustomPropertiesOfType
+		protected override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return WorldShipShipmentEntity.CustomProperties;}
+			get { return CustomProperties;}
 		}
 
-		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
-		/// pairs. </summary>
+		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		public  static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
 		{
@@ -823,13 +607,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The custom properties for the fields of the type of this entity instance. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
+		protected override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return WorldShipShipmentEntity.FieldsCustomProperties;}
+			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShipmentID property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ShipmentID property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
@@ -839,8 +622,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ShipmentID, value); }
 		}
 
-		/// <summary> The OrderNumber property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The OrderNumber property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."OrderNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -850,8 +632,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.OrderNumber, value); }
 		}
 
-		/// <summary> The FromCompanyOrName property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromCompanyOrName property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromCompanyOrName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -861,8 +642,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromCompanyOrName, value); }
 		}
 
-		/// <summary> The FromAttention property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromAttention property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromAttention"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -872,8 +652,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromAttention, value); }
 		}
 
-		/// <summary> The FromAddress1 property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromAddress1 property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromAddress1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -883,8 +662,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromAddress1, value); }
 		}
 
-		/// <summary> The FromAddress2 property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromAddress2 property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromAddress2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -894,8 +672,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromAddress2, value); }
 		}
 
-		/// <summary> The FromAddress3 property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromAddress3 property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromAddress3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -905,8 +682,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromAddress3, value); }
 		}
 
-		/// <summary> The FromCountryCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromCountryCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -916,8 +692,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromCountryCode, value); }
 		}
 
-		/// <summary> The FromPostalCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromPostalCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -927,8 +702,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromPostalCode, value); }
 		}
 
-		/// <summary> The FromCity property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromCity property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromCity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -938,8 +712,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromCity, value); }
 		}
 
-		/// <summary> The FromStateProvCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromStateProvCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromStateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -949,8 +722,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromStateProvCode, value); }
 		}
 
-		/// <summary> The FromTelephone property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromTelephone property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromTelephone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -960,8 +732,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromTelephone, value); }
 		}
 
-		/// <summary> The FromEmail property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromEmail property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -971,8 +742,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromEmail, value); }
 		}
 
-		/// <summary> The FromAccountNumber property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The FromAccountNumber property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."FromAccountNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -982,8 +752,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.FromAccountNumber, value); }
 		}
 
-		/// <summary> The ToCustomerID property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToCustomerID property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToCustomerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -993,8 +762,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToCustomerID, value); }
 		}
 
-		/// <summary> The ToCompanyOrName property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToCompanyOrName property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToCompanyOrName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1004,8 +772,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToCompanyOrName, value); }
 		}
 
-		/// <summary> The ToAttention property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToAttention property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToAttention"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1015,8 +782,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToAttention, value); }
 		}
 
-		/// <summary> The ToAddress1 property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToAddress1 property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToAddress1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1026,8 +792,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToAddress1, value); }
 		}
 
-		/// <summary> The ToAddress2 property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToAddress2 property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToAddress2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1037,8 +802,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToAddress2, value); }
 		}
 
-		/// <summary> The ToAddress3 property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToAddress3 property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToAddress3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1048,8 +812,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToAddress3, value); }
 		}
 
-		/// <summary> The ToCountryCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToCountryCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1059,8 +822,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToCountryCode, value); }
 		}
 
-		/// <summary> The ToPostalCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToPostalCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1070,8 +832,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToPostalCode, value); }
 		}
 
-		/// <summary> The ToCity property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToCity property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToCity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1081,8 +842,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToCity, value); }
 		}
 
-		/// <summary> The ToStateProvCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToStateProvCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToStateProvCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1092,8 +852,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToStateProvCode, value); }
 		}
 
-		/// <summary> The ToTelephone property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToTelephone property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToTelephone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1103,8 +862,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToTelephone, value); }
 		}
 
-		/// <summary> The ToEmail property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToEmail property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1114,8 +872,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToEmail, value); }
 		}
 
-		/// <summary> The ToAccountNumber property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToAccountNumber property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToAccountNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1125,8 +882,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToAccountNumber, value); }
 		}
 
-		/// <summary> The ToResidential property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ToResidential property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ToResidential"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1136,8 +892,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ToResidential, value); }
 		}
 
-		/// <summary> The ServiceType property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ServiceType property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ServiceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1147,8 +902,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ServiceType, value); }
 		}
 
-		/// <summary> The BillTransportationTo property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The BillTransportationTo property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."BillTransportationTo"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1158,8 +912,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.BillTransportationTo, value); }
 		}
 
-		/// <summary> The SaturdayDelivery property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The SaturdayDelivery property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."SaturdayDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1169,8 +922,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.SaturdayDelivery, value); }
 		}
 
-		/// <summary> The QvnOption property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The QvnOption property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."QvnOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1180,8 +932,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.QvnOption, value); }
 		}
 
-		/// <summary> The QvnFrom property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The QvnFrom property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."QvnFrom"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1191,8 +942,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.QvnFrom, value); }
 		}
 
-		/// <summary> The QvnSubjectLine property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The QvnSubjectLine property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."QvnSubjectLine"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 18<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1202,8 +952,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.QvnSubjectLine, value); }
 		}
 
-		/// <summary> The QvnMemo property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The QvnMemo property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."QvnMemo"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1213,8 +962,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.QvnMemo, value); }
 		}
 
-		/// <summary> The Qvn1ShipNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn1ShipNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn1ShipNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1224,8 +972,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn1ShipNotify, value); }
 		}
 
-		/// <summary> The Qvn1DeliveryNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn1DeliveryNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn1DeliveryNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1235,8 +982,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn1DeliveryNotify, value); }
 		}
 
-		/// <summary> The Qvn1ExceptionNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn1ExceptionNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn1ExceptionNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1246,8 +992,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn1ExceptionNotify, value); }
 		}
 
-		/// <summary> The Qvn1ContactName property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn1ContactName property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn1ContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1257,8 +1002,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn1ContactName, value); }
 		}
 
-		/// <summary> The Qvn1Email property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn1Email property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn1Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1268,8 +1012,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn1Email, value); }
 		}
 
-		/// <summary> The Qvn2ShipNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn2ShipNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn2ShipNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1279,8 +1022,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn2ShipNotify, value); }
 		}
 
-		/// <summary> The Qvn2DeliveryNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn2DeliveryNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn2DeliveryNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1290,8 +1032,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn2DeliveryNotify, value); }
 		}
 
-		/// <summary> The Qvn2ExceptionNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn2ExceptionNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn2ExceptionNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1301,8 +1042,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn2ExceptionNotify, value); }
 		}
 
-		/// <summary> The Qvn2ContactName property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn2ContactName property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn2ContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1312,8 +1052,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn2ContactName, value); }
 		}
 
-		/// <summary> The Qvn2Email property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn2Email property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn2Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1323,8 +1062,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn2Email, value); }
 		}
 
-		/// <summary> The Qvn3ShipNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn3ShipNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn3ShipNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1334,8 +1072,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn3ShipNotify, value); }
 		}
 
-		/// <summary> The Qvn3DeliveryNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn3DeliveryNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn3DeliveryNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1345,8 +1082,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn3DeliveryNotify, value); }
 		}
 
-		/// <summary> The Qvn3ExceptionNotify property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn3ExceptionNotify property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn3ExceptionNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1356,8 +1092,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn3ExceptionNotify, value); }
 		}
 
-		/// <summary> The Qvn3ContactName property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn3ContactName property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn3ContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1367,8 +1102,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn3ContactName, value); }
 		}
 
-		/// <summary> The Qvn3Email property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The Qvn3Email property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."Qvn3Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1378,8 +1112,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.Qvn3Email, value); }
 		}
 
-		/// <summary> The CustomsDescriptionOfGoods property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The CustomsDescriptionOfGoods property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."CustomsDescriptionOfGoods"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1389,8 +1122,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.CustomsDescriptionOfGoods, value); }
 		}
 
-		/// <summary> The CustomsDocumentsOnly property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The CustomsDocumentsOnly property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."CustomsDocumentsOnly"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1400,8 +1132,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.CustomsDocumentsOnly, value); }
 		}
 
-		/// <summary> The ShipperNumber property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ShipperNumber property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ShipperNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1411,8 +1142,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ShipperNumber, value); }
 		}
 
-		/// <summary> The PackageCount property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The PackageCount property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."PackageCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1422,8 +1152,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.PackageCount, value); }
 		}
 
-		/// <summary> The DeliveryConfirmation property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The DeliveryConfirmation property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."DeliveryConfirmation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1433,8 +1162,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.DeliveryConfirmation, value); }
 		}
 
-		/// <summary> The DeliveryConfirmationAdult property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The DeliveryConfirmationAdult property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."DeliveryConfirmationAdult"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1444,8 +1172,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.DeliveryConfirmationAdult, value); }
 		}
 
-		/// <summary> The InvoiceTermsOfSale property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceTermsOfSale property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceTermsOfSale"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1455,8 +1182,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceTermsOfSale, value); }
 		}
 
-		/// <summary> The InvoiceReasonForExport property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceReasonForExport property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceReasonForExport"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1466,8 +1192,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceReasonForExport, value); }
 		}
 
-		/// <summary> The InvoiceComments property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceComments property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceComments"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1477,8 +1202,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceComments, value); }
 		}
 
-		/// <summary> The InvoiceCurrencyCode property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceCurrencyCode property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceCurrencyCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1488,8 +1212,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceCurrencyCode, value); }
 		}
 
-		/// <summary> The InvoiceChargesFreight property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceChargesFreight property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceChargesFreight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1499,8 +1222,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceChargesFreight, value); }
 		}
 
-		/// <summary> The InvoiceChargesInsurance property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceChargesInsurance property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceChargesInsurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1510,8 +1232,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceChargesInsurance, value); }
 		}
 
-		/// <summary> The InvoiceChargesOther property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The InvoiceChargesOther property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."InvoiceChargesOther"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1521,8 +1242,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.InvoiceChargesOther, value); }
 		}
 
-		/// <summary> The ShipmentProcessedOnComputerID property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The ShipmentProcessedOnComputerID property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."ShipmentProcessedOnComputerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1532,8 +1252,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.ShipmentProcessedOnComputerID, value); }
 		}
 
-		/// <summary> The UspsEndorsement property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The UspsEndorsement property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."UspsEndorsement"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1543,8 +1262,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.UspsEndorsement, value); }
 		}
 
-		/// <summary> The CarbonNeutral property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
+		/// <summary> The CarbonNeutral property of the Entity WorldShipShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WorldShipShipment"."CarbonNeutral"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1554,58 +1272,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.CarbonNeutral, value); }
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipGoodsEntity' which are related to this entity via a relation of type '1:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipGoodsEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(WorldShipGoodsEntity))]
 		public virtual EntityCollection<WorldShipGoodsEntity> Goods
 		{
-			get
-			{
-				if(_goods==null)
-				{
-					_goods = new EntityCollection<WorldShipGoodsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipGoodsEntityFactory)));
-
-				}
-				return _goods;
-			}
+			get { return GetOrCreateEntityCollection<WorldShipGoodsEntity, WorldShipGoodsEntityFactory>("", false, false, ref _goods);	}
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipPackageEntity' which are related to this entity via a relation of type '1:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(WorldShipPackageEntity))]
 		public virtual EntityCollection<WorldShipPackageEntity> Packages
 		{
-			get
-			{
-				if(_packages==null)
-				{
-					_packages = new EntityCollection<WorldShipPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipPackageEntityFactory)));
-					_packages.SetContainingEntityInfo(this, "WorldShipShipment");
-				}
-				return _packages;
-			}
+			get { return GetOrCreateEntityCollection<WorldShipPackageEntity, WorldShipPackageEntityFactory>("WorldShipShipment", true, false, ref _packages);	}
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipProcessedEntity' which are related to this entity via a relation of type '1:n'.
-		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipProcessedEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(WorldShipProcessedEntity))]
 		public virtual EntityCollection<WorldShipProcessedEntity> WorldShipProcessed
 		{
-			get
-			{
-				if(_worldShipProcessed==null)
-				{
-					_worldShipProcessed = new EntityCollection<WorldShipProcessedEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipProcessedEntityFactory)));
-
-				}
-				return _worldShipProcessed;
-			}
+			get { return GetOrCreateEntityCollection<WorldShipProcessedEntity, WorldShipProcessedEntityFactory>("WorldShipShipment", true, false, ref _worldShipProcessed);	}
 		}
-
-
-
 	
-		
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
@@ -1620,10 +1307,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		/// <summary>Returns the ShipWorks.Data.Model.EntityType enum value for this entity.</summary>
 		[Browsable(false), XmlIgnore]
-		public override int LLBLGenProEntityTypeValue 
+		protected override int LLBLGenProEntityTypeValue 
 		{ 
 			get { return (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity; }
 		}
+
 		#endregion
 
 

@@ -1,35 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
-using ShipWorks.Actions.Scheduling;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using ShipWorks.UI.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions.Scheduling;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Triggers.Editors;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.UI;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Templates;
-using ShipWorks.Templates.Printing;
-using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using SandMenu = Divelements.SandRibbon.Menu;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Actions
 {
@@ -44,7 +36,7 @@ namespace ShipWorks.Actions
         // A materialized representation of the action's trigger settings
         ActionTrigger trigger;
 
-        // The trigger and tasks that were apart of the action when we first started editing it.  This is so we know what 
+        // The trigger and tasks that were apart of the action when we first started editing it.  This is so we know what
         // needs deleted when we go to save.
         ActionTrigger originalTrigger;
         List<ActionTask> originalTasks;
@@ -205,13 +197,13 @@ namespace ShipWorks.Actions
         /// </summary>
         private void UpdateTriggerRelatedUI(ActionTriggerType triggerType)
         {
-            // Disable the triggering computer option - triggering computer is not a valid option 
+            // Disable the triggering computer option - triggering computer is not a valid option
             // when the trigger is based on a scheduled
             runOnTriggerringComputer.Enabled = triggerType != ActionTriggerType.Scheduled;
 
             if (triggerType == ActionTriggerType.Scheduled)
             {
-                // Since it's not really a valid use case and should be disabled, just the default/generic text for this 
+                // Since it's not really a valid use case and should be disabled, just the default/generic text for this
                 runOnTriggerringComputer.Text = string.Format("On the computer that triggers the action");
             }
             else
@@ -460,8 +452,8 @@ namespace ShipWorks.Actions
         {
             if (actionTriggerType == ActionTriggerType.Scheduled && runOnTriggerringComputer.Checked)
             {
-                // When the option to run on the triggering computer is selected and with the Schedule trigger, just change 
-                // this to run on any computer for now with the thought process being that we don't to put another step 
+                // When the option to run on the triggering computer is selected and with the Schedule trigger, just change
+                // this to run on any computer for now with the thought process being that we don't to put another step
                 // for the user to complete when creating a scheduled action
                 runOnTriggerringComputer.Checked = false;
                 runOnAnyComputer.Checked = true;
@@ -563,11 +555,11 @@ namespace ShipWorks.Actions
         {
             runOnSpecificComputersList.Enabled = runOnSpecificComputers.Checked;
 
-            if (runOnSpecificComputersList.Visible && 
+            if (runOnSpecificComputersList.Visible &&
                 runOnSpecificComputersList.Enabled &&
                 !runOnSpecificComputersList.GetSelectedComputers().Any())
             {
-                runOnSpecificComputersList.ShowPopup();   
+                runOnSpecificComputersList.ShowPopup();
             }
         }
 
@@ -585,7 +577,7 @@ namespace ShipWorks.Actions
                 return;
             }
 
-            ActionTriggerType actionTriggerType = (ActionTriggerType)triggerCombo.SelectedValue;
+            ActionTriggerType actionTriggerType = (ActionTriggerType) triggerCombo.SelectedValue;
 
             if (!ValidateRunOnComputer(actionTriggerType))
             {
@@ -605,11 +597,11 @@ namespace ShipWorks.Actions
                 optionControl.SelectedPage = optionPageAction;
                 ActiveControl = panelTrigger;
 
-                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo, 
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
                     "This action is configured to use a filter that has been disabled. This action will not run until the filter is enabled.\n\nDo you want to use this filter anyway?");
                 if (result == DialogResult.No)
                 {
-                    // The user opted not to use a disabled filter, so drop 
+                    // The user opted not to use a disabled filter, so drop
                     // them back into the dialog
                     return;
                 }
@@ -620,7 +612,7 @@ namespace ShipWorks.Actions
             {
                 optionControl.SelectedPage = optionPageAction;
                 ActiveControl = panelTrigger;
-                
+
                 MessageHelper.ShowError(this, ex.Message);
                 return;
             }
@@ -629,7 +621,7 @@ namespace ShipWorks.Actions
             {
                 List<ActionTask> tasksToSave = ActiveBubbles.Select(b => b.ActionTask).ToList();
                 List<ActionTask> tasksToDelete = originalTasks.Except(tasksToSave).ToList();
-                
+
                 // Validate all the task editors
                 var errors = new List<TaskValidationError>();
                 foreach (ActionTaskBubble editor in ActiveBubbles)
@@ -665,7 +657,7 @@ namespace ShipWorks.Actions
                 {
                     return;
                 }
-                
+
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !at.IsAllowedForTrigger(actionTriggerType)).ToList();
                 if (invalidTasks.Any())
@@ -675,7 +667,7 @@ namespace ShipWorks.Actions
                     string invalidTasksMsg = string.Join<string>(", ", invalidTaskNames);
 
                     MessageHelper.ShowError(this, string.Format("The task{0} '{1}' cannot be used with '{2}'.",
-                        invalidTaskNames.Count() == 1 ? "" : "s", 
+                        invalidTaskNames.Count() == 1 ? "" : "s",
                         invalidTasksMsg,
                         EnumHelper.GetDescription(actionTriggerType)));
                     return;
@@ -693,7 +685,7 @@ namespace ShipWorks.Actions
                         "At least one task is configured to use a filter that has been disabled.\n\nDo you want to use this filter anyway?");
                     if (result == DialogResult.No)
                     {
-                        // The user opted not to use a disabled filter, so drop 
+                        // The user opted not to use a disabled filter, so drop
                         // them back into the dialog
                         return;
                     }
@@ -722,17 +714,17 @@ namespace ShipWorks.Actions
                     //Save the computer limited settings
                     if (runOnTriggerringComputer.Checked)
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitedType.TriggeringComputer;
+                        action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;
                         action.ComputerLimitedList = new long[0];
                     }
                     else if (runOnAnyComputer.Checked)
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitedType.None;
+                        action.ComputerLimitedType = (int) ComputerLimitedType.None;
                         action.ComputerLimitedList = new long[0];
                     }
                     else
                     {
-                        action.ComputerLimitedType = (int)ComputerLimitedType.List;
+                        action.ComputerLimitedType = (int) ComputerLimitedType.List;
                         action.ComputerLimitedList = runOnSpecificComputersList.GetSelectedComputers().Select(x => x.ComputerID).ToArray();
                     }
 
@@ -784,7 +776,7 @@ namespace ShipWorks.Actions
                 MessageHelper.ShowMessage(this, ex.Message + "\n\nThe action has not been saved, and the editor will now close.");
 
                 // At this point I'm taking the easy approach and just closing out of the window.  This is because it would be pretty
-                // hard to make sure all the tasks roll back properly, due to the Save\Delete extra state stuff.  I also think that 
+                // hard to make sure all the tasks roll back properly, due to the Save\Delete extra state stuff.  I also think that
                 // having this type of error while saving will be rare.  Its possible to make this able to stay open in the future,
                 // if there was ever a compelling need.
                 DialogResult = DialogResult.Abort;

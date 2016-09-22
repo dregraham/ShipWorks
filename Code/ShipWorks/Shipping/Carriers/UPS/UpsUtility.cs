@@ -12,14 +12,14 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public static class UpsUtility
     {
-		private static Lazy<bool> hasSurePostShipments = new Lazy<bool>(SurePostShipmentsExist);
+        private static Lazy<bool> hasSurePostShipments = new Lazy<bool>(SurePostShipmentsExist);
         private static IEnumerable<UpsServiceType> surePostShipmentTypes;
 
         /// <summary>
@@ -77,14 +77,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             package.TrackingNumber = "";
             package.UspsTrackingNumber = "";
 
-			package.AdditionalHandlingEnabled = false;
+            package.AdditionalHandlingEnabled = false;
 
             package.DryIceEnabled = false;
             package.DryIceIsForMedicalUse = false;
             package.DryIceRegulationSet = (int) UpsDryIceRegulationSet.Cfr;
             package.DryIceWeight = 0;
 
-			package.VerbalConfirmationEnabled = false;
+            package.VerbalConfirmationEnabled = false;
             package.VerbalConfirmationName = "";
             package.VerbalConfirmationPhone = "";
             package.VerbalConfirmationPhoneExtension = "";
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageTypes.Add(UpsPackagingType.BoxExpress);
             packageTypes.Add(UpsPackagingType.ExpressEnvelope);
 
-            UpsShipmentType upsShipmentType = (UpsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+            UpsShipmentType upsShipmentType = (UpsShipmentType) ShipmentTypeManager.GetType(shipmentTypeCode);
             if (upsShipmentType.IsMailInnovationsEnabled())
             {
                 packageTypes.AddRange(GetMailInnovationsPackagingTypes());
@@ -208,9 +208,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static string GetCurrency(UpsAccountEntity account)
         {
-            if (account==null)
+            if (account == null)
             {
-                throw new ArgumentNullException("account","UPS account passed into GetCurrency is null.");
+                throw new ArgumentNullException("account", "UPS account passed into GetCurrency is null.");
             }
 
             return EnumHelper.GetApiValue(ShipmentType.GetCurrencyForCountryCode(account.CountryCode));
@@ -351,7 +351,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             get
             {
-                return surePostShipmentTypes ?? (surePostShipmentTypes = new ReadOnlyCollection<UpsServiceType>(new []
+                return surePostShipmentTypes ?? (surePostShipmentTypes = new ReadOnlyCollection<UpsServiceType>(new[]
                 {
                     UpsServiceType.UpsSurePost1LbOrGreater,
                     UpsServiceType.UpsSurePostBoundPrintedMatter,

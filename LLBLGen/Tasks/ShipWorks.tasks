@@ -3,7 +3,7 @@
 		name="ShipWorks Custom" isOptional ="false" 
 		description="General group of tasks which are used for ShipWorks templates.">
   <supportedPlatforms>
-    <platform name=".NET 3.5" />
+    <platform name=".NET 4.0" />
   </supportedPlatforms>
   <supportedTemplateGroups>
     <templateGroup name="Adapter" />
@@ -34,7 +34,7 @@
   </taskGroup>
 
   <taskGroup name="Code Files " description="Create Custom ShipWorks Output Files">
-    <task name="EntityCollectionsGenerator" assemblyFilename="SD.LLBLGen.Pro.LptParser.dll" taskPerformerClass="SD.LLBLGen.Pro.LptParser.DotNetTemplateEngine">
+    <task name="EntityCollectionsGenerator" assemblyFilename="SD.LLBLGen.Pro.TaskPerformers.dll" taskPerformerClass="SD.LLBLGen.Pro.TaskPerformers.CodeEmitter">
       <parameters>
         <parameter isOptional="false" name="destinationFolder" defaultValue="Custom"/>
         <parameter isOptional="false" name="filenameFormat" defaultValue="EntityCollections.[extension]"/>
@@ -42,7 +42,7 @@
         <parameter isOptional="false" name="emitType" defaultValue="generic"/>
       </parameters>
     </task>
-	  <task name="EntityTypeProviderGenerator" assemblyFilename="SD.LLBLGen.Pro.LptParser.dll" taskPerformerClass="SD.LLBLGen.Pro.LptParser.DotNetTemplateEngine">
+	  <task name="EntityTypeProviderGenerator" assemblyFilename="SD.LLBLGen.Pro.TaskPerformers.dll" taskPerformerClass="SD.LLBLGen.Pro.TaskPerformers.CodeEmitter">
 		  <parameters>
 			  <parameter isOptional="false" name="destinationFolder" defaultValue="Custom"/>
 			  <parameter isOptional="false" name="filenameFormat" defaultValue="EntityTypeProvider.[extension]"/>

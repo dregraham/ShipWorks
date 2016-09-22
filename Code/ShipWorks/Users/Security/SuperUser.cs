@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -54,19 +54,19 @@ namespace ShipWorks.Users.Security
             adapter.IdentityInsert = false;
 
             // Now we have to make sure and reset our seeding back to normal, since the identity insert will have goofed it up
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 // If there are existing users, we use the current MAX - b\c the next seed given is 1000+ what we reseed to.
                 // Which is also why if there are no users, use just use the raw seed (like 2, not 1002, b\c the first seed will then be given as 1002)
-                SqlCommand getSeedCmd = SqlCommandProvider.Create(con, string.Format(@"
+                DbCommand getSeedCmd = DbCommandProvider.Create(con, string.Format(@"
                     SELECT COALESCE(MAX(UserID), {0})
                       FROM [User]
                       WHERE UserID != {1}", EntityUtility.GetEntitySeed(EntityType.UserEntity), UserEntity.SuperUserID));
                 long seedID = (long) getSeedCmd.ExecuteScalar();
 
-                SqlCommand cmd = SqlCommandProvider.Create(con);
+                DbCommand cmd = DbCommandProvider.Create(con);
                 cmd.CommandText = string.Format("DBCC CHECKIDENT ('{0}', RESEED, {1})", SqlAdapter.GetTableName(EntityType.UserEntity), seedID);
-                SqlCommandProvider.ExecuteNonQuery(cmd);
+                DbCommandProvider.ExecuteNonQuery(cmd);
             }
         }
 
