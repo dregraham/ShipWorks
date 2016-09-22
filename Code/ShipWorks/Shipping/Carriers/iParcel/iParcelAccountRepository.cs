@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
+    [Component]
+    [KeyedComponent(typeof(CarrierAccountRepositoryBase<IParcelAccountEntity, IIParcelAccountEntity>), ShipmentTypeCode.iParcel)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever<ICarrierAccount>), ShipmentTypeCode.iParcel)]
     public class iParcelAccountRepository : CarrierAccountRepositoryBase<IParcelAccountEntity, IIParcelAccountEntity>
     {
         /// <summary>

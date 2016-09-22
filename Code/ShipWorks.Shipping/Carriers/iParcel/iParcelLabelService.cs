@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -11,22 +12,26 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// Label service for the iParcel carrier
     /// </summary>
+    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.iParcel)]
     public class iParcelLabelService : ILabelService
     {
         private readonly ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository;
-        private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
         private readonly IOrderManager orderManager;
+        private readonly Func<ShipmentEntity, DataSet, iParcelDownloadedLabelData> createDownloadedLabelData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public iParcelLabelService(ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository, IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IOrderManager orderManager)
+        public iParcelLabelService(ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository,
+            IiParcelServiceGateway serviceGateway,
+            IOrderManager orderManager,
+            Func<ShipmentEntity, DataSet, iParcelDownloadedLabelData> createDownloadedLabelData)
         {
             this.accountRepository = accountRepository;
-            this.repository = repository;
             this.serviceGateway = serviceGateway;
             this.orderManager = orderManager;
+            this.createDownloadedLabelData = createDownloadedLabelData;
         }
 
         /// <summary>
@@ -34,36 +39,22 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
-            ProcessShipmentAndReturnResponse(shipment);
-
-            throw new NotImplementedException("Return a valid ILabelService");
-        }
-
-        /// <summary>
-        /// Process the shipment this is used for integration tests
-        /// </summary>
-        public DataSet ProcessShipmentAndReturnResponse(ShipmentEntity shipment)
-        {
             try
             {
                 MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
                 shipment.ActualLabelFormat = shipment.RequestedLabelFormat != (int) ThermalLanguage.None ?
-                    shipment.RequestedLabelFormat
-                    : (int?) null;
+                    shipment.RequestedLabelFormat :
+                    (int?) null;
 
-                IParcelAccountEntity iParcelAccount = accountRepository.GetAccount(shipment.IParcel.IParcelAccountID);
+                IIParcelAccountEntity iParcelAccount = accountRepository.GetAccountReadOnly(shipment.IParcel.IParcelAccountID);
                 iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
 
                 // i-parcel requires that we upload item information, so fetch the order and order items
                 orderManager.PopulateOrderDetails(shipment);
 
-                DataSet response = serviceGateway.SubmitShipment(credentials, shipment);
-
-                repository.SaveLabel(shipment, response);
-                repository.SaveTrackingInfoToEntity(shipment, response);
-
-                return response;
+                DataSet dataSet = serviceGateway.SubmitShipment(credentials, shipment);
+                return createDownloadedLabelData(shipment, dataSet);
             }
             catch (iParcelException ex)
             {

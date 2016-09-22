@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 {
     /// <summary>
     /// Base exception for all exceptions thrown by the i-Parcel integration.
-    /// </summary>    
+    /// </summary>
     [Serializable]
     public class iParcelException : Exception
     {
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Serialization constructor
         /// </summary>
-        protected iParcelException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+        protected iParcelException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
             base(serializationInfo, streamingContext)
         { }
     }

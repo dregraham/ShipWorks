@@ -2409,7 +2409,6 @@
       <DependentUpon>iParcelAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentials.cs" />
-    <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepository.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelException.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelOptionsControl.cs">
       <SubType>UserControl</SubType>
