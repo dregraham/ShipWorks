@@ -6,8 +6,9 @@ disable trigger OrderShipmentShipSenseStatusTrigger ON [Order];
 disable trigger OrderShipSenseRecognitionStatusTrigger ON [Order];
 GO
 UPDATE orderTable
-SET orderTable.RollupItemQuantity = (Select SUM(Quantity) from [OrderItem] oi WHERE orderTable.OrderID = oi.OrderID)
-From [Order] as orderTable;
+SET orderTable.RollupItemQuantity = ISNULL((SELECT SUM(Quantity) FROM [OrderItem] oi WHERE orderTable.OrderID = oi.OrderID), 0)
+FROM [Order] AS orderTable
+WHERE orderTable.RollupItemQuantity IS NULL
 GO
 enable trigger FilterDirtyOrder ON [Order];
 enable trigger OrderAuditTrigger ON [Order];
