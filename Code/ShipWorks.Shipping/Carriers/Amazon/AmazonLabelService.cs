@@ -8,7 +8,6 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
-using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -25,7 +24,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IEnumerable<IAmazonLabelEnforcer> labelEnforcers;
         private readonly IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest;
         private readonly IObjectReferenceManager objectReferenceManager;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -33,14 +31,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonLabelService(IDataResourceManager resourceManager,
             IEnumerable<IAmazonLabelEnforcer> labelEnforcers,
             IIndex<AmazonMwsApiCall, IAmazonShipmentRequest> amazonRequest,
-            IObjectReferenceManager objectReferenceManager,
-            Func<Type, ILog> createLogger)
+            IObjectReferenceManager objectReferenceManager)
         {
             this.resourceManager = resourceManager;
             this.labelEnforcers = labelEnforcers;
             this.amazonRequest = amazonRequest;
             this.objectReferenceManager = objectReferenceManager;
-            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -95,19 +91,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // If it's a PDF we need to convert it
             if (fileContents.FileType == "application/pdf")
             {
-                try
+                using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
                 {
-                    using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
-                    {
-                        resourceManager.CreateFromPdf(pdfBytes, shipmentID,
-                            i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
-                            SaveCroppedLabel);
-                    }
-                }
-                catch (ArgumentException ex)
-                {
-                    log.Error("Invalid label received from Amazon", ex);
-                    throw new ShippingException("An invalid label was received from Amazon", ex);
+                    resourceManager.CreateFromPdf(pdfBytes, shipmentID,
+                        i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
+                        SaveCroppedLabel);
                 }
             }
             else
