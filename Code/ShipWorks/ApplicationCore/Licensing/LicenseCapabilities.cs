@@ -423,14 +423,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 // Custom data sources is disabled. Add GenericFile to the list of stores that are not allowed.
                 forbiddenChannels.Add(StoreTypeCode.GenericFile);
-                forbiddenChannels.Add(StoreTypeCode.Odbc);
             }
 
-            // Generic module channel capability
+            // Generic module and ODBC channel capability
             if (!GetBoolValueFromNameValuePair("CustomDataSourcesAPI", capabilitiesNode))
             {
-                // Custom data sources API is disabled. Add GenericModule to the list of stores that are not allowed.
+                // Custom data sources API is disabled. Add GenericModule and ODBC to the list of stores that are not allowed.
                 forbiddenChannels.Add(StoreTypeCode.GenericModule);
+                forbiddenChannels.Add(StoreTypeCode.Odbc);
             }
 
             // Channel and shipment limits
