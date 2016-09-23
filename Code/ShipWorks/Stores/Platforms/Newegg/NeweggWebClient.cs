@@ -386,11 +386,11 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Usps:
                     PostalServiceType uspsType = (PostalServiceType)shipmentEntity.Postal.Service;
-                    if (uspsType == PostalServiceType.GlobalPostEconomy)
+                    if (uspsType == PostalServiceType.GlobalPostEconomy || uspsType == PostalServiceType.GlobalPostSmartSaverEconomy)
                     {
                         uspsType = PostalServiceType.InternationalFirst;
                     }
-                    if (uspsType == PostalServiceType.GlobalPostPriority)
+                    if (uspsType == PostalServiceType.GlobalPostPriority || uspsType == PostalServiceType.GlobalPostSmartSaverPriority)
                     {
                         uspsType = PostalServiceType.InternationalPriority;
                     }
