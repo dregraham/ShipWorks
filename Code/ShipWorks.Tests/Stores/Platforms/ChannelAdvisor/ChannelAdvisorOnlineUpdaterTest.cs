@@ -126,7 +126,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsGem_WhenUspsAndGlobalPostPriorityServiceUsed()
+        public void GetShipmentClassCode_ReturnsIPriority_WhenUspsAndGlobalPostPriorityServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void GetShipmentClassCode_ReturnsGem_WhenUspsAndGlobalPostSmartSaverPriorityServiceUsed()
+        public void GetShipmentClassCode_ReturnsIPrioirty_WhenUspsAndGlobalPostSmartSaverPriorityServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
