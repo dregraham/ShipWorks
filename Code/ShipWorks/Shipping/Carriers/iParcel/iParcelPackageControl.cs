@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared;
@@ -94,10 +93,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Clear previous rows
             packagesGrid.Rows.Clear();
             selectedRows.Clear();
-
-            List<DimensionsAdapter> newDims = new List<DimensionsAdapter>();
-            shipments.SelectMany(s => s.Ups.Packages).ToList().ForEach(p => newDims.Add(new DimensionsAdapter(p)));
-            dimensionsControl.LoadDimensions(newDims);
 
             List<List<IParcelPackageEntity>> packageBuckets = new List<List<IParcelPackageEntity>>();
 

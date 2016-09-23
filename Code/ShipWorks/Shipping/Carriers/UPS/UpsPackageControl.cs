@@ -131,10 +131,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             LoadPackagingTypes(shipments);
 
-            List<DimensionsAdapter> newDims = new List<DimensionsAdapter>();
-            shipments.SelectMany(s => s.Ups.Packages).ToList().ForEach(p => newDims.Add(new DimensionsAdapter(p)));
-            dimensionsControl.LoadDimensions(newDims);
-
             List<List<UpsPackageEntity>> packageBuckets = new List<List<UpsPackageEntity>>();
 
             // Load the shipment data
