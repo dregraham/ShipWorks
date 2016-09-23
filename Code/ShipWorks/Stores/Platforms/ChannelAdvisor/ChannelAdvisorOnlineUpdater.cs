@@ -356,9 +356,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "FIRSTCLASS";
                 case PostalServiceType.InternationalExpress:
                     return "GEM";
+                case PostalServiceType.GlobalPostSmartSaverEconomy:
                 case PostalServiceType.GlobalPostEconomy:
                 case PostalServiceType.InternationalFirst:
                     return "IFIRSTCLASS";
+                case PostalServiceType.GlobalPostSmartSaverPriority:
                 case PostalServiceType.GlobalPostPriority:
                 case PostalServiceType.InternationalPriority:
                     return "IPRIORITY";

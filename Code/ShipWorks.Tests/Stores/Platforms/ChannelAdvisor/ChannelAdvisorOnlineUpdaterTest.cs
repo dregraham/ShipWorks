@@ -114,6 +114,18 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         }
 
         [Fact]
+        public void GetShipmentClassCode_ReturnsInternationalFirst_WhenUspsAndGlobalPostSmartSaverEconomyServiceUsed()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Usps);
+
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverEconomy;
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("IFIRSTCLASS", code);
+        }
+
+        [Fact]
         public void GetShipmentClassCode_ReturnsGem_WhenUspsAndGlobalPostPriorityServiceUsed()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
@@ -124,7 +136,19 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             Assert.Equal("IPRIORITY", code);
         }
-        
+
+        [Fact]
+        public void GetShipmentClassCode_ReturnsGem_WhenUspsAndGlobalPostSmartSaverPriorityServiceUsed()
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.Usps);
+
+            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverPriority;
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal("IPRIORITY", code);
+        }
+
         [Fact]
         public void GetShipmentClassCode_ReturnsMi_WhenUpsAndMiServiceUsed()
         {

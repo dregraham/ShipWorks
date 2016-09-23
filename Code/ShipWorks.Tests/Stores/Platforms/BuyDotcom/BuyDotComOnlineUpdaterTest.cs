@@ -1,13 +1,12 @@
-﻿using System;
-using Xunit;
-using ShipWorks.Stores.Platforms.BuyDotCom;
-using ShipWorks.Data.Model.EntityClasses;
-
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
+using System;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.BuyDotcom
 {
@@ -91,6 +90,20 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
             postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostPriority;
+
+            shipmentEntity.Postal = postalShipmentEntity;
+            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
+
+            BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
+
+            Assert.Equal(BuyDotComTrackingType.Usps, buyDotComTrackingType);
+        }
+
+        [Fact]
+        public void GetTrackingType_ReturnsUsps_WhenUspsAndGlobalPostSmartSaverPriorityServiceUsed()
+        {
+            postalShipmentEntity.Usps = uspsShipmentEntity;
+            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverPriority;
 
             shipmentEntity.Postal = postalShipmentEntity;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
