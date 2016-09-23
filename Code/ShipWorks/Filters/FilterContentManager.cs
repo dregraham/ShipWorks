@@ -443,7 +443,7 @@ namespace ShipWorks.Filters
                 new object[] { });
 
             // Wait for it to finish.  It's ok if it doesnt.
-            calculatingQuickFilterEvent.WaitOne(TimeSpan.Zero, false);
+            calculatingQuickFilterEvent.WaitOne();
         }
 
         /// <summary>
