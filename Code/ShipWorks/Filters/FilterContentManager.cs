@@ -423,13 +423,6 @@ namespace ShipWorks.Filters
         /// </summary>
         private static void InitiateQuickFilterCalculation()
         {
-            // Since we need to register an operation with the ApplicationBusyManager, we've got to start our work from the UI thread.
-            if (Program.ExecutionMode.IsUIDisplayed && Program.MainForm.InvokeRequired)
-            {
-                Program.MainForm.BeginInvoke((MethodInvoker) InitiateQuickFilterCalculation);
-                return;
-            }
-
             // If we've entered a connection sensitive scope since we were BeginInvoke'd, then this will just have to wait for later
             if (ConnectionSensitiveScope.IsActive)
             {
@@ -442,18 +435,12 @@ namespace ShipWorks.Filters
                 return;
             }
 
-            ApplicationBusyToken operationToken;
-            if (!ApplicationBusyManager.TryOperationStarting("Updating Quick Filters", out operationToken))
-            {
-                return;
-            }
-
             calculatingQuickFilterEvent.Reset();
 
             // Queue the work to a background thread
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InitiateQuickFilterCalculationThread),
-                new object[] { operationToken});
+                new object[] { });
 
             // Wait for it to finish.  It's ok if it doesnt.
             calculatingQuickFilterEvent.WaitOne(TimeSpan.Zero, false);
@@ -464,9 +451,6 @@ namespace ShipWorks.Filters
         /// </summary>
         private static void InitiateQuickFilterCalculationThread(object state)
         {
-            object[] castedState = (object[])state;
-            ApplicationBusyToken token = (ApplicationBusyToken)castedState[0];
-
             // Get a connection that will not timeout
             using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
@@ -493,8 +477,6 @@ namespace ShipWorks.Filters
             }
 
             calculatingQuickFilterEvent.Set();
-
-            ApplicationBusyManager.OperationComplete(token);
         }
 
         /// <summary>
