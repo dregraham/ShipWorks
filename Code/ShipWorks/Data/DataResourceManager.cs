@@ -156,56 +156,56 @@ namespace ShipWorks.Data
 
             lock (resourceLock)
             {
-                using (new LoggedStopwatch(log, $"DataResourceManager.EnsureResourceData - comitted: "))
+                using (SqlAdapter adapter = new SqlAdapter(false))
                 {
-                    using (SqlAdapter adapter = new SqlAdapter(false))
+                    SHA256 sha = SHA256.Create();
+                    byte[] checksum = sha.ComputeHash(data);
+
+                    // See if we can find an existing resource
+                    ResourceCollection resources = new ResourceCollection();
+                    adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object)checksum), 1, null, null, excludeDataFields);
+
+                    // The resource already exists, just use it
+                    if (resources.Count > 0)
                     {
-                        SHA256 sha = SHA256.Create();
-                        byte[] checksum = sha.ComputeHash(data);
+                        resourceID = resources[0].ResourceID;
+                        resourceFilename = resources[0].Filename;
 
-                        // See if we can find an existing resource
-                        ResourceCollection resources = new ResourceCollection();
-                        adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object)checksum), 1, null, null, excludeDataFields);
+                        log.InfoFormat("Found existing resource {0}", resourceFilename);
+                    }
+                    else
+                    {
+                        // If "label" is a file path, use it's extension for our resource file extension.  Otherwise default to our own.
+                        string fileExtension = (!string.IsNullOrEmpty(label) && Path.HasExtension(label)) ? Path.GetExtension(label).ToLowerInvariant() : ".swr";
 
-                        // The resource already exists, just use it
-                        if (resources.Count > 0)
+                        // Find an available filename
+                        while (true)
                         {
-                            resourceID = resources[0].ResourceID;
-                            resourceFilename = resources[0].Filename;
+                            resourceFilename = string.Format("{0}{1}",
+                                Guid.NewGuid().ToString("D").Substring(0, 8),
+                                fileExtension);
 
-                            log.InfoFormat("Found existing resource {0}", resourceFilename);
-                        }
-                        else
-                        {
-                            // If "label" is a file path, use it's extension for our resource file extension.  Otherwise default to our own.
-                            string fileExtension = (!string.IsNullOrEmpty(label) && Path.HasExtension(label)) ? Path.GetExtension(label).ToLowerInvariant() : ".swr";
-
-                            // Find an available filename
-                            while (true)
+                            if (ResourceCollection.GetCount(adapter, ResourceFields.Filename == resourceFilename) == 0)
                             {
-                                resourceFilename = string.Format("{0}{1}",
-                                    Guid.NewGuid().ToString("D").Substring(0, 8),
-                                    fileExtension);
-
-                                if (ResourceCollection.GetCount(adapter, ResourceFields.Filename == resourceFilename) == 0)
-                                {
-                                    break;
-                                }
+                                break;
                             }
+                        }
 
-                            ResourceEntity resource = new ResourceEntity();
-                            resource.Data = compress ? GZipUtility.Compress(data) : data;
-                            resource.Checksum = checksum;
-                            resource.Compressed = compress;
-                            resource.Filename = resourceFilename;
+                        ResourceEntity resource = new ResourceEntity();
+                        resource.Data = compress ? GZipUtility.Compress(data) : data;
+                        resource.Checksum = checksum;
+                        resource.Compressed = compress;
+                        resource.Filename = resourceFilename;
 
+                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - comitted: "))
+                        {
                             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                             {
                                 // Don't refetch b\c we don't want to pull back the Data
                                 adapter.SaveEntity(resource, false);
 
                                 // Get the resource id
-                                resourceID = (long)resource.GetCurrentFieldValue((int)ResourceFieldIndex.ResourceID);
+                                resourceID = (long) resource.GetCurrentFieldValue((int) ResourceFieldIndex.ResourceID);
 
                                 log.InfoFormat("Created new resource {0}", resourceFilename);
                                 scope.Complete();
