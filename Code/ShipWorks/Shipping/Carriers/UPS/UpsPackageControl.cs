@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             LoadPackagingTypes(shipments);
             dimensionsControl.LoadDimensions(
-                shipments.SelectMany(s => s.Ups.Packages).Select(p => new DimensionsAdapter(p)).ToList());
+                shipments.SelectMany(s => s.Ups.Packages).Select(p => new DimensionsAdapter(p)));
 
             List<List<UpsPackageEntity>> packageBuckets = new List<List<UpsPackageEntity>>();
 
