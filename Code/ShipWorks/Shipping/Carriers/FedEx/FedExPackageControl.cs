@@ -105,6 +105,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packagesGrid.Rows.Clear();
             selectedRows.Clear();
 
+            dimensionsControl.LoadDimensions(
+                shipments.SelectMany(s => s.FedEx.Packages).Select(p => new DimensionsAdapter(p)));
+
             List<List<FedExPackageEntity>> packageBuckets = new List<List<FedExPackageEntity>>();
 
             // Load the shipment data
