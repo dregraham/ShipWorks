@@ -44,8 +44,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException("ShipWorks encountered an error attempting to process the shipment.", templateTokenException);
             }
-
-            throw new NotImplementedException("Return a valid ILabelService");
         }
 
         /// <summary>

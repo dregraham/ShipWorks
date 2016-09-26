@@ -58,8 +58,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException(ex.Message, ex);
             }
-
-            throw new NotImplementedException("Return a valid ILabelService");
         }
     }
 }
