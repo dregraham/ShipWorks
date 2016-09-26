@@ -7,6 +7,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using System.Diagnostics;
+using System.Transactions;
 using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -96,72 +97,68 @@ namespace ShipWorks.Templates.Printing
             TemplateEntity template = templateResult.XPathSource.Template;
             PrintResultEntity result = null;
 
-            using (new LoggedStopwatch(log, $"PrintResultLogger.LogPrintResultContent - comitted: "))
+            using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                result = CreatePrintResultEntry(settings, relatedEntityID, contextEntityID, jobIdentifier, template);
+
+                // Save it now, b\c we need the ID to use for the resource manager
+                adapter.SaveAndRefetch(result);
+
+                try
                 {
-                    result = CreatePrintResultEntry(settings, relatedEntityID, contextEntityID, jobIdentifier, template);
+                    string printContent = templateResult.ReadResult();
 
-                    // Save it now, b\c we need the ID to use for the resource manager
-                    adapter.SaveAndRefetch(result);
-                }
-            }
-
-            try
-            {
-                string printContent = templateResult.ReadResult();
-
-                // If its html content, then process all the images
-                if (template.OutputFormat == (int)TemplateOutputFormat.Html)
-                {
-                    TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor();
-                    imageProcessor.LocalImages = true;
-                    imageProcessor.OnlineImages = false;
-
-                    // Process all the images in the document
-                    printContent = imageProcessor.Process(printContent, (HtmlAttribute attribute, Uri srcUri, string imageName) =>
+                    // If its html content, then process all the images
+                    if (template.OutputFormat == (int)TemplateOutputFormat.Html)
                     {
-                        try
+                        TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor();
+                        imageProcessor.LocalImages = true;
+                        imageProcessor.OnlineImages = false;
+
+                        // Process all the images in the document
+                        printContent = imageProcessor.Process(printContent, (HtmlAttribute attribute, Uri srcUri, string imageName) =>
                         {
-                            DataResourceReference resource = DataResourceManager.CreateFromFile(srcUri.LocalPath, result.PrintResultID);
+                            try
+                            {
+                                DataResourceReference resource = DataResourceManager.CreateFromFile(srcUri.LocalPath, result.PrintResultID);
 
-                            // Update the attribute with the new filename
-                            attribute.Value = resource.Filename;
+                                // Update the attribute with the new filename
+                                attribute.Value = resource.Filename;
 
-                            HtmlNode img = attribute.OwnerNode;
+                                HtmlNode img = attribute.OwnerNode;
 
-                            // Add the shipworks special attributes for template resources
-                            img.Attributes.Append("importedFrom", imageName);
-                        }
-                        catch (Exception ex)
-                        {
-                            // We are here b\c a copy operation failed.  Missing one file does
-                            // not fail the whole process.  Lots could go wrong, so for now I am having
-                            // it just catch the general Exception case.
-                            log.Error(string.Format("Error localizing URI '{0}'.", srcUri), ex);
-                        }
-                    });
+                                // Add the shipworks special attributes for template resources
+                                img.Attributes.Append("importedFrom", imageName);
+                            }
+                            catch (Exception ex)
+                            {
+                                // We are here b\c a copy operation failed.  Missing one file does
+                                // not fail the whole process.  Lots could go wrong, so for now I am having
+                                // it just catch the general Exception case.
+                                log.Error(string.Format("Error localizing URI '{0}'.", srcUri), ex);
+                            }
+                        });
+                    }
+
+                    // Save the print content as a resource as well
+                    DataResourceReference contentResource = DataResourceManager.CreateFromText(printContent, result.PrintResultID);
+                    result.ContentResourceID = contentResource.ReferenceID;
+
+                    using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                    {
+                        adapter.SaveEntity(result);
+
+                        adapter.Commit();
+                    }
                 }
-
-                // Save the print content as a resource as well
-                DataResourceReference contentResource = DataResourceManager.CreateFromText(printContent, result.PrintResultID);
-                result.ContentResourceID = contentResource.ReferenceID;
-
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                catch (Exception ex)
                 {
-                    adapter.SaveEntity(result);
+                    log.Error(ex.Message);
 
-                    adapter.Commit();
+                    SqlAdapter.Default.DeleteEntity(result);
+
+                    throw;
                 }
-
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex.Message);
-
-                SqlAdapter.Default.DeleteEntity(result);
-
-                throw;
             }
 
         }
