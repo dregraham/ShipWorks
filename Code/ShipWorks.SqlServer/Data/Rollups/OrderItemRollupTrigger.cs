@@ -34,7 +34,7 @@ public partial class Triggers
         rollupColumns.Add(new RollupColumn { SourceColumn = "Code",        TargetColumn = "RollupItemCode",        Method = RollupMethod.SingleOrNull });
         rollupColumns.Add(new RollupColumn { SourceColumn = "SKU",         TargetColumn = "RollupItemSKU",         Method = RollupMethod.SingleOrNull });
         rollupColumns.Add(new RollupColumn { SourceColumn = "Location",    TargetColumn = "RollupItemLocation",    Method = RollupMethod.SingleOrNull });
-        rollupColumns.Add(new RollupColumn { SourceColumn = "Quantity",    TargetColumn = "RollupItemQuantity",    Method = RollupMethod.SingleOrNull });
+        rollupColumns.Add(new RollupColumn { SourceColumn = "Quantity",    TargetColumn = "RollupItemQuantity",    Method = RollupMethod.Sum});
         rollupColumns.Add(new RollupColumn { SourceColumn = "TotalWeight", TargetColumn = "RollupItemTotalWeight", Method = RollupMethod.Sum,  SourceDependencies = new List<string> { "Weight", "Quantity" } });
 
         RollupUtility.UpdateRollups(parentTable, parentKey, childCountColumn, childTable, rollupColumns);
