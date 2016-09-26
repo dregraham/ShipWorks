@@ -14,6 +14,7 @@ using ShipWorks.Users;
 using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Templates.Printing
@@ -93,11 +94,82 @@ namespace ShipWorks.Templates.Printing
         private static void LogPrintResultContent(TemplateResult templateResult, PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier)
         {
             TemplateEntity template = templateResult.XPathSource.Template;
+            PrintResultEntity result = null;
 
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (new LoggedStopwatch(log, $"PrintResultLogger.LogPrintResultContent - comitted: "))
             {
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    result = CreatePrintResultEntry(settings, relatedEntityID, contextEntityID, jobIdentifier, template);
+
+                    // Save it now, b\c we need the ID to use for the resource manager
+                    adapter.SaveAndRefetch(result);
+                }
+            }
+
+            try
+            {
+                string printContent = templateResult.ReadResult();
+
+                // If its html content, then process all the images
+                if (template.OutputFormat == (int)TemplateOutputFormat.Html)
+                {
+                    TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor();
+                    imageProcessor.LocalImages = true;
+                    imageProcessor.OnlineImages = false;
+
+                    // Process all the images in the document
+                    printContent = imageProcessor.Process(printContent, (HtmlAttribute attribute, Uri srcUri, string imageName) =>
+                    {
+                        try
+                        {
+                            DataResourceReference resource = DataResourceManager.CreateFromFile(srcUri.LocalPath, result.PrintResultID);
+
+                            // Update the attribute with the new filename
+                            attribute.Value = resource.Filename;
+
+                            HtmlNode img = attribute.OwnerNode;
+
+                            // Add the shipworks special attributes for template resources
+                            img.Attributes.Append("importedFrom", imageName);
+                        }
+                        catch (Exception ex)
+                        {
+                            // We are here b\c a copy operation failed.  Missing one file does
+                            // not fail the whole process.  Lots could go wrong, so for now I am having
+                            // it just catch the general Exception case.
+                            log.Error(string.Format("Error localizing URI '{0}'.", srcUri), ex);
+                        }
+                    });
+                }
+
+                // Save the print content as a resource as well
+                DataResourceReference contentResource = DataResourceManager.CreateFromText(printContent, result.PrintResultID);
+                result.ContentResourceID = contentResource.ReferenceID;
+
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    adapter.SaveEntity(result);
+
+                    adapter.Commit();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+
+                SqlAdapter.Default.DeleteEntity(result);
+
+                throw;
+            }
+
+        }
+
+        public static PrintResultEntity CreatePrintResultEntry(PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier, TemplateEntity template)
+        {
                 PrintResultEntity result = new PrintResultEntity();
-                
+
                 // Placeholder until we get the real ID
                 result.ContentResourceID = -1;
 
@@ -143,52 +215,16 @@ namespace ShipWorks.Templates.Printing
                     result.PageMarginTop = 0;
                     result.PageMarginBottom = 0;
                 }
-
+            return result;
                 // Save it now, b\c we need the ID to use for the resource manager
-                adapter.SaveAndRefetch(result);
-
-                string printContent = templateResult.ReadResult();
-
                 // If its html content, then process all the images
-                if (template.OutputFormat == (int) TemplateOutputFormat.Html)
-                {
-                    TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor();
-                    imageProcessor.LocalImages = true;
-                    imageProcessor.OnlineImages = false;
-
                     // Process all the images in the document
-                    printContent = imageProcessor.Process(printContent, (HtmlAttribute attribute, Uri srcUri, string imageName) =>
-                    {
-                        try
-                        {
-                            DataResourceReference resource = DataResourceManager.CreateFromFile(srcUri.LocalPath, result.PrintResultID);
-
                             // Update the attribute with the new filename
-                            attribute.Value = resource.Filename;
-
-                            HtmlNode img = attribute.OwnerNode;
-
                             // Add the shipworks special attributes for template resources
-                            img.Attributes.Append("importedFrom", imageName);
-                        }
-                        catch (Exception ex)
-                        {
                             // We are here b\c a copy operation failed.  Missing one file does
                             // not fail the whole process.  Lots could go wrong, so for now I am having
                             // it just catch the general Exception case.
-                            log.Error(string.Format("Error localizing URI '{0}'.", srcUri), ex);
-                        }
-                    });
-                }
-
                 // Save the print content as a resource as well
-                DataResourceReference contentResource = DataResourceManager.CreateFromText(printContent, result.PrintResultID);
-                result.ContentResourceID = contentResource.ReferenceID;
-
-                adapter.SaveAndRefetch(result);
-
-                adapter.Commit();
-            }
         }
 
         /// <summary>
