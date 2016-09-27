@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         public void LicenseCapabilities_DisablesShipmentType_WhenResponseContainsDisabledRestriction()
         {
             string xmlWithEndiciaDisabledRestrictions = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfUsers</Name><Value>-1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomInvoice </Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomPackingSlips</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomEmail</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSources</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSourcesAPI</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomerManagement</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>RateCompare</Name><Value>no</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><BillingEndDate>2016-02-26T20:51:48</BillingEndDate><IsInTrial>false</IsInTrial><PendingUserCapabilities /><RecurlyCustomerStatus>Current</RecurlyCustomerStatus><CustomerStatus><Key /><Machine /><Active>true</Active><Cancelled>false</Cancelled><DisabledReason /><Valid>true</Valid><CustomerID>31039</CustomerID><EndiciaDhlEnabled status='1' /><EndiciaInsuranceEnabled status='1' /><UpsSurePostEnabled status='1' /><EndiciaConsolidator status='1'>test</EndiciaConsolidator><EndiciaScanBasedReturns status='1' /><StampsAscendiaEnabled status='1'>1</StampsAscendiaEnabled><StampsDhlConsolidatorEnabled status='1'>1</StampsDhlConsolidatorEnabled><StampsGlobegisticsEnabled status='1'>1</StampsGlobegisticsEnabled><StampsIbcEnabled status='1'>1</StampsIbcEnabled><StampsRrDonnelleyEnabled status='1'>1</StampsRrDonnelleyEnabled><StampsInsuranceEnabled status='1'>1</StampsInsuranceEnabled><StampsDhlEnabled status='1'>1</StampsDhlEnabled><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Restriction>Disabled</Restriction></ShipmentType><ShipmentType TypeCode='2'><Restriction>Disabled</Restriction></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";
-            
+
             XmlDocument xmlResponse = new XmlDocument();
             xmlResponse.LoadXml(xmlWithEndiciaDisabledRestrictions);
 
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSources_WhenResponseContainsCustomDataSources()
+        public void LicenseCapabilities_GenericFileIsAllowed_WhenResponseContainsCustomDataSources()
         {
             string xmlWithCustomDataSources = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSources</Name><Value>yes</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><CustomerStatus><Valid>true</Valid></CustomerStatus></LoginActivityResponse>";
 
@@ -161,11 +161,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
-            Assert.Equal(true, licenseCapabilities.CustomDataSources);
+            Assert.Equal(true, licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericFile));
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSources_WhenResponseDoesNotContainsCustomDataSources()
+        public void LicenseCapabilities_GenericFileIsNotAllowed_WhenResponseDoesNotContainsCustomDataSources()
         {
             string xmlWithCustomDataSources = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfUsers</Name><Value>-1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomInvoice </Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomPackingSlips</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomEmail</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSourcesAPI</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomerManagement</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>RateCompare</Name><Value>no</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><BillingEndDate>2016-02-26T20:51:48</BillingEndDate><IsInTrial>false</IsInTrial><PendingUserCapabilities /><RecurlyCustomerStatus>Current</RecurlyCustomerStatus><CustomerStatus><Key /><Machine /><Active>true</Active><Cancelled>false</Cancelled><DisabledReason /><Valid>true</Valid><CustomerID>31039</CustomerID><EndiciaDhlEnabled status='1' /><EndiciaInsuranceEnabled status='1' /><UpsSurePostEnabled status='1' /><EndiciaConsolidator status='1'>test</EndiciaConsolidator><EndiciaScanBasedReturns status='1' /><StampsAscendiaEnabled status='1'>1</StampsAscendiaEnabled><StampsDhlConsolidatorEnabled status='1'>1</StampsDhlConsolidatorEnabled><StampsGlobegisticsEnabled status='1'>1</StampsGlobegisticsEnabled><StampsIbcEnabled status='1'>1</StampsIbcEnabled><StampsRrDonnelleyEnabled status='1'>1</StampsRrDonnelleyEnabled><StampsInsuranceEnabled status='1'>1</StampsInsuranceEnabled><StampsDhlEnabled status='1'>1</StampsDhlEnabled><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Restriction>Disabled</Restriction></ShipmentType><ShipmentType TypeCode='2'><Restriction>AccountRegistration</Restriction><Restriction>Purchasing</Restriction><Restriction>Processing</Restriction></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";
 
@@ -174,11 +174,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
-            Assert.Equal(false, licenseCapabilities.CustomDataSources);
+            Assert.Equal(false, licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericFile));
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSourcesApi_WhenResponseDoesContainsCustomDataSourcesApi()
+        public void LicenseCapabilities_GenericModuleIsAllowed_WhenResponseDoesContainsCustomDataSourcesApi()
         {
             string xmlWithCustomDataSources = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfUsers</Name><Value>-1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomInvoice </Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomPackingSlips</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomEmail</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSourcesAPI</Name><Value>yes</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomerManagement</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>RateCompare</Name><Value>no</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><BillingEndDate>2016-02-26T20:51:48</BillingEndDate><IsInTrial>false</IsInTrial><PendingUserCapabilities /><RecurlyCustomerStatus>Current</RecurlyCustomerStatus><CustomerStatus><Key /><Machine /><Active>true</Active><Cancelled>false</Cancelled><DisabledReason /><Valid>true</Valid><CustomerID>31039</CustomerID><EndiciaDhlEnabled status='1' /><EndiciaInsuranceEnabled status='1' /><UpsSurePostEnabled status='1' /><EndiciaConsolidator status='1'>test</EndiciaConsolidator><EndiciaScanBasedReturns status='1' /><StampsAscendiaEnabled status='1'>1</StampsAscendiaEnabled><StampsDhlConsolidatorEnabled status='1'>1</StampsDhlConsolidatorEnabled><StampsGlobegisticsEnabled status='1'>1</StampsGlobegisticsEnabled><StampsIbcEnabled status='1'>1</StampsIbcEnabled><StampsRrDonnelleyEnabled status='1'>1</StampsRrDonnelleyEnabled><StampsInsuranceEnabled status='1'>1</StampsInsuranceEnabled><StampsDhlEnabled status='1'>1</StampsDhlEnabled><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Restriction>Disabled</Restriction></ShipmentType><ShipmentType TypeCode='2'><Restriction>AccountRegistration</Restriction><Restriction>Purchasing</Restriction><Restriction>Processing</Restriction></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";
 
@@ -191,7 +191,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSourcesApi_WhenResponseDoesNotContainsCustomDataSourcesApi()
+        public void LicenseCapabilities_GenericModuleIsNotAllowed_WhenResponseDoesNotContainsCustomDataSourcesApi()
         {
             string xmlWithCustomDataSources = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfUsers</Name><Value>-1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomInvoice </Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomPackingSlips</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomEmail</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomerManagement</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>RateCompare</Name><Value>no</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><BillingEndDate>2016-02-26T20:51:48</BillingEndDate><IsInTrial>false</IsInTrial><PendingUserCapabilities /><RecurlyCustomerStatus>Current</RecurlyCustomerStatus><CustomerStatus><Key /><Machine /><Active>true</Active><Cancelled>false</Cancelled><DisabledReason /><Valid>true</Valid><CustomerID>31039</CustomerID><EndiciaDhlEnabled status='1' /><EndiciaInsuranceEnabled status='1' /><UpsSurePostEnabled status='1' /><EndiciaConsolidator status='1'>test</EndiciaConsolidator><EndiciaScanBasedReturns status='1' /><StampsAscendiaEnabled status='1'>1</StampsAscendiaEnabled><StampsDhlConsolidatorEnabled status='1'>1</StampsDhlConsolidatorEnabled><StampsGlobegisticsEnabled status='1'>1</StampsGlobegisticsEnabled><StampsIbcEnabled status='1'>1</StampsIbcEnabled><StampsRrDonnelleyEnabled status='1'>1</StampsRrDonnelleyEnabled><StampsInsuranceEnabled status='1'>1</StampsInsuranceEnabled><StampsDhlEnabled status='1'>1</StampsDhlEnabled><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Restriction>Disabled</Restriction></ShipmentType><ShipmentType TypeCode='2'><Restriction>AccountRegistration</Restriction><Restriction>Purchasing</Restriction><Restriction>Processing</Restriction></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";
 
@@ -201,6 +201,32 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
             Assert.Equal(false, licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericModule));
+        }
+
+        [Fact]
+        public void LicenseCapabilities_OdbcIsAllowed_WhenResponseDoesContainsCustomDataSourcesApi()
+        {
+            string xmlWithCustomDataSources = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfUsers</Name><Value>-1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomInvoice </Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomPackingSlips</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomEmail</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomDataSourcesAPI</Name><Value>yes</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomerManagement</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>RateCompare</Name><Value>no</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><BillingEndDate>2016-02-26T20:51:48</BillingEndDate><IsInTrial>false</IsInTrial><PendingUserCapabilities /><RecurlyCustomerStatus>Current</RecurlyCustomerStatus><CustomerStatus><Key /><Machine /><Active>true</Active><Cancelled>false</Cancelled><DisabledReason /><Valid>true</Valid><CustomerID>31039</CustomerID><EndiciaDhlEnabled status='1' /><EndiciaInsuranceEnabled status='1' /><UpsSurePostEnabled status='1' /><EndiciaConsolidator status='1'>test</EndiciaConsolidator><EndiciaScanBasedReturns status='1' /><StampsAscendiaEnabled status='1'>1</StampsAscendiaEnabled><StampsDhlConsolidatorEnabled status='1'>1</StampsDhlConsolidatorEnabled><StampsGlobegisticsEnabled status='1'>1</StampsGlobegisticsEnabled><StampsIbcEnabled status='1'>1</StampsIbcEnabled><StampsRrDonnelleyEnabled status='1'>1</StampsRrDonnelleyEnabled><StampsInsuranceEnabled status='1'>1</StampsInsuranceEnabled><StampsDhlEnabled status='1'>1</StampsDhlEnabled><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Restriction>Disabled</Restriction></ShipmentType><ShipmentType TypeCode='2'><Restriction>AccountRegistration</Restriction><Restriction>Purchasing</Restriction><Restriction>Processing</Restriction></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";
+
+            XmlDocument xmlResponse = new XmlDocument();
+            xmlResponse.LoadXml(xmlWithCustomDataSources);
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.Equal(true, licenseCapabilities.IsChannelAllowed(StoreTypeCode.Odbc));
+        }
+
+        [Fact]
+        public void LicenseCapabilities_OdbcIsNotAllowed_WhenResponseDoesNotContainsCustomDataSourcesApi()
+        {
+            string xmlWithCustomDataSources = "<?xml version='1.0'?><LoginActivityResponse xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><UserCapabilities><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfShipments</Name><Value>600</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfChannels</Name><Value>1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>NumberOfUsers</Name><Value>-1</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomInvoice </Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomPackingSlips</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomEmail</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>CustomerManagement</Name><Value>no</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'><Name>RateCompare</Name><Value>no</Value></NameValuePair></UserCapabilities><UserLevels><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfChannels</Name><Value>2</Value></NameValuePair><NameValuePair xmlns='http://ShipWorks.com/UserLevelsV1.xsd'><Name>NumberOfShipments</Name><Value>0</Value></NameValuePair></UserLevels><BillingEndDate>2016-02-26T20:51:48</BillingEndDate><IsInTrial>false</IsInTrial><PendingUserCapabilities /><RecurlyCustomerStatus>Current</RecurlyCustomerStatus><CustomerStatus><Key /><Machine /><Active>true</Active><Cancelled>false</Cancelled><DisabledReason /><Valid>true</Valid><CustomerID>31039</CustomerID><EndiciaDhlEnabled status='1' /><EndiciaInsuranceEnabled status='1' /><UpsSurePostEnabled status='1' /><EndiciaConsolidator status='1'>test</EndiciaConsolidator><EndiciaScanBasedReturns status='1' /><StampsAscendiaEnabled status='1'>1</StampsAscendiaEnabled><StampsDhlConsolidatorEnabled status='1'>1</StampsDhlConsolidatorEnabled><StampsGlobegisticsEnabled status='1'>1</StampsGlobegisticsEnabled><StampsIbcEnabled status='1'>1</StampsIbcEnabled><StampsRrDonnelleyEnabled status='1'>1</StampsRrDonnelleyEnabled><StampsInsuranceEnabled status='1'>1</StampsInsuranceEnabled><StampsDhlEnabled status='1'>1</StampsDhlEnabled><ShipmentTypeFunctionality><ShipmentType TypeCode='14'><Restriction>Disabled</Restriction></ShipmentType><ShipmentType TypeCode='2'><Restriction>AccountRegistration</Restriction><Restriction>Purchasing</Restriction><Restriction>Processing</Restriction></ShipmentType></ShipmentTypeFunctionality></CustomerStatus></LoginActivityResponse>";
+
+            XmlDocument xmlResponse = new XmlDocument();
+            xmlResponse.LoadXml(xmlWithCustomDataSources);
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.Equal(false, licenseCapabilities.IsChannelAllowed(StoreTypeCode.Odbc));
         }
 
         [Fact]
@@ -597,16 +623,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSources_FromPendingCapabilities_WhenEnterprisePlanIsPending()
-        {
-            XmlDocument xmlResponse = LoadPlanWithPendingEnterpriseCapabilities();
-
-            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
-
-            Assert.Equal(true, licenseCapabilities.CustomDataSources);
-        }
-
-        [Fact]
         public void LicenseCapabilities_GenericFilesAllowed_WhenEnterprisePlanIsPending()
         {
             XmlDocument xmlResponse = LoadPlanWithPendingEnterpriseCapabilities();
@@ -624,6 +640,16 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
             Assert.True(licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericModule));
+        }
+
+        [Fact]
+        public void LicenseCapabilities_OdbcIsAllowed_WhenEnterprisePlanIsPending()
+        {
+            XmlDocument xmlResponse = LoadPlanWithPendingEnterpriseCapabilities();
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.True(licenseCapabilities.IsChannelAllowed(StoreTypeCode.Odbc));
         }
 
         [Fact]
@@ -677,16 +703,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSources_FromCurrentCapabilities_WhenEnterprisePlanIsCurrent()
-        {
-            XmlDocument xmlResponse = LoadPlanDowngradingFromEnterpriseCapabilities();
-
-            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
-
-            Assert.Equal(true, licenseCapabilities.CustomDataSources);
-        }
-
-        [Fact]
         public void LicenseCapabilities_GenericFilesAllowed_WhenEnterprisePlanIsCurrent()
         {
             XmlDocument xmlResponse = LoadPlanDowngradingFromEnterpriseCapabilities();
@@ -704,6 +720,16 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
             Assert.True(licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericModule));
+        }
+
+        [Fact]
+        public void LicenseCapabilities_OdbcIsAllowed_WhenEnterprisePlanIsCurrent()
+        {
+            XmlDocument xmlResponse = LoadPlanDowngradingFromEnterpriseCapabilities();
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.True(licenseCapabilities.IsChannelAllowed(StoreTypeCode.Odbc));
         }
 
         [Fact]
@@ -741,13 +767,33 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void LicenseCapabilities_SetsCustomDataSources_FromPendingCapabilities_WhenUpgradingPlans()
+        public void LicenseCapabilities_AllowsGenericFile_FromPendingCapabilities_WhenUpgradingPlans()
         {
             XmlDocument xmlResponse = LoadResponseWithUpgradedPendingCapabilities();
 
             LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
 
-            Assert.Equal(true, licenseCapabilities.CustomDataSources);
+            Assert.Equal(true, licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericFile));
+        }
+
+        [Fact]
+        public void LicenseCapabilities_AllowsGenericModule_FromPendingCapabilities_WhenUpgradingPlans()
+        {
+            XmlDocument xmlResponse = LoadResponseWithUpgradedPendingCapabilities();
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.Equal(true, licenseCapabilities.IsChannelAllowed(StoreTypeCode.GenericModule));
+        }
+
+        [Fact]
+        public void LicenseCapabilities_AllowsOdbc_FromPendingCapabilities_WhenUpgradingPlans()
+        {
+            XmlDocument xmlResponse = LoadResponseWithUpgradedPendingCapabilities();
+
+            LicenseCapabilities licenseCapabilities = new LicenseCapabilities(xmlResponse);
+
+            Assert.Equal(true, licenseCapabilities.IsChannelAllowed(StoreTypeCode.Odbc));
         }
 
         [Fact]
@@ -1110,7 +1156,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                             </NameValuePair>
                             <NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'>
                               <Name>CustomDataSourcesAPI</Name>
-                              <Value>no</Value>
+                              <Value>yes</Value>
                             </NameValuePair>
                             <NameValuePair xmlns='http://ShipWorks.com/UserCapabilitiesV1.xsd'>
                               <Name>CustomerManagement</Name>
