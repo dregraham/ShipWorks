@@ -27,6 +27,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         // [DataSource("DataSource_Ship_Stamps")]
         [ExcelData("DataSources\\Usps.xlsx", "Stamps")]
         [Trait("Category", "USPS")]
+        [Trait("Category", "ktemp")]
         [Theory]
         public void ProcessBatch_UspsAndExpress1Usps(DataRow row)
         {

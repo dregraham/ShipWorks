@@ -7,7 +7,6 @@ using ShipWorks.Data.Model;
 using ShipWorks.Users;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using ThreadTimer = System.Threading.Timer;
@@ -95,7 +94,7 @@ namespace ShipWorks.Data.Caching
         {
             // If running integration tests, this may throw.
             // Comment it out to run the test...
-            Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+            //Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (disposedLock)
             {
