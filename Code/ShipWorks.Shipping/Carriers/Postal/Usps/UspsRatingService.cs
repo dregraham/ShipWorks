@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -26,6 +21,11 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -416,9 +416,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void SortRateGroup(RateGroup rateGroup)
         {
-            // Move all of the global post services to the top
-            IEnumerable<RateResult> globapPostPriority = rateGroup.Rates.Where(r => r.Description.Contains("GlobalPost")).ToList();
-            foreach (RateResult rateResult in globapPostPriority.OrderByDescending(r => r.Amount))
+            // Move all of the global post services to the top. Order by descending as we insert them to the 
+            // beginning, one at a time, so they will then be in alphabetical order which is what we want.
+            IEnumerable<RateResult> globapPostPriority = rateGroup.Rates
+                .Where(r => r.Description.Contains("GlobalPost"))
+                .OrderByDescending(r=>r.Description).ToList();
+            foreach (RateResult rateResult in globapPostPriority)
             {
                 rateGroup.Rates.Remove(rateResult);
                 rateGroup.Rates.Insert(0, rateResult);
