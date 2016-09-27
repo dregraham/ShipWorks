@@ -99,11 +99,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Stamps RrDonnelley consolidator
         /// </summary>
         bool StampsRrDonnelleyConsolidator { get; set; }
-
-        /// <summary>
-        /// Custom data source restriction
-        /// </summary>
-        bool CustomDataSources { get; set; }
         
         /// <summary>
         /// Number of selling channels the license allows
