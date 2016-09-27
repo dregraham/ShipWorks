@@ -416,21 +416,21 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="pendingCapabilitiesNode">The pending capabilities node.</param>
         private void MergeIntNodes(string capability, XmlNode currentCapabilitiesNode, XmlNode pendingCapabilitiesNode)
         {
-            int initialLimit = GetIntValueFromNameValuePair(capability, currentCapabilitiesNode);
+            int currentLimit = GetIntValueFromNameValuePair(capability, currentCapabilitiesNode);
             int pendingLimit = GetIntValueFromNameValuePair(capability, pendingCapabilitiesNode);
-            int currentLimit = Unlimited;
+            int mergedLimit = Unlimited;
 
-            if (initialLimit != Unlimited && pendingLimit != Unlimited)
+            if (currentLimit != Unlimited && pendingLimit != Unlimited)
             {
-                currentLimit = pendingLimit > initialLimit ?
+                mergedLimit = pendingLimit > currentLimit ?
                     pendingLimit :
-                    initialLimit;
+                    currentLimit;
             }
 
             // Capability has pending changes, apply them
-            if (currentLimit != initialLimit)
+            if (mergedLimit != currentLimit)
             {
-                SetStringValueForNameValuePair(currentLimit.ToString(), capability, currentCapabilitiesNode);
+                SetStringValueForNameValuePair(mergedLimit.ToString(), capability, currentCapabilitiesNode);
             }
         }
 
@@ -442,12 +442,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <param name="pendingCapabilitiesNode">The pending capabilities node.</param>
         private void MergeBoolNodes(string capability, XmlNode currentCapabilitiesNode, XmlNode pendingCapabilitiesNode)
         {
-            bool initialIsAllowed = GetBoolValueFromNameValuePair(capability, currentCapabilitiesNode);
+            bool currentIsAllowed = GetBoolValueFromNameValuePair(capability, currentCapabilitiesNode);
             bool pendingIsAllowed = GetBoolValueFromNameValuePair(capability, pendingCapabilitiesNode);
-            bool currentIsAllowed = initialIsAllowed || pendingIsAllowed;
+            bool mergedIsAllowed = currentIsAllowed || pendingIsAllowed;
 
             // Capability has pending changes, apply them
-            if (currentIsAllowed != initialIsAllowed)
+            if (mergedIsAllowed != currentIsAllowed)
             {
                 SetStringValueForNameValuePair(True, capability, currentCapabilitiesNode);
             }
