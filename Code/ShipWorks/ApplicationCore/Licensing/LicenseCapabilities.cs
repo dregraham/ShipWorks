@@ -374,8 +374,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // When changing plans in the middle of a billing cycle there will be two groups of capabilities
             // that need to be inspected. When upgrading a plan, the increased capabilities should take effect
             // immediately while capabilities of downgraded plans should not take effect until the next
-            // billing cycle (i.e. always choose the plan with the higher capabilities). The plan with the
-            // higher capabilities can be determined by shipment limit.
+            // billing cycle (i.e. always choose the least restrictive capability).
             try
             {
                 XmlNode currentCapabilitiesNode = sourceNode.SelectSingleNode("//UserCapabilities");
@@ -397,6 +396,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Merges any applicable pending capabilities into the current ones.
         /// </summary>
+        /// <remarks>
+        /// This is needed for customers upgrading/downgrading pricing plans in the middle of the billing cycle,
+        /// so that we give them the least restrictive capabilities between the current and pending capabilities.
+        /// </remarks>
         /// <param name="currentCapabilitiesNode">The current capabilities node.</param>
         /// <param name="pendingCapabilitiesNode">The pending capabilities node.</param>
         private void MergePendingCapabilities(XmlNode currentCapabilitiesNode, XmlNode pendingCapabilitiesNode)
@@ -411,6 +414,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Merges current and pending int nodes.
         /// </summary>
+        /// <remarks>
+        /// Nodes get merged by taking the highest value between current and pending capabilities.
+        /// </remarks>
         /// <param name="capability">The capability to merge</param>
         /// <param name="currentCapabilitiesNode">The current capabilities node.</param>
         /// <param name="pendingCapabilitiesNode">The pending capabilities node.</param>
@@ -422,9 +428,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             if (currentLimit != Unlimited && pendingLimit != Unlimited)
             {
-                mergedLimit = pendingLimit > currentLimit ?
-                    pendingLimit :
-                    currentLimit;
+                mergedLimit = Math.Max(currentLimit, pendingLimit);
             }
 
             // Capability has pending changes, apply them
@@ -437,7 +441,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Merges current and pending bool nodes
         /// </summary>
-        /// <param name="capability"></param>
+        /// <remarks>
+        /// Nodes get merged by setting the current capability to true if either the current or pending one is true,
+        /// else leave it as false.
+        /// </remarks>
+        /// <param name="capability">The capability to merge</param>
         /// <param name="currentCapabilitiesNode">The current capabilities node.</param>
         /// <param name="pendingCapabilitiesNode">The pending capabilities node.</param>
         private void MergeBoolNodes(string capability, XmlNode currentCapabilitiesNode, XmlNode pendingCapabilitiesNode)
