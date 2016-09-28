@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services
@@ -101,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public void InitialShipmentType_SetsInitialShipmentTypeToLastMatch_WhenShipmentIsInRule()
+        public void InitialShipmentType_SetsInitialShipmentTypeToFirstMatch_WhenShipmentIsInRule()
         {
             var rule1 = new ShippingProviderRuleEntity { ShipmentType = (int) ShipmentTypeCode.FedEx };
             var rule2 = new ShippingProviderRuleEntity { ShipmentType = (int) ShipmentTypeCode.Amazon };
@@ -116,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject.InitialShipmentType(new ShipmentEntity { OrderID = 6 });
 
-            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Verify(x => x[ShipmentTypeCode.Amazon]);
+            mock.Mock<IIndex<ShipmentTypeCode, ShipmentType>>().Verify(x => x[ShipmentTypeCode.FedEx]);
         }
 
         [Fact]
