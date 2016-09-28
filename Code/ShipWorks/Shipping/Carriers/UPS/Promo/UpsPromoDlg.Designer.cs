@@ -146,6 +146,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Activate UPS Promo";
+            this.Shown += new System.EventHandler(this.OnShow);
             this.ResumeLayout(false);
             this.PerformLayout();
 
