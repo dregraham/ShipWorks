@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
@@ -22,7 +22,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -75,12 +74,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
 
             BestRateShipmentEntity bestRateShipment = shipment.BestRate;
-            BestRateProfileEntity bestRateProfile = profile.BestRate;
+            IBestRateProfileEntity bestRateProfile = profile.BestRate;
 
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsProfileID, bestRateShipment, BestRateShipmentFields.DimsProfileID);
             ShippingProfileUtility.ApplyProfileValue(bestRateProfile.DimsWeight, bestRateShipment, BestRateShipmentFields.DimsWeight);

@@ -369,7 +369,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
 
@@ -377,7 +377,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (shipment.Postal.Usps != null)
             {
                 UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
-                UspsProfileEntity uspsProfile = profile.Postal.Usps;
+                IUspsProfileEntity uspsProfile = profile.Postal.Usps;
 
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.UspsAccountID, uspsShipment, UspsShipmentFields.UspsAccountID);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
