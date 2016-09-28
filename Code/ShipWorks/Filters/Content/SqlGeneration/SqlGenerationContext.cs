@@ -218,7 +218,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 }
                 else
                 {
-                    parameter = new SqlParameter(param, SqlDbType.NVarChar, length);
+                    parameter = new SqlParameter(param, SqlDbType.NVarChar, Math.Max(length, text.Length));
                 }
 
                 parameter.Value = value;
