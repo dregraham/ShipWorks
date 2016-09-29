@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public static class UspsUtility
     {
-        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation = new Dictionary
-            <ServiceType, PostalServiceType>
+        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation = 
+            new Dictionary<ServiceType, PostalServiceType>
         {
             {ServiceType.USFC, PostalServiceType.FirstClass},
             {ServiceType.USPM, PostalServiceType.PriorityMail},
