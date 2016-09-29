@@ -38,9 +38,7 @@ namespace ShipWorks.SqlServer.Common.Data
             // Ensure we don't have a SQL timeout before the applock timeout
             cmd.CommandTimeout = Math.Max(30, (int) wait.TotalSeconds + 30);
 
-            DbParameter returnValue = cmd.CreateParameter();
-            returnValue.ParameterName = "@ReturnValue";
-            returnValue.DbType = DbType.Int32;
+            DbParameter returnValue = cmd.AddParameter("@ReturnValue", DbType.Int32);
             returnValue.Direction = ParameterDirection.ReturnValue;
 
             cmd.AddParameterWithValue("@Resource", name);
