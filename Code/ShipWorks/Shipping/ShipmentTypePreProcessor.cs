@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using ShipWorks.Data.Connection;
+﻿using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// A pre-processor that allows can be called prior to processing a shipment.
+    /// A pre-processor that can be called prior to processing a shipment.
     /// </summary>
     public class ShipmentTypePreProcessor
     {
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity> { shipment };
 
-            if (synchronizer.HasAccounts)
+            if (IsReadyToShip(synchronizer))
             {
                 ShippingManager.EnsureShipmentLoaded(shipment);
             }
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping
                     // The user created an account, so try to grab the account and use it
                     // to process the shipment
                     ShippingSettings.CheckForChangesNeeded();
-                    if (synchronizer.HasAccounts)
+                    if (IsReadyToShip(synchronizer))
                     {
                         shipments.ForEach(s =>
                         {
@@ -74,5 +74,10 @@ namespace ShipWorks.Shipping
 
             return shipments;
         }
+
+        /// <summary>
+        /// Determines whether the shipment type is ready to ship.
+        /// </summary>
+        protected virtual bool IsReadyToShip(IShipmentProcessingSynchronizer synchronizer) => synchronizer.HasAccounts;
     }
 }
