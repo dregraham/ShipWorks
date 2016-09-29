@@ -418,11 +418,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             // Move all of the global post services to the top. Order by descending as we insert them to the 
             // beginning, one at a time, so they will then be in alphabetical order which is what we want.
-            IEnumerable<RateResult> globapPostPriority = rateGroup.Rates
+            IEnumerable<RateResult> globalPostPriority = rateGroup.Rates
                 .Where(r => r.Description.Contains("GlobalPost"))
-                .OrderByDescending(r=>r.Description).ToList();
+                .OrderByDescending(r => r.Description).ToList();
 
-            foreach (RateResult rateResult in globapPostPriority)
+            foreach (RateResult rateResult in globalPostPriority)
             {
                 rateGroup.Rates.Remove(rateResult);
                 rateGroup.Rates.Insert(0, rateResult);
