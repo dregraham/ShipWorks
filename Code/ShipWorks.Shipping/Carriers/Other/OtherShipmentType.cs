@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
@@ -89,12 +90,12 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
 
             OtherShipmentEntity otherShipment = shipment.Other;
-            OtherProfileEntity otherProfile = profile.Other;
+            IOtherProfileEntity otherProfile = profile.Other;
 
             ShippingProfileUtility.ApplyProfileValue(otherProfile.Service, otherShipment, OtherShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(otherProfile.Carrier, otherShipment, OtherShipmentFields.Carrier);
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Update the dyamic data of the shipment
+        /// Update the dynamic data of the shipment
         /// </summary>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {

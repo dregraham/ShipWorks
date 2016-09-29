@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Interapptive_ShipWorks>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Interapptive_ShipWorks>
+	</modules>
+</config>

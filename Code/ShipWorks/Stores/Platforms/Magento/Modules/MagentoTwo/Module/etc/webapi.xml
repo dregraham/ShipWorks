@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <!-- Used to get store specific information-->
+    <route url="/V1/shipworks" method="GET">
+        <service class="ShipWorks\Module\Api\ShipWorksInterface" method="getSanityCheck"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <!-- Used to get store specific information-->
+    <route url="/V1/shipworks/module" method="GET">
+        <service class="ShipWorks\Module\Api\ShipWorksInterface" method="getModule"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+
+    <!-- Used to get store specific information-->
+    <route url="/V1/shipworks/store" method="GET">
+        <service class="ShipWorks\Module\Api\StoreInterface" method="getStore"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+
+    <!-- Used to get store specific information-->
+    <route url="/V1/shipworks/store/statuscodes" method="GET">
+        <service class="ShipWorks\Module\Api\StoreInterface" method="getStatusCodes"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+
+    <!-- Used to get orders from the store-->
+    <route url="/V1/shipworks/orders" method="GET">
+        <service class="ShipWorks\Module\Api\OrderInterface" method="getOrders"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+
+    <!-- Used to get a count of orders-->
+    <route url="/V1/shipworks/orders/count" method="GET">
+        <service class="ShipWorks\Module\Api\OrderInterface" method="getCount"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+
+    <!-- Used to update orders-->
+    <route url="/V1/shipworks/orders/update" method="POST">
+        <service class="ShipWorks\Module\Api\OrderInterface" method="updateOrders"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+</routes>
