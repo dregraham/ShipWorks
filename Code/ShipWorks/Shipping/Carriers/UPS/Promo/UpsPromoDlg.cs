@@ -18,9 +18,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         {
             this.promo = promo;
             InitializeComponent();
-
-            GetTerms();
-            promoDescription.Text = terms.Description;
         }
 
         /// <summary>
@@ -115,12 +112,26 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 {
                     MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
                     promo.RemindMe();
-                    Close();
                     success = false;
                 }
             }
 
             return success;
+        }
+
+        /// <summary>
+        /// Get terms and conditions from UPS, if it fails close the dialog
+        /// </summary>
+        private void OnShow(object sender, EventArgs e)
+        {
+            if (GetTerms())
+            {
+                promoDescription.Text = terms.Description;
+            }
+            else
+            {
+                Close();
+            }
         }
     }
 }
