@@ -421,6 +421,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             IEnumerable<RateResult> globapPostPriority = rateGroup.Rates
                 .Where(r => r.Description.Contains("GlobalPost"))
                 .OrderByDescending(r=>r.Description).ToList();
+
             foreach (RateResult rateResult in globapPostPriority)
             {
                 rateGroup.Rates.Remove(rateResult);
