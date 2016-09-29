@@ -50,6 +50,7 @@ namespace ShipWorks.SqlServer.Filters
         // This is the FilterNodePurpose types that this updated should process.  It is in SQL "IN" clause
         // format.
         protected string purposeInParam = string.Format("{0}, {1}", (int) FilterNodePurpose.Standard, (int) FilterNodePurpose.Search);
+        bool _enforceTimeLimit = true;
 
         /// <summary>
         /// Static constructor
@@ -67,7 +68,11 @@ namespace ShipWorks.SqlServer.Filters
         /// <summary>
         /// Should the time limit be enforced?
         /// </summary>
-        protected bool EnforceTimeLimit { get; set; } = true;
+        protected bool EnforceTimeLimit
+        {
+            get { return _enforceTimeLimit; }
+            set { _enforceTimeLimit = value; }
+        }
 
         /// <summary>
         /// Initialize the class after having made any local updates
