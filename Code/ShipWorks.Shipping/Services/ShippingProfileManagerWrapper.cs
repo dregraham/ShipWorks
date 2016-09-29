@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -26,6 +27,12 @@ namespace ShipWorks.Shipping.Profiles
         {
             return ShippingProfileManager.GetDefaultProfile(shipmentTypeCode);
         }
+
+        /// <summary>
+        /// Get the default profile for the given shipment type
+        /// </summary>
+        public IShippingProfileEntity GetDefaultProfileReadOnly(ShipmentTypeCode shipmentTypeCode) =>
+            ShippingProfileManager.GetDefaultProfileReadOnly(shipmentTypeCode);
 
         /// <summary>
         /// Create a profile with the default settings for the shipment type
@@ -65,11 +72,34 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
+        /// Create a profile with the default settings for the shipment type
+        /// </summary>
+        public IShippingProfileEntity GetOrCreatePrimaryProfileReadOnly(ShipmentType shipmentType)
+        {
+            return GetDefaultProfileReadOnly(shipmentType.ShipmentTypeCode) ??
+                GetOrCreatePrimaryProfile(shipmentType).AsReadOnly();
+        }
+
+        /// <summary>
+        /// Get the specified profile
+        /// </summary>
+        public IShippingProfileEntity GetProfileReadOnly(long profileID) =>
+            ShippingProfileManager.GetProfileReadOnly(profileID);
+
+        /// <summary>
         /// Get profiles for the given shipment type
         /// </summary>
         public IEnumerable<ShippingProfileEntity> GetProfilesFor(ShipmentTypeCode value)
         {
             return ShippingProfileManager.Profiles.Where(x => x.ShipmentTypeCode == value);
+        }
+
+        /// <summary>
+        /// Get profiles for the given shipment type
+        /// </summary>
+        public IEnumerable<IShippingProfileEntity> GetProfilesReadOnlyFor(ShipmentTypeCode value)
+        {
+            return ShippingProfileManager.ProfilesReadOnly.Where(x => x.ShipmentTypeCode == value);
         }
 
         /// <summary>
