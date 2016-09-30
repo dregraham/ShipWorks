@@ -1,15 +1,15 @@
 ﻿using System;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net
 {
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <summary>
         /// Constructor
         /// </summary>
-        protected OnTracRequest(OnTracAccountEntity onTracAccount, string actionDescriptionToLog)
+        protected OnTracRequest(IOnTracAccountEntity onTracAccount, string actionDescriptionToLog)
             : this(
                 onTracAccount.AccountNumber,
                 SecureText.Decrypt(onTracAccount.Password, onTracAccount.AccountNumber.ToString()),
@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// Constructor
         /// </summary>
         protected OnTracRequest(long onTracAccountNumber, string onTracPassword, string actionDescriptionToLog)
-            : this(onTracAccountNumber, onTracPassword,new LogEntryFactory(), ApiLogSource.OnTrac, actionDescriptionToLog, LogActionType.Other)
+            : this(onTracAccountNumber, onTracPassword, new LogEntryFactory(), ApiLogSource.OnTrac, actionDescriptionToLog, LogActionType.Other)
         {
         }
 
@@ -54,13 +54,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
             AccountNumber = onTracAccountNumber;
             OnTracPassword = onTracPassword;
 
-            BaseUrlUsedToCallOnTrac = UseTestServer
-                          ? "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/"
-                          : "https://www.shipontrac.net/OnTracWebServices/OnTracServices.svc/v2/";
+            BaseUrlUsedToCallOnTrac = UseTestServer ?
+                "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/" :
+                "https://www.shipontrac.net/OnTracWebServices/OnTracServices.svc/v2/";
         }
 
         /// <summary>
-        /// Ontrac Account Number 
+        /// Ontrac Account Number
         /// </summary>
         protected long AccountNumber
         {
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <summary>
         /// Makes the actual call to OnTrac
         /// </summary>
-        /// <typeparam name="T">Return Type to serailze the response to</typeparam>
+        /// <typeparam name="T">Return Type to serialize the response to</typeparam>
         /// <param name="request">The request to serialize and send to OnTrac</param>
         protected T ExecuteLoggedRequest<T>(HttpRequestSubmitter request)
         {

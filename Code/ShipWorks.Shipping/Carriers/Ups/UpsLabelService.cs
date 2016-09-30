@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,10 +15,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsLabelService : ILabelService
     {
+        protected readonly Func<UpsLabelResponse, IDownloadedLabelData> createDownloadedLabelData;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpsLabelService(Func<UpsLabelResponse, IDownloadedLabelData> createDownloadedLabelData)
+        {
+            this.createDownloadedLabelData = createDownloadedLabelData;
+        }
+
         /// <summary>
         /// Creates the label
         /// </summary>
-        public virtual void Create(ShipmentEntity shipment)
+        public virtual IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             UpsShipmentEntity upsShipmentEntity = shipment.Ups;
             UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
@@ -33,6 +44,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ValidatePackageDimensions(shipment);
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
+
+            return new NullDownloadedLabelData();
         }
 
         /// <summary>
