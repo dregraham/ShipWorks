@@ -37,9 +37,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.OnTrac)
                 .SingleInstance();
 
-            builder.RegisterType<OnTracLabelService>()
-                .Keyed<ILabelService>(ShipmentTypeCode.OnTrac);
-
             builder.RegisterType<OnTracAccountRepository>()
                 .As<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
 

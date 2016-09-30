@@ -35,9 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Endicia
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Endicia)
                 .SingleInstance();
 
-            builder.RegisterType<EndiciaLabelService>()
-                .Keyed<ILabelService>(ShipmentTypeCode.Endicia);
-
             builder.RegisterType<EndiciaAccountRepository>()
                 .As<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>()
                 .Keyed<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>(ShipmentTypeCode.Endicia)

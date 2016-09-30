@@ -3,7 +3,7 @@ using System.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracShipmentRequest(OnTracAccountEntity account)
-            : base(account, "OnTracShipmentRequest")
+        public OnTracShipmentRequest(IOnTracAccountEntity account) :
+            base(account, "OnTracShipmentRequest")
         {
             httpRequestSubmitterFactory = new HttpRequestSubmitterFactory();
         }
