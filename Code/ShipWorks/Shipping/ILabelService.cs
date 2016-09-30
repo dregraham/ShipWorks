@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create a label
         /// </summary>
-        void Create(ShipmentEntity shipment);
+        IDownloadedLabelData Create(ShipmentEntity shipment);
 
         /// <summary>
         /// Voids the shipment

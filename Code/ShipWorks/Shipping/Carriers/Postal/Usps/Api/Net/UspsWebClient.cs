@@ -806,8 +806,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public void ProcessShipment(ShipmentEntity shipment)
+        public UspsLabelResponse ProcessShipment(ShipmentEntity shipment)
         {
+            UspsLabelResponse uspsLabelParams = null;
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
@@ -818,7 +819,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 ExceptionWrapper(() =>
                 {
-                    ProcessShipmentInternal(shipment, account);
+                    uspsLabelParams = ProcessShipmentInternal(shipment, account);
                     return true;
                 }, account);
             }
@@ -853,12 +854,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 // This isn't an exception we can handle, so just throw the original exception
                 throw;
             }
+
+            return uspsLabelParams;
         }
 
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private void ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private UspsLabelResponse ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             Guid uspsGuid;
             string tracking = string.Empty;
@@ -980,10 +983,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
 
-            // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
-            ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
-
-            SaveLabels(shipment, imageData, labelUrl);
+            return new UspsLabelResponse()
+            {
+                Shipment = shipment,
+                ImageData = imageData,
+                LabelUrl = labelUrl
+            };
         }
 
         /// <summary>
@@ -1042,38 +1047,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return thermalType;
-        }
-
-        /// <summary>
-        /// Uses the label URLs to saves the label(s) for the given shipment.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="imageData">The base 64 binary data of each label image.</param>
-        /// <param name="labelUrl">For envelopes, we need the labelUrl</param>
-        private static void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
-        {
-            List<Label> labels = new List<Label>();
-
-            try
-            {
-                LabelFactory labelFactory = new LabelFactory();
-
-                if (imageData != null && imageData.Length > 0)
-                {
-                    labels.AddRange(labelFactory.CreateLabels(shipment, imageData).ToList());
-                }
-
-                if (!string.IsNullOrWhiteSpace(labelUrl))
-                {
-                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl));
-                }
-
-                labels.ForEach(l => l.Save());
-            }
-            finally
-            {
-                labels.ForEach(l => l.Dispose());
-            }
         }
 
         /// <summary>

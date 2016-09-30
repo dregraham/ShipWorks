@@ -2,7 +2,6 @@
 using System.Data;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
@@ -10,7 +9,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Integration.MSTest.Fixtures;
 
@@ -59,7 +57,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IRatingService ratingService = lifetimeScope.ResolveKeyed<IRatingService>(ShipmentTypeCode.iParcel);
-                return ratingService.GetRates(shipment).Rates.Sum(x=>x.AmountOrDefault);
+                return ratingService.GetRates(shipment).Rates.Sum(x => x.AmountOrDefault);
             }
         }
 
@@ -80,7 +78,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
             // Default to the Origin country code
             shipment.IParcel.IParcelAccountID = GetFedExAccountId(AccountID, ShipCountryCode);
 
-            shipment.IParcel.Service = (int)GetServiceType();
+            shipment.IParcel.Service = (int) GetServiceType();
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -88,7 +86,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 
                 iParcelLabelService iParcelLabelService = labelService as iParcelLabelService;
 
-                DataSet response = iParcelLabelService.ProcessShipmentAndReturnResponse(shipment);
+                DataSet response = (iParcelLabelService.Create(shipment) as iParcelDownloadedLabelData).Response;
 
                 decimal responseInsuranceValue = 0m;
 
@@ -236,9 +234,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 
                 if (!string.IsNullOrEmpty(SkuAndQuantity))
                 {
-                    package.SkuAndQuantities = SkuAndQuantity;    
+                    package.SkuAndQuantities = SkuAndQuantity;
                 }
-                
+
 
                 shipment.IParcel.Packages.Add(package);
             }

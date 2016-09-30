@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Interface for Amazon Shipping requests
     /// </summary>
-    public interface IAmazonShipmentRequest
+    public interface IAmazonCancelShipmentRequest
     {
         /// <summary>
         /// Submits the request

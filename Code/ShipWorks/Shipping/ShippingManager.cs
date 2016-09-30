@@ -991,13 +991,7 @@ namespace ShipWorks.Shipping
                             // real time if it was originally best rate
                             EnsureShipmentTypesAreAllowed(shipmentToTry.ShipmentTypeCode, licenseService);
 
-                            using (SqlAdapter adapter = new SqlAdapter(true))
-                            {
-                                adapter.SaveAndRefetch(shipmentToTry);
-                                ProcessShipmentHelper(shipmentToTry, storeEntity, licenseCheckCache);
-
-                                adapter.Commit();
-                            }
+                            ProcessShipmentHelper(shipmentToTry, storeEntity, licenseCheckCache);
 
                             success = true;
                             processedShipment = shipmentToTry;
@@ -1175,60 +1169,70 @@ namespace ShipWorks.Shipping
                         }
                     }
 
-                    // Transacted
-                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
+                    DateTime shipmentDate;
+
+                    ILabelService labelService =
+                        lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
+
+                    Debug.Assert(System.Transactions.Transaction.Current == null, "No transaction should exist at this point.");
+                    IDownloadedLabelData downloadedLabelData = labelService.Create(shipment);
+
+                    // Check to see if the label service DownloadLabel started a transaction.
+                    Debug.Assert(System.Transactions.Transaction.Current == null, "No transaction should exist at this point.  Did labelService.DownloadLabel create one?");
+
+                    using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper transaction committed."))
                     {
-                        log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
-                        DateTime shipmentDate;
-
-                        ILabelService labelService =
-                            lifetimeScope.ResolveKeyed<ILabelService>((ShipmentTypeCode) shipment.ShipmentType);
-
-                        labelService.Create(shipment);
-
-                        shipmentDate = lifetimeScope.Resolve<IDateTimeProvider>().UtcNow;
-
-                        log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
-
-                        if (IsInsuredByInsureShip(shipmentType, shipment))
+                        // Transacted
+                        using (SqlAdapter adapter = new SqlAdapter(true))
                         {
-                            log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
-                            InsureShipPolicy insureShipPolicy =
-                                new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
-                            insureShipPolicy.Insure(shipment);
-                            log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+                            // Save the label data.
+                            downloadedLabelData.Save();
+
+                            shipmentDate = lifetimeScope.Resolve<IDateTimeProvider>().UtcNow;
+
+                            log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
+
+                            if (IsInsuredByInsureShip(shipmentType, shipment))
+                            {
+                                log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
+                                InsureShipPolicy insureShipPolicy =
+                                    new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
+                                insureShipPolicy.Insure(shipment);
+                                log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+                            }
+
+                            // Now that the label is generated, we can reset the shipping fields the store changed back to their
+                            // original values before saving to the database
+                            foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
+                            {
+                                // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
+                                shipment.SetNewFieldValue((int) fieldIndex, clone.GetCurrentFieldValue((int) fieldIndex));
+                                shipment.Fields[(int) fieldIndex].IsChanged = false;
+                            }
+
+                            shipment.Processed = true;
+                            shipment.ProcessedDate = shipmentDate;
+                            shipment.ProcessedUserID = UserSession.User.UserID;
+                            shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
+
+                            // Remove any shipment data that is not necessary for this shipment type
+                            // BN: Actually we can't do this here.  Auditing follows some rules, and one of which is that if there are any deletes of 1:1 mapped entities (such as FedEx:Shipment)
+                            //     then the whole activity is considered a delete.  So deleting "non active shipment data" actually makes processing show up as a Delete in the audit.
+                            // ClearNonActiveShipmentData(shipment, adapter);
+
+                            adapter.SaveAndRefetch(shipment);
+
+                            // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
+                            if (!shipmentType.ProcessingCompletesExternally)
+                            {
+                                // Dispatch the shipment processed event
+                                ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
+                                log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
+                            }
+
+                            adapter.Commit();
                         }
-
-                        // Now that the label is generated, we can reset the shipping fields the store changed back to their
-                        // original values before saving to the database
-                        foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
-                        {
-                            // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
-                            shipment.SetNewFieldValue((int) fieldIndex, clone.GetCurrentFieldValue((int) fieldIndex));
-                            shipment.Fields[(int) fieldIndex].IsChanged = false;
-                        }
-
-                        shipment.Processed = true;
-                        shipment.ProcessedDate = shipmentDate;
-                        shipment.ProcessedUserID = UserSession.User.UserID;
-                        shipment.ProcessedComputerID = UserSession.Computer.ComputerID;
-
-                        // Remove any shipment data that is not necessary for this shipment type
-                        // BN: Actually we can't do this here.  Auditing follows some rules, and one of which is that if there are any deletes of 1:1 mapped entities (such as FedEx:Shipment)
-                        //     then the whole activity is considered a delete.  So deleting "non active shipment data" actually makes processing show up as a Delete in the audit.
-                        // ClearNonActiveShipmentData(shipment, adapter);
-
-                        adapter.SaveAndRefetch(shipment);
-
-                        // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
-                        if (!shipmentType.ProcessingCompletesExternally)
-                        {
-                            // Dispatch the shipment processed event
-                            ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
-                            log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
-                        }
-
-                        adapter.Commit();
                     }
 
                     log.InfoFormat("Shipment {0}  - Committed", shipment.ShipmentID);
