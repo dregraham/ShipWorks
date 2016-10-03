@@ -46,7 +46,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Address", new AddressOutline(context, "from", true), () => new PersonAdapter(Shipment, "Origin"));
 
             AddCustomsElement(context);
-            
+
             // Add an outline entry for the last/terminating best rate event that occurred on the shipment
             AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
 
@@ -77,7 +77,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddVoidedOutlines(context);
 
             AddElement("ShippedDate", () => Shipment.ShipDate);
-            AddElement("ServiceUsed", () => ShippingManager.GetServiceUsed(Shipment));
+            AddElement("ServiceUsed", () => ShippingManager.GetActualServiceUsed(Shipment));
             AddElement("ReturnShipment", () => Shipment.ReturnShipment);
             AddElement("TrackingNumber", () => Shipment.TrackingNumber);
             AddElement("TotalCharges", () => Shipment.ShipmentCost);

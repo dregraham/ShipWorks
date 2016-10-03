@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Templates.Tokens;
 
@@ -18,30 +13,20 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     /// </summary>
     public class NetworkSolutionsOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(NetworkSolutionsOnlineUpdater));
-						  
+
         // store for which this updater is to operate
-        NetworkSolutionsStoreEntity store;
+        private readonly NetworkSolutionsStoreEntity store;
 
         // status code provider
-        NetworkSolutionsStatusCodeProvider statusCodeProvider;
+        private NetworkSolutionsStatusCodeProvider statusCodeProvider;
 
         /// <summary>
         /// Gets the status code provider
         /// </summary>
-        protected NetworkSolutionsStatusCodeProvider StatusCodes
-        {
-            get
-            {
-                if (statusCodeProvider == null)
-                {
-                    statusCodeProvider = new NetworkSolutionsStatusCodeProvider(store);
-                }
-
-                return statusCodeProvider;
-            }
-        }
+        protected NetworkSolutionsStatusCodeProvider StatusCodes =>
+            statusCodeProvider ?? (statusCodeProvider = new NetworkSolutionsStatusCodeProvider(store));
 
         /// <summary>
         /// Constructor
@@ -128,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             OrderEntity order = shipment.Order;
             if (!order.IsManual)
             {
-                // Upload tracking number 
+                // Upload tracking number
                 NetworkSolutionsWebClient client = new NetworkSolutionsWebClient(store);
 
                 // upload the details

@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                 mock.Provide(repo.Object);
 
                 Mock<IShippingManager> shippingManager = mock.Mock<IShippingManager>();
-                shippingManager.Setup(s => s.GetServiceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
+                shippingManager.Setup(s => s.GetOverriddenSerivceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
 
                 SparkPayShipmentFactory testObject = mock.Create<SparkPayShipmentFactory>();
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                 mock.Provide(repo.Object);
 
                 Mock<IShippingManager> shippingManager = mock.Mock<IShippingManager>();
-                shippingManager.Setup(s => s.GetServiceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
+                shippingManager.Setup(s => s.GetOverriddenSerivceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
 
                 SparkPayShipmentFactory testObject = mock.Create<SparkPayShipmentFactory>();
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                 mock.Provide(repo.Object);
 
                 Mock<IShippingManager> shippingManager = mock.Mock<IShippingManager>();
-                shippingManager.Setup(s => s.GetServiceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
+                shippingManager.Setup(s => s.GetOverriddenSerivceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
 
                 SparkPayShipmentFactory testObject = mock.Create<SparkPayShipmentFactory>();
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                 mock.Provide(repo.Object);
 
                 Mock<IShippingManager> shippingManager = mock.Mock<IShippingManager>();
-                shippingManager.Setup(s => s.GetServiceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
+                shippingManager.Setup(s => s.GetOverriddenSerivceUsed(It.IsAny<ShipmentEntity>())).Returns("foo");
 
                 SparkPayShipmentFactory testObject = mock.Create<SparkPayShipmentFactory>();
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
 
                 testObject.Create(shipment);
 
-                shippingManager.Verify(s => s.GetServiceUsed(shipment), Times.Once);
+                shippingManager.Verify(s => s.GetOverriddenSerivceUsed(shipment), Times.Once);
             }
         }
     }

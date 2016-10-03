@@ -480,7 +480,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Generic module channel capability
             if (!GetBoolValueFromNameValuePair(CustomDataSourcesApi, capabilitiesNode))
             {
-                // Custom data sources API is disabled. Add GenericModule to the list of stores that are not allowed.
+                // Custom data sources API is disabled. Add GenericModule and ODBC to the list of stores that are not allowed.
                 forbiddenChannels.Add(StoreTypeCode.GenericModule);
                 forbiddenChannels.Add(StoreTypeCode.Odbc);
             }

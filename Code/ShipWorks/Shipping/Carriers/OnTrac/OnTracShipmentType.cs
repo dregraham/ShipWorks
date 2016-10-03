@@ -305,16 +305,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
 
             OnTracShipmentEntity onTracShipment = shipment.OnTrac;
-            OnTracProfileEntity onTracProfile = profile.OnTrac;
+            IOnTracProfileEntity onTracProfile = profile.OnTrac;
 
-            long? accountID = (onTracProfile.OnTracAccountID == 0 && OnTracAccountManager.Accounts.Count > 0)
-                ? OnTracAccountManager.Accounts[0].OnTracAccountID
-                : onTracProfile.OnTracAccountID;
+            long? accountID = (onTracProfile.OnTracAccountID == 0 && OnTracAccountManager.Accounts.Count > 0) ?
+                OnTracAccountManager.Accounts[0].OnTracAccountID :
+                onTracProfile.OnTracAccountID;
 
             ShippingProfileUtility.ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
