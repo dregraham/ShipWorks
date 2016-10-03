@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using log4net;
 using ShipWorks.Stores.Content;
-using ShipWorks.Shipping;
-using ShipWorks.Stores.Platforms.Groupon;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
-using System.Threading;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -80,6 +72,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
         }
 
+        /// <summary>
+        /// Gets the tracking info to send to groupon
+        /// </summary>
         private static List<GrouponTracking> GetGrouponTracking(ShipmentEntity shipment)
         {
             OrderEntity order = shipment.Order;

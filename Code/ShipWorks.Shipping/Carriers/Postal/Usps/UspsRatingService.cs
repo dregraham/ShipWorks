@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -26,6 +21,11 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -74,9 +74,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // since it should be using a different cache key
             try
             {
-                return accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
+                RateGroup rates = accountRepository.Accounts.Any(a => a.PendingInitialAccount != (int) UspsPendingAccountType.Create) ?
                     GetRatesInternal(shipment) :
                     GetCounterRates(shipment);
+
+                SortRateGroup(rates);
+
+                return rates;
             }
             catch (UspsException ex)
             {
@@ -405,6 +409,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // we are not using the counter rate repo so
             // we can send back a trusting certificate inspector
             return new TrustingCertificateInspector();
+        }
+
+        /// <summary>
+        /// Sort the rates in the rate group based on our preferences
+        /// </summary>
+        private void SortRateGroup(RateGroup rateGroup)
+        {
+            // Move all of the global post services to the top. Order by descending as we insert them to the 
+            // beginning, one at a time, so they will then be in alphabetical order which is what we want.
+            IEnumerable<RateResult> globalPostPriority = rateGroup.Rates
+                .Where(r => r.Description.Contains("GlobalPost"))
+                .OrderByDescending(r => r.Description).ToList();
+
+            foreach (RateResult rateResult in globalPostPriority)
+            {
+                rateGroup.Rates.Remove(rateResult);
+                rateGroup.Rates.Insert(0, rateResult);
+            }
         }
     }
 }

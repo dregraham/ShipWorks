@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
@@ -17,6 +13,10 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -256,6 +256,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         .ToList();
 
                     services.AddRange(accesibleConsolidatorTypes);
+
+                    // Add global post services
+                    services.InsertRange(0, new[]
+                    {
+                        PostalServiceType.GlobalPostEconomy,
+                        PostalServiceType.GlobalPostPriority,
+                        PostalServiceType.GlobalPostSmartSaverEconomy, 
+                        PostalServiceType.GlobalPostSmartSaverPriority
+                    });
                 }
 
                 return services;
@@ -574,6 +583,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 .ToList();
 
             servicePicker.Initialize(postalServices, excludedServices);
+        }
+
+        /// <summary>
+        /// Determines whether the specified service type is GlobalPost.
+        /// </summary>
+        public static bool IsGlobalPost(PostalServiceType serviceType)
+        {
+            PostalServiceType[] postalServiceTypes = {
+                PostalServiceType.GlobalPostEconomy, PostalServiceType.GlobalPostPriority,
+                PostalServiceType.GlobalPostSmartSaverEconomy, PostalServiceType.GlobalPostSmartSaverPriority
+            };
+
+            return postalServiceTypes.Contains(serviceType);
         }
     }
 }

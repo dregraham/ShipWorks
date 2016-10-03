@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Insurance
             // Trying to insure
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.ShipWorks)
             {
-                List<IInsuranceChoice> insuranceChoices = 
+                List<IInsuranceChoice> insuranceChoices =
                     Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                     .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                     .Where(choice => choice.Insured).ToList();
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Insurance
                 cost.AddInfoMessage("ShipWorks Insurance can only cover up to $5000 in declared value.");
                 return cost;
             }
-            
+
             // Check country
             try
             {
@@ -470,8 +470,8 @@ namespace ShipWorks.Shipping.Insurance
 
                 case ShipmentTypeCode.Usps:
                     {
-                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ? 
-                            null : 
+                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ?
+                            null :
                             CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                     }
                     break;
@@ -562,7 +562,9 @@ namespace ShipWorks.Shipping.Insurance
             }
             else
             {
-                if (postalService == PostalServiceType.InternationalPriority)
+                if (postalService == PostalServiceType.InternationalPriority ||
+                    postalService == PostalServiceType.GlobalPostPriority ||
+                    postalService == PostalServiceType.GlobalPostSmartSaverPriority)
                 {
                     // Get how many increments of $50
                     int quantity = (int) Math.Ceiling(declaredValue / 50m);
