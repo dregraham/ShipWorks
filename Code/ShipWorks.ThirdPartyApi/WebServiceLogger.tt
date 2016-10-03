@@ -9,7 +9,7 @@
 	var services = new object[]
     {
         "ShipWorks.ApplicationCore.Licensing.Activation.WebServices", "Activation",
-		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV51",
+		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV55",
 		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
@@ -46,7 +46,6 @@
 using System.Xml;
 using System.Web.Services.Protocols;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 
 <#

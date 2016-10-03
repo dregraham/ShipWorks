@@ -261,7 +261,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     services.InsertRange(0, new[]
                     {
                         PostalServiceType.GlobalPostEconomy,
-                        PostalServiceType.GlobalPostPriority
+                        PostalServiceType.GlobalPostPriority,
+                        PostalServiceType.GlobalPostSmartSaverEconomy, 
+                        PostalServiceType.GlobalPostSmartSaverPriority
                     });
                 }
 

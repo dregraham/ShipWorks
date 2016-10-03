@@ -352,24 +352,35 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 case PostalServiceType.ExpressMail:
                     return "EXPRESS";
+
                 case PostalServiceType.FirstClass:
                     return "FIRSTCLASS";
+
                 case PostalServiceType.InternationalExpress:
                     return "GEM";
+
+                case PostalServiceType.GlobalPostSmartSaverEconomy:
                 case PostalServiceType.GlobalPostEconomy:
                 case PostalServiceType.InternationalFirst:
                     return "IFIRSTCLASS";
+
+                case PostalServiceType.GlobalPostSmartSaverPriority:
                 case PostalServiceType.GlobalPostPriority:
                 case PostalServiceType.InternationalPriority:
                     return "IPRIORITY";
+
                 case PostalServiceType.LibraryMail:
                     return "LIBRARYMAIL";
+
                 case PostalServiceType.MediaMail:
                     return "MEDIA";
+
                 case PostalServiceType.StandardPost:
                     return "PARCELPOST";
+
                 case PostalServiceType.ParcelSelect:
                     return "PARCELSELECT";
+
                 case PostalServiceType.PriorityMail:
                     return "PRIORITY";
 

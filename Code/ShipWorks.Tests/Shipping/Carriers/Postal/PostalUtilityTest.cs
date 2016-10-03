@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ShipWorks.Shipping.Carriers.Postal;
+using System.Collections.Generic;
 using Xunit;
-using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
 {
@@ -47,13 +47,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [Fact]
-        public void IsGlobalPost_ReturnsTrue_WhenServiceTypeIsGlobablPost()
+        public void IsGlobalPost_ReturnsTrue_WhenServiceTypeIsGlobalPost()
         {
             Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostEconomy));
         }
 
         [Fact]
-        public void IsGlobalPost_ReturnsFalse_WhenServiceTypeIsNotGlobablPost()
+        public void IsGlobalPost_ReturnsTrue_WhenServiceTypeIsGlobalPostSaverEconomy()
+        {
+            Assert.True(PostalUtility.IsGlobalPost(PostalServiceType.GlobalPostSmartSaverEconomy));
+        }
+
+        [Fact]
+        public void IsGlobalPost_ReturnsFalse_WhenServiceTypeIsNotGlobalPost()
         {
             Assert.False(PostalUtility.IsGlobalPost(PostalServiceType.AsendiaGeneric));
         }
