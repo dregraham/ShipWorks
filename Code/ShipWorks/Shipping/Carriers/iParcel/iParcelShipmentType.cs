@@ -8,12 +8,14 @@ using System.Text;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
@@ -34,9 +36,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// i-Parcel implementation of the ShipmentType
     /// </summary>
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.iParcel)]
     public class iParcelShipmentType : ShipmentType
     {
-        private readonly IiParcelRepository repository;
+        private readonly ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository;
         private readonly IiParcelServiceGateway serviceGateway;
 
         /// <summary>
@@ -53,9 +57,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="serviceGateway">The service gateway.</param>
-        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway)
+        public iParcelShipmentType(ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository,
+            IiParcelServiceGateway serviceGateway)
         {
-            this.repository = repository;
+            this.accountRepository = accountRepository;
             this.serviceGateway = serviceGateway;
         }
 
@@ -67,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts => iParcelAccountManager.Accounts.Any();
+        public override bool HasAccounts => accountRepository.AccountsReadOnly.Any();
 
         /// <summary>
         /// Create and Initialize a new shipment
@@ -226,9 +231,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             base.ConfigurePrimaryProfile(profile);
 
-            long shipperID = iParcelAccountManager.Accounts.Count > 0
-                                 ? iParcelAccountManager.Accounts[0].IParcelAccountID
-                                 : (long) 0;
+            long shipperID = accountRepository.AccountsReadOnly.Select(x => x.IParcelAccountID).FirstOrDefault();
 
             profile.IParcel.IParcelAccountID = shipperID;
             profile.OriginID = (int) ShipmentOriginSource.Account;
@@ -246,18 +249,19 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Apply the given shipping profile to the shipment
         /// </summary>
         [NDependIgnoreLongMethod]
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             IParcelShipmentEntity iParcel = shipment.IParcel;
-            IParcelProfileEntity source = profile.IParcel;
+            IIParcelProfileEntity source = profile.IParcel;
 
             bool changedPackageWeights = false;
+            int profilePackageCount = profile.IParcel.Packages.Count();
 
             // Apply all package profiles
-            for (int i = 0; i < profile.IParcel.Packages.Count; i++)
+            for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                IParcelProfilePackageEntity packageProfile = profile.IParcel.Packages[i];
+                IIParcelProfilePackageEntity packageProfile = profile.IParcel.Packages.ElementAt(i);
 
                 IParcelPackageEntity package;
 
@@ -287,10 +291,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             // Remove any packages that are too many for the profile
-            if (profile.IParcel.Packages.Count > 0)
+            if (profilePackageCount > 0)
             {
                 // Go through each package that needs removed
-                foreach (IParcelPackageEntity package in iParcel.Packages.Skip(profile.IParcel.Packages.Count).ToList())
+                foreach (IParcelPackageEntity package in iParcel.Packages.Skip(profilePackageCount).ToList())
                 {
                     if (package.Weight != 0)
                     {
@@ -728,7 +732,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             try
             {
                 // Send the shipment to the gateway
-                IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
+                IIParcelAccountEntity iParcelAccount = accountRepository.GetAccountReadOnly(shipment.IParcel.IParcelAccountID);
                 iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
 
                 DataSet response = serviceGateway.TrackShipment(credentials, shipment);

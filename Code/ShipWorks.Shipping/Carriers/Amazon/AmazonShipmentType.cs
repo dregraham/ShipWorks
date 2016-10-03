@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
@@ -15,7 +16,6 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
 
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
-            AmazonProfileEntity amazonProfile = profile.Amazon;
+            IAmazonProfileEntity amazonProfile = profile.Amazon;
 
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 

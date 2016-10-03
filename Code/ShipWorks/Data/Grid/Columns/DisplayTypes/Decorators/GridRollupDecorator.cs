@@ -97,7 +97,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         {
             return new GridRollupDecoratorEditor(this);
         }
-        
+
         /// <summary>
         /// Decorate the given formatted value
         /// </summary>
@@ -114,12 +114,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             {
                 countValue = 1;
             }
-            
+
             // If the count is null, then that means we're probably dealing with a row for a store type that isn't for the count field type.
             // Like if we are rolling up an ebay column and this isn't an ebay store.
             if (countValue != null)
             {
-                formattedValue.Text = FormatRollupText((int) countValue, formattedValue);
+                formattedValue.Text = FormatRollupText(Convert.ToInt32(countValue), formattedValue);
 
                 if (ShowMultiImage)
                 {

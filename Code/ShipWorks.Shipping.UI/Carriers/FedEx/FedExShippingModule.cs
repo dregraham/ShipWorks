@@ -50,9 +50,6 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.FedEx)
                 .ExternallyOwned();
 
-            builder.RegisterType<FedExLabelService>()
-                .Keyed<ILabelService>(ShipmentTypeCode.FedEx);
-
             builder.RegisterType<FedExRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.FedEx);
 

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 
@@ -18,6 +20,7 @@ namespace ShipWorks.Shipping.Profiles
     /// </summary>
     public static class ShippingProfileManager
     {
+        static IEnumerable<IShippingProfileEntity> readOnlyEntities;
         static TableSynchronizer<ShippingProfileEntity> synchronizer;
         static bool needCheckForChanges = false;
 
@@ -60,6 +63,8 @@ namespace ShipWorks.Shipping.Profiles
                         ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType);
                         shipmentType.LoadProfileData(profile, true);
                     }
+
+                    readOnlyEntities = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
                 }
 
                 needCheckForChanges = false;
@@ -86,6 +91,25 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
+        /// Return the active list of all profiles
+        /// </summary>
+        public static IEnumerable<IShippingProfileEntity> ProfilesReadOnly
+        {
+            get
+            {
+                lock (synchronizer)
+                {
+                    if (needCheckForChanges)
+                    {
+                        InternalCheckForChanges();
+                    }
+
+                    return readOnlyEntities;
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the profile with the specified ID, or null if it does not exist
         /// </summary>
         public static ShippingProfileEntity GetProfile(long profileID)
@@ -94,9 +118,17 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
+        /// Get the profile with the specified ID, or null if it does not exist
+        /// </summary>
+        public static IShippingProfileEntity GetProfileReadOnly(long profileID)
+        {
+            return ProfilesReadOnly.SingleOrDefault(p => p.ShippingProfileID == profileID);
+        }
+
+        /// <summary>
         /// Apply the given profile to the given shipment
         /// </summary>
-        public static void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public static void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             if (shipment.Processed)
             {
@@ -148,7 +180,7 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Checks whether the name of the profile already exists in another profile
         /// </summary>
-        public static bool DoesNameExist(ShippingProfileEntity profile)
+        public static bool DoesNameExist(IShippingProfileEntity profile)
         {
             if (profile == null)
             {
@@ -168,6 +200,15 @@ namespace ShipWorks.Shipping.Profiles
         public static ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
         {
             return Profiles.FirstOrDefault(p =>
+                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+        }
+
+        /// <summary>
+        /// Get the default profile for the given shipment type
+        /// </summary>
+        public static IShippingProfileEntity GetDefaultProfileReadOnly(ShipmentTypeCode shipmentTypeCode)
+        {
+            return ProfilesReadOnly.FirstOrDefault(p =>
                 p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
         }
     }
