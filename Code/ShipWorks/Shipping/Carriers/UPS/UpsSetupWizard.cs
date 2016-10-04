@@ -1015,7 +1015,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountSoapException ex)
             {
-                throw new UpsOpenAccountException($"Ups returned the following error: {ex.Message}", ex);
+                throw new UpsOpenAccountException($"UPS returned the following error: {ex.Message}", ex);
             }
             catch (UpsOpenAccountException ex)
             {
