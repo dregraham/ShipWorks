@@ -113,7 +113,7 @@ namespace ShipWorks.Editions
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, storeEntities);
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, storeEntities);
 
-            UpdateDefaultShippingType(restrictions);
+            UpdateDefaultShippingType();
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
 
             // Let anyone who cares know that enabled carriers may have changed.
@@ -125,7 +125,7 @@ namespace ShipWorks.Editions
         /// the selected default type.  i.e. if UPS is restricted and it was the default type, the next created shipment
         /// would be created as UPS.  So instead, we'll update the default type to be None.
         /// </summary>
-        private static void UpdateDefaultShippingType(IEnumerable<EditionRestriction> restrictions)
+        private static void UpdateDefaultShippingType()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
