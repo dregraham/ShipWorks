@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -54,9 +55,6 @@ namespace ShipWorks.Shipping.Loading
             {
                 workProgress.Starting();
 
-                // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-                filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-
                 bool wasCanceled = LoadShipments(workProgress, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
 
                 workProgress.Completed();
@@ -68,9 +66,12 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool LoadShipments(IProgressReporter workProgress, List<long> entityIDsOriginalSort,
             IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
         {
+            bool ensureFilterCountsUpToDateCalled = false;
+
             using (ITrackedDurationEvent trackedDurationEvent = startDurationEvent("LoadShipments"))
             {
                 bool wasCanceled = false;
@@ -81,9 +82,23 @@ namespace ShipWorks.Shipping.Loading
 
                 IOrderedEnumerable<long> orderByDescending = entityIDsOriginalSort.OrderByDescending(id => id);
 
-                foreach (IEnumerable<long> orders in orderByDescending.SplitIntoChunksOf(100))
+                foreach (IEnumerable<long> orderIDs in orderByDescending.SplitIntoChunksOf(100))
                 {
-                    foreach (OrderEntity order in orderManager.LoadOrders(orders, fullOrderPrefetchPath.Value))
+                    IEnumerable<OrderEntity> orders = orderManager.LoadOrders(orderIDs, fullOrderPrefetchPath.Value);
+
+                    // Only ensure filter counts are up to date if there are any orders that have NO shipments already.
+                    // This is because the filter counts need to be up to date so that the correct profile can be used
+                    // to create new shipments.
+                    // We only need to do it once, even while in a chunk, because they only need to be up to date as to
+                    // when LoadShipments was called.  If they aren't up to date 200 orders in, we don't care.
+                    if (!ensureFilterCountsUpToDateCalled && orders.Any(o => o.Shipments.Count == 0))
+                    {
+                        // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
+                        filterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+                        ensureFilterCountsUpToDateCalled = true;
+                    }
+
+                    foreach (OrderEntity order in orders)
                     {
                         if (workProgress.IsCancelRequested)
                         {
