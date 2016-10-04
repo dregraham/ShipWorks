@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
@@ -65,6 +66,7 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
+        [NDependIgnoreLongMethod]
         private bool LoadShipments(IProgressReporter workProgress, List<long> entityIDsOriginalSort,
             IDictionary<long, ShipmentEntity> globalShipments, BlockingCollection<ShipmentEntity> shipmentsToValidate, bool createIfNoShipments)
         {
