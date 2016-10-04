@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Content;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
-using System.Data;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
@@ -23,56 +16,34 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(GenericStoreOnlineUpdater));
 
-        // the store this instances is working for
-        GenericModuleStoreEntity store;
-
         // the status codes the store supports
-        GenericStoreStatusCodeProvider statusCodeProvider;
-
-        // storetype reference
-        GenericModuleStoreType genericStoreType;
+        private GenericStoreStatusCodeProvider statusCodeProvider;
 
         /// <summary>
         /// The store this instance is executing for
         /// </summary>
-        protected GenericModuleStoreEntity Store
-        {
-            get { return store; }
-        }
+        protected GenericModuleStoreEntity Store { get; }
 
         /// <summary>
         /// Status Codes for the store
         /// </summary>
-        protected GenericStoreStatusCodeProvider StatusCodes
-        {
-            get
-            {
-                if (statusCodeProvider == null)
-                {
-                    statusCodeProvider = genericStoreType.CreateStatusCodeProvider();
-                }
-
-                return statusCodeProvider;
-            }
-        }
+        protected GenericStoreStatusCodeProvider StatusCodes => 
+            statusCodeProvider ?? (statusCodeProvider = GenericStoreType.CreateStatusCodeProvider());
 
         /// <summary>
         /// StoreType reference
         /// </summary>
-        protected GenericModuleStoreType GenericStoreType
-        {
-            get { return genericStoreType; }
-        }
+        protected GenericModuleStoreType GenericStoreType { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public GenericStoreOnlineUpdater(GenericModuleStoreEntity store)
         {
-            this.store = store;
+            this.Store = store;
 
             // get the implementing storetype
-            genericStoreType = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+            GenericStoreType = (GenericModuleStoreType)StoreTypeManager.GetType(store);
         }
 
         /// <summary>
@@ -106,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             if (!order.IsManual)
             {
                 // Upload tracking number
-                GenericStoreWebClient webClient = genericStoreType.CreateWebClient();
+                GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
                 webClient.UploadShipmentDetails(order, shipment);
             }
             else
@@ -142,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 {
                     string processedComment = (comment == null) ? "" : TemplateTokenProcessor.ProcessTokens(comment, orderID);
 
-                    GenericStoreWebClient webClient = genericStoreType.CreateWebClient();
+                    GenericStoreWebClient webClient = GenericStoreType.CreateWebClient();
                     webClient.UpdateOrderStatus(order, code, processedComment);
 
                     // Update the database to match, status code display

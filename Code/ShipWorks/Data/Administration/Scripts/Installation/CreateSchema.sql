@@ -3963,7 +3963,8 @@ CREATE TABLE [dbo].[UserSettings]
 [TemplateExpandedFolders] [xml] NULL,
 [TemplateLastSelected] [bigint] NOT NULL,
 [CustomerFilterLastActive] [bigint] NOT NULL,
-[CustomerFilterExpandedFolders] [xml] NULL
+[CustomerFilterExpandedFolders] [xml] NULL,
+[NextGlobalPostNotificationDate] [DateTime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

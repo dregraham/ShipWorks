@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using log4net;
 using ShipWorks.Shipping;

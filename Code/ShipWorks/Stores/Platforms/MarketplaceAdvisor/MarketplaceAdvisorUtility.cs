@@ -145,31 +145,31 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                         switch ((FedExServiceType) shipment.FedEx.Service)
                         {
                             case FedExServiceType.PriorityOvernight:
-                            case FedExServiceType.OneRatePriorityOvernight: 
+                            case FedExServiceType.OneRatePriorityOvernight:
                                 return 65545;
 
                             case FedExServiceType.StandardOvernight:
-                            case FedExServiceType.OneRateStandardOvernight: 
+                            case FedExServiceType.OneRateStandardOvernight:
                                 return 65546;
 
                             case FedExServiceType.FirstOvernight:
-                            case FedExServiceType.OneRateFirstOvernight: 
+                            case FedExServiceType.OneRateFirstOvernight:
                                 return 65529;
 
                             case FedExServiceType.FedEx2Day:
-                            case FedExServiceType.OneRate2Day: 
+                            case FedExServiceType.OneRate2Day:
                                 return 65532;
 
                             case FedExServiceType.FedExExpressSaver:
-                            case FedExServiceType.OneRateExpressSaver: 
+                            case FedExServiceType.OneRateExpressSaver:
                                 return 65547;
 
                             case FedExServiceType.InternationalPriority: return 65544;
                             case FedExServiceType.InternationalEconomy: return 65543;
 
-                            case FedExServiceType.InternationalFirst: 
-                            case FedExServiceType.FedExGround: 
-                            case FedExServiceType.GroundHomeDelivery: 
+                            case FedExServiceType.InternationalFirst:
+                            case FedExServiceType.FedExGround:
+                            case FedExServiceType.GroundHomeDelivery:
                             case FedExServiceType.FedExInternationalGround:
                                 return 65527;
                         }
@@ -192,7 +192,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                             case PostalServiceType.MediaMail: return 65503;
                             case PostalServiceType.ExpressMail: return 65504;
                             case PostalServiceType.InternationalExpress: return 65507;
-                            case PostalServiceType.InternationalPriority: return 65510;
+
+                            case PostalServiceType.InternationalPriority:
+                            case PostalServiceType.GlobalPostPriority:
+                            case PostalServiceType.GlobalPostSmartSaverPriority:
+                                return 65510;
 
                             // Going to treat Critical as Priority - not sure where to get updated code
                             case PostalServiceType.CriticalMail: return 65502;

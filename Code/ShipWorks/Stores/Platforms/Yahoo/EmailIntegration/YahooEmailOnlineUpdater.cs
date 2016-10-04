@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Xml;
 using Interapptive.Shared;
@@ -28,14 +27,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
     public class YahooEmailOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailOnlineUpdater));
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public YahooEmailOnlineUpdater()
-        {
-
-        }
 
         /// <summary>
         /// Upload the shipment details of the most recent shipment of the given order
@@ -72,7 +63,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Upload the shipment details of the given shipment
         /// </summary>
-        [NDependIgnoreLongMethod]
         public EmailOutboundEntity GenerateShipmentUpdateEmail(ShipmentEntity shipment)
         {
             if (shipment.Order.IsManual)
@@ -116,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
             // This would only happen if the user skipped setup during migration/upgrade, and they didn't have
             // Yahoo! updates configured in V2.
-            if (String.IsNullOrEmpty(account.OutgoingServer))
+            if (string.IsNullOrEmpty(account.OutgoingServer))
             {
                 throw new YahooException("The email account associated with the store is not configured for sending email.");
             }
@@ -124,11 +114,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Yahoo, "TrackingUpdate");
             logEntry.LogRequest(emailXmlContent);
 
-            EmailMessageHeader header = new EmailMessageHeader();
-            header.To = "tracking-update@store.yahoo.com";
-            header.Subject = string.Format("Tracking update for '{0}'", order.YahooOrderID);
-            header.EmailAccountID = account.EmailAccountID;
-            header.Visibility = EmailOutboundVisibility.OutboxOnly;
+            return CreateEmailOutboundEntity(shipment, order, account, emailXmlContent);
+        }
+
+        /// <summary>
+        /// Creates the email outbound entity.
+        /// </summary>
+        private EmailOutboundEntity CreateEmailOutboundEntity(ShipmentEntity shipment, YahooOrderEntity order,
+            EmailAccountEntity account, string emailXmlContent)
+        {
+            EmailMessageHeader header = new EmailMessageHeader
+            {
+                To = "tracking-update@store.yahoo.com",
+                Subject = $"Tracking update for '{order.YahooOrderID}'",
+                EmailAccountID = account.EmailAccountID,
+                Visibility = EmailOutboundVisibility.OutboxOnly
+            };
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
