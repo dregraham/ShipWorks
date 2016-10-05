@@ -24,6 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
         [Fact]
         public void RegulatoryLineItemsField_IsOneDimensionalArray()
         {
+            KeyValueDetail[] regulatoryLineItemsField = new DangerousGoodsDetail().RegulatoryLineItems;
             var dangerousGoodsDetailType = typeof(DangerousGoodsDetail);
             PropertyInfo propertyInfo = dangerousGoodsDetailType.GetProperty("RegulatoryLineItems");
 
