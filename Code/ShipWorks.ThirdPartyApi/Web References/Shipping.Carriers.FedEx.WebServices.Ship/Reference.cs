@@ -13,15 +13,11 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
-    using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
+namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
+{
     using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -10618,7 +10614,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         
         private RadioactivityDetail radioactivityDetailField;
         
-        private KeyValueDetail[][] regulatoryLineItemsField;
+        private KeyValueDetail[] regulatoryLineItemsField;
         
         /// <remarks/>
         public string UploadedTrackingNumber {
@@ -10818,7 +10814,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Values", typeof(KeyValueDetail), IsNullable=false)]
-        public KeyValueDetail[][] RegulatoryLineItems {
+        public KeyValueDetail[] RegulatoryLineItems {
             get {
                 return this.regulatoryLineItemsField;
             }
