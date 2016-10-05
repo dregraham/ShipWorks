@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
 using System.Data.SqlClient;
+using System.Linq;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Users;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns.Definitions;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores;
-using System.Diagnostics;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Users;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -100,7 +95,7 @@ namespace ShipWorks.Data.Grid.Columns
 
                 // Find the column format for this column ID
                 GridColumnFormatEntity formatEntity = LoadColumnFormatEntity(definition.ColumnGuid, columnFormats);
-                
+
                 // Get the display type to load the format into
                 GridColumnDisplayType displayType = definition.DisplayType;
 
@@ -172,7 +167,7 @@ namespace ShipWorks.Data.Grid.Columns
         {
             List<GridColumnDefinition> allDefinitions = new List<GridColumnDefinition>();
 
-            // Add in all the definitions to check.  Exclude the "base" column sets, where there a "derived" column set includes columns (and thus the IDs) 
+            // Add in all the definitions to check.  Exclude the "base" column sets, where there a "derived" column set includes columns (and thus the IDs)
             // from the base.  What happens when a column shares a GUID is that the global formatting preferences apply to that column guid for whatever layout
             // it is used in.
             foreach (GridColumnDefinitionCollection definitions in columnDefinitions

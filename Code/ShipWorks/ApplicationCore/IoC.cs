@@ -178,6 +178,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces();
 
             ComponentAttribute.Register(builder, allAssemblies);
+            ServiceAttribute.Register(builder, allAssemblies);
             KeyedComponentAttribute.Register(builder, allAssemblies);
             ResolveWithAttributesAttribute.Register(builder, allAssemblies);
 

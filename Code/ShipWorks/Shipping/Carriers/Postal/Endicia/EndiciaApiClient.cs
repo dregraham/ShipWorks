@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -16,7 +12,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
@@ -31,7 +26,6 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -306,78 +300,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             customs.CustomsItems = customsItems.ToArray();
-        }
-
-        /// <summary>
-        /// Save the label images generated for the shipment
-        /// </summary>
-        private static void SaveLabelImages(ShipmentEntity shipment, LabelRequestResponse response)
-        {
-            // If we had saved an image for this shipment previously clear it.
-            ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
-
-            // Primary image
-            if (!string.IsNullOrEmpty(response.Base64LabelImage))
-            {
-                SaveLabelImage(shipment, "LabelPrimary", response.Base64LabelImage, false);
-            }
-
-            // Image sets
-            if (response.Label != null)
-            {
-                foreach (ImageData imageData in response.Label.Image)
-                {
-                    // For international endicia was sending down all 5 copies in the ImageData sets.  In that case we promote the first one to be the "Primary" label.
-                    if (string.IsNullOrEmpty(response.Base64LabelImage) && response.Label.Image[0] == imageData)
-                    {
-                        SaveLabelImage(shipment, "LabelPrimary", imageData.Value, true);
-                    }
-                    else
-                    {
-                        SaveLabelImage(shipment, string.Format("LabelPart{0}", imageData.PartNumber), imageData.Value, true);
-                    }
-                }
-            }
-
-            // Customs
-            if (response.CustomsForm != null)
-            {
-                foreach (ImageData imageData in response.CustomsForm.Image)
-                {
-                    SaveLabelImage(shipment, string.Format("Customs{0}", imageData.PartNumber), imageData.Value, true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save the given label image
-        /// </summary>
-        private static void SaveLabelImage(ShipmentEntity shipment, string name, string base64, bool crop)
-        {
-            using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64)))
-            {
-                // If not cropping, or if it is thermal, just save it as-is
-                if (!crop || shipment.ActualLabelFormat != null)
-                {
-                    DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, name);
-                }
-                else
-                {
-                    using (Image imageOriginal = Image.FromStream(stream))
-                    {
-                        // For endicia we are just cropping off the "Cut here along line", and its at the same spot on every label that needs it
-                        using (Image imageLabelCrop = DisplayHelper.CropImage(imageOriginal, 0, 0, imageOriginal.Width, Math.Min(imageOriginal.Height, 1580)))
-                        {
-                            using (MemoryStream imageStream = new MemoryStream())
-                            {
-                                imageLabelCrop.Save(imageStream, ImageFormat.Png);
-
-                                DataResourceManager.CreateFromBytes(imageStream.ToArray(), shipment.ShipmentID, name);
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -795,19 +717,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 // Filter out any we really don't care about
                 .Where(e =>
+                {
+                    EndiciaApiException apiEx = e as EndiciaApiException;
+                    if (apiEx != null)
                     {
-                        EndiciaApiException apiEx = e as EndiciaApiException;
-                        if (apiEx != null)
-                        {
-                            // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
-                            // user just won't get the rate for it (which makes sense)
-                            return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    })
+                        // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
+                        // user just won't get the rate for it (which makes sense)
+                        return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                })
 
                 .ToList();
 
@@ -1171,11 +1093,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the given shipment
         /// </summary>
-        public void ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        public LabelRequestResponse ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
             EndiciaAccountEntity account = GetAccount(postal);
-            PostalServiceType serviceType = (PostalServiceType)postal.Service;
+            PostalServiceType serviceType = (PostalServiceType) postal.Service;
 
             LabelRequest request = GenerateLabelRequest(shipment, endiciaShipmentType, account, serviceType);
 
@@ -1213,12 +1135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                     }
 
-                    // Tracking and cost
-                    shipment.TrackingNumber = response.TrackingNumber;
-                    shipment.ShipmentCost = postal.NoPostage ? 0 : response.FinalPostage;
-                    shipment.Postal.Endicia.TransactionID = response.TransactionID;
-
-                    SaveLabelImages(shipment, response);
+                    return response;
                 }
             }
             catch (Exception ex)
@@ -1233,7 +1150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private LabelRequest GenerateLabelRequest(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, EndiciaAccountEntity account, PostalServiceType serviceType)
         {
             PostalShipmentEntity postal = shipment.Postal;
-            PostalPackagingType packagingType = (PostalPackagingType)postal.PackagingType;
+            PostalPackagingType packagingType = (PostalPackagingType) postal.PackagingType;
 
             // Create the request
             LabelRequest request = new LabelRequest();
@@ -1486,7 +1403,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private static void ApplyToAddress(ShipmentEntity shipment, LabelRequest request, PersonAdapter from, PersonAdapter recipient)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
 
             // POZipCode is always required for ParcelSelect if EntryFacility is not 'Other'.
             if (string.IsNullOrWhiteSpace(request.POZipCode) && PostalUtility.IsEntryFacilityRequired(serviceType))
@@ -1607,7 +1524,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             shipment.ActualLabelFormat = (int?) thermalType;
             request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
         }
-        
+
         /// <summary>
         /// For APO/FPO shipments, add appropriate label format.
         /// </summary>
@@ -1638,8 +1555,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private static ThermalLanguage? ApplyInternationalLabelFormat(ShipmentEntity shipment, LabelRequest request, ThermalLanguage? thermalType)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
             request.LabelType = "International";
             request.LabelSubtype = "Integrated";
@@ -1717,9 +1634,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // If this is an Express1 shipment, and Single-Source is turned on, we need to make sure it is a packaging type Express1 supports or
                 if (settings.Express1EndiciaSingleSource)
                 {
-                    // If its not a postage saving service, express1 would automatically reroute to Endicia.  
+                    // If its not a postage saving service, express1 would automatically reroute to Endicia.
                     // It's only when the service could save, but the packaging is goofed that there's a problem.
-                    if (Express1Utilities.IsPostageSavingService(serviceType) && 
+                    if (Express1Utilities.IsPostageSavingService(serviceType) &&
                         !Express1Utilities.IsValidPackagingType(serviceType, packagingType))
                     {
                         request.Provider = "Endicia";

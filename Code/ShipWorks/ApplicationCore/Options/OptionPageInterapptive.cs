@@ -1,5 +1,5 @@
 using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Reflection;
 using System.Windows.Forms;
 using Interapptive.Shared.Data;
@@ -27,7 +27,6 @@ using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.SearchFit;
 using ShipWorks.Stores.Platforms.Sears;
-using ShipWorks.Stores.Platforms.Yahoo;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
 
 namespace ShipWorks.ApplicationCore.Options
@@ -54,7 +53,7 @@ namespace ShipWorks.ApplicationCore.Options
         {
             postalWebTestServer.Checked = PostalWebUtility.UseTestServer;
             uspsTestServer.Checked = UspsWebClient.UseTestServer;
-            
+
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
             express1EndiciaTestServer.Checked = Express1EndiciaUtility.UseTestServer;
@@ -80,7 +79,7 @@ namespace ShipWorks.ApplicationCore.Options
 
             buyDotComMapChooser.Initialize(new BuyDotComOrderImportSchema());
 
-            EnumHelper.BindComboBox <EndiciaTestServer>(endiciaTestServers);
+            EnumHelper.BindComboBox<EndiciaTestServer>(endiciaTestServers);
             endiciaTestServers.SelectedValue = EndiciaApiClient.UseTestServerUrl;
             endiciaTestServers.Enabled = endiciaTestServer.Checked;
 
@@ -119,7 +118,7 @@ namespace ShipWorks.ApplicationCore.Options
 
             InterapptiveOnly.AllowMultipleInstances = multipleInstances.Checked;
 
-            EndiciaApiClient.UseTestServerUrl = (EndiciaTestServer)endiciaTestServers.SelectedValue;
+            EndiciaApiClient.UseTestServerUrl = (EndiciaTestServer) endiciaTestServers.SelectedValue;
 
             new InsureShipSettings().UseTestServer = useInsureShipTestServer.Checked;
         }
@@ -131,9 +130,9 @@ namespace ShipWorks.ApplicationCore.Options
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlTransaction transaction = con.BeginTransaction())
+                using (DbTransaction transaction = con.BeginTransaction())
                 {
                     SqlAssemblyDeployer.DeployAssemblies(con, transaction);
                     transaction.Commit();
@@ -158,9 +157,9 @@ namespace ShipWorks.ApplicationCore.Options
 
                     Cursor.Current = Cursors.WaitCursor;
 
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
-                        using (SqlTransaction transaction = con.BeginTransaction())
+                        using (DbTransaction transaction = con.BeginTransaction())
                         {
                             SqlAssemblyDeployer.DropAssemblies(con, transaction);
                             SqlAssemblyDeployer.DeployAssembly(assembly, con, transaction);
@@ -189,7 +188,7 @@ namespace ShipWorks.ApplicationCore.Options
                 FilterLayoutContext.Current.RegenerateAllFilters(SqlAdapter.Default);
 
                 // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
                     SqlUtility.TruncateTable("FilterNodeContentDirty", con);
                     SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", con);

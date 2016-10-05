@@ -1,21 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Properties;
-using ShipWorks.Data.Connection;
-using ShipWorks.Templates.Emailing;
-using ShipWorks.Email;
-using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Email;
+using ShipWorks.UI.Wizard;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Users
 {

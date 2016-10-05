@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <preference for="ShipWorks\Module\Api\ShipWorksInterface"
+                type="ShipWorks\Module\Model\ShipWorks" />
+
+    <preference for="ShipWorks\Module\Api\WriterInterface"
+                type="ShipWorks\Module\Model\XMLWriter" />
+
+    <preference for="ShipWorks\Module\Api\StoreInterface"
+                type="ShipWorks\Module\Model\Store" />
+
+    <preference for="ShipWorks\Module\Api\OrderInterface"
+                type="ShipWorks\Module\Model\Order" />
+
+    <preference for="ShipWorks\Module\Api\OrderActionParametersInterface"
+                type="ShipWorks\Module\Model\OrderActionParameters" />
+</config>

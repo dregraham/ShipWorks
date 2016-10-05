@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
@@ -15,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     {
         static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOnlineUpdater));
 
-        MarketplaceAdvisorStoreEntity store;
+        private readonly MarketplaceAdvisorStoreEntity store;
 
         /// <summary>
         /// Constructor

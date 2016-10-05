@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Data.Common;
 using Common.Logging;
 using Interapptive.Shared.Data;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Connection
         /// Returns the sql connection that is currently in scope.  Returns null if there is no
         /// connection active.
         /// </summary>
-        public static SqlConnection ScopedConnection
+        public static DbConnection ScopedConnection
         {
             get;
             private set;
@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Connection
         /// Returns the sql transaction that is currently in scope.  Returns null if there is no
         /// connection active.
         /// </summary>
-        public static SqlTransaction ScopedTransaction
+        public static DbTransaction ScopedTransaction
         {
             get;
             private set;
@@ -76,7 +76,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Execute the specified action with a pre-built connection and command
         /// </summary>
-        public static void ExecuteWithCommand(Action<SqlCommand> commandAction)
+        public static void ExecuteWithCommand(Action<DbCommand> commandAction)
         {
             ExecuteWithCommand<object>(x =>
             {
@@ -88,20 +88,20 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Execute the specified action with a pre-built connection and command
         /// </summary>
-        public static T ExecuteWithCommand<T>(Func<SqlCommand, T> commandAction)
+        public static T ExecuteWithCommand<T>(Func<DbCommand, T> commandAction)
         {
             if (ScopedConnection == null)
             {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlCommand command = SqlCommandProvider.Create(con))
+                    using (DbCommand command = DbCommandProvider.Create(con))
                     {
                         return commandAction(command);
                     }
                 }
             }
 
-            using (SqlCommand command = SqlCommandProvider.Create(ScopedConnection))
+            using (DbCommand command = DbCommandProvider.Create(ScopedConnection))
             {
                 command.Transaction = ScopedTransaction;
                 return commandAction(command);

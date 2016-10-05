@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
@@ -26,7 +26,7 @@ namespace ShipWorks.ApplicationCore.Setup
         /// </summary>
         public static bool IsLocked()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 return SqlAppLockUtility.IsLocked(con, resourceName);
             }

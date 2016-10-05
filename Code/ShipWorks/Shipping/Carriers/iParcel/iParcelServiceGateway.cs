@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Authentication;
-using System.Data;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Track;
 
@@ -13,12 +10,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// Implementation of the IiParcelServiceGateway that dispatches requests to the i-parcel web services.
     /// </summary>
+    [Component]
     public class iParcelServiceGateway : IiParcelServiceGateway
     {
-
         /// <summary>
         /// Intended to serve as a means to determine if a set of credentials are recognized
-        /// by the the i-parcel web service.
+        /// by the i-parcel web service.
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <returns>
@@ -71,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns>A DataSet containing tracking events.</returns>
         public DataSet TrackShipment(iParcelCredentials credentials, ShipmentEntity shipment)
         {
-            // Just use the first package to track the shipment to be consistent with the 
+            // Just use the first package to track the shipment to be consistent with the
             // other carrier implementations
             iParcelTrackRequest request = new iParcelTrackRequest(credentials, shipment.IParcel.Packages[0]);
             return request.Submit();

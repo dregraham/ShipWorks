@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
@@ -12,6 +11,8 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -78,6 +79,9 @@ namespace ShipWorks.Shipping.Carriers.Usps
                 .AsImplementedInterfaces();
 
             builder.RegisterType<AssociateShipworksWithItselfRequest>();
+
+            builder.RegisterType<GlobalPostLabelNotification>()
+                .As<IGlobalPostLabelNotification>();
         }
     }
 }

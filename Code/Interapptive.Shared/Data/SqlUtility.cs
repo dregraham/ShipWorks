@@ -1,18 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.IO;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.Win32;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Reflection;
-using System.Data.SqlClient;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
 using log4net;
-using System.Threading;
-using System.Globalization;
 
 namespace Interapptive.Shared.Data
 {
@@ -30,7 +23,7 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Executes each batch in the SQL, as separated by the GO keyword, using the given connection.
         /// </summary>
-        public static void ExecuteScriptSql(string name, string sql, SqlConnection con)
+        public static void ExecuteScriptSql(string name, string sql, DbConnection con)
         {
             ExecuteScriptSql(name, sql, con, null);
         }
@@ -38,7 +31,7 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Executes each batch in the SQL, as separated by the GO keyword, using the given connection.
         /// </summary>
-        public static void ExecuteScriptSql(string name, string sql, SqlConnection con, SqlTransaction transaction)
+        public static void ExecuteScriptSql(string name, string sql, DbConnection con, DbTransaction transaction)
         {
             if (con == null)
             {
@@ -47,17 +40,17 @@ namespace Interapptive.Shared.Data
 
             SqlScript script = new SqlScript(name, sql);
 
-            using (SqlCommand command = SqlCommandProvider.Create(con))
+            using (DbCommand command = DbCommandProvider.Create(con))
             {
                 command.Transaction = transaction;
-                script.Execute(command);   
+                script.Execute(command);
             }
         }
 
         /// <summary>
         /// Enable CLR usage on the given connection
         /// </summary>
-        public static void EnableClr(SqlConnection con)
+        public static void EnableClr(DbConnection con)
         {
             if (con == null)
             {
@@ -68,8 +61,8 @@ namespace Interapptive.Shared.Data
 
             try
             {
-                SqlCommandProvider.ExecuteNonQuery(con, "sp_configure 'clr enabled', 1");
-                SqlCommandProvider.ExecuteNonQuery(con, "RECONFIGURE");
+                DbCommandProvider.ExecuteNonQuery(con, "sp_configure 'clr enabled', 1");
+                DbCommandProvider.ExecuteNonQuery(con, "RECONFIGURE");
             }
             catch (Exception ex)
             {
@@ -82,25 +75,25 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Set the compatibility level of the database
         /// </summary>
-        public static void SetSql2008CompatibilityLevel(SqlConnection con)
+        public static void SetSql2008CompatibilityLevel(DbConnection con)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = string.Format("ALTER DATABASE [{0}] SET COMPATIBILITY_LEVEL = 100", con.Database);
 
             log.Info(cmd.CommandText);
 
-            SqlCommandProvider.ExecuteNonQuery(cmd);
+            DbCommandProvider.ExecuteNonQuery(cmd);
         }
 
         /// <summary>
         /// Set the database on the given connection into single-user mode.
         /// </summary>
-        public static void SetSingleUser(SqlConnection con)
+        public static void SetSingleUser(DbConnection con)
         {
             if (con == null)
             {
@@ -108,13 +101,13 @@ namespace Interapptive.Shared.Data
             }
 
             log.Info("Altering database to SINGLE_USER");
-            SqlCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+            DbCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
         }
 
         /// <summary>
         /// Set the database on the given connection into multi-user mode
         /// </summary>
-        public static void SetMultiUser(SqlConnection con)
+        public static void SetMultiUser(DbConnection con)
         {
             if (con == null)
             {
@@ -122,22 +115,22 @@ namespace Interapptive.Shared.Data
             }
 
             log.Info("Altering database to MULTI_USER");
-            SqlCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE");
+            DbCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE");
         }
-        
+
         /// <summary>
         /// Determines if the specified database is in SINGLE_USER mode using the given connection
         /// </summary>
-        public static bool IsSingleUser(SqlConnection con, string databaseName)
+        public static bool IsSingleUser(DbConnection con, string databaseName)
         {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "SELECT user_access FROM sys.databases WHERE name = @name";
-            cmd.Parameters.AddWithValue("@name", databaseName);
+            cmd.AddParameterWithValue("@name", databaseName);
 
             object result = cmd.ExecuteScalar();
             if (result == null || result is DBNull)
@@ -151,7 +144,7 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Set the number of days change tracking should retain data for the database on the given connection
         /// </summary>
-        public static void SetChangeTrackingRetention(SqlConnection con, int days)
+        public static void SetChangeTrackingRetention(DbConnection con, int days)
         {
             if (con == null)
             {
@@ -160,36 +153,36 @@ namespace Interapptive.Shared.Data
 
             log.InfoFormat("Altering database to CHANGE_RETRENTION {0} DAYS", days);
 
-            SqlCommandProvider.ExecuteNonQuery(con, string.Format("ALTER DATABASE [" + con.Database + "] SET CHANGE_TRACKING (CHANGE_RETENTION = {0} DAYS)", days));
+            DbCommandProvider.ExecuteNonQuery(con, string.Format("ALTER DATABASE [" + con.Database + "] SET CHANGE_TRACKING (CHANGE_RETENTION = {0} DAYS)", days));
         }
 
         /// <summary>
         /// Start a new transaction on the given connection
         /// </summary>
-        public static void BeginTransaction(SqlConnection con)
+        public static void BeginTransaction(DbConnection con)
         {
-            SqlCommandProvider.ExecuteNonQuery(con, "BEGIN TRANSACTION");
+            DbCommandProvider.ExecuteNonQuery(con, "BEGIN TRANSACTION");
         }
 
         /// <summary>
         /// Commit the outstanding transaction on the given connection
         /// </summary>
-        public static void CommitTransaction(SqlConnection con)
+        public static void CommitTransaction(DbConnection con)
         {
-            SqlCommandProvider.ExecuteNonQuery(con, "COMMIT");
+            DbCommandProvider.ExecuteNonQuery(con, "COMMIT");
         }
 
         /// <summary>
         /// Returns true if the database exists on the server from the specified connection
         /// </summary>
-        public static bool DoesDatabaseExist(SqlConnection con, string databaseName)
+        public static bool DoesDatabaseExist(DbConnection con, string databaseName)
         {
             // query the sys tables to determine if a database exists
-            SqlCommand cmd = SqlCommandProvider.Create(con);
+            DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "select count(*) from master..sysdatabases where name = @databaseName";
-            cmd.Parameters.AddWithValue("@databaseName", databaseName);
+            cmd.AddParameterWithValue("@databaseName", databaseName);
 
-            if ((int) SqlCommandProvider.ExecuteScalar(cmd) == 1)
+            if ((int) DbCommandProvider.ExecuteScalar(cmd) == 1)
             {
                 return true;
             }
@@ -223,21 +216,21 @@ namespace Interapptive.Shared.Data
 
             return value;
         }
-        
+
         /// <summary>
         /// Get the effective logged in SQL Server user of the connection
         /// </summary>
-        public static string GetUsername(SqlConnection con)
+        public static string GetUsername(DbConnection con)
         {
-            return (string) SqlCommandProvider.ExecuteScalar(con, "SELECT SUSER_SNAME()");
+            return (string) DbCommandProvider.ExecuteScalar(con, "SELECT SUSER_SNAME()");
         }
 
         /// <summary>
         /// Checks that the given permission name is available for the current user on the current schema
         /// </summary>
-        public static bool CheckSchemaPermission(SqlConnection con, string permission)
+        public static bool CheckSchemaPermission(DbConnection con, string permission)
         {
-            int result = (int) SqlCommandProvider.ExecuteScalar(con, string.Format("SELECT HAS_PERMS_BY_NAME(SCHEMA_NAME(), 'SCHEMA', '{0}')", permission));
+            int result = (int) DbCommandProvider.ExecuteScalar(con, string.Format("SELECT HAS_PERMS_BY_NAME(SCHEMA_NAME(), 'SCHEMA', '{0}')", permission));
 
             return result != 0;
         }
@@ -245,9 +238,9 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Checks that the given user has the given permission in the current database
         /// </summary>
-        public static bool CheckDatabasePermission(SqlConnection con, string permission)
+        public static bool CheckDatabasePermission(DbConnection con, string permission)
         {
-            int result = (int) SqlCommandProvider.ExecuteScalar(con, string.Format("SELECT HAS_PERMS_BY_NAME('{0}', 'DATABASE', '{1}')", con.Database, permission));
+            int result = (int) DbCommandProvider.ExecuteScalar(con, string.Format("SELECT HAS_PERMS_BY_NAME('{0}', 'DATABASE', '{1}')", con.Database, permission));
 
             return result != 0;
         }
@@ -255,9 +248,9 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Checks that the given user has the given permission on the given object in the current database
         /// </summary>
-        public static bool CheckObjectPermission(SqlConnection con, string objectName, string permission)
+        public static bool CheckObjectPermission(DbConnection con, string objectName, string permission)
         {
-            int result = (int) SqlCommandProvider.ExecuteScalar(con, string.Format("SELECT HAS_PERMS_BY_NAME('{0}', 'OBJECT', '{1}')", objectName, permission));
+            int result = (int) DbCommandProvider.ExecuteScalar(con, string.Format("SELECT HAS_PERMS_BY_NAME('{0}', 'OBJECT', '{1}')", objectName, permission));
 
             return result != 0;
         }
@@ -265,9 +258,9 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Get the file path to the master database mdf file
         /// </summary>
-        public static string GetMasterDataFilePath(SqlConnection con)
+        public static string GetMasterDataFilePath(DbConnection con)
         {
-            object fileResult = SqlCommandProvider.ExecuteScalar(con, "select filename from master..sysdatabases where name = 'master'");
+            object fileResult = DbCommandProvider.ExecuteScalar(con, "select filename from master..sysdatabases where name = 'master'");
 
             if (fileResult == null || fileResult is DBNull)
             {
@@ -290,7 +283,7 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Truncate the given table contents
         /// </summary>
-        public static void TruncateTable(string filterNodeContentDirty, SqlConnection sqlConnection)
+        public static void TruncateTable(string filterNodeContentDirty, DbConnection sqlConnection)
         {
             TruncateTable(filterNodeContentDirty, sqlConnection, null);
         }
@@ -298,14 +291,14 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Truncate the given table contents
         /// </summary>
-        public static void TruncateTable(string table, SqlConnection con, SqlTransaction transaction)
+        public static void TruncateTable(string table, DbConnection con, DbTransaction transaction)
         {
             if (!truncateWithDelete)
             {
                 // Try TRUNCATE for optimal performance
                 try
                 {
-                    SqlCommand truncateCmd = con.CreateCommand();
+                    DbCommand truncateCmd = con.CreateCommand();
                     truncateCmd.Transaction = transaction;
                     truncateCmd.CommandText = "TRUNCATE TABLE [" + table + "]";
                     truncateCmd.ExecuteNonQuery();
@@ -319,7 +312,7 @@ namespace Interapptive.Shared.Data
             }
 
             // Fallback to DELETE in case user doesn't have permission
-            SqlCommand deleteCmd = con.CreateCommand();
+            DbCommand deleteCmd = con.CreateCommand();
             deleteCmd.Transaction = transaction;
             deleteCmd.CommandText = "DELETE " + table;
             deleteCmd.ExecuteNonQuery();
@@ -333,21 +326,21 @@ namespace Interapptive.Shared.Data
         /// <returns>Pipe delimited CSV of running queries.</returns>
         public static string GetRunningSqlCommands(string connectionString)
         {
-            StringBuilder runningSqlCommands = new StringBuilder();
+            StringBuilder runningDbCommands = new StringBuilder();
             bool isFirstRow = true;
 
             try
             {
-                runningSqlCommands.AppendLine("SQL Commands that were running:");
+                runningDbCommands.AppendLine("SQL Commands that were running:");
 
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                using (DbConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    using (SqlCommand sqlCommand = sqlConnection.CreateCommand())
+                    using (DbCommand sqlCommand = sqlConnection.CreateCommand())
                     {
                         sqlCommand.CommandText = ResourceUtility.ReadString("Interapptive.Shared.Resources.RunningSqlQueries.sql");
                         sqlConnection.Open();
 
-                        using (SqlDataReader sqlDataReader = sqlCommand.ExecuteReader())
+                        using (DbDataReader sqlDataReader = sqlCommand.ExecuteReader())
                         {
                             while (sqlDataReader.Read())
                             {
@@ -358,9 +351,9 @@ namespace Interapptive.Shared.Data
                                     for (int rowNumber = 0; rowNumber < schemaTable.Rows.Count; rowNumber++)
                                     {
                                         DataRow schemaRow = schemaTable.Rows[rowNumber];
-                                        runningSqlCommands.AppendFormat("{0}|", schemaRow[0]);
+                                        runningDbCommands.AppendFormat("{0}|", schemaRow[0]);
                                     }
-                                    runningSqlCommands.AppendLine();
+                                    runningDbCommands.AppendLine();
 
                                     isFirstRow = false;
                                 }
@@ -368,10 +361,10 @@ namespace Interapptive.Shared.Data
                                 for (int columnNumber = 0; columnNumber < sqlDataReader.FieldCount; columnNumber++)
                                 {
                                     string value = sqlDataReader[columnNumber].ToString().Replace(Environment.NewLine, " ");
-                                    runningSqlCommands.AppendFormat("{0}|", value);
+                                    runningDbCommands.AppendFormat("{0}|", value);
                                 }
 
-                                runningSqlCommands.AppendLine();
+                                runningDbCommands.AppendLine();
                             }
                         }
                     }
@@ -382,10 +375,10 @@ namespace Interapptive.Shared.Data
                 // Since this is method is really only for logging additional troubleshooting info, we don't want an exception here to interfere
                 // with the real exception that occurred, so we'll just log this exception, and carry on.
                 log.Error("An error occurred while attempting to determine sql commands that were running.", ex);
-                runningSqlCommands.AppendLine(ex.Message);
+                runningDbCommands.AppendLine(ex.Message);
             }
 
-            return runningSqlCommands.ToString();
+            return runningDbCommands.ToString();
         }
     }
 }

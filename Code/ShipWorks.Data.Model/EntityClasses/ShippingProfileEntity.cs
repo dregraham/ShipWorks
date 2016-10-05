@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -23,23 +23,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-
-	/// <summary>
-	/// Entity class which represents the entity 'ShippingProfile'.<br/><br/>
-	/// 
-	/// </summary>
+	/// <summary>Entity class which represents the entity 'ShippingProfile'.<br/><br/></summary>
 	[Serializable]
-	public partial class ShippingProfileEntity : CommonEntityBase, ISerializable
+	public partial class ShippingProfileEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-
-
-
 		private AmazonProfileEntity _amazon;
 		private BestRateProfileEntity _bestRate;
 		private FedExProfileEntity _fedEx;
@@ -48,7 +40,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private OtherProfileEntity _other;
 		private PostalProfileEntity _postal;
 		private UpsProfileEntity _ups;
-		
+
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
 		#endregion
@@ -60,9 +52,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-
-
-
 			/// <summary>Member name Amazon</summary>
 			public static readonly string Amazon = "Amazon";
 			/// <summary>Member name BestRate</summary>
@@ -87,11 +76,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			SetupCustomPropertyHashtables();
 		}
-
+		
 		/// <summary> CTor</summary>
 		public ShippingProfileEntity():base("ShippingProfileEntity")
 		{
-			InitClassEmpty(null, CreateFields());
+			InitClassEmpty(null, null);
 		}
 
 		/// <summary> CTor</summary>
@@ -106,16 +95,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="validator">The custom validator object for this ShippingProfileEntity</param>
 		public ShippingProfileEntity(IValidator validator):base("ShippingProfileEntity")
 		{
-			InitClassEmpty(validator, CreateFields());
+			InitClassEmpty(validator, null);
 		}
 				
-
 		/// <summary> CTor</summary>
 		/// <param name="shippingProfileID">PK value for ShippingProfile which data should be fetched into this ShippingProfile object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public ShippingProfileEntity(System.Int64 shippingProfileID):base("ShippingProfileEntity")
 		{
-			InitClassEmpty(null, CreateFields());
+			InitClassEmpty(null, null);
 			this.ShippingProfileID = shippingProfileID;
 		}
 
@@ -125,7 +113,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
 		public ShippingProfileEntity(System.Int64 shippingProfileID, IValidator validator):base("ShippingProfileEntity")
 		{
-			InitClassEmpty(validator, CreateFields());
+			InitClassEmpty(validator, null);
 			this.ShippingProfileID = shippingProfileID;
 		}
 
@@ -137,9 +125,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
-
-
 				_amazon = (AmazonProfileEntity)info.GetValue("_amazon", typeof(AmazonProfileEntity));
 				if(_amazon!=null)
 				{
@@ -180,45 +165,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_ups.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
+				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		
-		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
-		/// <param name="fieldIndex">The fieldindex.</param>
-		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
-		{
-			switch((ShippingProfileFieldIndex)fieldIndex)
-			{
-				default:
-					base.PerformDesyncSetupFKFieldChange(fieldIndex);
-					break;
-			}
-		}
-				
-		/// <summary>Gets the inheritance info provider instance of the project this entity instance is located in. </summary>
-		/// <returns>ready to use inheritance info provider instance.</returns>
-		protected override IInheritanceInfoProvider GetInheritanceInfoProvider()
-		{
-			return InheritanceInfoProviderSingleton.GetInstance();
-		}
-		
+
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
 		/// <param name="entity">Entity to set as an related entity</param>
 		/// <remarks>Used by prefetch path logic.</remarks>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntityProperty(string propertyName, IEntity2 entity)
+		protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
 		{
 			switch(propertyName)
 			{
-
-
-
 				case "Amazon":
 					this.Amazon = (AmazonProfileEntity)entity;
 					break;
@@ -244,6 +205,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					this.Ups = (UpsProfileEntity)entity;
 					break;
 				default:
+					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
 			}
 		}
@@ -251,75 +213,59 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
+		protected override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return ShippingProfileEntity.GetRelationsForField(fieldName);
+			return GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public static RelationCollection GetRelationsForField(string fieldName)
+		internal static RelationCollection GetRelationsForField(string fieldName)
 		{
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
-
-
 				case "Amazon":
-					toReturn.Add(ShippingProfileEntity.Relations.AmazonProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.AmazonProfileEntityUsingShippingProfileID);
 					break;
 				case "BestRate":
-					toReturn.Add(ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.BestRateProfileEntityUsingShippingProfileID);
 					break;
 				case "FedEx":
-					toReturn.Add(ShippingProfileEntity.Relations.FedExProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.FedExProfileEntityUsingShippingProfileID);
 					break;
 				case "IParcel":
-					toReturn.Add(ShippingProfileEntity.Relations.IParcelProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.IParcelProfileEntityUsingShippingProfileID);
 					break;
 				case "OnTrac":
-					toReturn.Add(ShippingProfileEntity.Relations.OnTracProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.OnTracProfileEntityUsingShippingProfileID);
 					break;
 				case "Other":
-					toReturn.Add(ShippingProfileEntity.Relations.OtherProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.OtherProfileEntityUsingShippingProfileID);
 					break;
 				case "Postal":
-					toReturn.Add(ShippingProfileEntity.Relations.PostalProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.PostalProfileEntityUsingShippingProfileID);
 					break;
 				case "Ups":
-					toReturn.Add(ShippingProfileEntity.Relations.UpsProfileEntityUsingShippingProfileID);
+					toReturn.Add(Relations.UpsProfileEntityUsingShippingProfileID);
 					break;
 				default:
-
 					break;				
 			}
 			return toReturn;
 		}
 #if !CF
-		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it
-		/// will return true if the entity has any single-sided relation</summary>
+		/// <summary>Checks if the relation mapped by the property with the name specified is a one way / single sided relation. If the passed in name is null, it/ will return true if the entity has any single-sided relation</summary>
 		/// <param name="propertyName">Name of the property which is mapped onto the relation to check, or null to check if the entity has any relation/ which is single sided</param>
 		/// <returns>true if the relation is single sided / one way (so the opposite relation isn't present), false otherwise</returns>
-		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected override bool CheckOneWayRelations(string propertyName)
 		{
-			// use template trick to calculate the # of single-sided / oneway relations
 			int numberOfOneWayRelations = 0;
 			switch(propertyName)
 			{
 				case null:
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
-
-
-
-
-
-
-
-
-
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -328,13 +274,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Sets the internal parameter related to the fieldname passed to the instance relatedEntity. </summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void SetRelatedEntity(IEntity2 relatedEntity, string fieldName)
+		protected override void SetRelatedEntity(IEntityCore relatedEntity, string fieldName)
 		{
 			switch(fieldName)
 			{
-
-
 				case "Amazon":
 					SetupSyncAmazon(relatedEntity);
 					break;
@@ -368,13 +311,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="relatedEntity">Instance to unset as the related entity of type entityType</param>
 		/// <param name="fieldName">Name of field mapped onto the relation which resolves in the instance relatedEntity</param>
 		/// <param name="signalRelatedEntityManyToOne">if set to true it will notify the manytoone side, if applicable.</param>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void UnsetRelatedEntity(IEntity2 relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
+		protected override void UnsetRelatedEntity(IEntityCore relatedEntity, string fieldName, bool signalRelatedEntityManyToOne)
 		{
 			switch(fieldName)
 			{
-
-
 				case "Amazon":
 					DesetupSyncAmazon(false, true);
 					break;
@@ -406,7 +346,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets a collection of related entities referenced by this entity which depend on this entity (this entity is the PK side of their FK fields). These entities will have to be persisted after this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependingRelatedEntities()
+		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
 			if(_amazon!=null)
@@ -455,7 +395,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets a collection of related entities referenced by this entity which this entity depends on (this entity is the FK side of their PK fields). These
 		/// entities will have to be persisted before this entity during a recursive save.</summary>
 		/// <returns>Collection with 0 or more IEntity2 objects, referenced by this entity</returns>
-		public override List<IEntity2> GetDependentRelatedEntities()
+		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
 
@@ -474,33 +414,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
 			return toReturn;
 		}
 		
-		/// <summary>Gets a list of all entity collections stored as member variables in this entity. The contents of the ArrayList is used by the DataAccessAdapter to perform recursive saves. Only 1:n related collections are returned.</summary>
+		/// <summary>Gets a list of all entity collections stored as member variables in this entity. Only 1:n related collections are returned.</summary>
 		/// <returns>Collection with 0 or more IEntityCollection2 objects, referenced by this entity</returns>
-		public override List<IEntityCollection2> GetMemberEntityCollections()
+		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-
-
 			return toReturn;
 		}
-		
-
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		protected override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-
-
-
 				info.AddValue("_amazon", (!this.MarkedForDeletion?_amazon:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
@@ -510,44 +442,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_postal", (!this.MarkedForDeletion?_postal:null));
 				info.AddValue("_ups", (!this.MarkedForDeletion?_ups:null));
 			}
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
-		/// <summary>Returns true if the original value for the field with the fieldIndex passed in, read from the persistent storage was NULL, false otherwise.
-		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
-		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
-		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(ShippingProfileFieldIndex fieldIndex)
-		{
-			return base.Fields[(int)fieldIndex].IsNull;
-		}
-		
-		/// <summary>Returns true if the current value for the field with the fieldIndex passed in represents null/not defined, false otherwise.
-		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
-		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
-		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(ShippingProfileFieldIndex fieldIndex)
-		{
-			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
-		}
 
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
-		public override List<IEntityRelation> GetAllRelations()
+		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new ShippingProfileRelations().GetAllRelations();
 		}
-		
 
-
-
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'AmazonProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'AmazonProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoAmazon()
 		{
@@ -556,8 +465,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'BestRateProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'BestRateProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoBestRate()
 		{
@@ -566,8 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'FedExProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'FedExProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoFedEx()
 		{
@@ -576,8 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'IParcelProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'IParcelProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoIParcel()
 		{
@@ -586,8 +492,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'OnTracProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'OnTracProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoOnTrac()
 		{
@@ -596,8 +501,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'OtherProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'OtherProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoOther()
 		{
@@ -606,8 +510,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'PostalProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'PostalProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoPostal()
 		{
@@ -616,8 +519,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'UpsProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'UpsProfile' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoUps()
 		{
@@ -625,22 +527,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UpsProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
 			return bucket;
 		}
-	
 		
-		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
-		protected virtual IEntityFields2 CreateFields()
-		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.ShippingProfileEntity);
-		}
-
-		/// <summary>
-		/// Creates the ITypeDefaultValue instance used to provide default values for value types which aren't of type nullable(of T)
-		/// </summary>
-		/// <returns></returns>
-		protected override ITypeDefaultValue CreateTypeDefaultValueProvider()
-		{
-			return new TypeDefaultValue();
-		}
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
@@ -653,8 +540,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-
-
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -663,16 +548,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 
-
 		}
 		
 		/// <summary>Determines whether the entity has populated member collections</summary>
 		/// <returns>true if the entity has populated member collections.</returns>
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
-
-
-			return base.HasPopulatedMemberEntityCollections();
+			bool toReturn = false;
+			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
 		/// <summary>Creates the member entity collections queue.</summary>
@@ -681,20 +564,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-
-
 		}
 #endif
-		/// <summary>
-		/// Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element. 
-		/// </summary>
+		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
 		/// <returns>Dictionary with per name the related referenced data element, which can be an entity collection or an entity or null</returns>
-		public override Dictionary<string, object> GetRelatedData()
+		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-
-
-
 			toReturn.Add("Amazon", _amazon);
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("FedEx", _fedEx);
@@ -705,62 +581,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("Ups", _ups);
 			return toReturn;
 		}
-		
-		/// <summary> Adds the internals to the active context. </summary>
-		protected override void AddInternalsToContext()
-		{
-
-
-
-			if(_amazon!=null)
-			{
-				_amazon.ActiveContext = base.ActiveContext;
-			}
-			if(_bestRate!=null)
-			{
-				_bestRate.ActiveContext = base.ActiveContext;
-			}
-			if(_fedEx!=null)
-			{
-				_fedEx.ActiveContext = base.ActiveContext;
-			}
-			if(_iParcel!=null)
-			{
-				_iParcel.ActiveContext = base.ActiveContext;
-			}
-			if(_onTrac!=null)
-			{
-				_onTrac.ActiveContext = base.ActiveContext;
-			}
-			if(_other!=null)
-			{
-				_other.ActiveContext = base.ActiveContext;
-			}
-			if(_postal!=null)
-			{
-				_postal.ActiveContext = base.ActiveContext;
-			}
-			if(_ups!=null)
-			{
-				_ups.ActiveContext = base.ActiveContext;
-			}
-		}
 
 		/// <summary> Initializes the class members</summary>
-		protected virtual void InitClassMembers()
+		private void InitClassMembers()
 		{
-
-
-
-
-			_amazon = null;
-			_bestRate = null;
-			_fedEx = null;
-			_iParcel = null;
-			_onTrac = null;
-			_other = null;
-			_postal = null;
-			_ups = null;
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
@@ -768,69 +592,57 @@ namespace ShipWorks.Data.Model.EntityClasses
 			OnInitClassMembersComplete();
 		}
 
+
 		#region Custom Property Hashtable Setup
 		/// <summary> Initializes the hashtables for the entity type and entity field custom properties. </summary>
 		private static void SetupCustomPropertyHashtables()
 		{
 			_customProperties = new Dictionary<string, string>();
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
-
-			Dictionary<string, string> fieldHashtable = null;
+			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Name", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipmentType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipmentTypePrimary", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("OriginID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InsuranceInitialValueSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("InsuranceInitialValueAmount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
-
 
 		/// <summary> Removes the sync logic for member _amazon</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncAmazon(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShippingProfileEntity.Relations.AmazonProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.AmazonProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_amazon = null;
 		}
 		
 		/// <summary> setups the sync logic for member _amazon</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncAmazon(IEntity2 relatedEntity)
+		private void SetupSyncAmazon(IEntityCore relatedEntity)
 		{
 			if(_amazon!=relatedEntity)
 			{
 				DesetupSyncAmazon(true, true);
 				_amazon = (AmazonProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShippingProfileEntity.Relations.AmazonProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.AmazonProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -851,19 +663,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncBestRate(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.BestRateProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_bestRate = null;
 		}
 		
 		/// <summary> setups the sync logic for member _bestRate</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncBestRate(IEntity2 relatedEntity)
+		private void SetupSyncBestRate(IEntityCore relatedEntity)
 		{
 			if(_bestRate!=relatedEntity)
 			{
 				DesetupSyncBestRate(true, true);
 				_bestRate = (BestRateProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShippingProfileEntity.Relations.BestRateProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _bestRate, new PropertyChangedEventHandler( OnBestRatePropertyChanged ), "BestRate", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.BestRateProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -884,19 +696,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncFedEx(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _fedEx, new PropertyChangedEventHandler( OnFedExPropertyChanged ), "FedEx", ShippingProfileEntity.Relations.FedExProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _fedEx, new PropertyChangedEventHandler( OnFedExPropertyChanged ), "FedEx", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.FedExProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_fedEx = null;
 		}
 		
 		/// <summary> setups the sync logic for member _fedEx</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncFedEx(IEntity2 relatedEntity)
+		private void SetupSyncFedEx(IEntityCore relatedEntity)
 		{
 			if(_fedEx!=relatedEntity)
 			{
 				DesetupSyncFedEx(true, true);
 				_fedEx = (FedExProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _fedEx, new PropertyChangedEventHandler( OnFedExPropertyChanged ), "FedEx", ShippingProfileEntity.Relations.FedExProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _fedEx, new PropertyChangedEventHandler( OnFedExPropertyChanged ), "FedEx", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.FedExProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -917,19 +729,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncIParcel(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _iParcel, new PropertyChangedEventHandler( OnIParcelPropertyChanged ), "IParcel", ShippingProfileEntity.Relations.IParcelProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _iParcel, new PropertyChangedEventHandler( OnIParcelPropertyChanged ), "IParcel", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.IParcelProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_iParcel = null;
 		}
 		
 		/// <summary> setups the sync logic for member _iParcel</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncIParcel(IEntity2 relatedEntity)
+		private void SetupSyncIParcel(IEntityCore relatedEntity)
 		{
 			if(_iParcel!=relatedEntity)
 			{
 				DesetupSyncIParcel(true, true);
 				_iParcel = (IParcelProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _iParcel, new PropertyChangedEventHandler( OnIParcelPropertyChanged ), "IParcel", ShippingProfileEntity.Relations.IParcelProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _iParcel, new PropertyChangedEventHandler( OnIParcelPropertyChanged ), "IParcel", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.IParcelProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -950,19 +762,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncOnTrac(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _onTrac, new PropertyChangedEventHandler( OnOnTracPropertyChanged ), "OnTrac", ShippingProfileEntity.Relations.OnTracProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _onTrac, new PropertyChangedEventHandler( OnOnTracPropertyChanged ), "OnTrac", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.OnTracProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_onTrac = null;
 		}
 		
 		/// <summary> setups the sync logic for member _onTrac</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncOnTrac(IEntity2 relatedEntity)
+		private void SetupSyncOnTrac(IEntityCore relatedEntity)
 		{
 			if(_onTrac!=relatedEntity)
 			{
 				DesetupSyncOnTrac(true, true);
 				_onTrac = (OnTracProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _onTrac, new PropertyChangedEventHandler( OnOnTracPropertyChanged ), "OnTrac", ShippingProfileEntity.Relations.OnTracProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _onTrac, new PropertyChangedEventHandler( OnOnTracPropertyChanged ), "OnTrac", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.OnTracProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -983,19 +795,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncOther(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _other, new PropertyChangedEventHandler( OnOtherPropertyChanged ), "Other", ShippingProfileEntity.Relations.OtherProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _other, new PropertyChangedEventHandler( OnOtherPropertyChanged ), "Other", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.OtherProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_other = null;
 		}
 		
 		/// <summary> setups the sync logic for member _other</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncOther(IEntity2 relatedEntity)
+		private void SetupSyncOther(IEntityCore relatedEntity)
 		{
 			if(_other!=relatedEntity)
 			{
 				DesetupSyncOther(true, true);
 				_other = (OtherProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _other, new PropertyChangedEventHandler( OnOtherPropertyChanged ), "Other", ShippingProfileEntity.Relations.OtherProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _other, new PropertyChangedEventHandler( OnOtherPropertyChanged ), "Other", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.OtherProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -1016,19 +828,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncPostal(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _postal, new PropertyChangedEventHandler( OnPostalPropertyChanged ), "Postal", ShippingProfileEntity.Relations.PostalProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "Profile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _postal, new PropertyChangedEventHandler( OnPostalPropertyChanged ), "Postal", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.PostalProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "Profile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_postal = null;
 		}
 		
 		/// <summary> setups the sync logic for member _postal</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncPostal(IEntity2 relatedEntity)
+		private void SetupSyncPostal(IEntityCore relatedEntity)
 		{
 			if(_postal!=relatedEntity)
 			{
 				DesetupSyncPostal(true, true);
 				_postal = (PostalProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _postal, new PropertyChangedEventHandler( OnPostalPropertyChanged ), "Postal", ShippingProfileEntity.Relations.PostalProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _postal, new PropertyChangedEventHandler( OnPostalPropertyChanged ), "Postal", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.PostalProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -1049,19 +861,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncUps(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _ups, new PropertyChangedEventHandler( OnUpsPropertyChanged ), "Ups", ShippingProfileEntity.Relations.UpsProfileEntityUsingShippingProfileID, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _ups, new PropertyChangedEventHandler( OnUpsPropertyChanged ), "Ups", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.UpsProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
 			_ups = null;
 		}
 		
 		/// <summary> setups the sync logic for member _ups</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncUps(IEntity2 relatedEntity)
+		private void SetupSyncUps(IEntityCore relatedEntity)
 		{
 			if(_ups!=relatedEntity)
 			{
 				DesetupSyncUps(true, true);
 				_ups = (UpsProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _ups, new PropertyChangedEventHandler( OnUpsPropertyChanged ), "Ups", ShippingProfileEntity.Relations.UpsProfileEntityUsingShippingProfileID, false, new string[] {  } );
+				this.PerformSetupSyncRelatedEntity( _ups, new PropertyChangedEventHandler( OnUpsPropertyChanged ), "Ups", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.UpsProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
@@ -1080,19 +892,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
 		/// <param name="validator">The validator object for this ShippingProfileEntity</param>
 		/// <param name="fields">Fields of this entity</param>
-		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
+		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
 			OnInitializing();
-			base.Fields = fields;
-			base.IsNew=true;
-			base.Validator = validator;
+			this.Fields = fields ?? CreateFields();
+			this.Validator = validator;
 			InitClassMembers();
 
-			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
 			OnInitialized();
+
 		}
 
 		#region Class Property Declarations
@@ -1109,115 +920,72 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
-
-
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathAmazon
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Amazon")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.AmazonProfileEntity, 0, null, null, null, null, "Amazon", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Amazon")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.AmazonProfileEntity, 0, null, null, null, null, "Amazon", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathBestRate
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(BestRateProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("BestRate")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.BestRateProfileEntity, 0, null, null, null, null, "BestRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(BestRateProfileEntityFactory))), (IEntityRelation)GetRelationsForField("BestRate")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.BestRateProfileEntity, 0, null, null, null, null, "BestRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathFedEx
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("FedEx")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.FedExProfileEntity, 0, null, null, null, null, "FedEx", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExProfileEntityFactory))), (IEntityRelation)GetRelationsForField("FedEx")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.FedExProfileEntity, 0, null, null, null, null, "FedEx", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'IParcelProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'IParcelProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathIParcel
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(IParcelProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("IParcel")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.IParcelProfileEntity, 0, null, null, null, null, "IParcel", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(IParcelProfileEntityFactory))), (IEntityRelation)GetRelationsForField("IParcel")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.IParcelProfileEntity, 0, null, null, null, null, "IParcel", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OnTracProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OnTracProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathOnTrac
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(OnTracProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("OnTrac")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.OnTracProfileEntity, 0, null, null, null, null, "OnTrac", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(OnTracProfileEntityFactory))), (IEntityRelation)GetRelationsForField("OnTrac")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.OnTracProfileEntity, 0, null, null, null, null, "OnTrac", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OtherProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OtherProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathOther
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(OtherProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Other")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.OtherProfileEntity, 0, null, null, null, null, "Other", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(OtherProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Other")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.OtherProfileEntity, 0, null, null, null, null, "Other", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PostalProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PostalProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathPostal
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(PostalProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Postal")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.PostalProfileEntity, 0, null, null, null, null, "Postal", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(PostalProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Postal")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.PostalProfileEntity, 0, null, null, null, null, "Postal", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UpsProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathUps
 		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Ups")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.UpsProfileEntity, 0, null, null, null, null, "Ups", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UpsProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Ups")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.UpsProfileEntity, 0, null, null, null, null, "Ups", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
+
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, string> CustomPropertiesOfType
+		protected override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return ShippingProfileEntity.CustomProperties;}
+			get { return CustomProperties;}
 		}
 
-		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
-		/// pairs. </summary>
+		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		public  static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
 		{
@@ -1227,13 +995,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The custom properties for the fields of the type of this entity instance. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
-		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
+		protected override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return ShippingProfileEntity.FieldsCustomProperties;}
+			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShippingProfileID property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The ShippingProfileID property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
@@ -1243,10 +1010,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.ShippingProfileID, value); }
 		}
 
-		/// <summary> The RowVersion property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The RowVersion property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."RowVersion"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Byte[] RowVersion
 		{
@@ -1254,8 +1020,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		}
 
-		/// <summary> The Name property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The Name property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1265,8 +1030,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.Name, value); }
 		}
 
-		/// <summary> The ShipmentType property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The ShipmentType property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1276,8 +1040,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.ShipmentType, value); }
 		}
 
-		/// <summary> The ShipmentTypePrimary property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The ShipmentTypePrimary property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShipmentTypePrimary"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
@@ -1287,8 +1050,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.ShipmentTypePrimary, value); }
 		}
 
-		/// <summary> The OriginID property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The OriginID property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."OriginID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1298,8 +1060,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.OriginID, value); }
 		}
 
-		/// <summary> The Insurance property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The Insurance property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1309,8 +1070,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.Insurance, value); }
 		}
 
-		/// <summary> The InsuranceInitialValueSource property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The InsuranceInitialValueSource property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."InsuranceInitialValueSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1320,8 +1080,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.InsuranceInitialValueSource, value); }
 		}
 
-		/// <summary> The InsuranceInitialValueAmount property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The InsuranceInitialValueAmount property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."InsuranceInitialValueAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1331,8 +1090,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.InsuranceInitialValueAmount, value); }
 		}
 
-		/// <summary> The ReturnShipment property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The ReturnShipment property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ReturnShipment"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1342,8 +1100,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.ReturnShipment, value); }
 		}
 
-		/// <summary> The RequestedLabelFormat property of the Entity ShippingProfile<br/><br/>
-		/// </summary>
+		/// <summary> The RequestedLabelFormat property of the Entity ShippingProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShippingProfile"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
@@ -1353,27 +1110,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, value); }
 		}
 
-
-
-
-		/// <summary> Gets / sets related entity of type 'AmazonProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'AmazonProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual AmazonProfileEntity Amazon
 		{
-			get
-			{
-				return _amazon;
-			}
+			get { return _amazon; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncAmazon(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1390,33 +1138,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_amazon!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncAmazon(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncAmazon(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'BestRateProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'BestRateProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual BestRateProfileEntity BestRate
 		{
-			get
-			{
-				return _bestRate;
-			}
+			get { return _bestRate; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncBestRate(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1433,33 +1174,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_bestRate!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncBestRate(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncBestRate(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual FedExProfileEntity FedEx
 		{
-			get
-			{
-				return _fedEx;
-			}
+			get { return _fedEx; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncFedEx(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1476,33 +1210,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_fedEx!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncFedEx(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncFedEx(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'IParcelProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'IParcelProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual IParcelProfileEntity IParcel
 		{
-			get
-			{
-				return _iParcel;
-			}
+			get { return _iParcel; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncIParcel(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1519,33 +1246,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_iParcel!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncIParcel(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncIParcel(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'OnTracProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'OnTracProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual OnTracProfileEntity OnTrac
 		{
-			get
-			{
-				return _onTrac;
-			}
+			get { return _onTrac; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncOnTrac(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1562,33 +1282,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_onTrac!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncOnTrac(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncOnTrac(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'OtherProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'OtherProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual OtherProfileEntity Other
 		{
-			get
-			{
-				return _other;
-			}
+			get { return _other; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncOther(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1605,33 +1318,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_other!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncOther(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncOther(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'PostalProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'PostalProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual PostalProfileEntity Postal
 		{
-			get
-			{
-				return _postal;
-			}
+			get { return _postal; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncPostal(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "Profile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "Profile");
 				}
 				else
 				{
@@ -1648,33 +1354,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_postal!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "Profile");
-							SetupSyncPostal(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "Profile");
+							SetupSyncPostal(value);
 						}
 					}
 				}
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'UpsProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
+		/// <summary> Gets / sets related entity of type 'UpsProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
 		public virtual UpsProfileEntity Ups
 		{
-			get
-			{
-				return _ups;
-			}
+			get { return _ups; }
 			set
 			{
-				if(base.IsDeserializing)
+				if(this.IsDeserializing)
 				{
 					SetupSyncUps(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "ShippingProfile");
-					}
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
@@ -1691,16 +1390,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_ups!=value)
 						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncUps(relatedEntity);
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncUps(value);
 						}
 					}
 				}
 			}
 		}
 	
-		
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
@@ -1715,10 +1412,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		/// <summary>Returns the ShipWorks.Data.Model.EntityType enum value for this entity.</summary>
 		[Browsable(false), XmlIgnore]
-		public override int LLBLGenProEntityTypeValue 
+		protected override int LLBLGenProEntityTypeValue 
 		{ 
 			get { return (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity; }
 		}
+
 		#endregion
 
 

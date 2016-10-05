@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Divelements.SandGrid;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.SortProviders;
+using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users.Audit;
-using Divelements.SandGrid;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
-using ShipWorks.Data.Grid.Columns.SortProviders;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -27,8 +23,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{92439D7D-6484-4808-B0C0-32B5CE1074F6}", true,
                         new GridEntityDisplayType(), "Related To", new GridEntityDisplayInfo(6, EntityType.OrderEntity, "Order 1028"),
-                        new GridColumnFieldValueProvider(AuditChangeFields.ObjectID),
-                        new GridColumnObjectLabelSortProvider(AuditChangeFields.ObjectID)) { AutoSizeMode = ColumnAutoSizeMode.Spring },
+                        new GridColumnFieldValueProvider(AuditChangeFields.EntityID),
+                        new GridColumnObjectLabelSortProvider(AuditChangeFields.EntityID)) { AutoSizeMode = ColumnAutoSizeMode.Spring },
                 };
 
             return definitions;

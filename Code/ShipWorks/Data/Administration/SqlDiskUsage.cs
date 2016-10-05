@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
-using System.Text;
-using System.Data.SqlClient;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Data.Administration
 {
@@ -21,7 +20,7 @@ namespace ShipWorks.Data.Administration
                         EntityType.AuditChangeDetailEntity
                     };
 
-        static  List<EntityType> resourceList = new List<EntityType>
+        static List<EntityType> resourceList = new List<EntityType>
                     {
                         EntityType.ResourceEntity
                     };
@@ -44,7 +43,7 @@ namespace ShipWorks.Data.Administration
                         EntityType.MarketplaceAdvisorOrderEntity,
                         EntityType.MivaOrderItemAttributeEntity,
                         EntityType.NetworkSolutionsOrderEntity,
-                        EntityType.NeweggOrderEntity, 
+                        EntityType.NeweggOrderEntity,
                         EntityType.NeweggOrderItemEntity,
                         EntityType.OrderEntity,
                         EntityType.OrderItemEntity,
@@ -118,7 +117,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static long SpaceRemaining
         {
-            get 
+            get
             {
                 int gbLimit = SizeLimitGB;
 
@@ -166,12 +165,12 @@ namespace ShipWorks.Data.Administration
         {
             get
             {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
+                    DbCommand cmd = DbCommandProvider.Create(con);
                     cmd.CommandText = "SELECT SERVERPROPERTY ('edition')";
 
-                    return SqlCommandProvider.ExecuteScalar(cmd).ToString().Contains("Express");
+                    return DbCommandProvider.ExecuteScalar(cmd).ToString().Contains("Express");
                 }
             }
         }
@@ -181,7 +180,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static long GetDatabaseSpaceUsed()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 string sql = @"IF OBJECT_ID('tempdb..#RowCountsAndSizes') IS NOT NULL
                                 DROP TABLE #RowCountsAndSizes
@@ -190,7 +189,7 @@ namespace ShipWorks.Data.Administration
                               EXEC       sp_MSForEachTable 'INSERT INTO #RowCountsAndSizes EXEC sp_spaceused ''?'' '
                               select sum(CONVERT(bigint,left(reserved,len(reserved)-3))) from #RowCountsAndSizes";
 
-                long size = (long) SqlCommandProvider.ExecuteScalar(con, sql);
+                long size = (long) DbCommandProvider.ExecuteScalar(con, sql);
 
                 return size * 1024L;
             }
@@ -201,16 +200,16 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static long GetTableSpaceUsed(List<EntityType> entityList)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 long total = 0;
 
                 foreach (string table in entityList.Select(e => SqlAdapter.GetTableName(e)))
                 {
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
+                    DbCommand cmd = DbCommandProvider.Create(con);
                     cmd.CommandText = string.Format("EXEC sp_spaceused '{0}'", table);
 
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
                     {
                         reader.Read();
 

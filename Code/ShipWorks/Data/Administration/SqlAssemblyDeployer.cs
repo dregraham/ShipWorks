@@ -1,13 +1,13 @@
 using System;
-using System.Text;
-using System.Reflection;
-using log4net;
-using System.Data.SqlClient;
-using Microsoft.SqlServer.Server;
-using System.IO;
 using System.Collections;
+using System.Data.Common;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
+using log4net;
+using Microsoft.SqlServer.Server;
 
 namespace ShipWorks.Data.Administration
 {
@@ -23,7 +23,7 @@ namespace ShipWorks.Data.Administration
         /// Deploy all ShipWorks assemblies to the SQL Server on the given connection. The assemblies are dropped
         /// before they are deployed.
         /// </summary>
-        public static void DeployAssemblies(SqlConnection con, SqlTransaction transaction)
+        public static void DeployAssemblies(DbConnection con, DbTransaction transaction)
         {
             if (con == null)
             {
@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Drop all ShipWorks assemblies to the SQL Server on the given connection
         /// </summary>
-        public static void DropAssemblies(SqlConnection con, SqlTransaction sqlTransaction)
+        public static void DropAssemblies(DbConnection con, DbTransaction sqlTransaction)
         {
             if (con == null)
             {
@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Administration
         /// Deploy the given assembly to the connection specified by the SQL Session
         /// </summary>
         [NDependIgnoreLongMethod]
-        public static void DeployAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        public static void DeployAssembly(Assembly assembly, DbConnection con, DbTransaction transaction)
         {
             if (con == null)
             {
@@ -125,9 +125,9 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the stored procedure that specifies the schema version to which the installed assembly applies
         /// </summary>
-        private static void UpdateAssemblySchemaVersionProcedure(SqlConnection con, SqlTransaction transaction)
+        private static void UpdateAssemblySchemaVersionProcedure(DbConnection con, DbTransaction transaction)
         {
-            using (SqlCommand command = con.CreateCommand())
+            using (DbCommand command = con.CreateCommand())
             {
                 command.Transaction = transaction;
                 SqlSchemaUpdater.UpdateAssemblyVersionStoredProcedure(command);
@@ -137,7 +137,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Add the specified assembly to the database
         /// </summary>
-        private static void CreateAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        private static void CreateAssembly(Assembly assembly, DbConnection con, DbTransaction transaction)
         {
             log.Info("Create assembly");
 
@@ -150,7 +150,7 @@ namespace ShipWorks.Data.Administration
                 hex.AppendFormat("{0:X2}", b);
             }
 
-            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            using (DbCommand cmd = DbCommandProvider.Create(con))
             {
                 cmd.Transaction = transaction;
                 cmd.CommandText = string.Format(@"
@@ -158,14 +158,14 @@ namespace ShipWorks.Data.Administration
                     FROM 0x{1}
                     WITH PERMISSION_SET = SAFE", assembly.GetName().Name, hex);
 
-                SqlCommandProvider.ExecuteNonQuery(cmd);    
+                DbCommandProvider.ExecuteNonQuery(cmd);
             }
         }
 
         /// <summary>
         /// Drop the specified assembly from the database
         /// </summary>
-        private static void DropAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        private static void DropAssembly(Assembly assembly, DbConnection con, DbTransaction transaction)
         {
             string scriptName = "DropAssembly.sql";
 
@@ -180,7 +180,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Register the specified method as a store procedure using metadata from the attribute
         /// </summary>
-        private static void RegisterProcedure(MethodInfo method, SqlProcedureAttribute procedure, SqlConnection con, SqlTransaction transaction)
+        private static void RegisterProcedure(MethodInfo method, SqlProcedureAttribute procedure, DbConnection con, DbTransaction transaction)
         {
             String procedureName = procedure.Name;
             if (string.IsNullOrEmpty(procedureName))
@@ -195,13 +195,13 @@ namespace ShipWorks.Data.Administration
             command.AppendFormat(GetParameterDeclaration(method));
             command.AppendFormat("AS EXTERNAL NAME [{0}].[{1}].[{2}]", method.DeclaringType.Assembly.GetName().Name, method.DeclaringType.FullName, method.Name);
 
-            SqlCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
+            DbCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
         }
 
         /// <summary>
         /// Register the specified method as a trigger using metadata from the attribute
         /// </summary>
-        private static void RegisterTrigger(MethodInfo method, SqlTriggerAttribute trigger, SqlConnection con, SqlTransaction transaction)
+        private static void RegisterTrigger(MethodInfo method, SqlTriggerAttribute trigger, DbConnection con, DbTransaction transaction)
         {
             String triggerName = trigger.Name;
             if (string.IsNullOrEmpty(triggerName))
@@ -227,13 +227,13 @@ namespace ShipWorks.Data.Administration
             command.AppendFormat("CREATE TRIGGER [{0}] ON [{1}] {2} ", triggerName, trigger.Target, trigger.Event);
             command.AppendFormat("AS EXTERNAL NAME [{0}].[{1}].[{2}]", method.DeclaringType.Assembly.GetName().Name, method.DeclaringType.FullName, method.Name);
 
-            SqlCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
+            DbCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
         }
 
         /// <summary>
         /// Register the specified method as a function using metadata from the attribute
         /// </summary>
-        private static void RegisterFunction(MethodInfo method, SqlFunctionAttribute function, SqlConnection con, SqlTransaction transaction)
+        private static void RegisterFunction(MethodInfo method, SqlFunctionAttribute function, DbConnection con, DbTransaction transaction)
         {
             String functionName = function.Name;
             if (string.IsNullOrEmpty(functionName))
@@ -265,7 +265,7 @@ namespace ShipWorks.Data.Administration
             command.AppendFormat(" RETURNS {0} ", returnType);
             command.AppendFormat(" AS EXTERNAL NAME [{0}].[{1}].[{2}]", method.DeclaringType.Assembly.GetName().Name, method.DeclaringType.FullName, method.Name);
 
-            SqlCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
+            DbCommandProvider.ExecuteNonQuery(con, command.ToString(), transaction);
         }
 
         /// <summary>

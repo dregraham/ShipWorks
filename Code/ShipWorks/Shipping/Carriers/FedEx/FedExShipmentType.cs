@@ -12,9 +12,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -589,18 +589,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Apply the given shipping profile to the shipment
         /// </summary>
         [NDependIgnoreLongMethod]
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             FedExShipmentEntity fedex = shipment.FedEx;
-            FedExProfileEntity source = profile.FedEx;
+            IFedExProfileEntity source = profile.FedEx;
 
             bool changedPackageWeights = false;
+            int profilePackageCount = profile.FedEx.Packages.Count();
 
             // Apply all package profiles
-            for (int i = 0; i < profile.FedEx.Packages.Count; i++)
+            for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                FedExProfilePackageEntity packageProfile = profile.FedEx.Packages[i];
+                IFedExProfilePackageEntity packageProfile = profile.FedEx.Packages.ElementAt(i);
 
                 FedExPackageEntity package;
 
@@ -658,10 +659,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             // Remove any packages that are too many for the profile
-            if (profile.FedEx.Packages.Count > 0)
+            if (profilePackageCount > 0)
             {
                 // Go through each package that needs removed
-                foreach (FedExPackageEntity package in fedex.Packages.Skip(profile.FedEx.Packages.Count).ToList())
+                foreach (FedExPackageEntity package in fedex.Packages.Skip(profilePackageCount).ToList())
                 {
                     if (package.Weight != 0)
                     {

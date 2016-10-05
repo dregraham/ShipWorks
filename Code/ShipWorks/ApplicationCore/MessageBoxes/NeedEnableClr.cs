@@ -1,24 +1,23 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
-using ShipWorks.Data.Administration;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
+using System.Windows.Forms;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.ApplicationCore.MessageBoxes
 {
+    /// <summary>
+    /// Class to see if CLR needs to be enabled
+    /// </summary>
     public partial class NeedEnableClr : Form
     {
         SqlSession sqlSession;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public NeedEnableClr(SqlSession sqlSession)
         {
             InitializeComponent();
@@ -33,7 +32,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         {
             try
             {
-                using (SqlConnection con = sqlSession.OpenConnection())
+                using (DbConnection con = sqlSession.OpenConnection())
                 {
                     SqlUtility.EnableClr(con);
                 }

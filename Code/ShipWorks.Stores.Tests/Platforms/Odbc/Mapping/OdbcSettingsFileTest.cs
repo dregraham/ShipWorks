@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Tests.Shared;
 using System;
 using System.IO;
 using System.Linq;

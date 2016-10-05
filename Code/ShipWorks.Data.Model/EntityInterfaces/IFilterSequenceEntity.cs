@@ -1,7 +1,7 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code.
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The RowVersion property of the Entity FilterSequence<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FilterSequence"."RowVersion"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Byte[] RowVersion { get; }
         /// <summary> The ParentFilterID property of the Entity FilterSequence<br/><br/>
@@ -53,8 +53,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         System.Int32 Position { get; }
         
         
-        IFilterEntity Parent { get; }
         IFilterEntity Filter { get; }
+        IFilterEntity Parent { get; }
         
         IEnumerable<IFilterNodeEntity> NodesUsingSequence { get; }
 
@@ -82,8 +82,8 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class FilterSequenceEntity : IFilterSequenceEntity
     {
         
-        IFilterEntity IFilterSequenceEntity.Parent => Parent;
         IFilterEntity IFilterSequenceEntity.Filter => Filter;
+        IFilterEntity IFilterSequenceEntity.Parent => Parent;
         
         IEnumerable<IFilterNodeEntity> IFilterSequenceEntity.NodesUsingSequence => NodesUsingSequence;
 

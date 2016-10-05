@@ -1,39 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Drawing;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using log4net;
 using System.Diagnostics;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Properties;
-using System.Threading;
-using ShipWorks.ApplicationCore.Interaction;
-using Interapptive.Shared.Utility;
-using System.Net;
+using System.Drawing;
+using System.Linq;
 using System.Reflection;
-using System.Xml;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Email;
-using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.Users;
-using System.Collections;
+using System.Threading;
+using System.Windows.Forms;
 using Autofac;
-using ShipWorks.Actions;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Common.Threading;
-using ShipWorks.Stores.Platforms;
 using Interapptive.Shared.Net;
+using log4net;
+using ShipWorks.Actions;
+using ShipWorks.ApplicationCore.Dashboard.Content;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Email;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Dashboard
 {
@@ -137,7 +128,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // Don't wait for idle - do these right away
             IdleWatcher.RunWorkNow(checkVersionWorkID);
             IdleWatcher.RunWorkNow(tangoMessageWorkID);
-       }
+        }
 
         /// <summary>
         /// Clear the contents of the panel.  Does not dismiss any messages, just removes them.  Called when a user logs off.
@@ -519,7 +510,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 }
                 else
                 {
-                    // There's already a dashboard item; confirm whether it needs to be swapped out based 
+                    // There's already a dashboard item; confirm whether it needs to be swapped out based
                     // on the delta of the IsUnderShipmentLimit property, so we get the appropriate messaging
                     if (existingItem.IsUnderShipmentLimit != dashboardItem.IsUnderShipmentLimit)
                     {
@@ -625,13 +616,13 @@ namespace ShipWorks.ApplicationCore.Dashboard
             {
                 // Unsent messages - but only ones that should have been sent by now
                 unsent = EmailOutboundCollection.GetCount(SqlAdapter.Default,
-                    EmailOutboundFields.SendStatus != (int)EmailOutboundStatus.Sent &
+                    EmailOutboundFields.SendStatus != (int) EmailOutboundStatus.Sent &
                     (EmailOutboundFields.DontSendBefore == DBNull.Value | EmailOutboundFields.DontSendBefore <= DateTime.UtcNow) &
                     EmailOutboundFields.ComposedDate < DateTime.UtcNow.AddMinutes(-1));
 
                 if (unsent > 0)
                 {
-                    errors = EmailOutboundCollection.GetCount(SqlAdapter.Default, EmailOutboundFields.SendStatus == (int)EmailOutboundStatus.Failed);
+                    errors = EmailOutboundCollection.GetCount(SqlAdapter.Default, EmailOutboundFields.SendStatus == (int) EmailOutboundStatus.Failed);
                 }
             });
 

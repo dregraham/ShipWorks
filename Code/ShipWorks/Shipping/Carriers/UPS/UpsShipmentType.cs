@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -11,9 +6,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -34,6 +29,11 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.UI;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -432,18 +432,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Apply the given shipping profile to the shipment
         /// </summary>
         [NDependIgnoreLongMethod]
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             UpsShipmentEntity ups = shipment.Ups;
-            UpsProfileEntity source = profile.Ups;
+            IUpsProfileEntity source = profile.Ups;
 
             bool changedPackageWeights = false;
+            int profilePackageCount = profile.Ups.Packages.Count();
 
             // Apply all package profiles
-            for (int i = 0; i < profile.Ups.Packages.Count; i++)
+            for (int i = 0; i < profilePackageCount; i++)
             {
                 // Get the profile to apply
-                UpsProfilePackageEntity packageProfile = profile.Ups.Packages[i];
+                IUpsProfilePackageEntity packageProfile = profile.Ups.Packages.ElementAt(i);
 
                 UpsPackageEntity package;
 
@@ -497,10 +498,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             // Remove any packages that are too many for the profile
-            if (profile.Ups.Packages.Count > 0)
+            if (profilePackageCount > 0)
             {
                 // Go through each package that needs removed
-                foreach (UpsPackageEntity package in ups.Packages.Skip(profile.Ups.Packages.Count).ToList())
+                foreach (UpsPackageEntity package in ups.Packages.Skip(profilePackageCount).ToList())
                 {
                     if (package.Weight != 0)
                     {

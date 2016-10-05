@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using log4net;
 using System.ComponentModel;
+using System.Linq;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.Users
 {
@@ -96,7 +95,7 @@ namespace ShipWorks.Users
         {
             get
             {
-                return Computers.SingleOrDefault(c => c.Name == SqlSession.Current.GetServerMachineName());   
+                return Computers.SingleOrDefault(c => c.Name == SqlSession.Current.GetServerMachineName());
             }
         }
 

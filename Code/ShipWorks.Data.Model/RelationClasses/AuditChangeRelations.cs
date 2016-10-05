@@ -1,9 +1,9 @@
 ﻿///////////////////////////////////////////////////////////////
 // This is generated code. 
 //////////////////////////////////////////////////////////////
-// Code is generated using LLBLGen Pro version: 2.6
+// Code is generated using LLBLGen Pro version: 5.0
 // Code is generated on: 
-// Code is generated using templates: SD.TemplateBindings.SharedTemplates.NET20
+// Code is generated using templates: SD.TemplateBindings.SharedTemplates
 // Templates vendor: Solutions Design.
 // Templates version: 
 //////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: AuditChange. </summary>
+	/// <summary>Implements the relations factory for the entity: AuditChange. </summary>
 	public partial class AuditChangeRelations
 	{
 		/// <summary>CTor</summary>
@@ -31,7 +31,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.AuditChangeDetailEntityUsingAuditChangeID);
-
 			toReturn.Add(this.AuditEntityUsingAuditID);
 			return toReturn;
 		}
@@ -68,16 +67,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSuperTypeRelation() { return null;}
-
 		#endregion
 
 		#region Included Code
 
 		#endregion
+	}
+	
+	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
+	internal static class StaticAuditChangeRelations
+	{
+		internal static readonly IEntityRelation AuditChangeDetailEntityUsingAuditChangeIDStatic = new AuditChangeRelations().AuditChangeDetailEntityUsingAuditChangeID;
+		internal static readonly IEntityRelation AuditEntityUsingAuditIDStatic = new AuditChangeRelations().AuditEntityUsingAuditID;
+
+		/// <summary>CTor</summary>
+		static StaticAuditChangeRelations()
+		{
+		}
 	}
 }

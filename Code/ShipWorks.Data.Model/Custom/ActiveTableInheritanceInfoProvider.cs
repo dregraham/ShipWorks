@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.HelperClasses;
+﻿using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Data.Model.Custom
 {
     /// <summary>
-    /// Our customer inheritance provider that knows how to exlude order and item tables that are not active 
+    /// Our customer inheritance provider that knows how to exlude order and item tables that are not active
     /// </summary>
     internal class ActiveTableInheritanceInfoProvider : InheritanceInfoProviderCore, IInheritanceInfoProvider
     {
@@ -20,10 +17,10 @@ namespace ShipWorks.Data.Model.Custom
 
             }
 
-            public override string ToQueryText(ref int uniqueMarker, bool inHavingClause)
+            public override string ToQueryText(bool inHavingClause)
             {
                 // Hav to call the base even though we don't use it b\c it sets up the parameters collection
-                base.ToQueryText(ref uniqueMarker, inHavingClause);
+                base.ToQueryText(inHavingClause);
 
                 return "NULL";
             }

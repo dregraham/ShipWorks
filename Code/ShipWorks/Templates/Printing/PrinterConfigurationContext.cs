@@ -69,9 +69,10 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// A proxy to access printer settings through to improve performance
         /// </summary>
-        class PrinterSettingsProxy
+        public class PrinterSettingsProxy
         {
-            PrinterSettings printerSettings;
+            static readonly ILog log = LogManager.GetLogger(typeof(PrinterSettingsProxy));
+            IPrinterSetting printerSettings;
 
             string printerName;
             PageSettings pageSettings;
@@ -82,7 +83,7 @@ namespace ShipWorks.Templates.Printing
             /// <summary>
             /// Constructor
             /// </summary>
-            public PrinterSettingsProxy(PrinterSettings settings)
+            public PrinterSettingsProxy(IPrinterSetting settings)
             {
                 this.printerSettings = settings;
             }
@@ -96,7 +97,7 @@ namespace ShipWorks.Templates.Printing
                 {
                     if (printerName == null)
                     {
-                        printerName = printerSettings.PrinterName;
+                        printerName = PrinterSettings.PrinterName;
                     }
 
                     return printerName;
@@ -110,12 +111,7 @@ namespace ShipWorks.Templates.Printing
             {
                 get
                 {
-                    if (paperSize == null)
-                    {
-                        paperSize = InternalPageSettings.PaperSize;
-                    }
-
-                    return paperSize;
+                    return paperSize ?? (paperSize = InternalPageSettings.PaperSize);
                 }
             }
 
@@ -160,12 +156,17 @@ namespace ShipWorks.Templates.Printing
                 {
                     if (pageSettings == null)
                     {
-                        pageSettings = printerSettings.DefaultPageSettings;
+                        pageSettings = PrinterSettings.DefaultPageSettings;
                     }
 
                     return pageSettings;
                 }
             }
+
+            /// <summary>
+            /// The current IPrinterSetting being used.
+            /// </summary>
+            public IPrinterSetting PrinterSettings => printerSettings;
         }
 
         #endregion
@@ -297,13 +298,15 @@ namespace ShipWorks.Templates.Printing
         private static void ActivatePrinterSettings(PrinterConfigurationContext context, PrinterSettingsProxy printerSettings)
         {
             // We'll need this even if we don't change it, so that the paper settings restoration has access to it
-            context.defaultPrinter = new PrinterSettings().PrinterName;
+            IPrinterSetting ps = PrinterSettingFactory.GetDefaultPrinterSettings();
+            
+            context.defaultPrinter = ps?.PrinterName;
             context.requestedPrinter = printerSettings.PrinterName;
 
             // See if we need to change printers
             if (context.defaultPrinter != context.requestedPrinter)
             {
-                log.InfoFormat("Change printer from {0} to {1}.", context.defaultPrinter, context.requestedPrinter);
+                log.FatalFormat("Change printer from {0} to {1}.", context.defaultPrinter, context.requestedPrinter);
 
                 // Change the printer
                 SetDefaultPrinter(context.requestedPrinter);
@@ -393,12 +396,7 @@ namespace ShipWorks.Templates.Printing
             // See if we can get the current printer settings
             try
             {
-                PrinterSettings settings = new PrinterSettings();
-                settings.PrinterName = printerName;
-
-                var unused = settings.GetHdevmode();
-
-                return new PrinterSettingsProxy(settings);
+                return PrinterSettingFactory.GetPrinterSettingsProxy(printerName);
             }
             catch (InvalidPrinterException ex)
             {
@@ -536,7 +534,7 @@ namespace ShipWorks.Templates.Printing
                 // Add it to the queue to be scheduled
                 queue.Enqueue(activationEvent);
 
-                // Signal tha requests exist
+                // Signal that requests exist
                 activationRequestsExistEvent.Set();
 
                 return activationEvent;

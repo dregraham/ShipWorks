@@ -68,10 +68,6 @@ namespace ShipWorks.Shipping.Carriers.Express1
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Express1Usps)
                 .SingleInstance();
 
-            builder.RegisterType<Express1EndiciaLabelService>()
-                .AsSelf()
-                .Keyed<ILabelService>(ShipmentTypeCode.Express1Endicia);
-
             builder.RegisterType<Express1UspsLabelService>()
                 .AsSelf()
                 .Keyed<ILabelService>(ShipmentTypeCode.Express1Usps);

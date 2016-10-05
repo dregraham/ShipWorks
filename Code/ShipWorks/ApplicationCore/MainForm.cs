@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -51,6 +52,7 @@ using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.DetailView;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
@@ -439,7 +441,7 @@ namespace ShipWorks
                     SqlSession master = new SqlSession(SqlSession.Current);
                     master.Configuration.DatabaseName = "master";
 
-                    using (SqlConnection testConnection = new SqlConnection(master.Configuration.GetConnectionString()))
+                    using (DbConnection testConnection = DataAccessAdapter.CreateConnection(master.Configuration.GetConnectionString()))
                     {
                         testConnection.Open();
 
@@ -473,7 +475,7 @@ namespace ShipWorks
 
             // In case we bombed while in single user mode, make sure we are always back to multi.  I guess this could screw you
             // if you were an admin who was purposely trying to put it in single mode and keep it there... but why would you do that?
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
                 {
@@ -812,7 +814,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks(GetCustomerIdForTelemetry(), ShipWorksSession.InstanceID.ToString("D"));
+            Telemetry.TrackStartShipworks();
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -825,15 +827,6 @@ namespace ShipWorks
             }
 
             ForceHeartbeat();
-        }
-
-        /// <summary>
-        /// Get a customer id that can be used for telemetry
-        /// </summary>
-        private string GetCustomerIdForTelemetry()
-        {
-            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-            return tangoWebClient.GetTangoCustomerId();
         }
 
         /// <summary>
@@ -3197,7 +3190,7 @@ namespace ShipWorks
 
                     // Turn off all columns except the object and the note
                     foreach (GridColumnPosition position in noteLayout.AllColumns
-                        .Where(p => p != noteLayout.AllColumns[NoteFields.ObjectID] && p != noteLayout.AllColumns[NoteFields.Text]))
+                        .Where(p => p != noteLayout.AllColumns[NoteFields.EntityID] && p != noteLayout.AllColumns[NoteFields.Text]))
                     {
                         position.Visible = false;
                     }

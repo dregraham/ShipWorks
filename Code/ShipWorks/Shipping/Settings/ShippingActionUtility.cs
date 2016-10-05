@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared;
 using ShipWorks.Actions;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
-using System.Windows.Forms;
-using Interapptive.Shared;
-using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common.Enums;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -32,7 +28,7 @@ namespace ShipWorks.Shipping.Settings
 
             // By default auto-printing is enabled
             bool enabled = (code != ShipmentTypeCode.UpsWorldShip);
-            
+
             return CreateAction("Print labels", CreateProcessedTrigger(code), typeof(PrintShipmentsTask), code, identifier, enabled, true, null);
         }
 
@@ -126,11 +122,11 @@ namespace ShipWorks.Shipping.Settings
         [NDependIgnoreLongMethod]
         [NDependIgnoreTooManyParams]
         private static ActionEntity CreateAction(
-            string baseName, 
+            string baseName,
             ActionTrigger trigger,
-            Type taskType, 
-            ShipmentTypeCode code, 
-            string identifier, 
+            Type taskType,
+            ShipmentTypeCode code,
+            string identifier,
             bool enabled,
             bool computerLimited,
             MethodInvoker<ActionTask> settingsApplier)

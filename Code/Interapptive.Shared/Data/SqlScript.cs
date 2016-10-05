@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+using System.Data.Common;
 using System.Data.SqlClient;
-using log4net;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using log4net;
 
 namespace Interapptive.Shared.Data
 {
@@ -71,24 +71,24 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Executes the script on the given connection
         /// </summary>
-        public void Execute(SqlConnection con)
+        public void Execute(DbConnection con)
         {
-            using (SqlCommand command = SqlCommandProvider.Create(con))
+            using (DbCommand command = DbCommandProvider.Create(con))
             {
-                Execute(command);   
+                Execute(command);
             }
         }
 
         /// <summary>
         /// Executes the script on the given connection with the given transaction
         /// </summary>
-        public void Execute(SqlCommand cmd)
+        public void Execute(DbCommand cmd)
         {
             log.InfoFormat("Running script {0}", name);
 
             // Because this is primarily used for schema modifications, set the timeout to a very large amount
             // since not completing execution means an upgrade or install failed.
-            cmd.CommandTimeout = (int)TimeSpan.FromHours(12).TotalSeconds;
+            cmd.CommandTimeout = (int) TimeSpan.FromHours(12).TotalSeconds;
 
             // Execute each batch
             for (int i = 0; i < batches.Count; i++)
@@ -106,13 +106,13 @@ namespace Interapptive.Shared.Data
                         try
                         {
                             cmd.CommandText = command;
-                            SqlCommandProvider.ExecuteNonQuery(cmd);
+                            DbCommandProvider.ExecuteNonQuery(cmd);
 
                             break;
                         }
                         catch (SqlException ex)
                         {
-                            // "Backup, file manipulation operations (such as ALTER DATABASE ADD FILE) and encryption changes on a database must be serialized. 
+                            // "Backup, file manipulation operations (such as ALTER DATABASE ADD FILE) and encryption changes on a database must be serialized.
                             //  Reissue the statement after the current backup or file manipulation operation is completed."
                             if (ex.Number == 3023)
                             {

@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
-using log4net;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
+using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using Interapptive.Shared;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.Users.Audit
@@ -76,7 +75,7 @@ namespace ShipWorks.Users.Audit
             log.Info("Starting AsyncProcessAudits at " + DateTime.Now);
             bool lockAcquired = false;
 
-            using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
+            using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
                 try
                 {
@@ -169,7 +168,7 @@ namespace ShipWorks.Users.Audit
         private static AuditCollection GetUndeterminedAudits(int max)
         {
             RelationPredicateBucket bucket = new RelationPredicateBucket(AuditFields.Action == (int) AuditActionType.Undetermined);
-            
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 AuditCollection collection = new AuditCollection();
@@ -242,7 +241,7 @@ namespace ShipWorks.Users.Audit
         [NDependIgnoreLongMethod]
         private static void CondenseChangesForSameObject(AuditChangeCollection changes)
         {
-            var groups = changes.GroupBy(c => c.ObjectID).Where(g => g.Count() > 1).ToList();
+            var groups = changes.GroupBy(c => c.EntityID).Where(g => g.Count() > 1).ToList();
 
             // Go through each group to consolidate
             foreach (List<AuditChangeEntity> group in groups.Select(g => g.OrderBy(a => a.AuditChangeID).ToList()))
@@ -323,7 +322,7 @@ namespace ShipWorks.Users.Audit
             // If there are multiple groups, or if its standalone and there are multiple changes, then its "Various"
             if (changeGroup == null || (changeGroup == AuditChangeGroup.Standalone && changeCatalog.SelectMany(p => p.Value).Count() > 1))
             {
-                audit.ObjectID = AuditUtility.VariousEntityID;
+                audit.EntityID = AuditUtility.VariousEntityID;
                 audit.Action = (int) DetermineVariousGroupAction(changeCatalog);
             }
             else
@@ -334,7 +333,7 @@ namespace ShipWorks.Users.Audit
                         {
                             KeyValuePair<long, AuditChangeType> changeInfo = changeCatalog.Single().Value.Single();
 
-                            audit.ObjectID = changeInfo.Key;
+                            audit.EntityID = changeInfo.Key;
                             audit.Action = (int) GetActionFromChangeType(changeInfo.Value);
                         }
                         break;
@@ -368,22 +367,22 @@ namespace ShipWorks.Users.Audit
             else
             {
                 // Roll up all children below orders.  Attributes have to come first, since they have to be before OrderItem
-                foreach (EntityType childType in new EntityType[] 
-                    { 
-                        EntityType.OrderItemAttributeEntity, 
-                        EntityType.OrderItemEntity, 
-                        EntityType.OrderChargeEntity, 
+                foreach (EntityType childType in new EntityType[]
+                    {
+                        EntityType.OrderItemAttributeEntity,
+                        EntityType.OrderItemEntity,
+                        EntityType.OrderChargeEntity,
                         EntityType.ShipmentEntity,
                         EntityType.NoteEntity
                     })
                 {
-                    // Get the changs as related to the parent.  
+                    // Get the changs as related to the parent.
                     Dictionary<long, AuditChangeType> rolledupChanges = RollupChildChanges(childType, changeCatalog, audit.AuditID);
 
                     // Remove this child set from the change catalog
                     changeCatalog.Remove(childType);
 
-                    // Add in all the changes to the changeCatalog. 
+                    // Add in all the changes to the changeCatalog.
                     if (rolledupChanges != null)
                     {
                         EntityType parentType = EntityUtility.GetEntityType(rolledupChanges.First().Key);
@@ -416,7 +415,7 @@ namespace ShipWorks.Users.Audit
             {
                 KeyValuePair<long, AuditChangeType> changeInfo = changeCatalog.First().Value.First();
 
-                audit.ObjectID = changeInfo.Key;
+                audit.EntityID = changeInfo.Key;
                 audit.Action = (int) GetActionFromChangeType(changeInfo.Value);
             }
 
@@ -439,11 +438,11 @@ namespace ShipWorks.Users.Audit
                     else
                     {
                         KeyValuePair<long, AuditChangeType> customerChange = customerChanges.First();
-                        
+
                         // If the customer was deleted, that's what it get's logged as
                         if (customerChange.Value == AuditChangeType.Delete)
                         {
-                            audit.ObjectID = customerChange.Key;
+                            audit.EntityID = customerChange.Key;
                             audit.Action = (int) AuditActionType.Delete;
                         }
 
@@ -481,7 +480,7 @@ namespace ShipWorks.Users.Audit
                             // If there are no orders - or if there are multiple ones that all go to the same customer, log it to the customer
                             if (orderChanges == null || orderChanges.Count > 1)
                             {
-                                audit.ObjectID = customerChange.Key;
+                                audit.EntityID = customerChange.Key;
                                 audit.Action = (int) AuditActionType.Delete;
                             }
 
@@ -490,7 +489,7 @@ namespace ShipWorks.Users.Audit
                             {
                                 KeyValuePair<long, AuditChangeType> orderChange = orderChanges.Single();
 
-                                audit.ObjectID = orderChange.Key;
+                                audit.EntityID = orderChange.Key;
                                 audit.Action = (int) GetActionFromChangeType(orderChange.Value);
                             }
                         }
@@ -512,7 +511,7 @@ namespace ShipWorks.Users.Audit
                     {
                         KeyValuePair<long, AuditChangeType> orderChange = orderChanges.Single();
 
-                        audit.ObjectID = orderChange.Key;
+                        audit.EntityID = orderChange.Key;
                         audit.Action = (int) GetActionFromChangeType(orderChange.Value);
                     }
                 }
@@ -543,7 +542,7 @@ namespace ShipWorks.Users.Audit
 
                     EntityType parentType = EntityUtility.GetEntityType(parentID.Value);
 
-                    // Only add this guy to the rolled up version if the parent wasnt directly changed too.  And it always gets rolled up as an 
+                    // Only add this guy to the rolled up version if the parent wasnt directly changed too.  And it always gets rolled up as an
                     // update.  So if the child was added\deleted for example, that actually shows up as an update to the parent.
                     // We are looking at the original catalog for this test, not the condensed one.
                     if (!changeCatalog.ContainsKey(parentType) || !changeCatalog[parentType].ContainsKey(parentID.Value))
@@ -665,7 +664,7 @@ namespace ShipWorks.Users.Audit
             // Go through each change to try to figure out what's going on
             foreach (AuditChangeEntity change in changes)
             {
-                EntityType entityType = EntityUtility.GetEntityType(change.ObjectID);
+                EntityType entityType = EntityUtility.GetEntityType(change.EntityID);
                 AuditChangeType changeType = (AuditChangeType) change.ChangeType;
 
                 // Get the change map for this entity type
@@ -677,7 +676,7 @@ namespace ShipWorks.Users.Audit
                 }
 
                 // Should never already be there due to the condensing we have already done
-                entityChangeMap.Add(change.ObjectID, changeType);
+                entityChangeMap.Add(change.EntityID, changeType);
             }
 
             return changeCatalog;

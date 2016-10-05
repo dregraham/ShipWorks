@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace ShipWorks.Data.Utility
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Data.Utility
         /// connection also requesting a lock from working with the entityID.
         /// Throws a SqlAppResourceLockException if the lock cannot be taken.
         /// </summary>
-        public SqlEntityLock(SqlConnection con, long entityID, string reason)
+        public SqlEntityLock(DbConnection con, long entityID, string reason)
             : base(con, string.Format("EntityLock_{0}", entityID))
         {
             this.entityID = entityID;

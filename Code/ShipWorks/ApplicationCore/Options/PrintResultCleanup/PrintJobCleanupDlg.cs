@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -13,8 +13,8 @@ using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users.Audit;
@@ -147,9 +147,9 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
 
                 shrinkProgress.Starting();
 
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                    using (DbCommand cmd = DbCommandProvider.Create(con))
                     {
                         // this can really take a while
                         cmd.CommandTimeout = (int) TimeSpan.FromMinutes(60).TotalSeconds;
@@ -281,14 +281,14 @@ namespace ShipWorks.ApplicationCore.Options.PrintResultCleanup
 
             estimateScript = estimateScript.Replace("{CUTOFFDATE}", selectedDate.ToShortDateString());
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                using (DbCommand cmd = DbCommandProvider.Create(con))
                 {
                     cmd.CommandTimeout = (int) TimeSpan.FromMinutes(5).TotalSeconds;
                     cmd.CommandText = estimateScript;
 
-                    object result = SqlCommandProvider.ExecuteScalar(cmd);
+                    object result = DbCommandProvider.ExecuteScalar(cmd);
                     long byteCount = 0;
                     if (result != null && result != DBNull.Value)
                     {

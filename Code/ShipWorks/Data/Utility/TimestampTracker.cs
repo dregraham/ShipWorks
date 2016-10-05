@@ -1,6 +1,6 @@
+using System.Data.Common;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 
@@ -42,13 +42,13 @@ namespace ShipWorks.Data.Utility
         /// </summary>
         public bool CheckForChange()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 long current = 0;
                 object value = null;
 
                 SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(3, -5, "TimestapTracker.CheckForChange");
-                sqlAdapterRetry.ExecuteWithRetry(() => value = SqlCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)"));
+                sqlAdapterRetry.ExecuteWithRetry(() => value = DbCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)"));
 
                 // During a reconnect or after an upgrade, the timestamp is sometimes returned as null
                 // If that happens, we'll assume no changes for the moment and let the next run through

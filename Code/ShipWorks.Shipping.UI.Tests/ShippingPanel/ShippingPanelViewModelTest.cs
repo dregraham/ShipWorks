@@ -1019,7 +1019,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             shipmentViewModel.Verify(x => x.Save(), Times.Once);
         }
-        
+
         private ShippingPanelViewModel GetShippingPanelViewModelWithLoadedOrder(List<ICarrierShipmentAdapter> shipmentAdapters)
         {
             ShippingPanelViewModel shippingPanelViewModel = mock.Create<ShippingPanelViewModel>();

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Adapter.Custom;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
 using System.Data.SqlClient;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Email
 {
@@ -113,7 +111,7 @@ namespace ShipWorks.Email
             // Only the time has come to send the message
             predicate.AddWithAnd(EmailOutboundFields.DontSendBefore == DBNull.Value | EmailOutboundFields.DontSendBefore <= DateTime.UtcNow);
 
-            // Only messages that we havnt JUST tried to send.  So like if a messages fails, and then we loop around again due to our paging, 
+            // Only messages that we havnt JUST tried to send.  So like if a messages fails, and then we loop around again due to our paging,
             // we won't pick it right back up for sending.
             predicate.AddWithAnd(EmailOutboundFields.SentDate < createdTime);
 

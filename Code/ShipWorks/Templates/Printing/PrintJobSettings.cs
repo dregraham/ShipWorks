@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing.Printing;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -14,7 +10,7 @@ namespace ShipWorks.Templates.Printing
         // The printer and tray to use
         string printerName;
         int paperSource;
-        string _paperSourceName;
+        string paperSourceName;
 
         // Number of copies of the processed output desired
         int copies = 1;
@@ -67,7 +63,7 @@ namespace ShipWorks.Templates.Printing
             {
                 printerName = value;
 
-                _paperSourceName = null;
+                paperSourceName = null;
             }
         }
 
@@ -84,7 +80,7 @@ namespace ShipWorks.Templates.Printing
             {
                 paperSource = value;
 
-                _paperSourceName = null;
+                paperSourceName = null;
             }
         }
 
@@ -95,24 +91,13 @@ namespace ShipWorks.Templates.Printing
         {
             get
             {
-                if (_paperSourceName == null)
+                if (paperSourceName == null)
                 {
-                    _paperSourceName = string.Empty;
-
-                    PrinterSettings settings = new PrinterSettings();
-                    settings.PrinterName = printerName;
-
-                    foreach (System.Drawing.Printing.PaperSource source in settings.PaperSources)
-                    {
-                        if (source.RawKind == paperSource)
-                        {
-                            _paperSourceName = source.SourceName;
-                            break;
-                        }
-                    }
+                    IPrinterSetting settings = PrinterSettingFactory.GetPrinterSettings(printerName);
+                    paperSourceName = settings.PaperSourceName;
                 }
 
-                return _paperSourceName;
+                return paperSourceName;
             }
         }
 
@@ -135,7 +120,7 @@ namespace ShipWorks.Templates.Printing
         }
 
         /// <summary>
-        /// Indicates if the print job represents a therma label
+        /// Indicates if the print job represents a thermal label
         /// </summary>
         public bool IsThermal
         {

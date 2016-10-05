@@ -1,19 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Diagnostics;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Connection;
-using System.Transactions;
 using System.Collections;
-using System.Reflection;
-using ShipWorks.Data.Model;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Transactions;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Users.Security
 {
@@ -114,7 +111,7 @@ namespace ShipWorks.Users.Security
                     PermissionEntity permission = new PermissionEntity();
                     permission.UserID = userID;
                     permission.PermissionType = (int) type;
-                    permission.ObjectID = objectID;
+                    permission.EntityID = objectID;
 
                     permissions.Add(permission);
                 }
@@ -130,20 +127,20 @@ namespace ShipWorks.Users.Security
 
             if (scope == PermissionScope.Global && objectID != null)
             {
-                throw new InvalidOperationException("Global scope should not specified an ObjectID to secure.");
+                throw new InvalidOperationException("Global scope should not specified an EntityID to secure.");
             }
 
             if (scope == PermissionScope.Store)
             {
                 if (objectID == null)
                 {
-                    throw new InvalidOperationException("An ObjectID must be specified for a permission of store scope.");
+                    throw new InvalidOperationException("An EntityID must be specified for a permission of store scope.");
                 }
 
                 EntityType entityType = EntityUtility.GetEntityType(objectID.Value);
                 if (entityType != EntityType.StoreEntity)
                 {
-                    throw new InvalidOperationException("The ObjectID must represent a store key for a permission of store scope.");
+                    throw new InvalidOperationException("The EntityID must represent a store key for a permission of store scope.");
                 }
             }
         }
@@ -155,7 +152,7 @@ namespace ShipWorks.Users.Security
         {
             foreach (PermissionEntity permission in other.permissions)
             {
-                AddPermission((PermissionType) permission.PermissionType, permission.ObjectID);
+                AddPermission((PermissionType) permission.PermissionType, permission.EntityID);
             }
         }
 
@@ -190,7 +187,7 @@ namespace ShipWorks.Users.Security
         /// </summary>
         private PermissionEntity FindPermission(PermissionCollection collection, PermissionType type, long? objectID)
         {
-            List<int> indexes = collection.FindMatches(PermissionFields.PermissionType == (int) type & PermissionFields.ObjectID == objectID);
+            List<int> indexes = collection.FindMatches(PermissionFields.PermissionType == (int) type & PermissionFields.EntityID == objectID);
 
             if (indexes != null && indexes.Count > 0)
             {
@@ -241,7 +238,7 @@ namespace ShipWorks.Users.Security
             // Start out by removing all our own permissions
             foreach (PermissionEntity permission in new List<PermissionEntity>(permissions))
             {
-                RemovePermission((PermissionType) permission.PermissionType, permission.ObjectID);
+                RemovePermission((PermissionType) permission.PermissionType, permission.EntityID);
             }
 
             // Add back in all permissions we are copying from

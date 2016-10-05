@@ -1,31 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Grid.Columns;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using Divelements.SandGrid;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
-using System.Text.RegularExpressions;
-using ShipWorks.UI.Controls;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping;
-using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Carriers.Postal;
 using Interapptive.Shared.UI;
-using ShipWorks.Data.Caching;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Users.Audit
 {
@@ -72,7 +58,7 @@ namespace ShipWorks.Users.Audit
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing) 
+            if (disposing)
             {
                 if (components != null)
                 {
@@ -100,7 +86,7 @@ namespace ShipWorks.Users.Audit
             // Prepare configurable columns
             entityGrid.InitializeColumns(new StandardGridColumnStrategy(gridSettingsKey, GridColumnDefinitionSet.AuditChanges, layout =>
                 {
-                    layout.DefaultSortColumnGuid = layout.AllColumns[AuditChangeFields.ObjectID].Definition.ColumnGuid;
+                    layout.DefaultSortColumnGuid = layout.AllColumns[AuditChangeFields.EntityID].Definition.ColumnGuid;
                     layout.DefaultSortOrder = ListSortDirection.Ascending;
 
                     layout.LastSortColumnGuid = layout.DefaultSortColumnGuid;
@@ -128,7 +114,7 @@ namespace ShipWorks.Users.Audit
             {
                 return;
             }
-            
+
             // Get the audit change and details
             AuditChangeEntity change = (AuditChangeEntity) entityProvider.GetEntity(entityGrid.Selection.Keys.First(), true);
 
@@ -206,7 +192,7 @@ namespace ShipWorks.Users.Audit
             }
             text = sb.ToString();
 
-            EntityType changeEntity = EntityUtility.GetEntityType(change.ObjectID);
+            EntityType changeEntity = EntityUtility.GetEntityType(change.EntityID);
 
             // Orders and Customers special case address processing
             if (changeEntity == EntityType.OrderEntity || changeEntity == EntityType.CustomerEntity)

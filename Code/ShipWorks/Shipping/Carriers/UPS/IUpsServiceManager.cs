@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -42,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="description">The description.</param>
         /// <param name="destinationCountryCode">The destination country code.</param>
         /// <returns>An UpsServiceMapping object.</returns>
-        UpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode);
+        IUpsServiceMapping GetServicesByWorldShipDescription(string description, string destinationCountryCode);
 
         /// <summary>
         /// Gets the service by transit code.

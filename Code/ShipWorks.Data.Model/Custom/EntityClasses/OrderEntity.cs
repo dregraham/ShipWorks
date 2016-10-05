@@ -16,7 +16,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         bool settingOrderNumberComplete = false;
 
         // We cache this so we only have to look it up once
-        static string baseObjectName = new OrderEntity().LLBLGenProEntityName;
+        static string baseObjectName = ((IEntityCore) new OrderEntity()).LLBLGenProEntityName;
 
         /// <summary>
         /// Set the Prefix for the order number
@@ -55,15 +55,15 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Field value is changing
         /// </summary>
-        protected override void OnFieldValueChanged(object originalValue, IEntityField2 field)
+        protected override void OnFieldValueChanged(object originalValue, int fieldIndex)
         {
             // If any parts of the order number are changing, we have to update the complete number
-            if (field.FieldIndex == (int) OrderFieldIndex.OrderNumber)
+            if (fieldIndex == (int) OrderFieldIndex.OrderNumber)
             {
                 UpdateOrderNumberComplete();
             }
 
-            base.OnFieldValueChanged(originalValue, field);
+            base.OnFieldValueChanged(originalValue, fieldIndex);
         }
 
         /// <summary>

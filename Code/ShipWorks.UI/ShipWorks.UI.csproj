@@ -48,12 +48,12 @@
       <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37223, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19038, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37224, Culture=neutral, PublicKeyToken=f46ff315b1088208, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=f46ff315b1088208, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.Extras.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -78,17 +78,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
-    </Reference>
-    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll</HintPath>
-    </Reference>
-    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -129,7 +121,7 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvvmLightLibs.5.2.0.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xaml" />
@@ -156,6 +148,8 @@
     <Compile Include="Behaviors\ComboBoxSelectionChangedBehavior.cs" />
     <Compile Include="Behaviors\PasswordBoxBindingBehavior.cs" />
     <Compile Include="Behaviors\TextBoxInputRegExBehavior.cs" />
+    <Compile Include="Behaviors\WebBrowserRunStartupScriptBehavior.cs" />
+    <Compile Include="Behaviors\WebBrowserSuppressPopupBehavior.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteFactory.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteViewModel.cs" />
     <Compile Include="Controls\ChannelConfirmDelete\ChannelConfirmDeleteDlg.xaml.cs">
@@ -191,6 +185,11 @@
       <DependentUpon>CustomerLicenseActivationDlg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
+      <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlgViewModel.cs" />
+    <Compile Include="Controls\WebBrowser\IDismissableWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\IWebBrowserDlgViewModel.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserDlg.xaml.cs">
       <DependentUpon>WebBrowserDlg.xaml</DependentUpon>
@@ -249,10 +248,6 @@
       <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
       <Name>Interapptive.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
-      <Project>{d5eb1eb5-dd70-4461-9377-b462031837dc}</Project>
-      <Name>ShipWorks.Data.Adapter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
       <Name>ShipWorks.Data.Model</Name>
@@ -301,6 +296,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

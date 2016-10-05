@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
-using System.Drawing;
 
 namespace ShipWorks.Users.Security
 {

@@ -1,20 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using log4net;
-using System.Data.SqlClient;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Connection;
-using Interapptive.Shared.Utility;
-using Divelements.SandGrid;
-using ShipWorks.UI;
+using System.Data.Common;
 using System.Windows.Forms;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.UI;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Users.Audit
 {
@@ -47,7 +39,7 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         public static void Audit(AuditActionType action, long userID)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 AuditEntity audit = new AuditEntity();
 
@@ -60,7 +52,7 @@ namespace ShipWorks.Users.Audit
                 audit.Date = DateTime.UtcNow;
 
                 audit.Action = (int) action;
-                audit.ObjectID = null;
+                audit.EntityID = null;
 
                 audit.HasEvents = false;
 
@@ -74,9 +66,9 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// Get the latest and greatest transaction ID value
         /// </summary>
-        private static long GetTransactionID(SqlConnection con)
+        private static long GetTransactionID(DbConnection con)
         {
-            return SqlCommandProvider.ExecuteScalar<long>(con, "SELECT dbo.GetTransactionID()");
+            return DbCommandProvider.ExecuteScalar<long>(con, "SELECT dbo.GetTransactionID()");
         }
 
         /// <summary>

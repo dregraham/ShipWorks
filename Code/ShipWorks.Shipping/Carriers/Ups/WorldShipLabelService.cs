@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Connection;
+﻿using System;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -13,18 +14,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public class WorldShipLabelService : UpsLabelService
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public WorldShipLabelService(Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData) 
+            : base(createDownloadedLabelData)
+        {
+        }
+
+        /// <summary>
         /// Creates the label
         /// </summary>
-        public override void Create(ShipmentEntity shipment)
+        public override IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             try
             {
                 base.Create(shipment);
 
-                WorldShipUtility.ExportToWorldShip(shipment);
-
-                // Mark shipment as exported
-                shipment.Ups.WorldShipStatus = (int) WorldShipStatusType.Exported;
+                return createDownloadedLabelData(new UpsLabelResponse()
+                    {
+                        Shipment = shipment
+                    }
+                );
             }
             catch (CarrierException ex)
             {
