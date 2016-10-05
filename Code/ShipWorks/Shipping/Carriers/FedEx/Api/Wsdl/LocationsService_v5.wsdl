@@ -1,6 +1,6 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/locs/v1" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/locs/v1" name="LocationsServiceDefinitions">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/locs/v5" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/locs/v5" name="LocationsServiceDefinitions">
   <types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/locs/v1">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/locs/v5">
       <xs:element name="SearchLocationsReply" type="ns:SearchLocationsReply"/>
       <xs:element name="SearchLocationsRequest" type="ns:SearchLocationsRequest"/>
       <xs:complexType name="Address">
@@ -136,6 +136,11 @@
           <xs:element name="Carrier" type="ns:CarrierCodeType" minOccurs="0"/>
           <xs:element name="ServiceCategory" type="ns:ServiceCategoryType" minOccurs="0"/>
           <xs:element name="ServiceType" type="ns:ServiceType" minOccurs="0"/>
+          <xs:element name="CountryRelationship" type="ns:CountryRelationshipType" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>This field describe a subset of the carrier's products or services which may have unique characteristics: i.e. latest drop-off times at a particular location vary depending on the destination type.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element name="NormalLatestDropOffDetails" type="ns:LatestDropOffDetail" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
               <xs:documentation>Specifies the details about the latest times a drop off can be made at a location most days. These are the normal drop off times.</xs:documentation>
@@ -216,16 +221,6 @@
             </xs:annotation>
           </xs:element>
           <xs:element name="MeterInstance" type="xs:string" minOccurs="0"/>
-          <xs:element name="ClientProductId" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>A FedEx assigned identifier for a third party software product used by customer to do business with FedEx. Such as a Compatible Solution Provider's product.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element name="ClientProductVersion" type="xs:string" minOccurs="0">
-            <xs:annotation>
-              <xs:documentation>The version of the third party product.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
           <xs:element name="IntegratorId" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Only used in transactions which require identification of the FedEx Office integrator.</xs:documentation>
@@ -310,6 +305,15 @@
           </xs:element>
         </xs:sequence>
       </xs:complexType>
+      <xs:simpleType name="CountryRelationshipType">
+        <xs:annotation>
+          <xs:documentation>Describes relationship between origin and destination countries.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="DOMESTIC"/>
+          <xs:enumeration value="INTERNATIONAL"/>
+        </xs:restriction>
+      </xs:simpleType>
       <xs:simpleType name="DayOfWeekType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="FRI"/>
@@ -349,6 +353,7 @@
             </xs:annotation>
           </xs:element>
           <xs:element name="ReservationAvailabilityDetail" type="ns:ReservationAvailabilityDetail" minOccurs="0"/>
+          <xs:element name="SupportedRedirectToHoldServices" type="ns:SupportedRedirectToHoldServiceType" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="LocationDetail" type="ns:LocationDetail" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Details about a FedEx location such as services offered, working hours and pick and drop off times.</xs:documentation>
@@ -421,10 +426,7 @@
           <xs:documentation>Specifies the reason for the overlay of the daily last drop off time for a carrier.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="DOMESTIC_CANADIAN"/>
-          <xs:enumeration value="EAST_COAST"/>
-          <xs:enumeration value="FEDEX_GROUND"/>
-          <xs:enumeration value="WEST_COAST"/>
+          <xs:enumeration value="US_WEST_COAST"/>
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="LatestDropoffOverlayDetail">
@@ -470,12 +472,14 @@
           <xs:enumeration value="COPY_AND_PRINT_SERVICES"/>
           <xs:enumeration value="DANGEROUS_GOODS_SERVICES"/>
           <xs:enumeration value="DIRECT_MAIL_SERVICES"/>
+          <xs:enumeration value="DOMESTIC_SHIPPING_SERVICES"/>
           <xs:enumeration value="DROP_BOX"/>
           <xs:enumeration value="EXPRESS_FREIGHT_DROPOFFS"/>
           <xs:enumeration value="EXPRESS_PARCEL_DROPOFFS"/>
           <xs:enumeration value="FEDEX_FREIGHT_DROPOFFS"/>
           <xs:enumeration value="GROUND_DROPOFFS"/>
           <xs:enumeration value="GROUND_HOME_DELIVERY_DROPOFFS"/>
+          <xs:enumeration value="INTERNATIONAL_SHIPPING_SERVICES"/>
           <xs:enumeration value="LOCATION_IS_IN_AIRPORT"/>
           <xs:enumeration value="NOTARY_SERVICES"/>
           <xs:enumeration value="OBSERVES_DAY_LIGHT_SAVING_TIMES"/>
@@ -527,6 +531,7 @@
               <xs:documentation>Details about the clearance location.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element name="ServicingLocationDetails" type="ns:LocationIdentificationDetail" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="AcceptedCurrency" type="xs:string" minOccurs="0"/>
           <xs:element name="LocationHolidays" type="ns:Holiday" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="MapUrl" type="xs:string" minOccurs="0"/>
@@ -555,11 +560,19 @@
           <xs:element name="Hours" type="ns:TimeRange" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="LocationIdentificationDetail"> 
+        <xs:sequence>
+           <xs:element name="Type" type="ns:FedExLocationType" minOccurs="0"/>
+           <xs:element name="Id" type="xs:string" minOccurs="0"/>
+           <xs:element name="Number" type="xs:nonNegativeInteger" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
       <xs:simpleType name="LocationSearchFilterType">
         <xs:annotation>
           <xs:documentation>Specifies the crieteria used to filter the location search results.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
+          <xs:enumeration value="EXCLUDE_LOCATIONS_OUTSIDE_COUNTRY"/>
           <xs:enumeration value="EXCLUDE_LOCATIONS_OUTSIDE_STATE_OR_PROVINCE"/>
         </xs:restriction>
       </xs:simpleType>
@@ -649,7 +662,7 @@
           </xs:element>
           <xs:element name="MessageParameters" type="ns:NotificationParameter" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) witout having to parse the message string.</xs:documentation>
+              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) without having to parse the message string.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -697,11 +710,6 @@
           <xs:enumeration value="SIGNATURE_OPTION"/>
         </xs:restriction>
       </xs:simpleType>
-      <xs:complexType name="RequestedReservationDetail">
-        <xs:sequence>
-          <xs:element name="UniqueTrackingNumber" type="ns:UniqueTrackingNumber" minOccurs="0"/>
-        </xs:sequence>
-      </xs:complexType>
       <xs:simpleType name="ReservationAttributesType">
         <xs:annotation>
           <xs:documentation>Attributes about a reservation at a FedEx location.</xs:documentation>
@@ -791,6 +799,11 @@
               <xs:documentation>Specifies the criterion that may be used to search for FedEx locations.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element name="UniqueTrackingNumber" type="ns:UniqueTrackingNumber" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Tracking number to be used when searching for locations. This tracking number, along with other location search constraints, help to narrow the search for locations.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element name="Address" type="ns:Address" minOccurs="0"/>
           <xs:element name="PhoneNumber" type="xs:string" minOccurs="0"/>
           <xs:element name="GeographicCoordinates" type="xs:string" minOccurs="0"/>
@@ -804,7 +817,6 @@
               <xs:documentation>Specifies the details on how the location search results be sorted in the reply.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="ReservationDetail" type="ns:RequestedReservationDetail" minOccurs="0"/>
           <xs:element name="Constraints" type="ns:SearchLocationConstraints" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Contraints to be applied to location attributes.</xs:documentation>
@@ -878,9 +890,9 @@
           <xs:documentation>Used in authentication of the sender's identity.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-          <xs:element name="CspCredential" type="ns:WebAuthenticationCredential" minOccurs="1">
+          <xs:element name="ParentCredential" type="ns:WebAuthenticationCredential" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>Credential used to authenticate a CSP product/version.</xs:documentation>
+              <xs:documentation>This was renamed from cspCredential.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="UserCredential" type="ns:WebAuthenticationCredential" minOccurs="1">
@@ -917,7 +929,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Major" type="xs:int" fixed="1" minOccurs="1">
+          <xs:element name="Major" type="xs:int" fixed="5" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -951,7 +963,7 @@
   <binding name="LocationsServiceSoapBinding" type="ns:LocationsPortType">
     <s1:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="searchLocations">
-      <s1:operation soapAction="http://fedex.com/ws/locs/v1/searchLocations" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/locs/v5/searchLocations" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>

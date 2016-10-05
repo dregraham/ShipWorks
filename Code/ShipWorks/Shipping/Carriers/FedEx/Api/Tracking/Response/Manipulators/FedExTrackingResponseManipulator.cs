@@ -1,11 +1,11 @@
-using System;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 using ShipWorks.Shipping.Tracking;
-using log4net;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
 {
@@ -78,31 +78,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
         /// </summary>
         private static string GetTrackingSummary(TrackDetail detail)
         {
-            if (detail.StatusDetail == null || string.IsNullOrWhiteSpace(detail.StatusDetail.Description))
+            if (string.IsNullOrWhiteSpace(detail.StatusDetail?.Description))
             {
                 return "No tracking information was returned.";
             }
 
-            string status = string.Format("<b>{0}</b>", detail.StatusDetail.Description);
+            string status = $"<b>{detail.StatusDetail.Description}</b>";
 
-            if (detail.ActualDeliveryTimestampSpecified)
+            string actualDeliveryDate = GetTrackingDateOrTimestamp(detail, TrackingDateOrTimestampType.ACTUAL_DELIVERY);
+            if (!string.IsNullOrEmpty(actualDeliveryDate))
             {
-                DateTime delivered = detail.ActualDeliveryTimestamp;
-                status += string.Format(" on {0:M/dd/yyyy h:mm tt}", delivered);
+                status += $" on {actualDeliveryDate}";
             }
 
-            if (detail.EstimatedDeliveryTimestampSpecified)
+            string estimatedDeliveryDate = GetTrackingDateOrTimestamp(detail, TrackingDateOrTimestampType.ESTIMATED_DELIVERY);
+            if (!string.IsNullOrEmpty(estimatedDeliveryDate))
             {
-                DateTime estimate = detail.EstimatedDeliveryTimestamp;
-                status += string.Format("<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {0:M/dd/yyyy}</span>", estimate);
+                status += $"<br/><span style='color: rgb(80, 80, 80);'>Should arrive: {estimatedDeliveryDate}</span>";
             }
 
             if (!string.IsNullOrEmpty(detail.DeliverySignatureName))
             {
-                status += string.Format("<br/><span style='color: rgb(80, 80, 80);'>Signed by: {0}</span>", AddressCasing.Apply(detail.DeliverySignatureName));
+                status += $"<br/><span style='color: rgb(80, 80, 80);'>Signed by: {AddressCasing.Apply(detail.DeliverySignatureName)}</span>";
             }
 
             return status;
+        }
+
+        /// <summary>
+        /// Gets the tracking date or timestamp.
+        /// </summary>
+        private static string GetTrackingDateOrTimestamp(TrackDetail detail, TrackingDateOrTimestampType dateType)
+        {
+            return detail.DatesOrTimes?.FirstOrDefault(d => d.TypeSpecified && d.Type == dateType)?.DateOrTimestamp ?? null;
         }
 
         /// <summary>
