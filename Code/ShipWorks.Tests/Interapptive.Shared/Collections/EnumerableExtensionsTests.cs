@@ -290,5 +290,49 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
             Assert.Equal(ComparisonResult.Equal, testObject.Object.CompareCountTo(3));
         }
+
+        [Fact]
+        public void WithItemIfEmpty_Throws_WhenItemCreatorIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => Enumerable.Empty<string>().WithItemIfEmpty(null));
+        }
+
+        [Fact]
+        public void WithItemIfEmpty_ReturnsItem_WhenSourceIsEmpty()
+        {
+            var results = Enumerable.Empty<string>().WithItemIfEmpty(() => "Foo").ToArray();
+            Assert.Equal(new[] { "Foo" }, results);
+        }
+
+        [Fact]
+        public void WithItemIfEmpty_ReturnsItem_WhenSourceIsNull()
+        {
+            var results = ((IEnumerable<string>) null).WithItemIfEmpty(() => "Foo").ToArray();
+            Assert.Equal(new[] { "Foo" }, results);
+        }
+
+        [Fact]
+        public void WithItemIfEmpty_ReturnsSource_WhenSourceHasOneItem()
+        {
+            var source = new[] { "Bar" };
+            var results = source.WithItemIfEmpty(() => "Foo").ToArray();
+            Assert.Equal(source, results);
+        }
+
+        [Fact]
+        public void WithItemIfEmpty_ReturnsSource_WhenSourceHasTwoItems()
+        {
+            var source = new[] { "Bar", "Baz" };
+            var results = source.WithItemIfEmpty(() => "Foo").ToArray();
+            Assert.Equal(source, results);
+        }
+
+        [Fact]
+        public void WithItemIfEmpty_DoesNotCallCreator_WhenSourceIsNotEmpty()
+        {
+            var source = new[] { "Bar" };
+            var results = source.WithItemIfEmpty(() => { throw new InvalidOperationException(); }).ToArray();
+            Assert.Equal(source, results);
+        }
     }
 }

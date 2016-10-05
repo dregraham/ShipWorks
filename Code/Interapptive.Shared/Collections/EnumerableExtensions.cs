@@ -117,6 +117,40 @@ namespace Interapptive.Shared.Collections
         }
 
         /// <summary>
+        /// Inject the specified item into the list if the source is null or empty
+        /// </summary>
+        public static IEnumerable<T> WithItemIfEmpty<T>(this IEnumerable<T> source, Func<T> itemCreator)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(itemCreator, nameof(itemCreator));
+
+            return source == null ?
+                new[] { itemCreator() } :
+                WithItemIfEmptyInternal(source, itemCreator);
+        }
+
+        /// <summary>
+        /// Internal version of the WithItemIfEmpty method that allows yielding
+        /// </summary>
+        private static IEnumerable<T> WithItemIfEmptyInternal<T>(this IEnumerable<T> source, Func<T> itemCreator)
+        {
+            bool needsDefault = true;
+
+            using (IEnumerator<T> iter = source.GetEnumerator())
+            {
+                while (iter.MoveNext())
+                {
+                    yield return iter.Current;
+                    needsDefault = false;
+                }
+            }
+
+            if (needsDefault)
+            {
+                yield return itemCreator();
+            }
+        }
+
+        /// <summary>
         /// Repeats the items in the collection
         /// </summary>
         /// <typeparam name="T">Type of object in the collection</typeparam>
