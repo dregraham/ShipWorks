@@ -23,10 +23,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="RateServiceSoapBinding", Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="RateServiceSoapBinding", Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RateService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback getRatesOperationCompleted;
@@ -73,9 +73,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         public event getRatesCompletedEventHandler getRatesCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/rate/v18/getRates", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("RateReply", Namespace="http://fedex.com/ws/rate/v18")]
-        public RateReply getRates([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/rate/v18")] RateRequest RateRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/rate/v20/getRates", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RateReply", Namespace="http://fedex.com/ws/rate/v20")]
+        public RateReply getRates([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/rate/v20")] RateRequest RateRequest) {
             object[] results = this.Invoke("getRates", new object[] {
                         RateRequest});
             return ((RateReply)(results[0]));
@@ -122,11 +122,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RateRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -254,11 +254,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class WebAuthenticationDetail {
         
         private WebAuthenticationCredential parentCredentialField;
@@ -287,11 +287,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class WebAuthenticationCredential {
         
         private string keyField;
@@ -320,11 +320,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class PackageRateDetail {
         
         private ReturnedRateType rateTypeField;
@@ -600,9 +600,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ReturnedRateType {
         
         /// <remarks/>
@@ -618,9 +618,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         PAYOR_LIST_SHIPMENT,
         
         /// <remarks/>
-        PAYOR_RETAIL_PACKAGE,
-        
-        /// <remarks/>
         PREFERRED_ACCOUNT_PACKAGE,
         
         /// <remarks/>
@@ -634,9 +631,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RatedWeightMethod {
         
         /// <remarks/>
@@ -680,9 +677,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum MinimumChargeType {
         
         /// <remarks/>
@@ -702,11 +699,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Weight {
         
         private WeightUnits unitsField;
@@ -761,9 +758,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum WeightUnits {
         
         /// <remarks/>
@@ -774,11 +771,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Money {
         
         private string currencyField;
@@ -820,11 +817,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RateDiscount {
         
         private RateDiscountType rateDiscountTypeField;
@@ -903,9 +900,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RateDiscountType {
         
         /// <remarks/>
@@ -925,11 +922,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Rebate {
         
         private RebateType rebateTypeField;
@@ -1008,9 +1005,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RebateType {
         
         /// <remarks/>
@@ -1024,11 +1021,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Surcharge {
         
         private SurchargeType surchargeTypeField;
@@ -1107,9 +1104,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SurchargeType {
         
         /// <remarks/>
@@ -1315,9 +1312,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SurchargeLevelType {
         
         /// <remarks/>
@@ -1328,11 +1325,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Tax {
         
         private TaxType taxTypeField;
@@ -1386,9 +1383,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum TaxType {
         
         /// <remarks/>
@@ -1414,11 +1411,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class VariableHandlingCharges {
         
         private Money variableHandlingChargeField;
@@ -1471,11 +1468,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RatedPackageDetail {
         
         private TrackingId[] trackingIdsField;
@@ -1567,11 +1564,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class TrackingId {
         
         private TrackingIdType trackingIdTypeField;
@@ -1625,9 +1622,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum TrackingIdType {
         
         /// <remarks/>
@@ -1644,9 +1641,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum OversizeClassType {
         
         /// <remarks/>
@@ -1660,11 +1657,88 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class AncillaryFeeAndTax {
+        
+        private AncillaryFeeAndTaxType typeField;
+        
+        private bool typeFieldSpecified;
+        
+        private string descriptionField;
+        
+        private Money amountField;
+        
+        /// <remarks/>
+        public AncillaryFeeAndTaxType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Money Amount {
+            get {
+                return this.amountField;
+            }
+            set {
+                this.amountField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum AncillaryFeeAndTaxType {
+        
+        /// <remarks/>
+        CLEARANCE_ENTRY_FEE,
+        
+        /// <remarks/>
+        GOODS_AND_SERVICES_TAX,
+        
+        /// <remarks/>
+        HARMONIZED_SALES_TAX,
+        
+        /// <remarks/>
+        OTHER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class EdtTaxDetail {
         
         private EdtTaxType taxTypeField;
@@ -1780,9 +1854,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum EdtTaxType {
         
         /// <remarks/>
@@ -1832,11 +1906,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class EdtCommodityTax {
         
         private string harmonizedCodeField;
@@ -1866,11 +1940,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightRateNotation {
         
         private string codeField;
@@ -1899,11 +1973,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightBaseCharge {
         
         private FreightClassType freightClassField;
@@ -2043,9 +2117,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightClassType {
         
         /// <remarks/>
@@ -2104,9 +2178,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightChargeBasisType {
         
         /// <remarks/>
@@ -2120,11 +2194,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightRateDetail {
         
         private string quoteNumberField;
@@ -2217,9 +2291,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightRateQuoteType {
         
         /// <remarks/>
@@ -2230,9 +2304,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightBaseChargeCalculationType {
         
         /// <remarks/>
@@ -2243,11 +2317,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShipmentLegRateDetail {
         
         private string legDescriptionField;
@@ -2769,11 +2843,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Address {
         
         private string[] streetLinesField;
@@ -2888,9 +2962,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PricingCodeType {
         
         /// <remarks/>
@@ -2934,11 +3008,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CurrencyExchangeRate {
         
         private string fromCurrencyField;
@@ -2992,9 +3066,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SpecialRatingAppliedType {
         
         /// <remarks/>
@@ -3008,9 +3082,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RateDimensionalDivisorType {
         
         /// <remarks/>
@@ -3030,11 +3104,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShipmentRateDetail {
         
         private ReturnedRateType rateTypeField;
@@ -3093,6 +3167,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         
         private Money totalDutiesAndTaxesField;
         
+        private Money totalAncillaryFeesAndTaxesField;
+        
+        private Money totalDutiesTaxesAndFeesField;
+        
         private Money totalNetChargeWithDutiesAndTaxesField;
         
         private ShipmentLegRateDetail[] shipmentLegRateDetailsField;
@@ -3108,6 +3186,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         private Tax[] taxesField;
         
         private EdtCommodityTax[] dutiesAndTaxesField;
+        
+        private AncillaryFeeAndTax[] ancillaryFeesAndTaxesField;
         
         private VariableHandlingCharges variableHandlingChargesField;
         
@@ -3402,6 +3482,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         }
         
         /// <remarks/>
+        public Money TotalAncillaryFeesAndTaxes {
+            get {
+                return this.totalAncillaryFeesAndTaxesField;
+            }
+            set {
+                this.totalAncillaryFeesAndTaxesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Money TotalDutiesTaxesAndFees {
+            get {
+                return this.totalDutiesTaxesAndFeesField;
+            }
+            set {
+                this.totalDutiesTaxesAndFeesField = value;
+            }
+        }
+        
+        /// <remarks/>
         public Money TotalNetChargeWithDutiesAndTaxes {
             get {
                 return this.totalNetChargeWithDutiesAndTaxesField;
@@ -3488,6 +3588,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("AncillaryFeesAndTaxes")]
+        public AncillaryFeeAndTax[] AncillaryFeesAndTaxes {
+            get {
+                return this.ancillaryFeesAndTaxesField;
+            }
+            set {
+                this.ancillaryFeesAndTaxesField = value;
+            }
+        }
+        
+        /// <remarks/>
         public VariableHandlingCharges VariableHandlingCharges {
             get {
                 return this.variableHandlingChargesField;
@@ -3509,11 +3620,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RatedShipmentDetail {
         
         private Money effectiveNetDiscountField;
@@ -3567,11 +3678,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Distance {
         
         private decimal valueField;
@@ -3626,9 +3737,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DistanceUnits {
         
         /// <remarks/>
@@ -3639,11 +3750,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightServiceCenterDetail {
         
         private string interlineCarrierCodeField;
@@ -3821,9 +3932,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ServiceType {
         
         /// <remarks/>
@@ -3915,9 +4026,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightServiceSchedulingType {
         
         /// <remarks/>
@@ -3931,9 +4042,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DayOfWeekType {
         
         /// <remarks/>
@@ -3959,11 +4070,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ContactAndAddress {
         
         private Contact contactField;
@@ -3992,11 +4103,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Contact {
         
         private string contactIdField;
@@ -4121,11 +4232,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightCommitDetail {
         
         private FreightServiceCenterDetail originDetailField;
@@ -4166,11 +4277,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DelayDetail {
         
         private System.DateTime dateField;
@@ -4313,9 +4424,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DelayLevelType {
         
         /// <remarks/>
@@ -4341,9 +4452,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DelayPointType {
         
         /// <remarks/>
@@ -4363,9 +4474,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CommitmentDelayType {
         
         /// <remarks/>
@@ -4403,11 +4514,117 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class CleansedAddressAndLocationDetail {
+        
+        private string countryCodeField;
+        
+        private string stateOrProvinceCodeField;
+        
+        private string postalCodeField;
+        
+        private string serviceAreaField;
+        
+        private string locationIdField;
+        
+        private int locationNumberField;
+        
+        private bool locationNumberFieldSpecified;
+        
+        private string airportIdField;
+        
+        /// <remarks/>
+        public string CountryCode {
+            get {
+                return this.countryCodeField;
+            }
+            set {
+                this.countryCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string StateOrProvinceCode {
+            get {
+                return this.stateOrProvinceCodeField;
+            }
+            set {
+                this.stateOrProvinceCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PostalCode {
+            get {
+                return this.postalCodeField;
+            }
+            set {
+                this.postalCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ServiceArea {
+            get {
+                return this.serviceAreaField;
+            }
+            set {
+                this.serviceAreaField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string LocationId {
+            get {
+                return this.locationIdField;
+            }
+            set {
+                this.locationIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int LocationNumber {
+            get {
+                return this.locationNumberField;
+            }
+            set {
+                this.locationNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool LocationNumberSpecified {
+            get {
+                return this.locationNumberFieldSpecified;
+            }
+            set {
+                this.locationNumberFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string AirportId {
+            get {
+                return this.airportIdField;
+            }
+            set {
+                this.airportIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CommitDetail {
         
         private string commodityNameField;
@@ -4423,6 +4640,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         private SignatureOptionDetail derivedShipmentSignatureOptionField;
         
         private SignatureOptionDetail[] derivedPackageSignatureOptionsField;
+        
+        private CleansedAddressAndLocationDetail derivedOriginDetailField;
+        
+        private CleansedAddressAndLocationDetail derivedDestinationDetailField;
         
         private System.DateTime commitTimestampField;
         
@@ -4548,6 +4769,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
             }
             set {
                 this.derivedPackageSignatureOptionsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CleansedAddressAndLocationDetail DerivedOriginDetail {
+            get {
+                return this.derivedOriginDetailField;
+            }
+            set {
+                this.derivedOriginDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CleansedAddressAndLocationDetail DerivedDestinationDetail {
+            get {
+                return this.derivedDestinationDetailField;
+            }
+            set {
+                this.derivedDestinationDetailField = value;
             }
         }
         
@@ -4838,9 +5079,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ServiceOptionType {
         
         /// <remarks/>
@@ -4860,11 +5101,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ServiceSubOptionDetail {
         
         private FreightGuaranteeType freightGuaranteeField;
@@ -4931,9 +5172,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightGuaranteeType {
         
         /// <remarks/>
@@ -4944,9 +5185,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SmartPostIndiciaType {
         
         /// <remarks/>
@@ -4966,11 +5207,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class SignatureOptionDetail {
         
         private SignatureOptionType optionTypeField;
@@ -5012,9 +5253,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SignatureOptionType {
         
         /// <remarks/>
@@ -5034,9 +5275,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum TransitTimeType {
         
         /// <remarks/>
@@ -5104,11 +5345,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Notification {
         
         private NotificationSeverityType severityField;
@@ -5199,9 +5440,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NotificationSeverityType {
         
         /// <remarks/>
@@ -5221,11 +5462,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class NotificationParameter {
         
         private string idField;
@@ -5254,9 +5495,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum InternationalDocumentContentType {
         
         /// <remarks/>
@@ -5267,9 +5508,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RequiredShippingDocumentType {
         
         /// <remarks/>
@@ -5292,11 +5533,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RateReplyDetail {
         
         private ServiceType serviceTypeField;
@@ -5625,9 +5866,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PackagingType {
         
         /// <remarks/>
@@ -5665,11 +5906,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RateReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -5736,11 +5977,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class TransactionDetail {
         
         private string customerTransactionIdField;
@@ -5769,11 +6010,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Localization {
         
         private string languageCodeField;
@@ -5802,11 +6043,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class VersionId {
         
         private string serviceIdField;
@@ -5819,7 +6060,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         
         public VersionId() {
             this.serviceIdField = "crs";
-            this.majorField = 18;
+            this.majorField = 20;
             this.intermediateField = 0;
             this.minorField = 0;
         }
@@ -5866,11 +6107,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ContentRecord {
         
         private string partNumberField;
@@ -5924,11 +6165,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class AlcoholDetail {
         
         private AlcoholRecipientType recipientTypeField;
@@ -5958,9 +6199,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum AlcoholRecipientType {
         
         /// <remarks/>
@@ -5971,11 +6212,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class PriorityAlertDetail {
         
         private PriorityAlertEnhancementType[] enhancementTypesField;
@@ -6006,9 +6247,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PriorityAlertEnhancementType {
         
         /// <remarks/>
@@ -6016,11 +6257,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class PackageSpecialServicesRequested {
         
         private PackageSpecialServiceType[] specialServiceTypesField;
@@ -6110,9 +6351,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PackageSpecialServiceType {
         
         /// <remarks/>
@@ -6141,11 +6382,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CodDetail {
         
         private Money codCollectionAmountField;
@@ -6272,11 +6513,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CodAddTransportationChargesDetail {
         
         private RateTypeBasisType rateTypeBasisField;
@@ -6356,9 +6597,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RateTypeBasisType {
         
         /// <remarks/>
@@ -6369,9 +6610,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CodAddTransportationChargeBasisType {
         
         /// <remarks/>
@@ -6388,9 +6629,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ChargeBasisLevelType {
         
         /// <remarks/>
@@ -6401,9 +6642,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CodCollectionType {
         
         /// <remarks/>
@@ -6417,11 +6658,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Party {
         
         private string accountNumberField;
@@ -6475,11 +6716,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class TaxpayerIdentification {
         
         private TinType tinTypeField;
@@ -6583,9 +6824,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum TinType {
         
         /// <remarks/>
@@ -6602,9 +6843,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CodReturnReferenceIndicatorType {
         
         /// <remarks/>
@@ -6621,11 +6862,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DangerousGoodsDetail {
         
         private HazardousCommodityRegulationType regulationField;
@@ -6852,9 +7093,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousCommodityRegulationType {
         
         /// <remarks/>
@@ -6871,9 +7112,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DangerousGoodsAccessibilityType {
         
         /// <remarks/>
@@ -6884,9 +7125,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousCommodityOptionType {
         
         /// <remarks/>
@@ -6909,9 +7150,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DangerousGoodsPackingOptionType {
         
         /// <remarks/>
@@ -6919,11 +7160,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DangerousGoodsContainer {
         
         private HazardousContainerPackingType packingTypeField;
@@ -7016,9 +7257,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousContainerPackingType {
         
         /// <remarks/>
@@ -7026,9 +7267,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RadioactiveContainerClassType {
         
         /// <remarks/>
@@ -7057,11 +7298,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityContent {
         
         private HazardousCommodityDescription descriptionField;
@@ -7139,11 +7380,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityDescription {
         
         private string idField;
@@ -7346,9 +7587,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousCommodityPackingGroupType {
         
         /// <remarks/>
@@ -7365,11 +7606,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityPackingDetail {
         
         private bool cargoAircraftOnlyField;
@@ -7411,9 +7652,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousCommodityDescriptionProcessingOptionType {
         
         /// <remarks/>
@@ -7421,11 +7662,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityQuantityDetail {
         
         private decimal amountField;
@@ -7492,9 +7733,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousCommodityQuantityType {
         
         /// <remarks/>
@@ -7505,11 +7746,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityInnerReceptacleDetail {
         
         private HazardousCommodityQuantityDetail quantityField;
@@ -7526,11 +7767,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityOptionDetail {
         
         private HazardousCommodityLabelTextOptionType labelTextOptionField;
@@ -7572,9 +7813,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HazardousCommodityLabelTextOptionType {
         
         /// <remarks/>
@@ -7588,11 +7829,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RadionuclideDetail {
         
         private string radionuclideField;
@@ -7683,11 +7924,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RadionuclideActivity {
         
         private decimal valueField;
@@ -7742,9 +7983,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RadioactivityUnitOfMeasure {
         
         /// <remarks/>
@@ -7767,9 +8008,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PhysicalFormType {
         
         /// <remarks/>
@@ -7786,11 +8027,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class NetExplosiveDetail {
         
         private NetExplosiveClassificationType typeField;
@@ -7857,9 +8098,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NetExplosiveClassificationType {
         
         /// <remarks/>
@@ -7876,11 +8117,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HazardousCommodityPackagingDetail {
         
         private string countField;
@@ -7910,11 +8151,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DangerousGoodsSignatory {
         
         private string contactNameField;
@@ -7955,11 +8196,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RadioactivityDetail {
         
         private decimal transportIndexField;
@@ -8051,11 +8292,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Dimensions {
         
         private string lengthField;
@@ -8124,9 +8365,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LinearUnits {
         
         /// <remarks/>
@@ -8137,11 +8378,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomerReference {
         
         private CustomerReferenceType customerReferenceTypeField;
@@ -8183,9 +8424,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CustomerReferenceType {
         
         /// <remarks/>
@@ -8223,11 +8464,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RequestedPackageLineItem {
         
         private string sequenceNumberField;
@@ -8406,11 +8647,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class VariableHandlingChargeDetail {
         
         private Money fixedValueField;
@@ -8502,9 +8743,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RateElementBasisType {
         
         /// <remarks/>
@@ -8521,9 +8762,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PhysicalPackagingType {
         
         /// <remarks/>
@@ -8597,11 +8838,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ReturnInstructionsDetail {
         
         private ShippingDocumentFormat formatField;
@@ -8630,11 +8871,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShippingDocumentFormat {
         
         private ShippingDocumentDispositionDetail[] dispositionsField;
@@ -8764,11 +9005,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShippingDocumentDispositionDetail {
         
         private ShippingDocumentDispositionType dispositionTypeField;
@@ -8847,9 +9088,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShippingDocumentDispositionType {
         
         /// <remarks/>
@@ -8878,9 +9119,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShippingDocumentGroupingType {
         
         /// <remarks/>
@@ -8891,11 +9132,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShippingDocumentEMailDetail {
         
         private ShippingDocumentEMailRecipient[] eMailRecipientsField;
@@ -8950,11 +9191,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShippingDocumentEMailRecipient {
         
         private EMailNotificationRecipientType recipientTypeField;
@@ -8996,9 +9237,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum EMailNotificationRecipientType {
         
         /// <remarks/>
@@ -9015,9 +9256,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShippingDocumentEMailGroupingType {
         
         /// <remarks/>
@@ -9028,11 +9269,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShippingDocumentPrintDetail {
         
         private string printerIdField;
@@ -9049,11 +9290,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class LinearMeasure {
         
         private decimal valueField;
@@ -9108,13 +9349,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShippingDocumentImageType {
-        
-        /// <remarks/>
-        DPL,
         
         /// <remarks/>
         EPL2,
@@ -9130,9 +9368,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShippingDocumentStockType {
         
         /// <remarks/>
@@ -9169,9 +9407,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DocumentFormatOptionType {
         
         /// <remarks/>
@@ -9179,11 +9417,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightAddressLabelDetail {
         
         private ShippingDocumentFormat formatField;
@@ -9287,9 +9525,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PageQuadrantType {
         
         /// <remarks/>
@@ -9306,11 +9544,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DocTabContent {
         
         private DocTabContentType docTabContentTypeField;
@@ -9365,9 +9603,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DocTabContentType {
         
         /// <remarks/>
@@ -9387,11 +9625,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DocTabZoneSpecification {
         
         private string zoneNumberField;
@@ -9470,9 +9708,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DocTabZoneJustificationType {
         
         /// <remarks/>
@@ -9483,11 +9721,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DocTabContentBarcoded {
         
         private BarcodeSymbologyType symbologyField;
@@ -9529,9 +9767,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum BarcodeSymbologyType {
         
         /// <remarks/>
@@ -9575,9 +9813,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RelativeVerticalPositionType {
         
         /// <remarks/>
@@ -9588,11 +9826,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelDetail {
         
         private CustomLabelCoordinateUnits coordinateUnitsField;
@@ -9687,9 +9925,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CustomLabelCoordinateUnits {
         
         /// <remarks/>
@@ -9700,11 +9938,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelTextEntry {
         
         private CustomLabelPosition positionField;
@@ -9808,11 +10046,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelPosition {
         
         private string xField;
@@ -9855,9 +10093,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RotationType {
         
         /// <remarks/>
@@ -9874,11 +10112,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelGraphicEntry {
         
         private CustomLabelPosition positionField;
@@ -9919,11 +10157,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelBoxEntry {
         
         private CustomLabelPosition topLeftCornerField;
@@ -9952,11 +10190,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelTextBoxEntry {
         
         private CustomLabelPosition topLeftCornerField;
@@ -10084,11 +10322,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomLabelBarcodeEntry {
         
         private CustomLabelPosition positionField;
@@ -10205,11 +10443,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DangerousGoodsShippersDeclarationDetail {
         
         private ShippingDocumentFormat formatField;
@@ -10239,11 +10477,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomerImageUsage {
         
         private CustomerImageUsageType typeField;
@@ -10298,9 +10536,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CustomerImageUsageType {
         
         /// <remarks/>
@@ -10311,9 +10549,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ImageId {
         
         /// <remarks/>
@@ -10333,11 +10571,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Op900Detail {
         
         private ShippingDocumentFormat formatField;
@@ -10404,11 +10642,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class NaftaProducer {
         
         private string idField;
@@ -10437,11 +10675,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class NaftaCertificateOfOriginDetail {
         
         private ShippingDocumentFormat formatField;
@@ -10558,11 +10796,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DateRange {
         
         private System.DateTime beginsField;
@@ -10619,9 +10857,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NaftaImporterSpecificationType {
         
         /// <remarks/>
@@ -10638,9 +10876,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NaftaProducerSpecificationType {
         
         /// <remarks/>
@@ -10660,11 +10898,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class GeneralAgencyAgreementDetail {
         
         private ShippingDocumentFormat formatField;
@@ -10681,11 +10919,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ExportDeclarationDetail {
         
         private ShippingDocumentFormat documentFormatField;
@@ -10715,11 +10953,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomDocumentDetail {
         
         private ShippingDocumentFormat formatField;
@@ -10810,9 +11048,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LabelPrintingOrientationType {
         
         /// <remarks/>
@@ -10823,9 +11061,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LabelRotationType {
         
         /// <remarks/>
@@ -10842,11 +11080,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CommercialInvoiceDetail {
         
         private ShippingDocumentFormat formatField;
@@ -10876,11 +11114,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CertificateOfOriginDetail {
         
         private ShippingDocumentFormat documentFormatField;
@@ -10910,11 +11148,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShippingDocumentSpecification {
         
         private RequestedShippingDocumentType[] shippingDocumentTypesField;
@@ -11066,9 +11304,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RequestedShippingDocumentType {
         
         /// <remarks/>
@@ -11103,11 +11341,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class AdditionalLabelsDetail {
         
         private AdditionalLabelsType typeField;
@@ -11150,9 +11388,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum AdditionalLabelsType {
         
         /// <remarks/>
@@ -11181,11 +11419,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RegulatoryLabelContentDetail {
         
         private RegulatoryLabelType typeField;
@@ -11228,9 +11466,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RegulatoryLabelType {
         
         /// <remarks/>
@@ -11238,9 +11476,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CustomerSpecifiedLabelGenerationOptionType {
         
         /// <remarks/>
@@ -11254,11 +11492,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ConfigurableLabelReferenceEntry {
         
         private string zoneNumberField;
@@ -11312,11 +11550,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomerSpecifiedLabelDetail {
         
         private DocTabContent docTabContentField;
@@ -11472,9 +11710,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LabelMaskableDataType {
         
         /// <remarks/>
@@ -11512,9 +11750,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SecondaryBarcodeType {
         
         /// <remarks/>
@@ -11531,11 +11769,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class LabelSpecification {
         
         private LabelFormatType labelFormatTypeField;
@@ -11714,9 +11952,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LabelFormatType {
         
         /// <remarks/>
@@ -11739,9 +11977,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LabelStockType {
         
         /// <remarks/>
@@ -11787,9 +12025,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LabelOrderType {
         
         /// <remarks/>
@@ -11800,11 +12038,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class SmartPostShipmentDetail {
         
         private SmartPostShipmentProcessingOptionType[] processingOptionsRequestedField;
@@ -11896,9 +12134,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SmartPostShipmentProcessingOptionType {
         
         /// <remarks/>
@@ -11906,9 +12144,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum SmartPostAncillaryEndorsementType {
         
         /// <remarks/>
@@ -11928,11 +12166,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class PickupDetail {
         
         private System.DateTime readyDateTimeField;
@@ -12049,9 +12287,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PickupRequestType {
         
         /// <remarks/>
@@ -12062,9 +12300,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PickupRequestSourceType {
         
         /// <remarks/>
@@ -12075,11 +12313,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DestinationControlDetail {
         
         private DestinationControlStatementType[] statementTypesField;
@@ -12121,9 +12359,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DestinationControlStatementType {
         
         /// <remarks/>
@@ -12134,11 +12372,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ExportDetail {
         
         private B13AFilingOptionType b13AFilingOptionField;
@@ -12204,9 +12442,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum B13AFilingOptionType {
         
         /// <remarks/>
@@ -12226,11 +12464,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class NaftaCommodityDetail {
         
         private NaftaPreferenceCriterionCode preferenceCriterionField;
@@ -12334,9 +12572,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NaftaPreferenceCriterionCode {
         
         /// <remarks/>
@@ -12359,9 +12597,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NaftaProducerDeterminationCode {
         
         /// <remarks/>
@@ -12378,9 +12616,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum NaftaNetCostMethodCode {
         
         /// <remarks/>
@@ -12391,11 +12629,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class EdtExciseCondition {
         
         private string categoryField;
@@ -12424,11 +12662,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Measure {
         
         private decimal quantityField;
@@ -12470,11 +12708,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Commodity {
         
         private string nameField;
@@ -12482,6 +12720,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         private string numberOfPiecesField;
         
         private string descriptionField;
+        
+        private CommodityPurposeType purposeField;
+        
+        private bool purposeFieldSpecified;
         
         private string countryOfManufactureField;
         
@@ -12543,6 +12785,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
             }
             set {
                 this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CommodityPurposeType Purpose {
+            get {
+                return this.purposeField;
+            }
+            set {
+                this.purposeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PurposeSpecified {
+            get {
+                return this.purposeFieldSpecified;
+            }
+            set {
+                this.purposeFieldSpecified = value;
             }
         }
         
@@ -12713,11 +12976,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum CommodityPurposeType {
+        
+        /// <remarks/>
+        BUSINESS,
+        
+        /// <remarks/>
+        CONSUMER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CommercialInvoice {
         
         private string[] commentsField;
@@ -12893,9 +13169,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum TaxesOrMiscellaneousChargeType {
         
         /// <remarks/>
@@ -12918,9 +13194,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PurposeOfShipmentType {
         
         /// <remarks/>
@@ -12943,11 +13219,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RecipientCustomsId {
         
         private RecipientCustomsIdType typeField;
@@ -12989,9 +13265,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RecipientCustomsIdType {
         
         /// <remarks/>
@@ -13005,11 +13281,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomsOptionDetail {
         
         private CustomsOptionType typeField;
@@ -13051,9 +13327,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CustomsOptionType {
         
         /// <remarks/>
@@ -13088,11 +13364,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class BrokerDetail {
         
         private BrokerType typeField;
@@ -13134,9 +13410,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum BrokerType {
         
         /// <remarks/>
@@ -13147,11 +13423,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomsClearanceDetail {
         
         private BrokerDetail[] brokersField;
@@ -13391,9 +13667,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ClearanceBrokerageType {
         
         /// <remarks/>
@@ -13413,11 +13689,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Payment {
         
         private PaymentType paymentTypeField;
@@ -13459,9 +13735,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PaymentType {
         
         /// <remarks/>
@@ -13469,11 +13745,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Payor {
         
         private Party responsiblePartyField;
@@ -13490,9 +13766,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightOnValueType {
         
         /// <remarks/>
@@ -13503,9 +13779,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RegulatoryControlType {
         
         /// <remarks/>
@@ -13522,11 +13798,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Volume {
         
         private VolumeUnits unitsField;
@@ -13581,9 +13857,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum VolumeUnits {
         
         /// <remarks/>
@@ -13594,11 +13870,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightShipmentLineItem {
         
         private FreightClassType freightClassField;
@@ -13608,6 +13884,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         private PhysicalPackagingType packagingField;
         
         private bool packagingFieldSpecified;
+        
+        private string piecesField;
         
         private string descriptionField;
         
@@ -13660,6 +13938,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
+        public string Pieces {
+            get {
+                return this.piecesField;
+            }
+            set {
+                this.piecesField = value;
+            }
+        }
+        
+        /// <remarks/>
         public string Description {
             get {
                 return this.descriptionField;
@@ -13701,11 +13990,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightSpecialServicePayment {
         
         private ShipmentSpecialServiceType specialServiceField;
@@ -13760,9 +14049,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShipmentSpecialServiceType {
         
         /// <remarks/>
@@ -13776,6 +14065,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         
         /// <remarks/>
         CUSTOM_DELIVERY_WINDOW,
+        
+        /// <remarks/>
+        CUT_FLOWERS,
         
         /// <remarks/>
         DANGEROUS_GOODS,
@@ -13796,7 +14088,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         ELECTRONIC_TRADE_DOCUMENTS,
         
         /// <remarks/>
-        EMAIL_NOTIFICATION,
+        EVENT_NOTIFICATION,
         
         /// <remarks/>
         EXTREME_LENGTH,
@@ -13871,13 +14163,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         SATURDAY_PICKUP,
         
         /// <remarks/>
+        THIRD_PARTY_CONSIGNEE,
+        
+        /// <remarks/>
         TOP_LOAD,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightShipmentRoleType {
         
         /// <remarks/>
@@ -13888,11 +14183,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class LiabilityCoverageDetail {
         
         private LiabilityCoverageType coverageTypeField;
@@ -13934,9 +14229,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum LiabilityCoverageType {
         
         /// <remarks/>
@@ -13947,11 +14242,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightShipmentDetail {
         
         private string fedExFreightAccountNumberField;
@@ -14203,9 +14498,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FreightCollectTermsType {
         
         /// <remarks/>
@@ -14216,11 +14511,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ExpressFreightDetailContact {
         
         private string nameField;
@@ -14249,11 +14544,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ExpressFreightDetail {
         
         private bool packingListEnclosedField;
@@ -14357,11 +14652,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class CustomDeliveryWindowDetail {
         
         private CustomDeliveryWindowType typeField;
@@ -14455,9 +14750,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CustomDeliveryWindowType {
         
         /// <remarks/>
@@ -14474,11 +14769,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class UploadDocumentReferenceDetail {
         
         private string lineNumberField;
@@ -14607,9 +14902,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum UploadDocumentProducerType {
         
         /// <remarks/>
@@ -14638,9 +14933,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum UploadDocumentType {
         
         /// <remarks/>
@@ -14663,9 +14958,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum UploadDocumentIdProducer {
         
         /// <remarks/>
@@ -14691,11 +14986,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class EtdDetail {
         
         private RequestedShippingDocumentType[] requestedDocumentCopiesField;
@@ -14726,11 +15021,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class FreightGuaranteeDetail {
         
         private FreightGuaranteeType typeField;
@@ -14786,11 +15081,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HomeDeliveryPremiumDetail {
         
         private HomeDeliveryPremiumType homeDeliveryPremiumTypeField;
@@ -14858,9 +15153,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum HomeDeliveryPremiumType {
         
         /// <remarks/>
@@ -14874,16 +15169,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShipmentDryIceDetail {
         
         private string packageCountField;
         
         private Weight totalWeightField;
+        
+        private ShipmentDryIceProcessingOptionType[] processingOptionsField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
@@ -14905,14 +15202,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
                 this.totalWeightField = value;
             }
         }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
+        public ShipmentDryIceProcessingOptionType[] ProcessingOptions {
+            get {
+                return this.processingOptionsField;
+            }
+            set {
+                this.processingOptionsField = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum ShipmentDryIceProcessingOptionType {
+        
+        /// <remarks/>
+        SHIPMENT_LEVEL_DRY_ICE_ONLY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class InternationalTrafficInArmsRegulationsDetail {
         
         private string licenseOrExemptionNumberField;
@@ -14929,11 +15247,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class InternationalControlledExportDetail {
         
         private InternationalControlledExportType typeField;
@@ -15025,9 +15343,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum InternationalControlledExportType {
         
         /// <remarks/>
@@ -15065,142 +15383,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public partial class EMailRecipient {
-        
-        private string emailAddressField;
-        
-        private AccessorRoleType roleField;
-        
-        private bool roleFieldSpecified;
-        
-        private EmailOptionType[] optionsRequestedField;
-        
-        private Localization localizationField;
-        
-        /// <remarks/>
-        public string EmailAddress {
-            get {
-                return this.emailAddressField;
-            }
-            set {
-                this.emailAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public AccessorRoleType Role {
-            get {
-                return this.roleField;
-            }
-            set {
-                this.roleField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleSpecified {
-            get {
-                return this.roleFieldSpecified;
-            }
-            set {
-                this.roleFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
-        public EmailOptionType[] OptionsRequested {
-            get {
-                return this.optionsRequestedField;
-            }
-            set {
-                this.optionsRequestedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Localization Localization {
-            get {
-                return this.localizationField;
-            }
-            set {
-                this.localizationField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public enum AccessorRoleType {
-        
-        /// <remarks/>
-        SHIPMENT_COMPLETOR,
-        
-        /// <remarks/>
-        SHIPMENT_INITIATOR,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public enum EmailOptionType {
-        
-        /// <remarks/>
-        SUPPRESS_ACCESS_EMAILS,
-        
-        /// <remarks/>
-        SUPPRESS_ADDITIONAL_LANGUAGES,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public partial class EMailLabelDetail {
-        
-        private string messageField;
-        
-        private EMailRecipient[] recipientsField;
-        
-        /// <remarks/>
-        public string Message {
-            get {
-                return this.messageField;
-            }
-            set {
-                this.messageField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Recipients")]
-        public EMailRecipient[] Recipients {
-            get {
-                return this.recipientsField;
-            }
-            set {
-                this.recipientsField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class PendingShipmentDetail {
         
         private PendingShipmentType typeField;
@@ -15210,8 +15397,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         private System.DateTime expirationDateField;
         
         private bool expirationDateFieldSpecified;
-        
-        private EMailLabelDetail emailLabelDetailField;
         
         private PendingShipmentProcessingOptionType[] processingOptionsField;
         
@@ -15261,16 +15446,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         }
         
         /// <remarks/>
-        public EMailLabelDetail EmailLabelDetail {
-            get {
-                return this.emailLabelDetailField;
-            }
-            set {
-                this.emailLabelDetailField = value;
-            }
-        }
-        
-        /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
         public PendingShipmentProcessingOptionType[] ProcessingOptions {
             get {
@@ -15294,9 +15469,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PendingShipmentType {
         
         /// <remarks/>
@@ -15304,9 +15479,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum PendingShipmentProcessingOptionType {
         
         /// <remarks/>
@@ -15314,9 +15489,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RecommendedDocumentType {
         
         /// <remarks/>
@@ -15399,11 +15574,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ReturnAssociationDetail {
         
         private string trackingNumberField;
@@ -15446,11 +15621,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ReturnEMailDetail {
         
         private string merchantPhoneNumberField;
@@ -15480,9 +15655,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ReturnEMailAllowedSpecialServiceType {
         
         /// <remarks/>
@@ -15493,11 +15668,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class Rma {
         
         private string reasonField;
@@ -15514,11 +15689,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ReturnShipmentDetail {
         
         private ReturnType returnTypeField;
@@ -15584,9 +15759,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ReturnType {
         
         /// <remarks/>
@@ -15600,87 +15775,129 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public partial class EMailNotificationRecipient {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class ShipmentNotificationFormatSpecification {
         
-        private EMailNotificationRecipientType eMailNotificationRecipientTypeField;
+        private NotificationFormatType typeField;
         
-        private bool eMailNotificationRecipientTypeFieldSpecified;
+        private bool typeFieldSpecified;
         
-        private string eMailAddressField;
+        /// <remarks/>
+        public NotificationFormatType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
         
-        private EMailNotificationEventType[] notificationEventsRequestedField;
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum NotificationFormatType {
         
-        private EMailNotificationFormatType formatField;
+        /// <remarks/>
+        HTML,
         
-        private bool formatFieldSpecified;
+        /// <remarks/>
+        TEXT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class EMailDetail {
+        
+        private string emailAddressField;
+        
+        private string nameField;
+        
+        /// <remarks/>
+        public string EmailAddress {
+            get {
+                return this.emailAddressField;
+            }
+            set {
+                this.emailAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class NotificationDetail {
+        
+        private NotificationType notificationTypeField;
+        
+        private bool notificationTypeFieldSpecified;
+        
+        private EMailDetail emailDetailField;
         
         private Localization localizationField;
         
         /// <remarks/>
-        public EMailNotificationRecipientType EMailNotificationRecipientType {
+        public NotificationType NotificationType {
             get {
-                return this.eMailNotificationRecipientTypeField;
+                return this.notificationTypeField;
             }
             set {
-                this.eMailNotificationRecipientTypeField = value;
+                this.notificationTypeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EMailNotificationRecipientTypeSpecified {
+        public bool NotificationTypeSpecified {
             get {
-                return this.eMailNotificationRecipientTypeFieldSpecified;
+                return this.notificationTypeFieldSpecified;
             }
             set {
-                this.eMailNotificationRecipientTypeFieldSpecified = value;
+                this.notificationTypeFieldSpecified = value;
             }
         }
         
         /// <remarks/>
-        public string EMailAddress {
+        public EMailDetail EmailDetail {
             get {
-                return this.eMailAddressField;
+                return this.emailDetailField;
             }
             set {
-                this.eMailAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("NotificationEventsRequested")]
-        public EMailNotificationEventType[] NotificationEventsRequested {
-            get {
-                return this.notificationEventsRequestedField;
-            }
-            set {
-                this.notificationEventsRequestedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public EMailNotificationFormatType Format {
-            get {
-                return this.formatField;
-            }
-            set {
-                this.formatField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FormatSpecified {
-            get {
-                return this.formatFieldSpecified;
-            }
-            set {
-                this.formatFieldSpecified = value;
+                this.emailDetailField = value;
             }
         }
         
@@ -15696,13 +15913,119 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public enum EMailNotificationEventType {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum NotificationType {
+        
+        /// <remarks/>
+        EMAIL,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class ShipmentEventNotificationSpecification {
+        
+        private ShipmentNotificationRoleType roleField;
+        
+        private bool roleFieldSpecified;
+        
+        private NotificationEventType[] eventsField;
+        
+        private NotificationDetail notificationDetailField;
+        
+        private ShipmentNotificationFormatSpecification formatSpecificationField;
+        
+        /// <remarks/>
+        public ShipmentNotificationRoleType Role {
+            get {
+                return this.roleField;
+            }
+            set {
+                this.roleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RoleSpecified {
+            get {
+                return this.roleFieldSpecified;
+            }
+            set {
+                this.roleFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Events")]
+        public NotificationEventType[] Events {
+            get {
+                return this.eventsField;
+            }
+            set {
+                this.eventsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public NotificationDetail NotificationDetail {
+            get {
+                return this.notificationDetailField;
+            }
+            set {
+                this.notificationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentNotificationFormatSpecification FormatSpecification {
+            get {
+                return this.formatSpecificationField;
+            }
+            set {
+                this.formatSpecificationField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum ShipmentNotificationRoleType {
+        
+        /// <remarks/>
+        BROKER,
+        
+        /// <remarks/>
+        OTHER,
+        
+        /// <remarks/>
+        RECIPIENT,
+        
+        /// <remarks/>
+        SHIPPER,
+        
+        /// <remarks/>
+        THIRD_PARTY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum NotificationEventType {
         
         /// <remarks/>
         ON_DELIVERY,
+        
+        /// <remarks/>
+        ON_ESTIMATED_DELIVERY,
         
         /// <remarks/>
         ON_EXCEPTION,
@@ -15715,32 +16038,41 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public enum EMailNotificationFormatType {
-        
-        /// <remarks/>
-        HTML,
-        
-        /// <remarks/>
-        TEXT,
-        
-        /// <remarks/>
-        WIRELESS,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
-    public partial class EMailNotificationDetail {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class ShipmentEventNotificationDetail {
+        
+        private ShipmentNotificationAggregationType aggregationTypeField;
+        
+        private bool aggregationTypeFieldSpecified;
         
         private string personalMessageField;
         
-        private EMailNotificationRecipient[] recipientsField;
+        private ShipmentEventNotificationSpecification[] eventNotificationsField;
+        
+        /// <remarks/>
+        public ShipmentNotificationAggregationType AggregationType {
+            get {
+                return this.aggregationTypeField;
+            }
+            set {
+                this.aggregationTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool AggregationTypeSpecified {
+            get {
+                return this.aggregationTypeFieldSpecified;
+            }
+            set {
+                this.aggregationTypeFieldSpecified = value;
+            }
+        }
         
         /// <remarks/>
         public string PersonalMessage {
@@ -15753,23 +16085,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Recipients")]
-        public EMailNotificationRecipient[] Recipients {
+        [System.Xml.Serialization.XmlElementAttribute("EventNotifications")]
+        public ShipmentEventNotificationSpecification[] EventNotifications {
             get {
-                return this.recipientsField;
+                return this.eventNotificationsField;
             }
             set {
-                this.recipientsField = value;
+                this.eventNotificationsField = value;
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public enum ShipmentNotificationAggregationType {
+        
+        /// <remarks/>
+        PER_PACKAGE,
+        
+        /// <remarks/>
+        PER_SHIPMENT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class HoldAtLocationDetail {
         
         private string phoneNumberField;
@@ -15860,9 +16205,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FedExLocationType {
         
         /// <remarks/>
@@ -15891,11 +16236,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class DeliveryOnInvoiceAcceptanceDetail {
         
         private Party recipientField;
@@ -15924,11 +16269,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShipmentSpecialServicesRequested {
         
         private ShipmentSpecialServiceType[] specialServiceTypesField;
@@ -15939,7 +16284,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         
         private HoldAtLocationDetail holdAtLocationDetailField;
         
-        private EMailNotificationDetail eMailNotificationDetailField;
+        private ShipmentEventNotificationDetail eventNotificationDetailField;
         
         private ReturnShipmentDetail returnShipmentDetailField;
         
@@ -16003,12 +16348,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         }
         
         /// <remarks/>
-        public EMailNotificationDetail EMailNotificationDetail {
+        public ShipmentEventNotificationDetail EventNotificationDetail {
             get {
-                return this.eMailNotificationDetailField;
+                return this.eventNotificationDetailField;
             }
             set {
-                this.eMailNotificationDetailField = value;
+                this.eventNotificationDetailField = value;
             }
         }
         
@@ -16115,9 +16460,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum FlatbedTrailerOption {
         
         /// <remarks/>
@@ -16128,11 +16473,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
+    public partial class ShipmentAuthorizationDetail {
+        
+        private string accountNumberField;
+        
+        /// <remarks/>
+        public string AccountNumber {
+            get {
+                return this.accountNumberField;
+            }
+            set {
+                this.accountNumberField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ShipmentVariationOptionDetail {
         
         private string idField;
@@ -16162,11 +16528,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class RequestedShipment {
         
         private System.DateTime shipTimestampField;
@@ -16192,6 +16558,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
         private Money totalInsuredValueField;
         
         private string preferredCurrencyField;
+        
+        private ShipmentAuthorizationDetail shipmentAuthorizationDetailField;
         
         private Party shipperField;
         
@@ -16365,6 +16733,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
             }
             set {
                 this.preferredCurrencyField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentAuthorizationDetail ShipmentAuthorizationDetail {
+            get {
+                return this.shipmentAuthorizationDetailField;
+            }
+            set {
+                this.shipmentAuthorizationDetailField = value;
             }
         }
         
@@ -16627,9 +17005,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum DropoffType {
         
         /// <remarks/>
@@ -16649,9 +17027,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum RateRequestType {
         
         /// <remarks/>
@@ -16665,9 +17043,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum EdtRequestType {
         
         /// <remarks/>
@@ -16678,9 +17056,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ShipmentOnlyFieldsType {
         
         /// <remarks/>
@@ -16694,11 +17072,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ConsolidationKey {
         
         private ConsolidationType typeField;
@@ -16766,9 +17144,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ConsolidationType {
         
         /// <remarks/>
@@ -16791,11 +17169,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public partial class ClientDetail {
         
         private string accountNumberField;
@@ -16873,9 +17251,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum ExpressRegionCode {
         
         /// <remarks/>
@@ -16895,9 +17273,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v18")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/rate/v20")]
     public enum CarrierCodeType {
         
         /// <remarks/>
@@ -16920,11 +17298,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void getRatesCompletedEventHandler(object sender, getRatesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getRatesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {

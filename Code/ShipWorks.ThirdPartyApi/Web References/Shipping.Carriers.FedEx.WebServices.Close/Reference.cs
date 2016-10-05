@@ -23,10 +23,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="CloseServiceSoapBinding", Namespace="http://fedex.com/ws/close/v4")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="CloseServiceSoapBinding", Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback closeWithDocumentsOperationCompleted;
@@ -98,9 +98,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         public event groundCloseReportsReprintCompletedEventHandler groundCloseReportsReprintCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v4/closeWithDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("CloseWithDocumentsReply", Namespace="http://fedex.com/ws/close/v4")]
-        public CloseWithDocumentsReply closeWithDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v4")] CloseWithDocumentsRequest CloseWithDocumentsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v5/closeWithDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("CloseWithDocumentsReply", Namespace="http://fedex.com/ws/close/v5")]
+        public CloseWithDocumentsReply closeWithDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v5")] CloseWithDocumentsRequest CloseWithDocumentsRequest) {
             object[] results = this.Invoke("closeWithDocuments", new object[] {
                         CloseWithDocumentsRequest});
             return ((CloseWithDocumentsReply)(results[0]));
@@ -128,9 +128,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v4/smartPostClose", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("SmartPostCloseReply", Namespace="http://fedex.com/ws/close/v4")]
-        public SmartPostCloseReply smartPostClose([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v4")] SmartPostCloseRequest SmartPostCloseRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v5/smartPostClose", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("SmartPostCloseReply", Namespace="http://fedex.com/ws/close/v5")]
+        public SmartPostCloseReply smartPostClose([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v5")] SmartPostCloseRequest SmartPostCloseRequest) {
             object[] results = this.Invoke("smartPostClose", new object[] {
                         SmartPostCloseRequest});
             return ((SmartPostCloseReply)(results[0]));
@@ -158,9 +158,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v4/groundClose", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseReply", Namespace="http://fedex.com/ws/close/v4")]
-        public GroundCloseReply groundClose([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v4")] GroundCloseRequest GroundCloseRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v5/groundClose", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseReply", Namespace="http://fedex.com/ws/close/v5")]
+        public GroundCloseReply groundClose([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v5")] GroundCloseRequest GroundCloseRequest) {
             object[] results = this.Invoke("groundClose", new object[] {
                         GroundCloseRequest});
             return ((GroundCloseReply)(results[0]));
@@ -188,9 +188,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v4/groundCloseWithDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseDocumentsReply", Namespace="http://fedex.com/ws/close/v4")]
-        public GroundCloseDocumentsReply groundCloseWithDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v4")] GroundCloseWithDocumentsRequest GroundCloseWithDocumentsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v5/groundCloseWithDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseDocumentsReply", Namespace="http://fedex.com/ws/close/v5")]
+        public GroundCloseDocumentsReply groundCloseWithDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v5")] GroundCloseWithDocumentsRequest GroundCloseWithDocumentsRequest) {
             object[] results = this.Invoke("groundCloseWithDocuments", new object[] {
                         GroundCloseWithDocumentsRequest});
             return ((GroundCloseDocumentsReply)(results[0]));
@@ -218,9 +218,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v4/reprintGroundCloseDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseDocumentsReply", Namespace="http://fedex.com/ws/close/v4")]
-        public GroundCloseDocumentsReply reprintGroundCloseDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v4")] ReprintGroundCloseDocumentsRequest ReprintGroundCloseDocumentsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v5/reprintGroundCloseDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseDocumentsReply", Namespace="http://fedex.com/ws/close/v5")]
+        public GroundCloseDocumentsReply reprintGroundCloseDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v5")] ReprintGroundCloseDocumentsRequest ReprintGroundCloseDocumentsRequest) {
             object[] results = this.Invoke("reprintGroundCloseDocuments", new object[] {
                         ReprintGroundCloseDocumentsRequest});
             return ((GroundCloseDocumentsReply)(results[0]));
@@ -248,9 +248,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v4/groundCloseReportsReprint", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseReportsReprintReply", Namespace="http://fedex.com/ws/close/v4")]
-        public GroundCloseReportsReprintReply groundCloseReportsReprint([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v4")] GroundCloseReportsReprintRequest GroundCloseReportsReprintRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/close/v5/groundCloseReportsReprint", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GroundCloseReportsReprintReply", Namespace="http://fedex.com/ws/close/v5")]
+        public GroundCloseReportsReprintReply groundCloseReportsReprint([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/close/v5")] GroundCloseReportsReprintRequest GroundCloseReportsReprintRequest) {
             object[] results = this.Invoke("groundCloseReportsReprint", new object[] {
                         GroundCloseReportsReprintRequest});
             return ((GroundCloseReportsReprintReply)(results[0]));
@@ -297,11 +297,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseWithDocumentsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -490,11 +490,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class WebAuthenticationDetail {
         
         private WebAuthenticationCredential parentCredentialField;
@@ -523,11 +523,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class WebAuthenticationCredential {
         
         private string keyField;
@@ -556,11 +556,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class GroundCloseReportsReprintReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -653,9 +653,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum NotificationSeverityType {
         
         /// <remarks/>
@@ -675,11 +675,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class Notification {
         
         private NotificationSeverityType severityField;
@@ -770,11 +770,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class NotificationParameter {
         
         private string idField;
@@ -803,11 +803,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class TransactionDetail {
         
         private string customerTransactionIdField;
@@ -836,11 +836,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class Localization {
         
         private string languageCodeField;
@@ -869,11 +869,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class VersionId {
         
         private string serviceIdField;
@@ -886,7 +886,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         
         public VersionId() {
             this.serviceIdField = "clos";
-            this.majorField = 4;
+            this.majorField = 5;
             this.intermediateField = 0;
             this.minorField = 0;
         }
@@ -933,11 +933,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ManifestFile {
         
         private string fileNameField;
@@ -967,11 +967,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class GroundCloseReportsReprintRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -1087,11 +1087,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ClientDetail {
         
         private string accountNumberField;
@@ -1144,9 +1144,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CloseReportType {
         
         /// <remarks/>
@@ -1166,11 +1166,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ReprintGroundCloseDocumentsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -1298,9 +1298,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ReprintGroundCloseDocumentsOptionType {
         
         /// <remarks/>
@@ -1311,16 +1311,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseDocumentSpecification {
         
         private CloseDocumentType[] closeDocumentTypesField;
         
         private DetailedDeliveryManifestDetail detailedDeliveryManifestDetailField;
+        
+        private HazardousMaterialsCertificationDetail hazardousMaterialsCertificationDetailField;
         
         private ManifestDetail manifestDetailField;
         
@@ -1348,6 +1350,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         }
         
         /// <remarks/>
+        public HazardousMaterialsCertificationDetail HazardousMaterialsCertificationDetail {
+            get {
+                return this.hazardousMaterialsCertificationDetailField;
+            }
+            set {
+                this.hazardousMaterialsCertificationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
         public ManifestDetail ManifestDetail {
             get {
                 return this.manifestDetailField;
@@ -1369,9 +1381,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CloseDocumentType {
         
         /// <remarks/>
@@ -1379,6 +1391,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
         
         /// <remarks/>
         DETAILED_DELIVERY_MANIFEST,
+        
+        /// <remarks/>
+        HAZARDOUS_MATERIALS_CERTIFICATION,
         
         /// <remarks/>
         MANIFEST,
@@ -1391,11 +1406,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class DetailedDeliveryManifestDetail {
         
         private CloseDocumentFormat formatField;
@@ -1424,11 +1439,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseDocumentFormat {
         
         private ShippingDocumentDispositionDetail[] dispositionsField;
@@ -1545,11 +1560,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ShippingDocumentDispositionDetail {
         
         private ShippingDocumentDispositionType dispositionTypeField;
@@ -1640,9 +1655,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ShippingDocumentDispositionType {
         
         /// <remarks/>
@@ -1671,9 +1686,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ShippingDocumentGroupingType {
         
         /// <remarks/>
@@ -1687,11 +1702,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ShippingDocumentStorageDetail {
         
         private string filePathField;
@@ -1745,9 +1760,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ShippingDocumentNamingType {
         
         /// <remarks/>
@@ -1758,11 +1773,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ShippingDocumentEMailDetail {
         
         private ShippingDocumentEMailRecipient[] eMailRecipientsField;
@@ -1817,11 +1832,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ShippingDocumentEMailRecipient {
         
         private EMailNotificationRecipientType recipientTypeField;
@@ -1863,9 +1878,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum EMailNotificationRecipientType {
         
         /// <remarks/>
@@ -1885,9 +1900,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ShippingDocumentEMailGroupingType {
         
         /// <remarks/>
@@ -1898,11 +1913,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ShippingDocumentPrintDetail {
         
         private string printerIdField;
@@ -1919,11 +1934,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class LinearMeasure {
         
         private decimal valueField;
@@ -1978,9 +1993,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum LinearUnits {
         
         /// <remarks/>
@@ -1991,9 +2006,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ShippingDocumentImageType {
         
         /// <remarks/>
@@ -2028,9 +2043,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ShippingDocumentStockType {
         
         /// <remarks/>
@@ -2079,11 +2094,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
+    public partial class HazardousMaterialsCertificationDetail {
+        
+        private CloseDocumentFormat formatField;
+        
+        /// <remarks/>
+        public CloseDocumentFormat Format {
+            get {
+                return this.formatField;
+            }
+            set {
+                this.formatField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ManifestDetail {
         
         private CloseDocumentFormat formatField;
@@ -2100,11 +2136,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class Op950Detail {
         
         private CloseDocumentFormat formatField;
@@ -2146,11 +2182,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CustomerImageUsage {
         
         private CustomerImageUsageType typeField;
@@ -2242,9 +2278,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CustomerImageUsageType {
         
         /// <remarks/>
@@ -2255,9 +2291,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum ImageId {
         
         /// <remarks/>
@@ -2277,9 +2313,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum InternalImageType {
         
         /// <remarks/>
@@ -2290,11 +2326,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class GroundCloseDocumentsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -2361,11 +2397,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseDocument {
         
         private CloseDocumentType typeField;
@@ -2483,11 +2519,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class ShippingDocumentPart {
         
         private string documentPartSequenceNumberField;
@@ -2518,11 +2554,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class GroundCloseWithDocumentsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -2613,11 +2649,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class GroundCloseReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -2722,11 +2758,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class GroundCloseRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -2841,9 +2877,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CloseGroupingType {
         
         /// <remarks/>
@@ -2857,11 +2893,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseManifestReferenceDetail {
         
         private CustomerReferenceType typeField;
@@ -2903,9 +2939,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CustomerReferenceType {
         
         /// <remarks/>
@@ -2943,11 +2979,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class SmartPostCloseReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -3001,11 +3037,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class SmartPostCloseRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -3131,9 +3167,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CarrierCodeType {
         
         /// <remarks/>
@@ -3156,11 +3192,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseWithDocumentsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -3227,11 +3263,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public partial class CloseSmartPostDetail {
         
         private string hubIdField;
@@ -3309,9 +3345,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CloseActionType {
         
         /// <remarks/>
@@ -3325,9 +3361,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v4")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/close/v5")]
     public enum CloseWithDocumentsProcessingOptionType {
         
         /// <remarks/>
@@ -3338,11 +3374,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void closeWithDocumentsCompletedEventHandler(object sender, closeWithDocumentsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class closeWithDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3364,11 +3400,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void smartPostCloseCompletedEventHandler(object sender, smartPostCloseCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class smartPostCloseCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3390,11 +3426,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void groundCloseCompletedEventHandler(object sender, groundCloseCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class groundCloseCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3416,11 +3452,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void groundCloseWithDocumentsCompletedEventHandler(object sender, groundCloseWithDocumentsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class groundCloseWithDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3442,11 +3478,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void reprintGroundCloseDocumentsCompletedEventHandler(object sender, reprintGroundCloseDocumentsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class reprintGroundCloseDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -3468,11 +3504,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void groundCloseReportsReprintCompletedEventHandler(object sender, groundCloseReportsReprintCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class groundCloseReportsReprintCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {

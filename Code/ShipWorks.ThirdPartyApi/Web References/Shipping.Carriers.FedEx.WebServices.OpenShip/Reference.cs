@@ -23,10 +23,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="OpenShipServiceSoapBinding", Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="OpenShipServiceSoapBinding", Namespace="http://fedex.com/ws/openship/v11")]
     public partial class OpenShipService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback modifyConsolidationOperationCompleted;
@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private System.Threading.SendOrPostCallback retrieveConsolidatedCommoditiesOperationCompleted;
         
         private System.Threading.SendOrPostCallback modifyPackageInOpenShipmentOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback deleteShipmentOperationCompleted;
         
         private System.Threading.SendOrPostCallback createOpenShipmentOperationCompleted;
         
@@ -64,6 +66,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private System.Threading.SendOrPostCallback getModifyOpenShipmentResultsOperationCompleted;
         
         private System.Threading.SendOrPostCallback deletePackagesFromOpenShipmentOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback reprintShippingDocumentsOperationCompleted;
         
         private System.Threading.SendOrPostCallback addPackagesToOpenShipmentOperationCompleted;
         
@@ -136,6 +140,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         public event modifyPackageInOpenShipmentCompletedEventHandler modifyPackageInOpenShipmentCompleted;
         
         /// <remarks/>
+        public event deleteShipmentCompletedEventHandler deleteShipmentCompleted;
+        
+        /// <remarks/>
         public event createOpenShipmentCompletedEventHandler createOpenShipmentCompleted;
         
         /// <remarks/>
@@ -166,6 +173,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         public event deletePackagesFromOpenShipmentCompletedEventHandler deletePackagesFromOpenShipmentCompleted;
         
         /// <remarks/>
+        public event reprintShippingDocumentsCompletedEventHandler reprintShippingDocumentsCompleted;
+        
+        /// <remarks/>
         public event addPackagesToOpenShipmentCompletedEventHandler addPackagesToOpenShipmentCompleted;
         
         /// <remarks/>
@@ -178,9 +188,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         public event deleteOpenShipmentCompletedEventHandler deleteOpenShipmentCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/modifyConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ModifyConsolidationReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public ModifyConsolidationReply modifyConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] ModifyConsolidationRequest ModifyConsolidationRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/modifyConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ModifyConsolidationReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ModifyConsolidationReply modifyConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ModifyConsolidationRequest ModifyConsolidationRequest) {
             object[] results = this.Invoke("modifyConsolidation", new object[] {
                         ModifyConsolidationRequest});
             return ((ModifyConsolidationReply)(results[0]));
@@ -208,9 +218,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/validateOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ValidateOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public ValidateOpenShipmentReply validateOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] ValidateOpenShipmentRequest ValidateOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/validateOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ValidateOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ValidateOpenShipmentReply validateOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ValidateOpenShipmentRequest ValidateOpenShipmentRequest) {
             object[] results = this.Invoke("validateOpenShipment", new object[] {
                         ValidateOpenShipmentRequest});
             return ((ValidateOpenShipmentReply)(results[0]));
@@ -238,9 +248,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/retrieveOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("RetrieveOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public RetrieveOpenShipmentReply retrieveOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] RetrieveOpenShipmentRequest RetrieveOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/retrieveOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RetrieveOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public RetrieveOpenShipmentReply retrieveOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] RetrieveOpenShipmentRequest RetrieveOpenShipmentRequest) {
             object[] results = this.Invoke("retrieveOpenShipment", new object[] {
                         RetrieveOpenShipmentRequest});
             return ((RetrieveOpenShipmentReply)(results[0]));
@@ -268,9 +278,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/deleteOpenConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("DeleteOpenConsolidationReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public DeleteOpenConsolidationReply deleteOpenConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] DeleteOpenConsolidationRequest DeleteOpenConsolidationRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/deleteOpenConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("DeleteOpenConsolidationReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public DeleteOpenConsolidationReply deleteOpenConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] DeleteOpenConsolidationRequest DeleteOpenConsolidationRequest) {
             object[] results = this.Invoke("deleteOpenConsolidation", new object[] {
                         DeleteOpenConsolidationRequest});
             return ((DeleteOpenConsolidationReply)(results[0]));
@@ -298,9 +308,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/createConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("CreateConsolidationReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public CreateConsolidationReply createConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] CreateConsolidationRequest CreateConsolidationRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/createConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("CreateConsolidationReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public CreateConsolidationReply createConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] CreateConsolidationRequest CreateConsolidationRequest) {
             object[] results = this.Invoke("createConsolidation", new object[] {
                         CreateConsolidationRequest});
             return ((CreateConsolidationReply)(results[0]));
@@ -328,9 +338,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/retrievePackageInOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("RetrievePackageInOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public RetrievePackageInOpenShipmentReply retrievePackageInOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] RetrievePackageInOpenShipmentRequest RetrievePackageInOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/retrievePackageInOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RetrievePackageInOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public RetrievePackageInOpenShipmentReply retrievePackageInOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] RetrievePackageInOpenShipmentRequest RetrievePackageInOpenShipmentRequest) {
             object[] results = this.Invoke("retrievePackageInOpenShipment", new object[] {
                         RetrievePackageInOpenShipmentRequest});
             return ((RetrievePackageInOpenShipmentReply)(results[0]));
@@ -358,9 +368,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/retrieveConsolidatedCommodities", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("RetrieveConsolidatedCommoditiesReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public RetrieveConsolidatedCommoditiesReply retrieveConsolidatedCommodities([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] RetrieveConsolidatedCommoditiesRequest RetrieveConsolidatedCommoditiesRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/retrieveConsolidatedCommodities", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RetrieveConsolidatedCommoditiesReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public RetrieveConsolidatedCommoditiesReply retrieveConsolidatedCommodities([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] RetrieveConsolidatedCommoditiesRequest RetrieveConsolidatedCommoditiesRequest) {
             object[] results = this.Invoke("retrieveConsolidatedCommodities", new object[] {
                         RetrieveConsolidatedCommoditiesRequest});
             return ((RetrieveConsolidatedCommoditiesReply)(results[0]));
@@ -388,9 +398,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/modifyPackageInOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ModifyPackageInOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public ModifyPackageInOpenShipmentReply modifyPackageInOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] ModifyPackageInOpenShipmentRequest ModifyPackageInOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/modifyPackageInOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ModifyPackageInOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ModifyPackageInOpenShipmentReply modifyPackageInOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ModifyPackageInOpenShipmentRequest ModifyPackageInOpenShipmentRequest) {
             object[] results = this.Invoke("modifyPackageInOpenShipment", new object[] {
                         ModifyPackageInOpenShipmentRequest});
             return ((ModifyPackageInOpenShipmentReply)(results[0]));
@@ -418,9 +428,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/createOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("CreateOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public CreateOpenShipmentReply createOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] CreateOpenShipmentRequest CreateOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/deleteShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ShipmentReply deleteShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] DeleteShipmentRequest DeleteShipmentRequest) {
+            object[] results = this.Invoke("deleteShipment", new object[] {
+                        DeleteShipmentRequest});
+            return ((ShipmentReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void deleteShipmentAsync(DeleteShipmentRequest DeleteShipmentRequest) {
+            this.deleteShipmentAsync(DeleteShipmentRequest, null);
+        }
+        
+        /// <remarks/>
+        public void deleteShipmentAsync(DeleteShipmentRequest DeleteShipmentRequest, object userState) {
+            if ((this.deleteShipmentOperationCompleted == null)) {
+                this.deleteShipmentOperationCompleted = new System.Threading.SendOrPostCallback(this.OndeleteShipmentOperationCompleted);
+            }
+            this.InvokeAsync("deleteShipment", new object[] {
+                        DeleteShipmentRequest}, this.deleteShipmentOperationCompleted, userState);
+        }
+        
+        private void OndeleteShipmentOperationCompleted(object arg) {
+            if ((this.deleteShipmentCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.deleteShipmentCompleted(this, new deleteShipmentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/createOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("CreateOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public CreateOpenShipmentReply createOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] CreateOpenShipmentRequest CreateOpenShipmentRequest) {
             object[] results = this.Invoke("createOpenShipment", new object[] {
                         CreateOpenShipmentRequest});
             return ((CreateOpenShipmentReply)(results[0]));
@@ -448,9 +488,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/deletePendingShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("DeletePendingShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public DeletePendingShipmentReply deletePendingShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] DeletePendingShipmentRequest DeletePendingShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/deletePendingShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("DeletePendingShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public DeletePendingShipmentReply deletePendingShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] DeletePendingShipmentRequest DeletePendingShipmentRequest) {
             object[] results = this.Invoke("deletePendingShipment", new object[] {
                         DeletePendingShipmentRequest});
             return ((DeletePendingShipmentReply)(results[0]));
@@ -478,9 +518,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/confirmOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ConfirmOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public ConfirmOpenShipmentReply confirmOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] ConfirmOpenShipmentRequest ConfirmOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/confirmOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ConfirmOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ConfirmOpenShipmentReply confirmOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ConfirmOpenShipmentRequest ConfirmOpenShipmentRequest) {
             object[] results = this.Invoke("confirmOpenShipment", new object[] {
                         ConfirmOpenShipmentRequest});
             return ((ConfirmOpenShipmentReply)(results[0]));
@@ -508,9 +548,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/getConfirmOpenShipmentResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GetConfirmOpenShipmentResultsReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public GetConfirmOpenShipmentResultsReply getConfirmOpenShipmentResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] GetConfirmOpenShipmentResultsRequest GetConfirmOpenShipmentResultsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/getConfirmOpenShipmentResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GetConfirmOpenShipmentResultsReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public GetConfirmOpenShipmentResultsReply getConfirmOpenShipmentResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] GetConfirmOpenShipmentResultsRequest GetConfirmOpenShipmentResultsRequest) {
             object[] results = this.Invoke("getConfirmOpenShipmentResults", new object[] {
                         GetConfirmOpenShipmentResultsRequest});
             return ((GetConfirmOpenShipmentResultsReply)(results[0]));
@@ -538,9 +578,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/getConfirmConsolidationResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GetConfirmConsolidationResultsReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public GetConfirmConsolidationResultsReply getConfirmConsolidationResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] GetConfirmConsolidationResultsRequest GetConfirmConsolidationResultsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/getConfirmConsolidationResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GetConfirmConsolidationResultsReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public GetConfirmConsolidationResultsReply getConfirmConsolidationResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] GetConfirmConsolidationResultsRequest GetConfirmConsolidationResultsRequest) {
             object[] results = this.Invoke("getConfirmConsolidationResults", new object[] {
                         GetConfirmConsolidationResultsRequest});
             return ((GetConfirmConsolidationResultsReply)(results[0]));
@@ -568,9 +608,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/modifyOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ModifyOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public ModifyOpenShipmentReply modifyOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] ModifyOpenShipmentRequest ModifyOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/modifyOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ModifyOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ModifyOpenShipmentReply modifyOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ModifyOpenShipmentRequest ModifyOpenShipmentRequest) {
             object[] results = this.Invoke("modifyOpenShipment", new object[] {
                         ModifyOpenShipmentRequest});
             return ((ModifyOpenShipmentReply)(results[0]));
@@ -598,9 +638,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/confirmConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ConfirmConsolidationReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public ConfirmConsolidationReply confirmConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] ConfirmConsolidationRequest ConfirmConsolidationRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/confirmConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ConfirmConsolidationReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ConfirmConsolidationReply confirmConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ConfirmConsolidationRequest ConfirmConsolidationRequest) {
             object[] results = this.Invoke("confirmConsolidation", new object[] {
                         ConfirmConsolidationRequest});
             return ((ConfirmConsolidationReply)(results[0]));
@@ -628,9 +668,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/createPendingShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("CreatePendingShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public CreateOpenShipmentReply createPendingShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] CreateOpenShipmentRequest CreatePendingShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/createPendingShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("CreatePendingShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public CreateOpenShipmentReply createPendingShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] CreateOpenShipmentRequest CreatePendingShipmentRequest) {
             object[] results = this.Invoke("createPendingShipment", new object[] {
                         CreatePendingShipmentRequest});
             return ((CreateOpenShipmentReply)(results[0]));
@@ -658,9 +698,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/getModifyOpenShipmentResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GetModifyOpenShipmentResultsReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public GetModifyOpenShipmentResultsReply getModifyOpenShipmentResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] GetModifyOpenShipmentResultsRequest GetModifyOpenShipmentResultsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/getModifyOpenShipmentResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GetModifyOpenShipmentResultsReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public GetModifyOpenShipmentResultsReply getModifyOpenShipmentResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] GetModifyOpenShipmentResultsRequest GetModifyOpenShipmentResultsRequest) {
             object[] results = this.Invoke("getModifyOpenShipmentResults", new object[] {
                         GetModifyOpenShipmentResultsRequest});
             return ((GetModifyOpenShipmentResultsReply)(results[0]));
@@ -688,9 +728,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/deletePackagesFromOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("DeletePackagesFromOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public DeletePackagesFromOpenShipmentReply deletePackagesFromOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] DeletePackagesFromOpenShipmentRequest DeletePackagesFromOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/deletePackagesFromOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("DeletePackagesFromOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public DeletePackagesFromOpenShipmentReply deletePackagesFromOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] DeletePackagesFromOpenShipmentRequest DeletePackagesFromOpenShipmentRequest) {
             object[] results = this.Invoke("deletePackagesFromOpenShipment", new object[] {
                         DeletePackagesFromOpenShipmentRequest});
             return ((DeletePackagesFromOpenShipmentReply)(results[0]));
@@ -718,9 +758,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/addPackagesToOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("AddPackagesToOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public AddPackagesToOpenShipmentReply addPackagesToOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] AddPackagesToOpenShipmentRequest AddPackagesToOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/reprintShippingDocuments", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ReprintShippingDocumentsReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public ReprintShippingDocumentsReply reprintShippingDocuments([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] ReprintShippingDocumentsRequest ReprintShippingDocumentsRequest) {
+            object[] results = this.Invoke("reprintShippingDocuments", new object[] {
+                        ReprintShippingDocumentsRequest});
+            return ((ReprintShippingDocumentsReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void reprintShippingDocumentsAsync(ReprintShippingDocumentsRequest ReprintShippingDocumentsRequest) {
+            this.reprintShippingDocumentsAsync(ReprintShippingDocumentsRequest, null);
+        }
+        
+        /// <remarks/>
+        public void reprintShippingDocumentsAsync(ReprintShippingDocumentsRequest ReprintShippingDocumentsRequest, object userState) {
+            if ((this.reprintShippingDocumentsOperationCompleted == null)) {
+                this.reprintShippingDocumentsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnreprintShippingDocumentsOperationCompleted);
+            }
+            this.InvokeAsync("reprintShippingDocuments", new object[] {
+                        ReprintShippingDocumentsRequest}, this.reprintShippingDocumentsOperationCompleted, userState);
+        }
+        
+        private void OnreprintShippingDocumentsOperationCompleted(object arg) {
+            if ((this.reprintShippingDocumentsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.reprintShippingDocumentsCompleted(this, new reprintShippingDocumentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/addPackagesToOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("AddPackagesToOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public AddPackagesToOpenShipmentReply addPackagesToOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] AddPackagesToOpenShipmentRequest AddPackagesToOpenShipmentRequest) {
             object[] results = this.Invoke("addPackagesToOpenShipment", new object[] {
                         AddPackagesToOpenShipmentRequest});
             return ((AddPackagesToOpenShipmentReply)(results[0]));
@@ -748,9 +818,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/getCreateOpenShipmentResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("GetCreateOpenShipmentResultsReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public GetCreateOpenShipmentResultsReply getCreateOpenShipmentResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] GetCreateOpenShipmentResultsRequest GetCreateOpenShipmentResultsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/getCreateOpenShipmentResults", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("GetCreateOpenShipmentResultsReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public GetCreateOpenShipmentResultsReply getCreateOpenShipmentResults([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] GetCreateOpenShipmentResultsRequest GetCreateOpenShipmentResultsRequest) {
             object[] results = this.Invoke("getCreateOpenShipmentResults", new object[] {
                         GetCreateOpenShipmentResultsRequest});
             return ((GetCreateOpenShipmentResultsReply)(results[0]));
@@ -778,9 +848,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/retrieveConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("RetrieveConsolidationReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public RetrieveConsolidationReply retrieveConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] RetrieveConsolidationRequest RetrieveConsolidationRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/retrieveConsolidation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RetrieveConsolidationReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public RetrieveConsolidationReply retrieveConsolidation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] RetrieveConsolidationRequest RetrieveConsolidationRequest) {
             object[] results = this.Invoke("retrieveConsolidation", new object[] {
                         RetrieveConsolidationRequest});
             return ((RetrieveConsolidationReply)(results[0]));
@@ -808,9 +878,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v9/deleteOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("DeleteOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v9")]
-        public DeleteOpenShipmentReply deleteOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v9")] DeleteOpenShipmentRequest DeleteOpenShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/openship/v11/deleteOpenShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("DeleteOpenShipmentReply", Namespace="http://fedex.com/ws/openship/v11")]
+        public DeleteOpenShipmentReply deleteOpenShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/openship/v11")] DeleteOpenShipmentRequest DeleteOpenShipmentRequest) {
             object[] results = this.Invoke("deleteOpenShipment", new object[] {
                         DeleteOpenShipmentRequest});
             return ((DeleteOpenShipmentReply)(results[0]));
@@ -857,11 +927,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ModifyConsolidationRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -938,11 +1008,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class WebAuthenticationDetail {
         
         private WebAuthenticationCredential parentCredentialField;
@@ -971,11 +1041,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class WebAuthenticationCredential {
         
         private string keyField;
@@ -1004,11 +1074,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeleteOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -1062,9 +1132,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NotificationSeverityType {
         
         /// <remarks/>
@@ -1084,11 +1154,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Notification {
         
         private NotificationSeverityType severityField;
@@ -1179,11 +1249,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class NotificationParameter {
         
         private string idField;
@@ -1212,11 +1282,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class TransactionDetail {
         
         private string customerTransactionIdField;
@@ -1245,11 +1315,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Localization {
         
         private string languageCodeField;
@@ -1278,11 +1348,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class VersionId {
         
         private string serviceIdField;
@@ -1295,7 +1365,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         
         public VersionId() {
             this.serviceIdField = "ship";
-            this.majorField = 9;
+            this.majorField = 11;
             this.intermediateField = 0;
             this.minorField = 0;
         }
@@ -1342,11 +1412,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeleteOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -1411,11 +1481,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ClientDetail {
         
         private string accountNumberField;
@@ -1468,11 +1538,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrieveConsolidationReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -1538,11 +1608,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RequestedConsolidation {
         
         private ConsolidationType consolidationTypeField;
@@ -1807,9 +1877,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ConsolidationType {
         
         /// <remarks/>
@@ -1832,11 +1902,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class TrackingId {
         
         private TrackingIdType trackingIdTypeField;
@@ -1902,9 +1972,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TrackingIdType {
         
         /// <remarks/>
@@ -1924,11 +1994,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Party {
         
         private string accountNumberField;
@@ -1982,11 +2052,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class TaxpayerIdentification {
         
         private TinType tinTypeField;
@@ -2090,9 +2160,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TinType {
         
         /// <remarks/>
@@ -2112,11 +2182,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Contact {
         
         private string contactIdField;
@@ -2241,11 +2311,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Address {
         
         private string[] streetLinesField;
@@ -2360,11 +2430,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ContactAndAddress {
         
         private Contact contactField;
@@ -2393,11 +2463,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationDataSource {
         
         private ConsolidationDataType fieldField;
@@ -2452,9 +2522,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ConsolidationDataType {
         
         /// <remarks/>
@@ -2480,9 +2550,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ConsolidationDataSourceType {
         
         /// <remarks/>
@@ -2493,11 +2563,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationSpecialServicesRequested {
         
         private ConsolidationSpecialServiceType[] specialServiceTypesField;
@@ -2527,9 +2597,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ConsolidationSpecialServiceType {
         
         /// <remarks/>
@@ -2543,11 +2613,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PriorityAlertDetail {
         
         private PriorityAlertEnhancementType[] enhancementTypesField;
@@ -2578,9 +2648,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PriorityAlertEnhancementType {
         
         /// <remarks/>
@@ -2588,11 +2658,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomerReference {
         
         private CustomerReferenceType customerReferenceTypeField;
@@ -2634,9 +2704,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomerReferenceType {
         
         /// <remarks/>
@@ -2671,11 +2741,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class LabelSpecification {
         
         private ShippingDocumentDispositionDetail[] dispositionsField;
@@ -2842,11 +2912,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentDispositionDetail {
         
         private ShippingDocumentDispositionType dispositionTypeField;
@@ -2925,9 +2995,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShippingDocumentDispositionType {
         
         /// <remarks/>
@@ -2953,9 +3023,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShippingDocumentGroupingType {
         
         /// <remarks/>
@@ -2966,11 +3036,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentEMailDetail {
         
         private ShippingDocumentEMailRecipient[] eMailRecipientsField;
@@ -3025,11 +3095,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentEMailRecipient {
         
         private EMailNotificationRecipientType recipientTypeField;
@@ -3071,9 +3141,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum EMailNotificationRecipientType {
         
         /// <remarks/>
@@ -3093,9 +3163,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShippingDocumentEMailGroupingType {
         
         /// <remarks/>
@@ -3106,11 +3176,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentPrintDetail {
         
         private string printerIdField;
@@ -3127,9 +3197,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LabelFormatType {
         
         /// <remarks/>
@@ -3146,9 +3216,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShippingDocumentImageType {
         
         /// <remarks/>
@@ -3177,9 +3247,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LabelStockType {
         
         /// <remarks/>
@@ -3190,9 +3260,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         
         /// <remarks/>
         PAPER_4X9,
-        
-        /// <remarks/>
-        PAPER_6X4,
         
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("PAPER_7X4.75")]
@@ -3231,9 +3298,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LabelPrintingOrientationType {
         
         /// <remarks/>
@@ -3244,9 +3311,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LabelOrderType {
         
         /// <remarks/>
@@ -3257,11 +3324,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomerSpecifiedLabelDetail {
         
         private DocTabContent docTabContentField;
@@ -3417,11 +3484,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DocTabContent {
         
         private DocTabContentType docTabContentTypeField;
@@ -3476,9 +3543,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DocTabContentType {
         
         /// <remarks/>
@@ -3498,11 +3565,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DocTabZoneSpecification {
         
         private string zoneNumberField;
@@ -3581,9 +3648,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DocTabZoneJustificationType {
         
         /// <remarks/>
@@ -3594,11 +3661,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DocTabContentBarcoded {
         
         private BarcodeSymbologyType symbologyField;
@@ -3640,9 +3707,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum BarcodeSymbologyType {
         
         /// <remarks/>
@@ -3683,9 +3750,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RelativeVerticalPositionType {
         
         /// <remarks/>
@@ -3696,11 +3763,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelDetail {
         
         private CustomLabelCoordinateUnits coordinateUnitsField;
@@ -3795,9 +3862,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomLabelCoordinateUnits {
         
         /// <remarks/>
@@ -3808,11 +3875,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelTextEntry {
         
         private CustomLabelPosition positionField;
@@ -3916,11 +3983,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelPosition {
         
         private string xField;
@@ -3963,9 +4030,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RotationType {
         
         /// <remarks/>
@@ -3982,11 +4049,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelGraphicEntry {
         
         private CustomLabelPosition positionField;
@@ -4027,11 +4094,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelBoxEntry {
         
         private CustomLabelPosition topLeftCornerField;
@@ -4060,11 +4127,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelTextBoxEntry {
         
         private CustomLabelPosition topLeftCornerField;
@@ -4192,11 +4259,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomLabelBarcodeEntry {
         
         private CustomLabelPosition positionField;
@@ -4313,11 +4380,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConfigurableLabelReferenceEntry {
         
         private string zoneNumberField;
@@ -4371,9 +4438,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LabelMaskableDataType {
         
         /// <remarks/>
@@ -4396,9 +4463,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SecondaryBarcodeType {
         
         /// <remarks/>
@@ -4415,11 +4482,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RegulatoryLabelContentDetail {
         
         private RegulatoryLabelType typeField;
@@ -4462,9 +4529,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RegulatoryLabelType {
         
         /// <remarks/>
@@ -4472,9 +4539,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomerSpecifiedLabelGenerationOptionType {
         
         /// <remarks/>
@@ -4488,11 +4555,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AdditionalLabelsDetail {
         
         private AdditionalLabelsType typeField;
@@ -4535,9 +4602,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AdditionalLabelsType {
         
         /// <remarks/>
@@ -4569,11 +4636,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class InternationalDistributionDetail {
         
         private DropoffType dropoffTypeField;
@@ -4677,9 +4744,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DropoffType {
         
         /// <remarks/>
@@ -4699,11 +4766,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Dimensions {
         
         private string lengthField;
@@ -4772,9 +4839,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LinearUnits {
         
         /// <remarks/>
@@ -4785,11 +4852,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Money {
         
         private string currencyField;
@@ -4831,9 +4898,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum UnitSystemType {
         
         /// <remarks/>
@@ -4844,11 +4911,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeclarationCurrency {
         
         private DeclarationValueType valueField;
@@ -4890,9 +4957,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DeclarationValueType {
         
         /// <remarks/>
@@ -4903,11 +4970,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationTransborderDistributionDetail {
         
         private TransborderDistributionSpecialServicesRequested specialServicesRequestedField;
@@ -4949,11 +5016,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class TransborderDistributionSpecialServicesRequested {
         
         private TransborderDistributionSpecialServiceType[] specialServiceTypesField;
@@ -4983,9 +5050,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TransborderDistributionSpecialServiceType {
         
         /// <remarks/>
@@ -4993,11 +5060,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class TransborderDistributionLtlDetail {
         
         private Payment paymentField;
@@ -5026,11 +5093,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Payment {
         
         private PaymentType paymentTypeField;
@@ -5072,9 +5139,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PaymentType {
         
         /// <remarks/>
@@ -5094,11 +5161,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Payor {
         
         private Party responsiblePartyField;
@@ -5128,11 +5195,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AssociatedAccount {
         
         private AssociatedAccountNumberType typeField;
@@ -5174,9 +5241,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AssociatedAccountNumberType {
         
         /// <remarks/>
@@ -5193,9 +5260,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TransborderDistributionRoutingType {
         
         /// <remarks/>
@@ -5209,11 +5276,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RequestedDistributionLocation {
         
         private string idField;
@@ -5329,9 +5396,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FedExDistributionLocationType {
         
         /// <remarks/>
@@ -5348,11 +5415,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentInclusionSpecification {
         
         private CarrierCodeType carrierCodeField;
@@ -5407,9 +5474,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CarrierCodeType {
         
         /// <remarks/>
@@ -5432,9 +5499,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ServiceCategoryType {
         
         /// <remarks/>
@@ -5445,11 +5512,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomsClearanceDetail {
         
         private BrokerDetail[] brokersField;
@@ -5701,11 +5768,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class BrokerDetail {
         
         private BrokerType typeField;
@@ -5759,9 +5826,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum BrokerType {
         
         /// <remarks/>
@@ -5772,9 +5839,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ClearanceBrokerageType {
         
         /// <remarks/>
@@ -5794,11 +5861,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomsOptionDetail {
         
         private CustomsOptionType typeField;
@@ -5840,9 +5907,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomsOptionType {
         
         /// <remarks/>
@@ -5877,11 +5944,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RecipientCustomsId {
         
         private RecipientCustomsIdType typeField;
@@ -5923,9 +5990,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RecipientCustomsIdType {
         
         /// <remarks/>
@@ -5939,9 +6006,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum InternationalDocumentContentType {
         
         /// <remarks/>
@@ -5955,9 +6022,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightOnValueType {
         
         /// <remarks/>
@@ -5968,11 +6035,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CommercialInvoice {
         
         private string[] commentsField;
@@ -6161,9 +6228,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TaxesOrMiscellaneousChargeType {
         
         /// <remarks/>
@@ -6186,9 +6253,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PurposeOfShipmentType {
         
         /// <remarks/>
@@ -6211,11 +6278,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Commodity {
         
         private string nameField;
@@ -6223,6 +6290,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private string numberOfPiecesField;
         
         private string descriptionField;
+        
+        private CommodityPurposeType purposeField;
+        
+        private bool purposeFieldSpecified;
         
         private string countryOfManufactureField;
         
@@ -6284,6 +6355,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
             }
             set {
                 this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CommodityPurposeType Purpose {
+            get {
+                return this.purposeField;
+            }
+            set {
+                this.purposeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PurposeSpecified {
+            get {
+                return this.purposeFieldSpecified;
+            }
+            set {
+                this.purposeFieldSpecified = value;
             }
         }
         
@@ -6454,11 +6546,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum CommodityPurposeType {
+        
+        /// <remarks/>
+        BUSINESS,
+        
+        /// <remarks/>
+        CONSUMER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Weight {
         
         private WeightUnits unitsField;
@@ -6513,9 +6618,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum WeightUnits {
         
         /// <remarks/>
@@ -6526,11 +6631,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Measure {
         
         private decimal quantityField;
@@ -6572,11 +6677,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class EdtExciseCondition {
         
         private string categoryField;
@@ -6605,11 +6710,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class NaftaCommodityDetail {
         
         private NaftaPreferenceCriterionCode preferenceCriterionField;
@@ -6713,9 +6818,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NaftaPreferenceCriterionCode {
         
         /// <remarks/>
@@ -6738,9 +6843,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NaftaProducerDeterminationCode {
         
         /// <remarks/>
@@ -6757,9 +6862,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NaftaNetCostMethodCode {
         
         /// <remarks/>
@@ -6770,11 +6875,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DateRange {
         
         private System.DateTime beginsField;
@@ -6831,11 +6936,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ExportDetail {
         
         private B13AFilingOptionType b13AFilingOptionField;
@@ -6901,9 +7006,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum B13AFilingOptionType {
         
         /// <remarks/>
@@ -6923,11 +7028,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DestinationControlDetail {
         
         private DestinationControlStatementType[] statementTypesField;
@@ -6969,9 +7074,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DestinationControlStatementType {
         
         /// <remarks/>
@@ -6982,9 +7087,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RegulatoryControlType {
         
         /// <remarks/>
@@ -7001,11 +7106,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomsDeclarationStatementDetail {
         
         private CustomsDeclarationStatementType[] typesField;
@@ -7035,9 +7140,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomsDeclarationStatementType {
         
         /// <remarks/>
@@ -7045,11 +7150,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class NaftaLowValueStatementDetail {
         
         private CustomsRoleType roleField;
@@ -7079,9 +7184,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomsRoleType {
         
         /// <remarks/>
@@ -7098,11 +7203,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationDocumentSpecification {
         
         private RequestedConsolidationDocumentType[] consolidationDocumentTypesField;
@@ -7122,6 +7227,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private CustomsPackingListDetail customsPackingListDetailField;
         
         private CrnReportDetail crnReportDetailField;
+        
+        private CommoditiesByTrackingNumberReportDetail commoditiesByTrackingNumberDetailField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ConsolidationDocumentTypes")]
@@ -7214,13 +7321,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
                 this.crnReportDetailField = value;
             }
         }
+        
+        /// <remarks/>
+        public CommoditiesByTrackingNumberReportDetail CommoditiesByTrackingNumberDetail {
+            get {
+                return this.commoditiesByTrackingNumberDetailField;
+            }
+            set {
+                this.commoditiesByTrackingNumberDetailField = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RequestedConsolidationDocumentType {
+        
+        /// <remarks/>
+        COMMODITIES_BY_TRACKING_NUMBER_REPORT,
         
         /// <remarks/>
         CONDENSED_CRN_REPORT,
@@ -7248,11 +7368,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CondensedCrnReportDetail {
         
         private ShippingDocumentFormat formatField;
@@ -7294,11 +7414,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentFormat {
         
         private ShippingDocumentDispositionDetail[] dispositionsField;
@@ -7440,11 +7560,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class LinearMeasure {
         
         private decimal valueField;
@@ -7499,9 +7619,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShippingDocumentStockType {
         
         /// <remarks/>
@@ -7544,9 +7664,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DocumentFormatOptionType {
         
         /// <remarks/>
@@ -7554,11 +7674,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomerImageUsage {
         
         private CustomerImageUsageType typeField;
@@ -7613,9 +7733,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomerImageUsageType {
         
         /// <remarks/>
@@ -7626,9 +7746,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ImageId {
         
         /// <remarks/>
@@ -7648,11 +7768,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedCommercialInvoiceDetail {
         
         private ShippingDocumentFormat formatField;
@@ -7694,11 +7814,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomConsolidationDocumentDetail {
         
         private ShippingDocumentFormat formatField;
@@ -7826,9 +7946,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LabelRotationType {
         
         /// <remarks/>
@@ -7845,11 +7965,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationCustomsLinehaulReportDetail {
         
         private ShippingDocumentFormat formatField;
@@ -7891,11 +8011,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedPartyReportDetail {
         
         private ShippingDocumentFormat formatField;
@@ -7937,11 +8057,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedSoldToSummaryReportDetail {
         
         private ShippingDocumentFormat formatField;
@@ -7983,11 +8103,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomsPackingListDetail {
         
         private ShippingDocumentFormat formatField;
@@ -8029,11 +8149,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CrnReportDetail {
         
         private ShippingDocumentFormat formatField;
@@ -8075,9 +8195,55 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class CommoditiesByTrackingNumberReportDetail {
+        
+        private ShippingDocumentFormat formatField;
+        
+        private CustomerImageUsage[] customerImageUsagesField;
+        
+        private string signatureNameField;
+        
+        /// <remarks/>
+        public ShippingDocumentFormat Format {
+            get {
+                return this.formatField;
+            }
+            set {
+                this.formatField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
+        public CustomerImageUsage[] CustomerImageUsages {
+            get {
+                return this.customerImageUsagesField;
+            }
+            set {
+                this.customerImageUsagesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SignatureName {
+            get {
+                return this.signatureNameField;
+            }
+            set {
+                this.signatureNameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RequestedShippingDocumentType {
         
         /// <remarks/>
@@ -8124,11 +8290,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrieveConsolidationRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -8193,11 +8359,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationKey {
         
         private ConsolidationType typeField;
@@ -8265,11 +8431,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetCreateOpenShipmentResultsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -8385,9 +8551,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ServiceType {
         
         /// <remarks/>
@@ -8491,11 +8657,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedShipmentDetail {
         
         private bool usDomesticField;
@@ -8758,11 +8924,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentOperationalDetail {
         
         private string ursaPrefixCodeField;
@@ -9250,9 +9416,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DayOfWeekType {
         
         /// <remarks/>
@@ -9278,9 +9444,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TransitTimeType {
         
         /// <remarks/>
@@ -9348,9 +9514,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum GroundDeliveryEligibilityType {
         
         /// <remarks/>
@@ -9367,11 +9533,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PendingShipmentAccessorDetail {
         
         private AccessorRoleType roleField;
@@ -9437,9 +9603,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AccessorRoleType {
         
         /// <remarks/>
@@ -9450,11 +9616,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedTagDetail {
         
         private string confirmationNumberField;
@@ -9573,11 +9739,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedSmartPostDetail {
         
         private CarrierCodeType pickUpCarrierField;
@@ -9632,11 +9798,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedHazardousShipmentDetail {
         
         private CompletedHazardousSummaryDetail hazardousSummaryDetailField;
@@ -9677,11 +9843,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedHazardousSummaryDetail {
         
         private string smallQuantityExceptionPackageCountField;
@@ -9699,16 +9865,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentDryIceDetail {
         
         private string packageCountField;
         
         private Weight totalWeightField;
+        
+        private ShipmentDryIceProcessingOptionType[] processingOptionsField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
@@ -9730,14 +9898,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
                 this.totalWeightField = value;
             }
         }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
+        public ShipmentDryIceProcessingOptionType[] ProcessingOptions {
+            get {
+                return this.processingOptionsField;
+            }
+            set {
+                this.processingOptionsField = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum ShipmentDryIceProcessingOptionType {
+        
+        /// <remarks/>
+        SHIPMENT_LEVEL_DRY_ICE_ONLY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AdrLicenseDetail {
         
         private LicenseOrPermitDetail licenseOrPermitDetailField;
@@ -9754,11 +9943,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class LicenseOrPermitDetail {
         
         private string numberField;
@@ -9827,11 +10016,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentRating {
         
         private ReturnedRateType actualRateTypeField;
@@ -9886,9 +10075,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ReturnedRateType {
         
         /// <remarks/>
@@ -9920,11 +10109,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentRateDetail {
         
         private ReturnedRateType rateTypeField;
@@ -9983,6 +10172,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         
         private Money totalDutiesAndTaxesField;
         
+        private Money totalAncillaryFeesAndTaxesField;
+        
+        private Money totalDutiesTaxesAndFeesField;
+        
         private Money totalNetChargeWithDutiesAndTaxesField;
         
         private ShipmentLegRateDetail[] shipmentLegRateDetailsField;
@@ -9998,6 +10191,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private Tax[] taxesField;
         
         private EdtCommodityTax[] dutiesAndTaxesField;
+        
+        private AncillaryFeeAndTax[] ancillaryFeesAndTaxesField;
         
         private VariableHandlingCharges variableHandlingChargesField;
         
@@ -10292,6 +10487,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
+        public Money TotalAncillaryFeesAndTaxes {
+            get {
+                return this.totalAncillaryFeesAndTaxesField;
+            }
+            set {
+                this.totalAncillaryFeesAndTaxesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Money TotalDutiesTaxesAndFees {
+            get {
+                return this.totalDutiesTaxesAndFeesField;
+            }
+            set {
+                this.totalDutiesTaxesAndFeesField = value;
+            }
+        }
+        
+        /// <remarks/>
         public Money TotalNetChargeWithDutiesAndTaxes {
             get {
                 return this.totalNetChargeWithDutiesAndTaxesField;
@@ -10378,6 +10593,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("AncillaryFeesAndTaxes")]
+        public AncillaryFeeAndTax[] AncillaryFeesAndTaxes {
+            get {
+                return this.ancillaryFeesAndTaxesField;
+            }
+            set {
+                this.ancillaryFeesAndTaxesField = value;
+            }
+        }
+        
+        /// <remarks/>
         public VariableHandlingCharges VariableHandlingCharges {
             get {
                 return this.variableHandlingChargesField;
@@ -10399,9 +10625,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PricingCodeType {
         
         /// <remarks/>
@@ -10445,9 +10671,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RatedWeightMethod {
         
         /// <remarks/>
@@ -10491,9 +10717,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum MinimumChargeType {
         
         /// <remarks/>
@@ -10513,11 +10739,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CurrencyExchangeRate {
         
         private string fromCurrencyField;
@@ -10571,9 +10797,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SpecialRatingAppliedType {
         
         /// <remarks/>
@@ -10587,9 +10813,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RateDimensionalDivisorType {
         
         /// <remarks/>
@@ -10609,11 +10835,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentLegRateDetail {
         
         private string legDescriptionField;
@@ -11135,11 +11361,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightRateDetail {
         
         private string quoteNumberField;
@@ -11232,9 +11458,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightRateQuoteType {
         
         /// <remarks/>
@@ -11245,9 +11471,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightBaseChargeCalculationType {
         
         /// <remarks/>
@@ -11261,11 +11487,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightBaseCharge {
         
         private FreightClassType freightClassField;
@@ -11405,9 +11631,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightClassType {
         
         /// <remarks/>
@@ -11466,9 +11692,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightChargeBasisType {
         
         /// <remarks/>
@@ -11482,11 +11708,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightRateNotation {
         
         private string codeField;
@@ -11515,11 +11741,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RateDiscount {
         
         private RateDiscountType rateDiscountTypeField;
@@ -11598,9 +11824,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RateDiscountType {
         
         /// <remarks/>
@@ -11623,11 +11849,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Rebate {
         
         private RebateType rebateTypeField;
@@ -11706,9 +11932,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RebateType {
         
         /// <remarks/>
@@ -11722,11 +11948,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Surcharge {
         
         private SurchargeType surchargeTypeField;
@@ -11805,9 +12031,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SurchargeType {
         
         /// <remarks/>
@@ -12013,9 +12239,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SurchargeLevelType {
         
         /// <remarks/>
@@ -12026,11 +12252,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Tax {
         
         private TaxType taxTypeField;
@@ -12084,9 +12310,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum TaxType {
         
         /// <remarks/>
@@ -12112,11 +12338,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class EdtCommodityTax {
         
         private string harmonizedCodeField;
@@ -12146,11 +12372,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class EdtTaxDetail {
         
         private EdtTaxType taxTypeField;
@@ -12266,9 +12492,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum EdtTaxType {
         
         /// <remarks/>
@@ -12318,11 +12544,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class VariableHandlingCharges {
         
         private Money variableHandlingChargeField;
@@ -12375,11 +12601,88 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class AncillaryFeeAndTax {
+        
+        private AncillaryFeeAndTaxType typeField;
+        
+        private bool typeFieldSpecified;
+        
+        private string descriptionField;
+        
+        private Money amountField;
+        
+        /// <remarks/>
+        public AncillaryFeeAndTaxType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Money Amount {
+            get {
+                return this.amountField;
+            }
+            set {
+                this.amountField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum AncillaryFeeAndTaxType {
+        
+        /// <remarks/>
+        CLEARANCE_ENTRY_FEE,
+        
+        /// <remarks/>
+        GOODS_AND_SERVICES_TAX,
+        
+        /// <remarks/>
+        HARMONIZED_SALES_TAX,
+        
+        /// <remarks/>
+        OTHER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedShipmentConsolidationDetail {
         
         private ConsolidationType typeField;
@@ -12459,9 +12762,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ConsolidationShipmentRoleType {
         
         /// <remarks/>
@@ -12475,11 +12778,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedTransborderDistributionDetail {
         
         private string deconsolidationLocationPostalCodeField;
@@ -12496,11 +12799,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AssociatedTrackingId {
         
         private AssociatedTrackingIdType typeField;
@@ -12542,9 +12845,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AssociatedTrackingIdType {
         
         /// <remarks/>
@@ -12564,11 +12867,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedHoldAtLocationDetail {
         
         private ContactAndAddress holdingLocationField;
@@ -12610,9 +12913,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FedExLocationType {
         
         /// <remarks/>
@@ -12641,11 +12944,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedEtdDetail {
         
         private string folderIdField;
@@ -12675,11 +12978,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class UploadDocumentReferenceDetail {
         
         private string lineNumberField;
@@ -12808,9 +13111,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum UploadDocumentProducerType {
         
         /// <remarks/>
@@ -12830,9 +13133,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum UploadDocumentType {
         
         /// <remarks/>
@@ -12855,9 +13158,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum UploadDocumentIdProducer {
         
         /// <remarks/>
@@ -12883,11 +13186,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocument {
         
         private ReturnedShippingDocumentType typeField;
@@ -13056,9 +13359,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ReturnedShippingDocumentType {
         
         /// <remarks/>
@@ -13144,11 +13447,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentPart {
         
         private string documentPartSequenceNumberField;
@@ -13179,11 +13482,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AssociatedShipmentDetail {
         
         private AssociatedShipmentType typeField;
@@ -13348,9 +13651,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AssociatedShipmentType {
         
         /// <remarks/>
@@ -13364,9 +13667,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PackagingType {
         
         /// <remarks/>
@@ -13404,11 +13707,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PackageOperationalDetail {
         
         private string astraHandlingTextField;
@@ -13462,11 +13765,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class OperationalInstruction {
         
         private int numberField;
@@ -13508,11 +13811,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PackageBarcodes {
         
         private BinaryBarcode[] binaryBarcodesField;
@@ -13543,11 +13846,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class BinaryBarcode {
         
         private BinaryBarcodeType typeField;
@@ -13590,9 +13893,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum BinaryBarcodeType {
         
         /// <remarks/>
@@ -13600,11 +13903,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class StringBarcode {
         
         private StringBarcodeType typeField;
@@ -13646,9 +13949,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum StringBarcodeType {
         
         /// <remarks/>
@@ -13671,11 +13974,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedCodDetail {
         
         private Money collectionAmountField;
@@ -13717,9 +14020,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CodAdjustmentType {
         
         /// <remarks/>
@@ -13730,11 +14033,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedPackageDetail {
         
         private string sequenceNumberField;
@@ -13913,9 +14216,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum OversizeClassType {
         
         /// <remarks/>
@@ -13929,11 +14232,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PackageRating {
         
         private ReturnedRateType actualRateTypeField;
@@ -13988,11 +14291,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PackageRateDetail {
         
         private ReturnedRateType rateTypeField;
@@ -14268,11 +14571,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CodReturnPackageDetail {
         
         private Money collectionAmountField;
@@ -14363,9 +14666,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SignatureOptionType {
         
         /// <remarks/>
@@ -14385,11 +14688,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedHazardousPackageDetail {
         
         private string referenceIdField;
@@ -14544,9 +14847,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DangerousGoodsAccessibilityType {
         
         /// <remarks/>
@@ -14557,9 +14860,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityRegulationType {
         
         /// <remarks/>
@@ -14576,9 +14879,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RadioactiveLabelType {
         
         /// <remarks/>
@@ -14592,11 +14895,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ValidatedHazardousContainer {
         
         private decimal qValueField;
@@ -14639,11 +14942,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ValidatedHazardousCommodityContent {
         
         private ValidatedHazardousCommodityDescription descriptionField;
@@ -14721,11 +15024,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ValidatedHazardousCommodityDescription {
         
         private string idField;
@@ -14926,9 +15229,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityPackingGroupType {
         
         /// <remarks/>
@@ -14945,9 +15248,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityAttributeType {
         
         /// <remarks/>
@@ -14958,11 +15261,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityQuantityDetail {
         
         private decimal amountField;
@@ -15029,9 +15332,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityQuantityType {
         
         /// <remarks/>
@@ -15042,11 +15345,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityOptionDetail {
         
         private HazardousCommodityLabelTextOptionType labelTextOptionField;
@@ -15088,9 +15391,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityLabelTextOptionType {
         
         /// <remarks/>
@@ -15104,11 +15407,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class NetExplosiveDetail {
         
         private NetExplosiveClassificationType typeField;
@@ -15175,9 +15478,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NetExplosiveClassificationType {
         
         /// <remarks/>
@@ -15194,11 +15497,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetCreateOpenShipmentResultsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -15263,11 +15566,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AddPackagesToOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -15383,11 +15686,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AddPackagesToOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -15478,9 +15781,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AddPackagesToOpenShipmentActionType {
         
         /// <remarks/>
@@ -15491,11 +15794,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RequestedPackageLineItem {
         
         private string sequenceNumberField;
@@ -15700,11 +16003,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class VariableHandlingChargeDetail {
         
         private Money fixedValueField;
@@ -15796,9 +16099,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RateElementBasisType {
         
         /// <remarks/>
@@ -15815,9 +16118,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RateTypeBasisType {
         
         /// <remarks/>
@@ -15828,9 +16131,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PhysicalPackagingType {
         
         /// <remarks/>
@@ -15904,11 +16207,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PackageSpecialServicesRequested {
         
         private PackageSpecialServiceType[] specialServiceTypesField;
@@ -16011,9 +16314,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PackageSpecialServiceType {
         
         /// <remarks/>
@@ -16042,11 +16345,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CodDetail {
         
         private Money codCollectionAmountField;
@@ -16161,11 +16464,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CodAddTransportationChargesDetail {
         
         private RateTypeBasisType rateTypeBasisField;
@@ -16245,9 +16548,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CodAddTransportationChargeBasisType {
         
         /// <remarks/>
@@ -16264,9 +16567,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ChargeBasisLevelType {
         
         /// <remarks/>
@@ -16277,9 +16580,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CodCollectionType {
         
         /// <remarks/>
@@ -16299,9 +16602,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CodReturnReferenceIndicatorType {
         
         /// <remarks/>
@@ -16318,12 +16621,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DangerousGoodsDetail {
+        
+        private string uploadedTrackingNumberField;
         
         private HazardousCommodityRegulationType regulationField;
         
@@ -16360,6 +16665,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private string additionalHandlingField;
         
         private RadioactivityDetail radioactivityDetailField;
+        
+        /// <remarks/>
+        public string UploadedTrackingNumber {
+            get {
+                return this.uploadedTrackingNumberField;
+            }
+            set {
+                this.uploadedTrackingNumberField = value;
+            }
+        }
         
         /// <remarks/>
         public HazardousCommodityRegulationType Regulation {
@@ -16549,9 +16864,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityOptionType {
         
         /// <remarks/>
@@ -16574,9 +16889,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DangerousGoodsPackingOptionType {
         
         /// <remarks/>
@@ -16584,11 +16899,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DangerousGoodsContainer {
         
         private HazardousContainerPackingType packingTypeField;
@@ -16681,9 +16996,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousContainerPackingType {
         
         /// <remarks/>
@@ -16691,9 +17006,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RadioactiveContainerClassType {
         
         /// <remarks/>
@@ -16722,11 +17037,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityContent {
         
         private HazardousCommodityDescription descriptionField;
@@ -16804,11 +17119,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityDescription {
         
         private string idField;
@@ -17011,11 +17326,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityPackingDetail {
         
         private bool cargoAircraftOnlyField;
@@ -17057,9 +17372,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HazardousCommodityDescriptionProcessingOptionType {
         
         /// <remarks/>
@@ -17067,11 +17382,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityInnerReceptacleDetail {
         
         private HazardousCommodityQuantityDetail quantityField;
@@ -17088,11 +17403,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RadionuclideDetail {
         
         private string radionuclideField;
@@ -17183,11 +17498,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RadionuclideActivity {
         
         private decimal valueField;
@@ -17242,9 +17557,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RadioactivityUnitOfMeasure {
         
         /// <remarks/>
@@ -17267,9 +17582,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PhysicalFormType {
         
         /// <remarks/>
@@ -17286,11 +17601,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HazardousCommodityPackagingDetail {
         
         private string countField;
@@ -17320,11 +17635,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DangerousGoodsSignatory {
         
         private string contactNameField;
@@ -17365,11 +17680,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RadioactivityDetail {
         
         private decimal transportIndexField;
@@ -17461,11 +17776,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class SignatureOptionDetail {
         
         private SignatureOptionType optionTypeField;
@@ -17507,11 +17822,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class AlcoholDetail {
         
         private AlcoholRecipientType recipientTypeField;
@@ -17541,9 +17856,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AlcoholRecipientType {
         
         /// <remarks/>
@@ -17554,11 +17869,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ContentRecord {
         
         private string partNumberField;
@@ -17612,11 +17927,247 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class PackageDocument {
+        
+        private string sequenceNumberField;
+        
+        private ShippingDocument[] shippingDocumentsField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
+        public string SequenceNumber {
+            get {
+                return this.sequenceNumberField;
+            }
+            set {
+                this.sequenceNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("ShippingDocuments")]
+        public ShippingDocument[] ShippingDocuments {
+            get {
+                return this.shippingDocumentsField;
+            }
+            set {
+                this.shippingDocumentsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ReprintShippingDocumentsReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private string jobIdField;
+        
+        private ShippingDocument[] shipmentDocumentsField;
+        
+        private PackageDocument[] packageDocumentsField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string JobId {
+            get {
+                return this.jobIdField;
+            }
+            set {
+                this.jobIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("ShipmentDocuments")]
+        public ShippingDocument[] ShipmentDocuments {
+            get {
+                return this.shipmentDocumentsField;
+            }
+            set {
+                this.shipmentDocumentsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("PackageDocuments")]
+        public PackageDocument[] PackageDocuments {
+            get {
+                return this.packageDocumentsField;
+            }
+            set {
+                this.packageDocumentsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ReprintShippingDocumentsRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private TrackingId trackingIdField;
+        
+        private string shipmentCreatorAccountNumberField;
+        
+        private string shipmentCreatorMeterNumberField;
+        
+        private LabelSpecification labelSpecificationField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TrackingId TrackingId {
+            get {
+                return this.trackingIdField;
+            }
+            set {
+                this.trackingIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ShipmentCreatorAccountNumber {
+            get {
+                return this.shipmentCreatorAccountNumberField;
+            }
+            set {
+                this.shipmentCreatorAccountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ShipmentCreatorMeterNumber {
+            get {
+                return this.shipmentCreatorMeterNumberField;
+            }
+            set {
+                this.shipmentCreatorMeterNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public LabelSpecification LabelSpecification {
+            get {
+                return this.labelSpecificationField;
+            }
+            set {
+                this.labelSpecificationField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeletePackagesFromOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -17682,11 +18233,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeletePackagesFromOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -17764,11 +18315,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetModifyOpenShipmentResultsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -17847,11 +18398,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetModifyOpenShipmentResultsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -17916,11 +18467,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConfirmConsolidationReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -18011,9 +18562,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AsynchronousProcessingResultType {
         
         /// <remarks/>
@@ -18024,11 +18575,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CompletedConsolidationDetail {
         
         private ConsolidationShipment[] consolidationShipmentsField;
@@ -18059,11 +18610,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationShipment {
         
         private ConsolidationShipmentRoleType shipmentRoleTypeField;
@@ -18117,11 +18668,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RequestedShipment {
         
         private System.DateTime shipTimestampField;
@@ -18149,6 +18700,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         private Dimensions totalDimensionsField;
         
         private string preferredCurrencyField;
+        
+        private ShipmentAuthorizationDetail shipmentAuthorizationDetailField;
         
         private Party shipperField;
         
@@ -18335,6 +18888,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
             }
             set {
                 this.preferredCurrencyField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentAuthorizationDetail ShipmentAuthorizationDetail {
+            get {
+                return this.shipmentAuthorizationDetailField;
+            }
+            set {
+                this.shipmentAuthorizationDetailField = value;
             }
         }
         
@@ -18617,11 +19180,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentManifestDetail {
         
         private CustomerReferenceType manifestReferenceTypeField;
@@ -18651,11 +19214,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ShipmentAuthorizationDetail {
+        
+        private string accountNumberField;
+        
+        /// <remarks/>
+        public string AccountNumber {
+            get {
+                return this.accountNumberField;
+            }
+            set {
+                this.accountNumberField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentSpecialServicesRequested {
         
         private ShipmentSpecialServiceType[] specialServiceTypesField;
@@ -18666,7 +19250,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         
         private HoldAtLocationDetail holdAtLocationDetailField;
         
-        private EMailNotificationDetail eMailNotificationDetailField;
+        private ShipmentEventNotificationDetail eventNotificationDetailField;
         
         private ReturnShipmentDetail returnShipmentDetailField;
         
@@ -18728,12 +19312,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        public EMailNotificationDetail EMailNotificationDetail {
+        public ShipmentEventNotificationDetail EventNotificationDetail {
             get {
-                return this.eMailNotificationDetailField;
+                return this.eventNotificationDetailField;
             }
             set {
-                this.eMailNotificationDetailField = value;
+                this.eventNotificationDetailField = value;
             }
         }
         
@@ -18829,9 +19413,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShipmentSpecialServiceType {
         
         /// <remarks/>
@@ -18865,7 +19449,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         ELECTRONIC_TRADE_DOCUMENTS,
         
         /// <remarks/>
-        EMAIL_NOTIFICATION,
+        EVENT_NOTIFICATION,
         
         /// <remarks/>
         EXTREME_LENGTH,
@@ -18940,15 +19524,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         SATURDAY_PICKUP,
         
         /// <remarks/>
+        THIRD_PARTY_CONSIGNEE,
+        
+        /// <remarks/>
         TOP_LOAD,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeliveryOnInvoiceAcceptanceDetail {
         
         private Party recipientField;
@@ -18977,11 +19564,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HoldAtLocationDetail {
         
         private string phoneNumberField;
@@ -19035,23 +19622,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
-    public partial class EMailNotificationDetail {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ShipmentEventNotificationDetail {
         
-        private EMailNotificationAggregationType aggregationTypeField;
+        private ShipmentNotificationAggregationType aggregationTypeField;
         
         private bool aggregationTypeFieldSpecified;
         
         private string personalMessageField;
         
-        private EMailNotificationRecipient[] recipientsField;
+        private ShipmentEventNotificationSpecification[] eventNotificationsField;
         
         /// <remarks/>
-        public EMailNotificationAggregationType AggregationType {
+        public ShipmentNotificationAggregationType AggregationType {
             get {
                 return this.aggregationTypeField;
             }
@@ -19082,22 +19669,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Recipients")]
-        public EMailNotificationRecipient[] Recipients {
+        [System.Xml.Serialization.XmlElementAttribute("EventNotifications")]
+        public ShipmentEventNotificationSpecification[] EventNotifications {
             get {
-                return this.recipientsField;
+                return this.eventNotificationsField;
             }
             set {
-                this.recipientsField = value;
+                this.eventNotificationsField = value;
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
-    public enum EMailNotificationAggregationType {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum ShipmentNotificationAggregationType {
         
         /// <remarks/>
         PER_PACKAGE,
@@ -19107,87 +19694,164 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
-    public partial class EMailNotificationRecipient {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ShipmentEventNotificationSpecification {
         
-        private EMailNotificationRecipientType eMailNotificationRecipientTypeField;
+        private ShipmentNotificationRoleType roleField;
         
-        private bool eMailNotificationRecipientTypeFieldSpecified;
+        private bool roleFieldSpecified;
         
-        private string eMailAddressField;
+        private NotificationEventType[] eventsField;
         
-        private EMailNotificationEventType[] notificationEventsRequestedField;
+        private NotificationDetail notificationDetailField;
         
-        private EMailNotificationFormatType formatField;
+        private ShipmentNotificationFormatSpecification formatSpecificationField;
         
-        private bool formatFieldSpecified;
+        /// <remarks/>
+        public ShipmentNotificationRoleType Role {
+            get {
+                return this.roleField;
+            }
+            set {
+                this.roleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RoleSpecified {
+            get {
+                return this.roleFieldSpecified;
+            }
+            set {
+                this.roleFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Events")]
+        public NotificationEventType[] Events {
+            get {
+                return this.eventsField;
+            }
+            set {
+                this.eventsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public NotificationDetail NotificationDetail {
+            get {
+                return this.notificationDetailField;
+            }
+            set {
+                this.notificationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentNotificationFormatSpecification FormatSpecification {
+            get {
+                return this.formatSpecificationField;
+            }
+            set {
+                this.formatSpecificationField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum ShipmentNotificationRoleType {
+        
+        /// <remarks/>
+        BROKER,
+        
+        /// <remarks/>
+        OTHER,
+        
+        /// <remarks/>
+        RECIPIENT,
+        
+        /// <remarks/>
+        SHIPPER,
+        
+        /// <remarks/>
+        THIRD_PARTY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum NotificationEventType {
+        
+        /// <remarks/>
+        ON_DELIVERY,
+        
+        /// <remarks/>
+        ON_ESTIMATED_DELIVERY,
+        
+        /// <remarks/>
+        ON_EXCEPTION,
+        
+        /// <remarks/>
+        ON_SHIPMENT,
+        
+        /// <remarks/>
+        ON_TENDER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class NotificationDetail {
+        
+        private NotificationType notificationTypeField;
+        
+        private bool notificationTypeFieldSpecified;
+        
+        private EMailDetail emailDetailField;
         
         private Localization localizationField;
         
         /// <remarks/>
-        public EMailNotificationRecipientType EMailNotificationRecipientType {
+        public NotificationType NotificationType {
             get {
-                return this.eMailNotificationRecipientTypeField;
+                return this.notificationTypeField;
             }
             set {
-                this.eMailNotificationRecipientTypeField = value;
+                this.notificationTypeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EMailNotificationRecipientTypeSpecified {
+        public bool NotificationTypeSpecified {
             get {
-                return this.eMailNotificationRecipientTypeFieldSpecified;
+                return this.notificationTypeFieldSpecified;
             }
             set {
-                this.eMailNotificationRecipientTypeFieldSpecified = value;
+                this.notificationTypeFieldSpecified = value;
             }
         }
         
         /// <remarks/>
-        public string EMailAddress {
+        public EMailDetail EmailDetail {
             get {
-                return this.eMailAddressField;
+                return this.emailDetailField;
             }
             set {
-                this.eMailAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("NotificationEventsRequested")]
-        public EMailNotificationEventType[] NotificationEventsRequested {
-            get {
-                return this.notificationEventsRequestedField;
-            }
-            set {
-                this.notificationEventsRequestedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public EMailNotificationFormatType Format {
-            get {
-                return this.formatField;
-            }
-            set {
-                this.formatField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FormatSpecified {
-            get {
-                return this.formatFieldSpecified;
-            }
-            set {
-                this.formatFieldSpecified = value;
+                this.emailDetailField = value;
             }
         }
         
@@ -19203,46 +19867,101 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
-    public enum EMailNotificationEventType {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum NotificationType {
         
         /// <remarks/>
-        ON_DELIVERY,
-        
-        /// <remarks/>
-        ON_EXCEPTION,
-        
-        /// <remarks/>
-        ON_SHIPMENT,
-        
-        /// <remarks/>
-        ON_TENDER,
+        EMAIL,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
-    public enum EMailNotificationFormatType {
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class EMailDetail {
+        
+        private string emailAddressField;
+        
+        private string nameField;
+        
+        /// <remarks/>
+        public string EmailAddress {
+            get {
+                return this.emailAddressField;
+            }
+            set {
+                this.emailAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ShipmentNotificationFormatSpecification {
+        
+        private NotificationFormatType typeField;
+        
+        private bool typeFieldSpecified;
+        
+        /// <remarks/>
+        public NotificationFormatType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum NotificationFormatType {
         
         /// <remarks/>
         HTML,
         
         /// <remarks/>
         TEXT,
-        
-        /// <remarks/>
-        WIRELESS,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ReturnShipmentDetail {
         
         private ReturnType returnTypeField;
@@ -19308,9 +20027,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ReturnType {
         
         /// <remarks/>
@@ -19324,11 +20043,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Rma {
         
         private string reasonField;
@@ -19345,11 +20064,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ReturnEMailDetail {
         
         private string merchantPhoneNumberField;
@@ -19379,9 +20098,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ReturnEMailAllowedSpecialServiceType {
         
         /// <remarks/>
@@ -19392,11 +20111,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ReturnAssociationDetail {
         
         private string trackingNumberField;
@@ -19439,11 +20158,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PendingShipmentDetail {
         
         private PendingShipmentType typeField;
@@ -19550,9 +20269,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PendingShipmentType {
         
         /// <remarks/>
@@ -19560,11 +20279,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class EMailLabelDetail {
         
         private string messageField;
@@ -19594,11 +20313,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class EMailRecipient {
         
         private string emailAddressField;
@@ -19665,9 +20384,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum EmailOptionType {
         
         /// <remarks/>
@@ -19678,9 +20397,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PendingShipmentProcessingOptionType {
         
         /// <remarks/>
@@ -19688,9 +20407,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RecommendedDocumentType {
         
         /// <remarks/>
@@ -19773,11 +20492,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class InternationalControlledExportDetail {
         
         private InternationalControlledExportType typeField;
@@ -19869,9 +20588,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum InternationalControlledExportType {
         
         /// <remarks/>
@@ -19909,11 +20628,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class InternationalTrafficInArmsRegulationsDetail {
         
         private string licenseOrExemptionNumberField;
@@ -19930,11 +20649,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class HomeDeliveryPremiumDetail {
         
         private HomeDeliveryPremiumType homeDeliveryPremiumTypeField;
@@ -20002,9 +20721,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum HomeDeliveryPremiumType {
         
         /// <remarks/>
@@ -20018,11 +20737,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightGuaranteeDetail {
         
         private FreightGuaranteeType typeField;
@@ -20078,9 +20797,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightGuaranteeType {
         
         /// <remarks/>
@@ -20091,11 +20810,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class EtdDetail {
         
         private RequestedShippingDocumentType[] requestedDocumentCopiesField;
@@ -20126,11 +20845,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomDeliveryWindowDetail {
         
         private CustomDeliveryWindowType typeField;
@@ -20224,9 +20943,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CustomDeliveryWindowType {
         
         /// <remarks/>
@@ -20243,9 +20962,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ShipmentProcessingOptionType {
         
         /// <remarks/>
@@ -20253,11 +20972,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ExpressFreightDetail {
         
         private bool packingListEnclosedField;
@@ -20312,11 +21031,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightShipmentDetail {
         
         private string fedExFreightAccountNumberField;
@@ -20593,11 +21312,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PrintedReference {
         
         private PrintedReferenceType typeField;
@@ -20639,9 +21358,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PrintedReferenceType {
         
         /// <remarks/>
@@ -20655,9 +21374,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightShipmentRoleType {
         
         /// <remarks/>
@@ -20668,9 +21387,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum FreightCollectTermsType {
         
         /// <remarks/>
@@ -20681,11 +21400,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class LiabilityCoverageDetail {
         
         private LiabilityCoverageType coverageTypeField;
@@ -20727,9 +21446,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum LiabilityCoverageType {
         
         /// <remarks/>
@@ -20740,11 +21459,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightSpecialServicePayment {
         
         private ShipmentSpecialServiceType specialServiceField;
@@ -20799,11 +21518,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightShipmentLineItem {
         
         private FreightClassType freightClassField;
@@ -21006,11 +21725,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Volume {
         
         private VolumeUnits unitsField;
@@ -21065,9 +21784,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum VolumeUnits {
         
         /// <remarks/>
@@ -21078,11 +21797,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentConsolidationDetail {
         
         private string relationshipTimestampField;
@@ -21198,11 +21917,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentInternationalDistributionDetail {
         
         private string clearanceFacilityLocIdField;
@@ -21269,9 +21988,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum DistributionClearanceType {
         
         /// <remarks/>
@@ -21282,11 +22001,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class InternationalDistributionSummaryDetail {
         
         private Weight totalWeightField;
@@ -21450,11 +22169,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class SplitPaymentDetail {
         
         private SplitPaymentType typeField;
@@ -21496,9 +22215,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SplitPaymentType {
         
         /// <remarks/>
@@ -21509,11 +22228,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShipmentTransborderDistributionDetail {
         
         private TransborderDistributionSpecialServicesRequested specialServicesRequestedField;
@@ -21542,11 +22261,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class TransborderDistributionSummaryDetail {
         
         private string expressPackageCountField;
@@ -21675,11 +22394,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class PickupDetail {
         
         private System.DateTime readyDateTimeField;
@@ -21796,9 +22515,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PickupRequestType {
         
         /// <remarks/>
@@ -21809,9 +22528,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PickupRequestSourceType {
         
         /// <remarks/>
@@ -21822,11 +22541,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class SmartPostShipmentDetail {
         
         private SmartPostShipmentProcessingOptionType[] processingOptionsRequestedField;
@@ -21918,9 +22637,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SmartPostShipmentProcessingOptionType {
         
         /// <remarks/>
@@ -21928,9 +22647,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SmartPostIndiciaType {
         
         /// <remarks/>
@@ -21950,9 +22669,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum SmartPostAncillaryEndorsementType {
         
         /// <remarks/>
@@ -21972,11 +22691,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ShippingDocumentSpecification {
         
         private RequestedShippingDocumentType[] shippingDocumentTypesField;
@@ -22128,11 +22847,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CertificateOfOriginDetail {
         
         private ShippingDocumentFormat documentFormatField;
@@ -22162,11 +22881,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CommercialInvoiceDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22196,11 +22915,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CustomDocumentDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22315,11 +23034,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ExportDeclarationDetail {
         
         private ShippingDocumentFormat documentFormatField;
@@ -22349,11 +23068,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GeneralAgencyAgreementDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22370,11 +23089,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class NaftaCertificateOfOriginDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22491,9 +23210,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NaftaImporterSpecificationType {
         
         /// <remarks/>
@@ -22510,9 +23229,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum NaftaProducerSpecificationType {
         
         /// <remarks/>
@@ -22532,11 +23251,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class NaftaProducer {
         
         private string idField;
@@ -22565,11 +23284,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class Op900Detail {
         
         private ShippingDocumentFormat formatField;
@@ -22636,11 +23355,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DangerousGoodsShippersDeclarationDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22670,11 +23389,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class FreightAddressLabelDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22778,9 +23497,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum PageQuadrantType {
         
         /// <remarks/>
@@ -22797,11 +23516,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ReturnInstructionsDetail {
         
         private ShippingDocumentFormat formatField;
@@ -22830,9 +23549,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum RateRequestType {
         
         /// <remarks/>
@@ -22846,9 +23565,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum EdtRequestType {
         
         /// <remarks/>
@@ -22859,11 +23578,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidationDocument {
         
         private ReturnedConsolidationDocumentType typeField;
@@ -22994,10 +23713,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ReturnedConsolidationDocumentType {
+        
+        /// <remarks/>
+        COMMODITIES_BY_TRACKING_NUMBER_REPORT,
         
         /// <remarks/>
         CONDENSED_CRN_REPORT,
@@ -23028,11 +23750,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConfirmConsolidationRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -23184,9 +23906,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum AsynchronousProcessingOptionType {
         
         /// <remarks/>
@@ -23200,11 +23922,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ModifyOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -23308,11 +24030,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ModifyOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -23415,9 +24137,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum CreateOpenShipmentActionType {
         
         /// <remarks/>
@@ -23437,11 +24159,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetConfirmConsolidationResultsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -23507,11 +24229,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetConfirmConsolidationResultsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -23576,11 +24298,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetConfirmOpenShipmentResultsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -23659,11 +24381,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class GetConfirmOpenShipmentResultsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -23728,11 +24450,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConfirmOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -23836,11 +24558,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConfirmOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -23980,11 +24702,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeletePendingShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -24038,11 +24760,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeletePendingShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -24108,11 +24830,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CreateOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -24253,11 +24975,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CreateOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -24372,11 +25094,207 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class ShipmentReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public partial class DeleteShipmentRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private System.DateTime shipTimestampField;
+        
+        private bool shipTimestampFieldSpecified;
+        
+        private TrackingId trackingIdField;
+        
+        private DeletionControlType deletionControlField;
+        
+        private bool deletionControlFieldSpecified;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime ShipTimestamp {
+            get {
+                return this.shipTimestampField;
+            }
+            set {
+                this.shipTimestampField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ShipTimestampSpecified {
+            get {
+                return this.shipTimestampFieldSpecified;
+            }
+            set {
+                this.shipTimestampFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TrackingId TrackingId {
+            get {
+                return this.trackingIdField;
+            }
+            set {
+                this.trackingIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public DeletionControlType DeletionControl {
+            get {
+                return this.deletionControlField;
+            }
+            set {
+                this.deletionControlField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DeletionControlSpecified {
+            get {
+                return this.deletionControlFieldSpecified;
+            }
+            set {
+                this.deletionControlFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
+    public enum DeletionControlType {
+        
+        /// <remarks/>
+        DELETE_ALL_PACKAGES,
+        
+        /// <remarks/>
+        DELETE_ENTIRE_CONSOLIDATION,
+        
+        /// <remarks/>
+        DELETE_ONE_PACKAGE,
+        
+        /// <remarks/>
+        LEGACY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ModifyPackageInOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -24467,11 +25385,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ModifyPackageInOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -24573,9 +25491,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public enum ModifyPackageInOpenShipmentActionType {
         
         /// <remarks/>
@@ -24583,11 +25501,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedCommodityDestinationDetail {
         
         private string countryCodeField;
@@ -24641,11 +25559,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedCommodity {
         
         private ConsolidatedCommodityDestinationDetail destinationDetailField;
@@ -24674,11 +25592,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedCommodityDetail {
         
         private string groupDescriptionField;
@@ -24745,11 +25663,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ConsolidatedCommoditiesSummaryDetail {
         
         private Money totalCustomsValueField;
@@ -24779,11 +25697,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrieveConsolidatedCommoditiesReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -24849,11 +25767,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrieveConsolidatedCommoditiesRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -24918,11 +25836,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrievePackageInOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -24988,11 +25906,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrievePackageInOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -25069,11 +25987,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CreateConsolidationReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -25165,11 +26083,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class CreateConsolidationRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -25246,11 +26164,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeleteOpenConsolidationReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -25304,11 +26222,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class DeleteOpenConsolidationRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -25385,11 +26303,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrieveOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -25467,11 +26385,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class RetrieveOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -25536,11 +26454,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ValidateOpenShipmentReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -25594,11 +26512,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ValidateOpenShipmentRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -25663,11 +26581,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1064.2")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v9")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/openship/v11")]
     public partial class ModifyConsolidationReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -25733,11 +26651,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void modifyConsolidationCompletedEventHandler(object sender, modifyConsolidationCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class modifyConsolidationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25759,11 +26677,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void validateOpenShipmentCompletedEventHandler(object sender, validateOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class validateOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25785,11 +26703,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void retrieveOpenShipmentCompletedEventHandler(object sender, retrieveOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class retrieveOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25811,11 +26729,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void deleteOpenConsolidationCompletedEventHandler(object sender, deleteOpenConsolidationCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deleteOpenConsolidationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25837,11 +26755,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void createConsolidationCompletedEventHandler(object sender, createConsolidationCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createConsolidationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25863,11 +26781,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void retrievePackageInOpenShipmentCompletedEventHandler(object sender, retrievePackageInOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class retrievePackageInOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25889,11 +26807,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void retrieveConsolidatedCommoditiesCompletedEventHandler(object sender, retrieveConsolidatedCommoditiesCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class retrieveConsolidatedCommoditiesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25915,11 +26833,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void modifyPackageInOpenShipmentCompletedEventHandler(object sender, modifyPackageInOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class modifyPackageInOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25941,11 +26859,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    public delegate void deleteShipmentCompletedEventHandler(object sender, deleteShipmentCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class deleteShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal deleteShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public ShipmentReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ShipmentReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void createOpenShipmentCompletedEventHandler(object sender, createOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25967,11 +26911,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void deletePendingShipmentCompletedEventHandler(object sender, deletePendingShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deletePendingShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -25993,11 +26937,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void confirmOpenShipmentCompletedEventHandler(object sender, confirmOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class confirmOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26019,11 +26963,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void getConfirmOpenShipmentResultsCompletedEventHandler(object sender, getConfirmOpenShipmentResultsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getConfirmOpenShipmentResultsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26045,11 +26989,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void getConfirmConsolidationResultsCompletedEventHandler(object sender, getConfirmConsolidationResultsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getConfirmConsolidationResultsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26071,11 +27015,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void modifyOpenShipmentCompletedEventHandler(object sender, modifyOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class modifyOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26097,11 +27041,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void confirmConsolidationCompletedEventHandler(object sender, confirmConsolidationCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class confirmConsolidationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26123,11 +27067,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void createPendingShipmentCompletedEventHandler(object sender, createPendingShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class createPendingShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26149,11 +27093,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void getModifyOpenShipmentResultsCompletedEventHandler(object sender, getModifyOpenShipmentResultsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getModifyOpenShipmentResultsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26175,11 +27119,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void deletePackagesFromOpenShipmentCompletedEventHandler(object sender, deletePackagesFromOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deletePackagesFromOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26201,11 +27145,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    public delegate void reprintShippingDocumentsCompletedEventHandler(object sender, reprintShippingDocumentsCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class reprintShippingDocumentsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal reprintShippingDocumentsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public ReprintShippingDocumentsReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ReprintShippingDocumentsReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void addPackagesToOpenShipmentCompletedEventHandler(object sender, addPackagesToOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class addPackagesToOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26227,11 +27197,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void getCreateOpenShipmentResultsCompletedEventHandler(object sender, getCreateOpenShipmentResultsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class getCreateOpenShipmentResultsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26253,11 +27223,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void retrieveConsolidationCompletedEventHandler(object sender, retrieveConsolidationCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class retrieveConsolidationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -26279,11 +27249,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     public delegate void deleteOpenShipmentCompletedEventHandler(object sender, deleteOpenShipmentCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1038.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class deleteOpenShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
