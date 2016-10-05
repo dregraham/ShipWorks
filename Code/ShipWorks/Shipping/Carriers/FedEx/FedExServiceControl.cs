@@ -1086,7 +1086,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx SmartPost® Media\n" +
                 "FedEx SmartPost Parcel Select\n" +
                 "FedEx ShipAlert®\n" +
-                "FedEx Priority Alert Plus™\n\n" +
+                "FedEx Priority Alert Plus™\n" +
+                "FedEx International DirectDistribution® Freight\n" +
+                "FedEx International Priority DirectDistribution®\n" +
+                "FedEx International Economy DirectDistribution®\n\n" +
 
                 "FedEx® Envelope\n" +
                 "FedEx® Pak\n" +
