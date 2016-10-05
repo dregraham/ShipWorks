@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
                 return "";
             }
 
-            return ShippingManager.GetServiceUsed(shipment);
+            return ShippingManager.GetActualServiceUsed(shipment);
         }
     }
 }

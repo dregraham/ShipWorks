@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
@@ -23,12 +16,11 @@ namespace ShipWorks.Stores.Platforms.Newegg
     /// </summary>
     public class NeweggOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(NeweggOnlineUpdater));
 
         // The store instance
-        private NeweggStoreEntity store;
-
+        private readonly NeweggStoreEntity store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NeweggOnlineUpdater"/> class.
@@ -38,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             this.store = store;
         }
-
 
         /// <summary>
         /// Uploads the shipping details to Newegg.

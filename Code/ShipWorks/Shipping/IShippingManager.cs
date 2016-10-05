@@ -88,7 +88,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the service used.
         /// </summary>
-        string GetServiceUsed(ShipmentEntity shipment);
+        string GetActualServiceUsed(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Gets the service used.
+        /// </summary>
+        string GetOverriddenSerivceUsed(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the shipment type carrier name.

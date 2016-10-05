@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -16,6 +13,9 @@ using ShipWorks.Startup;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
@@ -96,45 +96,44 @@ namespace ShipWorks.Tests.Integration.MSTest
         public static Guid GetShipWorksInstance()
         {
             Guid instance;
-
-            string instanceFromConfig = System.Configuration.ConfigurationManager.AppSettings["ShipWorksInstanceGuid"];
-            if (!string.IsNullOrWhiteSpace(instanceFromConfig))
+            switch (Environment.MachineName.ToLower())
             {
-                instance = Guid.Parse(instanceFromConfig);
-            }
-            else
-            {
-                // Fall back to the hard-coded values in the case where the instance value is not found in the
-                // configuration file
-                switch (Environment.MachineName.ToLower())
-                {
-                    case "tim-pc":
-                        instance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
-                        break;
-                    case "tim-pc2":
-                        instance = Guid.Parse("{a6c0a1b0-4757-4655-b74b-dbb9195b82ff}");
-                        break;
-                    case "john3610-pc":
-                        instance = Guid.Parse("{a721d9e4-fb3b-4a64-a612-8579b1251c95}");
-                        break;
-                    case "kevin-pc":
-                        instance = Guid.Parse("{6db3aa02-32bb-430e-95d2-0c59b3b7417a}");
-                        break;
-                    case "MSTest-vm":
-                        instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
-                        break;
-                    case "benz-pc3":
-                        instance = Guid.Parse("{A74AED9C-0AB8-4649-B233-8DFBE774D9F8}");
-                        break;
-                    case "mirza-pc2":
-                        instance = Guid.Parse("{1231F4A9-640C-4E08-A52A-AE3B2C2FB864}");
-                        break;
-                    case "berger-pc":
-                        instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
-                        break;
-                    default:
+                case "tim-pc":
+                    instance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
+                    break;
+                case "tim-pc2":
+                    instance = Guid.Parse("{a6c0a1b0-4757-4655-b74b-dbb9195b82ff}");
+                    break;
+                case "john3610-pc":
+                    instance = Guid.Parse("{a721d9e4-fb3b-4a64-a612-8579b1251c95}");
+                    break;
+                case "kevin":
+                    instance = Guid.Parse("{1393db92-517a-48ae-afb1-8f9d4edda751}");
+                    break;
+                case "MSTest-vm":
+                    instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
+                    break;
+                case "benz-pc3":
+                    instance = Guid.Parse("{A74AED9C-0AB8-4649-B233-8DFBE774D9F8}");
+                    break;
+                case "mirza-pc2":
+                    instance = Guid.Parse("{1231F4A9-640C-4E08-A52A-AE3B2C2FB864}");
+                    break;
+                case "berger-pc":
+                    instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
+                    break;
+                default:
+                    // If instance not specified for pc, look for instance guid from AppSettings.
+                    string instanceFromConfig = System.Configuration.ConfigurationManager.AppSettings["ShipWorksInstanceGuid"];
+                    if (!string.IsNullOrWhiteSpace(instanceFromConfig))
+                    {
+                        instance = Guid.Parse(instanceFromConfig);
+                    }
+                    else
+                    {
                         throw new ApplicationException("Enter your machine and ShipWorks instance GUID in the ShipWorksInitializer");
-                }
+                    }
+                    break;
             }
 
             return instance;

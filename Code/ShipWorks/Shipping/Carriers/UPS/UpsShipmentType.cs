@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared;
+﻿using Autofac;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -863,6 +864,31 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
+        /// </summary>
+        /// <returns>
+        /// The updates shipment (or shipments) that is ready to be processed. A null value may
+        /// be returned to indicate that processing should be halted completely. 
+        /// </returns>
+        /// <remarks>
+        /// Uses a UpsShipmentTypeProcessor instead of the default processor.
+        /// </remarks>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment,
+            Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing,
+            RateResult selectedRate,
+            ILifetimeScope lifetimeScope)
+        {
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer(lifetimeScope);
+            ShipmentTypePreProcessor preProcessor = lifetimeScope
+                .Resolve<Func<ShipmentTypeCode, UpsShipmentTypePreProcessor>>()(ShipmentTypeCode);
+            
+            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
         }
 
         /// <summary>
