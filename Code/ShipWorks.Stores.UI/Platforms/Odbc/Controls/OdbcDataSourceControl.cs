@@ -235,10 +235,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                             new List<IOdbcDataSource>());
                 }
 
-                genericResult.Value.Add(dataSourceService.GetDataSource(string.Empty));
+                AddCustomDataSource(genericResult.Value, dataSourceService);
             }
 
             return genericResult;
+        }
+
+        /// <summary>
+        /// Add Custom data source to the list of data sources if no custom data source exists
+        /// </summary>
+        private static void AddCustomDataSource(List<IOdbcDataSource> dataSources, IOdbcDataSourceService dataSourceService)
+        {
+            // If there are no custom data sources add an empty custom data source now
+            if (!dataSources.Any(d => d.IsCustom))
+            {
+                // Add an empty data source to the list of data sources, this is the
+                // one that shows up as Custom in the drop down list
+                dataSources.Add(dataSourceService.GetDataSource(string.Empty));
+            }
         }
 
         /// <summary>
@@ -262,7 +276,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text, SelectedDataSource.Driver);
             }
         }
-
 
         /// <summary>
         /// Called when leaving customConnectionString
