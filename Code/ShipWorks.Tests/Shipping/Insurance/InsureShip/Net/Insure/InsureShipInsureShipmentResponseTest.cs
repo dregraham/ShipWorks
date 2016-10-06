@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net;
-using ShipWorks.Shipping.Insurance.InsureShip.Net;
-using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
+using ShipWorks.Shipping.Insurance.InsureShip.Net;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
 {
@@ -25,7 +25,10 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
 
         public InsureShipInsureShipmentResponseTest()
         {
-            shipment = new ShipmentEntity(100031);
+            shipment = new ShipmentEntity(100031)
+            {
+                InsurancePolicy = new InsurancePolicyEntity()
+            };
 
             settings = new Mock<IInsureShipSettings>();
             settings.Setup(s => s.UseTestServer).Returns(true);
@@ -88,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
-            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
+            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode) 419);
 
             Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
@@ -97,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
-            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
+            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode) 419);
 
             try
             {
