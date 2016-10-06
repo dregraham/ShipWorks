@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -52,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ServicesAvailable = amazonRatesRetrievedMessage.RateGroup.Rates
                 .Select(x => x.Tag)
                 .Cast<AmazonRateTag>()
-                .WithItemIfEmpty(CreateNoRateTag)
+                .DefaultIfEmpty(CreateNoRateTag())
                 .ToList();
 
             ReselectRate(selectedServiceId);
