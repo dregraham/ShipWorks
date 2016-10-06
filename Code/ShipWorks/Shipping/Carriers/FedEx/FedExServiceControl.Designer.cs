@@ -1573,7 +1573,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCOD.ExtraText = "";
             this.sectionCOD.Location = new System.Drawing.Point(3, 671);
             this.sectionCOD.Name = "sectionCOD";
-            this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D";
+            this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D.";
             this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
             this.sectionCOD.Size = new System.Drawing.Size(487, 24);
             this.sectionCOD.TabIndex = 10;

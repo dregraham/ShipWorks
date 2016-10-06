@@ -97,13 +97,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx International Ground®")]
         FedExInternationalGround = 28,
 
-        [Description("FedEx International DirectDistribution® Freight")]
-        FedExInternationalDirectDistributionFreight = 29,
+        [Description("FedEx International Ground® Distribution")]
+        FedExInternationalGroundDistribution = 29,
 
-        [Description("FedEx International Priority DirectDistribution®")]
-        FedExInternationalPriorityDirectDistribution = 30,
+        [Description("FedEx International DirectDistribution®")]
+        FedExInternationalDirectDistribution = 30,
 
         [Description("FedEx International Economy DirectDistribution®")]
-        FedExInternationalEconomyDirectDistribution = 31
+        FedExInternationalEconomyDirectDistribution = 31,
+
+        [Description("FedEx International Priority DirectDistribution®")]
+        FedExInternationalPriorityDirectDistribution = 32,
+
+        [Description("FedEx International DirectDistribution® Surface Solutions U.S. to Canada")]
+        FedExInternationalDirectDistributionSurfaceSolutionsUStoCanada = 33,
+
+        [Description("FedEx International DirectDistribution® Freight")]
+        FedExInternationalDirectDistributionFreight = 34
     }
 }
