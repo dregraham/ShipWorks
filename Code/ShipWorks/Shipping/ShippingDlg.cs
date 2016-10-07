@@ -1491,7 +1491,7 @@ namespace ShipWorks.Shipping
         /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, this will return false.  The rest are
         /// still saved.
         /// </summary>
-        public bool SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave, bool sendShipmentChangedMessage)
+        private bool SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave, bool sendShipmentChangedMessage)
         {
             Cursor.Current = Cursors.WaitCursor;
 
