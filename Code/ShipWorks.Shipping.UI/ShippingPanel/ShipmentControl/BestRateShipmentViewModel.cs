@@ -51,14 +51,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         public IDisposable SubscribeToRatesRetrieval(ISchedulerProvider schedulerProvider)
         {
-            return new CompositeDisposable(
-                messenger.OfType<RatesRetrievingMessage>()
-                    .Subscribe(_ => RatesLoaded = false),
-                messenger.OfType<RatesRetrievingMessage>()
-                    .Select(GetMatchingRatesRetrievedMessage)
-                    .Switch()
-                    .ObserveOn(schedulerProvider.Dispatcher)
-                    .Subscribe(_ => RatesLoaded = true));
+            return messenger.OfType<RatesRetrievingMessage>()
+                .Do(_ => RatesLoaded = false)
+                .Select(GetMatchingRatesRetrievedMessage)
+                .Switch()
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(_ => RatesLoaded = true);
         }
 
         /// <summary>
