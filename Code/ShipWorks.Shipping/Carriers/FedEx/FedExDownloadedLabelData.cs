@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
-
     /// <summary>
     /// Label data that has been downloaded from a carrier
     /// </summary>
