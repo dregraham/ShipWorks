@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -271,8 +270,7 @@ namespace ShipWorks.Shipping.Services
             {
                 errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
             }
-            catch (Exception ex) when (ex is ShippingException ||
-                                       ex is CarrierException)
+            catch (ShippingException ex)
             {
                 errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex);
 
