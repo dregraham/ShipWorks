@@ -558,7 +558,7 @@ namespace ShipWorks.Shipping
             List<ShipmentEntity> removedNeedsSaved = uiDisplayedShipments.Where(s => !s.DeletedFromDatabase && shipmentControl.FindRow(s.ShipmentID) == null).ToList();
 
             // For the one's that have been removed, ignore any concurrency\deleted errors
-            SaveShipmentsToDatabase(removedNeedsSaved, false);
+            SaveShipmentsToDatabase(removedNeedsSaved, false, false);
 
             IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(uiDisplayedShipments.Except(removedNeedsSaved));
 
@@ -1488,19 +1488,25 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, the offending shipments are returned.  The rest are
+        /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, this will return false.  The rest are
         /// still saved.
         /// </summary>
-        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
+        public bool SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave, bool sendShipmentChangedMessage)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            foreach (ShipmentEntity shipment in shipments)
+            IEnumerable<ShipmentEntity> shipmentEntities = shipments.Where(s => !s.Processed).ToArray();
+            IDictionary<ShipmentEntity, Exception> exceptionShipments = shippingManager.SaveShipmentsToDatabase(shipmentEntities, forceSave);
+
+            if (sendShipmentChangedMessage)
             {
-                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
+                foreach (ShipmentEntity shipment in shipmentEntities)
+                {
+                    messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
+                }
             }
 
-            return shippingManager.SaveShipmentsToDatabase(shipments, forceSave);
+            return !exceptionShipments.Any();
         }
 
         /// <summary>
@@ -2181,7 +2187,7 @@ namespace ShipWorks.Shipping
             SaveChangesToUIDisplayedShipments();
 
             // Save them to the database
-            if (SaveShipmentsToDatabase(FetchShipmentsFromShipmentControl(), false).Count > 0)
+            if (!SaveShipmentsToDatabase(FetchShipmentsFromShipmentControl(), false, true))
             {
                 MessageHelper.ShowWarning(this,
                                           "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
