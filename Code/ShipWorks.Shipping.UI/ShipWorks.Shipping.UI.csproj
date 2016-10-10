@@ -181,6 +181,7 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonNotLinkedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
     </Compile>

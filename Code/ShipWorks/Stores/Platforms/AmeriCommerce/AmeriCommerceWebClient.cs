@@ -491,7 +491,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.ShippingDate = new DataDateTime();
             shippingTrans.ShippingDate.Value = shipment.ShipDate;
 
-            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetServiceUsed(shipment);
+            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetOverriddenSerivceUsed(shipment);
             shippingTrans.TrackingNumbers = shipment.TrackingNumber;
 
             return shippingTrans;

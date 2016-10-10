@@ -43,6 +43,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     case 0x80040414: return "There is not enough postage in your account.";
                     case 0x005f0302: return "This account is already a reseller account.";
                     case 0x005f0301: return string.Format("This account is a multi-user account. Multi-user accounts are not eligible to be migrated to a reseller account.{0}{0}Please contact Stamps.com if you need assistance.", Environment.NewLine);
+                    case 0x004F010B: return
+                            $"You must agree to the Terms and Conditions in order to use GlobalPost. ShipWorks will open a new browser window for you to agree to the Terms and Conditions. {Environment.NewLine}{Environment.NewLine}After agreeing to the Terms and Conditions please try creating the label in ShipWorks again.";
                 }
 
                 SoapException baseEx = InnerException as SoapException;

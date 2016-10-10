@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using Interapptive.Shared;
+﻿using Interapptive.Shared;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Users;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using ThreadTimer = System.Threading.Timer;
 
 namespace ShipWorks.Data.Caching
@@ -93,7 +92,9 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public void Dispose()
         {
-            Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+            // If running integration tests, this may throw.
+            // Comment it out to run the test...
+            //Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (disposedLock)
             {

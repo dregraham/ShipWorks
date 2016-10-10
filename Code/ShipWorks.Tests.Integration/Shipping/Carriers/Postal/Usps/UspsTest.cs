@@ -27,6 +27,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         // [DataSource("DataSource_Ship_Stamps")]
         [ExcelData("DataSources\\Usps.xlsx", "Stamps")]
         [Trait("Category", "USPS")]
+        [Trait("Category", "ktemp")]
         [Theory]
         public void ProcessBatch_UspsAndExpress1Usps(DataRow row)
         {
@@ -141,7 +142,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 output.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 output.WriteLine(string.Format("Executing Test ID {0}", row["TestID"]));
                 output.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
-                
+
                 // Yes, this looks stupid, but we get a debug assert if we aren't in a transaction...
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

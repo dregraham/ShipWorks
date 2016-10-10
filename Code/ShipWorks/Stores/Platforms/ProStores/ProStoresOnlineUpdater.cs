@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using log4net;
@@ -15,15 +13,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
     public class ProStoresOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ProStoresOnlineUpdater));
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ProStoresOnlineUpdater()
-        {
-
-        }
-
+        
         /// <summary>
         /// Upload the shipment details for the given order keys
         /// </summary>
@@ -60,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
                 ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
                 if (shipment == null)
                 {
-                    log.InfoFormat(String.Format("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID));
+                    log.InfoFormat("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID);
                 }
                 else
                 {

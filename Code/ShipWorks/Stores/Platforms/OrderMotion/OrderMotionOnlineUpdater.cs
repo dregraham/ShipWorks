@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
@@ -17,11 +9,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
     /// </summary>
     public class OrderMotionOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(OrderMotionOnlineUpdater));
-						  
+
         // store for which this updater is to operate
-        OrderMotionStoreEntity store;
+        private readonly OrderMotionStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -60,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             OrderEntity order = shipment.Order;
             if (!order.IsManual)
             {
-                // Upload tracking number 
+                // Upload tracking number
                 OrderMotionWebClient client = new OrderMotionWebClient(store);
 
                 // upload the details
