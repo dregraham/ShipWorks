@@ -2,22 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Web.Services.Description;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Xml.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -141,9 +135,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.InternationalEconomy,
                 FedExServiceType.InternationalPriorityFreight,
                 FedExServiceType.InternationalEconomyFreight,
-                FedExServiceType.FedExInternationalDirectDistributionFreight,
+                FedExServiceType.FedExInternationalGroundDistribution,
+                FedExServiceType.FedExInternationalDirectDistribution,
                 FedExServiceType.FedExInternationalEconomyDirectDistribution,
-                FedExServiceType.FedExInternationalPriorityDirectDistribution
+                FedExServiceType.FedExInternationalPriorityDirectDistribution,
+                FedExServiceType.FedExInternationalDirectDistributionSurfaceSolutionsUStoCanada,
+                FedExServiceType.FedExInternationalDirectDistributionFreight
             };
 
             if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") ||

@@ -651,6 +651,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.service.PromptText = "(Multiple Values)";
             this.service.Size = new System.Drawing.Size(250, 21);
             this.service.TabIndex = 1;
+            this.service.DropDownWidth = 360;
             //
             // labelService
             //
