@@ -204,26 +204,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
+                List<IOdbcDataSource> dataSources = new List<IOdbcDataSource>();
+
                 try
                 {
-                    List<IOdbcDataSource> dataSources = dataSourceService.GetDataSources().ToList();
-
-                    // If a data source was loaded from the store, make sure it is in the list.
-                    // If the datasource matches a datasource in the list, remove that datasource and replace it with the loaded one.
-                    if (loadedDataSource != null)
-                    {
-                        int? matchingSourceIndex = dataSources
-                            .Select((value, index) => new {value, index})
-                            .FirstOrDefault(x => x.value.Name == loadedDataSource.Name)?.index;
-
-                        if (matchingSourceIndex.HasValue)
-                        {
-                            dataSources.RemoveAt(matchingSourceIndex.Value);
-                        }
-
-                        dataSources.Insert(matchingSourceIndex ?? 0, loadedDataSource);
-                    }
-
+                    dataSources.AddRange(dataSourceService.GetDataSources());
                     genericResult = GenericResult.FromSuccess(dataSources);
                 }
                 catch (DataException ex)
@@ -232,7 +217,23 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     genericResult =
                         GenericResult.FromError(
                             $"ShipWorks encountered an error finding data sources. {Environment.NewLine}{Environment.NewLine}{ex.Message}",
-                            new List<IOdbcDataSource>());
+                            dataSources);
+                }
+
+                // If a data source was loaded from the store, make sure it is in the list.
+                // If the datasource matches a datasource in the list, remove that datasource and replace it with the loaded one.
+                if (loadedDataSource != null)
+                {
+                    int? matchingSourceIndex = dataSources
+                        .Select((value, index) => new { value, index })
+                        .FirstOrDefault(x => x.value.Name == loadedDataSource.Name)?.index;
+
+                    if (matchingSourceIndex.HasValue)
+                    {
+                        dataSources.RemoveAt(matchingSourceIndex.Value);
+                    }
+
+                    dataSources.Insert(matchingSourceIndex ?? 0, loadedDataSource);
                 }
 
                 AddCustomDataSource(genericResult.Value, dataSourceService);
