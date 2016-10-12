@@ -28,11 +28,12 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
-{   
+{
     public class FedExPrototypeFixture
     {
         private readonly Mock<ExecutionMode> executionMode;
@@ -77,7 +78,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         public string PackagingType { get; set; }
         public string ShipmentWeightUnits { get; set; }
         public double ShipmentTotalWeightValue { get; set; }
-        
+
         public string ShipperPersonName { get; set; }
         public string ShipperCompanyName { get; set; }
         public string ShipperPhoneNumber { get; set; }
@@ -106,7 +107,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         public string SpecialServiceType1 { get; set; }
         public string SpecialServiceType2 { get; set; }
         public string SpecialServiceType3 { get; set; }
-        
+
         public string CodCollectionCurrency { get; set; }
         public string CodCollectionAmount { get; set; }
         public string CodDetailCollectionType { get; set; }
@@ -239,7 +240,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             try
             {
                 InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
-                
+
                 ShipmentEntity shipment = CreateShipment();
 
                 // If you want to create the shipments, but NOT process them, press the magic keys
@@ -258,7 +259,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                     };
                     FedExShippingClerk shippingClerk = new FedExShippingClerk(parameters);
 
-                    shippingClerk.Ship(shipment);
+                    var responses = shippingClerk.Ship(shipment);
+
+                    foreach (ICarrierResponse response in responses)
+                    {
+                        response.Process();
+                    }
 
                     shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
                     shipment.Processed = true;
@@ -270,7 +276,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.CustomsGenerated = true;
 
                 ShippingManager.SaveShipment(shipment);
-                
+
                 return true;
             }
             finally
@@ -382,7 +388,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             shipment.FedEx.DropoffType = GetDropoffType();
 
             // Default to the shipper country code
-            shipment.FedEx.FedExAccountID = GetFedExAccountId(FedExAccountNumber, ShipperCountryCode); 
+            shipment.FedEx.FedExAccountID = GetFedExAccountId(FedExAccountNumber, ShipperCountryCode);
 
             // Set the ship date to now if the timestamp is not specified otherwise find the date of the day specified by the timestamp
             shipment.ShipDate = GetShipTimestamp();
@@ -518,7 +524,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
             if (!DateTime.TryParse(ShipTimestamp, out shipTimestamp))
             {
-                shipTimestamp = string.IsNullOrEmpty(ShipTimestamp) ? DateTime.Now : GetNext(DateTime.Now, (DayOfWeek)Enum.Parse(typeof(DayOfWeek), ShipTimestamp));    
+                shipTimestamp = string.IsNullOrEmpty(ShipTimestamp) ? DateTime.Now : GetNext(DateTime.Now, (DayOfWeek)Enum.Parse(typeof(DayOfWeek), ShipTimestamp));
             }
 
             return shipTimestamp;
@@ -528,7 +534,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         {
             if (!string.IsNullOrEmpty(ReturnType))
             {
-                // RETURNS_CLEARANCE always has a return type, they are only returns if 
+                // RETURNS_CLEARANCE always has a return type, they are only returns if
                 shipment.ReturnShipment = true;
 
                 // The spreadsheet has return shipment addresses already swapped; since the manipulators swap the
@@ -603,7 +609,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.ResidentialDetermination = residentialStatus;
             }
         }
-        
+
         protected virtual void SetLinearUnits(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(PackageLineItemUnits) || PackageLineItemUnits == "IN")
@@ -619,13 +625,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         protected virtual void SetHoldLocationData(ShipmentEntity shipment)
         {
             // Check all three locations because some of the tabs of the spreadsheet don't have a column for the hold at location type
-            if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToLower() == "hold_at_location") 
+            if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToLower() == "hold_at_location")
                 || (!string.IsNullOrEmpty(SpecialServiceType2) && SpecialServiceType2.ToLower() == "hold_at_location")
                 || (!string.IsNullOrEmpty(HoldLocationType)))
             {
                 // Default to the FedEx Express Station if there isn't a location type pulled in from the spreadsheet
                 shipment.FedEx.HoldLocationType = string.IsNullOrEmpty(HoldLocationType) ? (int)FedExLocationType.FedExExpressStation : (int) GetLocationType();
-                
+
                 shipment.FedEx.HoldCity = HoldCity;
                 shipment.FedEx.HoldCompanyName = HoldCompanyName;
                 shipment.FedEx.HoldCountryCode = HoldCountryCode;
@@ -643,7 +649,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.FedEx.HoldStreet2 = string.Empty;
                 shipment.FedEx.HoldStreet3 = string.Empty;
                 shipment.FedEx.HoldTitle = string.Empty;
-                shipment.FedEx.HoldUrbanizationCode = string.Empty;                
+                shipment.FedEx.HoldUrbanizationCode = string.Empty;
 
                 shipment.FedEx.FedExHoldAtLocationEnabled = true;
             }
@@ -753,8 +759,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 // number that we know works
                 shipment.FedEx.PayorTransportAccount = GetFormattedResponsiblePartyNumber();
             }
-            
-            
+
+
         }
         /// <summary>
         /// Sets the alcohol data.
@@ -802,16 +808,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         protected void SetPriortyAlertData(ShipmentEntity shipment)
         {
-            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || 
-                PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || 
-                PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" || 
+            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" ||
+                PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" ||
+                PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" ||
                 PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
                     package.PriorityAlert = true;
                     package.PriorityAlertDetailContent = PackageLineItemPriorityContent;
-                    
+
                     switch (PackageLineItemPriorityEnhancementType)
                     {
                         case null:
@@ -848,12 +854,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         private void SetDangerousGoodsData(ShipmentEntity shipment)
         {
-            if ((SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "dangerous_goods") || 
+            if ((SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "dangerous_goods") ||
                 (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "dangerous_goods") ||
                 (PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "dangerous_goods") ||
                 (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "dangerous_goods") ||
                 (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "dangerous_goods"))
-                
+
             {
                 bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1" || (!string.IsNullOrEmpty(DangerousGoodsCargoAircraftOnly) && DangerousGoodsCargoAircraftOnly.ToLower() == "true");
                 FedExDangerousGoodsAccessibilityType accessibility = GetFedExDangerousGoodsAccessibilityType();
@@ -907,9 +913,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                     package.DeclaredValue = amount;
                     package.Insurance = true;
                 }
-                
+
                 package.Weight = string.IsNullOrEmpty(PackageLineItemWeightValue) ? 0 : double.Parse(PackageLineItemWeightValue);
-                
+
                 if (!string.IsNullOrEmpty(PackageLineItemLength))
                 {
                     package.DimsLength = double.Parse(PackageLineItemLength);
@@ -1065,7 +1071,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 if (shipment.FedEx.SaturdayDelivery && string.IsNullOrEmpty(ShipTimestamp))
                 {
                     // We have a Saturday delivery, so update the ship date accordingly. We don't do this in
-                    // the switch statement above to avoid the case where a future delivery may overwrite the 
+                    // the switch statement above to avoid the case where a future delivery may overwrite the
                     // shipment date depending on the order the special service type values get assigned
                     // (i.e. SpecialServiceType1 vs. SpecialServiceType2)
                     if (shipment.FedEx.Service == (int)FedExServiceType.PriorityOvernight
@@ -1074,8 +1080,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                     {
                         shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
                     }
-                    else  if (shipment.FedEx.Service == (int)FedExServiceType.FedEx2Day 
-                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayAM 
+                    else  if (shipment.FedEx.Service == (int)FedExServiceType.FedEx2Day
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayAM
                         || shipment.FedEx.Service == (int)FedExServiceType.FedEx2DayFreight)
                     {
                         shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Thursday);
@@ -1084,7 +1090,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                     {
                         shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Wednesday);
                     }
-                
+
                 }
             }
         }
@@ -1138,8 +1144,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         private void SetCodData(ShipmentEntity shipment)
         {
-            if ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "cod") || 
-                (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "cod") || 
+            if ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "cod") ||
+                (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "cod") ||
                 (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "cod") ||
                 (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "cod"))
             {
@@ -1166,7 +1172,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 {
                     shipment.FedEx.CodLastName = personName[1];
                 }
-                
+
                 shipment.FedEx.CodPhone = CodPhoneNumber;
                 shipment.FedEx.CodPostalCode = CodPostalCode;
                 shipment.FedEx.CodStateProvCode = CodStateOrProvinceCode;
@@ -1252,7 +1258,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             {
                 return FedExCodPaymentType.Unsecured;
             }
-            
+
             throw new Exception("Unrecognized COD collection type");
         }
 
