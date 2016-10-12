@@ -3,8 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Transactions;
 using Interapptive.Shared.Data;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ExecutionMode;
+using log4net;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
@@ -12,41 +12,23 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Gives us the installed schema version
     /// </summary>
-    public class SqlSchemaVersion : ISqlSchemaVersion, IInitializeForCurrentDatabase
+    [Component]
+    public class SqlSchemaVersion : ISqlSchemaVersion
     {
-        Version minimumVersion = Version.Parse("4.8.0.0");
-        Lazy<bool> isCustomerLicenseSupported;
+        private Version versionFourEight = Version.Parse("4.8.0.0");
+        private ILog log;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public SqlSchemaVersion()
+        public SqlSchemaVersion(Func<Type, ILog> getLog)
         {
-            isCustomerLicenseSupported = new Lazy<bool>(IsInstalledSchemaVersionGreaterThanMinimum);
-        }
-
-        /// <summary>
-        /// Initialize for the current database
-        /// </summary>
-        public void InitializeForCurrentDatabase(ExecutionMode executionMode)
-        {
-            isCustomerLicenseSupported = new Lazy<bool>(IsInstalledSchemaVersionGreaterThanMinimum);
+            log = getLog(GetType());
         }
 
         /// <summary>
         /// Determines if on a version where customer license is supported
         /// </summary>
         /// <returns>true if version is 4.8.0.0 or better</returns>
-        public bool IsCustomerLicenseSupported() => isCustomerLicenseSupported.Value;
-
-        /// <summary>
-        /// Determines if on a version where customer license is supported
-        /// </summary>
-        /// <returns>true if version is 4.8.0.0 or better</returns>
-        private bool IsInstalledSchemaVersionGreaterThanMinimum()
-        {
-            return GetInstalledSchemaVersion() >= minimumVersion;
-        }
+        public bool IsCustomerLicenseSupported() =>
+            GetInstalledSchemaVersion() >= versionFourEight;
 
         /// <summary>
         /// Get the schema version of the ShipWorks database using the current open connection
@@ -60,7 +42,10 @@ namespace ShipWorks.Data.Administration
                 cmd.CommandText = "GetSchemaVersion";
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+                string version = SqlCommandProvider.ExecuteScalar(cmd) as string;
+                log.Info($"Got installed schema version: {version}");
+
+                return new Version(version);
             }
         }
     }
