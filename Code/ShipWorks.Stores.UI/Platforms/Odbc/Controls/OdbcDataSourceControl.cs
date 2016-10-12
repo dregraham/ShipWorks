@@ -149,21 +149,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
 
             if (!dataSourceResult.Success)
             {
-                dataSource.DataSource = null;
-                MessageHelper.ShowError(ParentForm, dataSourceResult.Message);
-            }
-            else if (dataSourceResult.Value.None())
-            {
-                dataSource.DataSource = null;
+                string errorMessage =
+                    $"{dataSourceResult.Message} {Environment.NewLine}{Environment.NewLine}You will need to configure the ODBC data source manually.";
 
-                log.Warn("No data sources found in IOdbcDataSourceRepository");
-                MessageHelper.ShowWarning(ParentForm, $"ShipWorks could not find any ODBC data sources. {Environment.NewLine} " +
-                                                "Please add one to continue.");
+                MessageHelper.ShowError(ParentForm, errorMessage);
             }
-            else
-            {
-                BindDataSources(dataSourceResult.Value);
-            }
+
+            BindDataSources(dataSourceResult.Value);
         }
 
         /// <summary>
@@ -209,43 +201,59 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private GenericResult<List<IOdbcDataSource>> GetDataSources()
         {
             GenericResult<List<IOdbcDataSource>> genericResult;
-
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
+                IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
+                List<IOdbcDataSource> dataSources = new List<IOdbcDataSource>();
+
                 try
                 {
-                    IOdbcDataSourceService dataSourceService = scope.Resolve<IOdbcDataSourceService>();
-
-                    List<IOdbcDataSource> dataSources = dataSourceService.GetDataSources().ToList();
-
-                    // If a data source was loaded from the store, make sure it is in the list.
-                    // If the datasource matches a datasource in the list, remove that datasource and replace it with the loaded one.
-                    if (loadedDataSource!= null)
-                    {
-                        int? matchingSourceIndex = dataSources
-                            .Select((value, index) => new {value, index})
-                            .FirstOrDefault(x => x.value.Name == loadedDataSource.Name)?.index;
-
-                        if (matchingSourceIndex.HasValue)
-                        {
-                            dataSources.RemoveAt(matchingSourceIndex.Value);
-                        }
-
-                        dataSources.Insert(matchingSourceIndex ?? 0, loadedDataSource);
-                    }
-
+                    dataSources.AddRange(dataSourceService.GetDataSources());
                     genericResult = GenericResult.FromSuccess(dataSources);
                 }
                 catch (DataException ex)
                 {
                     log.Error("Error thrown by repo.GetDataSources", ex);
                     genericResult =
-                        GenericResult.FromError<List<IOdbcDataSource>>(
-                            "ShipWorks encountered an error finding data sources. " +
-                            $"{Environment.NewLine}{Environment.NewLine}{ex.Message}");
+                        GenericResult.FromError(
+                            $"ShipWorks encountered an error finding data sources. {Environment.NewLine}{Environment.NewLine}{ex.Message}",
+                            dataSources);
                 }
+
+                // If a data source was loaded from the store, make sure it is in the list.
+                // If the datasource matches a datasource in the list, remove that datasource and replace it with the loaded one.
+                if (loadedDataSource != null)
+                {
+                    int? matchingSourceIndex = dataSources
+                        .Select((value, index) => new { value, index })
+                        .FirstOrDefault(x => x.value.Name == loadedDataSource.Name)?.index;
+
+                    if (matchingSourceIndex.HasValue)
+                    {
+                        dataSources.RemoveAt(matchingSourceIndex.Value);
+                    }
+
+                    dataSources.Insert(matchingSourceIndex ?? 0, loadedDataSource);
+                }
+
+                AddCustomDataSource(genericResult.Value, dataSourceService);
             }
+
             return genericResult;
+        }
+
+        /// <summary>
+        /// Add Custom data source to the list of data sources if no custom data source exists
+        /// </summary>
+        private static void AddCustomDataSource(List<IOdbcDataSource> dataSources, IOdbcDataSourceService dataSourceService)
+        {
+            // If there are no custom data sources add an empty custom data source now
+            if (!dataSources.Any(d => d.IsCustom))
+            {
+                // Add an empty data source to the list of data sources, this is the
+                // one that shows up as Custom in the drop down list
+                dataSources.Add(dataSourceService.GetDataSource(string.Empty));
+            }
         }
 
         /// <summary>
@@ -269,7 +277,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 SelectedDataSource.ChangeConnection(SelectedDataSource.Name, SelectedDataSource.Username, password.Text, SelectedDataSource.Driver);
             }
         }
-
 
         /// <summary>
         /// Called when leaving customConnectionString
