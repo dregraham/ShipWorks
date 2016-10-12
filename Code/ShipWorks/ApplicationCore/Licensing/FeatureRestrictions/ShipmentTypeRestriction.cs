@@ -181,7 +181,8 @@ namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
                 return Result(true, BestRateDisabledMessage);
             }
 
-            return Result(uspShipmentType.HasAccounts, BestRateUpsRestrictionMessage);
+            //return Result(uspShipmentType.HasAccounts, BestRateUpsRestrictionMessage);
+            return Result(false, BestRateDisabledMessage);
         }
 
         /// <summary>
