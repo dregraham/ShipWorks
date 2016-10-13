@@ -1,8 +1,9 @@
+using System.Threading;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Logon;
-using System.Threading;
 
 namespace ShipWorks.Data
 {
@@ -12,6 +13,7 @@ namespace ShipWorks.Data
     public static class ConfigurationData
     {
         static ConfigurationEntity config;
+        static IConfigurationEntity configReadOnly;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -19,10 +21,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void InitializeForCurrentDatabase()
         {
-            config = new ConfigurationEntity(true);
-            SqlAdapter.Default.FetchEntity(config);
-
-            needCheckForChanges = false;
+            UpdateConfiguration();
         }
 
         /// <summary>
@@ -40,14 +39,35 @@ namespace ShipWorks.Data
         {
             if (needCheckForChanges)
             {
-
-                ConfigurationEntity newConfig = new ConfigurationEntity(true);
-                SqlAdapter.Default.FetchEntity(newConfig);
-                config = newConfig;
-                needCheckForChanges = false;
+                UpdateConfiguration();
             }
 
             return EntityUtility.CloneEntity(config);
+        }
+
+        /// <summary>
+        /// Get the current configuration instance
+        /// </summary>
+        public static IConfigurationEntity FetchReadOnly()
+        {
+            if (needCheckForChanges)
+            {
+                UpdateConfiguration();
+            }
+
+            return configReadOnly;
+        }
+
+        /// <summary>
+        /// Update the configuration stored in memory
+        /// </summary>
+        private static void UpdateConfiguration()
+        {
+            ConfigurationEntity newConfig = new ConfigurationEntity(true);
+            SqlAdapter.Default.FetchEntity(newConfig);
+            config = newConfig;
+            configReadOnly = newConfig.AsReadOnly();
+            needCheckForChanges = false;
         }
 
         /// <summary>
