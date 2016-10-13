@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Should shipments be auto created
         /// </summary>
-        public bool AutoCreateShipments => Fetch().AutoCreateShipments;
+        public bool AutoCreateShipments => FetchReadOnly().AutoCreateShipments;
 
         /// <summary>
         /// The list of shipment types that have been fully configured for use within ShipWorks
