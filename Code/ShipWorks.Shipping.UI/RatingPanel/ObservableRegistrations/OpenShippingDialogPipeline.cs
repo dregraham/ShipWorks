@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -12,14 +13,16 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
     /// </summary>
     public class OpenShippingDialogPipeline : IRatingPanelGlobalPipeline
     {
-        readonly IObservable<IShipWorksMessage> messages;
+        private readonly IObservable<IShipWorksMessage> messages;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OpenShippingDialogPipeline(IObservable<IShipWorksMessage> messages)
+        public OpenShippingDialogPipeline(IObservable<IShipWorksMessage> messages, ISchedulerProvider schedulerProvider)
         {
             this.messages = messages;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -28,6 +31,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         public IDisposable Register(RatingPanelViewModel viewModel)
         {
             return messages.OfType<OpenShippingDialogMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(_ =>
                 {
                     viewModel.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());

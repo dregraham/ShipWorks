@@ -1,10 +1,12 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
 {
     /// <summary>
     /// Register an observable pipeline for the shipping panel view model
     /// </summary>
+    [Service]
     public interface IRatingPanelGlobalPipeline
     {
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -20,15 +21,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private IDisposable subscription;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDeletedPipeline(IObservable<IShipWorksMessage> messages, IStoreManager storeManager, IOrderManager orderManager)
+        public ShipmentDeletedPipeline(IObservable<IShipWorksMessage> messages, IStoreManager storeManager,
+            IOrderManager orderManager, ISchedulerProvider schedulerProvider)
         {
             this.messages = messages;
             this.storeManager = storeManager;
             this.orderManager = orderManager;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -37,6 +41,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messages.OfType<IEntityDeletedMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(x => ShouldUnloadShipment(x, viewModel.Shipment))
                 .Subscribe(x =>
                 {
