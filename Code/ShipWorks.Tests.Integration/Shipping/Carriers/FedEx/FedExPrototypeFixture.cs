@@ -997,20 +997,21 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 {
                     shipment.FedEx.ReferenceCustomer = CustomerReferenceValue ?? string.Empty;
                 }
-
                 else if (CustomerReferenceType.ToLower() == "p_o_number")
                 {
                     shipment.FedEx.ReferencePO = CustomerReferenceValue ?? string.Empty;
                 }
-
-                if (CustomerReferenceType.ToLower() == "invoice_number")
+                else if (CustomerReferenceType.ToLower() == "invoice_number")
                 {
                     shipment.FedEx.ReferenceInvoice = CustomerReferenceValue ?? string.Empty;
                 }
-
                 else if (CustomerReferenceType.ToLower() == "shipment_integrity")
                 {
                     shipment.FedEx.ReferenceShipmentIntegrity = CustomerReferenceValue ?? string.Empty;
+                }
+                else if (CustomerReferenceType.ToLower() == "rma_association")
+                {
+                    shipment.FedEx.RmaNumber = CustomerReferenceValue ?? string.Empty;
                 }
             }
         }
