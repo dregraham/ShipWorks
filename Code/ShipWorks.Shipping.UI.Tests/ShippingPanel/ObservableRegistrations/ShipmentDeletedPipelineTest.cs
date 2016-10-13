@@ -2,6 +2,7 @@
 using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testSubject = new Subject<IEntityDeletedMessage>();
             mock.Provide<IObservable<IShipWorksMessage>>(testSubject);
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 
         [Fact]
