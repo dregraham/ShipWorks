@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
-        private string fedExTestAccountNumber = "607253064";
+        private string fedExTestAccountNumber = "612480567";
         private const string ecodAccountNumber = "222326460";
         private bool justLabels = false;
         private readonly ITestOutputHelper output;
@@ -21,11 +21,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             this.output = output;
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "US Grn Dom")]
+        [ExcelData("DataSources\\FedExAll.xlsx", "US Grn Dom, Intl & Home Del")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExUSGroundDomestic(DataRow row)
         {
+            if (row["SaveLabel"] is DBNull || (bool)row["SaveLabel"] != true)
+            {
+                return;
+            }
+
             var testObject = new FedExUSGroundFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
