@@ -37,6 +37,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messages.OfType<CarrierConfiguredMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(x => x.ShipmentTypeCode == viewModel.ShipmentType)
                 .Do(_ => viewModel.AllowEditing = false)
                 .ObserveOn(schedulerProvider.TaskPool)

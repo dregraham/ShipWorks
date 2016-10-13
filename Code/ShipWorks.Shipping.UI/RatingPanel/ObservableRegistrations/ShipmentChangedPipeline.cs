@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
@@ -12,13 +13,15 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
     public class ShipmentChangedPipeline : IRatingPanelGlobalPipeline
     {
         readonly IObservable<IShipWorksMessage> messages;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentChangedPipeline(IObservable<IShipWorksMessage> messages)
+        public ShipmentChangedPipeline(IObservable<IShipWorksMessage> messages, ISchedulerProvider schedulerProvider)
         {
             this.messages = messages;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -28,6 +31,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         {
             return messages.OfType<ShipmentChangedMessage>()
                 .Where(x => x.ChangedField == "ServiceType")
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(x => viewModel.SelectRate(x.ShipmentAdapter));
         }
     }
