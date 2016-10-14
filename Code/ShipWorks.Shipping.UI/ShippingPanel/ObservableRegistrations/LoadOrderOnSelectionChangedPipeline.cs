@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         viewModel.IsLoading = true;
 
                         // If the view model sent the message, it's to reload the order. So don't try saving first
-                        if (message.Sender != viewModel)
+                        if (message.Sender != viewModel && message.OrderIdList?.First() != viewModel?.Shipment?.OrderID)
                         {
                             viewModel.SaveToDatabase();
                         }

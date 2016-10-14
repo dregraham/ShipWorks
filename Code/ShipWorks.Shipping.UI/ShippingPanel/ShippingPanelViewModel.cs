@@ -24,6 +24,7 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
@@ -306,7 +307,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IsLoadingShipment = false;
 
             shipmentChangedSubscription = PropertyChangeStream
-                .Where(x => x != nameof(IsLoading))
+                .Where(x => x != nameof(IsLoading) && x != nameof(BestRateShipmentViewModel.RatesLoaded) && x != nameof(DomesticInternationalText))
                 .Merge(ShipmentViewModel.PropertyChangeStream)
                 .Merge(Origin.PropertyChangeStream.Select(x => $"Origin{x}"))
                 .Merge(Destination.PropertyChangeStream.Select(x => $"Ship{x}"))
