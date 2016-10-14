@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
@@ -14,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
         private readonly Mock<IFedExServiceGateway> mockService = new Mock<IFedExServiceGateway>();
 
         private Mock<ICarrierRequestManipulator> firstManipulator;
-        private Mock<ICarrierResponseFactory> responseFactory;
+        private Mock<IFedExResponseFactory> responseFactory;
         private Mock<ICarrierRequestManipulator> secondManipulator;
         private FedExGlobalShipAddressRequest testObject;
         private FedExAccountEntity account;
@@ -30,8 +31,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
 
             secondManipulator = new Mock<ICarrierRequestManipulator>();
             secondManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
-            
-            responseFactory = new Mock<ICarrierResponseFactory>();
+
+            responseFactory = new Mock<IFedExResponseFactory>();
             responseFactory.Setup(x => x.CreateGlobalShipAddressResponse(It.IsAny<SearchLocationsReply>(), testObject));
 
             // Create some mocked manipulators for testing purposes
