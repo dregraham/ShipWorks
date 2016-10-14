@@ -54,13 +54,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request
         {
             // Allow the manipulators to build the raw request for the FedEx service
             ApplyManipulators();
-            
-            // The request is ready to be sent to FedEx; we're sure the native request will be a ProcessShipmentRequest 
+
+            // The request is ready to be sent to FedEx; we're sure the native request will be a ProcessShipmentRequest
             // (since we assigned it as such in the constructor) so we can safely cast it here
             IFedExNativeShipmentReply nativeResponse = fedExService.Ship(this.NativeRequest as IFedExNativeShipmentRequest);
 
             // Defer to the response factory to create the ship response that wraps the raw/native response obtained from the service
-            return responseFactory.CreateShipResponse(nativeResponse, this, this.ShipmentEntity);
+            FedExShipResponse shipResponse =  (FedExShipResponse) responseFactory.CreateShipResponse(nativeResponse, this, this.ShipmentEntity);
+
+            // Apply response manipulators now, because multipackage shipments require the first packages response
+            // manipulators to be applied before the proceeding packages request manipulators.
+            shipResponse.ApplyResponseManipulators();
+
+            return shipResponse;
         }
     }
 }
