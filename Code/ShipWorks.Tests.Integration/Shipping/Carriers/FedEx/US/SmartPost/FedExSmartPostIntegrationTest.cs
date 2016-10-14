@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
             this.output = output;
         }
 
-        [ExcelData(@"DataSources\FedExAll.xlsx", "IMpB Smartpost test cases")]
+        [ExcelData(@"DataSources\FedExAll\IMpB Smartpost.xlsx", "IMpB Smartpost")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExSmartPost(DataRow row)

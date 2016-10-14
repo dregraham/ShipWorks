@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Xunit;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
+﻿using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
@@ -21,10 +21,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             this.output = output;
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "US Grn Dom, Intl & Home Del")]
+        [ExcelData(@"DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx", "US Grn Dom Intl And Home Del")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExUSGroundDomestic(DataRow row)
+        public void Ship_FedExUSGround(DataRow row)
         {
             if (row["SaveLabel"] is DBNull || (bool)row["SaveLabel"] != true)
             {
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         }
 
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "Grn Alcohol")]
+        [ExcelData(@"DataSources\Grn Alcohol\FedExAll.xlsx", "Grn Alcohol")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExGroundDomesticAlcohol(DataRow row)
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "US Exp Intl-Alcohol")]
+        [ExcelData(@"DataSources\FedExAll\US Exp Intl-Alcohol.xlsx", "US Exp Intl-Alcohol")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressInternationalAlcohol(DataRow row)
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "US Exp Intl")]
+        [ExcelData(@"DataSources\FedExAll\US Exp Intl.xlsx", "US Exp Intl")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressInternational(DataRow row)
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "US Exp Dom-Alcohol")]
+        [ExcelData(@"DataSources\FedExAll\US Exp Dom-Alcohol.xlsx", "US Exp Dom-Alcohol")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomesticAlcohol(DataRow row)
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "US Exp Dom")]
+        [ExcelData(@"DataSources\FedExAll\US Exp Dom.xlsx", "US Exp Dom")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomestic(DataRow row)
@@ -151,7 +151,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "OneRate")]
+        [ExcelData(@"DataSources\OneRate\FedExAll.xlsx", "OneRate")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExOneRate(DataRow row)
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "ETD")]
+        [ExcelData(@"DataSources\FedExAll\ETD.xlsx", "ETD")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExETD(DataRow row)
