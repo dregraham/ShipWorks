@@ -1,6 +1,8 @@
-﻿using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
+﻿using ShipWorks.Startup;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground;
+using ShipWorks.Tests.Shared.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +11,7 @@ using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
+    [Collection("US Fedex Tests")]
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string fedExTestAccountNumber = "612480567";
@@ -16,9 +19,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         private bool justLabels = false;
         private readonly ITestOutputHelper output;
 
-        public FedExUSIntegrationTests(ITestOutputHelper output)
+        private DataContext context;
+
+
+        public FedExUSIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
+
+            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+                ShipWorksInitializer.GetShipWorksInstance());
         }
 
         [ExcelData(@"DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx", "US Grn Dom Intl And Home Del")]
@@ -50,7 +59,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 testObject.FedExAccountNumber = transactionsForEcodAccount.Contains(testObject.CustomerTransactionId)
                     ? ecodAccountNumber : fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 

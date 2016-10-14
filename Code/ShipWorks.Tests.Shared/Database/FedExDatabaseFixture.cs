@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -14,6 +12,8 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
+using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -70,6 +70,7 @@ namespace ShipWorks.Tests.Shared.Database
         private static void UpdateSettings()
         {
             var settings = ShippingSettings.Fetch();
+            settings.ShipSenseEnabled = false;
             settings.ConfiguredTypes = new[] { ShipmentTypeCode.FedEx };
             settings.ActivatedTypes = new[] { ShipmentTypeCode.FedEx };
             settings.FedExUsername = "7c9NbKsT8K3hUNuf";
