@@ -1,10 +1,10 @@
-﻿using System;
-using Xunit;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
+﻿using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using System;
 using System.Data;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             this.output = output;
         }
 
-        [ExcelData(@"DataSources\FedExAll.xlsx", "CA Exp Dom")]
+        [ExcelData(@"DataSources\FedExAll\CA Exp Dom.xlsx", "CA Exp Dom")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExCanadaExpressDomestic(DataRow row)
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "CA Grn Dom, Intl")]
+        [ExcelData(@"DataSources\FedExAll\CA Grn Dom Intl.xlsx", "CA Grn Dom Intl")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExCanadaGroundDomIntl(DataRow row)
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             }
         }
         
-        [ExcelData("DataSources\\FedExAll.xlsx", "CA Exp Intl")]
+        [ExcelData(@"DataSources\FedExAll\CA Exp Intl.xlsx", "CA Exp Intl")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExCanadaExpressInternational(DataRow row)
