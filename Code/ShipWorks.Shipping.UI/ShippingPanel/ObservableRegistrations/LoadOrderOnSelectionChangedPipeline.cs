@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             return new CompositeDisposable(
                 changeHandler
                     .OrderChangingStream()
+                    .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(this, message =>
                     {
                         viewModel.IsLoading = true;

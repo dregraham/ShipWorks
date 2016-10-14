@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testObject.Register(viewModelMock.Object);
 
             orderChangingSubject.OnNext(new OrderSelectionChangingMessage(this, new[] { 1L }));
+            schedulerProvider.Dispatcher.Start();
 
             viewModelMock.VerifySet(x => x.AllowEditing = false);
         }
@@ -58,6 +59,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testObject.Register(viewModelMock.Object);
 
             orderChangingSubject.OnNext(new OrderSelectionChangingMessage(this, new[] { 1L }));
+            schedulerProvider.Dispatcher.Start();
 
             viewModelMock.Verify(x => x.SaveToDatabase());
         }
