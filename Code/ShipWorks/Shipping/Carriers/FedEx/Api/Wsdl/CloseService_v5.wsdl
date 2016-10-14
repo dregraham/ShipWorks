@@ -1,6 +1,6 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/close/v4" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/close/v4" name="CloseServiceDefinitions">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/close/v5" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/close/v5" name="CloseServiceDefinitions">
   <types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/close/v4">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/close/v5">
       <xs:element name="CloseWithDocumentsReply" type="ns:CloseWithDocumentsReply"/>
       <xs:element name="CloseWithDocumentsRequest" type="ns:CloseWithDocumentsRequest"/>
       <xs:element name="GroundCloseDocumentsReply" type="ns:GroundCloseDocumentsReply"/>
@@ -130,6 +130,7 @@
             </xs:annotation>
           </xs:element>
           <xs:element name="DetailedDeliveryManifestDetail" type="ns:DetailedDeliveryManifestDetail" minOccurs="0"/>
+          <xs:element name="HazardousMaterialsCertificationDetail" type="ns:HazardousMaterialsCertificationDetail" minOccurs="0"/>
           <xs:element name="ManifestDetail" type="ns:ManifestDetail" minOccurs="0"/>
           <xs:element name="Op950Detail" type="ns:Op950Detail" minOccurs="0">
             <xs:annotation>
@@ -142,6 +143,7 @@
         <xs:restriction base="xs:string">
           <xs:enumeration value="COD_REPORT"/>
           <xs:enumeration value="DETAILED_DELIVERY_MANIFEST"/>
+          <xs:enumeration value="HAZARDOUS_MATERIALS_CERTIFICATION"/>
           <xs:enumeration value="MANIFEST"/>
           <xs:enumeration value="MULTIWEIGHT_REPORT"/>
           <xs:enumeration value="OP_950"/>
@@ -369,6 +371,11 @@
           </xs:element>
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="HazardousMaterialsCertificationDetail">
+        <xs:sequence>
+          <xs:element name="Format" type="ns:CloseDocumentFormat" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
       <xs:simpleType name="ImageId">
         <xs:restriction base="xs:string">
           <xs:enumeration value="IMAGE_1"/>
@@ -467,7 +474,7 @@
           </xs:element>
           <xs:element name="MessageParameters" type="ns:NotificationParameter" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) witout having to parse the message string.</xs:documentation>
+              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) without having to parse the message string.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -833,7 +840,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Major" type="xs:int" fixed="4" minOccurs="1">
+          <xs:element name="Major" type="xs:int" fixed="5" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -914,7 +921,7 @@
   <binding name="CloseServiceSoapBinding" type="ns:ClosePortType">
     <s1:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="closeWithDocuments">
-      <s1:operation soapAction="http://fedex.com/ws/close/v4/closeWithDocuments" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/close/v5/closeWithDocuments" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -923,7 +930,7 @@
       </output>
     </operation>
     <operation name="smartPostClose">
-      <s1:operation soapAction="http://fedex.com/ws/close/v4/smartPostClose" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/close/v5/smartPostClose" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -932,7 +939,7 @@
       </output>
     </operation>
     <operation name="groundClose">
-      <s1:operation soapAction="http://fedex.com/ws/close/v4/groundClose" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/close/v5/groundClose" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -941,7 +948,7 @@
       </output>
     </operation>
     <operation name="groundCloseWithDocuments">
-      <s1:operation soapAction="http://fedex.com/ws/close/v4/groundCloseWithDocuments" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/close/v5/groundCloseWithDocuments" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -950,7 +957,7 @@
       </output>
     </operation>
     <operation name="reprintGroundCloseDocuments">
-      <s1:operation soapAction="http://fedex.com/ws/close/v4/reprintGroundCloseDocuments" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/close/v5/reprintGroundCloseDocuments" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -959,7 +966,7 @@
       </output>
     </operation>
     <operation name="groundCloseReportsReprint">
-      <s1:operation soapAction="http://fedex.com/ws/close/v4/groundCloseReportsReprint" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/close/v5/groundCloseReportsReprint" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>

@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns:ns="http://fedex.com/ws/rate/v18" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="RateServiceDefinitions" targetNamespace="http://fedex.com/ws/rate/v18" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions xmlns:ns="http://fedex.com/ws/rate/v20" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="RateServiceDefinitions" targetNamespace="http://fedex.com/ws/rate/v20" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/rate/v18" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/rate/v20" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="RateReply" type="ns:RateReply" />
       <xs:element name="RateRequest" type="ns:RateRequest" />
-      <xs:simpleType name="AccessorRoleType">
-        <xs:annotation>
-          <xs:documentation>Specifies the role that identifies the permissions the accessor of the pending shipment.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="SHIPMENT_COMPLETOR" />
-          <xs:enumeration value="SHIPMENT_INITIATOR" />
-        </xs:restriction>
-      </xs:simpleType>
       <xs:complexType name="AdditionalLabelsDetail">
         <xs:annotation>
           <xs:documentation>Specifies additional labels to be produced. All required labels for shipments will be produced without the need to request additional labels. These are only available as thermal labels.</xs:documentation>
@@ -110,6 +101,21 @@
           <xs:enumeration value="LICENSEE" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="AncillaryFeeAndTax">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Type" type="ns:AncillaryFeeAndTaxType" />
+          <xs:element minOccurs="0" name="Description" type="xs:string" />
+          <xs:element minOccurs="0" name="Amount" type="ns:Money" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="AncillaryFeeAndTaxType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CLEARANCE_ENTRY_FEE" />
+          <xs:enumeration value="GOODS_AND_SERVICES_TAX" />
+          <xs:enumeration value="HARMONIZED_SALES_TAX" />
+          <xs:enumeration value="OTHER" />
+        </xs:restriction>
+      </xs:simpleType>
       <xs:simpleType name="B13AFilingOptionType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="FEDEX_TO_STAMP" />
@@ -187,6 +193,37 @@
           <xs:enumeration value="SUM_OF_PACKAGES" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="CleansedAddressAndLocationDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CountryCode" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>This represents the internal FedEx-system recognized country code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="StateOrProvinceCode" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>This represents the internal FedEx-system recognized state or province code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="PostalCode" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>This represents the internal FedEx-system recognized postal code.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="ServiceArea" type="xs:string" />
+          <xs:element minOccurs="0" name="LocationId" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The unique location identifier</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="LocationNumber" type="xs:int">
+            <xs:annotation>
+              <xs:documentation>The op-co specific numeric identifier for a location</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="AirportId" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:simpleType name="ClearanceBrokerageType">
         <xs:annotation>
           <xs:documentation>Specifies the type of brokerage to be applied to a shipment.</xs:documentation>
@@ -418,6 +455,8 @@
           </xs:element>
           <xs:element minOccurs="0" name="DerivedShipmentSignatureOption" type="ns:SignatureOptionDetail" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="DerivedPackageSignatureOptions" type="ns:SignatureOptionDetail" />
+          <xs:element minOccurs="0" name="DerivedOriginDetail" type="ns:CleansedAddressAndLocationDetail" />
+          <xs:element minOccurs="0" name="DerivedDestinationDetail" type="ns:CleansedAddressAndLocationDetail" />
           <xs:element minOccurs="0" name="CommitTimestamp" type="xs:dateTime">
             <xs:annotation>
               <xs:documentation>THe delivery commitment date/time. Express Only.</xs:documentation>
@@ -529,14 +568,11 @@
           <xs:element minOccurs="0" name="Name" type="xs:string" />
           <xs:element minOccurs="0" name="NumberOfPieces" type="xs:nonNegativeInteger" />
           <xs:element minOccurs="0" name="Description" type="xs:string" />
+          <xs:element minOccurs="0" name="Purpose" type="ns:CommodityPurposeType" />
           <xs:element minOccurs="0" name="CountryOfManufacture" type="xs:string" />
           <xs:element minOccurs="0" name="HarmonizedCode" type="xs:string" />
           <xs:element minOccurs="0" name="Weight" type="ns:Weight" />
-          <xs:element minOccurs="0" name="Quantity" type="xs:decimal">
-            <xs:annotation>
-              <xs:documentation>This field is used for enterprise transactions.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
+          <xs:element minOccurs="0" name="Quantity" type="xs:decimal" />
           <xs:element minOccurs="0" name="QuantityUnits" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="AdditionalMeasures" type="ns:Measure">
             <xs:annotation>
@@ -561,6 +597,12 @@
           </xs:element>
         </xs:sequence>
       </xs:complexType>
+      <xs:simpleType name="CommodityPurposeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="BUSINESS" />
+          <xs:enumeration value="CONSUMER" />
+        </xs:restriction>
+      </xs:simpleType>
       <xs:complexType name="ConfigurableLabelReferenceEntry">
         <xs:sequence>
           <xs:element minOccurs="0" name="ZoneNumber" type="xs:positiveInteger" />
@@ -1352,6 +1394,14 @@
           <xs:element minOccurs="0" maxOccurs="unbounded" name="Options" type="ns:DocumentFormatOptionType" />
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="DocumentLineItem">
+        <xs:annotation>
+          <xs:documentation>This is a structure for providing document line item content (in part or in whole) to a service.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Values" type="ns:KeyValueDetail" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:simpleType name="DropoffType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="BUSINESS_SERVICE_CENTER" />
@@ -1361,76 +1411,12 @@
           <xs:enumeration value="STATION" />
         </xs:restriction>
       </xs:simpleType>
-      <xs:complexType name="EMailLabelDetail">
+      <xs:complexType name="EMailDetail">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Message" type="xs:string">
+          <xs:element minOccurs="0" name="EmailAddress" type="xs:string" />
+          <xs:element minOccurs="0" name="Name" type="xs:string">
             <xs:annotation>
-              <xs:documentation>Content of the email message.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="Recipients" type="ns:EMailRecipient" />
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="EMailNotificationDetail">
-        <xs:annotation>
-          <xs:documentation>Information describing email notifications that will be sent in relation to events that occur during package movement</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-          <xs:element minOccurs="0" name="PersonalMessage" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>A message that will be included in the email notifications</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="Recipients" type="ns:EMailNotificationRecipient">
-            <xs:annotation>
-              <xs:documentation>Information describing the destination of the email, format of the email and events to be notified on</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:simpleType name="EMailNotificationEventType">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="ON_DELIVERY" />
-          <xs:enumeration value="ON_EXCEPTION" />
-          <xs:enumeration value="ON_SHIPMENT" />
-          <xs:enumeration value="ON_TENDER" />
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:simpleType name="EMailNotificationFormatType">
-        <xs:annotation>
-          <xs:documentation>The format of the email</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="HTML" />
-          <xs:enumeration value="TEXT" />
-          <xs:enumeration value="WIRELESS" />
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:complexType name="EMailNotificationRecipient">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="EMailNotificationRecipientType" type="ns:EMailNotificationRecipientType">
-            <xs:annotation>
-              <xs:documentation>Identifies the relationship this email recipient has to the shipment.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="EMailAddress" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>The email address to send the notification to</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="NotificationEventsRequested" type="ns:EMailNotificationEventType">
-            <xs:annotation>
-              <xs:documentation>The types of email notifications being requested for this recipient.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Format" type="ns:EMailNotificationFormatType">
-            <xs:annotation>
-              <xs:documentation>The format of the email notification.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Localization" type="ns:Localization">
-            <xs:annotation>
-              <xs:documentation>The language/locale to be used in this email notification.</xs:documentation>
+              <xs:documentation>Specifies the name associated with the email address.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -1443,33 +1429,6 @@
           <xs:enumeration value="SHIPPER" />
         </xs:restriction>
       </xs:simpleType>
-      <xs:complexType name="EMailRecipient">
-        <xs:annotation>
-          <xs:documentation>Information describing the address of of the email recipient, role of the email recipient and languages that are requested to be supported.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-          <xs:element minOccurs="0" name="EmailAddress" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>EMail address of the recipient.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Role" type="ns:AccessorRoleType">
-            <xs:annotation>
-              <xs:documentation>The relationship that the customer has to the pending shipment.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="OptionsRequested" type="ns:EmailOptionsRequested">
-            <xs:annotation>
-              <xs:documentation>Specifies how the email notification for the pending shipment need to be processed.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Localization" type="ns:Localization">
-            <xs:annotation>
-              <xs:documentation>Localization and language details specified by the recipient of the EMail.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
       <xs:complexType name="EdtCommodityTax">
         <xs:sequence>
           <xs:element minOccurs="0" name="HarmonizedCode" type="xs:string" />
@@ -1525,20 +1484,6 @@
           <xs:enumeration value="TRANSPORT_FACILITIES_TAX" />
         </xs:restriction>
       </xs:simpleType>
-      <xs:simpleType name="EmailOptionType">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="SUPPRESS_ACCESS_EMAILS" />
-          <xs:enumeration value="SUPPRESS_ADDITIONAL_LANGUAGES" />
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:complexType name="EmailOptionsRequested">
-        <xs:annotation>
-          <xs:documentation>Specifies how to apply the localization detail to the current context.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="Options" type="ns:EmailOptionType" />
-        </xs:sequence>
-      </xs:complexType>
       <xs:complexType name="EtdDetail">
         <xs:annotation>
           <xs:documentation>Electronic Trade document references used with the ETD special service.</xs:documentation>
@@ -2037,6 +1982,11 @@
               <xs:documentation>Specification of handling-unit packaging for this commodity or class line.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="Pieces" type="xs:nonNegativeInteger">
+            <xs:annotation>
+              <xs:documentation>Number of pieces for this commodity or class line.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element minOccurs="0" name="Description" type="xs:string">
             <xs:annotation>
               <xs:documentation>Customer-provided description for this commodity or class line.</xs:documentation>
@@ -2397,6 +2347,12 @@
           <xs:element minOccurs="0" name="LicenseOrExemptionNumber" type="xs:string" />
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="KeyValueDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Key" type="xs:string" />
+          <xs:element minOccurs="0" name="Value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:simpleType name="LabelFormatType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="COMMON2D" />
@@ -2707,11 +2663,45 @@
           </xs:element>
           <xs:element minOccurs="0" maxOccurs="unbounded" name="MessageParameters" type="ns:NotificationParameter">
             <xs:annotation>
-              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) witout having to parse the message string.</xs:documentation>
+              <xs:documentation>A collection of name/value pairs that provide specific data to help the client determine the nature of an error (or warning, etc.) without having to parse the message string.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="NotificationDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="NotificationType" type="ns:NotificationType">
+            <xs:annotation>
+              <xs:documentation>Indicates the type of notification that will be sent.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="EmailDetail" type="ns:EMailDetail">
+            <xs:annotation>
+              <xs:documentation>Specifies the email notification details.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="Localization" type="ns:Localization">
+            <xs:annotation>
+              <xs:documentation>Specifies the localization for this notification.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="NotificationEventType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ON_DELIVERY" />
+          <xs:enumeration value="ON_ESTIMATED_DELIVERY" />
+          <xs:enumeration value="ON_EXCEPTION" />
+          <xs:enumeration value="ON_SHIPMENT" />
+          <xs:enumeration value="ON_TENDER" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="NotificationFormatType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="HTML" />
+          <xs:enumeration value="TEXT" />
+        </xs:restriction>
+      </xs:simpleType>
       <xs:complexType name="NotificationParameter">
         <xs:sequence>
           <xs:element minOccurs="0" name="Id" type="xs:string">
@@ -2733,6 +2723,11 @@
           <xs:enumeration value="NOTE" />
           <xs:enumeration value="SUCCESS" />
           <xs:enumeration value="WARNING" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="NotificationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EMAIL" />
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="Op900Detail">
@@ -2949,11 +2944,6 @@
           <xs:element minOccurs="0" name="ExpirationDate" type="xs:date">
             <xs:annotation>
               <xs:documentation>Date after which the pending shipment will no longer be available for completion.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="EmailLabelDetail" type="ns:EMailLabelDetail">
-            <xs:annotation>
-              <xs:documentation>Only used with type of EMAIL.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="0" name="ProcessingOptions" type="ns:PendingShipmentProcessingOptionsRequested" />
@@ -3576,6 +3566,11 @@
               <xs:documentation>This attribute indicates the currency the caller requests to have used in all returned monetary values (when a choice is possible).</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="ShipmentAuthorizationDetail" type="ns:ShipmentAuthorizationDetail">
+            <xs:annotation>
+              <xs:documentation>Specifies details about the entity responsible for the shipment.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element minOccurs="0" name="Shipper" type="ns:Party" />
           <xs:element minOccurs="0" name="Recipient" type="ns:Party" />
           <xs:element minOccurs="0" name="RecipientLocationNumber" type="xs:string" />
@@ -3747,7 +3742,6 @@
           <xs:enumeration value="PAYOR_ACCOUNT_SHIPMENT" />
           <xs:enumeration value="PAYOR_LIST_PACKAGE" />
           <xs:enumeration value="PAYOR_LIST_SHIPMENT" />
-          <xs:enumeration value="PAYOR_RETAIL_PACKAGE" />
           <xs:enumeration value="PREFERRED_ACCOUNT_PACKAGE" />
           <xs:enumeration value="PREFERRED_ACCOUNT_SHIPMENT" />
           <xs:enumeration value="PREFERRED_LIST_PACKAGE" />
@@ -3848,6 +3842,11 @@
           <xs:enumeration value="STANDARD_OVERNIGHT" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="ShipmentAuthorizationDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AccountNumber" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="ShipmentConfigurationData">
         <xs:annotation>
           <xs:documentation>Specifies data structures that may be re-used multiple times with s single shipment.</xs:documentation>
@@ -3875,6 +3874,32 @@
               <xs:documentation>Total shipment dry ice weight for all packages.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="ProcessingOptions" type="ns:ShipmentDryIceProcessingOptionsRequested" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ShipmentDryIceProcessingOptionType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="SHIPMENT_LEVEL_DRY_ICE_ONLY" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ShipmentDryIceProcessingOptionsRequested">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Options" type="ns:ShipmentDryIceProcessingOptionType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ShipmentEventNotificationDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AggregationType" type="ns:ShipmentNotificationAggregationType" />
+          <xs:element minOccurs="0" name="PersonalMessage" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="EventNotifications" type="ns:ShipmentEventNotificationSpecification" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ShipmentEventNotificationSpecification">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Role" type="ns:ShipmentNotificationRoleType" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Events" type="ns:NotificationEventType" />
+          <xs:element minOccurs="0" name="NotificationDetail" type="ns:NotificationDetail" />
+          <xs:element minOccurs="0" name="FormatSpecification" type="ns:ShipmentNotificationFormatSpecification" />
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="ShipmentLegRateDetail">
@@ -4024,6 +4049,26 @@
           </xs:element>
         </xs:sequence>
       </xs:complexType>
+      <xs:simpleType name="ShipmentNotificationAggregationType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="PER_PACKAGE" />
+          <xs:enumeration value="PER_SHIPMENT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="ShipmentNotificationFormatSpecification">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Type" type="ns:NotificationFormatType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ShipmentNotificationRoleType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="BROKER" />
+          <xs:enumeration value="OTHER" />
+          <xs:enumeration value="RECIPIENT" />
+          <xs:enumeration value="SHIPPER" />
+          <xs:enumeration value="THIRD_PARTY" />
+        </xs:restriction>
+      </xs:simpleType>
       <xs:simpleType name="ShipmentOnlyFieldsType">
         <xs:annotation>
           <xs:documentation>These values identify which package-level data values will be provided at the shipment-level.</xs:documentation>
@@ -4109,9 +4154,19 @@
               <xs:documentation>Total of all values under this shipment's dutiesAndTaxes; only provided if estimated duties and taxes were calculated for this shipment.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="TotalAncillaryFeesAndTaxes" type="ns:Money">
+            <xs:annotation>
+              <xs:documentation>Identifies the total amount of the shipment-level fees and taxes that are not based on transportation charges or commodity-level estimated duties and taxes.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="TotalDutiesTaxesAndFees" type="ns:Money">
+            <xs:annotation>
+              <xs:documentation>The total of the totalDutiesAndTaxes plus the totalAncillaryFeesAndTaxes.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element minOccurs="0" name="TotalNetChargeWithDutiesAndTaxes" type="ns:Money">
             <xs:annotation>
-              <xs:documentation>This shipment's totalNetCharge + totalDutiesAndTaxes; only provided if estimated duties and taxes were calculated for this shipment AND duties, taxes and transportation charges are all paid by the same sender's account.</xs:documentation>
+              <xs:documentation>This shipment's totalNetCharge + totalDutiesTaxesAndFees; some duties and taxes are only provided if estimated duties and taxes were calculated for this shipment AND duties, taxes and transportation charges are all paid by the same sender's account.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="0" maxOccurs="unbounded" name="ShipmentLegRateDetails" type="ns:ShipmentLegRateDetail">
@@ -4149,6 +4204,11 @@
               <xs:documentation>All commodity-based duties and taxes applicable to this shipment.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="AncillaryFeesAndTaxes" type="ns:AncillaryFeeAndTax">
+            <xs:annotation>
+              <xs:documentation>Identifies the shipment-level fees and taxes that are not based on transportation charges or commodity-level estimated duties and taxes.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element minOccurs="0" name="VariableHandlingCharges" type="ns:VariableHandlingCharges">
             <xs:annotation>
               <xs:documentation>The "order level" variable handling charges.</xs:documentation>
@@ -4167,13 +4227,14 @@
           <xs:enumeration value="CALL_BEFORE_DELIVERY" />
           <xs:enumeration value="COD" />
           <xs:enumeration value="CUSTOM_DELIVERY_WINDOW" />
+          <xs:enumeration value="CUT_FLOWERS" />
           <xs:enumeration value="DANGEROUS_GOODS" />
           <xs:enumeration value="DO_NOT_BREAK_DOWN_PALLETS" />
           <xs:enumeration value="DO_NOT_STACK_PALLETS" />
           <xs:enumeration value="DRY_ICE" />
           <xs:enumeration value="EAST_COAST_SPECIAL" />
           <xs:enumeration value="ELECTRONIC_TRADE_DOCUMENTS" />
-          <xs:enumeration value="EMAIL_NOTIFICATION" />
+          <xs:enumeration value="EVENT_NOTIFICATION" />
           <xs:enumeration value="EXTREME_LENGTH" />
           <xs:enumeration value="FEDEX_ONE_RATE" />
           <xs:enumeration value="FOOD" />
@@ -4198,6 +4259,7 @@
           <xs:enumeration value="RETURN_SHIPMENT" />
           <xs:enumeration value="SATURDAY_DELIVERY" />
           <xs:enumeration value="SATURDAY_PICKUP" />
+          <xs:enumeration value="THIRD_PARTY_CONSIGNEE" />
           <xs:enumeration value="TOP_LOAD" />
         </xs:restriction>
       </xs:simpleType>
@@ -4214,7 +4276,11 @@
           <xs:element minOccurs="0" name="CodDetail" type="ns:CodDetail" />
           <xs:element minOccurs="0" name="DeliveryOnInvoiceAcceptanceDetail" type="ns:DeliveryOnInvoiceAcceptanceDetail" />
           <xs:element minOccurs="0" name="HoldAtLocationDetail" type="ns:HoldAtLocationDetail" />
-          <xs:element minOccurs="0" name="EMailNotificationDetail" type="ns:EMailNotificationDetail" />
+          <xs:element minOccurs="0" name="EventNotificationDetail" type="ns:ShipmentEventNotificationDetail">
+            <xs:annotation>
+              <xs:documentation>This replaces eMailNotificationDetail</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element minOccurs="0" name="ReturnShipmentDetail" type="ns:ReturnShipmentDetail" />
           <xs:element minOccurs="0" name="PendingShipmentDetail" type="ns:PendingShipmentDetail">
             <xs:annotation>
@@ -4384,7 +4450,6 @@
           <xs:documentation>Specifies the image format used for a shipping document.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="DPL" />
           <xs:enumeration value="EPL2" />
           <xs:enumeration value="PDF" />
           <xs:enumeration value="PNG" />
@@ -4890,7 +4955,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="1" fixed="18" name="Major" type="xs:int">
+          <xs:element minOccurs="1" fixed="20" name="Major" type="xs:int">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -4924,7 +4989,7 @@
   <binding name="RateServiceSoapBinding" type="ns:RatePortType">
     <s1:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <operation name="getRates">
-      <s1:operation soapAction="http://fedex.com/ws/rate/v18/getRates" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/rate/v20/getRates" style="document" />
       <input>
         <s1:body use="literal" />
       </input>

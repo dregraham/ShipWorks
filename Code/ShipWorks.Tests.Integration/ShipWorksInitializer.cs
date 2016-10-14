@@ -122,6 +122,9 @@ namespace ShipWorks.Tests.Integration.MSTest
                 case "berger-pc":
                     instance = Guid.Parse("{AABB7285-a889-46af-87b8-69c10cdbAABB}");
                     break;
+                case "hicks-pc":
+                    instance = Guid.Parse("{2599E819-28C0-4CA1-8810-7A8D3F1FC865}");
+                    break;
                 default:
                     // If instance not specified for pc, look for instance guid from AppSettings.
                     string instanceFromConfig = System.Configuration.ConfigurationManager.AppSettings["ShipWorksInstanceGuid"];

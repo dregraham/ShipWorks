@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -7,7 +8,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
         //note: smartpost gets it account number from the spreadsheet.
-        private const bool justLabels = true;
+        private const bool justLabels = false;
         private readonly ITestOutputHelper output;
 
         public FedExSmartPostIntegrationTest(ITestOutputHelper output)
@@ -20,6 +21,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
         [Theory]
         public void Ship_FedExSmartPost(DataRow row)
         {
+            if (row["SaveLabel"] is DBNull || (string)row["SaveLabel"] != "TRUE")
+            {
+                return;
+            }
+
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
 
             if (PopulateTestObject(row, testObject, FedExSmartPostFixture.SmartPostMapping) &&

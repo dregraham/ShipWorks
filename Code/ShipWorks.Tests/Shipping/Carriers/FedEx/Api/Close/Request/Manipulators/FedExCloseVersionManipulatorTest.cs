@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 {
@@ -64,12 +64,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo4_ForGroundClose()
+        public void Manipulate_SetsMajorTo5_ForGroundClose()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
 
             VersionId version = ((GroundCloseRequest)groundCarrierRequest.Object.NativeRequest).Version;
-            Assert.Equal(4, version.Major);
+            Assert.Equal(5, version.Major);
         }
 
         [Fact]
@@ -102,12 +102,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo4_ForSmartPostClose()
+        public void Manipulate_SetsMajorTo5_ForSmartPostClose()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
             VersionId version = ((SmartPostCloseRequest)smartPostCarrierRequest.Object.NativeRequest).Version;
-            Assert.Equal(4, version.Major);
+            Assert.Equal(5, version.Major);
         }
 
         [Fact]

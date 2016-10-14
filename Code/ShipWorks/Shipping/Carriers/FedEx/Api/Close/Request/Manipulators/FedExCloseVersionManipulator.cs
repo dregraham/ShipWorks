@@ -1,6 +1,6 @@
-using System;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 {
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             return new VersionId
             {
                 ServiceId = "clos",
-                Major = 4,
+                Major = 5,
                 Intermediate = 0,
                 Minor = 0
             };
