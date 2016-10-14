@@ -40,12 +40,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public void Save()
         {
-            // Tracking and cost
-            shipment.TrackingNumber = response.TrackingNumber;
-            shipment.ShipmentCost = shipment.Postal.NoPostage ? 0 : response.FinalPostage;
-            shipment.Postal.Endicia.TransactionID = response.TransactionID;
+            try
+            {
+                // Tracking and cost
+                shipment.TrackingNumber = response.TrackingNumber;
+                shipment.ShipmentCost = shipment.Postal.NoPostage ? 0 : response.FinalPostage;
+                shipment.Postal.Endicia.TransactionID = response.TransactionID;
 
-            SaveLabelImages(shipment, response);
+                SaveLabelImages(shipment, response);
+            }
+            catch (Exception ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
         }
 
         /// <summary>

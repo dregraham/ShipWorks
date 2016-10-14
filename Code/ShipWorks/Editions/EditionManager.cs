@@ -4,14 +4,19 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Editions
@@ -108,10 +113,32 @@ namespace ShipWorks.Editions
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, storeEntities);
             restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, storeEntities);
 
+            UpdateDefaultShippingType();
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
 
             // Let anyone who cares know that enabled carriers may have changed.
             Messenger.Current.Send(new EnabledCarriersChangedMessage(new object(), new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
+        }
+
+        /// <summary>
+        /// Updates the shipping setting default shipment type.  This is to keep restricted shipment types in sync with
+        /// the selected default type.  i.e. if UPS is restricted and it was the default type, the next created shipment
+        /// would be created as UPS.  So instead, we'll update the default type to be None.
+        /// </summary>
+        private static void UpdateDefaultShippingType()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingSettings shippingSettings = lifetimeScope.Resolve<IShippingSettings>();
+                IShipmentTypeManager shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
+
+                IShippingSettingsEntity shippingSettingsEntity = shippingSettings.FetchReadOnly();
+
+                if (shipmentTypeManager.ShipmentTypeCodes.None(x => x == shippingSettingsEntity.DefaultShipmentTypeCode))
+                {
+                    shippingSettings.SetDefaultProvider(ShipmentTypeCode.None);
+                }
+            }
         }
 
         /// <summary>
@@ -120,7 +147,8 @@ namespace ShipWorks.Editions
         ///
         /// This will return an modified list of restrictions if only trial restrictions exist.
         /// </summary>
-        public static List<EditionRestriction> RemoveRestrictionIfNeeded(EditionFeature editionFeature, object restrictionData, List<EditionRestriction> restrictions, List<StoreEntity> stores)
+        public static List<EditionRestriction> RemoveRestrictionIfNeeded(EditionFeature editionFeature,
+            object restrictionData, List<EditionRestriction> restrictions, List<StoreEntity> stores)
         {
             // Get the feature restrictions
             List<EditionRestriction> allFeatureRestrictions = restrictions
