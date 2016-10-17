@@ -31,9 +31,9 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// </summary>
         public override IInsureShipResponse Submit()
         {
-            Shipment.InsurancePolicy = new InsurancePolicyEntity()
+            Shipment.InsurancePolicy = Shipment.InsurancePolicy ?? new InsurancePolicyEntity
             {
-                InsureShipStoreName = Affiliate.InsureShipStoreID,
+                InsureShipStoreName = Affiliate.InsureShipPolicyID,
                 CreatedWithApi = false
             };
 

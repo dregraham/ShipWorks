@@ -3,6 +3,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
@@ -13,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
     public class FedExRateRequest : CarrierRequest
     {
         private readonly IFedExServiceGateway serviceGateway;
-        private readonly ICarrierResponseFactory responseFactory;
+        private readonly IFedExResponseFactory responseFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
 
         ///// <summary>
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request
         /// <param name="serviceGateway">The service gateway.</param>
         /// <param name="responseFactory">The response factory.</param>
         /// <param name="settingsRepository">The settings repository.</param>
-        public FedExRateRequest(IEnumerable<ICarrierRequestManipulator> manipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway serviceGateway, ICarrierResponseFactory responseFactory, ICarrierSettingsRepository settingsRepository)
+        public FedExRateRequest(IEnumerable<ICarrierRequestManipulator> manipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway serviceGateway, IFedExResponseFactory responseFactory, ICarrierSettingsRepository settingsRepository)
             : base(manipulators, shipmentEntity)
         {
             this.serviceGateway = serviceGateway;

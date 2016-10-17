@@ -6,12 +6,12 @@ CHANGES (US Grn Dom)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
 605634					11		CS			GROUND_HOME_DELIVERY FEDEX_GROUND							7/13/2015				Per FedEx
-	   
+
 =================================================================================
 CHANGES (US Exp Intl)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
- 
+
 
 
 =================================================================================
@@ -25,11 +25,16 @@ CHANGES (US Exp Dom - Alcohol)
 CHANGES (US Exp Intl)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
-413230					54		L			LB					KG										7/10/2015				Change based on FedEx error
-413299					44		CT			500					10										7/10/2015				Weight error from FedEx
+413230					54		L, CT, DI	KG					LB										7/10/2015				Change based on FedEx error
 N/a						N/A		EQ			n/a					n/a										7/14/2015				ETD error was thrown. this overrides and doesn't send ETD when not appropriate
-413235					59		AO			3/17/2015			3/17/2016								7/14/2015				fixed fedex error
-413236					60		AO			3/17/2015			3/17/2016								7/14/2015				fixed fedex error
+413235					59		AO			3/17/2015			3/17/2016								7/14/2015				Updated LicenseOrPermitExpirationDate to a date in the future
+413236					60		AO			3/17/2015			3/17/2016								7/14/2015				Updated LicenseOrPermitExpirationDate to a date in the future
+413239					63		AI			RETURNS_CLEARANCE	NULL									10/17/2016				Request was failing with "Invalid return associated outbound tracking number"
+413240					63		DJ			10					60										10/17/2016				Got error "Weight - Package weight exceeds maximum for requested" (also to match baseline)
+413240					63		AI			RETURNS_CLEARANCE	NULL									10/17/2016				Request was failing with "Invalid return associated outbound tracking number"
+413240					63		BU			NULL				OTHER									10/17/2016				This is needed to get the request to match the baseline
+413240					63		DI			KG					LB										10/17/2016				Got error "Weight - Package weight exceeds maximum for requested" (also to match baseline)
+
 
 =================================================================================
 CHANGES (CA Exp Intl)
@@ -49,3 +54,12 @@ SO-1008					13		J			150					1										7/17/2015				Invalid weight error
 ES-1009					14		J			15					1										7/17/2015				Invalid weight error
 SO-1008					13		AX			155					1										7/17/2015				Invalid weight error
 ES-1009					14		AX			25					1										7/17/2015				Invalid weight error
+
+=================================================================================
+CHANGES (US Grn Dom, Intl & Home Del)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605804					76		BC								USD										10/17/2016				Missing
+605804					76		BD								100										10/17/2016				Missing
+605804					76		EF								OTHER									10/17/2016				Missing
+605804					76		EG								Outbound shipment						10/17/2016				Missing

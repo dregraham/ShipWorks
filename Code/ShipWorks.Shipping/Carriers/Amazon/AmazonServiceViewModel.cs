@@ -3,7 +3,6 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls.MultiValueBinders;
 using System;
 using System.Collections.Generic;
@@ -47,32 +46,46 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAmazonRatesRetrieved(AmazonRatesRetrievedMessage amazonRatesRetrievedMessage)
         {
-            List<AmazonRateTag> services = new List<AmazonRateTag>();
-            foreach (RateResult rate in amazonRatesRetrievedMessage.RateGroup.Rates)
+            string selectedServiceId = ShippingService?.ShippingServiceId;
+
+            ServicesAvailable = amazonRatesRetrievedMessage.RateGroup.Rates
+                .Select(x => x.Tag)
+                .Cast<AmazonRateTag>()
+                .DefaultIfEmpty(CreateNoRateTag())
+                .ToList();
+
+            ReselectRate(selectedServiceId);
+        }
+
+        /// <summary>
+        /// Create a no-rate tag
+        /// </summary>
+        private AmazonRateTag CreateNoRateTag()
+        {
+            return new AmazonRateTag
             {
-                services.Add((AmazonRateTag) rate.Tag);
+                Description = "No rates are available for the shipment.",
+                ShippingServiceId = "-1",
+                ShippingServiceOfferId = null,
+                CarrierName = null
+            };
+        }
+
+        /// <summary>
+        /// Reselect the given rate, if possible
+        /// </summary>
+        private void ReselectRate(string selectedServiceId)
+        {
+            if (shippingServiceBinder.IsMultiValued)
+            {
+                return;
             }
 
-            if (!services.Any())
+            AmazonRateTag selectedRate = ServicesAvailable.FirstOrDefault(s => s.ShippingServiceId == selectedServiceId);
+            if (selectedRate != null)
             {
-                AmazonRateTag selectedRateTag = new AmazonRateTag
-                {
-                    Description = "No rates are available for the shipment.",
-                    ShippingServiceId = "-1",
-                    ShippingServiceOfferId = null,
-                    CarrierName = null
-                };
-                services.Insert(0, selectedRateTag);
-                ShippingService = selectedRateTag;
+                ShippingService = selectedRate;
             }
-            else if (!shippingServiceBinder.IsMultiValued && services.All(s => s.ShippingServiceId != ShippingService?.ShippingServiceId))
-            {
-                // The selected service id is no longer valid in the rates returned, so select the first one in the list.
-                ShippingService = services.First();
-            }
-
-            ServicesAvailable = services;
-            shippingServiceBinder.PropertyValue = ShippingService;
         }
 
         /// <summary>

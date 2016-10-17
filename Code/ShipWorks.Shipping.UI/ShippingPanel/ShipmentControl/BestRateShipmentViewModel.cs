@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -31,6 +32,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Constructor
         /// </summary>
         public BestRateShipmentViewModel(IMessenger messenger,
+            ISchedulerProvider schedulerProvider,
             IDimensionsManager dimensionsManager,
             IShippingViewModelFactory shippingViewModelFactory,
             ICustomsManager customsManager) : base(null, null, messenger, dimensionsManager, shippingViewModelFactory, customsManager)
@@ -40,23 +42,21 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             serviceLevels.Clear();
             EnumHelper.GetEnumList<ServiceLevelType>().Select(x => x.Value).ToList().ForEach(slt => serviceLevels.Add((int) slt, EnumHelper.GetDescription(slt)));
 
-            subscriptions = new CompositeDisposable(
-                SubscribeToRatesRetrieval());
+            subscriptions = new CompositeDisposable(SubscribeToRatesRetrieval(schedulerProvider));
         }
 
         /// <summary>
         /// Subscribe to rates retrieving and retrieved messages so we can update the
         /// rate text.
         /// </summary>
-        public IDisposable SubscribeToRatesRetrieval()
+        public IDisposable SubscribeToRatesRetrieval(ISchedulerProvider schedulerProvider)
         {
-            return new CompositeDisposable(
-                messenger.OfType<RatesRetrievingMessage>()
-                    .Subscribe(_ => RatesLoaded = false),
-                messenger.OfType<RatesRetrievingMessage>()
-                    .Select(GetMatchingRatesRetrievedMessage)
-                    .Switch()
-                    .Subscribe(_ => RatesLoaded = true));
+            return messenger.OfType<RatesRetrievingMessage>()
+                .Do(_ => RatesLoaded = false)
+                .Select(GetMatchingRatesRetrievedMessage)
+                .Switch()
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(_ => RatesLoaded = true);
         }
 
         /// <summary>

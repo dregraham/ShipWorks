@@ -32,24 +32,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         }
 
         [Fact]
-        public void GetDataSources_ReturnsDataSourceProviders_WithOnlyOneCustomDataSource()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
-                dataSource.SetupGet(d => d.IsCustom).Returns(true);
-
-                Mock<IShipWorksDbProviderFactory> providerFactory = mock.Mock<IShipWorksDbProviderFactory>();
-                Mock<IEncryptionProviderFactory> encryptionFactory = mock.Mock<IEncryptionProviderFactory>();
-                Func<IOdbcDataSource> odbcDataSourceFactory = () => new EncryptedOdbcDataSource(providerFactory.Object, encryptionFactory.Object);
-                var testObject = mock.Create<OdbcDataSourceRepository>(new TypedParameter(typeof(Func<IOdbcDataSource>), odbcDataSourceFactory));
-                var odbcDataSources = testObject.GetDataSources();
-
-                Assert.Equal(1, odbcDataSources.Count(d => d.IsCustom));
-            }
-        }
-
-        [Fact]
         public void GetDataSources_ReturnsDataSourceProviders_WithNamesFromDsnProvider()
         {
             using (var mock = AutoMock.GetLoose())
@@ -77,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         }
 
         [Fact]
-        public void GetDataSources_ReturnsCollectionOfFiveDataSourcesPlusCustom_WhenGetNextDsnNameReturnsFiveDsns()
+        public void GetDataSources_ReturnsCollectionOfFiveDataSources_WhenGetNextDsnNameReturnsFiveDsns()
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -88,7 +70,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
                 var testObject = mock.Create<OdbcDataSourceRepository>();
                 var odbcDataSources = testObject.GetDataSources();
 
-                Assert.Equal(6, odbcDataSources.Count());
+                Assert.Equal(5, odbcDataSources.Count());
             }
         }
 

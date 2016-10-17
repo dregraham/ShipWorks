@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Core.Messaging;
@@ -767,6 +768,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ShipmentControl
         {
             using (TestMessenger messenger = new TestMessenger())
             {
+                mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
                 mock.Provide<IMessenger>(messenger);
 
                 shipment.Processed = false;
