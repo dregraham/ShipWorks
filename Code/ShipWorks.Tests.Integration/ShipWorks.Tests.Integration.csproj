@@ -258,7 +258,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataSources\TestsWeWantToChange.txt" />
+    <Content Include="DataSources\FedExAll\TestsWeWantToChange.txt" />
     <Content Include="Utilities\GenerateTestData.sql" />
   </ItemGroup>
   <ItemGroup>
