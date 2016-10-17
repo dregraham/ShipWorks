@@ -4,6 +4,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
@@ -15,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request
         
         private Mock<IFedExServiceGateway> fedExService;
         private Mock<ICarrierResponse> carrierResponse;
-        private Mock<ICarrierResponseFactory> responseFactory;
+        private Mock<IFedExResponseFactory> responseFactory;
         
         private Mock<ICarrierRequestManipulator> firstManipulator;
         private Mock<ICarrierRequestManipulator> secondManipulator;
@@ -33,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request
 
             carrierResponse = new Mock<ICarrierResponse>();
 
-            responseFactory = new Mock<ICarrierResponseFactory>();
+            responseFactory = new Mock<IFedExResponseFactory>();
             responseFactory.Setup(f => f.CreateTrackResponse(It.IsAny<TrackReply>(), It.IsAny<CarrierRequest>())).Returns(carrierResponse.Object);
 
             firstManipulator = new Mock<ICarrierRequestManipulator>();
