@@ -76,13 +76,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         }
 
         [Fact]
-        public void Save_ThrowsOnTracException_WhenFormatIsNotSetAndImageIsInvalid()
+        public void Save_ThrowsShippingException_WhenFormatIsNotSetAndImageIsInvalid()
         {
             var shipment = new ShipmentEntity();
             var response = new ShipmentResponse { Label = "a" };
             var testObject = mock.Create<OnTracDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(response));
 
-            Assert.Throws<OnTracException>(() => testObject.Save());
+            Assert.Throws<ShippingException>(() => testObject.Save());
         }
 
         public void Dispose()
