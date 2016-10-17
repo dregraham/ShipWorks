@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
     public class FedExShipResponseTest
     {
         private FedExShipResponse testObject;
-        
+
         private List<ICarrierResponseManipulator> manipulators;
         private Mock<ILabelRepository> mockLabelRepository;
         private Mock<ICarrierResponseManipulator> mockedShipmentManipulator;
@@ -64,11 +64,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
         }
 
         [Fact]
-        public void Process_ManipulatorsApplied_WhenProcessShipmentReplyContainsNoErrors()
+        public void ApplyResponseManipulators_AppliesResponseManipulators_WhenProcessShipmentReplyContainsNoErrors()
         {
-            testObject.Process();
+            testObject.ApplyResponseManipulators();
 
-           mockedShipmentManipulator.Verify(x => x.Manipulate(It.IsAny<ICarrierResponse>()),Times.Once()); 
+            mockedShipmentManipulator.Verify(x => x.Manipulate(It.IsAny<FedExShipResponse>()),Times.Once());
         }
 
         [Fact]
@@ -78,6 +78,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
 
             mockLabelRepository.Verify(x => x.SaveLabels(testObject), Times.Once());
         }
-
     }
 }

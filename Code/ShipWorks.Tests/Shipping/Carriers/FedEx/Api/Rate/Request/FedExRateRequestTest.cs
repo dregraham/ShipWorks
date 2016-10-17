@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
@@ -15,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
         private FedExRateRequest testObject;
 
         private Mock<IFedExServiceGateway> fedExService;
-        private Mock<ICarrierResponse> carrierResponse;
-        private Mock<ICarrierResponseFactory> responseFactory;
+        private Mock<IFedExResponseFactory> responseFactory;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
         private Mock<ICarrierRequestManipulator> firstManipulator;
@@ -32,17 +32,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
 
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
-
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
 
             fedExService = new Mock<IFedExServiceGateway>();
             fedExService.Setup(s => s.GetRates(It.IsAny<RateRequest>(), shipmentEntity)).Returns(new RateReply());
 
-            carrierResponse = new Mock<ICarrierResponse>();
-
-            responseFactory = new Mock<ICarrierResponseFactory>();
-            responseFactory.Setup(f => f.CreateShipResponse(It.IsAny<RateReply>(), It.IsAny<CarrierRequest>(), shipmentEntity)).Returns(carrierResponse.Object);
+            responseFactory = new Mock<IFedExResponseFactory>();
 
             firstManipulator = new Mock<ICarrierRequestManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
@@ -57,10 +53,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
                 secondManipulator.Object
             };
 
-
             testObject = new FedExRateRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, settingsRepository.Object);
         }
-        
+
         [Fact]
         public void CarrierAccountEntity_DelegatesToRepositoryForAccount()
         {
@@ -70,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             // repository was used to fetch the account
             settingsRepository.Verify(r => r.GetAccount(testObject.ShipmentEntity), Times.Once());
         }
-        
+
         [Fact]
         public void CarrierAccountEntity_IsNotNull()
         {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Messaging.Messages.Shipping;
 
@@ -17,16 +18,19 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ILog log;
         private IDisposable subscription;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ApplyProfilePipeline(IObservable<IShipWorksMessage> messageStream,
             IShipmentTypeManager shipmentTypeManager,
+            ISchedulerProvider schedulerProvider,
             Func<Type, ILog> logManager)
         {
             this.messageStream = messageStream;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.schedulerProvider = schedulerProvider;
             log = logManager(typeof(ApplyProfilePipeline));
         }
 
@@ -43,6 +47,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                     shipmentType.ApplyProfile(viewModel.Shipment, x.Profile);
                     return viewModel.ShipmentAdapter;
                 })
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while applying profile to shipment", ex))
                 .Subscribe(x => viewModel.LoadShipment(x));
         }

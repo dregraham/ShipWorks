@@ -3,7 +3,6 @@
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
 using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -33,30 +32,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Read_CallsCheckForChangesNeeded_WhenReadingCustomerKeyThrowsOutOfSyncException()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                SetupEncryption(mock);
-
-                var outOfSyncEntity = mock.MockRepository.Create<ConfigurationEntity>();
-                outOfSyncEntity.Setup(c => c.CustomerKey)
-                    .Throws(new ORMEntityOutOfSyncException("out of sync", outOfSyncEntity.Object));
-
-                var configurationData = mock.Mock<IConfigurationData>();
-                configurationData.SetupSequence(c => c.Fetch())
-                    .Returns(outOfSyncEntity.Object)
-                    .Returns(new ConfigurationEntity { CustomerKey = EncryptedCustomerKey });
-
-
-                var testObject = mock.Create<CustomerLicenseReader>();
-                testObject.Read();
-
-                configurationData.Verify(c => c.CheckForChangesNeeded(), Times.AtLeastOnce);
-            }
-        }
-
-        [Fact]
         public void Read_DoesNotCAllCheckForChangesNeeded_WhenCustomerKeyDoesNotThrow()
         {
             using (var mock = AutoMock.GetLoose())
@@ -64,7 +39,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 SetupEncryption(mock);
 
                 var config = mock.Mock<IConfigurationData>();
-                config.Setup(c => c.Fetch())
+                config.Setup(c => c.FetchReadOnly())
                     .Returns(new ConfigurationEntity { CustomerKey = EncryptedCustomerKey });
 
                 var testObject = mock.Create<CustomerLicenseReader>();
@@ -83,7 +58,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 SetupEncryption(mock);
 
                 mock.Mock<IConfigurationData>()
-                    .Setup(c => c.Fetch())
+                    .Setup(c => c.FetchReadOnly())
                     .Returns(new ConfigurationEntity { CustomerKey = EncryptedCustomerKey });
 
                 var testObject = mock.Create<CustomerLicenseReader>();

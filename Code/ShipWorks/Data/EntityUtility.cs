@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -42,6 +43,7 @@ namespace ShipWorks.Data
 
         #endregion
 
+        static ILog log = LogManager.GetLogger(typeof(EntityUtility));
         static Dictionary<EntityType, int> entitySeedValues = new Dictionary<EntityType, int>();
 
         /// <summary>
@@ -182,16 +184,23 @@ namespace ShipWorks.Data
                 SerializationHelper.Optimization = SerializationOptimization.Fast;
                 SerializationHelper.PreserveObjectIDs = false;
 
-                using (MemoryStream memoryStream = new MemoryStream(1284))
+                try
                 {
-                    BinaryFormatter formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.Clone));
+                    return CloneIt(entity);
+                }
+                catch (Exception ex)
+                {
+                    log.Fatal($"EntityUtility.CloneEntity FAILED. Retrying.", ex);
 
-                    formatter.Serialize(memoryStream, entity);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-
-                    T clone = (T) formatter.Deserialize(memoryStream);
-
-                    return clone;
+                    try
+                    {
+                        return CloneIt(entity);
+                    }
+                    catch (Exception ex2)
+                    {
+                        log.Fatal($"EntityUtility.CloneEntity Retry FAILED. Throwing.", ex2);
+                        throw;
+                    }
                 }
             }
             else
@@ -200,6 +209,24 @@ namespace ShipWorks.Data
                 clone.Fields = entity.Fields.Clone();
                 clone.IsNew = entity.IsNew;
                 clone.IsDirty = entity.IsDirty;
+
+                return clone;
+            }
+        }
+
+        /// <summary>
+        /// Clone the entity
+        /// </summary>
+        static T CloneIt<T>(T entity) where T : EntityBase2
+        {
+            using (MemoryStream memoryStream = new MemoryStream(1284))
+            {
+                BinaryFormatter formatter = new BinaryFormatter(null, new StreamingContext(StreamingContextStates.Clone));
+
+                formatter.Serialize(memoryStream, entity);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                T clone = (T) formatter.Deserialize(memoryStream);
 
                 return clone;
             }

@@ -1,14 +1,10 @@
-﻿using System;
-
-namespace ShipWorks.Data.Administration
+﻿namespace ShipWorks.Data.Administration
 {
+    /// <summary>
+    /// Gives us the installed schema version
+    /// </summary>
     public interface ISqlSchemaVersion
     {
-        /// <summary>
-        /// Get the schema version of the ShipWorks database using the current connection
-        /// </summary>
-        Version GetInstalledSchemaVersion();
-
         /// <summary>
         /// Determines if on a version where customer license is supported
         /// </summary>

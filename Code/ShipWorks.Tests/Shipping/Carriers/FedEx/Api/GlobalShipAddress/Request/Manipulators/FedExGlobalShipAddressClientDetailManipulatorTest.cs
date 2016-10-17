@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             mockSettingsRepository = new Mock<ICarrierSettingsRepository>();
             mockSettingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>()))
                                   .Returns(account);
-
+            
 
             mockCarrierRequest = new Mock<CarrierRequest>(null, shipmentEntity, nativeRequest);
             mockCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);

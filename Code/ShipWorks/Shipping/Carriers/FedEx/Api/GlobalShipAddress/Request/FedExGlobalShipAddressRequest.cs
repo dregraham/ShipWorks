@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
@@ -12,13 +13,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
     public class FedExGlobalShipAddressRequest : CarrierRequest
     {
         private readonly IFedExServiceGateway fedExService;
-        private readonly ICarrierResponseFactory responseFactory;
+        private readonly IFedExResponseFactory responseFactory;
         private readonly FedExAccountEntity accountEntity;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExGlobalShipAddressRequest" /> class.
         /// </summary>
-        public FedExGlobalShipAddressRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipment, ICarrierResponseFactory responseFactory, IFedExServiceGateway fedExService, FedExAccountEntity accountEntity)
+        public FedExGlobalShipAddressRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipment, IFedExResponseFactory responseFactory, IFedExServiceGateway fedExService, FedExAccountEntity accountEntity)
             : base(requestManipulators, shipment)
         {
             this.fedExService = fedExService;

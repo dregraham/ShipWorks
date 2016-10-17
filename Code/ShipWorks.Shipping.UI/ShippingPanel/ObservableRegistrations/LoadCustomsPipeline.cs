@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI.Controls.AddressControl;
 
@@ -15,13 +16,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         private IDisposable subscription;
         private readonly IObservable<IShipWorksMessage> messages;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LoadCustomsPipeline(IObservable<IShipWorksMessage> messages)
+        public LoadCustomsPipeline(IObservable<IShipWorksMessage> messages, ISchedulerProvider schedulerProvider)
         {
             this.messages = messages;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -47,6 +50,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(_ => !viewModel.IsLoadingShipment)
                 .Select(getAdapter)
                 .Where(person => person != null)
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(person =>
                 {
                     model(viewModel).SaveToEntity(person);
