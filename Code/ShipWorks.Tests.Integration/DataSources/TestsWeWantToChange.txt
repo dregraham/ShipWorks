@@ -6,12 +6,12 @@ CHANGES (US Grn Dom)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
 605634					11		CS			GROUND_HOME_DELIVERY FEDEX_GROUND							7/13/2015				Per FedEx
-	   
+
 =================================================================================
 CHANGES (US Exp Intl)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
- 
+
 
 
 =================================================================================
@@ -49,3 +49,12 @@ SO-1008					13		J			150					1										7/17/2015				Invalid weight error
 ES-1009					14		J			15					1										7/17/2015				Invalid weight error
 SO-1008					13		AX			155					1										7/17/2015				Invalid weight error
 ES-1009					14		AX			25					1										7/17/2015				Invalid weight error
+
+=================================================================================
+CHANGES (US Grn Dom, Intl & Home Del)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605804					76		BC								USD										10/17/2016				Missing
+605804					76		BD								100										10/17/2016				Missing
+605804					76		EF								OTHER									10/17/2016				Missing
+605804					76		EG								Outbound shipment						10/17/2016				Missing
