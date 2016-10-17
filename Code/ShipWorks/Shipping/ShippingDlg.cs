@@ -1901,7 +1901,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
-        [NDependIgnoreLongMethod]
         private async void OnVoid(object sender, EventArgs e)
         {
             // Confirm they want to void

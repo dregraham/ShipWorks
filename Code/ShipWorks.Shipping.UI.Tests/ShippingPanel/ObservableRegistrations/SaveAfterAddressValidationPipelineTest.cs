@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.UI.ShippingPanel;
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         public SaveAfterAddressValidationPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 
         [Fact]

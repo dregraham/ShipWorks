@@ -9498,6 +9498,8 @@ namespace ShipWorks.Data.Model
 		CustomerFilterLastActive,
 		///<summary>CustomerFilterExpandedFolders. </summary>
 		CustomerFilterExpandedFolders,
+		///<summary>NextGlobalPostNotificationDate. </summary>
+		NextGlobalPostNotificationDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

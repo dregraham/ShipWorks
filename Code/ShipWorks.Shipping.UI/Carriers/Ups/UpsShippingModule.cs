@@ -108,6 +108,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
                 .AsImplementedInterfaces();
 
+            builder.RegisterType<UpsShipmentTypePreProcessor>().AsSelf();
+
             builder.RegisterType<WorldShipPackageImporter>().AsSelf();
         }
 

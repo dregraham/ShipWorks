@@ -1,19 +1,12 @@
-﻿disable trigger FilterDirtyOrder ON [Order];
-disable trigger OrderAuditTrigger ON [Order];
-disable trigger OrderLabelTrigger ON [Order];
-disable trigger OrderRollupTrigger ON [Order];
-disable trigger OrderShipmentShipSenseStatusTrigger ON [Order];
-disable trigger OrderShipSenseRecognitionStatusTrigger ON [Order];
+﻿SET NUMERIC_ROUNDABORT OFF
 GO
-UPDATE orderTable
-SET orderTable.RollupItemQuantity = ISNULL((SELECT SUM(Quantity) FROM [OrderItem] oi WHERE orderTable.OrderID = oi.OrderID), 0)
-FROM [Order] AS orderTable
-WHERE orderTable.RollupItemQuantity IS NULL
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-enable trigger FilterDirtyOrder ON [Order];
-enable trigger OrderAuditTrigger ON [Order];
-enable trigger OrderLabelTrigger ON [Order];
-enable trigger OrderRollupTrigger ON [Order];
-enable trigger OrderShipmentShipSenseStatusTrigger ON [Order];
-enable trigger OrderShipSenseRecognitionStatusTrigger ON [Order];
+PRINT N'Adding [NextGlobalPostNotificationDate] to [dbo].[UserSettings]'
 GO
+ALTER TABLE [dbo].[UserSettings]
+ADD [NextGlobalPostNotificationDate] [DateTime] NOT NULL
+CONSTRAINT [DF_NOTIFICATION_DATE] DEFAULT '1990-01-01'
+
+ALTER TABLE [dbo].[UserSettings]
+DROP CONSTRAINT [DF_NOTIFICATION_DATE]

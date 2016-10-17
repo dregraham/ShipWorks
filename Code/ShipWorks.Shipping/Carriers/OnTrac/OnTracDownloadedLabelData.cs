@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 {
                     const string error = "Error reading OnTrac label.";
                     log.Error(error, ex);
-                    throw new OnTracException(error, ex);
+                    throw new ShippingException(error, ex);
                 }
             }
 

@@ -50,7 +50,8 @@ namespace ShipWorks.SqlServer.Filters
         // This is the FilterNodePurpose types that this updated should process.  It is in SQL "IN" clause
         // format.
         protected string purposeInParam = string.Format("{0}, {1}", (int) FilterNodePurpose.Standard, (int) FilterNodePurpose.Search);
-        bool _enforceTimeLimit = true;
+
+        private bool _enforceTimeLimit = true;
 
         /// <summary>
         /// Static constructor

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -12,6 +9,9 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -20,7 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public static class UspsUtility
     {
-        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation = new Dictionary<ServiceType, PostalServiceType>
+        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation = 
+            new Dictionary<ServiceType, PostalServiceType>
         {
             {ServiceType.USFC, PostalServiceType.FirstClass},
             {ServiceType.USPM, PostalServiceType.PriorityMail},
@@ -58,6 +59,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.DHLBPMG, PostalServiceType.DhlBpmGround},
             {ServiceType.DHLMPE, PostalServiceType.DhlMarketingExpedited},
             {ServiceType.DHLMPG, PostalServiceType.DhlMarketingGround},
+            {ServiceType.SCGPE, PostalServiceType.GlobalPostEconomy},
+            {ServiceType.SCGPP, PostalServiceType.GlobalPostPriority},
+            {ServiceType.SCGPESS, PostalServiceType.GlobalPostSmartSaverEconomy},
+            {ServiceType.SCGPPSS, PostalServiceType.GlobalPostSmartSaverPriority}
         };
 
         /// <summary>

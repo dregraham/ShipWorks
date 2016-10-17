@@ -474,7 +474,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     string trackingNumber = shipment.TrackingNumber;
 
                     // Get the service used and strip out any non-ascii characters
-                    string serviceUsed = ShippingManager.GetServiceUsed(shipment);
+                    string serviceUsed = ShippingManager.GetOverriddenSerivceUsed(shipment);
                     serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
 
                     // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below

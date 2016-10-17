@@ -51,6 +51,9 @@ namespace ShipWorks.Filters
         // Used to take lock so only one thread can check for changes at a time
         static readonly object checkChangesLock = new object();
 
+        // Wait forever constant
+        private const int WaitForever = -1;
+
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
@@ -442,8 +445,8 @@ namespace ShipWorks.Filters
                 ExceptionMonitor.WrapWorkItem(InitiateQuickFilterCalculationThread),
                 new object[] { });
 
-            // Wait for it to finish.  It's ok if it doesnt.
-            calculatingQuickFilterEvent.WaitOne();
+            // Wait for it to finish.  
+            calculatingQuickFilterEvent.WaitOne(WaitForever, false);
         }
 
         /// <summary>

@@ -25,18 +25,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             this.dataSourceRepository = dataSourceRepository;
         }
 
+        /// <summary>
+        /// Get a list of data sources on the machine
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IOdbcDataSource> GetDataSources()
         {
             return dataSourceRepository.GetDataSources();
         }
 
         /// <summary>
-        /// Create an empty data source
+        /// Create a data source form the given connection string
         /// </summary>
         /// <returns></returns>
-        public IOdbcDataSource GetEmptyDataSource()
+        public IOdbcDataSource GetDataSource(string connectionString)
         {
-            return dataSourceFactory();
+            IOdbcDataSource source = dataSourceFactory();
+            source.ChangeConnection(connectionString);
+
+            return source;
         }
 
         /// <summary>
