@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomesticAlcohol(DataRow row)
         {
-            fedExTestAccountNumber = "607253064";
+            fedExTestAccountNumber = "612480567";
 
             var testObject = new FedExPrototypeFixture();
 
