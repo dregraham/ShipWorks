@@ -280,12 +280,18 @@
     <None Include="DataSources\FedExAll\Grn Alcohol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="DataSources\FedExAll\IDF.xlsx" />
+    <None Include="DataSources\FedExAll\IGD.xlsx" />
     <None Include="DataSources\FedExAll\IMpB Smartpost.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="DataSources\FedExAll\IPD.xlsx" />
     <None Include="DataSources\FedExAll\OneRate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="DataSources\FedExAll\TD Express.xlsx" />
+    <None Include="DataSources\FedExAll\TD Ground.xlsx" />
+    <None Include="DataSources\FedExAll\US Exp DG Open Ship.xlsx" />
     <None Include="DataSources\FedExAll\US Exp Dom-Alcohol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

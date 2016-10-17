@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         }
 
 
-        [ExcelData(@"DataSources\Grn Alcohol\FedExAll.xlsx", "Grn Alcohol")]
+        [ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExGroundDomesticAlcohol(DataRow row)
@@ -138,6 +138,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomestic(DataRow row)
         {
+            if (row["SaveLabel"] is DBNull || (bool)row["SaveLabel"] != true)
+            {
+                return;
+            }
+
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
@@ -151,7 +156,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData(@"DataSources\OneRate\FedExAll.xlsx", "OneRate")]
+        [ExcelData(@"DataSources\FedExAll\OneRate.xlsx", "OneRate")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExOneRate(DataRow row)

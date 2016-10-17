@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                 {
                     throw new InvalidDataException(string.Format("NaftaPreferenceCriterion is invalid {0}", NaftaPreferenceCriterion));
                 }
-                
+
                 shipment.FedEx.CustomsNaftaPreferenceType = (int) preference;
 
                 shipment.FedEx.CustomsNaftaDeterminationCode = GetNaftaDeterminationCode();
@@ -304,7 +304,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                 case ("hazardous_materials"): return FedExDangerousGoodsMaterialType.HazardousMaterials;
                 case ("orm_d"): return FedExDangerousGoodsMaterialType.OrmD;
                 case ("battery"): return FedExDangerousGoodsMaterialType.Batteries;
-                default: return FedExDangerousGoodsMaterialType.NotApplicable;                    
+                default: return FedExDangerousGoodsMaterialType.NotApplicable;
             }
         }
 
@@ -321,13 +321,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                 case "kg":
                     unitInt = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
                     break;
-
                 case "ml":
                     unitInt = (int) FedExHazardousMaterialsQuantityUnits.Milliliters;
                     break;
-
+                case "l":
+                    unitInt = (int) FedExHazardousMaterialsQuantityUnits.Liters;
+                    break;
+                case "g":
+                    unitInt = (int) FedExHazardousMaterialsQuantityUnits.Gram;
+                    break;
                 default:
-                    throw new ArgumentException(string.Format("Invalid Unit {0}", unit), unit);
+                    throw new ArgumentException($"Invalid Unit {unit}", unit);
             }
 
             return unitInt;
