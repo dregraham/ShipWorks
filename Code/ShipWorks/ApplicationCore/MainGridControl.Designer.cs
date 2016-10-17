@@ -166,7 +166,6 @@ namespace ShipWorks.ApplicationCore
             this.searchBox.WaterColor = System.Drawing.SystemColors.GrayText;
             this.searchBox.WaterText = "Search All Orders";
             this.searchBox.WordWrap = false;
-            this.searchBox.TextChanged += new System.EventHandler(this.OnSearchTextChanged);
             // 
             // buttonEndSearch
             // 
@@ -260,7 +259,6 @@ namespace ShipWorks.ApplicationCore
             this.filterEditor.Name = "filterEditor";
             this.filterEditor.Size = new System.Drawing.Size(731, 32);
             this.filterEditor.TabIndex = 2;
-            this.filterEditor.DefinitionEdited += new System.EventHandler(this.OnAdvancedSearchDefinitionEdited);
             this.filterEditor.RequiredHeightChanged += new System.EventHandler(this.OnAdvancedSearchRequiredHeightChanged);
             // 
             // MainGridControl
