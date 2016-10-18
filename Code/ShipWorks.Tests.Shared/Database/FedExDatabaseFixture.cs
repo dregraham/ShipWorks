@@ -59,8 +59,6 @@ namespace ShipWorks.Tests.Shared.Database
             GenerateAccounts();
             UpdateSettings();
 
-            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.FedEx);
-
             return newContext;
         }
 

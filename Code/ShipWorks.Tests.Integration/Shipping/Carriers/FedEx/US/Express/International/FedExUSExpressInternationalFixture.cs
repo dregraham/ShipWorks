@@ -247,9 +247,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.TrafficInArmsLicenseNumber = TrafficInArmsLicenseOrExemptionNumber;
             shipment.FedEx.WeightUnitType = ShipmentWeightUnits.ToLower() == "lb" ? (int)WeightUnitOfMeasure.Pounds : (int)WeightUnitOfMeasure.Kilograms;

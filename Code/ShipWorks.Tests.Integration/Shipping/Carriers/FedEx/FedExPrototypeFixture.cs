@@ -194,7 +194,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// Ships the shipment
         /// </summary>
         /// <returns></returns>
-        public virtual bool Ship(OrderEntity order = null)
+        public virtual bool Ship(OrderEntity order)
         {
             // TODO: remove the = null. This is here so the other spreadsheets will still work while I work on smartpost.
             try
@@ -202,7 +202,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
 
 
-                ShipmentEntity shipment = order == null ? CreateShipment() : CreateShipment(order);
+                ShipmentEntity shipment = CreateShipment(order);
 
                 // If you want to create the shipments, but NOT process them, press the magic keys
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
@@ -315,15 +315,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             }
 
             return accountEntity.FedExAccountID;
-        }
-
-        /// <summary>
-        /// Creates the shipment.
-        /// </summary>
-        public virtual ShipmentEntity CreateShipment()
-        {
-            OrderEntity orderEntity = (OrderEntity)ShipWorksDataMethods.GetEntity(GetOrderId("US"));
-            return CreateShipment(orderEntity);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
-    [Collection("US Fedex Tests")]
+    [Collection("Fedex Tests")]
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string fedExTestAccountNumber = "612480567";
@@ -35,10 +35,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExUSGround(DataRow row)
         {
-            if (row["SaveLabel"] is DBNull || (bool)row["SaveLabel"] != true)
+            if (row["SaveLabel"] is DBNull)
             {
                 return;
             }
+
+            output.WriteLine($"Preparing customer transaction ID {row[5]}");
 
             var testObject = new FedExUSGroundFixture();
 
@@ -80,7 +82,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -100,7 +102,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -118,7 +120,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -138,7 +140,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -156,7 +158,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -174,7 +176,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -193,7 +195,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
                 testObject.CommercialInvoiceFileElectronically = true;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
     }

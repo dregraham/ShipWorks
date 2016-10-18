@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Interapptive.Shared.Enums;
+using ShipWorks.Data.Model.EntityClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International
 {
@@ -49,9 +48,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             SetupCustomsItems(shipment);
             SetupCustomsShipment(shipment);

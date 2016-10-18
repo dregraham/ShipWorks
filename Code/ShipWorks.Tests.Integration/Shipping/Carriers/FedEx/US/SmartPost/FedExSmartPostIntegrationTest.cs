@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
 {
-    [Collection("US Fedex Tests")]
+    [Collection("Fedex Tests")]
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
         //note: smartpost gets it account number from the spreadsheet.

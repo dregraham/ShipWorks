@@ -18,9 +18,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.ReferenceCustomer = string.Empty;
             shipment.FedEx.ReferenceInvoice = string.Empty;
