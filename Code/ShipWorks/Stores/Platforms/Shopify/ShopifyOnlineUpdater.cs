@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
@@ -18,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     public class ShopifyOnlineUpdater
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyOnlineUpdater));
-        readonly ShopifyStoreEntity shopifyStore;
+        private readonly ShopifyStoreEntity shopifyStore;
 
         /// <summary>
         /// Constructor
@@ -41,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
             if (shipment == null)
-            { 
+            {
                 // log that there was no shipment, and return
                 log.DebugFormat("There was no shipment found for order Id: {0}", order.OrderID);
                 return;

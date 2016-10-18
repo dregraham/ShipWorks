@@ -47,6 +47,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             viewModel.IsDomestic = isDomestic;
 
+            testScheduler.Dispatcher.Start();
             Assert.Equal(expectedText, viewModel.DomesticInternationalText);
         }
 

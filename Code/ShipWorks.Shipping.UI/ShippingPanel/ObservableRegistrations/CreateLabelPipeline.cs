@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Messaging.Messages.Shipping;
 
@@ -16,13 +17,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private readonly IObservable<IShipWorksMessage> messageStream;
         private readonly ILog log;
         private IDisposable subscription;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CreateLabelPipeline(IObservable<IShipWorksMessage> messageStream, Func<Type, ILog> logManager)
+        public CreateLabelPipeline(IObservable<IShipWorksMessage> messageStream,
+            ISchedulerProvider schedulerProvider,
+            Func<Type, ILog> logManager)
         {
             this.messageStream = messageStream;
+            this.schedulerProvider = schedulerProvider;
             log = logManager(typeof(CreateLabelPipeline));
         }
 
@@ -32,6 +37,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messageStream.OfType<CreateLabelMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
                 .Subscribe(_ => viewModel.CreateLabel());

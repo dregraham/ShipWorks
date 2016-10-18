@@ -648,36 +648,60 @@ namespace ShipWorks.Filters
         /// </summary>
         public static void EnsureQuickFiltersUpToDate(byte[] rowVersion)
         {
-            // Can't calculate filters within a transaction - would hose everything up
-            using (new TransactionScope(TransactionScopeOption.Suppress))
+            int iteration = 0;
+
+            while (true)
             {
-                log.InfoFormat("Ensuring QUICK filters are at least as up to date as {0}", SqlUtility.GetTimestampValue(rowVersion));
+                iteration++;
 
-                using (DbConnection con = SqlSession.Current.OpenConnection())
+                // Can't calculate filters within a transaction - would hose everything up
+                using (new TransactionScope(TransactionScopeOption.Suppress))
                 {
-                    object result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM QuickFilterNodeContentDirty WITH (NOLOCK)");
+                    log.InfoFormat($"Ensuring QUICK filters are at least as up to date as {SqlUtility.GetTimestampValue(rowVersion)}, iteration {iteration}.");
 
-                    // No dirty means we're up to date
-                    if (result == null || ((byte[])result).Length == 0)
+                    if (QuickFiltersAreUpToDate(rowVersion))
                     {
-                        log.InfoFormat("There are no dirty objects, QUICK filters are up to date.");
                         return;
                     }
 
-                    // Still some dirty - but they are all edited after we first entered this method, which means they are
-                    // at least as up-to-date as when we were called - which is all we can hope for
-                    if (SqlUtility.GetTimestampValue((byte[])result) > SqlUtility.GetTimestampValue(rowVersion))
-                    {
-                        log.InfoFormat("Still some dirty objets, but all are up-to-date from the time of the request.");
-                        return;
-                    }
+                    // Ensure counts are running
+                    FilterContentManager.CalculateUpdateQuickFilterCounts();
+                }
+            }
+        }
 
-                    log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[])result), SqlUtility.GetTimestampValue(rowVersion));
+        /// <summary>
+        /// Determines if quick filters are up to date as far as rowVersion is concerned.
+        /// </summary>
+        static bool QuickFiltersAreUpToDate(byte[] rowVersion)
+        {
+            object result;
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM QuickFilterNodeContentDirty WITH (NOLOCK)");
+
+                // No dirty means we're up to date
+                if (result == null || ((byte[]) result).Length == 0)
+                {
+                    log.InfoFormat("There are no dirty objects, QUICK filters are up to date.");
+                    return true;
                 }
 
-                // Ensure counts are running
-                FilterContentManager.CalculateUpdateQuickFilterCounts();
+                // Still some dirty - but they are all edited after we first entered this method, which means they are
+                // at least as up-to-date as when we were called - which is all we can hope for
+                if (SqlUtility.GetTimestampValue((byte[]) result) > SqlUtility.GetTimestampValue(rowVersion))
+                {
+                    log.InfoFormat("Still some dirty objets, but all are up-to-date from the time of the request.");
+                    return true;
+                }
             }
+
+            log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[])result), SqlUtility.GetTimestampValue(rowVersion));
+
+            // Sleep 50ms so we don't slam SQL Server every couple of ms.
+            Thread.Sleep(50);
+
+            return false;
         }
 
         /// <summary>

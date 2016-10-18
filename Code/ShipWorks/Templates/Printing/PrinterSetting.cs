@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing.Printing;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -12,10 +8,10 @@ namespace ShipWorks.Templates.Printing
     public class PrinterSetting : IPrinterSetting
     {
         private PrinterSettings printerSettings;
-        private string paperSourceName;
-        
+        private string paperSourceName = string.Empty;
+
         /// <summary>
-        /// Constructor for createing a PrinterSetting based on a Windows PrinterSettings
+        /// Constructor for creating a PrinterSetting based on a Windows PrinterSettings
         /// </summary>
         /// <param name="printerSettings"></param>
         public PrinterSetting(PrinterSettings printerSettings)

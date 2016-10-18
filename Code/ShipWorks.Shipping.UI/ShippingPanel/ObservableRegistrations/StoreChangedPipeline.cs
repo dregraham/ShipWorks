@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -16,14 +17,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         readonly IObservable<IShipWorksMessage> messages;
         IDisposable subscription;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="messages"></param>
-        public StoreChangedPipeline(IObservable<IShipWorksMessage> messages)
+        public StoreChangedPipeline(IObservable<IShipWorksMessage> messages, ISchedulerProvider schedulerProvider)
         {
             this.messages = messages;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -32,6 +35,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messages.OfType<StoreChangedMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(m => OnStoreChanged(viewModel, m));
         }
 

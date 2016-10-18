@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Threading;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
@@ -13,13 +14,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
     {
         private readonly IObservable<IShipWorksMessage> messageStream;
         private IDisposable subscription;
+        private readonly ISchedulerProvider schedulerProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WindowUnloadingPipeline(IObservable<IShipWorksMessage> messageStream)
+        public WindowUnloadingPipeline(IObservable<IShipWorksMessage> messageStream, ISchedulerProvider schedulerProvider)
         {
             this.messageStream = messageStream;
+            this.schedulerProvider = schedulerProvider;
         }
 
         /// <summary>
@@ -28,6 +31,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messageStream.OfType<WindowResettingMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(x =>
                 {
                     viewModel?.SaveToDatabase();

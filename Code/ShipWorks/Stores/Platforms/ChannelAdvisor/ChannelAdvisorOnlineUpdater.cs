@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Data.Connection;
+﻿using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using System;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -26,9 +21,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorOnlineUpdater));
-						  
+
         // the store instance 
-        ChannelAdvisorStoreEntity store;
+        private readonly ChannelAdvisorStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -163,8 +158,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethodAttribute]
         public static string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)
@@ -189,197 +182,231 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             switch (type)
             {
                 case ShipmentTypeCode.Other:
-                    return shipment.Other.Service;
+                    return GetOtherShipmentClassCode(shipment);
+
                 case ShipmentTypeCode.iParcel:
-                    switch ((iParcelServiceType)shipment.IParcel.Service)
-                    {
-                        case iParcelServiceType.Immediate:
-                            return "Immediate";
-                        case iParcelServiceType.Preferred:
-                            return "Preferred";
-                        case iParcelServiceType.Saver:
-                            return "Saver";
-                        case iParcelServiceType.SaverDeferred:
-                            return "Saver Deferred";
-                    }
-                    return "None";
+                    return GetIParcelShipmentClassCode(shipment);
+
                 case ShipmentTypeCode.FedEx:
-                {
-                    switch ((FedExServiceType) shipment.FedEx.Service)
-                    {
-                        case FedExServiceType.FedExGround:
-                        case FedExServiceType.GroundHomeDelivery:
-                        case FedExServiceType.FedExInternationalGround:
-                            return "GROUND";
+                    return GetFedExShipmentClassCode(shipment);
 
-                        case FedExServiceType.FedEx2Day:
-                        case FedExServiceType.OneRate2Day:
-                            return "2Day";
-
-                        case FedExServiceType.PriorityOvernight:
-                        case FedExServiceType.OneRatePriorityOvernight:
-                            return "PRIORITY";
-
-                        case FedExServiceType.FirstOvernight:
-                        case FedExServiceType.OneRateFirstOvernight:
-                            return "1STOVERNIGHT";
-
-                        case FedExServiceType.StandardOvernight:
-                        case FedExServiceType.OneRateStandardOvernight:
-                            return "OVERNIGHT";
-
-                        case FedExServiceType.FedExExpressSaver:
-                        case FedExServiceType.OneRateExpressSaver:
-                            return "EXPSAVER";
-
-                        case FedExServiceType.FirstFreight:
-                        case FedExServiceType.FedEx1DayFreight:
-                            return "OVERNIGHTFREIGHT";
-
-                        case FedExServiceType.FedEx2DayFreight:
-                            return "2DAYFREIGHT";
-
-                        case FedExServiceType.InternationalPriority:
-                            return "INTLPRIORITY";
-
-                        case FedExServiceType.InternationalEconomy:
-                            return "INTLECONOMY";
-
-                        case FedExServiceType.InternationalFirst:
-                            return "INTLFIRST";
-
-                            /* undefined in CA, the user will have to add this to their store  */
-                        case FedExServiceType.InternationalPriorityFreight:
-                            return "Internaional Priority Freight";
-
-                        case FedExServiceType.InternationalEconomyFreight:
-                            return "International Economy Freight";
-
-                        case FedExServiceType.SmartPost:
-                            return "SmartPost";
-                    }
-
-                    break;
-                }
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                {
-                    switch ((UpsServiceType) shipment.Ups.Service)
-                    {
-                        case UpsServiceType.Ups2DayAir:
-                            return "2DAY";
-                        case UpsServiceType.Ups2DayAirAM:
-                            return "2DAA";
-                        case UpsServiceType.Ups3DaySelect:
-                            return "3DS";
-                        case UpsServiceType.UpsGround:
-                            return "GROUND";
-                        case UpsServiceType.UpsNextDayAir:
-                            return "NEXTDAY";
-                        case UpsServiceType.UpsNextDayAirAM:
-                            return "NDAEA";
-                        case UpsServiceType.UpsNextDayAirSaver:
-                            return "NDAS";
-                        case UpsServiceType.UpsStandard:
-                            return "STD";
-                        case UpsServiceType.WorldwideExpedited:
-                            return "WWEX";
-                        case UpsServiceType.WorldwideExpress:
-                            return "WWE";
-                        case UpsServiceType.WorldwideExpressPlus:
-                            return "WWEP";
-                        case UpsServiceType.UpsSurePostLessThan1Lb:
-                            return "SurePost Less than 1 lb";
-                        case UpsServiceType.UpsSurePost1LbOrGreater:
-                            return "SurePost 1 lb or Greater";
-                        case UpsServiceType.UpsSurePostBoundPrintedMatter:
-                            return "SurePost Bound Printed Matter";
-                        case UpsServiceType.UpsSurePostMedia:
-                            return "SurePost Media";
-                        case UpsServiceType.UpsMailInnovationsExpedited:
-                        case UpsServiceType.UpsMailInnovationsFirstClass:
-                        case UpsServiceType.UpsMailInnovationsPriority:
-                        case UpsServiceType.UpsMailInnovationsIntEconomy:
-                        case UpsServiceType.UpsMailInnovationsIntPriority:
-                            return "MI";
-                        case UpsServiceType.WorldwideSaver:
-                            return "UPSWorldwideSaver";
-                        case UpsServiceType.UpsExpress:
-                            return "UPSExpress";
-                        case UpsServiceType.UpsExpressEarlyAm:
-                            return "UPSExpressEarlyAm";
-                        case UpsServiceType.UpsExpressSaver:
-                            return "UPSExpressSaver";
-                        case UpsServiceType.UpsExpedited:
-                            return "UPSExpedited";
-                        case UpsServiceType.Ups3DaySelectFromCanada:
-                            return "UPS3DaySelectFromCanada";
-                        case UpsServiceType.UpsCaWorldWideExpressSaver:
-                            return "UPSCaWorldWideExpressSaver";
-                        case UpsServiceType.UpsCaWorldWideExpressPlus:
-                            return "UPSCaWorldWideExpressPlus";
-                        case UpsServiceType.UpsCaWorldWideExpress:
-                            return "UPSCaWorldWideExpress";
-                        case UpsServiceType.Ups2ndDayAirIntra:
-                            return "UPS2nDayAirIntra";
-                    }
-
-                    break;
-                }
+                    return GetUpsShipmentClassCode(shipment);
 
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
-                {
-                    PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
-                    switch (postalServiceType)
-                    {
-                        case PostalServiceType.ExpressMail:
-                            return "EXPRESS";
-                        case PostalServiceType.FirstClass:
-                            return "FIRSTCLASS";
-                        case PostalServiceType.InternationalExpress:
-                            return "GEM";
-                        case PostalServiceType.InternationalFirst:
-                            return "IFIRSTCLASS";
-                        case PostalServiceType.InternationalPriority:
-                            return "IPRIORITY";
-                        case PostalServiceType.LibraryMail:
-                            return "LIBRARYMAIL";
-                        case PostalServiceType.MediaMail:
-                            return "MEDIA";
-                        case PostalServiceType.StandardPost:
-                            return "PARCELPOST";
-                        case PostalServiceType.ParcelSelect:
-                            return "PARCELSELECT";
-                        case PostalServiceType.PriorityMail:
-                            return "PRIORITY";
+                    return GetPostalShipmentClassCode(shipment, store); 
 
-                            // CA doesnt have a default code for Critical right now (10-21-2011) so fallback
-                        case PostalServiceType.CriticalMail:
-                            return "PRIORITY";
-                    }
-
-                    if (ShipmentTypeManager.IsConsolidator(postalServiceType))
-                    {
-                        return store.ConsolidatorAsUsps ? "IECONOMY" : "CONSOLIDATOR";
-                    }
-
-                    if (ShipmentTypeManager.IsDhl(postalServiceType))
-                    {
-                        return "Global Mail";
-                    }
-
-                    break;
-                }
                 case ShipmentTypeCode.OnTrac:
-                    return EnumHelper.GetDescription((OnTracServiceType) shipment.OnTrac.Service);
+                    return GetOntracShipmentClassCode(shipment);
             }
 
             return "NONE";
         }
+
+        /// <summary>
+        /// Gets the other shipment class code.
+        /// </summary>
+        private static string GetOtherShipmentClassCode(ShipmentEntity shipment) =>
+            shipment.Other.Service;
+
+        /// <summary>
+        /// Gets the i parcel shipment class code.
+        /// </summary>
+        private static string GetIParcelShipmentClassCode(ShipmentEntity shipment)
+        {
+            switch ((iParcelServiceType)shipment.IParcel.Service)
+            {
+                case iParcelServiceType.Immediate:
+                    return "Immediate";
+                case iParcelServiceType.Preferred:
+                    return "Preferred";
+                case iParcelServiceType.Saver:
+                    return "Saver";
+                case iParcelServiceType.SaverDeferred:
+                    return "Saver Deferred";
+                default:
+                    return "None";
+            }
+        }
+
+        /// <summary>
+        /// Gets the fed ex shipment class code.
+        /// </summary>
+        private static string GetFedExShipmentClassCode(ShipmentEntity shipment)
+        {
+            Dictionary<FedExServiceType, string> fedExServiceTypeClassCode = new Dictionary<FedExServiceType, string>();
+
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExGround, "GROUND");
+            fedExServiceTypeClassCode.Add(FedExServiceType.GroundHomeDelivery, "GROUND");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExInternationalGround, "GROUND");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2Day, "2Day");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRate2Day, "2Day");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.PriorityOvernight, "PRIORITY");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRatePriorityOvernight, "PRIORITY");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.FirstOvernight, "1STOVERNIGHT");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRateFirstOvernight, "1STOVERNIGHT");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.StandardOvernight, "OVERNIGHT");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRateStandardOvernight, "OVERNIGHT");
+            
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExExpressSaver, "EXPSAVER");
+            fedExServiceTypeClassCode.Add(FedExServiceType.OneRateExpressSaver, "EXPSAVER");
+            
+            fedExServiceTypeClassCode.Add(FedExServiceType.FirstFreight, "OVERNIGHTFREIGHT");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedEx1DayFreight, "OVERNIGHTFREIGHT");
+            
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2DayFreight, "2DAYFREIGHT");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriority, "INTLPRIORITY");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalEconomy, "INTLECONOMY");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalFirst, "INTLFIRST");
+
+            /* undefined in CA, the user will have to add this to their store  */
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriorityFreight, "Internaional Priority Freight");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalEconomyFreight, "International Economy Freight");
+
+            fedExServiceTypeClassCode.Add(FedExServiceType.SmartPost, "SmartPost");
+
+            FedExServiceType fedExServiceType = (FedExServiceType)shipment.FedEx.Service;
+
+            if (fedExServiceTypeClassCode.ContainsKey((FedExServiceType)shipment.FedEx.Service))
+            {
+                return fedExServiceTypeClassCode[fedExServiceType];
+            }
+
+            return "None";
+        }
+
+        /// <summary>
+        /// Gets the ups shipment class code.
+        /// </summary>
+        private static string GetUpsShipmentClassCode(ShipmentEntity shipment)
+        {
+            Dictionary<UpsServiceType, string> upsServiceTypeClassCodes = GetUpsServiceTypeClassCodesMap();
+
+            UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
+            return upsServiceTypeClassCodes.ContainsKey(upsServiceType)
+                ? upsServiceTypeClassCodes[upsServiceType]
+                : "NONE";
+        }
+
+        /// <summary>
+        /// Gets the ups service type class codes map.
+        /// </summary>
+        private static Dictionary<UpsServiceType, string> GetUpsServiceTypeClassCodesMap()
+        {
+            return new Dictionary<UpsServiceType, string>
+            {
+                {UpsServiceType.Ups2DayAir, "2DAY"},
+                {UpsServiceType.Ups2DayAirAM, "2DAA"},
+                {UpsServiceType.Ups3DaySelect, "3DS"},
+                {UpsServiceType.UpsGround, "GROUND"},
+                {UpsServiceType.UpsNextDayAir, "NEXTDAY"},
+                {UpsServiceType.UpsNextDayAirAM, "NDAEA"},
+                {UpsServiceType.UpsNextDayAirSaver, "NDAS"},
+                {UpsServiceType.UpsStandard, "STD"},
+                {UpsServiceType.WorldwideExpedited, "WWEX"},
+                {UpsServiceType.WorldwideExpress, "WWE"},
+                {UpsServiceType.WorldwideExpressPlus, "WWEP"},
+                {UpsServiceType.UpsSurePostLessThan1Lb, "SurePost Less than 1 lb"},
+                {UpsServiceType.UpsSurePost1LbOrGreater, "SurePost 1 lb or Greater"},
+                {UpsServiceType.UpsSurePostBoundPrintedMatter, "SurePost Bound Printed Matter"},
+                {UpsServiceType.UpsSurePostMedia, "SurePost Media"},
+                {UpsServiceType.UpsMailInnovationsExpedited, "MI"},
+                {UpsServiceType.UpsMailInnovationsFirstClass, "MI"},
+                {UpsServiceType.UpsMailInnovationsPriority, "MI"},
+                {UpsServiceType.UpsMailInnovationsIntEconomy, "MI"},
+                {UpsServiceType.UpsMailInnovationsIntPriority, "MI"},
+                {UpsServiceType.WorldwideSaver, "UPSWorldwideSaver"},
+                {UpsServiceType.UpsExpress, "UPSExpress"},
+                {UpsServiceType.UpsExpressEarlyAm, "UPSExpressEarlyAm"},
+                {UpsServiceType.UpsExpressSaver, "UPSExpressSaver"},
+                {UpsServiceType.UpsExpedited, "UPSExpedited"},
+                {UpsServiceType.Ups3DaySelectFromCanada, "UPS3DaySelectFromCanada"},
+                {UpsServiceType.UpsCaWorldWideExpressSaver, "UPSCaWorldWideExpressSaver"},
+                {UpsServiceType.UpsCaWorldWideExpressPlus, "UPSCaWorldWideExpressPlus"},
+                {UpsServiceType.UpsCaWorldWideExpress, "UPSCaWorldWideExpress"},
+                {UpsServiceType.Ups2ndDayAirIntra, "UPS2nDayAirIntra"}
+            };
+        }
+
+        /// <summary>
+        /// Gets the postal shipment class code.
+        /// </summary>
+        private static string GetPostalShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
+        {
+            PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
+            switch (postalServiceType)
+            {
+                case PostalServiceType.ExpressMail:
+                    return "EXPRESS";
+
+                case PostalServiceType.FirstClass:
+                    return "FIRSTCLASS";
+
+                case PostalServiceType.InternationalExpress:
+                    return "GEM";
+
+                case PostalServiceType.GlobalPostSmartSaverEconomy:
+                case PostalServiceType.GlobalPostEconomy:
+                case PostalServiceType.InternationalFirst:
+                    return "IFIRSTCLASS";
+
+                case PostalServiceType.GlobalPostSmartSaverPriority:
+                case PostalServiceType.GlobalPostPriority:
+                case PostalServiceType.InternationalPriority:
+                    return "IPRIORITY";
+
+                case PostalServiceType.LibraryMail:
+                    return "LIBRARYMAIL";
+
+                case PostalServiceType.MediaMail:
+                    return "MEDIA";
+
+                case PostalServiceType.StandardPost:
+                    return "PARCELPOST";
+
+                case PostalServiceType.ParcelSelect:
+                    return "PARCELSELECT";
+
+                case PostalServiceType.PriorityMail:
+                    return "PRIORITY";
+
+                // CA doesnt have a default code for Critical right now (10-21-2011) so fallback
+                case PostalServiceType.CriticalMail:
+                    return "PRIORITY";
+            }
+
+            if (ShipmentTypeManager.IsConsolidator(postalServiceType))
+            {
+                return store.ConsolidatorAsUsps ? "IECONOMY" : "CONSOLIDATOR";
+            }
+
+            if (ShipmentTypeManager.IsDhl(postalServiceType))
+            {
+                return "Global Mail";
+            }
+
+            return "NONE";
+        }
+
+        /// <summary>
+        /// Gets the ontrac shipment class code.
+        /// </summary>
+        private static string GetOntracShipmentClassCode(ShipmentEntity shipment) =>
+            EnumHelper.GetDescription((OnTracServiceType)shipment.OnTrac.Service);
 
         /// <summary>
         /// Gets the CA shipment Carrier code.  The values are user-customizable in the CA admin site.

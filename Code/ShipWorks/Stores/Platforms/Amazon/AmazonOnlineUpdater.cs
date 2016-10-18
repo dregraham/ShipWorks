@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using log4net;
-using ShipWorks.Data.Model;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using System.Threading;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -18,11 +13,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// </summary>
     public class AmazonOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonOnlineUpdater));
-						  
+
         // the store this instance for
-        AmazonStoreEntity store;
+        private readonly AmazonStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -69,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
                 if (shipment == null)
                 {
-                    log.InfoFormat(String.Format("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID));
+                    log.InfoFormat("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID);
                 }
                 else
                 {

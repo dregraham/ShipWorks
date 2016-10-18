@@ -1,12 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -20,6 +11,15 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;
 using ShipWorks.UI.Controls;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ShipWorks.Data.Controls
 {
@@ -599,7 +599,9 @@ namespace ShipWorks.Data.Controls
 
                 AddressPrefix = loadedAddress.FieldPrefix;
 
-                validatedAddresses = new List<ValidatedAddressEntity>();
+                validatedAddresses = null;
+                validatedAddresses = LoadValidatedAddresses();
+
                 AddressSelector = new AddressSelector(AddressPrefix);
 
                 store = StoreManager.GetRelatedStore(EntityUtility.GetEntityId(loadedPeople.Single().Entity));

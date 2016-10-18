@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+﻿using Interapptive.Shared.Utility;
 using log4net;
-
-using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Shipping.Carriers.UPS;
+using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -390,6 +386,15 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Usps:
                     PostalServiceType uspsType = (PostalServiceType)shipmentEntity.Postal.Service;
+                    if (uspsType == PostalServiceType.GlobalPostEconomy || uspsType == PostalServiceType.GlobalPostSmartSaverEconomy)
+                    {
+                        uspsType = PostalServiceType.InternationalFirst;
+                    }
+                    if (uspsType == PostalServiceType.GlobalPostPriority || uspsType == PostalServiceType.GlobalPostSmartSaverPriority)
+                    {
+                        uspsType = PostalServiceType.InternationalPriority;
+                    }
+
                     service = EnumHelper.GetDescription(uspsType);
                     break;
 

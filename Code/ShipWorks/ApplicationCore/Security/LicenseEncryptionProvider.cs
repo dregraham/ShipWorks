@@ -1,5 +1,4 @@
-﻿using System;
-using Interapptive.Shared.Security;
+﻿using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Administration;
 
@@ -12,7 +11,6 @@ namespace ShipWorks.ApplicationCore.Security
     {
         private readonly ISqlSchemaVersion sqlSchemaVersion;
         private const string EmptyValue = "ShipWorks legacy user";
-        private bool isCustomerLicenseSupported;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenseEncryptionProvider"/> class.
@@ -21,7 +19,6 @@ namespace ShipWorks.ApplicationCore.Security
             : base(cipherKey)
         {
             this.sqlSchemaVersion = sqlSchemaVersion;
-            isCustomerLicenseSupported = sqlSchemaVersion.IsCustomerLicenseSupported();
         }
 
         /// <summary>
@@ -32,11 +29,6 @@ namespace ShipWorks.ApplicationCore.Security
         /// </remarks>
         public override string Decrypt(string encryptedText)
         {
-            if (!isCustomerLicenseSupported)
-            {
-                return string.Empty;
-            }
-
             try
             {
                 string decryptedResult = base.Decrypt(encryptedText);
@@ -47,10 +39,8 @@ namespace ShipWorks.ApplicationCore.Security
                 // refresh isCustomerLicenseSupported as we may have restored the database to a version
                 // that does not support customer licenses yet, the database is in a state where it needs
                 // to be upgraded
-                isCustomerLicenseSupported = sqlSchemaVersion.IsCustomerLicenseSupported();
-
                 // if the database does not yet support customer licenses return an empty string
-                if (!isCustomerLicenseSupported)
+                if (!sqlSchemaVersion.IsCustomerLicenseSupported())
                 {
                     return string.Empty;
                 }
@@ -67,11 +57,6 @@ namespace ShipWorks.ApplicationCore.Security
         /// </remarks>
         public override string Encrypt(string plainText)
         {
-            if (!isCustomerLicenseSupported)
-            {
-                throw new EncryptionException("Can't encrypt a license when isLegacy.");
-            }
-
             // AES can not encrypt empty strings. So when we get an empty string, set it to a fixed string,
             // so that when we decrypt later, we know it is actually supposed to be an empty string.
             if (string.IsNullOrWhiteSpace(plainText))

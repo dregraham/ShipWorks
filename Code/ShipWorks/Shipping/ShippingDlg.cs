@@ -1488,19 +1488,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, the offending shipments are returned.  The rest are
+        /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, this will return false.  The rest are
         /// still saved.
         /// </summary>
-        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
+        private bool SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
-            }
-
-            return shippingManager.SaveShipmentsToDatabase(shipments, forceSave);
+            return shippingManager.SaveShipmentsToDatabase(shipments.Where(s => !s.Processed), forceSave).None();
         }
 
         /// <summary>
@@ -1901,7 +1896,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
-        [NDependIgnoreLongMethod]
         private async void OnVoid(object sender, EventArgs e)
         {
             // Confirm they want to void
@@ -2181,12 +2175,19 @@ namespace ShipWorks.Shipping
             // will already be saved in memory.
             SaveChangesToUIDisplayedShipments();
 
+            IEnumerable<ShipmentEntity> shipments = FetchShipmentsFromShipmentControl().ToArray();
+
             // Save them to the database
-            if (SaveShipmentsToDatabase(FetchShipmentsFromShipmentControl(), false).Count > 0)
+            if (!SaveShipmentsToDatabase(shipments, false))
             {
                 MessageHelper.ShowWarning(this,
                                           "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
                                           "Your changes to those shipments were not saved.");
+            }
+
+            foreach (ShipmentEntity shipment in shipments.Where(s => !s.Processed))
+            {
+                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
             }
 
             ErrorManager.Clear();

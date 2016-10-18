@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             packagesGrid.Rows.Clear();
             selectedRows.Clear();
             dimensionsControl.LoadDimensions(
-                shipments.SelectMany(s => s.Ups.Packages).Select(p => new DimensionsAdapter(p)));
+                shipments.SelectMany(s => s.IParcel.Packages).Select(p => new DimensionsAdapter(p)));
 
             List<List<IParcelPackageEntity>> packageBuckets = new List<List<IParcelPackageEntity>>();
 
