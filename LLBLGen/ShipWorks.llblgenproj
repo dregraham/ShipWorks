@@ -3519,6 +3519,7 @@
   <SPCallDefinitions>
     <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9" />
     <SPCallDefinition Name="CalculateUpdateFilterCounts" ObjectID="38ab1dd3-02d1-46ea-b52d-d920e4ab0192" />
+    <SPCallDefinition Name="CalculateUpdateQuickFilterCounts" ObjectID="fddaffaa-ec40-4fba-8d51-896e2dc55952" />
     <SPCallDefinition Name="DeleteAbandonedFilterCounts" ObjectID="b8baa903-5f71-4fd4-bca1-1ef1b299f578" />
     <SPCallDefinition Name="ResetShipSense" ObjectID="ea9b5edf-8edb-474a-b8a1-27f858946dfe" />
     <SPCallDefinition Name="ShipmentShipSenseProcedure" ObjectID="9414f6ce-af3a-4cbf-afcf-9230d90b74fc">
@@ -3546,7 +3547,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-21T19:21:45.0349887Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-12T14:33:45.2615195Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7823,6 +7824,7 @@
               <StoredProcedures>
                 <StoredProcedure Name="CalculateInitialFilterCounts" />
                 <StoredProcedure Name="CalculateUpdateFilterCounts" />
+                <StoredProcedure Name="CalculateUpdateQuickFilterCounts" />
                 <StoredProcedure Name="DeleteAbandonedFilterCounts" />
                 <StoredProcedure Name="GetAssemblySchemaVersion" />
                 <StoredProcedure Name="GetDatabaseGuid" />
@@ -11532,6 +11534,9 @@
           <FieldMappings />
         </SPCallMapping>
         <SPCallMapping SPCallName=":CalculateUpdateFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateUpdateFilterCounts">
+          <FieldMappings />
+        </SPCallMapping>
+        <SPCallMapping SPCallName=":CalculateUpdateQuickFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateUpdateQuickFilterCounts">
           <FieldMappings />
         </SPCallMapping>
         <SPCallMapping SPCallName=":DeleteAbandonedFilterCounts" TargetName="ShipWorksLocal:dbo:DeleteAbandonedFilterCounts">
