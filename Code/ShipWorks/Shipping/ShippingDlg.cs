@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping
         private readonly ICustomsManager customsManager;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private bool closing;
-
+        private bool applyingProfile;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -550,8 +550,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool SaveUIDisplayedShipments()
         {
-            // Save all changes from the UI to the entities loaded into the UI
-            SaveChangesToUIDisplayedShipments();
+            // Already called in OnApplyProfile. Calling again causes profile to be overwritten.
+            if (!applyingProfile)
+            {
+                // Save all changes from the UI to the entities loaded into the UI
+                SaveChangesToUIDisplayedShipments();
+            }
 
             // Save changes to the database for those entities that have been completely removed from the grid.  If we didn't do this now, then
             // the save would never happen, b\c we wouldn't have a reference to it when we closed.
@@ -679,6 +683,8 @@ namespace ShipWorks.Shipping
             LoadShipmentTypeCombo();
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
+
+            applyingProfile = false;
         }
 
         /// <summary>
@@ -1556,6 +1562,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnApplyProfile(object sender, EventArgs e)
         {
+            applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
