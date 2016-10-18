@@ -1,72 +1,31 @@
-﻿using System;
+﻿using Interapptive.Shared.Enums;
+using Interapptive.Shared.Win32;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Integration.MSTest.Utilities;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Enums;
-using Interapptive.Shared.Win32;
-using log4net;
-using log4net.Core;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data;
-using ShipWorks.Templates;
-using ShipWorks.Tests.Integration.MSTest.Utilities;
-using ShipWorks.Users;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Users.Audit;
-using ShipWorks.Shipping;
-using Moq;
-using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 {
     public class FedExPrototypeFixture
     {
-        private readonly Mock<ExecutionMode> executionMode;
-        private readonly ShipWorksInitializer shipWorksInitializer;
-
         public FedExPrototypeFixture()
         {
-            ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = Level.Error;
-            ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
-
-            // Sleep to allow time to attach the debugger to runner.exe if needed
-            //System.Threading.Thread.Sleep(30000);
-            // Ctrl + Alt + Shift + Windows Key
-            if (DebugKeysDown)
-            {
-                Debugger.Launch();
-            }
-
-            // Need to comment out Debug.Assert statements in ShipWorks.Data.Caching.EntityCacheChangeMonitor
-            // to avoid errors resulting from an assertion that the MainForm is running
-
-            // Mock an execution mode for the various dependencies that use the execution
-            // mode to determine at whether the UI is running
-            executionMode = new Mock<ExecutionMode>();
-            executionMode.Setup(m => m.IsUIDisplayed).Returns(false);
-            executionMode.Setup(m => m.IsUISupported).Returns(true);
-
-            shipWorksInitializer = new ShipWorksInitializer(executionMode.Object, () =>
-                {
-                    DataProvider.InitializeForApplication(executionMode.Object);
-                    FedExAccountManager.InitializeForCurrentSession();
-                }
-            );
         }
 
         public string FedExAccountNumber { get; set; }
@@ -235,13 +194,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// Ships the shipment
         /// </summary>
         /// <returns></returns>
-        public virtual bool Ship()
+        public virtual bool Ship(OrderEntity order)
         {
+            // TODO: remove the = null. This is here so the other spreadsheets will still work while I work on smartpost.
             try
             {
                 InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
 
-                ShipmentEntity shipment = CreateShipment();
+
+                ShipmentEntity shipment = CreateShipment(order);
 
                 // If you want to create the shipments, but NOT process them, press the magic keys
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
@@ -360,9 +321,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public virtual ShipmentEntity CreateShipment()
+        public virtual ShipmentEntity CreateShipment(OrderEntity orderEntity)
         {
-            OrderEntity orderEntity = (OrderEntity)ShipWorksDataMethods.GetEntity(GetOrderId("US"));
             ShipmentEntity shipment =
                 ShipWorksDataMethods.InternalCreateShipment(orderEntity, ShipmentTypeCode.FedEx, PackageCount, ShipmentTotalWeightValue / PackageCount, PackageLineItemWeightUnits);
 
@@ -1009,6 +969,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 {
                     shipment.FedEx.ReferenceShipmentIntegrity = CustomerReferenceValue ?? string.Empty;
                 }
+
                 else if (CustomerReferenceType.ToLower() == "rma_association")
                 {
                     shipment.FedEx.RmaNumber = CustomerReferenceValue ?? string.Empty;

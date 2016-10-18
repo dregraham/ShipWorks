@@ -1,19 +1,27 @@
-﻿using System;
+﻿using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database;
+using System;
 using System.Data;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
 {
+    [Collection("Fedex Tests")]
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
         //note: smartpost gets it account number from the spreadsheet.
         private const bool justLabels = false;
-        private readonly ITestOutputHelper output;
 
-        public FedExSmartPostIntegrationTest(ITestOutputHelper output)
+        private readonly ITestOutputHelper output;
+        private DataContext context;
+
+        public FedExSmartPostIntegrationTest(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
+            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+                ShipWorksInitializer.GetShipWorksInstance());
+
         }
 
         [ExcelData(@"DataSources\FedExAll\IMpB Smartpost.xlsx", "IMpB Smartpost")]
@@ -33,7 +41,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
             {
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
     }
