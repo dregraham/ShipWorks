@@ -149,15 +149,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomestic(DataRow row)
         {
-            if (row["SaveLabel"] is DBNull || (bool)row["SaveLabel"] != true)
+            output.WriteLine($"Preparing customer transaction ID {row[5]}");
+            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels))
             {
+                output.WriteLine("Skipping");
                 return;
             }
 
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
