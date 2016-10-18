@@ -2890,6 +2890,12 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuanityUnits,
 		///<summary>HazardousMaterialTechnicalName. </summary>
 		HazardousMaterialTechnicalName,
+		///<summary>SignatoryContactName. </summary>
+		SignatoryContactName,
+		///<summary>SignatoryTitle. </summary>
+		SignatoryTitle,
+		///<summary>SignatoryPlace. </summary>
+		SignatoryPlace,
 		/// <summary></summary>
 		AmountOfFields
 	}

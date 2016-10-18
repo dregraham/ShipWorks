@@ -6707,6 +6707,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialTechnicalName);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.SignatoryContactName field instance</summary>
+		public static EntityField2 SignatoryContactName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryContactName);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.SignatoryTitle field instance</summary>
+		public static EntityField2 SignatoryTitle
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryTitle);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.SignatoryPlace field instance</summary>
+		public static EntityField2 SignatoryPlace
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryPlace);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
