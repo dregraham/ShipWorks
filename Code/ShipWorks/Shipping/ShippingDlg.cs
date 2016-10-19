@@ -98,7 +98,6 @@ namespace ShipWorks.Shipping
         private readonly ICustomsManager customsManager;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private bool closing;
-        private bool applyingProfile;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -550,12 +549,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool SaveUIDisplayedShipments()
         {
-            // Already called in OnApplyProfile. Calling again causes profile to be overwritten.
-            if (!applyingProfile)
-            {
-                // Save all changes from the UI to the entities loaded into the UI
-                SaveChangesToUIDisplayedShipments();
-            }
+            // Save all changes from the UI to the entities loaded into the UI
+            SaveChangesToUIDisplayedShipments();
 
             // Save changes to the database for those entities that have been completely removed from the grid.  If we didn't do this now, then
             // the save would never happen, b\c we wouldn't have a reference to it when we closed.
@@ -961,14 +956,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            newServiceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
-            newServiceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
-            newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
-            newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
-            newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-            newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
-            newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
-            newServiceControl.ClearRatesAction = ClearRates;
+            HookUpServiceControlEvents(newServiceControl);
 
             rateControl.RateSelected += newServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
@@ -990,17 +978,43 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
-            oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
-            oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
-            oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
-            oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-            oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
-            oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-            oldServiceControl.ClearRatesAction = ClearRates;
+            UnhookServiceControlEvents(oldServiceControl);
+
             rateControl.RateSelected -= oldServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
             rateControl.ReloadRatesRequired -= OnRateReloadRequired;
+        }
+
+        /// <summary>
+        /// Unhooks the service control events.
+        /// </summary>
+        /// <param name="serviceControl">The service control.</param>
+        private void UnhookServiceControlEvents(ServiceControlBase serviceControl)
+        {
+            serviceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
+            serviceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
+            serviceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+            serviceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            serviceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+            serviceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+            serviceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+            serviceControl.ClearRatesAction = ClearRates;
+        }
+
+        /// <summary>
+        /// Hooks up service control events.
+        /// </summary>
+        /// <param name="serviceControl">The service control.</param>
+        private void HookUpServiceControlEvents(ServiceControlBase serviceControl)
+        {
+            serviceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
+            serviceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
+            serviceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+            serviceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+            serviceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+            serviceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
+            serviceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
+            serviceControl.ClearRatesAction = ClearRates;
         }
 
         /// <summary>
@@ -1560,7 +1574,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private async void OnApplyProfile(object sender, EventArgs e)
         {
-            applyingProfile = true;
+            // Unhook events, so they don't interfere with applying the profile.
+            UnhookServiceControlEvents(ServiceControl);
+
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
@@ -1578,7 +1594,9 @@ namespace ShipWorks.Shipping
 
             // Reload the UI to show the changes
             await LoadSelectedShipments(true);
-            applyingProfile = false;
+
+            // Hook events back up, now that profile is applied.
+            HookUpServiceControlEvents(ServiceControl);
         }
 
         /// <summary>
@@ -1716,7 +1734,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the requested shipping text, (Multiple) displayed for multiple values
         /// </summary>
-        static private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        private static string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
         {
             string label = null;
 
