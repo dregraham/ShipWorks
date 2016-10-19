@@ -37,6 +37,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
         public string PackageDangerousGoodsDetail { get; set; }
         public string PackageLineItemDimensionUnits { get; set; }
         public string PackageSignatureOptionType { get; set; }
+        
+        public string SignatoryContactName { get; set; }
+        public string SignatoryTitle { get; set; }
+        public string SignatoryPlace { get; set; }
 
         /// <summary>
         /// Creates the shipment.
@@ -270,13 +274,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
         /// <param name="shipment">The shipment.</param>
         private void ApplyDangerousGoods(ShipmentEntity shipment)
         {
-            if (!string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail))
+            if (!string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail) || !string.IsNullOrWhiteSpace(DangerousGoodsAccessibility))
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
                     package.DangerousGoodsType = (int) GetDangerousGoodsMaterialType();
 
-                    if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials)
+                    if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials || !string.IsNullOrEmpty(HazardProperShippingName))
                     {
                         package.HazardousMaterialProperName = HazardProperShippingName;
                         package.HazardousMaterialClass = HazardClass;
@@ -284,14 +288,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
 
                         package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.III;
                         package.HazardousMaterialQuantityValue = int.Parse(HazardQuantityAmount);
-
-                        package.HazardousMaterialQuantityValue = GetUnitInt(HazardQuantityUnits);
+                        package.HazardousMaterialQuanityUnits = GetUnitInt(HazardQuantityUnits);
 
                         package.DangerousGoodsEmergencyContactPhone = DangerEmergencyContactNumber;
 
                         package.DangerousGoodsOfferor = DangerOfferor;
 
                         package.DangerousGoodsPackagingCount = int.Parse(DangerCounts);
+
+                        package.SignatoryContactName = SignatoryContactName;
+                        package.SignatoryPlace = SignatoryPlace;
+                        package.SignatoryTitle = SignatoryTitle;
                     }
                 }
             }
@@ -299,6 +306,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
 
         private FedExDangerousGoodsMaterialType GetDangerousGoodsMaterialType()
         {
+            if (string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail))
+            {
+                return FedExDangerousGoodsMaterialType.NotApplicable;
+            }
+
             switch (PackageDangerousGoodsDetail.ToLower())
             {
                 case ("hazardous_materials"): return FedExDangerousGoodsMaterialType.HazardousMaterials;
