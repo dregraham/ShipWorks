@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared;
+﻿using Interapptive.Shared;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.UI.Controls;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -47,6 +41,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             emergencyContactPhone.ApplyMultiText(package.DangerousGoodsEmergencyContactPhone);
             offeror.ApplyMultiText(package.DangerousGoodsOfferor);
 
+            signatoryContactName.ApplyMultiText(package.SignatoryContactName);
+            signatoryPlace.ApplyMultiText(package.SignatoryPlace);
+            signatoryTitle.ApplyMultiText(package.SignatoryTitle);
+
             hazardousMaterialId.ApplyMultiText(package.HazardousMaterialNumber);
             hazardClass.ApplyMultiText(package.HazardousMaterialClass);
             hazardousMaterialProperName.ApplyMultiText(package.HazardousMaterialProperName);
@@ -77,6 +75,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 offeror.ReadMultiText(t => package.DangerousGoodsOfferor = t);
                 emergencyContactPhone.ReadMultiText(t => package.DangerousGoodsEmergencyContactPhone = t);
 
+                signatoryContactName.ReadMultiText(t => package.SignatoryContactName = t);
+                signatoryTitle.ReadMultiText(t => package.SignatoryTitle = t);
+                signatoryPlace.ReadMultiText(t => package.SignatoryPlace = t);
+
                 hazardousMaterialId.ReadMultiText(t => package.HazardousMaterialNumber = t);
                 hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
                 hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
@@ -88,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Read the value from a tstring and return the effective integer value
+        /// Read the value from a string and return the effective integer value
         /// </summary>
         private int ReadIntegerValue(string text)
         {

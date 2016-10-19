@@ -56,8 +56,16 @@
             this.offeror = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.dangerousGoodsMaterialType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.emergencyContactPhone = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.signatoryPlace = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.signatoryPlaceLabel = new System.Windows.Forms.Label();
+            this.signatoryTitle = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.signatoryTitleLabel = new System.Windows.Forms.Label();
+            this.signatoryContactName = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.signatoryContactNameLabel = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panelDangerousGoodsDetails.SuspendLayout();
             this.hazardousMaterialGroupBox.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dangerousGoodsEnabled
@@ -76,6 +84,7 @@
             // 
             this.panelDangerousGoodsDetails.AutoSize = true;
             this.panelDangerousGoodsDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelDangerousGoodsDetails.Controls.Add(this.groupBox1);
             this.panelDangerousGoodsDetails.Controls.Add(this.aircraftLabel);
             this.panelDangerousGoodsDetails.Controls.Add(this.dangerousGoodsCargoAircraftOnly);
             this.panelDangerousGoodsDetails.Controls.Add(this.dangerousGoodsPackagingUnits);
@@ -92,7 +101,7 @@
             this.panelDangerousGoodsDetails.Controls.Add(this.emergencyContactPhone);
             this.panelDangerousGoodsDetails.Location = new System.Drawing.Point(0, 18);
             this.panelDangerousGoodsDetails.Name = "panelDangerousGoodsDetails";
-            this.panelDangerousGoodsDetails.Size = new System.Drawing.Size(283, 369);
+            this.panelDangerousGoodsDetails.Size = new System.Drawing.Size(283, 476);
             this.panelDangerousGoodsDetails.TabIndex = 1;
             this.panelDangerousGoodsDetails.Visible = false;
             // 
@@ -170,9 +179,9 @@
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardClass);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardousMaterialCodeLabel);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardClassLabel);
-            this.hazardousMaterialGroupBox.Location = new System.Drawing.Point(9, 173);
+            this.hazardousMaterialGroupBox.Location = new System.Drawing.Point(9, 288);
             this.hazardousMaterialGroupBox.Name = "hazardousMaterialGroupBox";
-            this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(271, 193);
+            this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(271, 185);
             this.hazardousMaterialGroupBox.TabIndex = 13;
             this.hazardousMaterialGroupBox.TabStop = false;
             this.hazardousMaterialGroupBox.Text = "Hazardous Material Details";
@@ -355,6 +364,72 @@
             this.emergencyContactPhone.Size = new System.Drawing.Size(171, 21);
             this.emergencyContactPhone.TabIndex = 5;
             // 
+            // signatoryPlace
+            // 
+            this.signatoryPlace.Location = new System.Drawing.Point(100, 82);
+            this.signatoryPlace.Name = "signatoryPlace";
+            this.signatoryPlace.Size = new System.Drawing.Size(143, 21);
+            this.signatoryPlace.TabIndex = 23;
+            // 
+            // signatoryPlaceLabel
+            // 
+            this.signatoryPlaceLabel.AutoSize = true;
+            this.signatoryPlaceLabel.Location = new System.Drawing.Point(9, 85);
+            this.signatoryPlaceLabel.Name = "signatoryPlaceLabel";
+            this.signatoryPlaceLabel.Size = new System.Drawing.Size(85, 13);
+            this.signatoryPlaceLabel.TabIndex = 22;
+            this.signatoryPlaceLabel.Text = "Signatory Place:";
+            this.signatoryPlaceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // signatoryTitle
+            // 
+            this.signatoryTitle.Location = new System.Drawing.Point(100, 55);
+            this.signatoryTitle.Name = "signatoryTitle";
+            this.signatoryTitle.Size = new System.Drawing.Size(143, 21);
+            this.signatoryTitle.TabIndex = 21;
+            // 
+            // signatoryTitleLabel
+            // 
+            this.signatoryTitleLabel.AutoSize = true;
+            this.signatoryTitleLabel.Location = new System.Drawing.Point(14, 58);
+            this.signatoryTitleLabel.Name = "signatoryTitleLabel";
+            this.signatoryTitleLabel.Size = new System.Drawing.Size(80, 13);
+            this.signatoryTitleLabel.TabIndex = 20;
+            this.signatoryTitleLabel.Text = "Signatory Title:";
+            this.signatoryTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // signatoryContactName
+            // 
+            this.signatoryContactName.Location = new System.Drawing.Point(100, 28);
+            this.signatoryContactName.Name = "signatoryContactName";
+            this.signatoryContactName.Size = new System.Drawing.Size(143, 21);
+            this.signatoryContactName.TabIndex = 19;
+            // 
+            // signatoryContactNameLabel
+            // 
+            this.signatoryContactNameLabel.AutoSize = true;
+            this.signatoryContactNameLabel.Location = new System.Drawing.Point(7, 31);
+            this.signatoryContactNameLabel.Name = "signatoryContactNameLabel";
+            this.signatoryContactNameLabel.Size = new System.Drawing.Size(87, 13);
+            this.signatoryContactNameLabel.TabIndex = 18;
+            this.signatoryContactNameLabel.Text = "Signatory Name:";
+            this.signatoryContactNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.signatoryPlace);
+            this.groupBox1.Controls.Add(this.signatoryContactNameLabel);
+            this.groupBox1.Controls.Add(this.signatoryContactName);
+            this.groupBox1.Controls.Add(this.signatoryPlaceLabel);
+            this.groupBox1.Controls.Add(this.signatoryTitleLabel);
+            this.groupBox1.Controls.Add(this.signatoryTitle);
+            this.groupBox1.Location = new System.Drawing.Point(9, 166);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(271, 116);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Dangerous Goods Signatory";
+            // 
             // FedExDangerousGoodsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -366,11 +441,13 @@
             this.Controls.Add(this.dangerousGoodsEnabled);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExDangerousGoodsControl";
-            this.Size = new System.Drawing.Size(286, 390);
+            this.Size = new System.Drawing.Size(286, 497);
             this.panelDangerousGoodsDetails.ResumeLayout(false);
             this.panelDangerousGoodsDetails.PerformLayout();
             this.hazardousMaterialGroupBox.ResumeLayout(false);
             this.hazardousMaterialGroupBox.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -406,5 +483,12 @@
         private UI.Controls.MultiValueTextBox emergencyContactPhone;
         private UI.Controls.MultiValueTextBox hazardousMaterialTechnicalName;
         private System.Windows.Forms.Label hazardousMaterialTechnicalNameLabel;
+        private UI.Controls.MultiValueTextBox signatoryPlace;
+        private System.Windows.Forms.Label signatoryPlaceLabel;
+        private UI.Controls.MultiValueTextBox signatoryTitle;
+        private System.Windows.Forms.Label signatoryTitleLabel;
+        private UI.Controls.MultiValueTextBox signatoryContactName;
+        private System.Windows.Forms.Label signatoryContactNameLabel;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
