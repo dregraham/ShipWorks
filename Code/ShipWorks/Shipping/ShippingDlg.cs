@@ -683,8 +683,6 @@ namespace ShipWorks.Shipping
             LoadShipmentTypeCombo();
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
-
-            applyingProfile = false;
         }
 
         /// <summary>
@@ -1532,7 +1530,7 @@ namespace ShipWorks.Shipping
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                         menuItem.Tag = profile;
-                        menuItem.Click += new EventHandler(OnApplyProfile);
+                        menuItem.Click += OnApplyProfile;
 
                         if (profile.ShipmentTypePrimary && contextMenuProfiles.Items.Count > 0)
                         {
@@ -1560,7 +1558,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// User has selected to apply a profile to the selected shipments
         /// </summary>
-        private void OnApplyProfile(object sender, EventArgs e)
+        private async void OnApplyProfile(object sender, EventArgs e)
         {
             applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
@@ -1579,7 +1577,8 @@ namespace ShipWorks.Shipping
             }
 
             // Reload the UI to show the changes
-            LoadSelectedShipments(true);
+            await LoadSelectedShipments(true);
+            applyingProfile = false;
         }
 
         /// <summary>
