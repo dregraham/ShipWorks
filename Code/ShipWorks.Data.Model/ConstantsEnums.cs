@@ -2890,6 +2890,8 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuanityUnits,
 		///<summary>HazardousMaterialTechnicalName. </summary>
 		HazardousMaterialTechnicalName,
+		///<summary>AlcoholRecipientType. </summary>
+		AlcoholRecipientType,
 		/// <summary></summary>
 		AmountOfFields
 	}

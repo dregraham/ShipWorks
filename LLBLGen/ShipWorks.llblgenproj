@@ -834,6 +834,7 @@
       </EntityDefinition>
       <EntityDefinition Name="FedExPackage" ObjectID="8179c396-8aa8-4f34-8ba0-2cfd8eede45a">
         <Fields>
+          <Field Name="AlcoholRecipientType" Type="int" Precision="10" FieldIndex="34" />
           <Field Name="ContainsAlcohol" Type="bool" FieldIndex="19" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" FieldIndex="22" />
           <Field Name="DangerousGoodsCargoAircraftOnly" Type="bool" FieldIndex="23" />
@@ -3546,7 +3547,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-21T19:21:45.0349887Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-10-19T19:13:37.2920481Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4474,20 +4475,21 @@
                     <Field Name="PriorityAlertDetailContent" Ordinal="18" DbType="12" Length="1024" />
                     <Field Name="DryIceWeight" Ordinal="19" DbType="6" Precision="38" />
                     <Field Name="ContainsAlcohol" Ordinal="20" DbType="2" />
-                    <Field Name="DangerousGoodsEnabled" Ordinal="21" DbType="2" />
-                    <Field Name="DangerousGoodsType" Ordinal="22" DbType="8" Precision="10" />
-                    <Field Name="DangerousGoodsAccessibilityType" Ordinal="23" DbType="8" Precision="10" />
-                    <Field Name="DangerousGoodsCargoAircraftOnly" Ordinal="24" DbType="2" />
-                    <Field Name="DangerousGoodsEmergencyContactPhone" Ordinal="25" DbType="12" Length="16" />
-                    <Field Name="DangerousGoodsOfferor" Ordinal="26" DbType="12" Length="128" />
-                    <Field Name="DangerousGoodsPackagingCount" Ordinal="27" DbType="8" Precision="10" />
-                    <Field Name="HazardousMaterialNumber" Ordinal="28" DbType="12" Length="16" />
-                    <Field Name="HazardousMaterialClass" Ordinal="29" DbType="12" Length="8" />
-                    <Field Name="HazardousMaterialProperName" Ordinal="30" DbType="12" Length="64" />
-                    <Field Name="HazardousMaterialPackingGroup" Ordinal="31" DbType="8" Precision="10" />
-                    <Field Name="HazardousMaterialQuantityValue" Ordinal="32" DbType="6" Precision="38" />
-                    <Field Name="HazardousMaterialQuanityUnits" Ordinal="33" DbType="8" Precision="10" />
-                    <Field Name="HazardousMaterialTechnicalName" Ordinal="34" DbType="12" Length="64" />
+                    <Field Name="AlcoholRecipientType" Ordinal="21" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsEnabled" Ordinal="22" DbType="2" />
+                    <Field Name="DangerousGoodsType" Ordinal="23" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsAccessibilityType" Ordinal="24" DbType="8" Precision="10" />
+                    <Field Name="DangerousGoodsCargoAircraftOnly" Ordinal="25" DbType="2" />
+                    <Field Name="DangerousGoodsEmergencyContactPhone" Ordinal="26" DbType="12" Length="16" />
+                    <Field Name="DangerousGoodsOfferor" Ordinal="27" DbType="12" Length="128" />
+                    <Field Name="DangerousGoodsPackagingCount" Ordinal="28" DbType="8" Precision="10" />
+                    <Field Name="HazardousMaterialNumber" Ordinal="29" DbType="12" Length="16" />
+                    <Field Name="HazardousMaterialClass" Ordinal="30" DbType="12" Length="8" />
+                    <Field Name="HazardousMaterialProperName" Ordinal="31" DbType="12" Length="64" />
+                    <Field Name="HazardousMaterialPackingGroup" Ordinal="32" DbType="8" Precision="10" />
+                    <Field Name="HazardousMaterialQuantityValue" Ordinal="33" DbType="6" Precision="38" />
+                    <Field Name="HazardousMaterialQuanityUnits" Ordinal="34" DbType="8" Precision="10" />
+                    <Field Name="HazardousMaterialTechnicalName" Ordinal="35" DbType="12" Length="64" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -9419,6 +9421,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":FedExPackage" TargetName="ShipWorksLocal:dbo:FedExPackage">
           <FieldMappings>
+            <FieldMapping FieldName="AlcoholRecipientType" TargetFieldName="AlcoholRecipientType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />
             <FieldMapping FieldName="DangerousGoodsCargoAircraftOnly" TargetFieldName="DangerousGoodsCargoAircraftOnly" />

@@ -46,6 +46,7 @@ CREATE TABLE [dbo].[FedExPackage]
 [PriorityAlertDetailContent] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DryIceWeight] [float] NOT NULL,
 [ContainsAlcohol] [bit] NOT NULL,
+[AlcoholRecipientType] [int] NOT NULL,
 [DangerousGoodsEnabled] [bit] NOT NULL,
 [DangerousGoodsType] [int] NOT NULL,
 [DangerousGoodsAccessibilityType] [int] NOT NULL,
