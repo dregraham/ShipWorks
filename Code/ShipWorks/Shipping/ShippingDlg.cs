@@ -98,6 +98,7 @@ namespace ShipWorks.Shipping
         private readonly ICustomsManager customsManager;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private bool closing;
+        private bool applyingProfile;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -549,8 +550,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool SaveUIDisplayedShipments()
         {
-            // Save all changes from the UI to the entities loaded into the UI
-            SaveChangesToUIDisplayedShipments();
+            // Already called in OnApplyProfile. Calling again causes profile to be overwritten.
+            if (!applyingProfile)
+            {
+                // Save all changes from the UI to the entities loaded into the UI
+                SaveChangesToUIDisplayedShipments();
+            }
 
             // Save changes to the database for those entities that have been completely removed from the grid.  If we didn't do this now, then
             // the save would never happen, b\c we wouldn't have a reference to it when we closed.
@@ -956,7 +961,14 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            HookUpServiceControlEvents(newServiceControl);
+            newServiceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
+            newServiceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
+            newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+            newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+            newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+            newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
+            newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
+            newServiceControl.ClearRatesAction = ClearRates;
 
             rateControl.RateSelected += newServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
@@ -978,43 +990,17 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            UnhookServiceControlEvents(oldServiceControl);
-
+            oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
+            oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+            oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+            oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+            oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+            oldServiceControl.ClearRatesAction = ClearRates;
             rateControl.RateSelected -= oldServiceControl.OnRateSelected;
             rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
             rateControl.ReloadRatesRequired -= OnRateReloadRequired;
-        }
-
-        /// <summary>
-        /// Unhooks the service control events.
-        /// </summary>
-        /// <param name="serviceControl">The service control.</param>
-        private void UnhookServiceControlEvents(ServiceControlBase serviceControl)
-        {
-            serviceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
-            serviceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
-            serviceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
-            serviceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
-            serviceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-            serviceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
-            serviceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-            serviceControl.ClearRatesAction = ClearRates;
-        }
-
-        /// <summary>
-        /// Hooks up service control events.
-        /// </summary>
-        /// <param name="serviceControl">The service control.</param>
-        private void HookUpServiceControlEvents(ServiceControlBase serviceControl)
-        {
-            serviceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
-            serviceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
-            serviceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
-            serviceControl.RateCriteriaChanged += OnRateCriteriaChanged;
-            serviceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-            serviceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
-            serviceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
-            serviceControl.ClearRatesAction = ClearRates;
         }
 
         /// <summary>
@@ -1572,11 +1558,19 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// User has selected to apply a profile to the selected shipments
         /// </summary>
+        /// <remarks>
+        /// Wrapping the method with this applyingProfile flag is not ideal, but after exploring other options
+        /// this seems to have the least impact. We can't just unhook the events and re-add them at the end,
+        /// because inside of the carrier specific service controls, they are doing their own event unhooking
+        /// and hooking up in the LoadShipments method. When hooking events back up, the service controls
+        /// hook up events that are specific to that carrier, which we would not have access to here. Another thought
+        /// was to try and unhook and hookup events here, but check if the handler is null before hooking it back up,
+        /// so we don't overwrite the carrier specific events. However, we can't do that because event handlers can only
+        /// be used with -= and += operations outside of their defining class, ServiceControl in this case.
+        /// </remarks>
         private async void OnApplyProfile(object sender, EventArgs e)
         {
-            // Unhook events, so they don't interfere with applying the profile.
-            UnhookServiceControlEvents(ServiceControl);
-
+            applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
@@ -1594,9 +1588,7 @@ namespace ShipWorks.Shipping
 
             // Reload the UI to show the changes
             await LoadSelectedShipments(true);
-
-            // Hook events back up, now that profile is applied.
-            HookUpServiceControlEvents(ServiceControl);
+            applyingProfile = false;
         }
 
         /// <summary>
