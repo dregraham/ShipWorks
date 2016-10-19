@@ -152,20 +152,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonDownloadedLabelData.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonCancelShipmentRequest.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapter.cs" />
+    <Compile Include="Carriers\iParcel\iParcelDownloadedLabelData.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapter.cs" />
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
@@ -173,13 +178,16 @@
     <Compile Include="Carriers\None\NoneShipmentType.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapter.cs" />
     <Compile Include="Carriers\NullShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracDownloadedLabelData.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapter.cs" />
+    <Compile Include="Carriers\NullDownloadedLabelData.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapter.cs" />
@@ -193,6 +201,7 @@
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
@@ -284,7 +293,6 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\IAmazonNotLinkedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
@@ -349,6 +357,10 @@
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj">
       <Project>{c53624d5-5b3b-48a6-9729-52a573726de9}</Project>
       <Name>ShipWorks.Stores</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

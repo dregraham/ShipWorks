@@ -8,9 +8,9 @@ namespace ShipWorks.Shipping.Carriers.None
     public class NoneLabelService : ILabelService
     {
         /// <summary>
-        /// Creates a none label 
+        /// Creates a none label
         /// </summary>
-        public void Create(ShipmentEntity shipment)
+        public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
             throw new ShippingException("No carrier is selected for the shipment.");
         }

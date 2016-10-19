@@ -1,4 +1,3 @@
-using System;
 using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
@@ -11,6 +10,7 @@ using ShipWorks.UI.Controls.ChannelLimit.ChannelLimitBehavior;
 using ShipWorks.UI.Controls.CustomerLicenseActivation;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.UI.Services;
+using System;
 
 namespace ShipWorks.UI
 {
@@ -66,6 +66,12 @@ namespace ShipWorks.UI
 
             builder.RegisterType<WebBrowserDlg>()
                 .Named<IDialog>("WebBrowserDlg");
+
+            builder.RegisterType<DismissableWebBrowserDlg>()
+                .Named<IDialog>("DismissableWebBrowserDlg");
+
+            builder.RegisterType<DismissableWebBrowserDlgViewModel>()
+                .As<IDismissableWebBrowserDlgViewModel>();
 
             builder.RegisterType<WebBrowserFactory>()
                 .AsImplementedInterfaces();

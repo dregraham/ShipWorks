@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
@@ -36,21 +37,24 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                 .Select(x => new
                 {
                     Component = x,
-                    Attribute = GetAttribute(x),
+                    Attributes = GetAttributes(x),
                 })
-                .Where(x => x.Attribute != null);
+                .Where(x => x.Attributes.Any());
 
             foreach (var item in keyedComponents)
             {
-                builder.RegisterType(item.Component)
-                    .Keyed(item.Attribute.Key, item.Attribute.Service);
+                foreach (var attribute in item.Attributes)
+                {
+                    builder.RegisterType(item.Component)
+                        .Keyed(attribute.Key, attribute.Service);
+                }
             }
         }
 
         /// <summary>
         /// Get a component attribute from the type
         /// </summary>
-        private static KeyedComponentAttribute GetAttribute(Type type) =>
-            GetCustomAttribute(type, typeof(KeyedComponentAttribute)) as KeyedComponentAttribute;
+        private static IEnumerable<KeyedComponentAttribute> GetAttributes(Type type) =>
+            GetCustomAttributes(type, typeof(KeyedComponentAttribute)).OfType<KeyedComponentAttribute>();
     }
 }

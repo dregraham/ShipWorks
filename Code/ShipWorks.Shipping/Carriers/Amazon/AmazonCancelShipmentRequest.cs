@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -9,7 +10,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Class for handling requests to the Amazon shipping api
     /// </summary>
-    public class AmazonCancelShipmentRequest : IAmazonShipmentRequest
+    [Component]
+    public class AmazonCancelShipmentRequest : IAmazonCancelShipmentRequest
     {
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;

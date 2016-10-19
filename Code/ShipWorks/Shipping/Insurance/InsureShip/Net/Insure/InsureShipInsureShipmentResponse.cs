@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using System.Net;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 {
@@ -32,12 +30,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// <exception cref="InsureShipResponseException"></exception>
         public InsureShipResponseCode Process()
         {
-            request.Shipment.InsurancePolicy = request.Shipment.InsurancePolicy ?? new InsurancePolicyEntity
-            {
-                InsureShipStoreName = request.Affiliate.InsureShipPolicyID,
-                CreatedWithApi = false
-            };
-
             InsureShipResponseCode responseCode;
 
             int statusCode = (int) request.ResponseStatusCode;

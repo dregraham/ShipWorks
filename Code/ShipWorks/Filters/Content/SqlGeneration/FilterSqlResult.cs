@@ -409,14 +409,15 @@ namespace ShipWorks.Filters.Content.SqlGeneration
 
                 case SqlDbType.NChar:
                 case SqlDbType.NVarChar:
-                    return string.Format("nvarchar({0})", parameter.Size);
+                    return string.Format("nvarchar({0})", (parameter.Size == 0 || parameter.Size > 4000) ? "max" : parameter.Size.ToString());
 
                 case SqlDbType.Binary:
                 case SqlDbType.VarBinary:
                     // Currently, all our column masks are 100 in size.But in case we change that later,
                     // use the max of 100 or the actual length.  Also, this could be used for one of the other varbinary
                     // columns that have a larger size.
-                    return string.Format("varbinary({0})", Math.Max(100, parameter.Size));
+                    int size = Math.Max(100, parameter.Size);
+                    return string.Format("varbinary({0})", size > 8000 ? "max" : size.ToString());
             }
 
             throw new InvalidOperationException(string.Format("Invalid parameter type: {0}.", parameter.SqlDbType));

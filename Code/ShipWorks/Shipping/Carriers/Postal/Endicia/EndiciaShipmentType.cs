@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Apply the given shipping profile to the shipment
         /// </summary>
-        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             base.ApplyProfile(shipment, profile);
 
@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (shipment.Postal.Endicia != null)
             {
                 EndiciaShipmentEntity endiciaShipment = shipment.Postal.Endicia;
-                EndiciaProfileEntity endiciaProfile = profile.Postal.Endicia;
+                IEndiciaProfileEntity endiciaProfile = profile.Postal.Endicia;
 
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.EndiciaAccountID, endiciaShipment, EndiciaShipmentFields.EndiciaAccountID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);

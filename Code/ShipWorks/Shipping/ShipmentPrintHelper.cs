@@ -87,6 +87,20 @@ namespace ShipWorks.Shipping
                         {
                             return template;
                         }
+                        else
+                        {
+                            log.Info($"ShipmentPrintHelper.DetermineGroupTemplate: ShipmentID wasn't found in filter content, trying again.");
+
+                            // Double check that quick filters are up to date, and check the filter content again.
+                            FilterHelper.EnsureQuickFiltersUpToDate();
+
+                            if (FilterHelper.IsObjectInFilterContent(shipment.ShipmentID, filterContentID.Value))
+                            {
+                                return template;
+                            }
+
+                            log.Info($"ShipmentPrintHelper.DetermineGroupTemplate: Event after calling EnsureQuickFiltersUpToDate(), ShipmentID wasn't found in filter content, trying again.");
+                        }
                     }
                 }
             }

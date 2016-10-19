@@ -534,7 +534,7 @@ namespace ShipWorks.Shipping
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
 
                 // First apply the base profile
-                ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfile(this));
+                ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this));
 
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
@@ -549,7 +549,7 @@ namespace ShipWorks.Shipping
                 // Go through each additional profile and apply it as well
                 foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
                 {
-                    ShippingProfileEntity profile = ShippingProfileManager.GetProfile(rule.ShippingProfileID);
+                    IShippingProfileEntity profile = shippingProfileManager.GetProfileReadOnly(rule.ShippingProfileID);
                     if (profile != null && filterHelper.IsObjectInFilterContent(shipment.OrderID, rule))
                     {
                         ApplyProfile(shipment, profile);
@@ -863,6 +863,15 @@ namespace ShipWorks.Shipping
         public abstract string GetServiceDescription(ShipmentEntity shipment);
 
         /// <summary>
+        /// Get the carrier specific description of the shipping service used, overidden by shipment types to provide a
+        /// compatible description for special one off service types like USPS GlobalPost
+        /// </summary>
+        public virtual string GetOveriddenServiceDescription(ShipmentEntity shipment)
+        {
+            return GetServiceDescription(shipment);
+        }
+
+        /// <summary>
         /// Can be overridden by derived classes to provide common carrier details of shipments
         /// </summary>
         public virtual ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)
@@ -899,7 +908,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Apply the specified shipment profile to the given shipment.
         /// </summary>
-        public virtual void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        public virtual void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);

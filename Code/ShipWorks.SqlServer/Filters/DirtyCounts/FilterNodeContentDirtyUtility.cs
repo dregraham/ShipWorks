@@ -163,21 +163,30 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             long computerID = UtilityFunctions.GetComputerID(con);
 
             // Insert everything into the dirty table.  Dupes will be dealt with when we update the counts.
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = string.Format(@"
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = string.Format(@"
+                        IF OBJECT_ID('tempdb..#FNCDTemp') IS NOT NULL DROP TABLE #FNCDTemp
 
-                INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                  SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
+                        SELECT {0} as [ObjectID], {1} as [ParentID], @type as [ObjectType], @computerID as [ComputerID], @columns as [ColumnsUpdated] 
+                            INTO #FNCDTemp FROM {2} 
+
+                        INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
+
+                        INSERT INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
             
-            ",
+                        DROP TABLE tempdb..#FNCDTemp
+                    ",
+                    primaryKey, parentID, table);
 
-            primaryKey, parentID, table);
+                cmd.Parameters.AddWithValue("@computerID", computerID);
+                cmd.Parameters.AddWithValue("@type", type);
+                cmd.Parameters.AddWithValue("@columns", columnsUpdated);
 
-            cmd.Parameters.AddWithValue("@computerID", computerID);
-            cmd.Parameters.AddWithValue("@type", type);
-            cmd.Parameters.AddWithValue("@columns", columnsUpdated);
-
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>

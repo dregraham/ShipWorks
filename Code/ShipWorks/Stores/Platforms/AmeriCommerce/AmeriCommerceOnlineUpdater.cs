@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
@@ -17,30 +13,20 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     /// </summary>
     public class AmeriCommerceOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceOnlineUpdater));
-						  
+
         // store for which this updater is to operate
-        AmeriCommerceStoreEntity store;
+        private readonly AmeriCommerceStoreEntity store;
 
         // status code provider
-        AmeriCommerceStatusCodeProvider statusCodeProvider;
+        private AmeriCommerceStatusCodeProvider statusCodeProvider;
 
         /// <summary>
         /// Gets the status code provider
         /// </summary>
-        protected AmeriCommerceStatusCodeProvider StatusCodes
-        {
-            get
-            {
-                if (statusCodeProvider == null)
-                {
-                    statusCodeProvider = new AmeriCommerceStatusCodeProvider(store);
-                }
-
-                return statusCodeProvider;
-            }
-        }
+        protected AmeriCommerceStatusCodeProvider StatusCodes =>
+            statusCodeProvider ?? (statusCodeProvider = new AmeriCommerceStatusCodeProvider(store));
 
         /// <summary>
         /// Constructor
@@ -125,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             OrderEntity order = shipment.Order;
             if (!order.IsManual)
             {
-                // Upload tracking number 
+                // Upload tracking number
                 AmeriCommerceWebClient client = new AmeriCommerceWebClient(store);
 
                 // upload the details

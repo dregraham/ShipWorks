@@ -1,6 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Messaging.Messages.Shipping
 {
@@ -12,7 +12,7 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApplyProfileMessage(object sender, long shipmentID, ShippingProfileEntity profile)
+        public ApplyProfileMessage(object sender, long shipmentID, IShippingProfileEntity profile)
         {
             Sender = sender;
             ShipmentID = shipmentID;
@@ -38,6 +38,6 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Profile to be applied
         /// </summary>
-        public ShippingProfileEntity Profile { get; }
+        public IShippingProfileEntity Profile { get; }
     }
 }

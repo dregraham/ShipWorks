@@ -170,6 +170,7 @@
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModelTest.cs" />
     <Compile Include="Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
     <Compile Include="Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
+    <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlgViewModelTest.cs" />
     <Compile Include="Controls\WebBrowser\WebBrowserFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controls\AddressControl\AddressViewModelTest.cs" />

@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
-using System.Data.Common;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Shipping;
-using System.Net;
 using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 
@@ -30,11 +26,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public class EbayOnlineUpdater
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayOnlineUpdater));
 
         // the store we're working on behalf of
-        EbayStoreEntity store;
+        private readonly EbayStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -61,8 +57,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void SendMessage(EbayOrderItemEntity orderItem, EbaySendMessageType messageType, string subject, string message, bool copySender)
         {
-            // Need the buyer and to convert the ShipWorks ebay message type to the 
-            // type expected by eBay to send an eBay message 
+            // Need the buyer and to convert the ShipWorks ebay message type to the
+            // type expected by eBay to send an eBay message
             string buyerID = ((EbayOrderEntity)orderItem.Order).EbayBuyerID;
             QuestionTypeCodeType ebayMessageType = EbayUtility.GetEbayQuestionTypeCode(messageType);
 
@@ -71,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
 
                 // Fire off the message
-                webClient.SendMessage(orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender);                
+                webClient.SendMessage(orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender);
             }
             catch (EbayException ex)
             {
@@ -110,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
                 webClient.LeaveFeedback(orderItem.EbayItemID, orderItem.EbayTransactionID, ((EbayOrderEntity) orderItem.Order).EbayBuyerID, feedbackType, feedback);
-                
+
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
                     orderItem.OrderID, orderItem.EbayItemID, orderItem.EbayTransactionID);
 
@@ -264,15 +260,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     log.WarnFormat("Not updating online status for order item {0} becaue it is manual or was deleted.", ebayItem.EbayItemID);
                     continue;
                 }
-                
+
                 string trackingNumber = string.Empty;
                 string carrierCode = ShippingCarrierCodeType.CustomCode.ToString();
 
                 if (shipped.HasValue && shipped.Value)
                 {
-                    // We have shipping information, so get the shipment details   
+                    // We have shipping information, so get the shipment details
                     ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
-                    
+
                     if (shipment != null)
                     {
                         try
@@ -299,7 +295,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             // We can't upload tracking details because this isn't a supported carrier, so create a
                             // note with the tracking number instead
                             string notesText = string.Format("Shipped {0} on {1}. Tracking number: {2}",
-                                ShippingManager.GetServiceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
+                                ShippingManager.GetOverriddenSerivceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
 
                             webClient.AddUserNote(ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
                         }
@@ -328,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     ebayItem.MyEbayShipped = shipped.Value;
 
-                    // Only overwrite Local Status if it's blank 
+                    // Only overwrite Local Status if it's blank
                     if (string.IsNullOrEmpty(order.LocalStatus))
                     {
                         order.LocalStatus = "Shipped";
@@ -341,7 +337,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     ebayItem.MyEbayPaid = paid.Value;
                 }
 
-                // Save the order on each iteration of the child item as this also recurses to save the child item, 
+                // Save the order on each iteration of the child item as this also recurses to save the child item,
                 // and we want it updated right away.
                 unitOfWork.AddForSave(order);
             }
@@ -401,7 +397,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         if (!string.IsNullOrEmpty(trackingNumber))
                         {
                             // From eBay web service info:
-                            // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations. 
+                            // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations.
                             // Buyers will subsequently be sent to the UPS Mail Innovations website for tracking.
                             useUpsMailInnovationsCarrierType = true;
                         }
@@ -432,7 +428,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         description.IsUSPS ? ShippingCarrierCodeType.USPS :
                         description.IsDHL ? ShippingCarrierCodeType.DHL :
                         ShippingCarrierCodeType.Other;
-                    
+
                     break;
             }
 

@@ -85,7 +85,9 @@
       <HintPath>..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.5.16.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Moq.4.5.16\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -142,13 +144,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapterTest.cs" />

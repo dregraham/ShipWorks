@@ -1,12 +1,11 @@
 ﻿#region
 
+using System;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.ApplicationCore.Security;
-using ShipWorks.Data.Administration;
-using System;
 using Xunit;
 
 #endregion
@@ -25,20 +24,6 @@ namespace ShipWorks.Tests.ApplicationCore.Security
                 mock.Create<EncryptionProviderFactory>().CreateLicenseEncryptionProvider();
 
                 cipherProvider.Verify(i => i[It.Is<CipherContext>(c => c == CipherContext.License)], Times.Once);
-            }
-        }
-
-        [Fact]
-        public void CreateLicenseEncryptionProvider_CallsIsCustomerLicenseSupported()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                MockCipherProvider(mock, CipherContext.License);
-                var sqlSchemaVersion = mock.Mock<ISqlSchemaVersion>();
-
-                mock.Create<EncryptionProviderFactory>().CreateLicenseEncryptionProvider();
-
-                sqlSchemaVersion.Verify(v => v.IsCustomerLicenseSupported(), Times.Once);
             }
         }
 

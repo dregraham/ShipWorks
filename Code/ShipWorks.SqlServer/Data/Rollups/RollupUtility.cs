@@ -87,7 +87,7 @@ namespace ShipWorks.SqlServer.Data.Rollups
                 }
 
                 // Single\Same or Null
-                if (column.Method == RollupMethod.SingleOrNull || 
+                if (column.Method == RollupMethod.SingleOrNull ||
                     column.Method == RollupMethod.SameOrNull)
                 {
                     string countClause = (column.Method == RollupMethod.SingleOrNull) ? "COUNT(*)" : string.Format("COUNT(DISTINCT(t.{0}))", column.SourceColumn);
@@ -103,12 +103,12 @@ namespace ShipWorks.SqlServer.Data.Rollups
                 }
                 else
                 {
-                    sqlColumnList.AppendFormat("SUM(t.{0}) as {0}", column.SourceColumn);
+                    sqlColumnList.AppendFormat("SUM(COALESCE(t.{0}, 0)) as {0}", column.SourceColumn);
 
                     // If its an update we also need to know what the sum used to be, so that we can know what the difference is
                     if (triggerAction == TriggerAction.Update)
                     {
-                        sqlColumnList.AppendFormat(", SUM(d.{0}) as {0}Previous", column.SourceColumn);
+                        sqlColumnList.AppendFormat(", SUM(COALESCE(d.{0}, 0)) as {0}Previous", column.SourceColumn);
 
                         previousSumsRequired = true;
                     }
@@ -166,7 +166,7 @@ namespace ShipWorks.SqlServer.Data.Rollups
                     }
                     else
                     {
-                        setColumns.AppendFormat("[{0}].{1} = [{0}].{1} + (r.{2} - r.{2}Previous)", parentTable, column.TargetColumn, column.SourceColumn);
+                        setColumns.AppendFormat("[{0}].{1} = COALESCE([{0}].{1}, 0) + COALESCE((r.{2} - r.{2}Previous), 0)", parentTable, column.TargetColumn, column.SourceColumn);
                     }
                 }
 
@@ -183,7 +183,7 @@ namespace ShipWorks.SqlServer.Data.Rollups
                     }
                     else
                     {
-                        setColumns.AppendFormat("[{0}].{1} = [{0}].{1} + r.{2}", parentTable, column.TargetColumn, column.SourceColumn);
+                        setColumns.AppendFormat("[{0}].{1} = COALESCE([{0}].{1}, 0) + COALESCE(r.{2}, 0)", parentTable, column.TargetColumn, column.SourceColumn);
                     }
                 }
 
@@ -202,7 +202,7 @@ namespace ShipWorks.SqlServer.Data.Rollups
                     }
                     else
                     {
-                        setColumns.AppendFormat("[{0}].{1} = [{0}].{1} - r.{2}", parentTable, column.TargetColumn, column.SourceColumn);
+                        setColumns.AppendFormat("[{0}].{1} = COALESCE([{0}].{1}, 0) - COALESCE(r.{2}, 0)", parentTable, column.TargetColumn, column.SourceColumn);
                     }
                 }
             }

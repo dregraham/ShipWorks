@@ -189,7 +189,7 @@ SELECT @ActionID = CONVERT(NVARCHAR(20), SCOPE_IDENTITY())
 PRINT(N'Add 1 row to [dbo].[Scheduling_JOB_DETAILS]')
 INSERT INTO [dbo].[Scheduling_JOB_DETAILS]
 ([SCHED_NAME], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [JOB_CLASS_NAME], [IS_DURABLE], [IS_NONCONCURRENT], [IS_UPDATE_DATA], [REQUESTS_RECOVERY], [JOB_DATA])
-VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Scheduling.QuartzNet.ActionJob, ShipWorks', 0, 0, 0, 0, null)
+VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Scheduling.QuartzNet.ActionJob, ShipWorks.Core', 0, 0, 0, 0, null)
 
 PRINT (N'Add 1 row to [dbo].[ActionTask]')
 INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError])

@@ -1139,12 +1139,15 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostLabelNotification.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\IUspsRatePromotionFootnoteViewModel.cs" />
@@ -1159,6 +1162,10 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsGlobalPostTermsAndConditionsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\Manipulators\UpsLinkNewAccountInfoManipulator.cs" />
     <Compile Include="Shipping\Carriers\UPS\LinkNewAccount\Request\UpsLinkNewAccountToProfileRequest.cs" />
@@ -1171,13 +1178,18 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypePreProcessor.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipPackageImporter.cs" />
     <Compile Include="Shipping\CustomsControlCache.cs" />
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
     <Compile Include="Shipping\ICachedRatesService.cs" />
+    <Compile Include="Shipping\IDownloadedLabelData.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceUtility.cs" />
@@ -2474,7 +2486,6 @@
       <DependentUpon>iParcelAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentials.cs" />
-    <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepository.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelException.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelOptionsControl.cs">
       <SubType>UserControl</SubType>
@@ -2554,7 +2565,6 @@
     <Compile Include="Shipping\Carriers\OnTrac\Enums\OnTracServiceType.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Authentication\OnTracAuthentication.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\OnTracRequest.cs" />
-    <Compile Include="Shipping\Carriers\OnTrac\Net\Shipment\DatabaseOnTracShipmentRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Shipment\OnTracDTOAdapter.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Shipment\OnTracShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Net\Track\OnTracTrackedShipment.cs" />
@@ -8719,6 +8729,7 @@
     </None>
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv29.wsdl" />
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl" />
+    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv55.wsdl" />
     <None Include="Shipping\Carriers\UPS\OnLineTools\Wsdl\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -8763,8 +8774,9 @@
     </None>
     <None Include="Stores\Platforms\CsCart\shipworks3.php" />
     <None Include="Stores\Platforms\LoadedCommerce\shipworks3.php" />
-    <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
-    <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
+    <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
+    <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\Module.zip" />
+    <None Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\composer.json" />
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
@@ -10580,7 +10592,7 @@
     <None Include="Resources\groupon.png" />
     <None Include="Resources\globe16.png" />
     <Resource Include="Resources\information2_16.png" />
-    <None Include="Resources\help16.png" />
+    <Resource Include="Resources\help16.png" />
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
@@ -10778,11 +10790,25 @@
     <EmbeddedResource Include="Stores\Platforms\Groupon\Template\GrouponPackingSlip.xsl" />
     <None Include="Resources\viewofstreet.png" />
     <Resource Include="Resources\table_dollar_sign_16_16.png" />
-    <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
-    <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
-    <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
     <None Include="Stores\Platforms\XCart\Modules\XCart5\shipworks3.php" />
     <EmbeddedResource Include="Stores\Platforms\Choxi\Template\ChoxiPackingSlip.xsl" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Api\OrderActionParametersInterface.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Api\OrderInterface.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Api\ShipWorksInterface.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Api\StoreInterface.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Api\WriterInterface.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\etc\di.xml" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\etc\module.xml" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\etc\webapi.xml" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Model\Order.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Model\OrderActionParameters.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Model\ShipWorks.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Model\Store.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\Model\XMLWriter.php" />
+    <Content Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\registration.php" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.ScanForms
                         new GridCell(shipment.Order.OrderNumberComplete),
                         new GridCell(GetRecipientDisplay(shipment)),
                         new GridDateTimeCell(shipment.ProcessedDate.Value.ToLocalTime()),
-                        new GridCell(ShippingManager.GetServiceUsed(shipment)),
+                        new GridCell(ShippingManager.GetActualServiceUsed(shipment)),
                         new GridDecimalCell(shipment.ShipmentCost),
                         new GridCell(shipment.TrackingNumber)
                     });
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.ScanForms
                     {
                         dlg.ShowDialog(this);
                         DialogResult = DialogResult.OK;
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
