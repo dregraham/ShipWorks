@@ -83,11 +83,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 specialServiceTypes.Add(ShipmentSpecialServiceType.SATURDAY_DELIVERY);
             }
 
-            if (request.ShipmentEntity.FedEx.ReturnsClearance)
-            {
-                specialServiceTypes.Add(ShipmentSpecialServiceType.RETURNS_CLEARANCE);
-            }
-
             // Assign the updated special service types list back to the request
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
         }

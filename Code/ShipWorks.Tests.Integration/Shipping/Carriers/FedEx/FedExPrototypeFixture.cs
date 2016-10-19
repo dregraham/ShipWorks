@@ -910,7 +910,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                         shipment.FedEx.Signature = (int) FedExSignatureType.Direct;
                         break;
                     case "indirect":
-                        shipment.FedEx.Signature = (int) FedExSignatureType.Direct;
+                        shipment.FedEx.Signature = (int) FedExSignatureType.Indirect;
                         break;
                    case "adult":
                         shipment.FedEx.Signature = (int) FedExSignatureType.Adult;
