@@ -2974,6 +2974,8 @@ namespace ShipWorks.Data.Model
 		ReturnsClearance,
 		///<summary>ReferenceFIMS. </summary>
 		ReferenceFIMS,
+		///<summary>ThirdPartyConsignee. </summary>
+		ThirdPartyConsignee,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3034,6 +3036,12 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuantityValue,
 		///<summary>HazardousMaterialQuanityUnits. </summary>
 		HazardousMaterialQuanityUnits,
+		///<summary>SignatoryContactName. </summary>
+		SignatoryContactName,
+		///<summary>SignatoryTitle. </summary>
+		SignatoryTitle,
+		///<summary>SignatoryPlace. </summary>
+		SignatoryPlace,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3346,6 +3354,8 @@ namespace ShipWorks.Data.Model
 		MaskedData,
 		///<summary>ReferenceFIMS. </summary>
 		ReferenceFIMS,
+		///<summary>ThirdPartyConsignee. </summary>
+		ThirdPartyConsignee,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -63,6 +63,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             HazardousMaterialPackingGroup = source.HazardousMaterialPackingGroup;
             HazardousMaterialQuantityValue = source.HazardousMaterialQuantityValue;
             HazardousMaterialQuanityUnits = source.HazardousMaterialQuanityUnits;
+            SignatoryContactName = source.SignatoryContactName;
+            SignatoryTitle = source.SignatoryTitle;
+            SignatoryPlace = source.SignatoryPlace;
             
             
             FedExProfile = source.FedExProfile?.AsReadOnly(objectMap);
@@ -234,6 +237,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> HazardousMaterialQuanityUnits { get; }
+        /// <summary> The SignatoryContactName property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."SignatoryContactName"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String SignatoryContactName { get; }
+        /// <summary> The SignatoryTitle property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."SignatoryTitle"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String SignatoryTitle { get; }
+        /// <summary> The SignatoryPlace property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."SignatoryPlace"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String SignatoryPlace { get; }
         
         
         public IFedExProfileEntity FedExProfile { get; }
