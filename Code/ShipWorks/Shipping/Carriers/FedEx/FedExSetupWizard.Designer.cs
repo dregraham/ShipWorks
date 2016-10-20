@@ -75,7 +75,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageLicense);
+            this.mainPanel.Controls.Add(this.wizardPageInitial);
             this.mainPanel.Size = new System.Drawing.Size(584, 474);
             // 
             // etchBottom
