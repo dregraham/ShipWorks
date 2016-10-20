@@ -31,6 +31,8 @@ using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 {
@@ -176,6 +178,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
         public string PackageLineItemPriorityEnhancementType { get; set; }
         public string PackageLineItemPriorityContent { get; set; }
+
+        public string PackageLineItemAlcoholDetailRecipientType { get; set; }
 
         public string DryIceWeightUnits { get; set; }
         public double DryIceWeightValue { get; set; }
@@ -776,6 +780,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
+                AlcoholRecipientType recipientType;
+                if (!Enum.TryParse(PackageLineItemAlcoholDetailRecipientType, true, out recipientType))
+                {
+                    recipientType = AlcoholRecipientType.CONSUMER;
+                }
+
+                package.AlcoholRecipientType = (int) recipientType;
                 package.ContainsAlcohol = hasAlcohol;
             }
         }
