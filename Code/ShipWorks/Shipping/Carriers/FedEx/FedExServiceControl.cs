@@ -1081,18 +1081,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" +
-                "FedEx SmartPost parcel select lightweight\n" +
+                "FedEx SmartPost® parcel select lightweight\n" +
                 "FedEx SmartPost® Bound Printed Matter\n" +
                 "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost parcel select\n" +
+                "FedEx SmartPost® parcel select\n" +
                 "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n" +
                 "FedEx International Ground® Distribution\n" +
-                "FedEx International DirectDistribution®\n" +
-                "FedEx International Economy DirectDistribution®\n" +
+                "FedEx® International DirectDistribution\n" +
+                "FedEx International Economy DirectDistribution℠ Service\n" +
                 "FedEx International Priority DirectDistribution®\n" +
-                "FedEx International DirectDistribution® Surface Solutions U.S. to Canada\n" +
-                "FedEx International DirectDistribution® Freight\n\n" +
+                "FedEx International DirectDistribution Surface Solutions U.S. to Canada\n" +
+                "FedEx International Priority DirectDistribution® Freight\n\n" +
 
                 "FedEx® Envelope\n" +
                 "FedEx® Pak\n" +
