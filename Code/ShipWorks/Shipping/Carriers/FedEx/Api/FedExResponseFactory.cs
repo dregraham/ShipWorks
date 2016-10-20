@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// <summary>
     /// An implementation of the ICarrierResponseFactory for FedEx.
     /// </summary>
-    public class FedExResponseFactory : ICarrierResponseFactory
+    public class FedExResponseFactory : IFedExResponseFactory
     {
         private readonly ILabelRepository labelRepository;
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns> An ICarrierResponse representing the response of a shipment request.</returns>
         /// <exception cref="CarrierException">An unexpected response type was provided to create a FedExShipResponse.</exception>
-        public ICarrierResponse CreateShipResponse(object nativeResponse, CarrierRequest request, ShipmentEntity shipmentEntity)
+        public FedExShipResponse CreateShipResponse(object nativeResponse, CarrierRequest request, ShipmentEntity shipmentEntity)
         {
             IFedExNativeShipmentReply processShipmentReply = nativeResponse as IFedExNativeShipmentReply;
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExShipmentCodManipulator(),
                 new FedExShipmentCostManipulator()
             };
-            
+
             return new FedExShipResponse(processShipmentReply, request, shipmentEntity, labelRepository, shipmentManipulators);
         }
 
@@ -91,7 +91,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             return new FedExGlobalShipAddressResponse(locationsReply, request);
         }
-
 
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
@@ -165,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             return new FedExVoidResponse(voidShipmentReply, request);
         }
-        
+
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
         /// carrier API request when registering a new CSP user.
@@ -185,7 +184,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new FedExRegisterCspUserResponse(registerReply, request);
         }
 
-
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
         /// carrier API request when subscribe a shipper to FedEx use the FedEx services.
@@ -204,7 +202,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             return new FedExSubscriptionResponse(subscriptionReply, request);
         }
-
 
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
