@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 throw new ArgumentNullException("request");
             }
 
-            if (!request.ShipmentEntity.ReturnShipment || !request.ShipmentEntity.FedEx.ReturnsClearance)
+            if (!request.ShipmentEntity.ReturnShipment)
             {
                 return;
             }

@@ -258,6 +258,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     service.ApplyMultiValue((FedExServiceType) shipment.FedEx.Service);
                     dropoffType.ApplyMultiValue((FedExDropoffType) shipment.FedEx.DropoffType);
                     returnsClearance.ApplyMultiCheck(shipment.FedEx.ReturnsClearance);
+                    thirdPartyConsignee.ApplyMultiCheck(shipment.FedEx.ThirdPartyConsignee);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     packagingType.ApplyMultiValue((FedExPackagingType) shipment.FedEx.PackagingType);
                     nonStandardPackaging.ApplyMultiCheck(shipment.FedEx.NonStandardContainer);
@@ -486,6 +487,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
                 dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
+                thirdPartyConsignee.ReadMultiCheck(v=>shipment.FedEx.ThirdPartyConsignee = v);
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
                 packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
                 nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);

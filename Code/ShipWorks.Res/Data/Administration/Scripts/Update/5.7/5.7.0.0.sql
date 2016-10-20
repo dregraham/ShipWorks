@@ -30,3 +30,11 @@ GO
 ALTER TABLE [dbo].[FedExProfile] ADD
 [ThirdPartyConsignee] [bit] NULL
 GO
+PRINT N'Set ThirdParytConsignee to 0 on the default FedEx Profile'
+GO
+UPDATE fep
+set fep.[ThirdPartyConsignee] = 0
+FROM dbo.FedExProfile fep	
+INNER JOIN dbo.ShippingProfile sp ON sp.ShippingProfileID = fep.ShippingProfileID
+WHERE sp.ShipmentTypePrimary = 1
+GO

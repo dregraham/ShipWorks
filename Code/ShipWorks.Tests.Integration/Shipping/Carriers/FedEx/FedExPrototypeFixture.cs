@@ -1027,6 +1027,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                         }
 
                         break;
+                    case "third party consignee":
+                        shipment.FedEx.ThirdPartyConsignee = true;
+                        break;
                 }
 
                 // Don't do this if the spreadsheet already specifies a timestamp
