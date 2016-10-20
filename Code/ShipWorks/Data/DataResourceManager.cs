@@ -9,6 +9,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Transactions;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
@@ -155,14 +156,14 @@ namespace ShipWorks.Data
 
             lock (resourceLock)
             {
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                using (SqlAdapter adapter = new SqlAdapter(false))
                 {
                     SHA256 sha = SHA256.Create();
                     byte[] checksum = sha.ComputeHash(data);
 
                     // See if we can find an existing resource
                     ResourceCollection resources = new ResourceCollection();
-                    adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object) checksum), 1, null, null, excludeDataFields);
+                    adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object)checksum), 1, null, null, excludeDataFields);
 
                     // The resource already exists, just use it
                     if (resources.Count > 0)
@@ -196,16 +197,21 @@ namespace ShipWorks.Data
                         resource.Compressed = compress;
                         resource.Filename = resourceFilename;
 
-                        // Don't refetch b\c we don't want to pull back the Data
-                        adapter.SaveEntity(resource, false);
+                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - comitted: "))
+                        {
+                            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                            {
+                                // Don't refetch b\c we don't want to pull back the Data
+                                adapter.SaveEntity(resource, false);
 
-                        // Get the resource id
-                        resourceID = (long) resource.GetCurrentFieldValue((int) ResourceFieldIndex.ResourceID);
+                                // Get the resource id
+                                resourceID = (long) resource.GetCurrentFieldValue((int) ResourceFieldIndex.ResourceID);
 
-                        log.InfoFormat("Created new resource {0}", resourceFilename);
+                                log.InfoFormat("Created new resource {0}", resourceFilename);
+                                scope.Complete();
+                            }
+                        }
                     }
-
-                    adapter.Commit();
                 }
 
                 string filePath = Path.Combine(DataPath.CurrentResources, resourceFilename);
