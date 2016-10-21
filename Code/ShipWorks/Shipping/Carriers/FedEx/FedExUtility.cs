@@ -13,6 +13,7 @@ using System.Xml;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -249,6 +250,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.DryIceWeight = 0;
 
             package.ContainsAlcohol = false;
+            package.AlcoholRecipientType = (int) AlcoholRecipientType.CONSUMER;
 
             package.PriorityAlert = false;
             package.PriorityAlertDetailContent = string.Empty;

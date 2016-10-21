@@ -2896,6 +2896,8 @@ namespace ShipWorks.Data.Model
 		SignatoryTitle,
 		///<summary>SignatoryPlace. </summary>
 		SignatoryPlace,
+		///<summary>AlcoholRecipientType. </summary>
+		AlcoholRecipientType,
 		/// <summary></summary>
 		AmountOfFields
 	}

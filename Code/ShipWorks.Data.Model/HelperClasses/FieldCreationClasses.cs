@@ -6722,6 +6722,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryPlace);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.AlcoholRecipientType field instance</summary>
+		public static EntityField2 AlcoholRecipientType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.AlcoholRecipientType);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
