@@ -79,10 +79,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// </summary>
         public void Process()
         {
+            labelRepository.SaveLabels(this);
+        }
+
+        /// <summary>
+        /// Applies the response manipulators.
+        /// </summary>
+        public void ApplyResponseManipulators()
+        {
             Verify();
 
             ApplyManipulators();
-            labelRepository.SaveLabels(this);
         }
 
         /// <summary>

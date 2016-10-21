@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request
     public class FedExVoidRequest : CarrierRequest
     {
         private readonly IFedExServiceGateway serviceGateway;
-        private readonly ICarrierResponseFactory responseFactory;
+        private readonly IFedExResponseFactory responseFactory;
         private readonly FedExAccountEntity accountEntity;
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request
         /// <param name="fedExService">The fed ex service.</param>
         /// <param name="responseFactory">The response factory.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public FedExVoidRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, ICarrierResponseFactory responseFactory, FedExAccountEntity accountEntity)
+        public FedExVoidRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, IFedExResponseFactory responseFactory, FedExAccountEntity accountEntity)
             : base(requestManipulators, shipmentEntity)
         {
             this.serviceGateway = fedExService;

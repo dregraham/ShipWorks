@@ -1068,6 +1068,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
             string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();
 
+            // If the origin is in Puerto Rico it is an international shipment
+            // confirmed on FedEx.com that the behavior is the same
+            if (originCountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
             return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
         }
 

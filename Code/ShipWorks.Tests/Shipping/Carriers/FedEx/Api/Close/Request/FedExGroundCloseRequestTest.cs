@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
@@ -12,14 +13,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
     public class FedExGroundCloseRequestTest
     {
         private FedExGroundCloseRequest testObject;
-        
+
         private Mock<IFedExServiceGateway> fedExService;
-        private Mock<ICarrierResponse> carrierResponse;
-        private Mock<ICarrierResponseFactory> responseFactory;
-        
+        private Mock<IFedExResponseFactory> responseFactory;
+
         private Mock<ICarrierRequestManipulator> firstManipulator;
         private Mock<ICarrierRequestManipulator> secondManipulator;
-        
+
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
@@ -31,10 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
             fedExService = new Mock<IFedExServiceGateway>();
             fedExService.Setup(s => s.Close(It.IsAny<GroundCloseRequest>())).Returns(new GroundCloseReply());
 
-            carrierResponse = new Mock<ICarrierResponse>();
-
-            responseFactory = new Mock<ICarrierResponseFactory>();
-            responseFactory.Setup(f => f.CreateShipResponse(It.IsAny<GroundCloseReply>(), It.IsAny<CarrierRequest>(), shipmentEntity)).Returns(carrierResponse.Object);
+            responseFactory = new Mock<IFedExResponseFactory>();
 
             firstManipulator = new Mock<ICarrierRequestManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
@@ -49,10 +46,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
                 secondManipulator.Object
             };
 
-
             testObject = new FedExGroundCloseRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, account);
         }
-
 
         [Fact]
         public void CarrierAccountEntity_IsNotNull()
