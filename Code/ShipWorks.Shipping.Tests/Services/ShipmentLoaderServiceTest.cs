@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Services
             mock.Provide<IMessenger>(messenger);
 
             mock.Override<IOrderLoader>()
-                .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ProgressDisplayOptions>(), It.IsAny<bool>()))
+                .Setup(x => x.LoadAsync(It.IsAny<IEnumerable<long>>(), It.IsAny<ProgressDisplayOptions>(), It.IsAny<bool>(), It.IsAny<TimeSpan>()))
                 .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, null, new[] { shipment }.ToList()));
 
             testObject = mock.Create<OrderLoaderService>();
@@ -72,15 +72,17 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public void Initialize_SendsMessage_WhenSelectionIsChanging()
+        public async void Initialize_SendsMessage_WhenSelectionIsChanging()
         {
-            bool wasCalled = false;
+            var waiter = new TaskCompletionSource<bool>();
 
             testObject.InitializeForCurrentSession();
             messenger.OfType<OrderSelectionChangedMessage>()
-                .Subscribe(x => wasCalled = true);
+                .Subscribe(x => waiter.SetResult(true));
 
             messenger.Send(new OrderSelectionChangingMessage(this, new[] { 3L }));
+
+            bool wasCalled = await Task.WhenAny(waiter.Task, Task.Delay(5000).ContinueWith(x => false)).Result;
 
             Assert.True(wasCalled);
         }

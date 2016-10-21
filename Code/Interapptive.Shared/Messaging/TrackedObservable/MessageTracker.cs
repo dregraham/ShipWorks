@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using Interapptive.Shared.Messaging.Logging;
 
 namespace Interapptive.Shared.Messaging.TrackedObservable
@@ -56,6 +57,9 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
         /// </summary>
         public Guid TrackingPath { get; }
 
+        /// <summary>
+        /// Track a Do call
+        /// </summary>
         public IMessageTracker<T> Do(Action<T> operation, object listener, string callerName)
         {
             long startingTimestamp = Stopwatch.GetTimestamp();
@@ -82,6 +86,16 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
             var value = operation(Value);
             MessageLogger.Current.Log(new SelectOperation(this, value, listener, callerName));
             return MessageTracker.Create(this, value);
+        }
+
+        /// <summary>
+        /// Track a select many call
+        /// </summary>
+        public IObservable<IMessageTracker<TReturn>> SelectMany<TReturn>(Func<T, IObservable<TReturn>> operation, object listener, string callerName)
+        {
+            var value = operation(Value);
+            MessageLogger.Current.Log(new SelectManyOperation(this, value, listener, callerName));
+            return value.Select(x => MessageTracker.Create(this, x));
         }
 
         /// <summary>

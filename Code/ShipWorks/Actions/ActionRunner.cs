@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared;
@@ -831,7 +830,7 @@ namespace ShipWorks.Actions
                 SortExpression sort = new SortExpression(ActionQueueSelectionFields.ActionQueueSelectionID | SortOperator.Ascending);
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(ActionQueueSelectionFields.ActionQueueID == step.ActionQueue.ActionQueueID);
-                using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, sort, true))
+                using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, sort, true))
                 {
                     while (reader.Read())
                     {
@@ -879,7 +878,7 @@ namespace ShipWorks.Actions
                 // If we have a bucket to use to do the query, query now
                 if (bucketToUse != null)
                 {
-                    using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucketToUse, CommandBehavior.CloseConnection, 0, true))
+                    using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucketToUse, CommandBehavior.CloseConnection, 0, true))
                     {
                         while (reader.Read())
                         {
