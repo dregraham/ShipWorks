@@ -73,6 +73,8 @@ namespace ShipWorks.Tests.Shared.Database
             settings.ActivatedTypes = new[] { ShipmentTypeCode.FedEx };
             settings.FedExUsername = "7c9NbKsT8K3hUNuf";
             settings.FedExPassword = "JOuIZJZw4EsKW5+YqqpUCmhtumtiZnEUcZWKsHMgtu8=";
+            settings.FedExThermalDocTab = true;
+            settings.FedExThermalDocTabType = 0; // Leading
             ShippingSettings.Save(settings);
         }
 
