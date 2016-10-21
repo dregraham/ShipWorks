@@ -116,7 +116,6 @@ namespace ShipWorks.Shipping.Loading
                                 newShipmentCount += 1;
                             }
 
-                            //{
                             needsValidationCount = AddShipmentsForProcessing(workProgress, globalShipments, shipmentsToValidate, order, needsValidationCount);
                         }
                         catch (SqlForeignKeyException)
