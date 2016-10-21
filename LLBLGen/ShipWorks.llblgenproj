@@ -866,6 +866,9 @@
           <Field Name="PriorityAlertDetailContent" Type="string" MaxLength="1024" FieldIndex="17" />
           <Field Name="PriorityAlertEnhancementType" Type="int" FieldIndex="16" />
           <Field Name="ShipmentID" Type="long" IsAutoCreated="true" FieldIndex="1" />
+          <Field Name="SignatoryContactName" Type="string" IsOptional="true" MaxLength="100" FieldIndex="34" />
+          <Field Name="SignatoryPlace" Type="string" IsOptional="true" MaxLength="100" FieldIndex="36" />
+          <Field Name="SignatoryTitle" Type="string" IsOptional="true" MaxLength="100" FieldIndex="35" />
           <Field Name="SkidPieces" Type="int" FieldIndex="9" />
           <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="Weight" Type="double" FieldIndex="2" />
@@ -909,6 +912,7 @@
           <Field Name="SmartPostEndorsement" Type="int" IsOptional="true" FieldIndex="22" />
           <Field Name="SmartPostHubID" Type="string" IsOptional="true" MaxLength="10" FieldIndex="25" />
           <Field Name="SmartPostIndicia" Type="int" IsOptional="true" FieldIndex="21" />
+          <Field Name="ThirdPartyConsignee" Type="bool" IsOptional="true" FieldIndex="36" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885">
@@ -939,6 +943,9 @@
           <Field Name="PriorityAlertDetailContent" Type="string" IsOptional="true" MaxLength="1024" FieldIndex="11" />
           <Field Name="PriorityAlertEnhancementType" Type="int" IsOptional="true" FieldIndex="10" />
           <Field Name="ShippingProfileID" Type="long" IsAutoCreated="true" FieldIndex="1" />
+          <Field Name="SignatoryContactName" Type="string" IsOptional="true" MaxLength="100" FieldIndex="27" />
+          <Field Name="SignatoryPlace" Type="string" IsOptional="true" MaxLength="100" FieldIndex="29" />
+          <Field Name="SignatoryTitle" Type="string" IsOptional="true" MaxLength="100" FieldIndex="28" />
           <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
@@ -1095,6 +1102,7 @@
           <Field Name="SmartPostHubID" Type="string" MaxLength="10" FieldIndex="106" />
           <Field Name="SmartPostIndicia" Type="int" FieldIndex="102" />
           <Field Name="SmartPostUspsApplicationId" Type="string" MaxLength="10" FieldIndex="107" />
+          <Field Name="ThirdPartyConsignee" Type="bool" FieldIndex="153" />
           <Field Name="TrafficInArmsLicenseNumber" Type="string" MaxLength="32" FieldIndex="140" />
           <Field Name="WeightUnitType" Type="int" FieldIndex="146" />
         </Fields>
@@ -3547,7 +3555,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-10-19T19:13:37.2920481Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-21T19:21:45.0349887Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4490,6 +4498,9 @@
                     <Field Name="HazardousMaterialQuantityValue" Ordinal="33" DbType="6" Precision="38" />
                     <Field Name="HazardousMaterialQuanityUnits" Ordinal="34" DbType="8" Precision="10" />
                     <Field Name="HazardousMaterialTechnicalName" Ordinal="35" DbType="12" Length="64" />
+                    <Field Name="SignatoryContactName" Ordinal="35" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="SignatoryTitle" Ordinal="36" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="SignatoryPlace" Ordinal="37" IsOptional="true" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -4531,6 +4542,7 @@
                     <Field Name="ReturnSaturdayPickup" Ordinal="34" IsOptional="true" DbType="2" />
                     <Field Name="ReturnsClearance" Ordinal="35" IsOptional="true" DbType="2" />
                     <Field Name="ReferenceFIMS" Ordinal="36" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="ThirdPartyConsignee" Ordinal="37" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -4563,6 +4575,9 @@
                     <Field Name="HazardousMaterialPackingGroup" Ordinal="25" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="HazardousMaterialQuantityValue" Ordinal="26" IsOptional="true" DbType="6" Precision="38" />
                     <Field Name="HazardousMaterialQuanityUnits" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="SignatoryContactName" Ordinal="28" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="SignatoryTitle" Ordinal="29" IsOptional="true" DbType="12" Length="100" />
+                    <Field Name="SignatoryPlace" Ordinal="30" IsOptional="true" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FedExShipment">
@@ -5274,6 +5289,7 @@
                     <Field Name="ReturnsClearance" Ordinal="151" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="MaskedData" Ordinal="152" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="ReferenceFIMS" Ordinal="153" DbType="12" Length="300" />
+                    <Field Name="ThirdPartyConsignee" Ordinal="154" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -9453,6 +9469,9 @@
             <FieldMapping FieldName="PriorityAlertDetailContent" TargetFieldName="PriorityAlertDetailContent" />
             <FieldMapping FieldName="PriorityAlertEnhancementType" TargetFieldName="PriorityAlertEnhancementType" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="SignatoryContactName" TargetFieldName="SignatoryContactName" />
+            <FieldMapping FieldName="SignatoryPlace" TargetFieldName="SignatoryPlace" />
+            <FieldMapping FieldName="SignatoryTitle" TargetFieldName="SignatoryTitle" />
             <FieldMapping FieldName="SkidPieces" TargetFieldName="SkidPieces" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
@@ -9496,6 +9515,7 @@
             <FieldMapping FieldName="SmartPostEndorsement" TargetFieldName="SmartPostEndorsement" />
             <FieldMapping FieldName="SmartPostHubID" TargetFieldName="SmartPostHubID" />
             <FieldMapping FieldName="SmartPostIndicia" TargetFieldName="SmartPostIndicia" />
+            <FieldMapping FieldName="ThirdPartyConsignee" TargetFieldName="ThirdPartyConsignee" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfilePackage" TargetName="ShipWorksLocal:dbo:FedExProfilePackage">
@@ -9526,6 +9546,9 @@
             <FieldMapping FieldName="PriorityAlertDetailContent" TargetFieldName="PriorityAlertDetailContent" />
             <FieldMapping FieldName="PriorityAlertEnhancementType" TargetFieldName="PriorityAlertEnhancementType" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+            <FieldMapping FieldName="SignatoryContactName" TargetFieldName="SignatoryContactName" />
+            <FieldMapping FieldName="SignatoryPlace" TargetFieldName="SignatoryPlace" />
+            <FieldMapping FieldName="SignatoryTitle" TargetFieldName="SignatoryTitle" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
@@ -9682,6 +9705,7 @@
             <FieldMapping FieldName="SmartPostHubID" TargetFieldName="SmartPostHubID" />
             <FieldMapping FieldName="SmartPostIndicia" TargetFieldName="SmartPostIndicia" />
             <FieldMapping FieldName="SmartPostUspsApplicationId" TargetFieldName="SmartPostUspsApplicationId" />
+            <FieldMapping FieldName="ThirdPartyConsignee" TargetFieldName="ThirdPartyConsignee" />
             <FieldMapping FieldName="TrafficInArmsLicenseNumber" TargetFieldName="TrafficInArmsLicenseNumber" />
             <FieldMapping FieldName="WeightUnitType" TargetFieldName="WeightUnitType" />
           </FieldMappings>

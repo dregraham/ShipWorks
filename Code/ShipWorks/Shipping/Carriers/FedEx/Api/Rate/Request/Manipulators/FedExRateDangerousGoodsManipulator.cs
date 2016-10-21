@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
@@ -46,7 +43,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
                 dangerousGoods.EmergencyContactNumber = package.DangerousGoodsEmergencyContactPhone;
                 dangerousGoods.Offeror = package.DangerousGoodsOfferor;
-                
+
+                SetupSignatory(package, dangerousGoods);
+
                 if (package.DangerousGoodsType != (int) FedExDangerousGoodsMaterialType.NotApplicable)
                 {
                     dangerousGoods.Options = new HazardousCommodityOptionType[] { GetApiHazardousCommodityType(package) };
@@ -67,6 +66,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 }
 
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail = dangerousGoods;
+            }
+        }
+
+        /// <summary>
+        /// Setups the signatory.
+        /// </summary>
+        private static void SetupSignatory(FedExPackageEntity package, DangerousGoodsDetail dangerousGoods)
+        {
+            if (!string.IsNullOrEmpty(package.SignatoryContactName) || !string.IsNullOrEmpty(package.SignatoryPlace) ||
+                !string.IsNullOrEmpty(package.SignatoryTitle))
+            {
+                dangerousGoods.Signatory = new DangerousGoodsSignatory();
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryContactName))
+            {
+                dangerousGoods.Signatory.ContactName = package.SignatoryContactName;
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryTitle))
+            {
+                dangerousGoods.Signatory.Title = package.SignatoryTitle;
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryPlace))
+            {
+                dangerousGoods.Signatory.Place = package.SignatoryPlace;
             }
         }
 

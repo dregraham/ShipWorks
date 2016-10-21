@@ -1,6 +1,8 @@
-﻿using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
+﻿using ShipWorks.Startup;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground;
+using ShipWorks.Tests.Shared.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +11,7 @@ using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
+    [Collection("Fedex Tests")]
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string fedExTestAccountNumber = "612480567";
@@ -16,9 +19,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         private bool justLabels = false;
         private readonly ITestOutputHelper output;
 
-        public FedExUSIntegrationTests(ITestOutputHelper output)
+        private DataContext context;
+
+
+        public FedExUSIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
+
+            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+                ShipWorksInitializer.GetShipWorksInstance());
         }
 
         [ExcelData(@"DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx", "US Grn Dom Intl And Home Del")]
@@ -26,10 +35,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExUSGround(DataRow row)
         {
-            if (row["SaveLabel"] is DBNull || (bool)row["SaveLabel"] != true)
+            if (row["SaveLabel"] is DBNull)
             {
                 return;
             }
+
+            output.WriteLine($"Preparing customer transaction ID {row[5]}");
 
             var testObject = new FedExUSGroundFixture();
 
@@ -50,12 +61,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 testObject.FedExAccountNumber = transactionsForEcodAccount.Contains(testObject.CustomerTransactionId)
                     ? ecodAccountNumber : fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
 
-        [ExcelData(@"DataSources\Grn Alcohol\FedExAll.xlsx", "Grn Alcohol")]
+        [ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExGroundDomesticAlcohol(DataRow row)
@@ -71,7 +82,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -91,7 +102,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -103,13 +114,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                (testObject.IsSaveLabel || !justLabels))// && (string) row[5] == "413230")
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -129,7 +140,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -138,20 +149,26 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExExpressDomestic(DataRow row)
         {
+            output.WriteLine($"Preparing customer transaction ID {row[5]}");
+            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels))
+            {
+                output.WriteLine("Skipping");
+                return;
+            }
+
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
-        [ExcelData(@"DataSources\OneRate\FedExAll.xlsx", "OneRate")]
+        [ExcelData(@"DataSources\FedExAll\OneRate.xlsx", "OneRate")]
         [Theory]
         [Trait("Category", "FedEx")]
         public void Ship_FedExOneRate(DataRow row)
@@ -165,7 +182,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -184,7 +201,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
                 testObject.CommercialInvoiceFileElectronically = true;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
     }

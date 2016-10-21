@@ -1531,7 +1531,7 @@ namespace ShipWorks.Shipping
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                         menuItem.Tag = profile;
-                        menuItem.Click += new EventHandler(OnApplyProfile);
+                        menuItem.Click += OnApplyProfile;
 
                         if (profile.ShipmentTypePrimary && contextMenuProfiles.Items.Count > 0)
                         {
@@ -1559,7 +1559,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// User has selected to apply a profile to the selected shipments
         /// </summary>
-        private void OnApplyProfile(object sender, EventArgs e)
+        private async void OnApplyProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
@@ -1577,7 +1577,7 @@ namespace ShipWorks.Shipping
             }
 
             // Reload the UI to show the changes
-            LoadSelectedShipments(true);
+            await LoadSelectedShipments(true);
         }
 
         /// <summary>

@@ -400,6 +400,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HazardousMaterialQuantityValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HazardousMaterialQuanityUnits", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SignatoryContactName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SignatoryTitle", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SignatoryPlace", fieldHashtable);
 		}
 		#endregion
 
@@ -766,6 +772,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)FedExProfilePackageFieldIndex.HazardousMaterialQuanityUnits, false); }
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.HazardousMaterialQuanityUnits, value); }
+		}
+
+		/// <summary> The SignatoryContactName property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."SignatoryContactName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String SignatoryContactName
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.SignatoryContactName, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.SignatoryContactName, value); }
+		}
+
+		/// <summary> The SignatoryTitle property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."SignatoryTitle"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String SignatoryTitle
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.SignatoryTitle, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.SignatoryTitle, value); }
+		}
+
+		/// <summary> The SignatoryPlace property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."SignatoryPlace"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String SignatoryPlace
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.SignatoryPlace, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.SignatoryPlace, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

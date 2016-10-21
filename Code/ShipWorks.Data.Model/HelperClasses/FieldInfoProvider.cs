@@ -1027,6 +1027,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuantityValue", typeof(System.Double), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuantityValue, 0, 0, 38);
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuanityUnits", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialTechnicalName", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, 64, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryContactName", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.SignatoryContactName, 100, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryTitle", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.SignatoryTitle, 100, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryPlace", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.SignatoryPlace, 100, 0, 0);
 			this.AddElementFieldInfo("FedExPackageEntity", "AlcoholRecipientType", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.AlcoholRecipientType, 0, 0, 10);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
@@ -1069,6 +1072,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfileEntity", "ReturnSaturdayPickup", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnSaturdayPickup, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "ReturnsClearance", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnsClearance, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "ReferenceFIMS", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceFIMS, 300, 0, 0);
+			this.AddElementFieldInfo("FedExProfileEntity", "ThirdPartyConsignee", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ThirdPartyConsignee, 0, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -1101,6 +1105,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "HazardousMaterialPackingGroup", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.HazardousMaterialPackingGroup, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "HazardousMaterialQuantityValue", typeof(Nullable<System.Double>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.HazardousMaterialQuantityValue, 0, 0, 38);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "HazardousMaterialQuanityUnits", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.HazardousMaterialQuanityUnits, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "SignatoryContactName", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.SignatoryContactName, 100, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "SignatoryTitle", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.SignatoryTitle, 100, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "SignatoryPlace", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.SignatoryPlace, 100, 0, 0);
 		}
 		/// <summary>Inits FedExShipmentEntity's FieldInfo objects</summary>
 		private void InitFedExShipmentEntityInfos()
@@ -1259,6 +1266,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "ReturnsClearance", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ReturnsClearance, 0, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "MaskedData", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.MaskedData, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "ReferenceFIMS", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceFIMS, 300, 0, 0);
+			this.AddElementFieldInfo("FedExShipmentEntity", "ThirdPartyConsignee", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ThirdPartyConsignee, 0, 0, 0);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()

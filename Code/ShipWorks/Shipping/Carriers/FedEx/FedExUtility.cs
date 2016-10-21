@@ -263,6 +263,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             package.TrackingNumber = "";
 
+            package.SignatoryContactName = string.Empty;
+            package.SignatoryTitle = string.Empty;
+            package.SignatoryPlace = string.Empty;
+
             package.DangerousGoodsEnabled = false;
             package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;

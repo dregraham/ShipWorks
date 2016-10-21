@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
 {
@@ -37,14 +37,18 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
         public string PackageDangerousGoodsDetail { get; set; }
         public string PackageLineItemDimensionUnits { get; set; }
         public string PackageSignatureOptionType { get; set; }
+        
+        public string SignatoryContactName { get; set; }
+        public string SignatoryTitle { get; set; }
+        public string SignatoryPlace { get; set; }
 
         /// <summary>
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.ReferenceCustomer = string.Empty;
             shipment.FedEx.ReferenceInvoice = string.Empty;
@@ -80,7 +84,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                 {
                     throw new InvalidDataException(string.Format("NaftaPreferenceCriterion is invalid {0}", NaftaPreferenceCriterion));
                 }
-                
+
                 shipment.FedEx.CustomsNaftaPreferenceType = (int) preference;
 
                 shipment.FedEx.CustomsNaftaDeterminationCode = GetNaftaDeterminationCode();
@@ -270,13 +274,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
         /// <param name="shipment">The shipment.</param>
         private void ApplyDangerousGoods(ShipmentEntity shipment)
         {
-            if (!string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail))
+            if (!string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail) || !string.IsNullOrWhiteSpace(DangerousGoodsAccessibility))
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
                     package.DangerousGoodsType = (int) GetDangerousGoodsMaterialType();
 
-                    if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials)
+                    if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials || !string.IsNullOrEmpty(HazardProperShippingName))
                     {
                         package.HazardousMaterialProperName = HazardProperShippingName;
                         package.HazardousMaterialClass = HazardClass;
@@ -284,14 +288,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
 
                         package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.III;
                         package.HazardousMaterialQuantityValue = int.Parse(HazardQuantityAmount);
-
-                        package.HazardousMaterialQuantityValue = GetUnitInt(HazardQuantityUnits);
+                        package.HazardousMaterialQuanityUnits = GetUnitInt(HazardQuantityUnits);
 
                         package.DangerousGoodsEmergencyContactPhone = DangerEmergencyContactNumber;
 
                         package.DangerousGoodsOfferor = DangerOfferor;
 
                         package.DangerousGoodsPackagingCount = int.Parse(DangerCounts);
+
+                        package.SignatoryContactName = SignatoryContactName;
+                        package.SignatoryPlace = SignatoryPlace;
+                        package.SignatoryTitle = SignatoryTitle;
                     }
                 }
             }
@@ -299,12 +306,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
 
         private FedExDangerousGoodsMaterialType GetDangerousGoodsMaterialType()
         {
+            if (string.IsNullOrWhiteSpace(PackageDangerousGoodsDetail))
+            {
+                return FedExDangerousGoodsMaterialType.NotApplicable;
+            }
+
             switch (PackageDangerousGoodsDetail.ToLower())
             {
                 case ("hazardous_materials"): return FedExDangerousGoodsMaterialType.HazardousMaterials;
                 case ("orm_d"): return FedExDangerousGoodsMaterialType.OrmD;
                 case ("battery"): return FedExDangerousGoodsMaterialType.Batteries;
-                default: return FedExDangerousGoodsMaterialType.NotApplicable;                    
+                default: return FedExDangerousGoodsMaterialType.NotApplicable;
             }
         }
 
@@ -321,13 +333,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                 case "kg":
                     unitInt = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
                     break;
-
                 case "ml":
                     unitInt = (int) FedExHazardousMaterialsQuantityUnits.Milliliters;
                     break;
-
+                case "l":
+                    unitInt = (int) FedExHazardousMaterialsQuantityUnits.Liters;
+                    break;
+                case "g":
+                    unitInt = (int) FedExHazardousMaterialsQuantityUnits.Gram;
+                    break;
                 default:
-                    throw new ArgumentException(string.Format("Invalid Unit {0}", unit), unit);
+                    throw new ArgumentException($"Invalid Unit {unit}", unit);
             }
 
             return unitInt;

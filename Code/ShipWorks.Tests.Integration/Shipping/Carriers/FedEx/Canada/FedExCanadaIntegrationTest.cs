@@ -1,7 +1,9 @@
-﻿using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
+﻿using ShipWorks.Startup;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Shared.Database;
 using System;
 using System.Data;
 using Xunit;
@@ -9,15 +11,21 @@ using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 {
+    [Collection("Fedex Tests")]
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
         private const string fedExTestAccountNumber = "607194785";
         private const bool justLabels = true;
         private readonly ITestOutputHelper output;
 
-        public FedExCanadaIntegrationTest(ITestOutputHelper output)
+        private DataContext context;
+
+        public FedExCanadaIntegrationTest(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
+
+            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+                ShipWorksInitializer.GetShipWorksInstance());
         }
 
         [ExcelData(@"DataSources\FedExAll\CA Exp Dom.xlsx", "CA Exp Dom")]
@@ -36,7 +44,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
@@ -52,7 +60,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             {
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
         
@@ -72,7 +80,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
     }
