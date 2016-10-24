@@ -63,3 +63,9 @@ CHANGES (US Grn Dom, Intl & Home Del)
 605804					76		BD								100										10/17/2016				Missing
 605804					76		EF								OTHER									10/17/2016				Missing
 605804					76		EG								Outbound shipment						10/17/2016				Missing
+
+=================================================================================
+CHANGES (Grn Alcohol)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605766 					7		BO								9012633035								10/24/2016				Missing

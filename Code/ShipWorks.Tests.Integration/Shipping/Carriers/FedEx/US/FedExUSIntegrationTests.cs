@@ -71,8 +71,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [Trait("Category", "FedEx")]
         public void Ship_FedExGroundDomesticAlcohol(DataRow row)
         {
-            fedExTestAccountNumber = "607253064";
-
             var testObject = new FedExUSGroundAlcoholFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSGroundAlcoholFixture.Mapping) &&
