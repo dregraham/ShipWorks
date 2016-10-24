@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
                 testObject.Ship(context.Order);
             }
         }
-        
+
         [ExcelData(@"DataSources\FedExAll\CA Exp Intl.xlsx", "CA Exp Intl")]
         [Trait("Category", "FedEx")]
         [Theory]
