@@ -14,8 +14,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
     [Collection("Fedex Tests")]
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
-        private const string fedExTestAccountNumber = "607194785";
-        private const bool justLabels = true;
+        private const string fedExTestAccountNumber = "612365903";
+        private const bool justLabels = false;
         private readonly ITestOutputHelper output;
 
         private DataContext context;
@@ -69,6 +69,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
         [Theory]
         public void Ship_FedExCanadaExpressInternational(DataRow row)
         {
+            if (row[0] is DBNull)
+            {
+                return;
+            }
+
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressInternationalMapping.Mapping) &&

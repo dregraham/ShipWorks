@@ -42,7 +42,10 @@ CHANGES (CA Exp Intl)
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
 N/A						N/A		BJ			N/A					Added column permit number				7/13/2015				Needed by FedEx
 N/A						N/A		DB			N/A					Added column phone number				7/13/2015				Needed by FedEx
-
+IPRC					14		CA			N/A					OTHER									10/24/2016				Needed by FedEx
+IPRC					14		CB			N/A					Passport								10/24/2016				Needed by FedEx
+IERC					14		CA			N/A					OTHER									10/24/2016				Needed by FedEx
+IERC					14		CB			N/A					Passport								10/24/2016				Needed by FedEx
 
 =================================================================================
 CHANGES (CA Exp Dom)
