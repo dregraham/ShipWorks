@@ -214,22 +214,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         protected RateGroup GetRatesFunction(ShipmentEntity shipment)
         {
             RateGroup rates;
-            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
 
             // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ShipmentType.UpdateDynamicShipmentData(testRateShipment);
+                ShipmentType.UpdateDynamicShipmentData(shipment);
 
-                OrderHeader orderHeader = DataProvider.GetOrderHeader(testRateShipment.OrderID);
+                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
 
                 StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
-                storeType.OverrideShipmentDetails(testRateShipment);
+                storeType.OverrideShipmentDetails(shipment);
 
                 ISupportExpress1Rates ratingService = lifetimeScope.ResolveKeyed<ISupportExpress1Rates>(ShipmentType.ShipmentTypeCode);
 
                 // Get rates without express1 rates
-                rates = ratingService.GetRates(testRateShipment, false);
+                rates = ratingService.GetRates(shipment, false);
             }
 
             rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
@@ -237,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
             rates.Rates.ForEach(UseProperUspsLogo);
 
-            rates.Carrier = testRateShipment.ShipmentTypeCode;
+            rates.Carrier = shipment.ShipmentTypeCode;
 
             return rates;
         }
