@@ -153,7 +153,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="request">The request.</param>
         /// <param name="dangerousGoods">The dangerous goods.</param>
         /// <param name="package">The package.</param>
-        /// <exception cref="FedExException">Hazardous materials can only be shipped with the FedEx Ground service.</exception>
         private static void ConfigureHazardousMaterials(CarrierRequest request, DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
         {
             FedExServiceType serviceType = (FedExServiceType) request.ShipmentEntity.FedEx.Service;
