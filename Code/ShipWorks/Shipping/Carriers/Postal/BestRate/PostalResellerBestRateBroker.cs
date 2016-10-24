@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Autofac;
 using Interapptive.Shared.Utility;
@@ -141,9 +142,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
 
-            currentShipment.Postal.DimsHeight = currentShipment.BestRate.DimsHeight;
-            currentShipment.Postal.DimsWidth = currentShipment.BestRate.DimsWidth;
-            currentShipment.Postal.DimsLength = currentShipment.BestRate.DimsLength;
+            currentShipment.Postal.DimsHeight = originalShipment.BestRate.DimsHeight;
+            currentShipment.Postal.DimsWidth = originalShipment.BestRate.DimsWidth;
+            currentShipment.Postal.DimsLength = originalShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.Postal.DimsWeight = originalShipment.BestRate.DimsWeight;
@@ -212,28 +213,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         protected RateGroup GetRatesFunction(ShipmentEntity shipment)
         {
             RateGroup rates;
+            ShipmentEntity testRateShipment = EntityUtility.CloneEntity(shipment);
 
             // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ShipmentType.UpdateDynamicShipmentData(shipment);
+                ShipmentType.UpdateDynamicShipmentData(testRateShipment);
 
-                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
+                OrderHeader orderHeader = DataProvider.GetOrderHeader(testRateShipment.OrderID);
+
+                // Create a clone so we don't have to worry about modifying the original shipment
+                testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
+
+                //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
+                testRateShipment.BestRate.InsuranceValue = 0;
+
+                CreateShipmentChild(testRateShipment);
+                ShipmentType.ConfigureNewShipment(testRateShipment);
+                T account = AccountRepository.Accounts.FirstOrDefault(a => a.AccountId == shipment.Postal.Usps.UspsAccountID);
+                UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
                 // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
                 StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
-                storeType.OverrideShipmentDetails(shipment);
+                storeType.OverrideShipmentDetails(testRateShipment);
 
                 ISupportExpress1Rates ratingService = lifetimeScope.ResolveKeyed<ISupportExpress1Rates>(ShipmentType.ShipmentTypeCode);
 
                 // Get rates without express1 rates
-                rates = ratingService.GetRates(shipment, false);
+                rates = ratingService.GetRates(testRateShipment, false);
             }
 
             rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
 
             // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
             rates.Rates.ForEach(UseProperUspsLogo);
+
+            rates.Carrier = testRateShipment.ShipmentTypeCode;
 
             return rates;
         }
