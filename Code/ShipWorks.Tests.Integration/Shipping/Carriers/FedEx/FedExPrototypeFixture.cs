@@ -548,8 +548,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.ShipEmail = string.Empty;
                 shipment.ShipUnparsedName = ShipperPersonName;
 
-
-
                 shipment.OriginFirstName = RecipientPersonName;
                 shipment.OriginMiddleName = string.Empty;
                 shipment.OriginLastName = RecipientPersonName;
