@@ -104,13 +104,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             bool hasAccounts = testObject.HasAccounts;
 
-            genericRepositoryMock.Verify(r => r.Accounts, Times.Once());
+            genericRepositoryMock.Verify(r => r.AccountsReadOnly, Times.Once());
         }
 
         [Fact]
         public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts()
         {
-            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            genericRepositoryMock.Setup(r => r.AccountsReadOnly).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
 
             bool hasAccounts = testObject.HasAccounts;
 
@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         [Fact]
         public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts()
         {
-            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
+            genericRepositoryMock.Setup(r => r.AccountsReadOnly).Returns(new List<UspsAccountEntity>());
 
             bool hasAccounts = testObject.HasAccounts;
 

@@ -73,6 +73,7 @@ namespace ShipWorks.Shipping.Services
                     Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment)
                 })
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)));
         }
 
