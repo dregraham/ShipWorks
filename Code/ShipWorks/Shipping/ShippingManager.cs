@@ -219,10 +219,10 @@ namespace ShipWorks.Shipping
             shipment.ShipAddressValidationError = order.ShipAddressValidationError;
             shipment.ShipAddressValidationStatus = order.ShipAddressValidationStatus;
             shipment.ShipAddressValidationSuggestionCount = order.ShipAddressValidationSuggestionCount;
-            shipment.ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown;
-            shipment.ShipPOBox = (int) ValidationDetailStatusType.Unknown;
-            shipment.ShipUSTerritory = (int) ValidationDetailStatusType.Unknown;
-            shipment.ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown;
+            shipment.ShipResidentialStatus = order.ShipResidentialStatus;
+            shipment.ShipPOBox = order.ShipPOBox;
+            shipment.ShipUSTerritory = order.ShipUSTerritory;
+            shipment.ShipMilitaryAddress = order.ShipMilitaryAddress;
 
             shipment.OriginOriginID = (int) ShipmentOriginSource.Store;
 

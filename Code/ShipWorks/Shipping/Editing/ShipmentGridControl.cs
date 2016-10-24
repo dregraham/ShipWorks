@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
@@ -440,7 +441,7 @@ namespace ShipWorks.Shipping.Editing
                     {
                         IOrderLoader loader = lifetimeScope.Resolve<IOrderLoader>();
                         ShipmentsLoadedEventArgs result = await loader.LoadAsync(dlg.Selection.OrderedKeys,
-                            ProgressDisplayOptions.Delay, true);
+                            ProgressDisplayOptions.Delay, true, Timeout.Infinite);
                         OnLoadMoreShipmentsCompleted(this, result);
                     }
                 }

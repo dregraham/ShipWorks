@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// <summary>
         /// Gets the insurance provider.
         /// </summary>
-        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        public override InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings)
         {
             return (InsuranceProvider) settings.IParcelInsuranceProvider;
         }

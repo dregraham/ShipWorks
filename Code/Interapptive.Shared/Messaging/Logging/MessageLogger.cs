@@ -29,8 +29,9 @@ namespace Interapptive.Shared.Messaging.Logging
         /// </summary>
         public static IMessageLogger Current { get; }
 
-        readonly WebClient client;
-        readonly string endpoint;
+        private readonly WebClient client;
+        private readonly string endpoint;
+        private readonly JsonSerializerSettings settings;
         IObserver<ILogItem> observer;
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Interapptive.Shared.Messaging.Logging
         {
             endpoint = $"http://localhost:9809/ShipWorks/{Guid.NewGuid()}";
             client = new WebClient();
+            settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 
             Observable.Create<ILogItem>(x =>
             {
@@ -47,7 +49,7 @@ namespace Interapptive.Shared.Messaging.Logging
                 return Disposable.Create(() => observer = null);
             })
             .ObserveOn(TaskPoolScheduler.Default)
-            .Select(x => new { Data = JsonConvert.SerializeObject(x), Endpoint = x.Endpoint })
+            .Select(x => new { Data = JsonConvert.SerializeObject(x, settings), Endpoint = x.Endpoint })
             .Do(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data))
             .Subscribe(_ => { }, ex => { });
         }
