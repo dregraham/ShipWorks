@@ -1410,7 +1410,7 @@ namespace ShipWorks.Shipping
 
             if (tabControl.Contains(tabPageCustoms))
             {
-                CustomsControl.LoadShipments(uiDisplayedShipments, true);
+                CustomsControl.LoadShipments(uiDisplayedShipments, uiDisplayedShipments.None(s => s.Processed));
             }
         }
 
