@@ -656,6 +656,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             package.Insurance = false;
             package.InsuranceValue = 0M;
 
+            package.SignatoryContactName = string.Empty;
+            package.SignatoryTitle = string.Empty;
+            package.SignatoryPlace = string.Empty;
+
             package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsPackagingCount = 0;
             package.DangerousGoodsOfferor = string.Empty;
@@ -671,6 +675,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             package.HazardousMaterialTechnicalName = string.Empty;
             package.HazardousMaterialQuanityUnits = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
             package.HazardousMaterialQuantityValue = 0;
+
+            package.AlcoholRecipientType = 0;
         }
 
         /// <summary>

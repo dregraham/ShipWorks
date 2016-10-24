@@ -5,9 +5,14 @@ GO
 PRINT N'Altering [dbo].[FedExPackage]'
 GO
 ALTER TABLE [dbo].[FedExPackage] ADD
-[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryContactName] DEFAULT (('')),
+[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryTitle] DEFAULT (('')),
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryPlace] DEFAULT ((''))
+GO
+PRINT N'Dropping FedExPackage Constraints'
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryContactName]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryTitle]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryPlace]
 GO
 PRINT N'Altering [dbo].[FedExProfilePackage]'
 GO
