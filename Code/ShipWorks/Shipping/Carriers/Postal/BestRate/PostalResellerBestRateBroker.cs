@@ -145,6 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.DimsHeight = originalShipment.BestRate.DimsHeight;
             currentShipment.Postal.DimsWidth = originalShipment.BestRate.DimsWidth;
             currentShipment.Postal.DimsLength = originalShipment.BestRate.DimsLength;
+            currentShipment.Postal.DimsProfileID = originalShipment.BestRate.DimsProfileID;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.Postal.DimsWeight = originalShipment.BestRate.DimsWeight;
@@ -222,18 +223,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 
                 OrderHeader orderHeader = DataProvider.GetOrderHeader(testRateShipment.OrderID);
 
-                // Create a clone so we don't have to worry about modifying the original shipment
-                testRateShipment.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
-
-                //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
-                testRateShipment.BestRate.InsuranceValue = 0;
-
-                CreateShipmentChild(testRateShipment);
-                ShipmentType.ConfigureNewShipment(testRateShipment);
-                T account = AccountRepository.Accounts.FirstOrDefault(a => a.AccountId == shipment.Postal.Usps.UspsAccountID);
-                UpdateChildShipmentSettings(testRateShipment, shipment, account);
-
-                // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
                 StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
                 storeType.OverrideShipmentDetails(testRateShipment);
 
