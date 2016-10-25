@@ -166,18 +166,11 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             using (SqlCommand cmd = con.CreateCommand())
             {
                 cmd.CommandText = string.Format(@"
-                        IF OBJECT_ID('tempdb..#FNCDTemp') IS NOT NULL DROP TABLE #FNCDTemp
+                    INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                      SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
 
-                        SELECT {0} as [ObjectID], {1} as [ParentID], @type as [ObjectType], @computerID as [ComputerID], @columns as [ColumnsUpdated] 
-                            INTO #FNCDTemp FROM {2} 
-
-                        INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
-
-                        INSERT INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                          SELECT [ObjectID], [ParentID], [ObjectType], [ComputerID], [ColumnsUpdated]  FROM #FNCDTemp
-            
-                        DROP TABLE tempdb..#FNCDTemp
+                    INSERT INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                      SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
                     ",
                     primaryKey, parentID, table);
 
