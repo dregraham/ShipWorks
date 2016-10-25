@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <modules>
+        <Interapptive_ShipWorks>
+            <version>4.0.0</version>
+        </Interapptive_ShipWorks>
+    </modules>
+    <global>
+        <models>
+            <ShipWorks>
+                <class>Interapptive_ShipWorks_Model</class>
+            </ShipWorks>
+            <ShipWorksOrder>
+                <class>Interapptive_ShipWorks_Model_Order</class>
+            </ShipWorksOrder>
+        </models>
+        <helpers>
+            <ShipWorks>
+                <class>Interapptive_ShipWorks_Helper</class>
+            </ShipWorks>
+        </helpers>
+    </global>
+    <admin>
+        <routers>
+            <shipWorksApi>
+                <use>admin</use>
+                <args>
+                    <module>Interapptive_ShipWorks</module>
+                    <frontName>ShipWorks</frontName>
+                </args>
+            </shipWorksApi>
+        </routers>
+    </admin>
+    <default>
+        <shipWorksApi>
+            <mapping>
+                <Code>sku</Code>
+                <Location>None</Location>
+                <AttributeOne>None</AttributeOne>
+                <AttributeTwo>None</AttributeTwo>
+                <AttributeThree>None</AttributeThree>
+            </mapping>
+        </shipWorksApi>
+    </default>
+</config>
