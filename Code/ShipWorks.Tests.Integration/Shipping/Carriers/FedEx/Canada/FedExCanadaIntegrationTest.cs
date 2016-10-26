@@ -77,8 +77,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressInternationalMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                (testObject.IsSaveLabel || !justLabels)) // && (string)row[3] == "IF-1003")
             {
+
                 output.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
                 output.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);

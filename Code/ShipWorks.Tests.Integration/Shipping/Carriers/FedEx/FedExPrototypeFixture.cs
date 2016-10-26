@@ -1015,8 +1015,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                         break;
                     case "future_day_shipment":
                         // Just need to set the ship date to a date in the future; choose the next Monday
-                        // so that Saturday pickup/delivery doesn't factor in
-                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
+                        // so that Saturday pickup/delivery doesn't factor in unless specified by ShipTimestamp
+                        if(string.IsNullOrEmpty(ShipTimestamp))
+                        {
+                            shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
+                        }
                         break;
                     case "fedex_one_rate":
                         switch ((FedExServiceType)shipment.FedEx.Service)
