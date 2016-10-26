@@ -180,6 +180,7 @@
     <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\FedExCanadaIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\FedExUKIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostIntegrationTest.cs" />
@@ -292,6 +293,9 @@
     </None>
     <None Include="DataSources\FedExAll\TD Express.xlsx" />
     <None Include="DataSources\FedExAll\TD Ground.xlsx" />
+    <None Include="DataSources\FedExAll\UK ETD.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DataSources\FedExAll\US Exp DG Open Ship.xlsx" />
     <None Include="DataSources\FedExAll\US Exp Dom-Alcohol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

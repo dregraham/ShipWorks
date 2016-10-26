@@ -120,7 +120,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             checker.Check("Company", account.Company);
             checker.Check("Street Address", account.Street1);
             checker.Check("City", account.City);
-            checker.Check("State", account.StateProvCode);
+
+            if (!string.IsNullOrWhiteSpace(account.CountryCode) &&
+                (account.CountryCode == "US" || account.CountryCode == "CA"))
+            {
+                checker.Check("State", account.StateProvCode);
+            }
+
             checker.Check("Postal Code", account.PostalCode);
             checker.Check("Email", account.Email);
             checker.Check("Phone", account.Phone);
