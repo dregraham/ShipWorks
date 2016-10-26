@@ -2890,14 +2890,14 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuanityUnits,
 		///<summary>HazardousMaterialTechnicalName. </summary>
 		HazardousMaterialTechnicalName,
+		///<summary>AlcoholRecipientType. </summary>
+		AlcoholRecipientType,
 		///<summary>SignatoryContactName. </summary>
 		SignatoryContactName,
 		///<summary>SignatoryTitle. </summary>
 		SignatoryTitle,
 		///<summary>SignatoryPlace. </summary>
 		SignatoryPlace,
-		///<summary>AlcoholRecipientType. </summary>
-		AlcoholRecipientType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3358,6 +3358,8 @@ namespace ShipWorks.Data.Model
 		ReferenceFIMS,
 		///<summary>ThirdPartyConsignee. </summary>
 		ThirdPartyConsignee,
+		///<summary>Currency. </summary>
+		Currency,
 		/// <summary></summary>
 		AmountOfFields
 	}

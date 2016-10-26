@@ -689,6 +689,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ThirdPartyConsignee", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Currency", fieldHashtable);
 		}
 		#endregion
 
@@ -2332,6 +2334,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.ThirdPartyConsignee, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.ThirdPartyConsignee, value); }
+		}
+
+		/// <summary> The Currency property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."Currency"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> Currency
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.Currency, false); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.Currency, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

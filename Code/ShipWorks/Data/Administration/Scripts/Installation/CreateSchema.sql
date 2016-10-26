@@ -2012,7 +2012,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0)),
 [MaskedData] [int] NULL,
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ThirdPartyConsignee] [bit] NOT NULL
+[ThirdPartyConsignee] [bit] NOT NULL,
+[Currency] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'

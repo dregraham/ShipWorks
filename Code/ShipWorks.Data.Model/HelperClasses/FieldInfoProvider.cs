@@ -1027,10 +1027,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuantityValue", typeof(System.Double), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuantityValue, 0, 0, 38);
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuanityUnits", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialTechnicalName", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, 64, 0, 0);
-			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryContactName", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.SignatoryContactName, 100, 0, 0);
-			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryTitle", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.SignatoryTitle, 100, 0, 0);
-			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryPlace", typeof(System.String), false, false, false, true,  (int)FedExPackageFieldIndex.SignatoryPlace, 100, 0, 0);
 			this.AddElementFieldInfo("FedExPackageEntity", "AlcoholRecipientType", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.AlcoholRecipientType, 0, 0, 10);
+			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryContactName", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.SignatoryContactName, 100, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryTitle", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.SignatoryTitle, 100, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryPlace", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.SignatoryPlace, 100, 0, 0);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
 		private void InitFedExProfileEntityInfos()
@@ -1267,6 +1267,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "MaskedData", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.MaskedData, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "ReferenceFIMS", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceFIMS, 300, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "ThirdPartyConsignee", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ThirdPartyConsignee, 0, 0, 0);
+			this.AddElementFieldInfo("FedExShipmentEntity", "Currency", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.Currency, 0, 0, 10);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()
