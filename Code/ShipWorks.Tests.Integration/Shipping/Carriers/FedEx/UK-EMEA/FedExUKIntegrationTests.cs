@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.UK;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
@@ -12,7 +13,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
     public class FedExUKIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string UKAccountNumber = "605517846";
-        private bool justLabels = false;
+        private bool justLabels = true;
         private readonly ITestOutputHelper output;
 
         private DataContext context;
@@ -33,7 +34,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         {
             var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExUKETDMapping.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
