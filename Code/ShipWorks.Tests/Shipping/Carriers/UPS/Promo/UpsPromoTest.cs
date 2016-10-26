@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 {
     public class UpsPromoTest
     {
-        private const string ContinentalUsPromoCode = "BUSYTHVO9";
+        private const string ContinentalUsPromoCode = "BXA4S3YB9";
         private const string AlaskaPromoCode = "P950029472";
         private const string HawaiiPromoCode = "P780029996";
         private const string TestPromoCode = "BVOGIGNA7";

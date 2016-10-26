@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private PromoAcceptanceTerms terms;
 
         private const string TestPromoCode = "BVOGIGNA7";
-        private const string ContinentalUsPromoCode = "BUSYTHVO9";
+        private const string ContinentalUsPromoCode = "BXA4S3YB9";
         private const string AlaskaPromoCode = "P950029472";
         private const string HawaiiPromoCode = "P780029996";
 
