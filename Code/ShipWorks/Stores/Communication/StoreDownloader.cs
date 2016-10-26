@@ -617,12 +617,11 @@ namespace ShipWorks.Stores.Communication
                         adapter.SaveAndRefetch(order);
                     }
                     catch (ORMQueryExecutionException ex)
+                        when (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (ex.Message.Contains("SqlDateTime overflow"))
-                        {
-                            throw new DownloadException(
-                                $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
-                        }
+                        throw new DownloadException(
+                            $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
+                            "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
                     }
 
                     // Update the note counts
