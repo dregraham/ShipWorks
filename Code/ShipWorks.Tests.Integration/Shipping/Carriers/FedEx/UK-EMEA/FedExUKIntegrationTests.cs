@@ -45,5 +45,23 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 testObject.Ship(context.Order);
             }
         }
+
+        [ExcelData(@"DataSources\FedExAll\UK International.xlsx", "UK International")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExExpressInternational(DataRow row)
+        {
+            var testObject = new FedExUSExpressInternationalFixture();
+
+            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
+                (testObject.IsSaveLabel || !justLabels))// && (string) row[5] == "413230")
+            {
+                output.WriteLine($"Executing customer transaction ID {row[5]}");
+
+                testObject.FedExAccountNumber = UKAccountNumber;
+
+                testObject.Ship(context.Order);
+            }
+        }
     }
 }

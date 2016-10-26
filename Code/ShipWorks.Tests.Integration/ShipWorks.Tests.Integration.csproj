@@ -297,6 +297,9 @@
     <None Include="DataSources\FedExAll\UK ETD.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="DataSources\FedExAll\UK International.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DataSources\FedExAll\US Exp DG Open Ship.xlsx" />
     <None Include="DataSources\FedExAll\US Exp Dom-Alcohol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
