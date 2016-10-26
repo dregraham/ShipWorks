@@ -167,9 +167,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             {
                 cmd.CommandText = string.Format(@"
                     INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                      SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
-
-                    INSERT INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+	                    OUTPUT inserted.ObjectID, inserted.ParentID, inserted.ObjectType, inserted.ComputerID, inserted.ColumnsUpdated
+		                    INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
                       SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
                     ",
                     primaryKey, parentID, table);
