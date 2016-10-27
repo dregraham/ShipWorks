@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.UK
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK
 {
     public class FedExUKETDMapping
     {

@@ -179,10 +179,12 @@
     <Compile Include="Functional\Services\ServiceStatusManagerTest.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\FedExCanadaIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTests.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\FedExUKIntegrationTests.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKETDMapping.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUkInternationalMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKETDMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUkInternationalMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostIntegrationTest.cs" />
@@ -276,6 +278,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\CA Grn Dom Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\EMEA.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\ETD.xlsx">

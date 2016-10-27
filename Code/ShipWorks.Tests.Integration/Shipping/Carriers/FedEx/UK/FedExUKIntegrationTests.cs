@@ -1,13 +1,12 @@
 ﻿using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.UK;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK
 {
     [Collection("Fedex Tests")]
     public class FedExUKIntegrationTests : DataDrivenIntegrationTestBase
