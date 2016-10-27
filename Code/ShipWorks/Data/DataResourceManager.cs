@@ -431,16 +431,9 @@ namespace ShipWorks.Data
                             }
                             catch (SqlException ex)
                             {
-                                string exceptionMessage = ex.Message.ToLower();
-                                if (exceptionMessage.Contains("sqllockexception") || exceptionMessage.Contains("could not acquire applock"))
-                                {
-                                    log.Warn(ex.Message);
-                                }
-                                else
-                                {
-                                    log.Error(string.Format("Error likely returned from stored proc {0}", scriptName), ex);
-                                    throw;
-                                }
+                                // An error occurred, but this gets called by the idle worker every 2ish hours or so,
+                                // so if it's a recoverable error, it will finish then.
+                                log.Error($"An error occurred while attempting to delete abandoned resources.  ", ex);
                             }
                         }
                     }
