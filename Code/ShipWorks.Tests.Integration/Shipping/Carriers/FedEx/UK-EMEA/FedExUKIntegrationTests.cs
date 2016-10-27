@@ -45,5 +45,24 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 testObject.Ship(context.Order);
             }
         }
+
+        [ExcelData(@"DataSources\FedExAll\UK Intra.xlsx", "UK Intra")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExUKIntra(DataRow row)
+        {
+            var testObject = new FedExUSExpressInternationalFixture();
+
+            if (PopulateTestObject(row, testObject, FedExUKIntraMapping.Mapping) &&
+                (testObject.IsSaveLabel || !justLabels))
+            {
+                output.WriteLine($"Executing customer transaction ID {row[5]}");
+
+                testObject.FedExAccountNumber = UKAccountNumber;
+                testObject.CommercialInvoiceFileElectronically = true;
+
+                testObject.Ship(context.Order);
+            }
+        }
     }
 }
