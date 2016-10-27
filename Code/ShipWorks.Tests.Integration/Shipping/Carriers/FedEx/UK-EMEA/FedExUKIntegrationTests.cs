@@ -53,10 +53,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         {
             var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))// && (string) row[5] == "413230")
+            if (PopulateTestObject(row, testObject, FedExUkInternationalMapping.Mapping) &&
+                (testObject.IsSaveLabel || !justLabels)) // && (string) row[4] == "UK-404")
             {
-                output.WriteLine($"Executing customer transaction ID {row[5]}");
+                output.WriteLine($"Executing customer transaction ID {row[4]}");
 
                 testObject.FedExAccountNumber = UKAccountNumber;
 

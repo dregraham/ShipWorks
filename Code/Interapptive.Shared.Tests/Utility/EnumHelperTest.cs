@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using Xunit;
+using Interapptive.Shared.Enums;
 
 namespace Interapptive.Shared.Tests.Utility
 {
@@ -32,6 +33,20 @@ namespace Interapptive.Shared.Tests.Utility
         public void Description_ThrowsException_WhenDescriptionIsNotSet()
         {
             Assert.Throws<NullReferenceException>(() => { EnumHelper.GetDescription(TestEnum.NoDetails); });
+        }
+
+        [Fact]
+        public void TryParseEnum_ReturnsNull_WhenNoMatchingEnum()
+        {
+            var result = EnumHelper.TryParseEnum<CurrencyType>("blah");
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void TryParseEnum_ReturnsMatchingEnum_WhenMatchingEnum()
+        {
+            var result = EnumHelper.TryParseEnum<CurrencyType>("USD");
+            Assert.Equal(CurrencyType.USD, result);
         }
     }
 

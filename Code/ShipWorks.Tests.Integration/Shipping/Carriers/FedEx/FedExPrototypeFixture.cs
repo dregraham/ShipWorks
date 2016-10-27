@@ -21,6 +21,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 {
@@ -401,6 +402,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             shipment.FedEx.HomeDeliveryInstructions = string.Empty;
             shipment.FedEx.HomeDeliveryDate = DateTime.Today;
 
+            shipment.FedEx.Currency = (int?) GetCurrency();
+
             shipment.ResidentialResult = !string.IsNullOrEmpty(RecipientResidential) && RecipientResidential.ToLower() == "true";
             if (shipment.ResidentialResult)
             {
@@ -480,6 +483,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             }
 
             return shipment;
+        }
+
+        private CurrencyType? GetCurrency()
+        {
+            return EnumHelper.TryParseEnum<CurrencyType>(PackageLineItemInsuredValueCurrency);
         }
 
         private DateTime GetShipTimestamp()
@@ -623,6 +631,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             switch (HoldLocationType.ToLower())
             {
                 case "fedex_express_station": return FedExLocationType.FedExExpressStation;
+                case "fedex_office": return FedExLocationType.FedExOffice;
             }
 
             throw new InvalidOperationException("Need to add another case to the GetLocationType switch statement in the test fixture");
