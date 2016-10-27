@@ -182,7 +182,7 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\FedExUKIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKETDMapping.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKIntraMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKIntraFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostIntegrationTest.cs" />

@@ -1300,7 +1300,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 case "FEDEX_2_DAY_AM": return FedExServiceType.FedEx2DayAM;
             }
 
-            throw new Exception("Unrecognized service type.");
+            throw new Exception($"Unrecognized service type. {ShipmentServiceType}");
         }
 
         /// <summary>

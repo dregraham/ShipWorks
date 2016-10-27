@@ -3,6 +3,7 @@ using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.UK;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
@@ -51,9 +52,9 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         [Trait("Category", "FedEx")]
         public void Ship_FedExUKIntra(DataRow row)
         {
-            var testObject = new FedExUSExpressInternationalFixture();
+            var testObject = new FedExUKIntraFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUKIntraMapping.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExUKIntraFixture.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
