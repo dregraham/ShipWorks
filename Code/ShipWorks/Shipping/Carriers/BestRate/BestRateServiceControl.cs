@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -21,10 +21,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
-            RateControl.ShowAllRates = false;
-            RateControl.ActionLinkVisible = true;
+            SetupRateControl();
 
             sectionLabelOptions.Visible = false;
+        }
+
+        /// <summary>
+        /// Sets up the rate control - Configures ShowAllRates and ActionLink visibility.
+        /// </summary>
+        public override void SetupRateControl()
+        {
+            RateControl.ShowAllRates = false;
+            RateControl.ActionLinkVisible = true;
         }
 
         /// <summary>
