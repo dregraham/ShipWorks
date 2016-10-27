@@ -253,5 +253,12 @@ namespace Interapptive.Shared.Utility
 
             return lines.ToArray();
         }
+
+        /// <summary>
+        /// true if the value parameter occurs within this string.
+        /// </summary>
+        /// <returns></returns>
+        public static bool Contains(this string source, string value, StringComparison comp)
+            => source.IndexOf(value, comp) >= 0;
     }
 }
