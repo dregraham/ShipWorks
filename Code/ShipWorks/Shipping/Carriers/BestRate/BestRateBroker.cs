@@ -441,6 +441,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             currentShipment.BestRateEvents = originalShipment.BestRateEvents;
             currentShipment.ShipSenseStatus = originalShipment.ShipSenseStatus;
             currentShipment.ShipSenseChangeSets = originalShipment.ShipSenseChangeSets;
+            currentShipment.ContentWeight = originalShipment.ContentWeight;
 
             UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
         }

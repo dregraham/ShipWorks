@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -15,6 +9,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -94,11 +94,18 @@ namespace ShipWorks.Shipping.Editing
             // Make sure the rate control shows all rates by default; other
             // service controls (i.e. best rate) can override this as needed
             RateControl = rateControl;
+
+            personControl.EnableValidationControls = true;
+        }
+
+        /// <summary>
+        /// Sets up the rate control - Configures ShowAllRates and ActionLink visibility.
+        /// </summary>
+        public virtual void SetupRateControl()
+        {
             RateControl.ShowAllRates = true;
             RateControl.ShowSingleRate = false;
             RateControl.ActionLinkVisible = false;
-
-            personControl.EnableValidationControls = true;
         }
 
         /// <summary>

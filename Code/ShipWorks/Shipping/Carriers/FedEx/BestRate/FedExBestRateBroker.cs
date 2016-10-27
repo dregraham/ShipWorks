@@ -59,6 +59,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.Packages[0].DimsHeight = originalShipment.BestRate.DimsHeight;
             currentShipment.FedEx.Packages[0].DimsWidth = originalShipment.BestRate.DimsWidth;
             currentShipment.FedEx.Packages[0].DimsLength = originalShipment.BestRate.DimsLength;
+            currentShipment.FedEx.Packages[0].DimsProfileID = originalShipment.BestRate.DimsProfileID;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.FedEx.Packages[0].Weight = originalShipment.ContentWeight;
@@ -72,8 +73,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.Service = (int) FedExServiceType.FedExGround;
             SetAccount(currentShipment, account);
 
-            currentShipment.FedEx.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
-            currentShipment.FedEx.Packages[0].Insurance = currentShipment.Insurance;
+            currentShipment.FedEx.Packages[0].InsuranceValue = originalShipment.BestRate.InsuranceValue;
+            currentShipment.FedEx.Packages[0].Insurance = originalShipment.Insurance;
         }
 
         /// <summary>

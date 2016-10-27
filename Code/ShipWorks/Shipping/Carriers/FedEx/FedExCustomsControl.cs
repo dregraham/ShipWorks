@@ -122,7 +122,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             OnNaftaEnabled(naftaEnabled, EventArgs.Empty);
             naftaEnabled.CheckedChanged += OnNaftaEnabled;
 
+            UpdateEnabledUI(enableEditing);
+
             UpdateControlVisibility(shipments.All(x => x.FedEx.Service == (int) FedExServiceType.FedExFims));
+        }
+
+        /// <summary>
+        /// Update the editable state of the control
+        /// </summary>
+        private void UpdateEnabledUI(bool enableEditing)
+        {
+            numberOfPieces.Enabled = enableEditing;
+            unitPrice.Enabled = enableEditing;
         }
 
         /// <summary>
