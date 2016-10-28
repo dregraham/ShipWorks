@@ -71,7 +71,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         }
 
         [Fact]
-        public void Constructor_SetsAgreementUrl_WhenResponseCodeIsOne()
+        public void Constructor_SetsAgreementUrl_WhenResponseCodeIsOne_AndUrlStartsWithHttp()
+        {
+            PromoDiscountAgreementResponse response = new PromoDiscountAgreementResponse()
+            {
+                PromoAgreement = new PromoAgreementType() { AgreementURL = "http://www.example.com" },
+                Response = new ResponseType { ResponseStatus = new CodeDescriptionType() { Code = "1" } }
+            };
+
+            testObject = new PromoAcceptanceTerms(response, log.Object);
+
+            Assert.Equal(response.PromoAgreement.AgreementURL, testObject.URL);
+        }
+
+        [Fact]
+        public void Constructor_SetsAgreementUrlToValidUrl_WhenResponseContainsNoProtocol()
         {
             PromoDiscountAgreementResponse response = new PromoDiscountAgreementResponse()
             {
@@ -81,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 
             testObject = new PromoAcceptanceTerms(response, log.Object);
 
-            Assert.Equal(response.PromoAgreement.AgreementURL, testObject.URL);
+            Assert.Equal("https://www.example.com", testObject.URL);
         }
 
         [Fact]

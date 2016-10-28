@@ -34,7 +34,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                 throw new UpsPromoException("There was a problem communicating with UPS to accept the terms and conditions of the UPS promo. Please try again later.");
             }
 
-            URL = response.PromoAgreement.AgreementURL;
+            string agreementUrl = response.PromoAgreement.AgreementURL;
+            URL = agreementUrl.StartsWith("http") ? agreementUrl : string.Format($"https://{agreementUrl}");
+
             Description = WebUtility.HtmlDecode(response.PromoDescription);
             AcceptanceCode = response.PromoAgreement.AcceptanceCode;
             IsAccepted = false;
