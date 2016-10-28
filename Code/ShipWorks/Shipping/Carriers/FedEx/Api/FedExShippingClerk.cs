@@ -170,6 +170,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
                 case FedExServiceType.FedExEconomyCanada:
                 case FedExServiceType.FedExInternationalGround:
+                case FedExServiceType.FedExNextDayMidMorning:
+                case FedExServiceType.FedExNextDayEarlyMorning:
+                case FedExServiceType.FedExNextDayAfternoon:
+                case FedExServiceType.FedExDistanceDeferred:
+                case FedExServiceType.FedExNextDayEndOfDay:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
@@ -179,6 +184,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalPriorityFreight:
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.FirstFreight:
+                case FedExServiceType.FedExNextDayFreight:
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
                 case FedExServiceType.SmartPost:
@@ -186,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     CleanAndValidateShipmentForSmartPost(fedExShipmentEntity);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("shipmentEntity");
+                    throw new ArgumentOutOfRangeException($"shipmentEntity {EnumHelper.GetDescription(serviceType)}");
             }
         }
 

@@ -1298,6 +1298,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 case "INTERNATIONAL_ECONOMY_FREIGHT": return FedExServiceType.InternationalEconomyFreight;
                 case "SMART_POST": return FedExServiceType.SmartPost;
                 case "FEDEX_2_DAY_AM": return FedExServiceType.FedEx2DayAM;
+                case "FEDEX_NEXT_DAY_AFTERNOON": return FedExServiceType.FedExNextDayAfternoon;
+                case "FEDEX_NEXT_DAY_END_OF_DAY": return FedExServiceType.FedExNextDayEndOfDay;
+                case "FEDEX_NEXT_DAY_MID_MORNING": return FedExServiceType.FedExNextDayMidMorning;
+                case "NEXT_DAY_EARLY_MORNING":
+                case "FEDEX_NEXT_DAY_EARLY_MORNING":
+                    return FedExServiceType.FedExNextDayEarlyMorning;
+                case "FEDEX_DISTANCE_DEFERRED":
+                    return FedExServiceType.FedExDistanceDeferred;
+                case "FEDEX_NEXT_DAY_FREIGHT":
+                    return FedExServiceType.FedExNextDayFreight;
             }
 
             throw new Exception($"Unrecognized service type. {ShipmentServiceType}");
