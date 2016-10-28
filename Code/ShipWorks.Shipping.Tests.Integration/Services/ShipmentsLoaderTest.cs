@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             context.UpdateShippingSetting(x => x.AutoCreateShipments = false);
 
             var results = await testObject.LoadAsync(new[] { newOrder.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             Assert.Empty(results.Shipments);
         }
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Modify.Shipment(order.Shipments[1]).AsFedEx(x => x.WithPackage()).Save();
 
             var results = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             Assert.Contains(ShipmentTypeCode.Usps, results.Shipments.Select(x => x.ShipmentTypeCode));
             Assert.Contains(ShipmentTypeCode.FedEx, results.Shipments.Select(x => x.ShipmentTypeCode));
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             context.UpdateShippingSetting(x => x.AutoCreateShipments = true);
 
             var results = await mock.Create<OrderLoader>().LoadAsync(new[] { testOrder.OrderID },
-                ProgressDisplayOptions.NeverShow, true);
+                ProgressDisplayOptions.NeverShow, true, TimeSpan.FromSeconds(10));
 
             Assert.Equal(1, results.Shipments.Count);
         }
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public async Task Load_IncludesOrderItems()
         {
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public async Task Load_IncludesStore()
         {
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public async Task Load_DoesNotIncludeCustomer()
         {
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public async Task Load_IncludesShipments()
         {
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save();
 
             var results = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             ShipmentEntity loadedShipment = results.Shipments.Where(x => x.ShipmentID == shipment.ShipmentID).First();
             Assert.NotNull(loadedShipment.Postal.Endicia);
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save();
 
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save();
 
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save();
 
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -206,7 +206,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save();
 
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 
@@ -222,7 +222,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .ShipmentID;
 
             var response = await testObject.LoadAsync(new[] { order.OrderID },
-                ProgressDisplayOptions.NeverShow, false);
+                ProgressDisplayOptions.NeverShow, false, TimeSpan.FromSeconds(10));
 
             OrderEntity results = response.Shipments.First().Order;
 

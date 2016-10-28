@@ -1,10 +1,17 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -21,13 +28,6 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Begin the order download process
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -634,7 +634,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
 
             List<DateTime> startDates = new DateTimeList();
-            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
             {
                 while (reader.Read())
                 {

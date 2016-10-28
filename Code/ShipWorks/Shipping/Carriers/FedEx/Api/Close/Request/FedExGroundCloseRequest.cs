@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request
     public class FedExGroundCloseRequest : CarrierRequest
     {
         private readonly IFedExServiceGateway serviceGateway;
-        private readonly ICarrierResponseFactory responseFactory;
+        private readonly IFedExResponseFactory responseFactory;
         private readonly FedExAccountEntity accountEntity;
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request
         /// <param name="fedExService">The fed ex service.</param>
         /// <param name="responseFactory">The response factory.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public FedExGroundCloseRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, ICarrierResponseFactory responseFactory, FedExAccountEntity accountEntity)
+        public FedExGroundCloseRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, ShipmentEntity shipmentEntity, IFedExServiceGateway fedExService, IFedExResponseFactory responseFactory, FedExAccountEntity accountEntity)
             : base(requestManipulators, shipmentEntity)
         {
             this.serviceGateway = fedExService;
@@ -51,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request
             // Allow the manipulators to build the raw request for the FedEx service
             ApplyManipulators();
 
-            // The request is ready to be sent to FedEx; we're sure the native request will be a GroundCloseRequest 
+            // The request is ready to be sent to FedEx; we're sure the native request will be a GroundCloseRequest
             // (since we assigned it as such in the constructor) so we can safely cast it here
             GroundCloseReply nativeResponse = serviceGateway.Close(this.NativeRequest as GroundCloseRequest);
             return responseFactory.CreateGroundCloseResponse(nativeResponse, this);

@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     {
         private readonly IFedExServiceGateway defaultFedExServiceGateway;
         private readonly IFedExServiceGateway openShipFedExServiceGateway;
-        private readonly ICarrierResponseFactory responseFactory;
+        private readonly IFedExResponseFactory responseFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly IFedExShipmentTokenProcessor tokenProcessor;
 
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class. This
         /// constructor is primarily for testing purposes.
         /// </summary>
-        public FedExRequestFactory(IFedExServiceGateway defaultFedExServiceGateway, IFedExServiceGateway openShipFedExServiceGateway, ICarrierSettingsRepository settingsRepository, IFedExShipmentTokenProcessor tokenProcessor, ICarrierResponseFactory responseFactory)
+        public FedExRequestFactory(IFedExServiceGateway defaultFedExServiceGateway, IFedExServiceGateway openShipFedExServiceGateway, ICarrierSettingsRepository settingsRepository, IFedExShipmentTokenProcessor tokenProcessor, IFedExResponseFactory responseFactory)
         {
             this.defaultFedExServiceGateway = defaultFedExServiceGateway;
             this.openShipFedExServiceGateway = openShipFedExServiceGateway;

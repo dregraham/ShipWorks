@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
@@ -703,7 +702,7 @@ namespace ShipWorks.Templates.Controls
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, settings.PreviewCount < 0 ? 0 : settings.PreviewCount, null, false))
+                    using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, settings.PreviewCount < 0 ? 0 : settings.PreviewCount, null, false))
                     {
                         while (reader.Read())
                         {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -70,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         /// </summary>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        public InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings)
         {
             return InsuranceProvider.Invalid;
         }

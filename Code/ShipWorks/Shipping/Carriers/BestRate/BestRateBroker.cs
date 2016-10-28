@@ -8,6 +8,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -58,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Get the insurance provider for the broker to use.
         /// </summary>
-        public abstract InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings);
+        public abstract InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings);
 
         /// <summary>
         /// Gets a value indicating whether there any accounts available to a broker.
@@ -68,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </value>
         public bool HasAccounts
         {
-            get { return AccountRepository.Accounts.Any(); }
+            get { return AccountRepository.AccountsReadOnly.Any(); }
         }
 
         /// <summary>
@@ -440,6 +441,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             currentShipment.BestRateEvents = originalShipment.BestRateEvents;
             currentShipment.ShipSenseStatus = originalShipment.ShipSenseStatus;
             currentShipment.ShipSenseChangeSets = originalShipment.ShipSenseChangeSets;
+            currentShipment.ContentWeight = originalShipment.ContentWeight;
 
             UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
         }

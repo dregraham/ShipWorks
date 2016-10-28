@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Settings;
@@ -36,9 +37,9 @@ namespace ShipWorks.Shipping.Services
         private readonly IShippingSettings shippingSettings;
 
 #pragma warning disable S107 // Methods should not have too many parameters
-                            /// <summary>
-                            /// Constructor
-                            /// </summary>
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderLoaderService(Func<Owned<IOrderLoader>> shipmentLoaderFactory, IMessenger messenger,
             ISchedulerProvider schedulerProvider, ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IStoreTypeManager storeTypeManager, Func<Type, ILog> logFactory, IOrderManager orderManager, IShippingSettings shippingSettings)
@@ -65,10 +66,10 @@ namespace ShipWorks.Shipping.Services
             }
 
             IOrderLoader shipmentLoader = shipmentLoaderFactory().Value;
-            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs, ProgressDisplayOptions.NeverShow, createIfNoShipments)
+            ShipmentsLoadedEventArgs results = await shipmentLoader.LoadAsync(orderIDs, ProgressDisplayOptions.NeverShow, createIfNoShipments, TimeSpan.FromSeconds(10))
                 .ConfigureAwait(true);
 
-            // Only 1 order was requested.  If auto creation of shipments isn't enabled, the results.Shipments will be empty 
+            // Only 1 order was requested.  If auto creation of shipments isn't enabled, the results.Shipments will be empty
             // and we can't get an order, but we need one for the shipping panel.  So if there are no shipments, load the
             // requested order.
             OrderEntity order = results.Shipments.FirstOrDefault()?.Order;
@@ -76,7 +77,7 @@ namespace ShipWorks.Shipping.Services
             {
                 order = orderManager.FetchOrder(orderIDs.First());
             }
-            
+
             List<ICarrierShipmentAdapter> adapters = results.Shipments.Select(carrierShipmentAdapterFactory.Get).ToList();
 
             LoadedOrderSelection orderSelectionLoaded = results.Error == null ?
@@ -97,10 +98,12 @@ namespace ShipWorks.Shipping.Services
             EndSession();
 
             subscription = messenger.OfType<OrderSelectionChangingMessage>()
-                .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
-                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .SelectMany(x => Observable.FromAsync(() => Load(x.OrderIdList, shippingSettings.Fetch().AutoCreateShipments)))
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Gate(messenger.OfType<OrderSelectionChangedMessage>())
+                .Select(x => x.Last())
+                .SelectMany(x => Load(x.OrderIdList, shippingSettings.FetchReadOnly().AutoCreateShipments).ToObservable())
                 .CatchAndContinue((Exception ex) => log.Error(ex))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x)));
         }
 

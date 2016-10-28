@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
     {
         const int maxIntialDownload = 365;
 
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PayPalDownloader));
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Download orders from PayPal
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -178,18 +178,17 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Downloads the specified transaction from PayPal and creates a ShipWorks order
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void LoadTransaction(PayPalWebClient client, string transactionID)
         {
             log.InfoFormat("Preparing to load PayPal transaction '{0}'.", transactionID);
 
-            PaymentTransactionType transaction = client.GetTransaction(transactionID);
+            PaymentTransactionType transaction = GetOrderTransaction(client, transactionID);
 
             if (ShouldImportTransaction(transaction))
             {
-                PayPalOrderEntity order = (PayPalOrderEntity)InstantiateOrder(new PayPalOrderIdentifier(transactionID));
+                PayPalOrderEntity order = (PayPalOrderEntity)InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID));
 
-                order.TransactionID = transactionID;
+                order.TransactionID = transaction.PaymentInfo.TransactionID;
                 order.PayPalFee = GetAmount(transaction.PaymentInfo.FeeAmount);
                 order.PaymentStatus = (int)PayPalUtility.GetPaymentStatus(transaction.PaymentInfo.PaymentStatus);
 
@@ -199,24 +198,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 // only do the remainder for new orders
                 if (order.IsNew)
                 {
-                    order.OrderDate = transaction.PaymentInfo.PaymentDate.ToUniversalTime();
-                    order.RequestedShipping = transaction.PaymentInfo.ShippingMethod == null ? "" : transaction.PaymentInfo.ShippingMethod;
-
-                    // no customer ids
-                    order.OnlineCustomerID = null;
-
-                    InstantiateNote(order, transaction.PaymentItemInfo.Memo, order.OrderDate, NoteVisibility.Public);
-
-                    LoadItems(order, transaction);
-
-                    LoadCharges(order, transaction);
-
-                    LoadPayments(order, transaction);
-
-                    order.OrderTotal = OrderUtility.CalculateTotal(order);
-
-                    // assign an order number
-                    order.OrderNumber = GetNextOrderNumber();
+                    LoadNewOrder(order, transaction);
                 }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PayPalDownloader.LoadOrder");
@@ -243,13 +225,54 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
             // save the store if changes were made
             SaveStore();
-            
-            // if this transaction has a parent transaction, load it too
-            if (transaction.PaymentInfo.ParentTransactionID != null && transaction.PaymentInfo.ParentTransactionID.Length > 0)
+        }
+
+        /// <summary>
+        /// Loads order information for new orders
+        /// </summary>
+        private void LoadNewOrder(PayPalOrderEntity order, PaymentTransactionType transaction)
+        {
+            order.OrderDate = transaction.PaymentInfo.PaymentDate.ToUniversalTime();
+            order.RequestedShipping = transaction.PaymentInfo.ShippingMethod ?? "";
+
+            // no customer ids
+            order.OnlineCustomerID = null;
+
+            InstantiateNote(order, transaction.PaymentItemInfo.Memo, order.OrderDate, NoteVisibility.Public);
+
+            LoadItems(order, transaction);
+
+            LoadCharges(order, transaction);
+
+            LoadPayments(order, transaction);
+
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
+
+            // assign an order number
+            order.OrderNumber = GetNextOrderNumber();
+        }
+
+        /// <summary>
+        /// Gets the order to download
+        /// </summary>
+        /// <remarks>
+        /// Paypal refunds come down as seperate orders, with little value information wise. These orders have
+        /// a parent transaction id, while real ones do not. Since we dont redownload modified orders, we
+        /// will take these refund orders as a sign to redownload the original order for modifications.
+        /// </remarks>
+        private PaymentTransactionType GetOrderTransaction(PayPalWebClient client, string transactionID)
+        {
+            PaymentTransactionType transaction = client.GetTransaction(transactionID);
+
+            // If parent transaction id is not null, then this is an actual order
+            if (string.IsNullOrWhiteSpace(transaction.PaymentInfo.ParentTransactionID))
             {
-                log.InfoFormat("PayPay transaction '{0}' has a parent transaction '{0}' that must also be downloaded.", transactionID, transaction.PaymentInfo.ParentTransactionID);
-                LoadTransaction(client, transaction.PaymentInfo.ParentTransactionID);
+                return transaction;
             }
+
+            // If parent transaction id is not null, then this is a refund order, so get the original order,
+            // so we can set update its status
+            return client.GetTransaction(transaction.PaymentInfo.ParentTransactionID);
         }
 
         /// <summary>
@@ -332,10 +355,10 @@ namespace ShipWorks.Stores.Platforms.PayPal
                         continue;
                     }
 
-                    // create the order item 
+                    // create the order item
                     OrderItemEntity item = InstantiateOrderItem(order);
 
-                    // fill it 
+                    // fill it
                     item.Name = paymentItem.Name;
                     item.Code = paymentItem.Number;
                     item.Quantity = Parse(paymentItem.Quantity, 1);
@@ -396,7 +419,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 // default it to US
                 order.BillCountryCode = "US";
             }
-            
+
             // copy billing to shipping
             PersonAdapter.Copy(order, "Bill", order, "Ship");
 
@@ -439,6 +462,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                     return false;
 
                 default:
+
                     return true;
             }
         }

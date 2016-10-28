@@ -355,7 +355,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             order.BillPhone = downloadedOrder.CustomerPhoneNumber;
             order.BillEmail = downloadedOrder.CustomerEmailAddress;
             order.BillFirstName = downloadedOrder.ShipToFirstName;
-            order.BillLastName = downloadedOrder.ShipToLastName;
+            order.BillLastName = downloadedOrder.ShipToLastName.Trim();
             order.BillStreet1 = downloadedOrder.ShipToAddress1;
             order.BillStreet2 = downloadedOrder.ShipToAddress2;
             order.BillCity = downloadedOrder.ShipToCity;
@@ -367,7 +367,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             order.ShipUnparsedName = downloadedOrder.CustomerName;
             order.ShipFirstName = downloadedOrder.ShipToFirstName;
-            order.ShipLastName = downloadedOrder.ShipToLastName;
+            order.ShipLastName = downloadedOrder.ShipToLastName.Trim();
             order.ShipCompany = downloadedOrder.ShipToCompany;
             order.ShipStreet1 = downloadedOrder.ShipToAddress1;
             order.ShipStreet2 = downloadedOrder.ShipToAddress2;
