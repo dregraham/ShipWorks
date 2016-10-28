@@ -196,9 +196,6 @@ namespace ShipWorks.Editions
                 }
             }
 
-            // Update the shipping settings default shipment type just in case the default carrier is now disabled.
-            UpdateDefaultShippingType();
-
             restrictionsFinalized = true;
 
             return restrictions;
@@ -241,25 +238,6 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
-        /// Updates the shipping setting default shipment type.  This is to keep restricted shipment types in sync with
-        /// the selected default type.  i.e. if UPS is restricted and it was the default type, the next created shipment
-        /// would be created as UPS.  So instead, we'll update the default type to be None.
-        /// </summary>
-        private void UpdateDefaultShippingType()
-        {
-            ShippingSettingsEntity shippingSettingsEntity = ShippingSettings.Fetch();
-            ShipmentTypeCode currentDefaultShipmentTypeCode = (ShipmentTypeCode) shippingSettingsEntity.DefaultType;
-
-            IEnumerable<ShipmentTypeCode> disabledShipmentTypeCodes = restrictions.Where(er => er.Feature == EditionFeature.ShipmentType).Select(er => (ShipmentTypeCode) er.Data);
-
-            if (disabledShipmentTypeCodes.Contains(currentDefaultShipmentTypeCode))
-            {
-                shippingSettingsEntity.DefaultType = (int) ShipmentTypeCode.None;
-                ShippingSettings.Save(shippingSettingsEntity);
-            }
-        }
-
-        /// <summary>
         /// Must be implemented by derived classes that add 'RequiresUpgrade' restrictions.  Return true to indicate the upgrade was successful.
         /// </summary>
         public virtual bool PromptForUpgrade(IWin32Window owner, EditionRestrictionIssue issue)
@@ -281,7 +259,7 @@ namespace ShipWorks.Editions
             {
                 try
                 {
-                    // Just use the defer to the shipping settings. This will be USPS in the case that 
+                    // Just use the defer to the shipping settings. This will be USPS in the case that
                     // the USPS account was added during activation otherwise it will be None.
                     ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
                     ShipmentTypeCode defaultShipmentType = (ShipmentTypeCode) shippingSettings.DefaultType;

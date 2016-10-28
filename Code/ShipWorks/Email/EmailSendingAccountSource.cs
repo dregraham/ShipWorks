@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -76,7 +75,7 @@ namespace ShipWorks.Email
             {
                 List<long> keys = new List<long>();
 
-                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(
+                using (IDataReader reader = adapter.FetchDataReader(
                     resultFields,
                     new RelationPredicateBucket(CreateOutboxQueryPredicate()),
                     CommandBehavior.CloseConnection,

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared;
@@ -448,14 +447,37 @@ namespace ShipWorks.Actions
             step.AttemptError = "";
 
             // See if it will be skipped due to a filter condition
-            bool filtersUpdated;
-            bool skipStep = !CheckStepFilterCondition(step, queue.EntityID, out filtersUpdated);
+            bool filtersUpdatedForFilterCondition;
+            bool skipStep = !CheckStepFilterCondition(step, queue.EntityID, out filtersUpdatedForFilterCondition);
+            bool filtersUpdated = true;
 
             // Create an instance of the task that created this step - we need information from it
             ActionTask actionTask = ActionManager.InstantiateTask(step.TaskIdentifier, step.TaskSettings);
 
+            // If we aren't skipping this step and filter contents need read, do further investigation.
+            if (!skipStep && actionTask.ReadsFilterContents)
+            {
+                if (step.FilterCondition || step.InputFilterNodeID > 0 || step.FilterConditionNodeID > 0)
+                {
+                    log.Info($@"Action task, {step.StepName} - {step.TaskIdentifier}, is set to ReadsFilterContents 
+                                and has a FilterCondition or InputFilterNode,  so we must ensure all filters are up to date.");
+
+                    filtersUpdated = FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion);
+                }
+                else
+                {
+                    log.Info($@"Action task, {step.StepName} - {step.TaskIdentifier}, is set to ReadsFilterContents 
+                                and,  so we must ensure Quick filters are up to date.");
+
+                    FilterHelper.EnsureQuickFiltersUpToDate(queue.QueueVersion);
+
+                    // Quick filter counts always run to completion, so filtersUpdated will always be true in this case.
+                    filtersUpdated = true;
+                }
+            }
+
             // If the task reads filter contents as a part of its execution, and we've not yet made sure filters are updated, we need to do it now
-            if (!skipStep && actionTask.ReadsFilterContents && !filtersUpdated && !FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion))
+            if (!skipStep && !filtersUpdatedForFilterCondition && !filtersUpdated)
             {
                 throw new ActionRunnerFilterUpdateException("Filters were busy updating and the step was postponed.");
             }
@@ -808,7 +830,7 @@ namespace ShipWorks.Actions
                 SortExpression sort = new SortExpression(ActionQueueSelectionFields.ActionQueueSelectionID | SortOperator.Ascending);
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(ActionQueueSelectionFields.ActionQueueID == step.ActionQueue.ActionQueueID);
-                using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, sort, true))
+                using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, sort, true))
                 {
                     while (reader.Read())
                     {
@@ -856,7 +878,7 @@ namespace ShipWorks.Actions
                 // If we have a bucket to use to do the query, query now
                 if (bucketToUse != null)
                 {
-                    using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucketToUse, CommandBehavior.CloseConnection, 0, true))
+                    using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucketToUse, CommandBehavior.CloseConnection, 0, true))
                     {
                         while (reader.Read())
                         {

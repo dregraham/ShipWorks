@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
@@ -156,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <summary>
         /// Gets the insurance provider.
         /// </summary>
-        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        public override InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings)
         {
             return InsuranceProvider.ShipWorks;
         }

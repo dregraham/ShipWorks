@@ -6,6 +6,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
@@ -13,11 +14,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
     public class FedExShipRequestTest
     {
         private FedExShipRequest testObject;
-         
+
         private Mock<IFedExServiceGateway> fedExService;
-        private Mock<ICarrierResponse> carrierResponse;
-        private Mock<ICarrierResponseFactory> responseFactory;
-        
+        private Mock<IFedExResponseFactory> responseFactory;
+
         private Mock<ICarrierRequestManipulator> firstManipulator;
         private Mock<ICarrierRequestManipulator> secondManipulator;
         private Mock<ICarrierSettingsRepository> settingsRespository;
@@ -39,10 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
             settingsRespository = new Mock<ICarrierSettingsRepository>();
             settingsRespository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
 
-            carrierResponse = new Mock<ICarrierResponse>();
-
-            responseFactory = new Mock<ICarrierResponseFactory>();
-            responseFactory.Setup(f => f.CreateShipResponse(It.IsAny<ProcessShipmentReply>(), carrierRequest.Object, shipmentEntity)).Returns(carrierResponse.Object);
+            responseFactory = new Mock<IFedExResponseFactory>();
 
             firstManipulator = new Mock<ICarrierRequestManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
@@ -58,6 +55,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
             };
 
             testObject = new FedExShipRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, settingsRespository.Object, new ProcessShipmentRequest());
+
+            var completedShipmentDetails = new CompletedShipmentDetail();
+            var completedPackageDetails = new CompletedPackageDetail[1];
+            completedPackageDetails[0] = new CompletedPackageDetail();
+            completedShipmentDetails.CompletedPackageDetails = completedPackageDetails;
+
+            var reply = new Mock<IFedExNativeShipmentReply>();
+            reply.SetupGet(x => x.HighestSeverity).Returns(NotificationSeverityType.SUCCESS);
+            reply.SetupGet(x => x.CompletedShipmentDetail).Returns(completedShipmentDetails);
+
+            FedExShipResponse shipResponse = new FedExShipResponse(reply.Object, null, null, null, new List<ICarrierResponseManipulator>());
+
+            responseFactory.Setup(
+                x => x.CreateShipResponse(It.IsAny<object>(), It.IsAny<CarrierRequest>(), It.IsAny<ShipmentEntity>()))
+                .Returns(shipResponse);
         }
 
         [Fact]
@@ -71,11 +83,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
         {
             object carrierAccount = testObject.CarrierAccountEntity;
 
-            // Verify the repository was used to obtain the account using the shipment 
-            // entity provided to the request 
+            // Verify the repository was used to obtain the account using the shipment
+            // entity provided to the request
             settingsRespository.Verify(r => r.GetAccount(shipmentEntity), Times.Once());
         }
-
 
         [Fact]
         public void Submit_DelegatesToManipulators()

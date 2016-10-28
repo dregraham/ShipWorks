@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -36,6 +28,14 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping
         private readonly ICustomsManager customsManager;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private bool closing;
-
+        private bool applyingProfile;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -550,8 +550,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool SaveUIDisplayedShipments()
         {
-            // Save all changes from the UI to the entities loaded into the UI
-            SaveChangesToUIDisplayedShipments();
+            // Already called in OnApplyProfile. Calling again causes profile to be overwritten.
+            if (!applyingProfile)
+            {
+                // Save all changes from the UI to the entities loaded into the UI
+                SaveChangesToUIDisplayedShipments();
+            }
 
             // Save changes to the database for those entities that have been completely removed from the grid.  If we didn't do this now, then
             // the save would never happen, b\c we wouldn't have a reference to it when we closed.
@@ -1182,6 +1186,8 @@ namespace ShipWorks.Shipping
                 ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
                 license?.ApplyShippingPolicy(loadedShipmentEntities.First().ShipmentTypeCode, rateControl);
 
+                ServiceControl.SetupRateControl();
+
                 rateControl.LoadRates(rateGroup);
 
                 ServiceControl.SyncSelectedRate();
@@ -1406,7 +1412,7 @@ namespace ShipWorks.Shipping
 
             if (tabControl.Contains(tabPageCustoms))
             {
-                CustomsControl.LoadShipments(uiDisplayedShipments, true);
+                CustomsControl.LoadShipments(uiDisplayedShipments, uiDisplayedShipments.None(s => s.Processed));
             }
         }
 
@@ -1488,19 +1494,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, the offending shipments are returned.  The rest are
+        /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, this will return false.  The rest are
         /// still saved.
         /// </summary>
-        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
+        private bool SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
-            }
-
-            return shippingManager.SaveShipmentsToDatabase(shipments, forceSave);
+            return shippingManager.SaveShipmentsToDatabase(shipments.Where(s => !s.Processed), forceSave).None();
         }
 
         /// <summary>
@@ -1531,7 +1532,7 @@ namespace ShipWorks.Shipping
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                         menuItem.Tag = profile;
-                        menuItem.Click += new EventHandler(OnApplyProfile);
+                        menuItem.Click += OnApplyProfile;
 
                         if (profile.ShipmentTypePrimary && contextMenuProfiles.Items.Count > 0)
                         {
@@ -1559,8 +1560,19 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// User has selected to apply a profile to the selected shipments
         /// </summary>
-        private void OnApplyProfile(object sender, EventArgs e)
+        /// <remarks>
+        /// Wrapping the method with this applyingProfile flag is not ideal, but after exploring other options
+        /// this seems to have the least impact. We can't just unhook the events and re-add them at the end,
+        /// because inside of the carrier specific service controls, they are doing their own event unhooking
+        /// and hooking up in the LoadShipments method. When hooking events back up, the service controls
+        /// hook up events that are specific to that carrier, which we would not have access to here. Another thought
+        /// was to try and unhook and hookup events here, but check if the handler is null before hooking it back up,
+        /// so we don't overwrite the carrier specific events. However, we can't do that because event handlers can only
+        /// be used with -= and += operations outside of their defining class, ServiceControl in this case.
+        /// </remarks>
+        private async void OnApplyProfile(object sender, EventArgs e)
         {
+            applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
@@ -1577,7 +1589,8 @@ namespace ShipWorks.Shipping
             }
 
             // Reload the UI to show the changes
-            LoadSelectedShipments(true);
+            await LoadSelectedShipments(true);
+            applyingProfile = false;
         }
 
         /// <summary>
@@ -1715,7 +1728,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the requested shipping text, (Multiple) displayed for multiple values
         /// </summary>
-        static private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        private static string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
         {
             string label = null;
 
@@ -1901,7 +1914,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
-        [NDependIgnoreLongMethod]
         private async void OnVoid(object sender, EventArgs e)
         {
             // Confirm they want to void
@@ -2181,12 +2193,19 @@ namespace ShipWorks.Shipping
             // will already be saved in memory.
             SaveChangesToUIDisplayedShipments();
 
+            IEnumerable<ShipmentEntity> shipments = FetchShipmentsFromShipmentControl().ToArray();
+
             // Save them to the database
-            if (SaveShipmentsToDatabase(FetchShipmentsFromShipmentControl(), false).Count > 0)
+            if (!SaveShipmentsToDatabase(shipments, false))
             {
                 MessageHelper.ShowWarning(this,
                                           "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
                                           "Your changes to those shipments were not saved.");
+            }
+
+            foreach (ShipmentEntity shipment in shipments.Where(s => !s.Processed))
+            {
+                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
             }
 
             ErrorManager.Clear();

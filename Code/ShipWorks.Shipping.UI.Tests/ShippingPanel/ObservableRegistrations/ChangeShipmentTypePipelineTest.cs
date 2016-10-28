@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,6 +29,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
                 v.CallBase = true;
             });
             viewModel = viewModelMock.Object;
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 
         [Fact]

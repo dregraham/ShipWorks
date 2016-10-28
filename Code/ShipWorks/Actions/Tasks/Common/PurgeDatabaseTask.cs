@@ -1,21 +1,20 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Actions.Triggers;
-using ShipWorks.Data;
-using log4net;
-using ShipWorks.Actions.Tasks.Common.Editors;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
-using System.Data.SqlClient;
-using System.Data;
-using ShipWorks.Common;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -61,7 +60,7 @@ namespace ShipWorks.Actions.Tasks.Common
             this.scriptRunner = scriptRunner;
             this.dateProvider = dateProvider;
         }
-        
+
         /// <summary>
         /// This task does not require any input to run.
         /// </summary>
@@ -244,7 +243,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 List<Tuple<long, long>> toDelete = new List<Tuple<long, long>>();
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.OrderDate <= olderThan);
-                using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, pageSize, sort, true))
+                using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, pageSize, sort, true))
                 {
                     while (reader.Read())
                     {

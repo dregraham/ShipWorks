@@ -125,13 +125,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         {
             bool hasAccounts = testObject.HasAccounts;
 
-            genericRepositoryMock.Verify(r => r.Accounts, Times.Once());
+            genericRepositoryMock.Verify(r => r.AccountsReadOnly, Times.Once());
         }
 
         [Fact]
         public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts()
         {
-            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
+            genericRepositoryMock.Setup(r => r.AccountsReadOnly).Returns(new List<IEndiciaAccountEntity> { new EndiciaAccountEntity() });
 
             bool hasAccounts = testObject.HasAccounts;
 
@@ -141,7 +141,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         [Fact]
         public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts()
         {
-            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>());
+            genericRepositoryMock.Setup(r => r.AccountsReadOnly).Returns(new List<IEndiciaAccountEntity>());
 
             bool hasAccounts = testObject.HasAccounts;
 

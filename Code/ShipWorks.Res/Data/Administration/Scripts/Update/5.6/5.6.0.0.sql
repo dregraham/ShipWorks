@@ -1,33 +1,12 @@
-﻿PRINT N'Dropping Order Triggers'
+﻿SET NUMERIC_ROUNDABORT OFF
 GO
-IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[FilterDirtyOrder]'))
-	DROP TRIGGER [dbo].[FilterDirtyOrder]
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
+PRINT N'Adding [NextGlobalPostNotificationDate] to [dbo].[UserSettings]'
+GO
+ALTER TABLE [dbo].[UserSettings]
+ADD [NextGlobalPostNotificationDate] [DateTime] NOT NULL
+CONSTRAINT [DF_NOTIFICATION_DATE] DEFAULT '1990-01-01'
 
-IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[OrderAuditTrigger]'))
-	DROP TRIGGER [dbo].[OrderAuditTrigger]
-GO
-
-IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[OrderLabelTrigger]'))
-	DROP TRIGGER [dbo].[OrderLabelTrigger]
-GO
-
-IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[OrderRollupTrigger]'))
-	DROP TRIGGER [dbo].[OrderRollupTrigger]
-GO
-
-IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[OrderShipmentShipSenseStatusTrigger]'))
-	DROP TRIGGER [dbo].[OrderShipmentShipSenseStatusTrigger]
-GO
-
-IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[OrderShipSenseRecognitionStatusTrigger]'))
-	DROP TRIGGER [dbo].[OrderShipSenseRecognitionStatusTrigger]
-GO
-
-PRINT N'Updating Order Table'
-GO
-UPDATE orderTable
-SET orderTable.RollupItemQuantity = ISNULL((SELECT SUM(Quantity) FROM [OrderItem] oi WHERE orderTable.OrderID = oi.OrderID), 0)
-FROM [Order] AS orderTable
-WHERE orderTable.RollupItemQuantity IS NULL
-GO
+ALTER TABLE [dbo].[UserSettings]
+DROP CONSTRAINT [DF_NOTIFICATION_DATE]

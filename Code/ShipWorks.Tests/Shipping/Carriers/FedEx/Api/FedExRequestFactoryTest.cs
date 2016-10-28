@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
@@ -24,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
     {
         private Mock<IFedExServiceGateway> fedExService;
         private Mock<IFedExServiceGateway> fedExOpenShipService;
-        private Mock<ICarrierResponseFactory> responseFactory;
+        private Mock<IFedExResponseFactory> responseFactory;
         private Mock<ICarrierSettingsRepository> settingsRepository;
         private FedExRequestFactory testObject;
         private Mock<IFedExShipmentTokenProcessor> tokenProcessor;
@@ -34,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             fedExService = new Mock<IFedExServiceGateway>();
             fedExOpenShipService = new Mock<IFedExServiceGateway>();
-            responseFactory = new Mock<ICarrierResponseFactory>();
+            responseFactory = new Mock<IFedExResponseFactory>();
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity());

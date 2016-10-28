@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,11 +42,17 @@ namespace ShipWorks.Filters
         // Event that lets us sync threads and know about when calculation is happening
         static readonly ManualResetEvent calculatingEvent = new ManualResetEvent(true);
 
+        // Event that lets us sync threads for quick filters and know about when calculation is happening
+        static readonly ManualResetEvent calculatingQuickFilterEvent = new ManualResetEvent(true);
+
         // So we know when to recalc date filters when the day changes
         static DateTime dateFiltersLastUpdated;
 
         // Used to take lock so only one thread can check for changes at a time
         static readonly object checkChangesLock = new object();
+
+        // Wait forever constant
+        private const int WaitForever = -1;
 
         /// <summary>
         /// Completely reload the count cache
@@ -112,7 +119,7 @@ namespace ShipWorks.Filters
                 }
 
                 // If there are any update counts required, make sure they are being worked on
-                if (IsUpdateCountsNeeded())
+                if (IsUpdateCountsNeeded() || IsUpdateQuickFilterCountsNeeded())
                 {
                     // Don't wait for them to complete
                     CalculateUpdateCounts();
@@ -157,7 +164,7 @@ namespace ShipWorks.Filters
             }
 
             // Save the new max
-            maxTimestamp = filterCountList.Select(x => x.RowVersion).Concat(new[] { maxTimestamp }).Max();
+            maxTimestamp = filterCountList.Select(x => x.RowVersion).Concat(new[] {maxTimestamp}).Max();
 
             return true;
         }
@@ -260,11 +267,11 @@ namespace ShipWorks.Filters
             {
                 // See if any of them need to have initial calculations.  Search does it's own, so we don't consider those.
                 return countCache.Values.Where(count =>
-                    {
-                        return
-                            (count.Status == FilterCountStatus.NeedsInitialCount || count.Status == FilterCountStatus.RunningInitialCount) &&
-                             count.Purpose != FilterNodePurpose.Search;
-                    }).ToList();
+                {
+                    return
+                        (count.Status == FilterCountStatus.NeedsInitialCount || count.Status == FilterCountStatus.RunningInitialCount) &&
+                        count.Purpose != FilterNodePurpose.Search;
+                }).ToList();
             }
         }
 
@@ -277,6 +284,26 @@ namespace ShipWorks.Filters
             {
                 return (DbCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM FilterNodeContentDirty WITH (NOLOCK)") != null);
             }
+        }
+
+        /// <summary>
+        /// Indicates if calculating update counts is currently needed.  This is determined by if there are any rows in the FilterNodeContentDirty table
+        /// </summary>
+        private static bool IsUpdateQuickFilterCountsNeeded()
+        {
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                return (DbCommandProvider.ExecuteScalar(con, "SELECT TOP(1) ObjectID FROM QuickFilterNodeContentDirty WITH (NOLOCK)") != null);
+            }
+        }
+
+        /// <summary>
+        /// Calculate the update counts of all nodes in the ready state.  If it does not complete
+        /// within the time specified, the method returns before the count is complete.
+        /// </summary>
+        public static void CalculateUpdateQuickFilterCounts()
+        {
+            InitiateQuickFilterCalculation();
         }
 
         /// <summary>
@@ -315,7 +342,7 @@ namespace ShipWorks.Filters
                 return;
             }
 
-            // Already calculating
+            // Already calculating initial or standard
             if (!calculatingEvent.WaitOne(TimeSpan.Zero, false))
             {
                 return;
@@ -333,7 +360,7 @@ namespace ShipWorks.Filters
             // Queue the work to a background thread
             ThreadPool.QueueUserWorkItem(
                 ExceptionMonitor.WrapWorkItem(InitiateCalculationThread),
-                new object[] { initial, operationToken });
+                new object[] {initial, operationToken});
 
             // Wait for it to finish.  It's ok if it doesnt.
             calculatingEvent.WaitOne(wait, false);
@@ -344,8 +371,9 @@ namespace ShipWorks.Filters
         /// </summary>
         private static void InitiateCalculationThread(object state)
         {
-            bool initial = (bool) ((object[]) state)[0];
-            ApplicationBusyToken token = (ApplicationBusyToken) ((object[]) state)[1];
+            object[] castedState = (object[])state;
+            bool initial = (bool)castedState[0];
+            ApplicationBusyToken token = (ApplicationBusyToken)castedState[1];
 
             // Get a connection that will not timeout
             using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
@@ -391,6 +419,67 @@ namespace ShipWorks.Filters
             calculatingEvent.Set();
 
             ApplicationBusyManager.OperationComplete(token);
+        }
+
+        /// <summary>
+        /// Initiate a quick filter calculation 
+        /// </summary>
+        private static void InitiateQuickFilterCalculation()
+        {
+            // If we've entered a connection sensitive scope since we were BeginInvoke'd, then this will just have to wait for later
+            if (ConnectionSensitiveScope.IsActive)
+            {
+                return;
+            }
+
+            // Already calculating quick filters
+            if (!calculatingQuickFilterEvent.WaitOne(TimeSpan.Zero, false))
+            {
+                return;
+            }
+
+            calculatingQuickFilterEvent.Reset();
+
+            // Queue the work to a background thread
+            ThreadPool.QueueUserWorkItem(
+                ExceptionMonitor.WrapWorkItem(InitiateQuickFilterCalculationThread),
+                new object[] { });
+
+            // Wait for it to finish.  
+            calculatingQuickFilterEvent.WaitOne(WaitForever, false);
+        }
+
+        /// <summary>
+        /// Calculate the initial filter counts on a background thread
+        /// </summary>
+        private static void InitiateQuickFilterCalculationThread(object state)
+        {
+            // Get a connection that will not timeout
+            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            {
+                // Create a new connection
+                using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
+                {
+                    adapter.CommandTimeOut = 0;
+
+                    if (adapter.InSystemTransaction)
+                    {
+                        // If there is no way around this, then wrap it in a TransactionScope with Suppress.
+                        throw new InvalidOperationException("This cannot be within a transaction.");
+                    }
+
+                    log.DebugFormat("Begin quick filter counts");
+
+                    SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
+                        new SqlAdapterRetry<SqlException>(5, -5, "FilterContentManager.InitiateQuickFilterCalculationThread");
+
+                    sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => ActionProcedures.CalculateUpdateQuickFilterCounts(adapter));
+
+                    log.DebugFormat("Complete quick filter counts");
+                }
+            }
+
+            calculatingQuickFilterEvent.Set();
         }
 
         /// <summary>

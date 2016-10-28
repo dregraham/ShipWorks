@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.Loading
     [Component]
     public class OrderLoader : IOrderLoader
     {
+        private static readonly AsyncSemaphore loadingSemaphore = new AsyncSemaphore(1);
         private readonly IMessageHelper messageHelper;
         private readonly IShipmentsValidator shipmentsLoaderValidator;
         private readonly IShipmentsLoader shipmentLoader;
@@ -40,7 +41,15 @@ namespace ShipWorks.Shipping.Loading
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs, ProgressDisplayOptions displayOptions, bool createIfNoShipments)
+        public Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs,
+            ProgressDisplayOptions displayOptions, bool createIfNoShipments, int timeoutInMilliseconds) =>
+            LoadAsync(entityIDs, displayOptions, createIfNoShipments, TimeSpan.FromMilliseconds(timeoutInMilliseconds));
+
+        /// <summary>
+        /// Load the shipments for the given collection of orders or shipments
+        /// </summary>
+        public async Task<ShipmentsLoadedEventArgs> LoadAsync(IEnumerable<long> entityIDs,
+            ProgressDisplayOptions displayOptions, bool createIfNoShipments, TimeSpan timeout)
         {
             MethodConditions.EnsureArgumentIsNotNull(entityIDs, nameof(entityIDs));
 
@@ -56,13 +65,28 @@ namespace ShipWorks.Shipping.Loading
 
             try
             {
-                wasCanceled = await LoadShipments(entityIDsOriginalSort, globalShipments,
-                    displayOptions, new ProgressProvider(), createIfNoShipments);
+                var progressProvider = new ProgressProvider();
+                using (CreateProgressDialog(displayOptions, progressProvider))
+                {
+                    if (await loadingSemaphore.WaitAsync(timeout))
+                    {
+                        wasCanceled = await LoadShipments(entityIDsOriginalSort, globalShipments,
+                            progressProvider, createIfNoShipments);
+                    }
+                    else
+                    {
+                        return new ShipmentsLoadedEventArgs(new Exception("Could not load order. Please try again"), false, null, new List<ShipmentEntity>());
+                    }
+                }
             }
             catch (Exception ex)
             {
                 log.Error(ex);
                 return new ShipmentsLoadedEventArgs(ex, false, null, new List<ShipmentEntity>());
+            }
+            finally
+            {
+                loadingSemaphore.Release();
             }
 
             if (wasCanceled)
@@ -84,21 +108,18 @@ namespace ShipWorks.Shipping.Loading
         /// Load the shipments
         /// </summary>
         private async Task<bool> LoadShipments(List<long> orderIDs, IDictionary<long, ShipmentEntity> globalShipments,
-            ProgressDisplayOptions displayOptions, IProgressProvider progressProvider, bool createIfNoShipments)
+            IProgressProvider progressProvider, bool createIfNoShipments)
         {
             using (BlockingCollection<ShipmentEntity> shipmentsToValidate = new BlockingCollection<ShipmentEntity>())
             {
-                using (CreateProgressDialog(displayOptions, progressProvider))
-                {
-                    Task<bool> loadShipmentsTask = shipmentLoader
-                        .StartTask(progressProvider, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
+                Task<bool> loadShipmentsTask = shipmentLoader
+                    .StartTask(progressProvider, orderIDs, globalShipments, shipmentsToValidate, createIfNoShipments);
 
-                    Task<bool> validateTask = shipmentsLoaderValidator
-                        .StartTask(progressProvider, globalShipments, shipmentsToValidate);
+                Task<bool> validateTask = shipmentsLoaderValidator
+                    .StartTask(progressProvider, globalShipments, shipmentsToValidate);
 
-                    return await TaskEx.WhenAll(loadShipmentsTask, validateTask)
-                        .ContinueWith(task => task.Result.Any(x => x));
-                }
+                return await TaskEx.WhenAll(loadShipmentsTask, validateTask)
+                    .ContinueWith(task => task.Result.Any(x => x));
             }
         }
 

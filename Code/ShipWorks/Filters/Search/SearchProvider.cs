@@ -300,9 +300,6 @@ namespace ShipWorks.Filters.Search
                     {
                         searchCmd = DataAccessAdapter.GetDbProviderFactory().CreateCommand();
                         searchCmd.CommandText = nodeContent.InitialCalculation.Replace("<SwFilterNodeID />", searchNode.FilterNodeID.ToString());
-
-                        // debugging delay
-                        // searchCmd.CommandText = "WAITFOR DELAY '00:00:20'; " + searchCmd.CommandText;
                     }
 
                     // Execute the search in a SqlAdapterRetry
@@ -315,6 +312,7 @@ namespace ShipWorks.Filters.Search
 
                     lock (searchCmdLock)
                     {
+                        searchCmd.Dispose();
                         searchCmd = null;
                     }
 
@@ -369,46 +367,15 @@ namespace ShipWorks.Filters.Search
                 {
                     using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
-                        bool gotLock = false;
-
-                        // Wait in line with other update\initial counts
-                        while (!isCancelRequested)
+                        if (!isCancelRequested)
                         {
-                            if (ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(2)))
-                            {
-                                gotLock = true;
-                                break;
-                            }
+                            Stopwatch sw = Stopwatch.StartNew();
 
-                            log.InfoFormat("Search timed out waiting for calculation lock, will try again...");
-                        }
+                            searchCmd.Connection = con;
+                            searchCmd.ExecuteNonQuery();
+                            searchCompleted = true;
 
-                        try
-                        {
-                            if (!isCancelRequested)
-                            {
-                                Stopwatch sw = Stopwatch.StartNew();
-
-                                searchCmd.Connection = con;
-                                searchCmd.ExecuteNonQuery();
-                                searchCompleted = true;
-
-                                log.DebugFormat("@@@@@ Time to execute search query: {0}", sw.Elapsed.TotalSeconds);
-                            }
-                        }
-                        finally
-                        {
-                            if (gotLock)
-                            {
-                                try
-                                {
-                                    ActiveCalculationUtility.ReleaseCalculatingLock(con);
-                                }
-                                catch (Exception ex)
-                                {
-                                    log.Error("Search failed to release calculating lock.", ex);
-                                }
-                            }
+                            log.DebugFormat("@@@@@ Time to execute search query: {0}", sw.Elapsed.TotalSeconds);
                         }
                     }
                 }

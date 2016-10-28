@@ -163,21 +163,22 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             long computerID = UtilityFunctions.GetComputerID(con);
 
             // Insert everything into the dirty table.  Dupes will be dealt with when we update the counts.
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = string.Format(@"
+            using (SqlCommand cmd = con.CreateCommand())
+            {
+                cmd.CommandText = string.Format(@"
+                    INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+	                    OUTPUT inserted.ObjectID, inserted.ParentID, inserted.ObjectType, inserted.ComputerID, inserted.ColumnsUpdated
+		                    INTO QuickFilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
+                      SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
+                    ",
+                    primaryKey, parentID, table);
 
-                INSERT INTO FilterNodeContentDirty (ObjectID, ParentID, ObjectType, ComputerID, ColumnsUpdated)
-                  SELECT {0}, {1}, @type, @computerID, @columns FROM {2}
-            
-            ",
+                cmd.Parameters.AddWithValue("@computerID", computerID);
+                cmd.Parameters.AddWithValue("@type", type);
+                cmd.Parameters.AddWithValue("@columns", columnsUpdated);
 
-            primaryKey, parentID, table);
-
-            cmd.Parameters.AddWithValue("@computerID", computerID);
-            cmd.Parameters.AddWithValue("@type", type);
-            cmd.Parameters.AddWithValue("@columns", columnsUpdated);
-
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>

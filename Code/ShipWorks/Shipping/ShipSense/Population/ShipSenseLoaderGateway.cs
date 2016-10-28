@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                using (SqlDataReader sqlDataReader = (SqlDataReader) sqlAdapter.FetchDataReader(resultFields, shipmentBucket, CommandBehavior.SequentialAccess, 1, sort, groupByCollection, false, 1, 1))
+                using (IDataReader sqlDataReader = sqlAdapter.FetchDataReader(resultFields, shipmentBucket, CommandBehavior.SequentialAccess, 1, sort, groupByCollection, false, 1, 1))
                 {
                     while (sqlDataReader.Read())
                     {

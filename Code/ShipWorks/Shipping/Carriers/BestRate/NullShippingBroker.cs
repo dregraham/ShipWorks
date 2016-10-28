@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
     /// <summary>
-    /// An implementation of the IBestRateShippingBroker interface that is an application of the 
-    /// null object pattern. This is intended to be used for those shipping providers where 
-    /// best rate is not applicable and/or not yet supported. 
+    /// An implementation of the IBestRateShippingBroker interface that is an application of the
+    /// null object pattern. This is intended to be used for those shipping providers where
+    /// best rate is not applicable and/or not yet supported.
     /// </summary>
     public class NullShippingBroker : IBestRateShippingBroker
     {
@@ -58,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the insurance provider for the carrier.
         /// </summary>
-        public InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        public InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings)
         {
             return InsuranceProvider.Invalid;
         }

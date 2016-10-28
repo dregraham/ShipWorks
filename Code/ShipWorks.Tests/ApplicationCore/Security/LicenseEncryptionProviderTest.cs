@@ -1,12 +1,11 @@
 ﻿#region
 
-using Autofac;
-using Autofac.Extras.Moq;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Security;
 using System;
 using System.IO;
 using System.Text;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Data.Administration;
 using Xunit;
 
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.ApplicationCore.Security
         private Stream EncryptedStream;
         private Stream EncryptedEmptyStream;
 
-        private readonly byte[] iv = {125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14};
+        private readonly byte[] iv = { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 };
         private readonly Guid key = new Guid("CF136821-5D3C-4237-ABFB-F5560C65A3D0");
 
         public LicenseEncryptionProviderTest()
@@ -58,17 +57,6 @@ namespace ShipWorks.Tests.ApplicationCore.Security
         }
 
         [Fact]
-        public void Encrypt_ThrowsEncryptionException_WhenCustomerLicenseNotSupported()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = GetLicenseEncryptionProvider(mock, false);
-
-                Assert.Throws<EncryptionException>(() => testObject.Encrypt(EncryptedString));
-            }
-        }
-
-        [Fact]
         public void Decrypt_ReturnsDecryptedString_WhenGivenEncryptedString()
         {
             using (var mock = AutoMock.GetLoose())
@@ -99,18 +87,6 @@ namespace ShipWorks.Tests.ApplicationCore.Security
             {
                 var testObject = GetLicenseEncryptionProvider(mock, true);
                 Assert.Throws<EncryptionException>(() => testObject.Decrypt(""));
-            }
-        }
-
-        [Fact]
-        public void Decrypt_ReturnsEmptyString_WhenCustomerLicenseNotSupported()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = GetLicenseEncryptionProvider(mock, false);
-                string decryptedText = testObject.Decrypt(EncryptedString);
-
-                Assert.Equal(string.Empty, decryptedText);
             }
         }
 
@@ -179,20 +155,6 @@ namespace ShipWorks.Tests.ApplicationCore.Security
             {
                 var testObject = GetLicenseEncryptionProvider(mock, true);
                 Assert.Throws<EncryptionException>(() => testObject.Decrypt(""));
-            }
-        }
-
-        [Fact]
-        public void Decrypt_ReturnsEmptyStream_WhenCustomerLicenseNotSupported()
-        {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var testObject = GetLicenseEncryptionProvider(mock, false);
-                testObject.Decrypt(EncryptedStream, DecryptedStream);
-
-                string decryptedText = GetText(DecryptedStream);
-
-                Assert.Equal(string.Empty, decryptedText);
             }
         }
 

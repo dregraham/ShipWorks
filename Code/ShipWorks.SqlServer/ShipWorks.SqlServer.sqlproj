@@ -227,6 +227,8 @@
     <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
     <Compile Include="Maintenance\RebuildTableIndex.cs" />
     <Compile Include="Common\DbCommandExtensions.cs" />
+    <Compile Include="Filters\FilterTargetNodeData.cs" />
+    <Compile Include="Filters\QuickFilterCountUpdater.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

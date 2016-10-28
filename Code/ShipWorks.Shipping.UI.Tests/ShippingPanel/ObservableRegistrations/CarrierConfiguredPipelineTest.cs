@@ -64,6 +64,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testObject.Register(viewModel.Object);
 
             messages.OnNext(new CarrierConfiguredMessage(this, viewModel.Object.ShipmentType));
+            schedulerProvider.Dispatcher.Start();
             schedulerProvider.TaskPool.Start();
 
             mock.Mock<IShippingManager>().Verify(x => x.GetShipment(123));
@@ -123,6 +124,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testObject.Register(viewModel.Object);
 
             messages.OnNext(new CarrierConfiguredMessage(this, viewModel.Object.ShipmentType));
+            schedulerProvider.Dispatcher.Start();
             schedulerProvider.TaskPool.Start();
             viewModel.Setup(x => x.Shipment).Returns(shipment);
             schedulerProvider.Dispatcher.Start();

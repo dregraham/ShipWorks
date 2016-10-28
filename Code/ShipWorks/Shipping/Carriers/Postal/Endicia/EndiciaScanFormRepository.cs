@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -140,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             resultFields.DefineField(ShipmentFields.ShipmentID, 0, "ShipmentID", "");
 
             // Do the fetch
-            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
             {
                 List<long> keys = new List<long>();
 

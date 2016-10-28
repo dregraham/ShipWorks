@@ -4,6 +4,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
@@ -12,14 +13,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
     public class FedExVoidRequestTest
     {
         private FedExVoidRequest testObject;
-        
+
         private Mock<IFedExServiceGateway> fedExService;
-        private Mock<ICarrierResponse> carrierResponse;
-        private Mock<ICarrierResponseFactory> responseFactory;
-        
+        private Mock<IFedExResponseFactory> responseFactory;
+
         private Mock<ICarrierRequestManipulator> firstManipulator;
         private Mock<ICarrierRequestManipulator> secondManipulator;
-        
+
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
@@ -31,10 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
             fedExService = new Mock<IFedExServiceGateway>();
             fedExService.Setup(s => s.Void(It.IsAny<DeleteShipmentRequest>())).Returns(new ShipmentReply());
 
-            carrierResponse = new Mock<ICarrierResponse>();
-
-            responseFactory = new Mock<ICarrierResponseFactory>();
-            responseFactory.Setup(f => f.CreateShipResponse(It.IsAny<ShipmentReply>(), It.IsAny<CarrierRequest>(), shipmentEntity)).Returns(carrierResponse.Object);
+            responseFactory = new Mock<IFedExResponseFactory>();
 
             firstManipulator = new Mock<ICarrierRequestManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
@@ -49,10 +46,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
                 secondManipulator.Object
             };
 
-
             testObject = new FedExVoidRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, account);
         }
-
 
         [Fact]
         public void CarrierAccountEntity_IsNotNull()

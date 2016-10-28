@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response.Manipulators;
@@ -67,41 +63,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             };
 
             return new UpsInvoiceRegistrationResponse(registerResponse, request, manipulators);
-        }
-
-        public ICarrierResponse CreateShipResponse(object nativeResponse, CarrierRequest request, ShipmentEntity shipmentEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICarrierResponse CreateGlobalShipAddressResponse(object nativeResponse, CarrierRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICarrierResponse CreateGroundCloseResponse(object nativeResponse, CarrierRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICarrierResponse CreateSmartPostCloseResponse(object nativeResponse, CarrierRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICarrierResponse CreateVoidResponse(object nativeResponse, CarrierRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICarrierResponse CreateRateResponse(object nativeResponse, CarrierRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICarrierResponse CreateTrackResponse(object nativeResponse, CarrierRequest request)
-        {
-            throw new NotImplementedException();
         }
     }
 }

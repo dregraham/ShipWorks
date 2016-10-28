@@ -618,6 +618,93 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
+        /// Ensures that there are no pending filter calculations that need done.  If the timeout expires before we are able to begin
+        /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
+        /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
+        /// </summary>
+        public static void EnsureQuickFiltersUpToDate()
+        {
+            byte[] rowVersion;
+
+            // Can't calculate filters within a transaction - would hose everything up
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            {
+                // We need to capture the DBTS on entry - we only care if filters get as up-to-date as what the dirty mark is now.
+                // If changes just keep coming in and coming in, then update counts would always be needed, and we'd never consider filters
+                // up-to-date
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    rowVersion = (byte[])DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
+                }
+            }
+
+            EnsureQuickFiltersUpToDate(rowVersion);
+        }
+
+        /// <summary>
+        /// Ensures that there are no pending filter calculations that need done.  If the timeout expires before we are able to begin
+        /// doing a calculation, the method returns false.  If the timeout expires during the calculation, the method finishes and returns
+        /// true. This method is different from FilterContentManager.CalculateUpdateCounts because it blocks until the counts are updated.
+        /// </summary>
+        public static void EnsureQuickFiltersUpToDate(byte[] rowVersion)
+        {
+            int iteration = 0;
+
+            while (true)
+            {
+                iteration++;
+
+                // Can't calculate filters within a transaction - would hose everything up
+                using (new TransactionScope(TransactionScopeOption.Suppress))
+                {
+                    log.InfoFormat($"Ensuring QUICK filters are at least as up to date as {SqlUtility.GetTimestampValue(rowVersion)}, iteration {iteration}.");
+
+                    if (QuickFiltersAreUpToDate(rowVersion))
+                    {
+                        return;
+                    }
+
+                    // Ensure counts are running
+                    FilterContentManager.CalculateUpdateQuickFilterCounts();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines if quick filters are up to date as far as rowVersion is concerned.
+        /// </summary>
+        static bool QuickFiltersAreUpToDate(byte[] rowVersion)
+        {
+            object result;
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+                result = DbCommandProvider.ExecuteScalar(con, "SELECT MIN(RowVersion) FROM QuickFilterNodeContentDirty WITH (NOLOCK)");
+
+                // No dirty means we're up to date
+                if (result == null || ((byte[]) result).Length == 0)
+                {
+                    log.InfoFormat("There are no dirty objects, QUICK filters are up to date.");
+                    return true;
+                }
+
+                // Still some dirty - but they are all edited after we first entered this method, which means they are
+                // at least as up-to-date as when we were called - which is all we can hope for
+                if (SqlUtility.GetTimestampValue((byte[]) result) > SqlUtility.GetTimestampValue(rowVersion))
+                {
+                    log.InfoFormat("Still some dirty objets, but all are up-to-date from the time of the request.");
+                    return true;
+                }
+            }
+
+            log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[])result), SqlUtility.GetTimestampValue(rowVersion));
+
+            // Sleep 50ms so we don't slam SQL Server every couple of ms.
+            Thread.Sleep(50);
+
+            return false;
+        }
+
+        /// <summary>
         /// Creates filter for address validation statuses.
         /// </summary>
         public static FilterDefinition CreateAddressValidationDefinition(IEnumerable<AddressValidationStatusType> statusesToInclude)
