@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
 
                 testObject.FedExAccountNumber = GetAccountForCountry(testObject.ShipperCountryCode);
 
-                testObject.CommercialInvoiceFileElectronically = true;
+                //testObject.CommercialInvoiceFileElectronically = true;
 
                 testObject.Ship(context.Order);
             }

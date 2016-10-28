@@ -72,3 +72,9 @@ CHANGES (Grn Alcohol)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
 605766 					7		BO								9012633035								10/24/2016				Missing
+
+=================================================================================
+CHANGES (EMEA)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+EMEA-515 				18		BY			ES					FI										10/27/2016				Wrong
