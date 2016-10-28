@@ -24,7 +24,8 @@ GO
 PRINT N'Altering [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD
-[ThirdPartyConsignee] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ThirdPartyConsignee] DEFAULT ((0))
+[ThirdPartyConsignee] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ThirdPartyConsignee] DEFAULT ((0)),
+[Currency] [int] NULL
 GO
 PRINT N'Dropping constraints from [dbo].[FedExShipment]'
 GO

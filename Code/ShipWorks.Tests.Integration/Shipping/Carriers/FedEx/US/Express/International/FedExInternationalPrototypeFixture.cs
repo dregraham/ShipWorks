@@ -110,11 +110,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             {
                 shipment.FedEx.ImporterOfRecord = true;
 
-                
+
                 List<string> names = ParseName(ImporterOfRecordPersonName);
                 shipment.FedEx.ImporterFirstName = names[0];
                 shipment.FedEx.ImporterLastName = names[1];
-                
+
                 shipment.FedEx.ImporterCompany = ImporterOfRecordCompanyName;
                 shipment.FedEx.ImporterStreet1 = ImporterOfRecordStreetLines;
                 shipment.FedEx.ImporterCity = ImporterOfRecordCity;
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             if (!string.IsNullOrEmpty(CommoditiesQuantity) && CommoditiesQuantity != "0")
             {
                 int numberOfItems = int.Parse(CommoditiesQuantity);
-                
+
                 // Add the customs items to the shipment
                 ShipmentCustomsItemEntity customsItem;
                 customsItem = new ShipmentCustomsItemEntity();
@@ -157,7 +157,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         private CurrencyType GetCurrencyType()
         {
             CurrencyType currencyType = CurrencyType.USD;
-            
+
             if (CommoditiesUnitPriceCurrency == "CAD")
             {
                 currencyType = CurrencyType.CAD;

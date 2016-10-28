@@ -6707,6 +6707,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialTechnicalName);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.AlcoholRecipientType field instance</summary>
+		public static EntityField2 AlcoholRecipientType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.AlcoholRecipientType);}
+		}
 		/// <summary>Creates a new FedExPackageEntity.SignatoryContactName field instance</summary>
 		public static EntityField2 SignatoryContactName
 		{
@@ -6721,11 +6726,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SignatoryPlace
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryPlace);}
-		}
-		/// <summary>Creates a new FedExPackageEntity.AlcoholRecipientType field instance</summary>
-		public static EntityField2 AlcoholRecipientType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.AlcoholRecipientType);}
 		}
 	}
 
@@ -7846,6 +7846,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ThirdPartyConsignee
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ThirdPartyConsignee);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.Currency field instance</summary>
+		public static EntityField2 Currency
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.Currency);}
 		}
 	}
 

@@ -190,6 +190,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MaskedData = source.MaskedData;
             ReferenceFIMS = source.ReferenceFIMS;
             ThirdPartyConsignee = source.ThirdPartyConsignee;
+            Currency = source.Currency;
             
             Shipment = source.Shipment?.AsReadOnly(objectMap);
             
@@ -1125,6 +1126,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean ThirdPartyConsignee { get; }
+        /// <summary> The Currency property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."Currency"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> Currency { get; }
         
         public IShipmentEntity Shipment { get; }
         

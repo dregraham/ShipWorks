@@ -43,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
             currentShipment.OnTrac.DimsHeight = originalShipment.BestRate.DimsHeight;
             currentShipment.OnTrac.DimsWidth = originalShipment.BestRate.DimsWidth;
             currentShipment.OnTrac.DimsLength = originalShipment.BestRate.DimsLength;
+            currentShipment.OnTrac.DimsProfileID = originalShipment.BestRate.DimsProfileID;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.OnTrac.DimsWeight = originalShipment.BestRate.DimsWeight;

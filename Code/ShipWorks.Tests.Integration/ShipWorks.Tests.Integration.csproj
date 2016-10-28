@@ -182,6 +182,7 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\FedExUKIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKETDMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUkInternationalMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKIntraFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
@@ -296,6 +297,9 @@
     <None Include="DataSources\FedExAll\TD Express.xlsx" />
     <None Include="DataSources\FedExAll\TD Ground.xlsx" />
     <None Include="DataSources\FedExAll\UK ETD.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\UK International.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\UK Intra.xlsx">

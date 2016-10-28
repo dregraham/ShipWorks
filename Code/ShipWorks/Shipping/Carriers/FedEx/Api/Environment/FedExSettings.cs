@@ -138,6 +138,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <returns></returns>
         public CurrencyType GetCurrencyType(ShipmentEntity shipment)
         {
+            if (shipment.FedEx.Currency.HasValue)
+            {
+                return (CurrencyType) shipment.FedEx.Currency;
+            }
+
             FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
             
             if (account == null)

@@ -238,6 +238,9 @@ end
 ########################################################################
 namespace :db do
 
+	desc "Create Blank Database"
+	task :blank,  [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :switch, :deploy]
+
 	desc "Create, populate, and switch to a new ShipWorks database that is populated with seed data; useful for running locally"
 	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy]
 

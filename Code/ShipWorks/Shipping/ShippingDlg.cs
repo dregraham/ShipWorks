@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -36,6 +28,14 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -1186,6 +1186,8 @@ namespace ShipWorks.Shipping
                 ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
                 license?.ApplyShippingPolicy(loadedShipmentEntities.First().ShipmentTypeCode, rateControl);
 
+                ServiceControl.SetupRateControl();
+
                 rateControl.LoadRates(rateGroup);
 
                 ServiceControl.SyncSelectedRate();
@@ -1410,7 +1412,7 @@ namespace ShipWorks.Shipping
 
             if (tabControl.Contains(tabPageCustoms))
             {
-                CustomsControl.LoadShipments(uiDisplayedShipments, true);
+                CustomsControl.LoadShipments(uiDisplayedShipments, uiDisplayedShipments.None(s => s.Processed));
             }
         }
 

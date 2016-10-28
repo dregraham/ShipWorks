@@ -21,6 +21,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 {
@@ -372,7 +373,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             shipment.OriginStreet2 = string.Empty;
             shipment.OriginStreet3 = string.Empty;
             shipment.OriginCity = ShipperCity;
-            shipment.OriginStateProvCode = ShipperStateOrProvinceCode;
+            shipment.OriginStateProvCode = ShipperStateOrProvinceCode ?? string.Empty;
             shipment.OriginPostalCode = ShipperPostalCode;
             shipment.OriginCountryCode = ShipperCountryCode;
             shipment.OriginEmail = string.Empty;
@@ -400,6 +401,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             shipment.FedEx.HomeDeliveryPhone = string.Empty;
             shipment.FedEx.HomeDeliveryInstructions = string.Empty;
             shipment.FedEx.HomeDeliveryDate = DateTime.Today;
+
+            shipment.FedEx.Currency = (int?) GetCurrency();
 
             shipment.ResidentialResult = !string.IsNullOrEmpty(RecipientResidential) && RecipientResidential.ToLower() == "true";
             if (shipment.ResidentialResult)
@@ -482,6 +485,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             return shipment;
         }
 
+        private CurrencyType? GetCurrency()
+        {
+            return EnumHelper.TryParseEnum<CurrencyType>(PackageLineItemInsuredValueCurrency);
+        }
+
         private DateTime GetShipTimestamp()
         {
             DateTime shipTimestamp;
@@ -559,7 +567,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.OriginStreet2 = string.Empty;
                 shipment.OriginStreet3 = string.Empty;
                 shipment.OriginCity = RecipientCity;
-                shipment.OriginStateProvCode = RecipientStateOrProvinceCode;
+                shipment.OriginStateProvCode = RecipientStateOrProvinceCode ?? string.Empty;
                 shipment.OriginPostalCode = RecipientPostalCode;
                 shipment.OriginCountryCode = RecipientCountryCode;
                 shipment.OriginEmail = string.Empty;
@@ -623,6 +631,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             switch (HoldLocationType.ToLower())
             {
                 case "fedex_express_station": return FedExLocationType.FedExExpressStation;
+                case "fedex_office": return FedExLocationType.FedExOffice;
             }
 
             throw new InvalidOperationException("Need to add another case to the GetLocationType switch statement in the test fixture");

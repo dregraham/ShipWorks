@@ -79,10 +79,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public StoreEntity Store
         {
-            get
-            {
-                return store;
-            }
+            get { return store; }
         }
 
         /// <summary>
@@ -90,10 +87,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected StoreType StoreType
         {
-            get
-            {
-                return storeType;
-            }
+            get { return storeType; }
         }
 
         /// <summary>
@@ -103,7 +97,8 @@ namespace ShipWorks.Stores.Communication
         {
             get
             {
-                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType) store.AddressValidationSetting);
+                AddressValidationStoreSettingType storeSetting =
+                    ((AddressValidationStoreSettingType) store.AddressValidationSetting);
                 return storeSetting;
             }
         }
@@ -113,10 +108,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public IProgressReporter Progress
         {
-            get
-            {
-                return progress;
-            }
+            get { return progress; }
         }
 
         /// <summary>
@@ -124,10 +116,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public int QuantitySaved
         {
-            get
-            {
-                return quantitySaved;
-            }
+            get { return quantitySaved; }
         }
 
         /// <summary>
@@ -135,10 +124,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public int QuantityNew
         {
-            get
-            {
-                return quantityNew;
-            }
+            get { return quantityNew; }
         }
 
         /// <summary>
@@ -364,7 +350,8 @@ namespace ShipWorks.Stores.Communication
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
+                RelationPredicateBucket bucket =
+                    new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
                 // We use a prototype approach to determine what to search for
                 OrderEntity prototype = storeType.CreateOrder();
@@ -377,7 +364,8 @@ namespace ShipWorks.Stores.Communication
                 {
                     if (field.IsChanged)
                     {
-                        bucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(field, null, ComparisonOperator.Equal, field.CurrentValue));
+                        bucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(field, null,
+                            ComparisonOperator.Equal, field.CurrentValue));
                     }
                 }
 
@@ -450,7 +438,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Creates a new note instance, but only if the note text is non-blank.  If its blank, null is returned.
         /// </summary>
-        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility visibility, bool ignoreDuplicateText = false)
+        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility visibility, bool ignoreDuplicateText = false)
         {
             if (string.IsNullOrWhiteSpace(noteText))
             {
@@ -474,8 +463,11 @@ namespace ShipWorks.Stores.Communication
                 if (!order.IsNew)
                 {
                     IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
-                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
-                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int) NoteSource.Downloaded));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(
+                        new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(
+                        new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal,
+                            (int) NoteSource.Downloaded));
 
                     using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
                     {
@@ -576,7 +568,8 @@ namespace ShipWorks.Stores.Communication
                         }
                         catch (CustomerAcquisitionLockException)
                         {
-                            throw new DownloadException("ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
+                            throw new DownloadException(
+                                "ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
                         }
                     }
 
@@ -618,8 +611,18 @@ namespace ShipWorks.Stores.Communication
                     // Calculate or verify the order total
                     VerifyOrderTotal(order);
 
-                    // Save the order so we can get its OrderID
-                    adapter.SaveAndRefetch(order);
+                    try
+                    {
+                        // Save the order so we can get its OrderID
+                        adapter.SaveAndRefetch(order);
+                    }
+                    catch (ORMQueryExecutionException ex)
+                        when (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new DownloadException(
+                            $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
+                            "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
+                    }
 
                     // Update the note counts
                     NoteManager.AdjustNoteCount(adapter, order.OrderID, order.Notes.Select(n => n.IsNew).Count());
