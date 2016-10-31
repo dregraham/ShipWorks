@@ -359,6 +359,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return true;
             }
 
+            if (serviceType == FedExServiceType.FedExNextDayAfternoon ||
+                serviceType == FedExServiceType.FedExNextDayEarlyMorning ||
+                serviceType == FedExServiceType.FedExNextDayMidMorning ||
+                serviceType == FedExServiceType.FedExNextDayEndOfDay ||
+                serviceType == FedExServiceType.FedExNextDayFreight && shipDate.DayOfWeek == DayOfWeek.Friday)
+            {
+                return true;
+            }
             return false;
         }
 
