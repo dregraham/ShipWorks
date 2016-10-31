@@ -58,6 +58,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>A List of FedExServiceType objects.</returns>
         public static List<FedExServiceType> GetValidServiceTypes(List<ShipmentEntity> shipments)
         {
+            if (shipments.All(s => s.OriginCountryCode == "GB" || s.OriginCountryCode == "UK") &&
+                shipments.All(s => s.ShipCountryCode == "GB" || s.ShipCountryCode == "UK"))
+            {
+                return GetUKServiceTypes();
+            }
+
             FedExShipmentType shipmentType = new FedExShipmentType();
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>();
 
@@ -164,6 +170,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return serviceTypes;
+        }
+
+        /// <summary>
+        /// FedEx Services types only available in the UK
+        /// </summary>
+        public static List<FedExServiceType> GetUKServiceTypes()
+        {
+            return new List<FedExServiceType>
+            {
+                FedExServiceType.FedExNextDayAfternoon,
+                FedExServiceType.FedExNextDayEarlyMorning,
+                FedExServiceType.FedExNextDayMidMorning,
+                FedExServiceType.FedExNextDayEndOfDay,
+                FedExServiceType.FedExDistanceDeferred,
+                FedExServiceType.FedExNextDayFreight
+            };
         }
 
         /// <summary>
