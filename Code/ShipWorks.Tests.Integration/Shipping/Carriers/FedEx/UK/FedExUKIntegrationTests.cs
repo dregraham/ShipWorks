@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUkInternationalMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels)) // && (string) row[4] == "UK-404")
+                (testObject.IsSaveLabel || !justLabels))// && (string) row[4] == "UK-422")
             {
                 output.WriteLine($"Executing customer transaction ID {row[4]}");
 

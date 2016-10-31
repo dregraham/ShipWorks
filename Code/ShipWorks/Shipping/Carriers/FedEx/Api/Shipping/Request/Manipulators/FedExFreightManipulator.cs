@@ -83,7 +83,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     specialServiceTypes.Add(ShipmentSpecialServiceType.INSIDE_PICKUP);
                 }
             }
-            else if (fedex.FreightLoadAndCount > 0)
+
+            if (fedex.FreightLoadAndCount > 0)
             {
                 expressFreightDetail.ShippersLoadAndCount = fedex.FreightLoadAndCount.ToString();
             }
@@ -92,6 +93,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             if (SettingsRepository.IsInterapptiveUser)
             {
                 expressFreightDetail.PackingListEnclosed = true;
+                expressFreightDetail.PackingListEnclosedSpecified = true;
             }
 
             // Add shipping document types 

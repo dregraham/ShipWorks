@@ -74,6 +74,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
                 return;
             }
 
+            output.WriteLine($"Beginning transaction {(string) row[3]}");
+
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressInternationalMapping.Mapping) &&
