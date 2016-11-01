@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using Interapptive.Shared.Business.Geography;
@@ -43,7 +44,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateResult(string description, string days, decimal amount, CurrencyCode currencyCode, object tag) : this()
+        public RateResult(string description, string days, decimal amount, CurrencyCode currencyCode, object tag)
+            : this()
         {
             Description = description;
             Days = days;
@@ -67,7 +69,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateResult(string description, string days, decimal amount, RateAmountComponents rateAmountComponents, object tag) :
+        public RateResult(string description, string days, decimal amount, RateAmountComponents rateAmountComponents,
+            object tag) :
             this(description, days, amount, CurrencyCode.USD, tag)
         {
             this.rateAmountComponents = rateAmountComponents;
@@ -125,8 +128,25 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Returns the amount formatted as currency. If there is a half cent, 1/2 is added to the end.
         /// </summary>
         public string FormattedAmount
-            =>
-            AmountOrDefault.FormatFriendlyCurrency(CultureInfo.CreateSpecificCulture(EnumHelper.GetApiValue(CurrencyCode)));
+        {
+            get
+            {
+                string culture = EnumHelper.GetApiValue(CurrencyCode);
+                CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+
+                try
+                {
+                    cultureInfo = CultureInfo.CreateSpecificCulture(culture);
+                }
+                catch (CultureNotFoundException)
+                {
+                    Debug.Fail("Unknown culture for currency");
+                }
+
+                return AmountOrDefault.FormatFriendlyCurrency(cultureInfo);
+            }
+        }
+
 
         /// <summary>
         /// The amount of taxes included in the rate
