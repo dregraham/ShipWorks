@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 {
-    
     public class FimsShippingClerkTest
     {
         private FimsShippingClerk testObject;
@@ -107,9 +106,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         public void Ship_ThrowsFedExException_WhenServiceIsNotFims()
         {
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
-            
+
             Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
-            
+
             Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS shipments require selecting a FIMS service type".ToUpperInvariant()));
         }
 

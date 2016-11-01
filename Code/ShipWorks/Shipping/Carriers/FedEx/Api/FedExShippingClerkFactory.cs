@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             Func<IFedExRequestFactory> createRequestFactory)
         {
             return IsFimsShipment(shipment) ?
-                CreateFimsShippingClerk(settingsRepository, labelRepositoryFactory.CreateFims) :
+                CreateFimsShippingClerk(labelRepositoryFactory.CreateFims) :
                 CreateFedExShippingClerk(settingsRepository, certificateInspector,
                     labelRepositoryFactory.CreateFedEx, createRequestFactory);
         }
@@ -77,11 +77,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Create a FIMS shipping clerk
         /// </summary>
-        private static IFedExShippingClerk CreateFimsShippingClerk(ICarrierSettingsRepository settingsRepository,
-            Func<IFimsLabelRepository> createFimsLabelRepository)
+        private static IFedExShippingClerk CreateFimsShippingClerk(Func<IFimsLabelRepository> createFimsLabelRepository)
         {
-            IFimsWebClient client = settingsRepository.UseTestServer ?
-                (IFimsWebClient) new FimsFakeWebClient() : new FimsWebClient();
+            IFimsWebClient client = new FimsWebClient();
 
             return new FimsShippingClerk(client, createFimsLabelRepository());
         }
