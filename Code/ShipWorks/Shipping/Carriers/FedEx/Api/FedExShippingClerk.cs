@@ -996,6 +996,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY: return FedExServiceType.FedExEuropeFirstInternationalPriority;
                 case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
+
+                case ServiceType.FEDEX_NEXT_DAY_EARLY_MORNING: return FedExServiceType.FedExNextDayEarlyMorning;
+                case ServiceType.FEDEX_NEXT_DAY_MID_MORNING: return FedExServiceType.FedExNextDayMidMorning;
+                case ServiceType.FEDEX_NEXT_DAY_AFTERNOON: return FedExServiceType.FedExNextDayAfternoon;
+                case ServiceType.FEDEX_NEXT_DAY_END_OF_DAY: return FedExServiceType.FedExNextDayEndOfDay;
+                case ServiceType.FEDEX_DISTANCE_DEFERRED: return FedExServiceType.FedExDistanceDeferred;
+                case ServiceType.FEDEX_NEXT_DAY_FREIGHT: return FedExServiceType.FedExNextDayFreight;
             }
 
             throw new CarrierException("Invalid FedEx Service Type " + rateDetail.ServiceType);
