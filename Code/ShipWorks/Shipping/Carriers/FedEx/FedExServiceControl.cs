@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -574,6 +575,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 UpdateLayoutForMultipleServices();
             }
 
+            UpdateLabelFormat();
+
             ResumeLayout();
             PerformLayout();
 
@@ -655,7 +658,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             sectionBilling.Visible = visible;
             sectionEmail.Visible = visible;
             sectionServiceOptions.Visible = visible;
-            sectionLabelOptions.Visible = visible;
         }
 
         /// <summary>
@@ -1137,6 +1139,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnNonStandardPackagingChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Return false if EPL and there is a FIMS service.
+        /// </summary>
+        protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            if (format == ThermalLanguage.EPL && LoadedShipments.Any(shipment => shipment.FedEx != null && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service)))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

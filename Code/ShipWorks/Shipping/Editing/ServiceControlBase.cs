@@ -180,9 +180,10 @@ namespace ShipWorks.Shipping.Editing
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
-
             LoadedShipments = shipments.ToList();
+
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
+            
             this.enableEditing = enableEditing;
 
             personControl.DestinationChanged -= this.OnRecipientDestinationChanged;
@@ -276,6 +277,14 @@ namespace ShipWorks.Shipping.Editing
         public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
         {
             OnRateSelected(sender, e);
+        }
+
+        /// <summary>
+        /// Rebinds labelformat dropdown taking LoadShipments into account.
+        /// </summary>
+        protected void UpdateLabelFormat()
+        {
+            labelFormat.BindToEnumAndPreserveSelection<ThermalLanguage>(ShouldIncludeLabelFormatInList);
         }
 
         /// <summary>
