@@ -26,8 +26,6 @@ namespace ShipWorks.Shipping.Editing
         // The type of shipment this instance is servicing
         readonly ShipmentTypeCode shipmentTypeCode;
 
-        // The values last past to the LoadShipments function
-        List<ShipmentEntity> loadedShipments;
         bool enableEditing;
 
         // Counter for rate criteria change event suspension
@@ -128,10 +126,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// The shipments last past to LoadShipments
         /// </summary>
-        public List<ShipmentEntity> LoadedShipments
-        {
-            get { return loadedShipments; }
-        }
+        public List<ShipmentEntity> LoadedShipments { get; private set; }
 
         /// <summary>
         /// The enable editing value last past to LoadShipments
@@ -175,7 +170,6 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load the data for the list of shipments into the control
         /// </summary>
-        [NDependIgnoreLongMethod]
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             if (shipments == null)
@@ -183,12 +177,12 @@ namespace ShipWorks.Shipping.Editing
                 throw new ArgumentNullException("shipments");
             }
 
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
-
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
-            this.loadedShipments = shipments.ToList();
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
+
+            LoadedShipments = shipments.ToList();
             this.enableEditing = enableEditing;
 
             personControl.DestinationChanged -= this.OnRecipientDestinationChanged;
@@ -207,27 +201,7 @@ namespace ShipWorks.Shipping.Editing
 
             personControl.LoadEntities(shipments.Select(s => new PersonAdapter(s, "Ship")).ToList());
 
-            bool anyNeedResidential = false;
-
-            // Determine if any shipments require the residential setting
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                anyNeedResidential = ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment);
-
-                if (anyNeedResidential)
-                {
-                    break;
-                }
-            }
-
-            UpdateResidentialDisplay(anyNeedResidential);
-
-            // Load residential stuff only if neccearry
-            if (anyNeedResidential)
-            {
-                bool anyFedex = shipments.Any(s => s.ShipmentType == (int) ShipmentTypeCode.FedEx);
-                LoadResidentialDeterminationOptions(anyFedex);
-            }
+            LoadResidentialUI(shipments);
 
             LoadReturnsUI();
 
@@ -238,19 +212,7 @@ namespace ShipWorks.Shipping.Editing
                 {
                     labelFormat.ApplyMultiValue((ThermalLanguage) shipment.RequestedLabelFormat);
 
-                    // Residential status info
-                    if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
-                    {
-                        ResidentialDeterminationType residentialType = (ResidentialDeterminationType) shipment.ResidentialDetermination;
-
-                        // If its processed, use its final determined value
-                        if (shipment.Processed)
-                        {
-                            residentialType = shipment.ResidentialResult ? ResidentialDeterminationType.Residential : ResidentialDeterminationType.Commercial;
-                        }
-
-                        residentialDetermination.ApplyMultiValue(residentialType);
-                    }
+                    LoadResidentialStatus(shipment);
                 }
             }
 
@@ -261,6 +223,44 @@ namespace ShipWorks.Shipping.Editing
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
+        }
+
+        /// <summary>
+        /// Loads Residential Status for shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        private void LoadResidentialStatus(ShipmentEntity shipment)
+        {
+            // Residential status info
+            if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
+            {
+                ResidentialDeterminationType residentialType = (ResidentialDeterminationType) shipment.ResidentialDetermination;
+
+                // If its processed, use its final determined value
+                if (shipment.Processed)
+                {
+                    residentialType = shipment.ResidentialResult ? ResidentialDeterminationType.Residential : ResidentialDeterminationType.Commercial;
+                }
+
+                residentialDetermination.ApplyMultiValue(residentialType);
+            }
+        }
+
+        /// <summary>
+        /// Loads ResidentialUI if any shipment requires residential status.
+        /// </summary>
+        private void LoadResidentialUI(IEnumerable<ShipmentEntity> shipments)
+        {
+            Boolean anyNeedResidential = shipments.Any(shipment => ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment));
+
+            UpdateResidentialDisplay(anyNeedResidential);
+
+            // Load residential stuff only if neccearry
+            if (anyNeedResidential)
+            {
+                bool anyFedex = shipments.Any(s => s.ShipmentType == (int) ShipmentTypeCode.FedEx);
+                LoadResidentialDeterminationOptions(anyFedex);
+            }
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace ShipWorks.Shipping.Editing
             {
                 using (MultiValueScope scope = new MultiValueScope())
                 {
-                    foreach (ShipmentEntity shipment in loadedShipments)
+                    foreach (ShipmentEntity shipment in LoadedShipments)
                     {
                         returnShipment.ReadMultiCheck(v => shipment.ReturnShipment = v);
                     }
@@ -316,7 +316,7 @@ namespace ShipWorks.Shipping.Editing
         {
             ReturnsControlBase newReturnsControl = null;
 
-            List<ShipmentType> loadedTypes = loadedShipments.Select(s => s.ShipmentType).Distinct().Select(st => ShipmentTypeManager.GetType((ShipmentTypeCode) st)).ToList();
+            List<ShipmentType> loadedTypes = LoadedShipments.Select(s => s.ShipmentType).Distinct().Select(st => ShipmentTypeManager.GetType((ShipmentTypeCode) st)).ToList();
 
             bool anyReturnsSupported = loadedTypes.Any(st => st.SupportsReturns);
 
@@ -330,7 +330,7 @@ namespace ShipWorks.Shipping.Editing
                 // Checkbox for enabling returns editing
                 using (MultiValueScope scope = new MultiValueScope())
                 {
-                    foreach (ShipmentEntity shipment in loadedShipments)
+                    foreach (ShipmentEntity shipment in LoadedShipments)
                     {
                         returnShipment.ApplyMultiCheck(shipment.ReturnShipment);
                     }
@@ -349,7 +349,7 @@ namespace ShipWorks.Shipping.Editing
                     newReturnsControl = new MultiSelectReturnsControl();
                 }
 
-                newReturnsControl.LoadShipments(loadedShipments);
+                newReturnsControl.LoadShipments(LoadedShipments);
 
                 // add the control to the UI
                 newReturnsControl.Location = new Point(0, 0);
@@ -362,7 +362,7 @@ namespace ShipWorks.Shipping.Editing
                 sectionReturns.Height = returnsPanel.Bottom + 5 + (sectionReturns.Height - sectionReturns.ContentPanel.Height);
 
                 // only enable for editing if all shipments are Returns
-                returnsPanel.Enabled = (loadedShipments.All(s => s.ReturnShipment));
+                returnsPanel.Enabled = (LoadedShipments.All(s => s.ReturnShipment));
             }
             else
             {
@@ -433,7 +433,7 @@ namespace ShipWorks.Shipping.Editing
             personControl.SaveToEntity();
 
             // Save the data to each selected shipment
-            foreach (ShipmentEntity shipment in loadedShipments)
+            foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
@@ -581,7 +581,7 @@ namespace ShipWorks.Shipping.Editing
             string country = "Domestic\\International";
             if (personControl.CountryCode != null)
             {
-                country = ShipmentTypeManager.GetType(loadedShipments[0]).IsDomestic(loadedShipments[0]) ? "Domestic" : "International";
+                country = ShipmentTypeManager.GetType(LoadedShipments[0]).IsDomestic(LoadedShipments[0]) ? "Domestic" : "International";
             }
 
             sectionRecipient.ExtraText = string.Format("{0}, {1}", name, country);
@@ -640,7 +640,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         internal void UnloadShipments()
         {
-            loadedShipments.Clear();
+            LoadedShipments.Clear();
         }
 
         /// <summary> 
