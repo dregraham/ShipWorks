@@ -43,11 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 throw new ArgumentNullException("fimsShipResponse", "The FIMS Label data is required");
             }
 
-            // Create a ShipWorks label from the PDF received from FIMS
-            using (MemoryStream pdfBytes = new MemoryStream(fimsShipResponse.LabelData))
-            {
-                dataResourceManager.CreateFromPdf(pdfBytes, ownerID, "LabelImage");
-            }
+            dataResourceManager.CreateFromBytes(fimsShipResponse.LabelData, ownerID, "LabelImage");
         }
 
         /// <summary>
