@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
 using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -787,9 +788,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 RatedShipmentDetail ratedShipmentDetail = GetRateReplyDetail(rateDetail);
 
                 decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
+                string currency = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Currency;
                 if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
                 {
                     cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                    currency = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Currency;
                 }
 
                 // Add the shipworks rate object
@@ -797,6 +800,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     EnumHelper.GetDescription(serviceType),
                     transitDays == 0 ? string.Empty : transitDays.ToString(),
                     cost,
+                    GetCurrencyCode(currency),
                     new FedExRateSelection(serviceType))
                 {
                     ExpectedDeliveryDate = deliveryDate,
@@ -805,9 +809,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
                 });
             }
-
-
             return results;
+        }
+
+        /// <summary>
+        /// Try to get the currency code from the response, if it fails return USD
+        /// </summary>
+        private CurrencyCode GetCurrencyCode(string currency)
+        {
+            // For some reason FedEx returns UKL for GBP
+            return currency.ToLower() == "ukl" ? CurrencyCode.GBP : CurrencyCode.USD;
         }
 
         /// <summary>

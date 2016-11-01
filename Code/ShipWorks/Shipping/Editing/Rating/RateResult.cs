@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
@@ -41,11 +43,12 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateResult(string description, string days, decimal amount, object tag) : this()
+        public RateResult(string description, string days, decimal amount, CurrencyCode currencyCode, object tag) : this()
         {
             Description = description;
             Days = days;
             Amount = amount;
+            CurrencyCode = currencyCode;
             Tag = tag;
 
             Selectable = true;
@@ -55,8 +58,17 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
+        public RateResult(string description, string days, decimal amount, object tag) :
+            this(description, days, amount, CurrencyCode.USD, tag)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RateResult(string description, string days, decimal amount, RateAmountComponents rateAmountComponents, object tag) :
-            this(description, days, amount, tag)
+            this(description, days, amount, CurrencyCode.USD, tag)
         {
             this.rateAmountComponents = rateAmountComponents;
         }
@@ -105,9 +117,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         public decimal? Amount { get; }
 
         /// <summary>
+        /// The currency that the amount is in
+        /// </summary>
+        public CurrencyCode CurrencyCode { get; }
+
+        /// <summary>
         /// Returns the amount formatted as currency. If there is a half cent, 1/2 is added to the end.
         /// </summary>
-        public string FormattedAmount => StringUtility.FormatFriendlyCurrency(AmountOrDefault);
+        public string FormattedAmount
+            =>
+            AmountOrDefault.FormatFriendlyCurrency(CultureInfo.CreateSpecificCulture(EnumHelper.GetApiValue(CurrencyCode)));
 
         /// <summary>
         /// The amount of taxes included in the rate
