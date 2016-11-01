@@ -23,8 +23,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         List<string> Errors { get; }
 
         /// <summary>
-        /// The byte array data of the label as a PDF
+        /// The byte array data of the label
         /// </summary>
-        byte[] LabelPdfData { get; set; }
+        byte[] LabelData { get; set; }
+
+        /// <summary>
+        /// Label Format 
+        /// </summary>
+        /// <remarks>
+        /// Z = ZPL, I = Image
+        /// </remarks>
+        string LabelFormat { get; set; }
     }
 }

@@ -266,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             // Construct the ship response to return.
             FimsShipResponse fimsShipResponse = new FimsShipResponse(parcelID, responseCode)
             {
-                LabelPdfData = pdf
+                LabelData = pdf
             };
 
             return fimsShipResponse;

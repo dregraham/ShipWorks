@@ -40,8 +40,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// The byte array data of the label as a PDF
+        /// The byte array data of the label
         /// </summary>
-        public byte[] LabelPdfData { get; set; }
+        public byte[] LabelData { get; set; }
+
+        /// <summary>
+        /// Label Format 
+        /// </summary>
+        /// <remarks>
+        /// Z = ZPL, I = Image
+        /// </remarks>
+        public String LabelFormat { get; set; }
     }
 }
