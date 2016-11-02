@@ -2013,7 +2013,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [MaskedData] [int] NULL,
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ThirdPartyConsignee] [bit] NOT NULL,
-[Currency] [int] NULL
+[Currency] [int] NULL,
+[InternationalTrafficInArmsService] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'

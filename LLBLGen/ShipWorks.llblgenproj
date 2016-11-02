@@ -1064,6 +1064,7 @@
           <Field Name="ImporterStreet2" Type="string" MaxLength="60" FieldIndex="95" />
           <Field Name="ImporterStreet3" Type="string" MaxLength="60" FieldIndex="96" />
           <Field Name="ImporterTIN" Type="string" MaxLength="24" FieldIndex="90" />
+          <Field Name="InternationalTrafficInArmsService" Type="bool" IsOptional="true" FieldIndex="155" />
           <Field Name="IntlExportDetailEntryNumber" Type="string" MaxLength="20" FieldIndex="143" />
           <Field Name="IntlExportDetailForeignTradeZoneCode" Type="string" MaxLength="50" FieldIndex="142" />
           <Field Name="IntlExportDetailLicenseOrPermitExpirationDate" Type="datetime" IsOptional="true" FieldIndex="145" />
@@ -3557,7 +3558,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-10-26T19:27:28.7413323Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-02T13:45:22.4300012Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5293,6 +5294,7 @@
                     <Field Name="ReferenceFIMS" Ordinal="153" DbType="12" Length="300" />
                     <Field Name="ThirdPartyConsignee" Ordinal="154" DbType="2" />
                     <Field Name="Currency" Ordinal="155" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="InternationalTrafficInArmsService" Ordinal="156" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -9671,6 +9673,7 @@
             <FieldMapping FieldName="ImporterStreet2" TargetFieldName="ImporterStreet2" />
             <FieldMapping FieldName="ImporterStreet3" TargetFieldName="ImporterStreet3" />
             <FieldMapping FieldName="ImporterTIN" TargetFieldName="ImporterTIN" />
+            <FieldMapping FieldName="InternationalTrafficInArmsService" TargetFieldName="InternationalTrafficInArmsService" />
             <FieldMapping FieldName="IntlExportDetailEntryNumber" TargetFieldName="IntlExportDetailEntryNumber" />
             <FieldMapping FieldName="IntlExportDetailForeignTradeZoneCode" TargetFieldName="IntlExportDetailForeignTradeZoneCode" />
             <FieldMapping FieldName="IntlExportDetailLicenseOrPermitExpirationDate" TargetFieldName="IntlExportDetailLicenseOrPermitExpirationDate" />

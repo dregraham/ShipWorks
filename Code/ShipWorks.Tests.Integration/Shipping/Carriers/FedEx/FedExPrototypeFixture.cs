@@ -201,7 +201,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <returns></returns>
         public virtual bool Ship(OrderEntity order)
         {
-            // TODO: remove the = null. This is here so the other spreadsheets will still work while I work on smartpost.
             try
             {
                 InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
@@ -213,7 +212,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-
                     FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
                     {
                         Inspector = new FedExShipmentType().CertificateInspector,

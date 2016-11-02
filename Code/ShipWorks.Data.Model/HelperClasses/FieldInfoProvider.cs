@@ -1268,6 +1268,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "ReferenceFIMS", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ReferenceFIMS, 300, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "ThirdPartyConsignee", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ThirdPartyConsignee, 0, 0, 0);
 			this.AddElementFieldInfo("FedExShipmentEntity", "Currency", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.Currency, 0, 0, 10);
+			this.AddElementFieldInfo("FedExShipmentEntity", "InternationalTrafficInArmsService", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExShipmentFieldIndex.InternationalTrafficInArmsService, 0, 0, 0);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()

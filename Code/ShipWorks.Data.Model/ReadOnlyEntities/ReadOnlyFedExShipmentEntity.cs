@@ -191,6 +191,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReferenceFIMS = source.ReferenceFIMS;
             ThirdPartyConsignee = source.ThirdPartyConsignee;
             Currency = source.Currency;
+            InternationalTrafficInArmsService = source.InternationalTrafficInArmsService;
             
             Shipment = source.Shipment?.AsReadOnly(objectMap);
             
@@ -1132,6 +1133,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> Currency { get; }
+        /// <summary> The InternationalTrafficInArmsService property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."InternationalTrafficInArmsService"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> InternationalTrafficInArmsService { get; }
         
         public IShipmentEntity Shipment { get; }
         

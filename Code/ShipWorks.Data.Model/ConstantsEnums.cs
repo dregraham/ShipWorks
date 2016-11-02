@@ -3360,6 +3360,8 @@ namespace ShipWorks.Data.Model
 		ThirdPartyConsignee,
 		///<summary>Currency. </summary>
 		Currency,
+		///<summary>InternationalTrafficInArmsService. </summary>
+		InternationalTrafficInArmsService,
 		/// <summary></summary>
 		AmountOfFields
 	}
