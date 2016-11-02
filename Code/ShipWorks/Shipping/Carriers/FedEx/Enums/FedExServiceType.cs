@@ -116,22 +116,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         FedExInternationalDirectDistributionFreight = 34,
 
         // Services needed for Intra certification tests
-        [Description("FedEx Next Day Afternoon")]
+        [Description("FedEx® Next Day Afternoon")]
         FedExNextDayAfternoon = 35,
 
-        [Description("FedEx Next Day Early Morning")]
+        [Description("FedEx® Next Day Early Morning")]
         FedExNextDayEarlyMorning = 36,
 
-        [Description("FedEx Next Day Mid Morning")]
+        [Description("FedEx® Next Day Mid Morning")]
         FedExNextDayMidMorning = 37,
 
-        [Description("FedEx Next Day End Of Day")]
+        [Description("FedEx® Next Day End Of Day")]
         FedExNextDayEndOfDay = 38,
 
-        [Description("FedEx Distance Deferred")]
+        [Description("FedEx® Distance Deferred")]
         FedExDistanceDeferred = 39,
 
-        [Description("FedEx Next Day Freight")]
+        [Description("FedEx® Next Day Freight")]
         FedExNextDayFreight = 40
 
     }
