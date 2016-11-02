@@ -21,13 +21,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// </summary>
     public class FimsWebClient : IFimsWebClient
     {
-        private static readonly XNamespace fimsWebServiceNamespace = "http://www.shipfims.com";
+        private static readonly XNamespace fimsWebServiceNamespace = "http://www.fimsform.com";
         private static readonly Uri productionUri = new Uri("http://www.shipfims.com/pkgFedex3/pkgFormService");
         private static readonly XNamespace soapenv = "http://schemas.xmlsoap.org/soap/envelope/";
         private static readonly FedExShipmentTokenProcessor tokenProcessor = new FedExShipmentTokenProcessor();
 
         // FedEx - "labelSource for ShipWorks should be set to 5 always"
         private const string LabelSource = "5";
+        private const string LabelSize = "6";
+
+        private const string TestCustCode = "SWORKS";
+        private const string TestServiceID = "CRESWA8WAHAFUFR";
 
         /// <summary>
         /// Ships a FIMS shipment.
@@ -73,9 +77,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             ShipmentEntity shipment = fimsShipRequest.Shipment;
             FedExShipmentEntity fedExShipment = fimsShipRequest.Shipment.FedEx;
 
-            string responseFormat = shipment.RequestedLabelFormat == (int) LabelFormatType.ZPL ? "z" : "i";
+            string responseFormat = shipment.RequestedLabelFormat == (int) LabelFormatType.ZPL ? "Z" : "I";
 
-            string labelType = shipment.TotalWeight < 4.4 && shipment.CustomsValue < 350 ? "R" : "P";
+            //todo: change when we hear back from fedex regarding what to send
+            string labelType = "31";
 
             string declaration = DetermineDeclaration(fedExShipment);
 
@@ -83,17 +88,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             XElement fimsRequestXml =
                 new XElement("labelRequest",
-                    new XElement("custCode", fimsShipRequest.Username),
-                    new XElement("serviceId", fimsShipRequest.Password),
+                    new XElement("custCode", TestCustCode),
+                    new XElement("serviceId", TestServiceID),
                     new XElement("labelSource", LabelSource),
                     new XElement("responseFormat", responseFormat),
+                    new XElement("labelSize", LabelSize),
                     new XElement("shipperReference", fedExShipment.ReferenceFIMS),
                     new XElement("labelType", labelType),
                     new XElement("declaration", declaration),
                     new XElement("pkgWeight", shipment.TotalWeight),
-                    new XElement("pkgLength", shipment.FedEx.Packages.FirstOrDefault()?.DimsLength),
-                    new XElement("pkgWidth", shipment.FedEx.Packages.FirstOrDefault()?.DimsWidth),
-                    new XElement("pkgHeight ", shipment.FedEx.Packages.FirstOrDefault()?.DimsHeight),
+                    new XElement("pkgLength", fedExShipment.Packages.FirstOrDefault()?.DimsLength),
+                    new XElement("pkgWidth", fedExShipment.Packages.FirstOrDefault()?.DimsWidth),
+                    new XElement("pkgHeight", fedExShipment.Packages.FirstOrDefault()?.DimsHeight),
                     new XElement("shipper",
                         new XElement("name", new PersonName(shipment.OriginFirstName, shipment.OriginMiddleName, shipment.OriginLastName)),
                         new XElement("company", shipment.OriginCompany),
@@ -237,15 +243,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             CheckResponseForErrors(xmlResponse);
 
-            byte[] pdf = Convert.FromBase64String(xmlResponseText);
+            byte[] label = Convert.FromBase64String(GetLabel(xmlResponse));
 
             string parcelID = GetParcelID(xmlResponse);
             string responseCode = GetResponseCode(xmlResponse);
+            string labelFormat = GetResponseFormat(xmlResponse);
 
             // Construct the ship response to return.
             FimsShipResponse fimsShipResponse = new FimsShipResponse(parcelID, responseCode)
             {
-                LabelData = pdf
+                LabelData = label,
+                LabelFormat = labelFormat
             };
 
             return fimsShipResponse;
@@ -277,6 +285,34 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             }
 
             return responseElement.Value;
+        }
+
+        /// <summary>
+        /// Gets the parcel id.
+        /// </summary>
+        private static string GetLabel(XElement xmlResponse)
+        {
+            XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "attached_label").FirstOrDefault();
+            if (responseElement == null)
+            {
+                throw new FedExException("FedEx FIMS did not return a label");
+            }
+
+            return responseElement.Value;
+        }
+
+        /// <summary>
+        /// Gets the response code.
+        /// </summary>
+        private static string GetResponseFormat(XElement xmlResponse)
+        {
+            XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "responseFormat").FirstOrDefault();
+            if (responseElement == null)
+            {
+                throw new FedExException("FedEx FIMS did not return a Response Format");
+            }
+
+            return responseElement.Value.Equals("z", StringComparison.InvariantCultureIgnoreCase) ? "Z" : "I";
         }
 
         /// <summary>
