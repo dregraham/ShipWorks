@@ -77,6 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AccountsForNullSpecialServicesRequested_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipmentEntity.FedEx.InternationalTrafficInArmsService = true;
 
             nativeRequest.RequestedShipment.SpecialServicesRequested = null;
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -90,6 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AccountsForNullSpecialServiceTypes_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipmentEntity.FedEx.InternationalTrafficInArmsService = true;
 
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -103,6 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenLicencseNumberIsProvided()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipmentEntity.FedEx.InternationalTrafficInArmsService = true;
 
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);

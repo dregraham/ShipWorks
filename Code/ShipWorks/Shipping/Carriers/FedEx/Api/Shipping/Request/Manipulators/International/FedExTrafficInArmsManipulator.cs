@@ -41,10 +41,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             // We can safely cast this since we've passed initialization
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
-            if (!string.IsNullOrEmpty(request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber))
+            if (request.ShipmentEntity.FedEx.InternationalTrafficInArmsService??false)
             {
                 AddTrafficInArmsOption(nativeRequest);
+            }
 
+            if (!string.IsNullOrEmpty(request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber))
+            {
                 InternationalTrafficInArmsRegulationsDetail armsDetail = new InternationalTrafficInArmsRegulationsDetail();
                 armsDetail.LicenseOrExemptionNumber = request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber;
 
@@ -58,6 +61,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="nativeRequest">The native request.</param>
         private void AddTrafficInArmsOption(IFedExNativeShipmentRequest nativeRequest)
         {
+            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
+            {
+                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
+            }
+
             List<ShipmentSpecialServiceType> services = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes?.ToList() ?? new List<ShipmentSpecialServiceType>();
             services.Add(ShipmentSpecialServiceType.INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS);
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = services.ToArray();

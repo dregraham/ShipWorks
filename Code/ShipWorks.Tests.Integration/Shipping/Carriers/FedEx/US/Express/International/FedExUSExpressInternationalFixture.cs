@@ -251,6 +251,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.TrafficInArmsLicenseNumber = TrafficInArmsLicenseOrExemptionNumber;
+            if (SpecialServiceType1?.Equals("INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS", StringComparison.OrdinalIgnoreCase) ?? false)
+            {
+                shipment.FedEx.InternationalTrafficInArmsService = true;
+            }
+
             shipment.FedEx.WeightUnitType = ShipmentWeightUnits.ToLower() == "lb" ? (int)WeightUnitOfMeasure.Pounds : (int)WeightUnitOfMeasure.Kilograms;
 
             SetupCustomsData(shipment);
