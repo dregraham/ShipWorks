@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -79,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static IFedExShippingClerk CreateFimsShippingClerk(Func<IFimsLabelRepository> createFimsLabelRepository)
         {
-            IFimsWebClient client = new FimsWebClient();
+            IFimsWebClient client = new FimsWebClient((source, name) => new ApiLogEntry(source, name));
 
             return new FimsShippingClerk(client, createFimsLabelRepository());
         }

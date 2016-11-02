@@ -13,6 +13,7 @@ using System.Text;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using ShipWorks.Filters.Content.Conditions.Shipments;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -29,9 +30,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         // FedEx - "labelSource for ShipWorks should be set to 5 always"
         private const string LabelSource = "5";
         private const string LabelSize = "6";
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
 
-        private const string TestCustCode = "SWORKS";
-        private const string TestServiceID = "CRESWA8WAHAFUFR";
+        public FimsWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        {
+            this.apiLogEntryFactory = apiLogEntryFactory;
+        }
 
         /// <summary>
         /// Ships a FIMS shipment.
@@ -77,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             ShipmentEntity shipment = fimsShipRequest.Shipment;
             FedExShipmentEntity fedExShipment = fimsShipRequest.Shipment.FedEx;
 
-            string responseFormat = shipment.RequestedLabelFormat == (int) LabelFormatType.ZPL ? "Z" : "I";
+            string responseFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "Z" : "I";
 
             //todo: change when we hear back from fedex regarding what to send
             string labelType = "31";
@@ -88,8 +92,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             XElement fimsRequestXml =
                 new XElement("labelRequest",
-                    new XElement("custCode", TestCustCode),
-                    new XElement("serviceId", TestServiceID),
+                    new XElement("custCode", fimsShipRequest.Username),
+                    new XElement("serviceId", fimsShipRequest.Password),
                     new XElement("labelSource", LabelSource),
                     new XElement("responseFormat", responseFormat),
                     new XElement("labelSize", LabelSize),
@@ -178,11 +182,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Submit the data to FIMS to get the label.
         /// </summary>
-        public static byte[] Submit(string soapRequest)
+        private byte[] Submit(string soapRequest)
         {
             byte[] response;
 
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.FedExFims, "Ship");
+            IApiLogEntry logger = apiLogEntryFactory(ApiLogSource.FedExFims, "Ship");
             logger.LogRequest(soapRequest, "xml");
 
             using (WebClient client = new WebClient())
