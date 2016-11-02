@@ -3517,7 +3517,11 @@
     </InheritanceHierarchies>
   </EntityModel>
   <SPCallDefinitions>
-    <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9" />
+    <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9">
+      <Parameters>
+        <Parameter Name="NodesUpdated" Type="int" Precision="10" Direction="3" />
+      </Parameters>
+    </SPCallDefinition>
     <SPCallDefinition Name="CalculateUpdateFilterCounts" ObjectID="38ab1dd3-02d1-46ea-b52d-d920e4ab0192" />
     <SPCallDefinition Name="CalculateUpdateQuickFilterCounts" ObjectID="fddaffaa-ec40-4fba-8d51-896e2dc55952" />
     <SPCallDefinition Name="DeleteAbandonedFilterCounts" ObjectID="b8baa903-5f71-4fd4-bca1-1ef1b299f578" />
@@ -3547,7 +3551,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-12T14:33:45.2615195Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-02T13:20:30.2848416Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7822,7 +7826,11 @@
                 </Table>
               </Tables>
               <StoredProcedures>
-                <StoredProcedure Name="CalculateInitialFilterCounts" />
+                <StoredProcedure Name="CalculateInitialFilterCounts">
+                  <Parameters>
+                    <Parameter Name="@nodesUpdated" Direction="3" Ordinal="1" DbType="8" Precision="10" />
+                  </Parameters>
+                </StoredProcedure>
                 <StoredProcedure Name="CalculateUpdateFilterCounts" />
                 <StoredProcedure Name="CalculateUpdateQuickFilterCounts" />
                 <StoredProcedure Name="DeleteAbandonedFilterCounts" />
@@ -11531,7 +11539,9 @@
       <TypedViewMappings />
       <SPCallMappings>
         <SPCallMapping SPCallName=":CalculateInitialFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateInitialFilterCounts">
-          <FieldMappings />
+          <FieldMappings>
+            <FieldMapping FieldName="NodesUpdated" TargetFieldName="@nodesUpdated" />
+          </FieldMappings>
         </SPCallMapping>
         <SPCallMapping SPCallName=":CalculateUpdateFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateUpdateFilterCounts">
           <FieldMappings />
