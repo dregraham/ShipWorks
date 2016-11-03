@@ -14,6 +14,7 @@ using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Common.IO.Hardware.Printers;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             string responseFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "Z" : "I";
 
             //todo: change when we hear back from fedex regarding what to send
-            string labelType = "31";
+            string labelType = EnumHelper.GetApiValue((FedExServiceType) fedExShipment.Service);
 
             string declaration = DetermineDeclaration(fedExShipment);
 
