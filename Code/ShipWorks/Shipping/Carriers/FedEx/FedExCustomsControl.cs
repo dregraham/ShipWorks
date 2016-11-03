@@ -124,7 +124,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateEnabledUI(enableEditing);
 
-            UpdateControlVisibility(shipments.All(x => x.FedEx.Service == (int) FedExServiceType.FedExFimsMailView));
+            UpdateControlVisibility(shipments.All(x => FedExUtility.IsFimsService((FedExServiceType) x.FedEx.Service)));
+            
         }
 
         /// <summary>
@@ -141,9 +142,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnServiceChanged(FedExServiceTypeChangedMessage message)
         {
-            bool isFims = message.ServiceType == FedExServiceType.FedExFimsMailView;
-
-            UpdateControlVisibility(isFims);
+            UpdateControlVisibility(FedExUtility.IsFimsService(message.ServiceType));
         }
 
         /// <summary>
