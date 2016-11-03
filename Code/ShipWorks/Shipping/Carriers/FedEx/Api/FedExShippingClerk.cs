@@ -818,7 +818,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private CurrencyCode GetCurrencyCode(string currency)
         {
             // For some reason FedEx returns UKL for GBP
-            return currency.ToLower() == "ukl" ? CurrencyCode.GBP : CurrencyCode.USD;
+            return currency?.ToLower() == "ukl" ? CurrencyCode.GBP : CurrencyCode.USD;
         }
 
         /// <summary>
