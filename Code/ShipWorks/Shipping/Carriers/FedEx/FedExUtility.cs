@@ -316,6 +316,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<FedExServiceType> fimsServices = new List<FedExServiceType>
             {
                 FedExServiceType.FedExFimsMailView,
+                FedExServiceType.FedExFimsMailViewLite,
                 FedExServiceType.FedExFimsPremium,
                 FedExServiceType.FedExFimsStandard
             };

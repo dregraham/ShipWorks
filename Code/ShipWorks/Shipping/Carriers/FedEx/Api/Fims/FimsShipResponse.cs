@@ -50,6 +50,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <remarks>
         /// Z = ZPL, I = Image
         /// </remarks>
-        public String LabelFormat { get; set; }
+        public string LabelFormat { get; set; }
+
+        /// <summary>
+        /// Tracking Number allowed on FedEx website
+        /// </summary>
+        public string TrackingNumber { get; set; }
     }
 }

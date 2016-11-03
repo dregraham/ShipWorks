@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 {
@@ -92,8 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx Economy")]
         FedExEconomyCanada = 26,
 
-        [Description("FedEx FIMS Mail View")]
-        [ApiValue("22")]
+        [Description("FedEx FIMS Mailview")]
         FedExFimsMailView = 27,
 
         [Description("FedEx International Ground®")]
@@ -136,12 +130,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx Next Day Freight")]
         FedExNextDayFreight = 40,
 
-        [Description("FedEx FIMS Standard Mail")]
-        [ApiValue("31")]
-        FedExFimsStandard = 41,
+        [Description("FedEx FIMS Mailview Lite")]
+        FedExFimsMailViewLite = 41,
 
-        [Description("FedEx FIMS Premium Mail")]
-        [ApiValue("21")]
-        FedExFimsPremium = 42
+        [Description("FedEx FIMS Standard")]
+        FedExFimsStandard = 42,
+
+        [Description("FedEx FIMS Premium")]
+        FedExFimsPremium = 43
     }
 }

@@ -83,9 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             FedExShipmentEntity fedExShipment = fimsShipRequest.Shipment.FedEx;
 
             string responseFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "Z" : "I";
-
-            //todo: change when we hear back from fedex regarding what to send
-            string labelType = EnumHelper.GetApiValue((FedExServiceType) fedExShipment.Service);
+            string labelType = GetLabelType(shipment);
 
             string declaration = DetermineDeclaration(fedExShipment);
 
@@ -136,6 +134,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             }
 
             return fimsRequestXml;
+        }
+
+        /// <summary>
+        /// Encapsulates the logic to get the correct label type.
+        /// </summary>
+        private static string GetLabelType(ShipmentEntity shipment)
+        {
+            switch ((FedExServiceType) shipment.FedEx.Service)
+            {
+                case FedExServiceType.FedExFimsMailView:
+                    return GetLabelTypeHelper(shipment, "41", "42");
+                case FedExServiceType.FedExFimsMailViewLite:
+                    return GetLabelTypeHelper(shipment, "51", "22");
+                case FedExServiceType.FedExFimsStandard:
+                    return GetLabelTypeHelper(shipment, "31", "22");
+                case FedExServiceType.FedExFimsPremium:
+                    return GetLabelTypeHelper(shipment, "21", "22");
+                default:
+                    throw new FedExException($"Invalid service {shipment.FedEx.Service} sent to FimsWebClient.");
+            }
+        }
+
+        private static string GetLabelTypeHelper(ShipmentEntity shipment, string labelTypeBelowWeightOrValue, string labelTypeAboveWeightOrValue)
+        {
+            if (shipment.TotalWeight < 4.4 && shipment.CustomsValue < 400)
+            {
+                return labelTypeBelowWeightOrValue;
+            }
+            else
+            {
+                return labelTypeAboveWeightOrValue;
+            }
         }
 
         /// <summary>
@@ -251,6 +281,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             byte[] label = Convert.FromBase64String(GetLabel(xmlResponse));
 
             string parcelID = GetParcelID(xmlResponse);
+            string trackingNumber = GetTrackingNumber(xmlResponse);
             string responseCode = GetResponseCode(xmlResponse);
             string labelFormat = GetResponseFormat(xmlResponse);
 
@@ -258,7 +289,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             FimsShipResponse fimsShipResponse = new FimsShipResponse(parcelID, responseCode)
             {
                 LabelData = label,
-                LabelFormat = labelFormat
+                LabelFormat = labelFormat,
+                TrackingNumber = trackingNumber
             };
 
             return fimsShipResponse;
@@ -287,6 +319,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             if (responseElement == null)
             {
                 throw new FedExException("FedEx FIMS did not return a ParcelID");
+            }
+
+            return responseElement.Value;
+        }
+
+        /// <summary>
+        /// Gets the Tracking Number
+        /// </summary>
+        private static string GetTrackingNumber(XElement xmlResponse)
+        {
+            XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "trackingNo").FirstOrDefault();
+            if (responseElement == null)
+            {
+                throw new FedExException("FedEx FIMS did not return a tracking number");
             }
 
             return responseElement.Value;
