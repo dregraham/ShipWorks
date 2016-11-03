@@ -1432,6 +1432,13 @@ namespace ShipWorks.Data.Grid.Paging
             // really are.
             if (entity == null)
             {
+                // If the rows status is removing we might be stuck in an infinite loop of tempting to redraw a
+                // row thats been removed, reset the grid to fix the issue
+                if (gridRow.DataState == PagedDataState.Removing)
+                {
+                    gridRow.EntityGrid.ReloadGridRows();
+                }
+
                 log.InfoFormat("Gateway returned null indicating entity has been deleted.");
                 gridRow.DataState = PagedDataState.Removing;
                 return;
