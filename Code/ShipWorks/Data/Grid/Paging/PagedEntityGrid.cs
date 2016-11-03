@@ -1437,7 +1437,7 @@ namespace ShipWorks.Data.Grid.Paging
                 if (gridRow.DataState == PagedDataState.Removing)
                 {
                     log.Info("Reloading grid due to row status removing and null entity");
-                    gridRow.EntityGrid.ReloadGridRows();
+                    ReloadGridRows();
                     return;
                 }
 
