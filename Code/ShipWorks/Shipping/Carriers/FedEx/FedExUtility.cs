@@ -14,6 +14,7 @@ using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -160,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Add FIMS if enabled
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
-                serviceTypes.Add(FedExServiceType.FedExFimsMailView);
+                serviceTypes.AddRange(EnumHelper.GetEnumList<FedExServiceType>().Where(s=>IsFimsService(s.Value)).Select(s=>s.Value));
             }
 
             if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
@@ -312,7 +313,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
-            return service == FedExServiceType.FedExFimsMailView;
+            List<FedExServiceType> fimsServices = new List<FedExServiceType>
+            {
+                FedExServiceType.FedExFimsMailView,
+                FedExServiceType.FedExFimsPremium,
+                FedExServiceType.FedExFimsStandard
+            };
+
+            return fimsServices.Contains(service);
         }
 
         /// <summary>
