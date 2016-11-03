@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Add FIMS if enabled
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
-                serviceTypes.Add(FedExServiceType.FedExFims);
+                serviceTypes.Add(FedExServiceType.FedExFimsMailView);
             }
 
             if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
-            return service == FedExServiceType.FedExFims;
+            return service == FedExServiceType.FedExFimsMailView;
         }
 
         /// <summary>

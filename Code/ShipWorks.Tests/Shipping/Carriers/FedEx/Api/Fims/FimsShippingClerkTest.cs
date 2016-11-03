@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
             shipmentEntity.FedEx.SmartPostHubID = "5571";
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFimsMailView;
             shipmentEntity.FedEx.Packages.Clear();
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
             shipmentEntity.ShipCountryCode = "CA";
