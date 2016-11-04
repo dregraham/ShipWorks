@@ -138,9 +138,10 @@ namespace ShipWorks.Data.Administration
         [NDependIgnoreLongMethod]
         public static void UpdateDatabase(IProgressProvider progressProvider, bool debuggingMode = false)
         {
-            Version installed = GetInstalledSchemaVersion();
+            Version installedSchema = GetInstalledSchemaVersion();
+            Version installedAssembly = GetInstalledAssemblyVersion();
 
-            log.InfoFormat("Upgrading database from {0} to {1}", installed, GetRequiredSchemaVersion());
+            log.Info($"Upgrading database to {GetRequiredSchemaVersion()}. From Schema: {installedSchema} & Assembly: {installedAssembly}.");
 
             // Create the primary progress item
             ProgressItem progressScripts = new ProgressItem("Update Tables");
@@ -164,7 +165,7 @@ namespace ShipWorks.Data.Administration
                         using (new ExistingConnectionScope())
                         {
                             // Update the tables
-                            UpdateScripts(installed, progressScripts);
+                            UpdateScripts(installedSchema, progressScripts);
 
                             // Functionality starting
                             progressFunctionality.Starting();
@@ -190,7 +191,7 @@ namespace ShipWorks.Data.Administration
                                 SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
                             }
 
-                            ApplyVersionSpecificUpdates(installed);
+                            ApplyVersionSpecificUpdates(installedAssembly);
                         }
                     }
                 }
@@ -216,7 +217,9 @@ namespace ShipWorks.Data.Administration
 
                 foreach (IVersionSpecificUpdate versionSpecificUpdate in applicableUpdates)
                 {
+                    log.Info($"Applying versionSepcificUpdate for version {versionSpecificUpdate.AppliesTo}");
                     versionSpecificUpdate.Update();
+                    log.Info($"Applied versionSepcificUpdate for version {versionSpecificUpdate.AppliesTo}");
                 }
             }
         }
