@@ -183,22 +183,13 @@ namespace ShipWorks.Shipping.Editing
             LoadedShipments = shipments.ToList();
 
             EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
-            
+
             this.enableEditing = enableEditing;
 
             personControl.DestinationChanged -= this.OnRecipientDestinationChanged;
             personControl.ContentChanged -= this.OnPersonContentChanged;
 
-            // Enable\disable the ContentPanels... not the groups themselves, so the groups can still be open\closed
-            foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>())
-            {
-                group.ContentPanel.Enabled = enableEditing;
-            }
-
-            if (enableEditing)
-            {
-                sectionRecipient.ContentPanel.Enabled = enableShippingAddress;
-            }
+            EnableContentPanels(enableEditing, enableShippingAddress);
 
             personControl.LoadEntities(shipments.Select(s => new PersonAdapter(s, "Ship")).ToList());
 
@@ -224,6 +215,25 @@ namespace ShipWorks.Shipping.Editing
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
+        }
+
+        /// <summary>
+        /// Enables the content panels.
+        /// </summary>
+        /// <param name="enableEditing">if set to <c>true</c> [enable editing].</param>
+        /// <param name="enableShippingAddress">if set to <c>true</c> [enable shipping address].</param>
+        private void EnableContentPanels(bool enableEditing, bool enableShippingAddress)
+        {
+            // Enable\disable the ContentPanels... not the groups themselves, so the groups can still be open\closed
+            foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>())
+            {
+                group.ContentPanel.Enabled = enableEditing;
+            }
+
+            if (enableEditing)
+            {
+                sectionRecipient.ContentPanel.Enabled = enableShippingAddress;
+            }
         }
 
         /// <summary>
@@ -652,7 +662,7 @@ namespace ShipWorks.Shipping.Editing
             LoadedShipments.Clear();
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
