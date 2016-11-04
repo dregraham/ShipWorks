@@ -339,7 +339,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// Gets the parcel id.
+        /// Gets the label.
         /// </summary>
         private static string GetLabel(XElement xmlResponse)
         {
@@ -353,7 +353,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// Gets the response code.
+        /// Gets the response format
         /// </summary>
         private static string GetResponseFormat(XElement xmlResponse)
         {
