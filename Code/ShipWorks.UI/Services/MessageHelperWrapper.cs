@@ -1,11 +1,11 @@
 ﻿
-using Interapptive.Shared.UI;
-using ShipWorks.Common.Threading;
 using System;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Windows.Forms;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.UI.Services
 {
@@ -92,6 +92,23 @@ namespace ShipWorks.UI.Services
         public DialogResult ShowDialog(Func<Form> createDialog)
         {
             using (Form dlg = createDialog())
+            {
+                return dlg.ShowDialog(ownerFactory());
+            }
+        }
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public DialogResult ShowDialog(Func<IForm> createDialog)
+        {
+            Control owner = ownerFactory();
+            if (owner.InvokeRequired)
+            {
+                return (DialogResult) owner.Invoke((Func<Func<IForm>, DialogResult>) (ShowDialog), createDialog);
+            }
+
+            using (IForm dlg = createDialog())
             {
                 return dlg.ShowDialog(ownerFactory());
             }

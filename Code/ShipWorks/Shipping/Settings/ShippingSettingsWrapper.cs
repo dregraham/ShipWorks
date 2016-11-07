@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public IEnumerable<ShipmentTypeCode> GetConfiguredTypes()
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
             return settings.ConfiguredTypes.Cast<ShipmentTypeCode>();
         }
 
@@ -101,5 +101,11 @@ namespace ShipWorks.Shipping.Settings
         {
             ShippingSettings.InitializeForCurrentDatabase();
         }
+
+        /// <summary>
+        /// Is the given shipment type configured
+        /// </summary>
+        public bool IsConfigured(ShipmentTypeCode shipmentType) =>
+            GetConfiguredTypes().Contains(shipmentType);
     }
 }

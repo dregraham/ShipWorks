@@ -12,11 +12,13 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -34,51 +36,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Setup wizard for processing shipments with USPS
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Usps)]
     [NDependIgnoreLongTypes]
     public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
     {
-        private readonly UspsRegistration uspsRegistration;
+        private UspsRegistration uspsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
         private bool registrationComplete;
-        private readonly bool allowRegisteringExistingAccount;
+        private bool allowRegisteringExistingAccount;
+        private bool tryExistingAccount;
+        private readonly UspsShipmentType shipmentType;
         private readonly int initialPersonControlHeight;
+        private readonly RegistrationPromotionFactory promotionFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
-        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount) :
-            this(promotion, allowRegisteringExistingAccount, null)
+        public UspsSetupWizard(UspsShipmentType shipmentType, RegistrationPromotionFactory promotionFactory)
         {
-        }
+            this.shipmentType = shipmentType;
+            this.promotionFactory = promotionFactory;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
-        /// </summary>
-        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, UspsAccountEntity uspsAccount)
-        {
-            UspsAccount = uspsAccount;
+            tryExistingAccount = true;
+            allowRegisteringExistingAccount = true;
 
             InitializeComponent();
 
             initialPersonControlHeight = personControl.Height;
 
-            UspsResellerType resellerType = UspsResellerType.None;
-
-            // Load up a registration object using the USPS validator and the gateway to
-            // the USPS API
-            uspsRegistration = new UspsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
-            this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
-
-            if (promotion.IsMonthlyFeeWaived)
-            {
-                RemoveMonthlyFeeText();
-            }
-
             // Set the shipment type is set correctly (could be USPS), so the
             // label type gets persisted to the correct profile
-            optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
+            optionsControl.ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -104,7 +94,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual void OnLoad(object sender, EventArgs e)
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            // Load up a registration object using the USPS validator and the gateway to the USPS API
+            IRegistrationPromotion promotion = promotionFactory.CreateRegistrationPromotion();
+            uspsRegistration = new UspsRegistration(new UspsRegistrationValidator(),
+                new UspsRegistrationGateway(UspsResellerType.None), promotion);
+
+            if (promotion.IsMonthlyFeeWaived)
+            {
+                RemoveMonthlyFeeText();
+            }
+
+            if (tryExistingAccount)
+            {
+                shipmentType.EnsureAccountsHaveCurrentContractData();
+                UspsAccount = UspsAccountManager.GetPendingUspsAccount();
+            }
 
             optionsControl.LoadSettings();
 
@@ -172,6 +176,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // created via the Activate Postage Discount dialog
                 PersonControl.LoadEntity(InitialAccountAddress);
             }
+        }
+
+        /// <summary>
+        /// show the dialog with the given parameters
+        /// </summary>
+        internal DialogResult ShowDialog(IWin32Window owner, bool allowRegisteringExistingAccount, bool tryExistingAccount)
+        {
+            this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
+            this.tryExistingAccount = tryExistingAccount;
+
+            return ShowDialog(owner);
         }
 
         /// <summary>
@@ -542,13 +557,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
-                UspsShipmentType shipmentType = (UspsShipmentType) ShipmentTypeManager.GetType(shipmentTypeCode);
-
                 // If this is the only account, update this shipment type profiles with this account
-                List<UspsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();
-                if (accounts.Count == 1)
+                IEnumerable<IUspsAccountEntity> accounts = shipmentType.AccountRepository.AccountsReadOnly;
+                if (accounts.Count() == 1)
                 {
-                    UspsAccountEntity accountEntity = accounts.First();
+                    IUspsAccountEntity accountEntity = accounts.First();
 
                     // Update any profiles to use this account if this is the only account
                     // in the system. This is to account for the situation where there a multiple

@@ -87,7 +87,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called each time a shipment has been successfully processed
         /// </summary>
-        public static void DispatchShipmentProcessed(ShipmentEntity shipment, SqlAdapter adapter)
+        public static void DispatchShipmentProcessed(ShipmentEntity shipment, ISqlAdapter adapter)
         {
             List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentProcessed, shipment.Order.StoreID);
 
@@ -262,13 +262,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter) =>
+        private static long DispatchAction(ActionEntity action, long? objectID, ISqlAdapter adapter) =>
             DispatchAction(action, objectID, adapter, null);
 
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter, string extraData)
+        private static long DispatchAction(ActionEntity action, long? objectID, ISqlAdapter adapter, string extraData)
         {
             log.DebugFormat("Dispatching action '{0}' for {1}", action.Name, objectID);
 

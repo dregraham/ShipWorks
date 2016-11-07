@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -26,6 +25,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -258,22 +258,11 @@ namespace ShipWorks.Shipping
         /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
         /// null if the shipment type does not require setup
         /// </summary>
-        public virtual ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
-        /// null if the shipment type does not require setup
-        /// </summary>
         /// <remarks>This overload will use the current lifetime scope to resolve the wizard if it is registered.
         /// If it is not, it will fall back to the other version of this method</remarks>
-        public virtual ShipmentTypeSetupWizardForm CreateSetupWizard(ILifetimeScope lifetimeScope)
+        public virtual IShipmentTypeSetupWizard CreateSetupWizard(ILifetimeScope lifetimeScope)
         {
-            return lifetimeScope.IsRegisteredWithKey<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) ?
-                lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) :
-                CreateSetupWizard();
+            return lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>().Create(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -435,18 +424,6 @@ namespace ShipWorks.Shipping
             return Enumerable.Empty<int>();
         }
 
-        ///// <summary>
-        ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        ///// </summary>
-        //public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
-        //    => new Dictionary<int, string>();
-
-        ///// <summary>
-        ///// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
-        ///// </summary>
-        //public Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments)
-        //    => BuildServiceTypeDictionary(shipments, new ExcludedServiceTypeRepository());
-
         /// <summary>
         /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have
         /// been excluded for this shipment type. The integer values are intended to correspond to
@@ -532,6 +509,9 @@ namespace ShipWorks.Shipping
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IShippingProfileManager shippingProfileManager = lifetimeScope.Resolve<IShippingProfileManager>();
+                ICustomsManager customsManager = lifetimeScope.Resolve<ICustomsManager>();
+                ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode);
+                IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
 
                 // First apply the base profile
                 ApplyProfile(shipment, shippingProfileManager.GetOrCreatePrimaryProfileReadOnly(this));
@@ -539,12 +519,10 @@ namespace ShipWorks.Shipping
                 // ApplyShipSense will call CustomsManager.LoadCustomsItems which will save the shipment to the database,
                 // but we want to defer that as long as possible, so call GenerateCustomsItems here so that when
                 // LoadCustomsItems is called, saving will be skipped.
-                CustomsManager.GenerateCustomsItems(shipment);
+                customsManager.GenerateCustomsItems(shipment);
 
                 // Now apply ShipSense
                 ApplyShipSense(shipment);
-
-                IFilterHelper filterHelper = lifetimeScope.Resolve<IFilterHelper>();
 
                 // Go through each additional profile and apply it as well
                 foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
@@ -558,10 +536,10 @@ namespace ShipWorks.Shipping
 
                 // This was brought in from LoadShipmentData.  Since we are no longer using that method for creating a new shipment,
                 // we still needed to do this logic.
-                IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = GetProcessingSynchronizer(lifetimeScope);
-                if (shipmentProcessingSynchronizer != null)
+                if (accountRetriever.GetAccountReadOnly(shipment) == null)
                 {
-                    shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                    ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
+                    carrierAccount?.ApplyTo(shipment);
                 }
             }
         }
@@ -863,7 +841,7 @@ namespace ShipWorks.Shipping
         public abstract string GetServiceDescription(ShipmentEntity shipment);
 
         /// <summary>
-        /// Get the carrier specific description of the shipping service used, overidden by shipment types to provide a
+        /// Get the carrier specific description of the shipping service used, overridden by shipment types to provide a
         /// compatible description for special one off service types like USPS GlobalPost
         /// </summary>
         public virtual string GetOveriddenServiceDescription(ShipmentEntity shipment)
@@ -1014,45 +992,11 @@ namespace ShipWorks.Shipping
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
         /// <summary>
-        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
-        /// actually processing the shipment. In most cases this is checking to see if an account exists
-        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
-        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
-        /// </summary>
-        /// <returns>The updates shipment (or shipments) that is ready to be processed. A null value may
-        /// be returned to indicate that processing should be halted completely.</returns>
-        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
-        {
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer(lifetimeScope);
-            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
-
-            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
-        }
-
-        /// <summary>
         /// Clear any data that should not be part of a shipment after it has been copied.
         /// </summary>
         public virtual void ClearDataForCopiedShipment(ShipmentEntity shipment)
         {
 
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            throw new NotImplementedException("Either override GetProcessingSynchronizer or register one with the IoC container");
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer(ILifetimeScope lifetimeScope)
-        {
-            return lifetimeScope.IsRegisteredWithKey<IShipmentProcessingSynchronizer>(ShipmentTypeCode) ?
-                lifetimeScope.ResolveKeyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode) :
-                GetProcessingSynchronizer();
         }
 
         /// <summary>

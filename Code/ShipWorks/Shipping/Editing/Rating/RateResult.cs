@@ -35,7 +35,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             Days = days;
 
             Selectable = false;
-            IsCounterRate = false;
         }
 
         /// <summary>
@@ -49,7 +48,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             Tag = tag;
 
             Selectable = true;
-            IsCounterRate = false;
         }
 
         /// <summary>
@@ -168,14 +166,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         public string CarrierDescription { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this [is a counter rate].
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this [is a counter rate]; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsCounterRate { get; set; }
-
-        /// <summary>
         /// Gets or sets the provider logo.
         /// </summary>
         /// <value>
@@ -194,7 +184,6 @@ namespace ShipWorks.Shipping.Editing.Rating
                 AmountFootnote = AmountFootnote,
                 CarrierDescription = CarrierDescription,
                 ExpectedDeliveryDate = ExpectedDeliveryDate,
-                IsCounterRate = IsCounterRate,
                 Selectable = Selectable,
                 RateID = RateID,
                 ServiceLevel = ServiceLevel,

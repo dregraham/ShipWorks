@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
-using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Policies
 {
@@ -47,7 +44,7 @@ namespace ShipWorks.Shipping.Policies
         }
 
         /// <summary>
-        /// Filter out 
+        /// Filter out
         /// </summary>
         public void Apply(object target)
         {
@@ -63,7 +60,7 @@ namespace ShipWorks.Shipping.Policies
 
             if (!IsApplicable(target))
             {
-                throw new ArgumentException("target not of type List<IBestRateShippingBroker> or List<ShipmentTypeCode>", "target");                
+                throw new ArgumentException("target not of type List<IBestRateShippingBroker> or List<ShipmentTypeCode>", "target");
             }
 
             List<IBestRateShippingBroker> brokers = target as List<IBestRateShippingBroker>;
@@ -108,8 +105,7 @@ namespace ShipWorks.Shipping.Policies
             Type type = broker.GetType();
 
             return type == typeof(WorldShipBestRateBroker) ||
-                   type == typeof(UpsBestRateBroker) ||
-                   type == typeof(UpsCounterRatesBroker);
+                   type == typeof(UpsBestRateBroker);
         }
     }
 }

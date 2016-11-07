@@ -24,7 +24,13 @@ namespace ShipWorks.Startup
         /// Initialize the IoC container
         /// </summary>
         public static IContainer Initialize(IContainer container) =>
-            IoC.Initialize(container,
+            IoC.Initialize(BuildRegistrations(container));
+
+        /// <summary>
+        /// Build the registrations in IoC container
+        /// </summary>
+        public static IContainer BuildRegistrations(IContainer container) =>
+            IoC.BuildRegistrations(container,
                 typeof(ShippingDialogService).Assembly,
                 typeof(ShippingModule).Assembly,
                 typeof(LemonStandStoreModule).Assembly,

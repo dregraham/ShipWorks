@@ -1,23 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     /// <summary>
     /// Validates registration information prior to sending registration request to Express1.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class Express1RegistrationValidator : IExpress1RegistrationValidator
     {
         private readonly IExpress1PaymentValidator paymentValidator;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Express1RegistrationValidator"/> class using 
-        /// the Express1CreditCardPaymentValidator.
-        /// </summary>
-        public Express1RegistrationValidator()
-            : this(new Express1CreditCardPaymentValidator())
-        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1RegistrationValidator"/> class.
@@ -26,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         {
             this.paymentValidator = paymentValidator;
         }
-        
+
         /// <summary>
         /// Validates Registration information prior to sending registration request to Express1.
         /// </summary>
@@ -36,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         public List<Express1ValidationError> Validate(Express1Registration registration)
         {
             List<Express1ValidationError> errors = new List<Express1ValidationError>();
-            
+
             errors.AddRange(ValidatePersonalInfo(registration));
             errors.AddRange(ValidatePaymentInfo(registration));
 
@@ -52,13 +45,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         public List<Express1ValidationError> ValidatePersonalInfo(Express1Registration registration)
         {
             List<Express1ValidationError> errors = new List<Express1ValidationError>();
-            
+
             // Required fields contain data
             errors.AddRange(ValidateDataIsProvided(registration.Name, "Name is required"));
             errors.AddRange(ValidateDataIsProvided(registration.Company, "Company is required"));
             errors.AddRange(ValidateDataIsProvided(registration.Phone10Digits, "Phone number is required"));
             errors.AddRange(ValidateDataIsProvided(registration.Email, "An email address is required"));
-            
+
             errors.AddRange(ValidateDataIsProvided(registration.MailingAddress.Street1, "A street address is required"));
             errors.AddRange(ValidateDataIsProvided(registration.MailingAddress.City, "City is required"));
             errors.AddRange(ValidateDataIsProvided(registration.MailingAddress.StateProvCode, "A state/province is required"));

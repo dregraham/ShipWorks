@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
@@ -13,6 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Window for purchasing more USPS postage
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class UspsPurchasePostageDlg : Form, IExpress1PurchasePostageDlg
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UspsPurchasePostageDlg));
@@ -52,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 postageBalance.GetValueAsync().ContinueWith(x =>
                 {
-                    BeginInvoke((Action)(() => current.Text = StringUtility.FormatFriendlyCurrency(x.Result)));
+                    BeginInvoke((Action) (() => current.Text = StringUtility.FormatFriendlyCurrency(x.Result)));
                 });
 
                 // We have a valid USPS account, so we can use it to initialize the account info
@@ -68,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private decimal GetBalance(UspsAccountEntity uspsAccount)
         {
             // Define these here since they could be used in either inside or outside the try statement
-            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller);
+            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType) uspsAccount.UspsReseller);
             string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
 
             try
@@ -105,8 +107,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnPurchase(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
-            UspsShipmentType uspsShipmentType = PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType)account.UspsReseller);
+            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType) account.UspsReseller);
+            UspsShipmentType uspsShipmentType = PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType) account.UspsReseller);
 
             try
             {

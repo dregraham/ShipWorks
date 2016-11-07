@@ -98,8 +98,8 @@ namespace ShipWorks.Shipping.Services
             EndSession();
 
             subscription = messenger.OfType<OrderSelectionChangingMessage>()
-                .Throttle(TimeSpan.FromMilliseconds(100))
-                .Gate(messenger.OfType<OrderSelectionChangedMessage>())
+                .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
+                .Gate(messenger.OfType<OrderSelectionChangedMessage>(), schedulerProvider.Default)
                 .Select(x => x.Last())
                 .SelectMany(x => Load(x.OrderIdList, shippingSettings.FetchReadOnly().AutoCreateShipments).ToObservable())
                 .CatchAndContinue((Exception ex) => log.Error(ex))

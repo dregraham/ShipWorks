@@ -7,6 +7,7 @@ using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// UserControl for managing\editing endicia accounts
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class EndiciaAccountManagerControl : PostalAccountManagerControlBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EndiciaAccountManagerControl));

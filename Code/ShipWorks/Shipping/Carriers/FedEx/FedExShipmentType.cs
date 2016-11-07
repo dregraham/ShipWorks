@@ -180,14 +180,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Create the setup wizard used for setting up the shipment type
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new FedExSetupWizard();
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle FedEx shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -1036,15 +1028,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override ReturnsControlBase CreateReturnsControl()
         {
             return new FedExReturnsControl();
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new FedExShipmentProcessingSynchronizer();
-            // Okay to "new up" the shipping clerk here, as this class is the root consumer
         }
 
         /// <summary>

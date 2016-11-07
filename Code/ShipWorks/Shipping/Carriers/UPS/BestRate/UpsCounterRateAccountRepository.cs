@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -12,7 +13,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// <summary>
     /// A repository for UPS counter rate accounts
     /// </summary>
-    public class UpsCounterRateAccountRepository : UpsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>
+    public class UpsCounterRateAccountRepository : UpsSettingsRepository,
+        ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>,
+        ICarrierAccountRetriever
     {
         private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<UpsAccountEntity>> lazyAccounts;
@@ -50,19 +53,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
-        public UpsAccountEntity GetAccount(long accountID)
-        {
-            return Accounts.First();
-        }
+        public UpsAccountEntity GetAccount(long accountID) => Accounts.First();
 
         /// <summary>
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
-        public IUpsAccountEntity GetAccountReadOnly(long accountID)
-        {
-            return AccountsReadOnly.First();
-        }
+        public IUpsAccountEntity GetAccountReadOnly(long accountID) => AccountsReadOnly.First();
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public UpsAccountEntity GetAccount(IShipmentEntity shipment) => Accounts.First();
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public IUpsAccountEntity GetAccountReadOnly(IShipmentEntity shipment) => AccountsReadOnly.First();
 
         /// <summary>
         /// Gets the default profile account. This will always return the same account that is
@@ -126,5 +133,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         {
             // Nothing to save. This is a counter rate account.
         }
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
+            GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(IShipmentEntity shipment) =>
+            GetAccountReadOnly(shipment);
+
+        /// <summary>
+        /// Returns a list of accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
+            AccountsReadOnly.OfType<ICarrierAccount>();
     }
 }

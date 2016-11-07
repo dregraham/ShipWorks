@@ -124,14 +124,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the Form used to do the setup for Endicia label server
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new EndiciaSetupWizard();
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle Endicia shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -404,14 +396,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new EndiciaShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
         public void ValidateShipment(ShipmentEntity shipment)
@@ -431,7 +415,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)
         {
-            EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
+            IEndiciaAccountEntity account = EndiciaAccountManager.GetAccountReadOnly(shipment.Postal.Endicia.EndiciaAccountID);
 
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
 

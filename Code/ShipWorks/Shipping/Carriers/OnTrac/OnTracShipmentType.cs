@@ -225,22 +225,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new OnTracShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Get new OnTracSetupWizard
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new OnTracSetupWizard();
-        }
-
-        /// <summary>
         /// Create and Initialize a new shipment
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)

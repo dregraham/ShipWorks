@@ -1,8 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
-using System;
 
 namespace ShipWorks.Shipping.Carriers.Usps
 {
@@ -39,10 +38,6 @@ namespace ShipWorks.Shipping.Carriers.Usps
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Usps)
                 .SingleInstance();
 
-            builder.RegisterType<UspsAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Usps)
-                .SingleInstance();
-
             builder.RegisterType<UspsShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Usps)
                 .ExternallyOwned();
@@ -61,9 +56,6 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<UspsRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Usps);
-
-            builder.RegisterType<UspsAccountRepository>()
-                .As<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
 
             builder.RegisterType<UspsWebClient>()
                 .AsImplementedInterfaces()

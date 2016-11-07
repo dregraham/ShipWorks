@@ -1,4 +1,9 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -22,11 +27,6 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -125,18 +125,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Create the Form used to do the setup for the USPS API
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            EnsureAccountsHaveCurrentContractData();
-            UspsAccountEntity pendingAccount = UspsAccountManager.GetPendingUspsAccount();
-            IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-
-            return new UspsSetupWizard(promotion, true, pendingAccount);
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle USPS profiles
         /// </summary>
         protected override ShippingProfileControlBase CreateProfileControl()
@@ -181,9 +169,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Ensure that all USPS accounts have up to date contract information
         /// </summary>
-        private void EnsureAccountsHaveCurrentContractData()
+        public virtual void EnsureAccountsHaveCurrentContractData()
         {
-            Task[] tasks = AccountRepository.Accounts
+            Task[] tasks = UspsAccountManager.UspsAccounts
                 .Where(account => account.PendingInitialAccount != (int) UspsPendingAccountType.Create)
                 .Select(account => Task.Factory.StartNew(() => UpdateContractType(account)))
                 .ToArray();
@@ -196,20 +184,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static UspsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
             bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted;
             bool shouldUseExpress1 = settings.UspsAutomaticExpress1 && !isExpress1Restricted &&
                                      Express1Utilities.IsValidPackagingType(null, packagingType);
 
             return shouldUseExpress1 ? UspsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account) : null;
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new UspsShipmentProcessingSynchronizer(AccountRepository);
         }
 
         /// <summary>
@@ -339,7 +319,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns>An instance of a UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            if (AccountRepository.Accounts.Any(a => a.PendingInitialAccount == (int) UspsPendingAccountType.None))
+            if (AccountRepository.Accounts.Any())
             {
                 // We have an account that is completely setup, so use the normal broker
                 return new UspsBestRateBroker(this, AccountRepository);
@@ -484,7 +464,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (account != null)
             {
                 // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
-                // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
+                // so we don't have to perform this every time, but does allow ShipWorks to handle cases where the contract type may have been
                 // updated outside of ShipWorks.
                 if (!UspsContractTypeCache.Contains(account.UspsAccountID) || UspsContractTypeCache.GetContractType(account.UspsAccountID) == UspsAccountContractType.Unknown)
                 {
@@ -564,7 +544,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalFirst)}";
 
                 case (int) PostalServiceType.GlobalPostPriority:
-                case (int)PostalServiceType.GlobalPostSmartSaverPriority:
+                case (int) PostalServiceType.GlobalPostSmartSaverPriority:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
 
                 default:

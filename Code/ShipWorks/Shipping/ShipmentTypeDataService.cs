@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
 {
@@ -38,48 +41,52 @@ namespace ShipWorks.Shipping
             {
                 EntityBase2 childEntity;
 
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    // Try to fetch the existing profile data for the shipment
-                    if (parent.Fields.State != EntityState.New)
+                    ISqlAdapterFactory adapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
+
+                    using (ISqlAdapter adapter = adapterFactory.CreateTransacted())
                     {
-                        childEntity = (EntityBase2) Activator.CreateInstance(entityType, parent.Fields["ShipmentID"].CurrentValue);
-                        adapter.FetchEntity(childEntity);
-                    }
-                    // If the parent is new, just create a new child.
-                    else
-                    {
-                        childEntity = (EntityBase2) Activator.CreateInstance(entityType);
-                    }
-
-                    // Apply the reference
-                    property.SetValue(parent, childEntity, null);
-
-                    // If it didn't exist, then we have to create to save it as new
-                    if (childEntity.Fields.State != EntityState.Fetched)
-                    {
-                        // Reset the object to new and apply
-                        childEntity.Fields.State = EntityState.New;
-
-                        // Configure the newly created shipment
-                        shipmentType.ConfigureNewShipment(shipment);
-
-                        // Save the new entity.  Remove the reference to the parent first that it doesn't save recursively up to the shipment, only down to child packages
-                        property.SetValue(parent, null, null);
-                        adapter.SaveAndRefetch(childEntity);
-                        property.SetValue(parent, childEntity, null);
-                    }
-
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = shipmentType.GetProcessingSynchronizer(lifetimeScope);
-                        if (shipmentProcessingSynchronizer != null)
+                        // Try to fetch the existing profile data for the shipment
+                        if (parent.Fields.State != EntityState.New)
                         {
-                            shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                            childEntity = (EntityBase2) Activator.CreateInstance(entityType, parent.Fields["ShipmentID"].CurrentValue);
+                            adapter.FetchEntity(childEntity);
                         }
-                    }
+                        // If the parent is new, just create a new child.
+                        else
+                        {
+                            childEntity = (EntityBase2) Activator.CreateInstance(entityType);
+                        }
 
-                    adapter.Commit();
+                        // Apply the reference
+                        property.SetValue(parent, childEntity, null);
+
+                        // If it didn't exist, then we have to create to save it as new
+                        if (childEntity.Fields.State != EntityState.Fetched)
+                        {
+                            // Reset the object to new and apply
+                            childEntity.Fields.State = EntityState.New;
+
+                            // Configure the newly created shipment
+                            shipmentType.ConfigureNewShipment(shipment);
+
+                            // Save the new entity.  Remove the reference to the parent first that it doesn't save recursively up to the shipment, only down to child packages
+                            property.SetValue(parent, null, null);
+                            adapter.SaveAndRefetch(childEntity);
+                            property.SetValue(parent, childEntity, null);
+                        }
+
+                        ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(shipmentType.ShipmentTypeCode);
+
+                        if (accountRetriever?.GetAccountReadOnly(shipment) == null)
+                        {
+                            ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
+                            carrierAccount?.ApplyTo(shipment);
+                        }
+
+                        adapter.Commit();
+                    }
                 }
             }
         }

@@ -142,12 +142,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() =>
-            new OtherShipmentProcessingSynchronizer();
-
-        /// <summary>
         /// Create the XML input to the XSL engine
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)

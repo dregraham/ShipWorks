@@ -478,16 +478,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
-        /// null if the shipment type does not require setup
-        /// </summary>
-        /// <returns>An iParcelSetupWizard object.</returns>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new iParcelSetupWizard();
-        }
-
-        /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
         /// <returns>An iParcelSettingsControl object.</returns>
@@ -562,14 +552,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // This was changed to an exception instead of creating the package when the creation was moved to ConfigureNewShipment
                 throw new NotFoundException("Primary package not found.");
             }
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new iParcelShipmentProcessingSynchronizer();
         }
 
         /// <summary>

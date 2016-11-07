@@ -73,20 +73,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Gets a value indicating whether the broker is a counter broker.
-        /// </summary>
-        /// <value>
-        ///   False by default
-        /// </value>
-        public virtual bool IsCounterRate
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Determines whether customs forms are required for the given shipment for any accounts of a broker.
         /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
         /// </summary>
@@ -349,8 +335,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     return null;
                 }
 
-                rateGroup.Rates.ForEach(r => r.IsCounterRate = IsCounterRate);
-
                 return rateGroup;
             }
             catch (ShippingException ex)
@@ -455,7 +439,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected virtual void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, TAccount account)
         {
             // Set the address of the shipment to either the account, or the address of the original shipment
-            if (!IsCounterRate && currentShipment.OriginOriginID == (int) ShipmentOriginSource.Account)
+            if (currentShipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
                 account.Address.CopyTo(currentShipment, "Origin");
             }

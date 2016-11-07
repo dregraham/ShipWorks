@@ -1,9 +1,14 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
@@ -13,56 +18,53 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services.ShipmentProcessorPhases;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// Shared code required to process a set of shipments
     /// </summary>
+    [Component]
     public class ShipmentProcessor : IShipmentProcessor
     {
-        private bool showBestRateCounterRateSetupWizard;
-        private bool cancelProcessing;
         private readonly IShippingErrorManager errorManager;
         private readonly IShippingManager shippingManager;
         private readonly Func<Control> ownerRetriever;
         private readonly ILifetimeScope lifetimeScope;
         private readonly ILicenseService licenseService;
-        private RateResult chosenRate;
-        private int shipmentCount;
-        private Action counterRateCarrierConfiguredWhileProcessing;
         Control owner;
+        private readonly PrepareShipmentPhase prepareShipmentPhase;
+        private readonly GetLabelPhase getLabelPhase;
+        private readonly SaveLabelPhase saveLabelPhase;
+        private readonly CompleteLabelPhase completeLabelPhase;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
-            ILifetimeScope lifetimeScope, IShippingManager shippingManager, ILicenseService licenseService)
+            ILifetimeScope lifetimeScope, IShippingManager shippingManager, ILicenseService licenseService,
+            PrepareShipmentPhase prepareShipmentPhase,
+            GetLabelPhase getLabelPhase,
+            SaveLabelPhase saveLabelPhase,
+            CompleteLabelPhase completeLabelPhase)
         {
+            this.completeLabelPhase = completeLabelPhase;
+            this.saveLabelPhase = saveLabelPhase;
+            this.getLabelPhase = getLabelPhase;
+            this.prepareShipmentPhase = prepareShipmentPhase;
             this.shippingManager = shippingManager;
             this.errorManager = errorManager;
             this.ownerRetriever = ownerRetriever;
             this.lifetimeScope = lifetimeScope;
             this.licenseService = licenseService;
         }
-
-        /// <summary>
-        /// Filtered rates that should be displayed after shipping
-        /// </summary>
-        public RateGroup FilteredRates { get; private set; }
 
         /// <summary>
         /// Process the list of shipments
@@ -83,18 +85,13 @@ namespace ShipWorks.Shipping.Services
 
             // Filter out the ones we know to be already processed, or are not ready
             IEnumerable<ShipmentEntity> shipmentEntities = shipmentsToProcess as IList<ShipmentEntity> ?? shipmentsToProcess.ToList();
-            IEnumerable<ShipmentEntity> filteredShipments = shipmentEntities.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
-
-            counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
-            chosenRate = chosenRateResult;
-
-            cancelProcessing = false;
+            IEnumerable<ShipmentEntity> filteredShipments = shipmentEntities.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
 
             licenseService.GetLicenses().FirstOrDefault()?.EnforceCapabilities(EnforcementContext.CreateLabel, owner);
 
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
             List<ShipmentEntity> clonedShipments = EntityUtility.CloneEntityCollection(filteredShipments);
-            shipmentCount = clonedShipments.Count;
+            int shipmentCount = clonedShipments.Count;
             shipmentRefresher.ProcessingShipments(clonedShipments);
 
             if (!clonedShipments.Any())
@@ -119,7 +116,8 @@ namespace ShipWorks.Shipping.Services
                 "Shipment {0} of {1}",
                 false);
 
-            ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRate);
+            prepareShipmentPhase.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
+            ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRateResult);
 
             // What to do before it gets started (but is on the background thread)
             // sender is a ShipWorks.Common.Threading.BackgroundExecutor<ShipWorks.Data.Model.EntityClasses.ShipmentEntity>
@@ -127,9 +125,6 @@ namespace ShipWorks.Shipping.Services
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
                 executionState.ConcurrencyErrors = shippingManager.SaveShipmentsToDatabase(clonedShipments, true);
-
-                // Reset to true, so that we show the counter rate setup wizard for this batch.
-                showBestRateCounterRateSetupWizard = true;
             };
 
             await executor.ExecuteAsync(ProcessShipment, clonedShipments, executionState);
@@ -137,12 +132,12 @@ namespace ShipWorks.Shipping.Services
             HandleProcessingException(executionState);
 
             // See if we are supposed to open WorldShip
-            if (executionState.WorldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
+            if (executionState.WorldshipExported && ShippingSettings.FetchReadOnly().WorldShipLaunch)
             {
                 WorldShipUtility.LaunchWorldShip(owner);
             }
 
-            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, executionState);
+            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, executionState.OrderHashes);
 
             shipmentRefresher.FinishProcessing();
 
@@ -199,7 +194,7 @@ namespace ShipWorks.Shipping.Services
         /// <remarks>This was initially intended to apply ShipSense to all unprocessed shipments outside of
         /// the shipping dialog, but now that we have the shipping panel it applies to more.</remarks>
         private void RefreshShipSenseStatusForUnprocessedShipments(ICarrierConfigurationShipmentRefresher shipmentRefresher,
-            IEnumerable<ShipmentEntity> shipmentsToProcess, ShipmentProcessorExecutionState executionState)
+            IEnumerable<ShipmentEntity> shipmentsToProcess, IEnumerable<string> orderHashes)
         {
             // Exclude shipments that are in the current context but are not being processed,
             // like the list of shipments in the shipping dialog
@@ -212,7 +207,7 @@ namespace ShipWorks.Shipping.Services
                 .ToList();
 
             Knowledgebase knowledgebase = new Knowledgebase();
-            foreach (string hash in executionState.OrderHashes.Distinct())
+            foreach (string hash in orderHashes.Distinct())
             {
                 knowledgebase.RefreshShipSenseStatus(hash, shipmentIdsToIgnore);
             }
@@ -224,85 +219,26 @@ namespace ShipWorks.Shipping.Services
         private void ProcessShipment(ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder)
         {
             ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
+            ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
 
-            // Processing was canceled by the best rate processing dialog
-            if (cancelProcessing)
+            PrepareShipmentResult phase1Result = prepareShipmentPhase.PrepareShipment(initial);
+            GetLabelResult phase2Result = getLabelPhase.GetLabel(phase1Result);
+            ISaveLabelResult phase3Result = saveLabelPhase.SaveLabel(phase2Result);
+            ICompleteLabelCreationResult phase4Result = completeLabelPhase.Finish(phase3Result);
+
+            // When we introduce Akka.net, the rest of this method would go into the reducer method
+            if (!string.IsNullOrEmpty(phase4Result.ErrorMessage))
             {
-                return;
+                executionState.NewErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + phase4Result.ErrorMessage);
             }
+            
+            executionState.OutOfFundsException = executionState.OutOfFundsException ?? phase4Result.OutOfFundsException;
+            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? phase4Result.TermsAndConditionsException;
+            executionState.WorldshipExported |= phase4Result.WorldshipExported;
 
-            long shipmentID = shipment.ShipmentID;
-            string errorMessage = null;
-
-            try
+            if (phase4Result.Success)
             {
-                Exception concurrencyEx;
-                if (executionState.ConcurrencyErrors.TryGetValue(shipment, out concurrencyEx))
-                {
-                    throw concurrencyEx;
-                }
-
                 executionState.OrderHashes.Add(shipment.Order.ShipSenseHashKey);
-
-                Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ?
-                    (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing :
-                    CounterRatesProcessing;
-
-                GenericResult<ShipmentEntity> result = ShippingManager.ProcessShipment(shipment,
-                    executionState.LicenseCheckResults,
-                    x => (DialogResult) owner.Invoke(ratesProcessing, x),
-                    executionState.SelectedRate, lifetimeScope);
-
-                // Clear any previous errors
-                errorManager.Remove(shipmentID);
-
-                if (!result.Success)
-                {
-                    errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, new Exception(result.Message), "processed");
-                }
-
-                // Special case - could refactor to abstract if necessary
-                executionState.WorldshipExported |= shipment.ShipmentType == (int) ShipmentTypeCode.UpsWorldShip;
-            }
-            catch (Exception ex) when (ex is ORMConcurrencyException ||
-                                       ex is ObjectDeletedException ||
-                                       ex is SqlForeignKeyException)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
-            }
-            catch (ShippingException ex)
-            {
-                errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex);
-
-                // Special case for out of funds
-                if (ex.InnerException != null)
-                {
-                    executionState.OutOfFundsException = executionState.OutOfFundsException ??
-                        (ex.InnerException.InnerException as IInsufficientFunds);
-
-                    executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ??
-                        (ex.InnerException.InnerException as ITermsAndConditionsException);
-                }
-            }
-
-            try
-            {
-                // Reload it so we can show the most recent data when the grid redisplays
-                ShippingManager.RefreshShipment(shipment);
-            }
-            catch (ObjectDeletedException ex)
-            {
-                // If there wasn't already a different error, set this as the error
-                if (errorMessage == null)
-                {
-                    errorMessage = "The shipment has been deleted.";
-                    errorManager.SetShipmentErrorMessage(shipmentID, new ShippingException(errorMessage, ex));
-                }
-            }
-
-            if (errorMessage != null)
-            {
-                executionState.NewErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
             }
         }
 
@@ -369,136 +305,6 @@ namespace ShipWorks.Shipping.Services
             {
                 NudgeManager.ShowNudge(owner, NudgeManager.GetFirstNudgeOfType(NudgeType.ProcessEndicia));
             }
-        }
-
-        /// <summary>
-        /// Method used when processing a (non-best rate) shipment for a provider that does not have any
-        /// accounts setup, and we need to provide the user with a way to sign up for the carrier.
-        /// </summary>
-        /// <param name="counterRatesProcessingArgs">The counter rates processing arguments.</param>
-        /// <returns></returns>
-        private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
-        {
-            // This is for a specific shipment type, so we're always going to need to show the wizard
-            // since the user explicitly chose to process with this provider
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(counterRatesProcessingArgs.Shipment);
-
-            DialogResult result = DialogResult.Cancel;
-
-            if (cancelProcessing)
-            {
-                return DialogResult.Cancel;
-            }
-
-            // If this shipment type is not allowed to have new registrations, cancel out.
-            if (!shipmentType.IsAccountRegistrationAllowed)
-            {
-                MessageHelper.ShowWarning(owner, $"Account registration is disabled for {EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)}");
-                return DialogResult.Cancel;
-            }
-
-            using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
-            {
-                result = setupWizard.ShowDialog(owner);
-
-                if (result == DialogResult.OK)
-                {
-                    ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
-
-                    // Make sure we've got the latest data for the shipment since the requested label format may have changed
-                    ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
-
-                    ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
-
-                    counterRateCarrierConfiguredWhileProcessing?.Invoke();
-                }
-                else
-                {
-                    // User canceled out of the setup wizard for this batch, so don't show
-                    // any setup wizard for the rest of this batch
-                    cancelProcessing = true;
-                }
-
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// Method used when processing a best rate shipment whose best rate is a counter rate, and we need
-        /// to provide the user with a way to sign up for the counter carrier or chose to use the best available rate.
-        /// </summary>
-        private DialogResult BestRateCounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
-        {
-            // If the user has opted to not see counter rate setup wizard for this batch, just return.
-            if (!showBestRateCounterRateSetupWizard)
-            {
-                RateResult rateResult = counterRatesProcessingArgs.FilteredRates.Rates.FirstOrDefault(rr => !rr.IsCounterRate);
-                if (rateResult == null)
-                {
-                    throw new ShippingException("No rate was found for any of your accounts, or you have not setup any accounts yet.");
-                }
-
-                counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateResult.ShipmentType);
-                return DialogResult.OK;
-            }
-
-            DialogResult setupWizardDialogResult = DialogResult.Cancel;
-
-            RateResult selectedRate = chosenRate ?? counterRatesProcessingArgs.FilteredRates.Rates.First();
-
-            if (selectedRate.IsCounterRate)
-            {
-                setupWizardDialogResult = ShowBestRateCounterRateSetupWizard(counterRatesProcessingArgs, selectedRate);
-            }
-            else
-            {
-                //The selected rate is not a counter rate, so we just set the shipment type and rate based on the rate grid
-                counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(selectedRate.ShipmentType);
-                counterRatesProcessingArgs.SelectedRate = selectedRate;
-
-                setupWizardDialogResult = DialogResult.OK;
-            }
-
-            if (setupWizardDialogResult != DialogResult.OK)
-            {
-                cancelProcessing = true;
-                showBestRateCounterRateSetupWizard = false;
-
-                FilteredRates = counterRatesProcessingArgs.FilteredRates;
-            }
-
-            return setupWizardDialogResult;
-        }
-
-        /// <summary>
-        /// Shows the counter rate carrier setup wizard, and handles the result of the wizard.
-        /// </summary>
-        /// <param name="counterRatesProcessingArgs">Arguments passed from the counter rate event</param>
-        /// <param name="selectedRate">Rate that has been selected</param>
-        /// <remarks>The selected rate is passed into the method instead of checking the selected rate from the rate control
-        /// because there is no selected rate when processing multiple shipments.  Also, it is simply for a user to deselect a rate,
-        /// in which case, we should just use the cheapest.</remarks>
-        private DialogResult ShowBestRateCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs, RateResult selectedRate)
-        {
-            DialogResult setupWizardDialogResult;
-
-            using (CounterRateProcessingSetupWizard rateProcessingSetupWizard = new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, selectedRate, shipmentCount))
-            {
-                setupWizardDialogResult = rateProcessingSetupWizard.ShowDialog(owner);
-                rateProcessingSetupWizard.BringToFront();
-
-                if (setupWizardDialogResult == DialogResult.OK)
-                {
-                    showBestRateCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
-
-                    counterRatesProcessingArgs.SelectedShipmentType = rateProcessingSetupWizard.SelectedShipmentType;
-                    counterRatesProcessingArgs.SelectedRate = rateProcessingSetupWizard.SelectedRate;
-
-                    ShippingSettings.MarkAsConfigured(rateProcessingSetupWizard.SelectedShipmentType.ShipmentTypeCode);
-                }
-            }
-
-            return setupWizardDialogResult;
         }
     }
 }

@@ -147,9 +147,11 @@
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\GenericShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
@@ -178,6 +180,10 @@
     <Compile Include="Services\RatesRetrieverTests.cs" />
     <Compile Include="Services\ShipmentFactoryTest.cs" />
     <Compile Include="Services\ShipmentLoaderServiceTest.cs" />
+    <Compile Include="Services\ShipmentProcessorPhases\CompleteLabelPhaseTest.cs" />
+    <Compile Include="Services\ShipmentProcessorPhases\GetLabelPhaseTest.cs" />
+    <Compile Include="Services\ShipmentProcessorPhases\PrepareShipmentPhaseTest.cs" />
+    <Compile Include="Services\ShipmentProcessorPhases\SaveLabelPhaseTest.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapperTest.cs" />
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />

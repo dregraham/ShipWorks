@@ -147,6 +147,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\LabelServiceRegistrationTest.cs" />
+    <Compile Include="Carriers\RatingServiceRegistrationTest.cs" />
+    <Compile Include="Carriers\ShipmentTypeSetupWizardRegistrationTest.cs" />
+    <Compile Include="Carriers\ShipmentPreProcessorRegistrationTest.cs" />
     <Compile Include="Carriers\CarrierTestUtilities.cs" />
     <Compile Include="Carriers\Other\OtherShipmentTypeTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentTypeTest.cs" />
@@ -157,6 +161,7 @@
     <Compile Include="Carriers\Postal\WebTools\WebToolsShipmentTypeTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentTypeTest.cs" />
+    <Compile Include="Carriers\CarrierAccountRepositoryRegistrationTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentTypeTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="GlobalSuppressions.cs" />
