@@ -38,21 +38,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            Refresh();
-        }
-
-        /// <summary>
-        /// Refresh every UspsAccountEntitys GlobalPostAvailability status
-        /// then update the list of available services
-        /// </summary>
-        public void Refresh()
-        {
             services.Clear();
             IEnumerable<UspsAccountEntity> accounts = accountRepo.Accounts.ToArray();
 
             foreach (UspsAccountEntity account in accounts)
             {
-                Refresh(account, true);
+                Refresh(account);
             }
         }
 
@@ -60,13 +51,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Refresh the accounts GlobalPostAvailability status
         /// then update the list of available services
         /// </summary>
-        public void Refresh(UspsAccountEntity account, bool refreshAccountGlobalPostAvailability)
+        public void Refresh(UspsAccountEntity account)
         {
-            if (refreshAccountGlobalPostAvailability)
-            {
-                RefreshAccountGlobalPostAvailability(account);
-            }
-
+            RefreshAccountGlobalPostAvailability(account);
             RefreashServicesFromAccount(account);
         }
 
