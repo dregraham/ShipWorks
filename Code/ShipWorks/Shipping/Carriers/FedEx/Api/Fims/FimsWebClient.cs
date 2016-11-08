@@ -54,8 +54,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         public IFimsShipResponse Ship(IFimsShipRequest fimsShipRequest)
         {
-            FimsShipResponse fimsShipResponse;
-
             if (fimsShipRequest == null)
             {
                 throw new ArgumentNullException("fimsShipRequest");
