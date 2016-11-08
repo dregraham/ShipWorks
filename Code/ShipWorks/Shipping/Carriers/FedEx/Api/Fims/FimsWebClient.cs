@@ -35,11 +35,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         private const string ResponseErrorMessage = "An error occurred processing the FedEx response.";
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private static ILog log;
+        private IHttpRequestSubmitterFactory requestSubmitterFactory;
 
-        public FimsWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, Func<Type, ILog> logFactory)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FimsWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, Func<Type, ILog> logFactory, IHttpRequestSubmitterFactory requestSubmitterFactory)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;
             log = logFactory(typeof(FimsWebClient));
+            this.requestSubmitterFactory = requestSubmitterFactory;
         }
 
         /// <summary>
@@ -51,31 +56,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         {
             FimsShipResponse fimsShipResponse;
 
-            try
+            if (fimsShipRequest == null)
             {
-                if (fimsShipRequest == null)
-                {
-                    throw new ArgumentNullException("fimsShipRequest");
-                }
-
-                XElement fimsRequestXml = BuildLabelRequest(fimsShipRequest);
-
-                string soapRequestText = BuildSoapRequest(fimsRequestXml).ToString();
-
-                byte[] responseBytes = Submit(soapRequestText);
-
-                fimsShipResponse = ProcessResponse(responseBytes);
-            }
-            catch (SoapException ex)
-            {
-                throw new FedExSoapCarrierException(ex);
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+                throw new ArgumentNullException("fimsShipRequest");
             }
 
-            return fimsShipResponse;
+            XElement fimsRequestXml = BuildLabelRequest(fimsShipRequest);
+
+            string soapRequestText = BuildSoapRequest(fimsRequestXml).ToString();
+
+            string response = Submit(soapRequestText);
+
+            return ProcessResponse(response);
         }
 
         /// <summary>
@@ -217,24 +209,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Submit the data to FIMS to get the label.
         /// </summary>
-        private byte[] Submit(string soapRequest)
+        private string Submit(string soapRequest)
         {
-            byte[] response;
+            HttpRequestSubmitter requestSubmitter = requestSubmitterFactory.GetHttpTextPostRequestSubmitter(soapRequest, "");
+            requestSubmitter.Uri = productionUri;
 
             IApiLogEntry logger = apiLogEntryFactory(ApiLogSource.FedExFims, "Ship");
-            logger.LogRequest(soapRequest, "xml");
+            logger.LogRequest(requestSubmitter);
 
-            using (WebClient client = new WebClient())
+            try
             {
-                byte[] data = Encoding.UTF8.GetBytes(soapRequest);
-
-                response = client.UploadData(productionUri.AbsoluteUri, data);
+                using (IHttpResponseReader reader = requestSubmitter.GetResponse())
+                {
+                    string responseText = reader.ReadResult();
+                    logger.LogResponse(responseText, "xml");
+                    return responseText;
+                }                
             }
-
-            string responseText = Encoding.Default.GetString(response);
-            logger.LogResponse(responseText, "txt");
-
-            return response;
+            catch (WebException ex)
+            {
+                logger.LogResponse(ex);
+                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+            }
         }
 
         /// <summary>
@@ -260,12 +256,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Process the response by array
         /// </summary>
-        private static FimsShipResponse ProcessResponse(byte[] responseBytes)
+        private static FimsShipResponse ProcessResponse(string response)
         {
-            if (responseBytes == null)
+            if (string.IsNullOrEmpty(response))
             {
                 throw new FedExException("FedEx FIMS shipment failed to return a response or label.");
             }
+
+            byte[] responseBytes = Encoding.Default.GetBytes(response); 
 
             // Define the byte arrays of the soap xml start/stop.
             byte[] xmlResponseStartBytes = Encoding.Default.GetBytes("<SOAP-ENV:Envelope");
