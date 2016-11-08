@@ -56,6 +56,39 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
+        public void InitializeForCurrentSession_AddsAllGlobalPostServices_WhenAccountSupportsAllGlobalPostServices()
+        {
+            UspsAccountEntity account = new UspsAccountEntity();
+            AccountInfo accountInfo = new AccountInfo
+            {
+                Capabilities = new CapabilitiesV11
+                {
+                    CanPrintGPSmartSaver = true,
+                    CanPrintGP = true
+                }
+            };
+
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
+            accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
+
+            Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
+            webClient.Setup(w => w.GetAccountInfo(account)).Returns(accountInfo);
+
+            Mock<Func<UspsResellerType, IUspsWebClient>> repo = mock.MockRepository.Create<Func<UspsResellerType, IUspsWebClient>>();
+            repo.Setup(x => x(It.IsAny<UspsResellerType>())).Returns(webClient.Object);
+            mock.Provide(repo.Object);
+
+            GlobalPostAvailabilityService testObject = mock.Create<GlobalPostAvailabilityService>();
+            testObject.InitializeForCurrentSession();
+
+            Assert.Contains(PostalServiceType.GlobalPostPriority, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostEconomy, testObject.Services);
+
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverEconomy, testObject.Services);
+            Assert.Contains(PostalServiceType.GlobalPostSmartSaverPriority, testObject.Services);
+        }
+
+        [Fact]
         public void InitializeForCurrentSession_AddsGlobalPostSmartSaverServices_WhenAccountSupportsGlobalPostSmartSaverServices()
         {
             UspsAccountEntity account = new UspsAccountEntity();

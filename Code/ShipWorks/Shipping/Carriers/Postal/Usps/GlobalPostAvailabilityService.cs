@@ -34,6 +34,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// GlobalPost services that are available
+        /// </summary>
+        public IEnumerable<PostalServiceType> Services => services;
+
+        /// <summary>
         /// Initialize services for the current session
         /// </summary>
         public void InitializeForCurrentSession()
@@ -54,14 +59,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public void Refresh(UspsAccountEntity account)
         {
             RefreshAccountGlobalPostAvailability(account);
-            RefreashServicesFromAccount(account);
+            RefreshServicesFromAccount(account);
         }
 
         /// <summary>
         /// Refresh the list of services based on the UspsAccountEntity
         /// </summary>
         /// <param name="account"></param>
-        private void RefreashServicesFromAccount(UspsAccountEntity account)
+        private void RefreshServicesFromAccount(UspsAccountEntity account)
         {
             if (account.GlobalPostAvailability == (int) GlobalPostServiceAvailability.None)
             {
@@ -139,10 +144,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 services.Add(service);
             }
         }
-
-        /// <summary>
-        /// GlobalPost services that are available
-        /// </summary>
-        public IEnumerable<PostalServiceType> Services => services;
     }
 }
