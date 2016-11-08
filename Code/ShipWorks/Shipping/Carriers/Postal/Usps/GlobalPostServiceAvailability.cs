@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -6,6 +7,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// GlobalPost services we support
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Flags]
     public enum GlobalPostServiceAvailability
     {
         None = 0,
