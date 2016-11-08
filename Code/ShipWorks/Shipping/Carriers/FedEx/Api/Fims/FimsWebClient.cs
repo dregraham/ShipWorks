@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Utility;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -31,11 +32,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         // FedEx - "labelSource for ShipWorks should be set to 5 always"
         private const string LabelSource = "5";
         private const string LabelSize = "6";
+        private const string ResponseErrorMessage = "An error occurred processing the FedEx response.";
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private static ILog log;
 
-        public FimsWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        public FimsWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, Func<Type, ILog> logFactory)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;
+            log = logFactory(typeof(FimsWebClient));
         }
 
         /// <summary>
@@ -304,7 +308,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "responseCode").FirstOrDefault();
             if (responseElement == null)
             {
-                throw new FedExException("FedEx FIMS did not return a Response Code");
+                log.Error("FedEx FIMS did not return a Response Code.");
+                throw new FedExException(ResponseErrorMessage);
             }
 
             return responseElement.Value;
@@ -318,7 +323,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "parcelId").FirstOrDefault();
             if (responseElement == null)
             {
-                throw new FedExException("FedEx FIMS did not return a ParcelID");
+                log.Error("FedEx FIMS did not return a Parcel ID.");
+                throw new FedExException(ResponseErrorMessage);
             }
 
             return responseElement.Value;
@@ -332,7 +338,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "trackingNo").FirstOrDefault();
             if (responseElement == null)
             {
-                throw new FedExException("FedEx FIMS did not return a tracking number");
+                log.Error("FedEx FIMS did not return a tracking number.");
+                throw new FedExException(ResponseErrorMessage);
             }
 
             return responseElement.Value;
@@ -346,7 +353,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "attached_label").FirstOrDefault();
             if (responseElement == null)
             {
-                throw new FedExException("FedEx FIMS did not return a label");
+                log.Error("FedEx FIMS did not return a label.");
+                throw new FedExException(ResponseErrorMessage);
             }
 
             return responseElement.Value;
@@ -360,7 +368,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "responseFormat").FirstOrDefault();
             if (responseElement == null)
             {
-                throw new FedExException("FedEx FIMS did not return a Response Format");
+                log.Error("FedEx FIMS did not return a Response Format.");
+                throw new FedExException(ResponseErrorMessage);
             }
 
             return responseElement.Value.Equals("z", StringComparison.InvariantCultureIgnoreCase) ? "Z" : "I";

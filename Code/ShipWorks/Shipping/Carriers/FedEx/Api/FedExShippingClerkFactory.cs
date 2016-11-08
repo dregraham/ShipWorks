@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static IFedExShippingClerk CreateFimsShippingClerk(Func<IFimsLabelRepository> createFimsLabelRepository)
         {
-            IFimsWebClient client = new FimsWebClient((source, name) => new ApiLogEntry(source, name));
+            IFimsWebClient client = new FimsWebClient((source, name) => new ApiLogEntry(source, name), LogManager.GetLogger);
 
             return new FimsShippingClerk(client, createFimsLabelRepository());
         }
