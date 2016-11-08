@@ -449,6 +449,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Response\FedExVoidResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizerTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\GlobalShipAddress\FedExWebServiceReferenceTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\Rate\ReturnedRateTypeTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\WebServices\Ship\FedExWebServiceShipReferenceTest.cs" />
