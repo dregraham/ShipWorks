@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -14,17 +15,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class GlobalPostAvailabilityService : IInitializeForCurrentSession
     {
-        private readonly CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity> repo;
+        private readonly CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity> accountRepo;
         private readonly Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory;
-        private List<PostalServiceType> services;
+        private readonly ILog log;
+        private readonly List<PostalServiceType> services;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GlobalPostAvailabilityService(CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity> repo, Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory)
+        public GlobalPostAvailabilityService(
+            CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity> accountRepo,
+            Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory, Func<Type, ILog> logfactory)
         {
-            this.repo = repo;
+            this.accountRepo = accountRepo;
             this.uspsWebClientFactory = uspsWebClientFactory;
+            log = logfactory(typeof(GlobalPostAvailabilityService));
             services = new List<PostalServiceType>();
         }
 
@@ -33,10 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            foreach (UspsAccountEntity account in repo.Accounts)
-            {
-                RefreashServicesFromAccount(account);
-            }
+            Refresh();
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public void Refresh()
         {
             services.Clear();
-            IEnumerable<UspsAccountEntity> accounts = repo.Accounts.ToArray();
+            IEnumerable<UspsAccountEntity> accounts = accountRepo.Accounts.ToArray();
 
             foreach (UspsAccountEntity account in accounts)
             {
@@ -108,7 +110,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (account != null)
             {
                 IUspsWebClient webClient = uspsWebClientFactory((UspsResellerType)account.UspsReseller);
-                object result = webClient.GetAccountInfo(account);
+
+                object result;
+                try
+                {
+                    result = webClient.GetAccountInfo(account);
+                }
+                catch (UspsException ex)
+                {
+                    log.Error("Error updating GlobalPostAvailability", ex);
+                    return;
+                }
+
                 AccountInfo accountInfo = result as AccountInfo;
 
                 if (accountInfo != null)
