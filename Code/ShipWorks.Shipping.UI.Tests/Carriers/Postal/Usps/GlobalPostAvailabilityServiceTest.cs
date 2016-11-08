@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public GlobalPostAvailabilityServiceTest()
         {
             mock = AutoMock.GetLoose();
-            //GlobalPostAvailabilityService testObject = new GlobalPostAvailabilityService();
         }
 
         [Fact]
@@ -36,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 }
             };
 
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
@@ -69,7 +68,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 }
             };
 
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
@@ -102,7 +101,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 }
             };
 
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
@@ -131,7 +130,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 }
             };
 
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
@@ -164,7 +163,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 }
             };
 
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
@@ -193,7 +192,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 }
             };
 
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             Mock<IUspsWebClient> webClient = mock.Mock<IUspsWebClient>();
@@ -213,7 +212,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         public void Refresh_LogsError_WhenUspsWebClientThrows()
         {
             UspsAccountEntity account = new UspsAccountEntity { GlobalPostAvailability = 0 };
-            Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>>();
+            Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.SetupGet(a => a.Accounts).Returns(new[] { account });
 
             UspsException ex = new UspsException("Something went wrong");

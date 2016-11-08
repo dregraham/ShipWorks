@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class GlobalPostAvailabilityService : IInitializeForCurrentSession
     {
-        private readonly CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity> accountRepo;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepo;
         private readonly Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory;
         private readonly ILog log;
         private readonly List<PostalServiceType> services;
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Constructor
         /// </summary>
         public GlobalPostAvailabilityService(
-            CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity> accountRepo,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepo,
             Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory, Func<Type, ILog> logfactory)
         {
             this.accountRepo = accountRepo;
@@ -135,6 +135,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         GlobalPostServiceAvailability.None;
 
                     account.GlobalPostAvailability = (int) (gpAvailability | gpSmartSaverAvailability);
+
+                    accountRepo.Save(account);
                 }
             }
         }
