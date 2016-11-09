@@ -1,22 +1,15 @@
-﻿using Interapptive.Shared;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Web.Services.Protocols;
-using System.Xml.Linq;
-using ShipWorks.Filters.Content.Conditions.Shipments;
-using ShipWorks.Common.IO.Hardware.Printers;
-using Interapptive.Shared.Utility;
-using log4net;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -35,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         private const string ResponseErrorMessage = "An error occurred processing the FedEx response.";
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private static ILog log;
-        private IHttpRequestSubmitterFactory requestSubmitterFactory;
+        private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
 
         /// <summary>
         /// Constructor

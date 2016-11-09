@@ -23,8 +23,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 var apiLogEntry = mock.MockRepository.Create<IApiLogEntry>();
                 mock.Provide(apiLogEntry.Object);
 
+                mock.Provide<IHttpRequestSubmitterFactory>(new HttpRequestSubmitterFactory());
+
                 var fedExShipment = new FedExShipmentEntity()
                 {
+                    Service = (int) FedExServiceType.FedExFimsPremium,
                     CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Gift,
                     ReferenceFIMS = "1234",
                     FimsAirWaybill = "123456789012"
