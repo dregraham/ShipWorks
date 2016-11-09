@@ -402,12 +402,6 @@
     <InstallerTypes Include="Standard">
       <ExeAppend></ExeAppend>
     </InstallerTypes>
-    <InstallerTypes Include="Endicia">
-      <ExeAppend>_eBayFree</ExeAppend>
-    </InstallerTypes>
-    <InstallerTypes Include="UPS">
-      <ExeAppend>_UPS</ExeAppend>
-    </InstallerTypes>
   </ItemGroup>
 
   <!-- Create the installer -->
