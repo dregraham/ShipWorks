@@ -10,39 +10,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// </summary>
     public class FimsShipResponse : IFimsShipResponse
     {
-        private readonly List<string> errors = new List<string>();
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public FimsShipResponse(string parcelID, string responseCode)
+        public FimsShipResponse(string parcelID, byte[] labelData, string labelFormat, string trackingNumber)
         {
             ParcelID = parcelID;
-            ResponseCode = responseCode;
+            LabelData = labelData;
+            LabelFormat = labelFormat;
+            TrackingNumber = trackingNumber;
         }
 
         /// <summary>
         /// ParcelID from FIMS response
         /// </summary>
-        public string ParcelID { get; private set; }
-
-        /// <summary>
-        /// ResponseCode from FIMS response
-        /// </summary>
-        public string ResponseCode { get; private set; }
-
-        /// <summary>
-        /// List of errors from FIMS response
-        /// </summary>
-        public List<string> Errors
-        {
-            get { return errors; }
-        }
+        public string ParcelID { get; }
 
         /// <summary>
         /// The byte array data of the label
         /// </summary>
-        public byte[] LabelData { get; set; }
+        public byte[] LabelData { get; }
 
         /// <summary>
         /// Label Format 
@@ -50,11 +37,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <remarks>
         /// Z = ZPL, I = Image
         /// </remarks>
-        public string LabelFormat { get; set; }
+        public string LabelFormat { get; }
 
         /// <summary>
         /// Tracking Number allowed on FedEx website
         /// </summary>
-        public string TrackingNumber { get; set; }
+        public string TrackingNumber { get; }
     }
 }

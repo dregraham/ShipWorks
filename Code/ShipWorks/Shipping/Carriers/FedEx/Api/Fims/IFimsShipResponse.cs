@@ -13,19 +13,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         string ParcelID { get; }
 
         /// <summary>
-        /// ResponseCode from FIMS response
-        /// </summary>
-        string ResponseCode { get; }
-
-        /// <summary>
-        /// List of errors from FIMS response
-        /// </summary>
-        List<string> Errors { get; }
-
-        /// <summary>
         /// The byte array data of the label
         /// </summary>
-        byte[] LabelData { get; set; }
+        byte[] LabelData { get; }
 
         /// <summary>
         /// Label Format 
@@ -33,11 +23,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <remarks>
         /// Z = ZPL, I = Image
         /// </remarks>
-        string LabelFormat { get; set; }
+        string LabelFormat { get; }
 
         /// <summary>
         /// Tracking Number allowed on FedEx website
         /// </summary>
-        string TrackingNumber { get; set; }
+        string TrackingNumber { get; }
     }
 }

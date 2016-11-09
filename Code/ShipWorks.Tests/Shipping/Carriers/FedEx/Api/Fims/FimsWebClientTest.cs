@@ -17,16 +17,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 {
     public class FimsWebClientTest : IDisposable
     {
-        AutoMock mock;
-        string label;
-        string base64Label;
+        private AutoMock mock;
+        private string label = "myLabelData";
+        private byte[] labelBytes;
+        
         Mock<IHttpRequestSubmitterFactory> submitterFactory;
+
+        // fields used in response:
+        private string base64Label;
+        private const string parcelId = "MyParcelId";
+        private const string trackingNo = "MyTrackingNumber";
+        private const string responseFormat = "Z";
 
         public FimsWebClientTest()
         {
             mock = AutoMock.GetLoose();
-            label = "label";
-            base64Label = Convert.ToBase64String(Encoding.UTF8.GetBytes(label));
+
+            labelBytes = Encoding.UTF8.GetBytes(label);
+            base64Label = Convert.ToBase64String(labelBytes);
 
             var responseReader = mock.MockRepository.Create<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult()).Returns(GetResponse);
@@ -863,6 +871,57 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
         #endregion "Customs Tests"
 
+        #region "Response Tests"
+
+        [Fact]
+        public void Ship_ParcelIdSetFromResponse()
+        {
+            IFimsShipResponse response = Ship();
+
+            Assert.Equal(parcelId, response.ParcelID);
+        }
+
+        [Fact]
+        public void Ship_TrackingNumberSetFromResponse()
+        {
+            IFimsShipResponse response = Ship();
+
+            Assert.Equal(trackingNo, response.TrackingNumber);
+        }
+
+        [Fact]
+        public void Ship_ResponseFormatSetFromResponse()
+        {
+            IFimsShipResponse response = Ship();
+
+            Assert.Equal(responseFormat, response.LabelFormat);
+        }
+
+        [Fact]
+        public void Ship_LabelDataSentFromResponse()
+        {
+            IFimsShipResponse response = Ship();
+
+            Assert.Equal(labelBytes, response.LabelData);
+        }
+
+        private IFimsShipResponse Ship()
+        {
+            var shipment = Create.Shipment()
+               .AsFedEx(x => x.WithPackage()
+                   .Set(f => f.Service, (int) FedExServiceType.FedExFimsMailView))
+               .Build();
+
+            var request = mock.MockRepository.Create<IFimsShipRequest>();
+            request.SetupGet(r => r.Shipment).Returns(shipment);
+
+            var testObject = mock.Create<FimsWebClient>();
+            var response = testObject.Ship(request.Object);
+            return response;
+        }
+
+        #endregion "Response Tests"
+
         public string GetResponse()
         {
             return 
@@ -870,10 +929,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
                 "  <SOAP-ENV:Header />" +
                 "  <SOAP-ENV:Body>" +
                 "    <labelResponse xmlns=\"http://www.fimsform.com\">" +
-                "      <responseFormat>Z</responseFormat>" +
+               $"      <responseFormat>{responseFormat}</responseFormat>" +
                 "      <labelSize>6</labelSize>" +
-                "      <parcelId>LB503658245SE</parcelId>" +
-                "      <trackingNo>681515955214</trackingNo>" +
+               $"      <parcelId>{parcelId}</parcelId>" +
+               $"      <trackingNo>{trackingNo}</trackingNo>" +
                 "      <responseCode>1</responseCode>" +
                $"      <attached_label>{base64Label}</attached_label>" +
                 "    </labelResponse>" +
