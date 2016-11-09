@@ -73,21 +73,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account"></param>
         private void RefreshServicesFromAccount(UspsAccountEntity account)
         {
-            GlobalPostServiceAvailability globalPostAvailabilityService =
+            GlobalPostServiceAvailability globalPostAvailability =
                 (GlobalPostServiceAvailability) account.GlobalPostAvailability;
 
-            if (globalPostAvailabilityService == GlobalPostServiceAvailability.None)
-            {
-                return;
-            }
-
-            if (globalPostAvailabilityService.HasFlag(GlobalPostServiceAvailability.GlobalPost))
+            if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.GlobalPost))
             {
                 AddToServices(PostalServiceType.GlobalPostEconomy);
                 AddToServices(PostalServiceType.GlobalPostPriority);
             }
 
-            if (globalPostAvailabilityService.HasFlag(GlobalPostServiceAvailability.SmartSaver))
+            if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.SmartSaver))
             {
                 AddToServices(PostalServiceType.GlobalPostSmartSaverEconomy);
                 AddToServices(PostalServiceType.GlobalPostSmartSaverPriority);

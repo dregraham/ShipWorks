@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     row.Selected = true;
                 }
 
-                ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncCheckAccountBalance), row);
+                ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncRefreshAccountInfo), row);
             }
 
             if (sandGrid.SelectedElements.Count == 0 && sandGrid.Rows.Count > 0)
@@ -86,9 +86,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Get the account info for the account, or null on error
+        /// Get the account balance and refresh the accounts GlobalPostAvailability
         /// </summary>
-        private void AsyncCheckAccountBalance(object state)
+        private void AsyncRefreshAccountInfo(object state)
         {
             string result = "";
 
