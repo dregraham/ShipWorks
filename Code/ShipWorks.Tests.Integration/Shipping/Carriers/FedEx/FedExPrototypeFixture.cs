@@ -391,7 +391,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             shipment.ShipStreet2 = string.Empty;
             shipment.ShipStreet3 = string.Empty;
             shipment.ShipCity = RecipientCity;
-            shipment.ShipStateProvCode = RecipientStateOrProvinceCode;
+            shipment.ShipStateProvCode = RecipientStateOrProvinceCode ?? string.Empty;
             shipment.ShipPostalCode = RecipientPostalCode;
             shipment.ShipCountryCode = RecipientCountryCode;
             shipment.ShipEmail = string.Empty;
@@ -548,7 +548,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.ShipStreet2 = string.Empty;
                 shipment.ShipStreet3 = string.Empty;
                 shipment.ShipCity = ShipperCity;
-                shipment.ShipStateProvCode = ShipperStateOrProvinceCode;
+                shipment.ShipStateProvCode = ShipperStateOrProvinceCode ?? string.Empty;
                 shipment.ShipPostalCode = ShipperPostalCode;
                 shipment.ShipCountryCode = ShipperCountryCode;
                 shipment.ShipEmail = string.Empty;
