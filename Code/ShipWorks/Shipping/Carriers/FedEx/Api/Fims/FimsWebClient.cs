@@ -25,7 +25,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// </summary>
     public class FimsWebClient : IFimsWebClient
     {
-        private static readonly XNamespace fimsWebServiceNamespace = "http://www.fimsform.com";
         private static readonly Uri productionUri = new Uri("http://www.shipfims.com/pkgFedex3/pkgFormService");
         private static readonly XNamespace soapenv = "http://schemas.xmlsoap.org/soap/envelope/";
         private static readonly FedExShipmentTokenProcessor tokenProcessor = new FedExShipmentTokenProcessor();
@@ -299,10 +298,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <exception cref="FedExException"></exception>
         private static void CheckResponseForErrors(XmlDocument xmlResponse)
         {
-            XmlNodeList errorElements = xmlResponse.SelectNodes("//*[local-name()='{error}']");
+            XmlNodeList errorElements = xmlResponse.SelectNodes("//*[local-name()='error']");
             if ((errorElements?.Count ?? 0) > 0)
             {
-                string errorMessage = string.Join<string>(System.Environment.NewLine, errorElements.Cast<XmlNode>().Select(e => e.Value));
+                string errorMessage = string.Join<string>(System.Environment.NewLine, errorElements.Cast<XmlNode>().Select(e => e.InnerText));
 
                 throw new FedExException(errorMessage);
             }

@@ -2,6 +2,7 @@
 using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
@@ -28,6 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         private const string parcelId = "MyParcelId";
         private const string trackingNo = "MyTrackingNumber";
         private const string responseFormat = "Z";
+        private string mockedResponse;
 
         public FimsWebClientTest()
         {
@@ -35,9 +38,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
             labelBytes = Encoding.UTF8.GetBytes(label);
             base64Label = Convert.ToBase64String(labelBytes);
+            mockedResponse = GetResponse();
 
             var responseReader = mock.MockRepository.Create<IHttpResponseReader>();
-            responseReader.Setup(r => r.ReadResult()).Returns(GetResponse);
+            responseReader.Setup(r => r.ReadResult()).Returns(() => mockedResponse);
 
             var requestSubmitter = mock.MockRepository.Create<HttpRequestSubmitter>();
             requestSubmitter.Setup(s => s.GetResponse()).Returns(responseReader.Object);
@@ -905,6 +909,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             Assert.Equal(labelBytes, response.LabelData);
         }
 
+        [Fact]
+        public void Ship_ExeptionThrown_WhenResponseContainsErrorMessage()
+        {
+            mockedResponse = GetErrorResponse(new List<string> { "error" });
+
+            Assert.Throws<FedExException>(() => Ship());
+        }
+
+        [Fact]
+        public void Ship_ExeptionThrownWithSingleErrorMessage_WhenResponseContainsErrorMessage()
+        {
+            var expectedErrorMessage = "My Random Error Message";
+            mockedResponse = GetErrorResponse(new List<string> { expectedErrorMessage });
+
+            var ex = Assert.Throws<FedExException>(() => Ship());
+            Assert.Equal(expectedErrorMessage, ex.Message);
+        }
+
+        [Fact]
+        public void Ship_ExeptionThrownWithMultipleErrorMessage_WhenResponseContainsMultipleErrorMessages()
+        {
+            var message1 = "My Random Error Message";
+            var message2 = "Second Error Message";
+            mockedResponse = GetErrorResponse(new List<string> { message1, message2 });
+
+            var ex = Assert.Throws<FedExException>(() => Ship());
+            Assert.Equal($"{message1}{System.Environment.NewLine}{message2}", ex.Message);
+        }
+
         private IFimsShipResponse Ship()
         {
             var shipment = Create.Shipment()
@@ -940,7 +973,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
                 "</SOAP-ENV:Envelope>";
         }
 
+        public string GetErrorResponse(List<string> errorMessages)
+        {
+            string xmlErrorMessages = new XElement("errors", errorMessages.Select(e => new XElement("error", e))).ToString();
 
+            return
+            "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+            "  <SOAP-ENV:Header />" +
+            "  <SOAP-ENV:Body>" +
+            "    <labelResponse xmlns=\"http://www.fimsform.com\">" +
+            "      <responseFormat>I</responseFormat>" +
+            "      <labelSize>6</labelSize>" +
+            "      <parcelId />" +
+            "      <trackingNo />" +
+            "      <responseCode>0</responseCode>" +
+           $"      {xmlErrorMessages}"+
+            "    </labelResponse>" +
+            "  </SOAP-ENV:Body>" +
+            "</SOAP-ENV:Envelope>";
+        }
         private void ValidateRequest(string xpath, int expectedValue) => ValidateRequest(xpath, expectedValue.ToString());
 
         private void ValidateRequest(string xpath, decimal expectedValue) => ValidateRequest(xpath, expectedValue.ToString());
