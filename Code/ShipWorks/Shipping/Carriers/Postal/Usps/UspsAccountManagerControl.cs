@@ -108,6 +108,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
                         PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient);
                         result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
+
+                        lifetimeScope.Resolve<GlobalPostAvailabilityService>().Refresh(account);
                     }
                 }
                 catch (UspsException ex)

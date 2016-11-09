@@ -41,7 +41,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Initialize services for the current session
         /// </summary>
-        public void InitializeForCurrentSession()
+        public void InitializeForCurrentSession() => Refresh();
+
+        /// <summary>
+        /// Refresh the GlobalPostAvailability for all accounts
+        /// </summary>
+        public void Refresh()
         {
             services.Clear();
             IEnumerable<UspsAccountEntity> accounts = accountRepo.Accounts.ToArray();
@@ -68,27 +73,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account"></param>
         private void RefreshServicesFromAccount(UspsAccountEntity account)
         {
-            if (account.GlobalPostAvailability == (int) GlobalPostServiceAvailability.None)
+            GlobalPostServiceAvailability globalPostAvailabilityService =
+                (GlobalPostServiceAvailability) account.GlobalPostAvailability;
+
+            if (globalPostAvailabilityService == GlobalPostServiceAvailability.None)
             {
                 return;
             }
 
-            if (account.GlobalPostAvailability == (int) GlobalPostServiceAvailability.GlobalPost)
+            if (globalPostAvailabilityService.HasFlag(GlobalPostServiceAvailability.GlobalPost))
             {
                 AddToServices(PostalServiceType.GlobalPostEconomy);
                 AddToServices(PostalServiceType.GlobalPostPriority);
             }
 
-            if (account.GlobalPostAvailability == (int) GlobalPostServiceAvailability.SmartSaver)
+            if (globalPostAvailabilityService.HasFlag(GlobalPostServiceAvailability.SmartSaver))
             {
-                AddToServices(PostalServiceType.GlobalPostSmartSaverEconomy);
-                AddToServices(PostalServiceType.GlobalPostSmartSaverPriority);
-            }
-
-            if (account.GlobalPostAvailability == (int) (GlobalPostServiceAvailability.SmartSaver | GlobalPostServiceAvailability.GlobalPost))
-            {
-                AddToServices(PostalServiceType.GlobalPostEconomy);
-                AddToServices(PostalServiceType.GlobalPostPriority);
                 AddToServices(PostalServiceType.GlobalPostSmartSaverEconomy);
                 AddToServices(PostalServiceType.GlobalPostSmartSaverPriority);
             }

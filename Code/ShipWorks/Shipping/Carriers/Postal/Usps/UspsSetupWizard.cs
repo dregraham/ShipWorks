@@ -504,8 +504,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
                 license?.AssociateUspsAccount(UspsAccount);
-
-                lifetimeScope.Resolve<GlobalPostAvailabilityService>().Refresh(UspsAccount);
             }
         }
 
