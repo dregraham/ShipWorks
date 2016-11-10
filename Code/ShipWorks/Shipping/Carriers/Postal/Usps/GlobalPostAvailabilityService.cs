@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Service for returning GlobalPost services based on UspsAccounts in the database
     /// </summary>
-    public class GlobalPostAvailabilityService : IInitializeForCurrentSession
+    public class GlobalPostAvailabilityService : IInitializeForCurrentSession, IGlobalPostAvailabilityService
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepo;
         private readonly Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory;

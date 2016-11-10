@@ -1133,6 +1133,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\GlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\GlobalPostServiceAvailability.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostLabelNotification.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />

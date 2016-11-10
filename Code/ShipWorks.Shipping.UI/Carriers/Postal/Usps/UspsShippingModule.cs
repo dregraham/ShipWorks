@@ -82,8 +82,6 @@ namespace ShipWorks.Shipping.Carriers.Usps
 
             builder.RegisterType<GlobalPostLabelNotification>()
                 .As<IGlobalPostLabelNotification>();
-
-            builder.RegisterType<GlobalPostAvailabilityService>();
         }
     }
 }

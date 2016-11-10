@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
@@ -64,6 +65,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             sandGrid.Rows.Clear();
 
+            AsyncRefreshGlobalPostStatus();
+
             foreach (UspsAccountEntity account in UspsAccountManager.GetAccounts(UspsResellerType))
             {
                 string contractType = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
@@ -76,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     row.Selected = true;
                 }
 
-                ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncRefreshAccountInfo), row);
+                ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(AsyncGetAccountBalance), row);
             }
 
             if (sandGrid.SelectedElements.Count == 0 && sandGrid.Rows.Count > 0)
@@ -86,9 +89,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Get the account balance and refresh the accounts GlobalPostAvailability
+        /// Refresh GlobalPost settings for all UspsAccounts
         /// </summary>
-        private void AsyncRefreshAccountInfo(object state)
+        private async void AsyncRefreshGlobalPostStatus()
+        {
+            await TaskEx.Run(() =>
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    lifetimeScope.Resolve<IGlobalPostAvailabilityService>().Refresh();
+                }
+            });
+        }
+
+        /// <summary>
+        /// Get the account balance
+        /// </summary>
+        private void AsyncGetAccountBalance(object state)
         {
             string result = "";
 
@@ -108,8 +125,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
                         PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient);
                         result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
-
-                        lifetimeScope.Resolve<GlobalPostAvailabilityService>().Refresh(account);
                     }
                 }
                 catch (UspsException ex)
