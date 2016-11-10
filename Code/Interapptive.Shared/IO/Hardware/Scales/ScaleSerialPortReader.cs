@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO.Ports;
-using log4net;
-using System.Text.RegularExpressions;
 using System.IO;
+using System.IO.Ports;
+using System.Text.RegularExpressions;
+using log4net;
 
 namespace Interapptive.Shared.IO.Hardware.Scales
 {
@@ -28,6 +26,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             EndiciaSalter,
             Fairbanks,
             Toledo,
+            SalterBrecknell,
         }
 
         // The order in which to try scales
@@ -41,6 +40,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             scaleOrder.Add(ScaleBrand.EndiciaSalter);
             scaleOrder.Add(ScaleBrand.Fairbanks);
             scaleOrder.Add(ScaleBrand.Toledo);
+            scaleOrder.Add(ScaleBrand.SalterBrecknell);
         }
 
         /// <summary>
@@ -106,6 +106,11 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 case ScaleBrand.Toledo:
                     {
                         return ReadToledo(portName);
+                    }
+
+                case ScaleBrand.SalterBrecknell:
+                    {
+                        return ReadSalterBrecknell(portName);
                     }
             }
 
@@ -253,8 +258,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private ScaleReadResult ReadToledo(string portName)
         {
-            List<Parity> parityTries = new List<Parity> {Parity.Even, Parity.None};
-            List<int> buadTries = new List<int> {9600, 4800, 2400, 1200};
+            List<Parity> parityTries = new List<Parity> { Parity.Even, Parity.None };
+            List<int> buadTries = new List<int> { 9600, 4800, 2400, 1200 };
 
             if (lockedPort.Length != 0)
             {
@@ -316,6 +321,54 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             }
 
             return ScaleReadResult.NotFound("Could not locate a MT serial port scale.");
+        }
+
+        /// <summary>
+        /// Read the weight from the scale
+        /// </summary>
+        /// <remarks>This was added because its a scale that we own and can test</remarks>
+        private ScaleReadResult ReadSalterBrecknell(string portName)
+        {
+            try
+            {
+                using (SerialPort port = OpenPort(portName, 2400, Parity.None, 8, StopBits.One))
+                {
+                    if (port == null)
+                    {
+                        return ScaleReadResult.NotFound("Could not open port to read scale.");
+                    }
+
+                    string result = port.ReadTo("\r");
+
+                    if (result.Length < 5)
+                    {
+                        return ScaleReadResult.NotFound("Data invalid for Salter Brecknell scale.");
+                    }
+
+                    // Get the last 6 digits
+                    var newResult = (result.Length > 6 ? result.Substring(result.Length - 6, 6) : result).Replace("lb", "");
+                    double value = 0;
+                    double.TryParse(newResult, out value);
+
+                    return ScaleReadResult.Success(value);
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                return ScaleReadResult.ReadError(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return ScaleReadResult.ReadError(ex.Message);
+            }
+            catch (TimeoutException ex)
+            {
+                return ScaleReadResult.NotFound(ex.Message);
+            }
+            catch (IOException ex)
+            {
+                return ScaleReadResult.NotFound(ex.Message);
+            }
         }
 
         /// <summary>
