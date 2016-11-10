@@ -50,8 +50,9 @@ namespace ShipWorks.AddressValidation
         private bool AddressValidationFolderExists(FilterNodeEntity orderNode)
         {
             return orderNode.ChildNodes
-                .FirstOrDefault(filter => filter.Filter.Name == ExamplesFolderName)?
-                .ChildNodes.Any(filter => filter.Filter.Name == AddressValidationFolderName) ?? false;
+                .Where(node => node.Filter?.Name == ExamplesFolderName)
+                .SelectMany(node => node.ChildNodes)
+                .Any(node => node.Filter?.Name == AddressValidationFolderName);
         }
     }
 }

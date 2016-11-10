@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 
-namespace ShipWorks.Data.Administration.VersionSpecifcUpdates
+namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 {
     /// <summary>
     /// ShipWorks update that should be applied for a specific version

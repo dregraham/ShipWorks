@@ -13,7 +13,7 @@ using NDesk.Options;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.VersionSpecifcUpdates;
+using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;

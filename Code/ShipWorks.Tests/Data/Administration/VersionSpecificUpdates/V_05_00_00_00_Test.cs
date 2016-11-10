@@ -2,7 +2,7 @@
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.VersionSpecifcUpdates;
+using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Tests.Shared;
 using System;
@@ -14,66 +14,49 @@ using Xunit;
 
 namespace ShipWorks.Core.Tests.Integration.Data.Administration.VersionSpecificUpdates
 {
-    public class V_05_00_00_00_Test
+    public class V_05_00_00_00_Test : IDisposable
     {
+        AutoMock mock;
+        V_05_00_00_00 testObject;
+
+        public V_05_00_00_00_Test()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testObject = mock.Create<V_05_00_00_00>();
+        }
+
         [Fact]
         public void Update_CustomerLicenseNotChangedIfCustomerKeyHasValue()
         {
-            using(var mock = AutoMock.GetLoose())
-            {
-                var customerLicense = mock.MockRepository.Create<ICustomerLicense>();
-                mock.MockFunc<string, ICustomerLicense>(customerLicense);
+            var config = mock.Mock<IConfigurationEntity>();
+            config.SetupGet(c => c.CustomerKey).Returns("key");
 
-                var configEntity = mock.MockRepository.Create<IConfigurationEntity>();
-                configEntity.SetupGet(c => c.CustomerKey).Returns("key");
+            mock.Mock<IConfigurationData>().Setup(d => d.FetchReadOnly()).Returns(config.Object);
 
-                var configData = mock.Mock<IConfigurationData>();
-                configData.Setup(c => c.FetchReadOnly()).Returns(configEntity.Object);
+            mock.Create<V_05_00_00_00>().Update();
 
-                mock.Create<V_05_00_00_00>().Update();
-
-                customerLicense.Verify(l => l.Save(), Times.Never);
-            }
+            mock.Mock<ICustomerLicense>().Verify(l => l.Save(), Times.Never);
         }
 
         [Fact]
         public void Update_CustomerLicenseSavedIfCustomerKeyIsNull()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var customerLicense = mock.MockRepository.Create<ICustomerLicense>();
-                mock.MockFunc<string, ICustomerLicense>(customerLicense);
+            mock.Create<V_05_00_00_00>().Update();
 
-                var configEntity = mock.MockRepository.Create<IConfigurationEntity>();
-                configEntity.SetupGet(c => c.CustomerKey).Returns((string) null);
-
-                var configData = mock.Mock<IConfigurationData>();
-                configData.Setup(c => c.FetchReadOnly()).Returns(configEntity.Object);
-
-                mock.Create<V_05_00_00_00>().Update();
-
-                customerLicense.Verify(l => l.Save(), Times.Once);
-            }
+            mock.Mock<ICustomerLicense>().Verify(l => l.Save(), Times.Once);
         }
 
         [Fact]
         public void Update_CheckForChangesNeedeCalled()
         {
-            using (var mock = AutoMock.GetLoose())
-            {
-                var customerLicense = mock.MockRepository.Create<ICustomerLicense>();
-                mock.MockFunc<string, ICustomerLicense>(customerLicense);
+            testObject.Update();
 
-                var configEntity = mock.MockRepository.Create<IConfigurationEntity>();
-                configEntity.SetupGet(c => c.CustomerKey).Returns((string) null);
+            mock.Mock<IConfigurationData>().Verify(l => l.CheckForChangesNeeded(), Times.Once);
+        }
 
-                var configData = mock.Mock<IConfigurationData>();
-                configData.Setup(c => c.FetchReadOnly()).Returns(configEntity.Object);
-
-                mock.Create<V_05_00_00_00>().Update();
-
-                configData.Verify(l => l.CheckForChangesNeeded(), Times.Once);
-            }
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }
