@@ -5,7 +5,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
+namespace ShipWorks.Data.Administration.VersionSpecifcUpdates
 {
     /// <summary>
     /// ShipWorks update that should be applied for a specific version

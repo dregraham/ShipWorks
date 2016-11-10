@@ -13,7 +13,7 @@ using NDesk.Options;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.VersionSpeicifcUpdates;
+using ShipWorks.Data.Administration.VersionSpecifcUpdates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
@@ -210,9 +210,10 @@ namespace ShipWorks.Data.Administration
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                // Commenting out filter until we know which version specific updates have successfully been run
                 IEnumerable<IVersionSpecificUpdate> applicableUpdates =
                     lifetimeScope.Resolve<IEnumerable<IVersionSpecificUpdate>>()
-                        .Where(x => installed < x.AppliesTo)
+                        //.Where(x => installed < x.AppliesTo)
                         .OrderBy(x => x.AppliesTo);
 
                 foreach (IVersionSpecificUpdate versionSpecificUpdate in applicableUpdates)

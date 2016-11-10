@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
+namespace ShipWorks.Data.Administration.VersionSpecifcUpdates
 {
     /// <summary>
     /// ShipWorks update that should be applied for a specific version
