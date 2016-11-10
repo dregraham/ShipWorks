@@ -100,9 +100,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
             // The shipment is an Endicia shipment, check to see if it's DHL
             if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType) shipmentEntity.Postal.Service))
             {
-                carrierCode = ShipmentTypeManager.IsDhlSmartMail((PostalServiceType) shipmentEntity.Postal.Service) ?
-                    "dhlsm" :
-                    "dhl";
+                if (shipmentEntity.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
+                    shipmentEntity.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia)
+                {
+                    carrierCode = "dhlgm";
+                }
+                else
+                {
+                    carrierCode = ShipmentTypeManager.IsDhlSmartMail((PostalServiceType)shipmentEntity.Postal.Service) ?
+                       "dhlsm" :
+                       "dhl";
+                }
             }
             else if (shipmentEntity.Postal != null &&
                      ShipmentTypeManager.IsConsolidator((PostalServiceType) shipmentEntity.Postal.Service))
