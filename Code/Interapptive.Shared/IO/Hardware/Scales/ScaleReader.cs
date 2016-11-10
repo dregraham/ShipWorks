@@ -55,6 +55,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             })
             .Delay(TimeSpan.FromMilliseconds(250))
             .Select(_ => ReadScale(true))
+            .Do(_ => scaleObserver?.OnNext(true))
             .Publish().RefCount();
         }
 
@@ -122,17 +123,12 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static ScaleReadResult ReadScale(bool isPolling)
         {
-            // If we can't take the lock don't worry about it - we'll just immediately return whatever the most recent result was.
-            // This prevents oodles of threads and UI from trying to read all at the same time,
-            // and also prevents blocking (which was happening, and causing hangs
+            // We can lock here because even if there were a deadlock, the UI won't hang since this is being called
+            // in a task. If it were to lock indefinitely, we couldn't use the scale anyway
             lock (threadLock)
             {
-                lastResult = InternalReadScale(isPolling);
+                return InternalReadScale(isPolling);
             }
-
-            scaleObserver?.OnNext(true);
-
-            return lastResult;
         }
 
         /// <summary>
