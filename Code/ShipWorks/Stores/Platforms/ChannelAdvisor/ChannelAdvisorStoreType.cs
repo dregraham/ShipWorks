@@ -174,17 +174,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
             definition.RootContainer.JoinType = ConditionGroupJoinType.And;
 
-            //      [Store] == this store
+            // [Store] == this store
             StoreCondition storeCondition = new StoreCondition();
             storeCondition.Operator = EqualityOperator.Equals;
             storeCondition.Value = Store.StoreID;
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // Order is Amazon Prime
-            ChannelAdvisorIsPrimeCondition fullfillmentCondition = new ChannelAdvisorIsPrimeCondition();
-            fullfillmentCondition.Operator = EqualityOperator.Equals;
-            fullfillmentCondition.Value = ChannelAdvisorIsAmazonPrime.Yes;
-            definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+            ChannelAdvisorIsPrimeCondition primeCondition = new ChannelAdvisorIsPrimeCondition();
+            primeCondition.Operator = EqualityOperator.Equals;
+            primeCondition.Value = ChannelAdvisorIsAmazonPrime.Yes;
+            definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
             return new FilterEntity
             {

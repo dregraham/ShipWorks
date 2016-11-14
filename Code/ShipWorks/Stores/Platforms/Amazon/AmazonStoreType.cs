@@ -175,17 +175,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
             definition.RootContainer.JoinType = ConditionGroupJoinType.And;
 
-            //      [Store] == this store
+            // [Store] == this store
             StoreCondition storeCondition = new StoreCondition();
             storeCondition.Operator = EqualityOperator.Equals;
             storeCondition.Value = Store.StoreID;
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // Order is Amazon Prime
-            AmazonIsPrimeCondition fullfillmentCondition = new AmazonIsPrimeCondition();
-            fullfillmentCondition.Operator = EqualityOperator.Equals;
-            fullfillmentCondition.Value = AmazonMwsIsPrime.Yes;
-            definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+            AmazonIsPrimeCondition primeCondition = new AmazonIsPrimeCondition();
+            primeCondition.Operator = EqualityOperator.Equals;
+            primeCondition.Value = AmazonMwsIsPrime.Yes;
+            definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
             return new FilterEntity
             {
