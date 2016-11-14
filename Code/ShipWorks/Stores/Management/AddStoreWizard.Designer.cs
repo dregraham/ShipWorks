@@ -657,7 +657,7 @@ namespace ShipWorks.Stores.Management
             // 
             // dateRangeRadioHider
             // 
-            this.dateRangeRadioHider.Location = new System.Drawing.Point(7, 4);
+            this.dateRangeRadioHider.Location = new System.Drawing.Point(7, 3);
             this.dateRangeRadioHider.Name = "dateRangeRadioHider";
             this.dateRangeRadioHider.Size = new System.Drawing.Size(30, 18);
             this.dateRangeRadioHider.TabIndex = 9;

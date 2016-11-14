@@ -503,7 +503,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
-
                 license?.AssociateUspsAccount(UspsAccount);
             }
         }
