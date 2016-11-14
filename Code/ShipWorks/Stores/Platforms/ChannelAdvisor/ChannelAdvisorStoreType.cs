@@ -30,15 +30,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// </summary>
     public class ChannelAdvisorStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
 
         /// <summary>
-        /// Store Type 
+        /// Store Type
         /// </summary>
-        public override StoreTypeCode TypeCode => 
+        public override StoreTypeCode TypeCode =>
             StoreTypeCode.ChannelAdvisor;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
-            get 
+            get
             {
                 ChannelAdvisorStoreEntity caStore = (ChannelAdvisorStoreEntity)Store;
 
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 ErrorReason = string.Empty
             });
 
-            return caStore; 
+            return caStore;
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             entity.FlagDescription = "";
             entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
             entity.MarketplaceNames = "";
-            
+
             return entity;
         }
 
@@ -127,11 +127,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Creates the order identifier 
+        /// Creates the order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) => 
+        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
-        
+
         /// <summary>
         /// Create the custom downloader
         /// </summary>
@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new OnlineUpdateShipmentUpdateActionControl(typeof(ChannelAdvisorShipmentUploadTask));
-        
+
         /// <summary>
         /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
         /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
@@ -162,9 +162,39 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             new List<FilterEntity>
             {
                 CreateFilterReadyToShip(),
-                CreateFilterShipped()
+                CreateFilterShipped(),
+                CreateFilterAmazonPrime()
             };
-        
+
+        /// <summary>
+        /// Creates the filter for Amazon Prime orders
+        /// </summary>
+        private FilterEntity CreateFilterAmazonPrime()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // Order is Amazon Prime
+            ChannelAdvisorIsPrimeCondition fullfillmentCondition = new ChannelAdvisorIsPrimeCondition();
+            fullfillmentCondition.Operator = EqualityOperator.Equals;
+            fullfillmentCondition.Value = ChannelAdvisorIsAmazonPrime.Yes;
+            definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+
+            return new FilterEntity
+            {
+                Name = "Amazon Prime",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
+        }
+
         /// <summary>
         /// Creates the filter shipped.
         /// </summary>
@@ -181,14 +211,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
             // [AND]
-            definition.RootContainer.JoinType = ConditionGroupJoinType.And;            
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
             ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
             definition.RootContainer.SecondGroup = shippedDefinition;
 
             //      [Any]
             shippedDefinition.FirstGroup = new ConditionGroup();
             shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
-            
+
             // ChannelAdvisor Shipping Status == Shipped
             ChannelAdvisorShippingStatusCondition shippingStatus = new ChannelAdvisorShippingStatusCondition();
             shippingStatus.Operator = EqualityOperator.Equals;
@@ -249,7 +279,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             notFba.Operator = EqualityOperator.Equals;
             notFba.Value = false;
             everyItem.Container.FirstGroup.Conditions.Add(notFba);
-  
+
 
             ChannelAdvisorPaymentStatusCondition channelAdvisorPaymentStatus = new ChannelAdvisorPaymentStatusCondition();
             channelAdvisorPaymentStatus.Operator = EqualityOperator.Equals;
@@ -278,7 +308,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl() =>
             new ChannelAdvisorSettingsControl();
-        
+
         /// <summary>
         /// Create the condition group for searching on Channel Advisor Order ID
         /// </summary>
@@ -312,7 +342,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            
+
         /// <summary>
         /// Generate CA specific template order elements
         /// </summary>
