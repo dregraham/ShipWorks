@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Transactions;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using log4net;
@@ -35,7 +36,7 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
-        /// Constrcutor. The reconnection will be attempted on the specified connection.
+        /// Constructor. The reconnection will be attempted on the specified connection.
         /// </summary>
         public ConnectionLostDlg(DbConnection connectionToOpen)
         {
@@ -132,9 +133,15 @@ namespace ShipWorks.Data.Connection
 
                 return true;
             }
+            catch (TransactionException ex)
+            {
+                log.Error("Reconnect failed", ex);
+                DialogResult = DialogResult.Abort;
+                return false;
+            }
             catch (SqlException ex)
             {
-                log.ErrorFormat("Reconnect failed", ex);
+                log.Error("Reconnect failed", ex);
 
                 if (showError)
                 {
@@ -168,7 +175,7 @@ namespace ShipWorks.Data.Connection
             {
                 // We have to show the UI on the UI thread.  Otherwise behavior is a little undefined.  The only problem would be
                 // if the UI thread is currently blocking waiting on a background operation that is waiting for the connection to come back.
-                // But as far as I know we don't do this anyhwere
+                // But as far as I know we don't do this anywhere
                 Program.MainForm.Invoke(new MethodInvoker(() =>
                     {
                         using (ConnectionLostDlg dlg = new ConnectionLostDlg((SqlConnection) connection))
