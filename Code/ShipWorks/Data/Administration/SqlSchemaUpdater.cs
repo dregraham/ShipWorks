@@ -216,7 +216,7 @@ namespace ShipWorks.Data.Administration
                 // Commenting out filter until we know which version specific updates have successfully been run
                 IEnumerable<IVersionSpecificUpdate> applicableUpdates =
                     lifetimeScope.Resolve<IEnumerable<IVersionSpecificUpdate>>()
-                        //.Where(x => installed < x.AppliesTo)
+                        .Where(x => installed < x.AppliesTo || x.AlwaysRun)
                         .OrderBy(x => x.AppliesTo);
 
                 foreach (IVersionSpecificUpdate versionSpecificUpdate in applicableUpdates)

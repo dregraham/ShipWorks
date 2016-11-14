@@ -16,6 +16,11 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         private readonly IConfigurationData configurationData;
 
         /// <summary>
+        /// Always run just in case it has never been run before.
+        /// </summary>
+        public bool AlwaysRun => true;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="customerLicense"></param>

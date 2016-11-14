@@ -13,6 +13,12 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     public class V_03_12_00_00 : IVersionSpecificUpdate
     {
         /// <summary>
+        /// This isn't critical. We don't want AV filters showing up after every upgrade
+        /// if the user doesn't want them...
+        /// </summary>
+        public bool AlwaysRun => false;
+
+        /// <summary>
         /// To which version does this update apply
         /// </summary>
         public Version AppliesTo => new Version(3, 12, 0, 0);

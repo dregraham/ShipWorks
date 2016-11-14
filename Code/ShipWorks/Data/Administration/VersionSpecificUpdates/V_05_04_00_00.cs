@@ -17,6 +17,11 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     public class V_05_04_00_00 : IVersionSpecificUpdate
     {
         /// <summary>
+        /// Always run just in case it has never been run before.
+        /// </summary>
+        public bool AlwaysRun => true;
+
+        /// <summary>
         /// To which version does this update apply
         /// </summary>
         public Version AppliesTo => new Version(5, 4, 0, 0);
