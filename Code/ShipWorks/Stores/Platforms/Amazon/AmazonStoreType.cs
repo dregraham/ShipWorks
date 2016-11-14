@@ -162,8 +162,38 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     CreateFilterReadyToShip(),
                     CreateFilterShipped(),
-                    CreateFilterFba()
+                    CreateFilterFba(),
+                    CreateFilterAmazonPrime()
                 };
+        }
+
+        /// <summary>
+        /// Creates the filter for Amazon Prime orders
+        /// </summary>
+        private FilterEntity CreateFilterAmazonPrime()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // Order is Amazon Prime
+            AmazonIsPrimeCondition fullfillmentCondition = new AmazonIsPrimeCondition();
+            fullfillmentCondition.Operator = EqualityOperator.Equals;
+            fullfillmentCondition.Value = AmazonMwsIsPrime.Yes;
+            definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+
+            return new FilterEntity
+            {
+                Name = "Amazon Prime",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
         }
 
         /// <summary>
