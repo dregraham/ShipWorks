@@ -13,8 +13,11 @@ using NDesk.Options;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 
@@ -153,6 +156,11 @@ namespace ShipWorks.Data.Administration
             progressFunctionality.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFunctionality);
 
+            // Create the functionality item
+            ProgressItem progressFilterCounts = new ProgressItem("Calculate Initial Filter Counts");
+            progressFilterCounts.CanCancel = false;
+            progressProvider.ProgressItems.Add(progressFilterCounts);
+
             // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
             // because reconnection to a very large database seems to take some time after running a big upgrade
             using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))
@@ -174,12 +182,7 @@ namespace ShipWorks.Data.Administration
                             UpdateAssemblies(progressFunctionality);
 
                             // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                            UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-
-                            // Functionality is done
-                            progressFunctionality.PercentComplete = 100;
-                            progressFunctionality.Detail = "Done";
-                            progressFunctionality.Completed();
+                            UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
 
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it every time, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
@@ -405,9 +408,9 @@ namespace ShipWorks.Data.Administration
         /// Since our filters use column masks that are exactly dependent on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
-        private static void UpdateFilters(ProgressItem progress, DbConnection connection, DbTransaction transaction)
+        private static void UpdateFilters(ProgressItem progressFunctionality, ProgressItem progressFilterCounts, DbConnection connection, DbTransaction transaction)
         {
-            progress.Detail = "Updating filters...";
+            progressFunctionality.Detail = "Updating filters...";
 
             try
             {
@@ -421,10 +424,70 @@ namespace ShipWorks.Data.Administration
                 // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
                 SqlUtility.TruncateTable("FilterNodeContentDirty", connection, transaction);
                 SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", connection, transaction);
+
+                // Functionality is done
+                progressFunctionality.PercentComplete = 100;
+                progressFunctionality.Detail = "Done";
+                progressFunctionality.Completed();
+
+                CalculateInitialFilterCounts(connection, progressFilterCounts);
             }
             finally
             {
                 FilterLayoutContext.PopScope();
+            }
+        }
+
+        /// <summary>
+        /// Calculate initial filter counts while doing a database upgrade.
+        /// </summary>
+        private static void CalculateInitialFilterCounts(DbConnection connection, ProgressItem progressFilterCounts)
+        {
+            progressFilterCounts.Starting();
+            progressFilterCounts.Detail = "Calculating initial filter counts...";
+
+            // Create a new adapter
+            using (SqlAdapter adapter = new SqlAdapter(connection))
+            {
+                FilterCollection filters = new FilterCollection();
+                adapter.FetchEntityCollection(filters, null);
+                int totalFilters = filters.Count;
+
+                // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
+                // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
+                // give this plenty of time.
+                adapter.CommandTimeOut = 0;
+
+                log.DebugFormat("Begin initial filter counts during database upgrade.");
+
+                SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
+                    new SqlAdapterRetry<SqlException>(5, -5, "ActionProcedures.CalculateInitialFilterCounts");
+
+                int nodesUpdated = 1;
+                int iterationNodesUpdated = 1;
+                sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
+                {
+                    // Keep calculating until no nodes were updated
+                    while (iterationNodesUpdated > 0)
+                    {
+                        ActionProcedures.CalculateInitialFilterCounts(ref iterationNodesUpdated, adapter);
+                        nodesUpdated += iterationNodesUpdated;
+
+                        if (iterationNodesUpdated == 0)
+                        {
+                            progressFilterCounts.PercentComplete = 100;
+                        }
+                        else
+                        {
+                            progressFilterCounts.PercentComplete = (int) (((decimal) nodesUpdated / totalFilters) * 100);
+                        }
+                    }
+                });
+
+                progressFilterCounts.Detail = "Done";
+                progressFilterCounts.Completed();
+
+                log.DebugFormat("Complete initial filter counts during database upgrade.");
             }
         }
 

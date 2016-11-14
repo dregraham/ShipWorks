@@ -257,14 +257,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                     services.AddRange(accesibleConsolidatorTypes);
 
+                    IGlobalPostAvailabilityService globalPostAvailabilityService = lifetimeScope.Resolve<IGlobalPostAvailabilityService>();
                     // Add global post services
-                    services.InsertRange(0, new[]
-                    {
-                        PostalServiceType.GlobalPostEconomy,
-                        PostalServiceType.GlobalPostPriority,
-                        PostalServiceType.GlobalPostSmartSaverEconomy, 
-                        PostalServiceType.GlobalPostSmartSaverPriority
-                    });
+                    services.InsertRange(0, globalPostAvailabilityService.Services);
                 }
 
                 return services;
