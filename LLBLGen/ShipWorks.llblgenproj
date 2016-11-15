@@ -2630,6 +2630,7 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="17" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="GlobalPostAvailability" Type="int" Precision="10" FieldIndex="24" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
@@ -3551,7 +3552,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-02T13:20:30.2848416Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-07T22:10:38.80821Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7537,6 +7538,7 @@
                     <Field Name="ContractType" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
+                    <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -11258,6 +11260,7 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="GlobalPostAvailability" TargetFieldName="GlobalPostAvailability" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />

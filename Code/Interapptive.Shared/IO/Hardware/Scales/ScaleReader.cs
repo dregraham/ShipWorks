@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
         static object threadLock = new object();
         static readonly DeviceListener DeviceListener = new DeviceListener();
+        private static IObserver<bool> scaleObserver;
 
         public static IObservable<ScaleReadResult> ReadEvents { get; }
 
@@ -45,9 +47,16 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 DeviceListener.Start();
             });
 
-            ReadEvents = Observable.Interval(TimeSpan.FromMilliseconds(250))
-                .Select(_ => ReadScale(true))
-                .Publish().RefCount();
+            ReadEvents = Observable.Create<bool>(x =>
+            {
+                scaleObserver = x;
+                x.OnNext(true);
+                return Disposable.Create(() => scaleObserver = null);
+            })
+            .Delay(TimeSpan.FromMilliseconds(250))
+            .Select(_ => ReadScale(true))
+            .Do(_ => scaleObserver?.OnNext(true))
+            .Publish().RefCount();
         }
 
         /// <summary>
@@ -114,22 +123,12 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static ScaleReadResult ReadScale(bool isPolling)
         {
-            // If we can't take the lock don't worry about it - we'll just immediately return whatever the most recent result was.
-            // This prevents oodles of threads and UI from trying to read all at the same time,
-            // and also prevents blocking (which was happening, and causing hangs
-            if (Monitor.TryEnter(threadLock))
+            // We can lock here because even if there were a deadlock, the UI won't hang since this is being called
+            // in a task. If it were to lock indefinitely, we couldn't use the scale anyway
+            lock (threadLock)
             {
-                try
-                {
-                    lastResult = InternalReadScale(isPolling);
-                }
-                finally
-                {
-                    Monitor.Exit(threadLock);
-                }
+                return InternalReadScale(isPolling);
             }
-
-            return lastResult;
         }
 
         /// <summary>
@@ -137,7 +136,8 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static ScaleReadResult InternalReadScale(bool isPolling)
         {
-            if (isPolling && serialReader != null)
+            // We may be in a situation where both scales are plugged in, so we should still poll the USB scale
+            if (isPolling && serialReader != null && usbReader == null)
             {
                 return serialScalesNotPolledResult;
             }

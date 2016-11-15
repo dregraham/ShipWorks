@@ -9554,6 +9554,8 @@ namespace ShipWorks.Data.Model
 		CreatedDate,
 		///<summary>PendingInitialAccount. </summary>
 		PendingInitialAccount,
+		///<summary>GlobalPostAvailability. </summary>
+		GlobalPostAvailability,
 		/// <summary></summary>
 		AmountOfFields
 	}
