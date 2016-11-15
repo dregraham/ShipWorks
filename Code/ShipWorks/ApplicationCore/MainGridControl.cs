@@ -344,7 +344,7 @@ namespace ShipWorks.ApplicationCore
             ActiveGrid.UpdateGridRows();
 
             // Auto select the row when doing a filter searach and there is only 1 result
-            if (ActiveFilterNode.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
+            if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
             {
                 ActiveGrid.Rows[0].Selected = true;
             }
