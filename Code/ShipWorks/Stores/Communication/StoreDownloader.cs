@@ -67,12 +67,12 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Gets the address of order from InstantiateOrder
         /// </summary>
-        protected AddressAdapter OriginalShippingAddress { get; private set; }
+        protected AddressAdapter ShippingAddressBeforeDownload { get; private set; }
 
         /// <summary>
         /// Gets the address of order from InstantiateOrder
         /// </summary>
-        protected AddressAdapter OriginalBillingAddress { get; private set; }
+        protected AddressAdapter BillingAddressBeforeDownload { get; private set; }
 
         /// <summary>
         /// The store the downloader downloads from
@@ -303,11 +303,11 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                OriginalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Ship", OriginalShippingAddress);
+                ShippingAddressBeforeDownload = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
 
-                OriginalBillingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Bill", OriginalBillingAddress);
+                BillingAddressBeforeDownload = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", BillingAddressBeforeDownload);
 
                 return order;
             }
@@ -518,6 +518,9 @@ namespace ShipWorks.Stores.Communication
                 throw new ArgumentNullException("order");
             }
 
+            // Setting this as a local variable because a SaveAndRefetch changes IsNew to false.
+            bool isOrderNew = order.IsNew;
+
             ConfigurationEntity config = ConfigurationData.Fetch();
 
             string orderStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.Order).StatusText;
@@ -554,13 +557,15 @@ namespace ShipWorks.Stores.Communication
             // Now we have to see if it was new
             bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
 
+            ResetAddressIfRequired(order, transaction);
+
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
                 using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                 {
                     // Get the customer
-                    if (order.IsNew)
+                    if (isOrderNew)
                     {
                         try
                         {
@@ -584,7 +589,7 @@ namespace ShipWorks.Stores.Communication
 
                     // Apply default status to order.  If tokenized, it has to be done after the save.
                     // Don't overwrite it if its already set.
-                    if (order.IsNew && string.IsNullOrEmpty(order.LocalStatus) && !orderStatusHasTokens)
+                    if (isOrderNew && string.IsNullOrEmpty(order.LocalStatus) && !orderStatusHasTokens)
                     {
                         order.LocalStatus = orderStatusText;
                     }
@@ -603,7 +608,7 @@ namespace ShipWorks.Stores.Communication
                     }
 
                     // If it's new and LastModified isn't set, use the date
-                    if (order.IsNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
+                    if (isOrderNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
                     {
                         order.OnlineLastModified = order.OrderDate;
                     }
@@ -628,7 +633,7 @@ namespace ShipWorks.Stores.Communication
                     NoteManager.AdjustNoteCount(adapter, order.OrderID, order.Notes.Select(n => n.IsNew).Count());
 
                     // Apply default order status, if it contained tokens it has to be after the save.  Don't overwrite what the downloader set.
-                    if (order.IsNew && string.IsNullOrEmpty(order.LocalStatus) && orderStatusHasTokens)
+                    if (isOrderNew && string.IsNullOrEmpty(order.LocalStatus) && orderStatusHasTokens)
                     {
                         order.LocalStatus = TemplateTokenProcessor.ProcessTokens(orderStatusText, order.OrderID);
                         adapter.SaveAndRefetch(order);
@@ -654,21 +659,21 @@ namespace ShipWorks.Stores.Communication
                     adapter.SaveAndRefetch(order);
 
                     // Update unprocessed shipment addresses if the order address has changed
-                    if (!order.IsNew)
+                    if (!isOrderNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        bool shippingAddressChanged = OriginalShippingAddress != newShippingAddress;
+                        bool shippingAddressChanged = ShippingAddressBeforeDownload != newShippingAddress;
                         if (shippingAddressChanged)
                         {
                             SetAddressValidationStatus(order, "Ship", adapter);
                             adapter.SaveAndRefetch(order);
 
-                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, OriginalShippingAddress, newShippingAddress);
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, ShippingAddressBeforeDownload, newShippingAddress);
                         }
 
                         // Update the customer's addresses if necessary
                         AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
-                        bool billingAddressChanged = OriginalBillingAddress != newBillingAddress;
+                        bool billingAddressChanged = BillingAddressBeforeDownload != newBillingAddress;
 
                         if (billingAddressChanged)
                         {
@@ -683,8 +688,8 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, BillingAddressBeforeDownload, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, ShippingAddressBeforeDownload, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }
@@ -717,6 +722,58 @@ namespace ShipWorks.Stores.Communication
             }
 
             log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
+        }
+
+        /// <summary>
+        /// If an order's addresses change to the originally validated address, change it back.
+        /// </summary>
+        private void ResetAddressIfRequired(OrderEntity order, DbTransaction transaction)
+        {
+            if (!order.IsNew)
+            {
+                using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
+                {
+                    bool shipAddressReset = ResetAddressIfRequired(order, "Ship", ShippingAddressBeforeDownload);
+                    bool billAddressReset = ResetAddressIfRequired(order, "Bill", BillingAddressBeforeDownload);
+                    if (shipAddressReset || billAddressReset)
+                    {
+                        adapter.SaveAndRefetch(order);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resets the address if required.
+        /// </summary>
+        /// <param name="order">The order that now has the downloaded address.</param>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="addressBeforeDownload">The address before download.</param>
+        /// <remarks>
+        /// If address changed and the new address matches the address pre-address validation (the AV original address)
+        /// from address validation, reset the address back to the original address.
+        /// </remarks>
+        private static bool ResetAddressIfRequired(OrderEntity order, string prefix, AddressAdapter addressBeforeDownload)
+        {
+            bool addressReset = false;
+            AddressAdapter orderAddress = new AddressAdapter(order, prefix);
+            if (addressBeforeDownload != orderAddress)
+            {
+                ValidatedAddressEntity addressBeforeValidation =
+                    ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, prefix);
+
+                if (addressBeforeValidation != null)
+                {
+                    AddressAdapter originalAddressAdapter = new AddressAdapter(addressBeforeValidation, string.Empty);
+
+                    if (originalAddressAdapter == orderAddress)
+                    {
+                        AddressAdapter.Copy(addressBeforeDownload, orderAddress);
+                        addressReset = true;
+                    }
+                }
+            }
+            return addressReset;
         }
 
         /// <summary>

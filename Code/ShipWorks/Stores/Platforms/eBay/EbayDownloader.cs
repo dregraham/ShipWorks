@@ -508,13 +508,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 CountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : ""
             };
 
-            if (!DoesDownloadedAddressMatchOriginal(order, downloadedShipAddress))
-            {
-                // overwrite address with downloaded address
-                AddressAdapter orderAddressAdapter = new AddressAdapter(order, "Ship");
-                AddressAdapter.Copy(downloadedShipAddress, orderAddressAdapter);
-            }
-
+            // overwrite address with downloaded address
+            AddressAdapter orderAddressAdapter = new AddressAdapter(order, "Ship");
+            AddressAdapter.Copy(downloadedShipAddress, orderAddressAdapter);
+            
             // Split the name
             PersonName personName = PersonName.Parse(address.Name);
 
@@ -528,25 +525,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Fill in billing address from the shipping
             PersonAdapter.Copy(order, "Ship", order, "Bill");
-        }
-
-        /// <summary>
-        /// Does the downloaded address match original.
-        /// </summary>
-        private static bool DoesDownloadedAddressMatchOriginal(EbayOrderEntity order, AddressAdapter downloadedShipAddress)
-        {
-            bool downloadAddressMatchesOriginal = false;
-
-            // See if there is an original address and if it matches the downloaded address.
-            ValidatedAddressEntity originalAddress =
-                ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, "Ship");
-
-            if (originalAddress != null)
-            {
-                AddressAdapter originalAddressAdapter = new AddressAdapter(originalAddress, "");
-                downloadAddressMatchesOriginal = (originalAddressAdapter == downloadedShipAddress);
-            }
-            return downloadAddressMatchesOriginal;
         }
 
         /// <summary>
