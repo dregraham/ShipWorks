@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Class for communivating with MagentoConnect module
     /// </summary>
-    public class MagentoConnectWebClient : MagentoWebClient
+    public class MagentoConnectWebClient : MagentoWebClient , IMagentoProbe
     {
         // SOAP proxy
         MagentoService service = null;
@@ -26,6 +26,22 @@ namespace ShipWorks.Stores.Platforms.Magento
         public MagentoConnectWebClient(MagentoStoreEntity store) : base(store)
         {
 
+        }
+
+        /// <summary>
+        /// Probe the given Magento store to see if it is compatible
+        /// </summary>
+        public bool IsCompatible(MagentoStoreEntity store)
+        {
+            try
+            {
+                GenericModuleResponse response = GetModule();
+                return true;
+            }
+            catch (GenericStoreException)
+            {
+                return false;
+            }
         }
 
         /// <summary>

@@ -30,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
+
             base.Download(trackedDurationEvent);
         }
 
