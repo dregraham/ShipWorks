@@ -757,6 +757,7 @@ namespace ShipWorks.Stores.Communication
         {
             bool addressReset = false;
             AddressAdapter orderAddress = new AddressAdapter(order, prefix);
+
             if (addressBeforeDownload != orderAddress)
             {
                 ValidatedAddressEntity addressBeforeValidation =
@@ -773,6 +774,7 @@ namespace ShipWorks.Stores.Communication
                     }
                 }
             }
+
             return addressReset;
         }
 
