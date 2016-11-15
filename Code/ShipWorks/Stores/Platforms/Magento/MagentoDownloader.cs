@@ -7,6 +7,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using System.Xml.XPath;
+using Interapptive.Shared.Metrics;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -22,6 +24,13 @@ namespace ShipWorks.Stores.Platforms.Magento
             : base(store)
         {
 
+        }
+
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        {
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+            trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
+            base.Download(trackedDurationEvent);
         }
 
         /// <summary>
