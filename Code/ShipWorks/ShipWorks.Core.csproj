@@ -1596,8 +1596,10 @@
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\OrdersResponse.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
+    <Compile Include="Stores\Platforms\Magento\MagentoTwoRestClient.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />

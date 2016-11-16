@@ -23,11 +23,25 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Initializer
         /// </summary>
-        public HttpVariable(string name, string value)
+        public HttpVariable(string name, string value, bool urlEncode)
         {
             this.name = name;
             this.value = value;
+            UrlEncode = urlEncode;
         }
+
+        /// <summary>
+        /// Initializer
+        /// </summary>
+        public HttpVariable(string name, string value) : this(name, value, false)
+        {
+
+        }
+
+        /// <summary>
+        /// Should this variable be UrlEncoded
+        /// </summary>
+        public bool UrlEncode { get; set; }
 
         /// <summary>
         /// The name of the variable to post
