@@ -164,6 +164,15 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoAccountSettingsControl.xaml.cs">
+      <DependentUpon>MagentoAccountSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.Designer.cs">
+      <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml.cs">
       <DependentUpon>OdbcImportMappingControl.xaml</DependentUpon>
     </Compile>
@@ -326,6 +335,9 @@
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.resx">
+      <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.resx">
       <DependentUpon>OdbcConnectionSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -425,6 +437,10 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Platforms\Magento\WizardPages\MagentoAccountSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

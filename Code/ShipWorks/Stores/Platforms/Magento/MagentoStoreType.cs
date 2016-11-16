@@ -23,9 +23,9 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     public class MagentoStoreType : GenericModuleStoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MagentoStoreType));
-						  
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -92,10 +92,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            return new List<WizardPage> 
-            {
-                new MagentoAccountPage()
-            };
+            return new List<WizardPage>
+                {
+                    scope.ResolveKeyed<WizardPage>(StoreTypeCode.Magento)
+                };
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new MagentoAccountSettingsControl(); 
+            return new MagentoAccountSettingsControl();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             MenuCommand command = new MenuCommand("Cancel", OnOrderCommand) {Tag = "cancel"};
             commands.Add(command);
 
-            // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and 
+            // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and
             // sets the order "state" online to complete
             command = new MenuCommand("Complete", OnOrderCommand) {Tag = "complete"};
             commands.Add(command);
@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     context.Complete(e.Issues, MenuCommandResult.Error);
                 };
 
-            executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys, 
+            executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys,
                 new Dictionary<string, string> { { "action", action }, { "comments", comments } });
         }
 
