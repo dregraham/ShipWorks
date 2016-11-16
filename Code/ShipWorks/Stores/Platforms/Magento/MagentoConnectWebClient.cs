@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Magento.WebServices;
 using ShipWorks.ApplicationCore.Logging;
 
@@ -31,16 +32,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Probe the given Magento store to see if it is compatible
         /// </summary>
-        public bool IsCompatible(MagentoStoreEntity store)
+        public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store)
         {
             try
             {
                 GenericModuleResponse response = GetModule();
-                return true;
+                return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
             }
             catch (GenericStoreException)
             {
-                return false;
+                return GenericResult.FromError("Exception occurred while attempting to connect to ShipWorks Module.", new Uri(store.ModuleUrl));
             }
         }
 
