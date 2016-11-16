@@ -1594,6 +1594,7 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
