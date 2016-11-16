@@ -1,4 +1,6 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -10,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Probe the given Magento store to see if it is compatible
         /// </summary>
-        bool IsCompatible(MagentoStoreEntity store);
+        GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store);
     }
 }

@@ -104,7 +104,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         protected HttpRequestSubmitter(HttpVerb verb)
         {
-            this.requestVerb = verb;            
+            this.requestVerb = verb;
         }
 
         /// <summary>
