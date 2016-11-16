@@ -164,8 +164,17 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Magento\WizardPages\MagentoAccountSettingsControl.xaml.cs">
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsControl.xaml.cs">
       <DependentUpon>MagentoAccountSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.Designer.cs">
+      <DependentUpon>MagentoAccountSettingsHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControl.xaml.cs">
+      <DependentUpon>MagentoWizardSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.cs">
       <SubType>UserControl</SubType>
@@ -335,6 +344,9 @@
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Magento\MagentoAccountSettingsHost.resx">
+      <DependentUpon>MagentoAccountSettingsHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.resx">
       <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -437,7 +449,11 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Platforms\Magento\WizardPages\MagentoAccountSettingsControl.xaml">
+    <Page Include="Platforms\Magento\MagentoAccountSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

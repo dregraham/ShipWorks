@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
@@ -118,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new MagentoAccountSettingsControl();
+            return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<AccountSettingsControlBase>(StoreTypeCode.Magento);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
+﻿namespace ShipWorks.Stores.UI.Platforms.Magento
 {
     /// <summary>
     /// Interaction logic for MagentoAccountSettingsControl.xaml
