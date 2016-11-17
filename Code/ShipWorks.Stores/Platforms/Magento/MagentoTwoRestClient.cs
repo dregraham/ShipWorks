@@ -1,12 +1,16 @@
 ﻿using System;
 using Interapptive.Shared.Net;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.DTO;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
-
-    public class MagentoTwoRestClient
+    /// <summary>
+    /// Magento Two REST Web Client
+    /// </summary>
+    [Component]
+    public class MagentoTwoRestClient : IMagentoTwoRestClient
     {
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
