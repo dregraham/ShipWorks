@@ -4,12 +4,15 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Magento.Enums;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 {
     /// <summary>
     /// Check to see if a specific store is compatible with Magento One Module
     /// </summary>
+    [KeyedComponent(typeof(IMagentoProbe), MagentoVersion.PhpFile)]
     public class MagentoOneModuleProbe : IMagentoProbe
     {
         /// <summary>

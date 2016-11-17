@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShipWorks.UI.Controls.Design;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -10,18 +11,26 @@ namespace ShipWorks.UI.ValueConverters
     /// Convert a boolean into another type
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public class BooleanConverter<T> : IValueConverter
+    public abstract class BooleanConverter<T> : IValueConverter
     {
+        readonly bool inDesignMode;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="trueValue"></param>
-        /// <param name="falseValue"></param>
-        public BooleanConverter(T trueValue, T falseValue)
+        public BooleanConverter(T trueValue, T falseValue) : this(trueValue, falseValue, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BooleanConverter(T trueValue, T falseValue, bool inDesignMode)
         {
             True = trueValue;
             False = falseValue;
             Invert = false;
+            this.inDesignMode = inDesignMode;
         }
 
         /// <summary>
@@ -44,7 +53,7 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (value is bool && ((bool) value)) ^ Invert ? True : False;
+            return ((value is bool && ((bool) value)) || inDesignMode) ^ Invert ? True : False;
         }
 
         /// <summary>

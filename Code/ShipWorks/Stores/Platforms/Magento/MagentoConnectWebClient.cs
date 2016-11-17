@@ -4,16 +4,17 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Magento.WebServices;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
     /// Class for communivating with MagentoConnect module
     /// </summary>
-    public class MagentoConnectWebClient : MagentoWebClient , IMagentoProbe
+    [Component]
+    public class MagentoConnectWebClient : MagentoWebClient, IMagentoConnectWebClient
     {
         // SOAP proxy
         MagentoService service = null;
@@ -27,22 +28,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         public MagentoConnectWebClient(MagentoStoreEntity store) : base(store)
         {
 
-        }
-
-        /// <summary>
-        /// Probe the given Magento store to see if it is compatible
-        /// </summary>
-        public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store)
-        {
-            try
-            {
-                GenericModuleResponse response = GetModule();
-                return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
-            }
-            catch (GenericStoreException)
-            {
-                return GenericResult.FromError("Exception occurred while attempting to connect to ShipWorks Module.", new Uri(store.ModuleUrl));
-            }
         }
 
         /// <summary>

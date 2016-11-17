@@ -218,6 +218,7 @@
     <Compile Include="Services\MessageHelperWrapper.cs" />
     <Compile Include="UiModule.cs" />
     <Compile Include="ValueConverters\BooleanToWaitCursorConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\InverseBooleanConverter.cs" />
     <Compile Include="ValueConverters\BooleanComparisonConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />

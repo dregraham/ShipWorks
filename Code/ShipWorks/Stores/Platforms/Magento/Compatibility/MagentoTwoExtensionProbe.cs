@@ -4,12 +4,15 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 {
     /// <summary>
     /// Check to see if a specific store is compatible with Magento Two Extension
     /// </summary>
+    [KeyedComponent(typeof(IMagentoProbe), MagentoVersion.MagentoTwo)]
     public class MagentoTwoExtensionProbe : IMagentoProbe
     {
         /// <summary>
