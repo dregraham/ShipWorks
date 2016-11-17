@@ -37,7 +37,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            EnumHelper.BindComboBox<CreditCardType>(cardType);
+            // Load the card types
+            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.Visa, "Visa"));
+            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.MasterCard, "MasterCard"));
+            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.AmericanExpress, "American Express"));
+            cardType.Items.Add(new CreditCardTypeDropDownItem(CreditCardType.Discover, "Discover"));
+            cardType.SelectedIndex = 0;
 
             // Set the minimum/maximum value of the credit card expiration month and year to adjust
             // for the current date
