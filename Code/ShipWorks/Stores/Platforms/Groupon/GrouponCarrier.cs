@@ -97,20 +97,13 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             string carrierCode;
 
-            // The shipment is an Endicia shipment, check to see if it's DHL
             if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType) shipmentEntity.Postal.Service))
             {
-                if (shipmentEntity.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
-                    shipmentEntity.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia)
-                {
-                    carrierCode = "dhlgm";
-                }
-                else
-                {
-                    carrierCode = ShipmentTypeManager.IsDhlSmartMail((PostalServiceType)shipmentEntity.Postal.Service) ?
-                       "dhlsm" :
-                       "dhl";
-                }
+                // Per Groupon -
+                // DHLSM has more restrictive checks in terms of the format of the tracking number, when compared to
+                // DHLGM. Given that there is no other difference between these two, in terms of how they are treated
+                // by our system, I'd suggest that you upload the DHLSM related tracking numbers as DHLGM
+                carrierCode = "dhlgm";
             }
             else if (shipmentEntity.Postal != null &&
                      ShipmentTypeManager.IsConsolidator((PostalServiceType) shipmentEntity.Postal.Service))
