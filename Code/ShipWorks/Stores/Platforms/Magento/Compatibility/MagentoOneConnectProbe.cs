@@ -58,9 +58,9 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 
                 return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return GenericResult.FromError("Exception occurred while attempting to connect to ShipWorks Module.", new Uri(store.ModuleUrl));
+                return GenericResult.FromError<Uri>($"Exception occurred while attempting to connect to ShipWorks Module. {ex.Message}");
             }
         }
     }

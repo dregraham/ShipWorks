@@ -9,7 +9,6 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Magento Two REST Web Client
     /// </summary>
-    [Component]
     public class MagentoTwoRestClient : IMagentoTwoRestClient
     {
         private const string TokenEndpoint = "rest/V1/integration/admin/token";

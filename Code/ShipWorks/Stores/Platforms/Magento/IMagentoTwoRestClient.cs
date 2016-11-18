@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.DTO;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Represents the Magento Two REST Web Client
     /// </summary>
+    [Service]
     public interface IMagentoTwoRestClient
     {
         /// <summary>
