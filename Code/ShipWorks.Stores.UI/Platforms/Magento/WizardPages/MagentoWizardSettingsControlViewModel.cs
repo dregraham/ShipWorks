@@ -102,6 +102,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
             {
                 throw new MagentoException("Store Url not in an a valid format.");
             }
+
             store.ModuleUsername = username;
             store.ModulePassword = password;
             store.ModuleUrl = storeUrl;
@@ -150,6 +151,8 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
                 {
                     throw new MagentoException("Could not connect to Magento");
                 }
+
+                store.ModuleUrl = compatibleUrlResult.Value.ToString();
             }
             catch (GenericStoreException ex)
             {
