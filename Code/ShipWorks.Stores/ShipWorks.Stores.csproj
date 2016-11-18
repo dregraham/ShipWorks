@@ -163,6 +163,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
+    <Compile Include="Platforms\Magento\Magento2RestDownloader.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
