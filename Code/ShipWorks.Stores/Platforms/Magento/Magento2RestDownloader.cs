@@ -12,9 +12,12 @@ using ShipWorks.Stores.Platforms.Magento.DTO;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
+    /// <summary>
+    /// Downloader for Magento 2 REST API
+    /// </summary>
+    /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
     public class Magento2RestDownloader : StoreDownloader
     {
-        private readonly StoreEntity store;
         private readonly IMagentoTwoRestClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly Uri storeUrl;
@@ -37,7 +40,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="sqlAdapter">The SQL adapter.</param>
         public Magento2RestDownloader(StoreEntity store, IMagentoTwoRestClient webClient, ISqlAdapterRetry sqlAdapter) : base(store)
         {
-            this.store = store;
             magentoStore = (MagentoStoreEntity) store;
             storeUrl = new Uri(magentoStore.ModuleUrl);
             this.webClient = webClient;
@@ -68,9 +70,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        private void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
+        public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
         {
-            orderEntity.OnlineLastModified = DateTime.Parse(magentoOrder.updated_at);
+            orderEntity.OnlineLastModified = DateTime.Parse(magentoOrder.updated_at).ToUniversalTime();
             orderEntity.OnlineStatus = magentoOrder.status;
             orderEntity.RequestedShipping = magentoOrder.shipping_description;
 
@@ -78,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (orderEntity.IsNew)
             {
-                orderEntity.OrderDate = DateTime.Parse(magentoOrder.created_at);
+                orderEntity.OrderDate = DateTime.Parse(magentoOrder.created_at).ToUniversalTime();
                 orderEntity.OrderNumber = magentoOrder.entity_id;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.grand_total);
 
@@ -158,12 +160,12 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         /// <summary>
         /// Loads the order charges.
-        /// </summary>
+        /// </summary
         private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
         {
             InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.tax_amount));
             InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping", Convert.ToDecimal(magentoOrder.shipping_amount));
-            InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description, Convert.ToDecimal(-magentoOrder.discount_amount));
+            InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description, Convert.ToDecimal(magentoOrder.discount_amount));
         }
     }
 }
