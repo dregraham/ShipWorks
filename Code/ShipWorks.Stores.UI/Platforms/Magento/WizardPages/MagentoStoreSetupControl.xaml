@@ -12,7 +12,7 @@
              d:DesignHeight="500"
              d:DesignWidth="500"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance wizardPages:MagentoWizardSettingsControlViewModel}"
+             d:DataContext="{d:DesignInstance wizardPages:MagentoStoreSetupControlViewModel}"
              >
     <Control.Resources>
         <ui:BooleanToGridRowHeightConverter x:Key="BooleanToGridRowHeightConverter" Invert="False" />
