@@ -34,14 +34,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsDhlsm_WhenCarrierIsDhlAndServiceIsSmartMail()
+        public void GetCarrierCode_ReturnsDhlgm_WhenCarrierIsDhl()
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Postal = new PostalShipmentEntity();
             shipment.Postal.Service = (int) PostalServiceType.DhlParcelPlusExpedited;
             shipment.ShipmentType = (int) ShipmentTypeCode.Endicia;
 
-            Assert.Equal("dhlsm", GrouponCarrier.GetCarrierCode(shipment));
+            Assert.Equal("dhlgm", GrouponCarrier.GetCarrierCode(shipment));
         }
 
         [Fact]
