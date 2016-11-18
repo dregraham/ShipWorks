@@ -552,7 +552,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             profile.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
             profile.FedEx.NonStandardContainer = false;
-            profile.FedEx.ReferenceFIMS = "";
+            profile.FedEx.ReferenceFIMS = "Order {//Order/Number}";
             profile.FedEx.ReferenceCustomer = "Order {//Order/Number}";
             profile.FedEx.ReferenceInvoice = "";
             profile.FedEx.ReferencePO = "";
