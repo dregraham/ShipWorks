@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
             InitializeComponent();
             StepNext += OnStepNextMagentoStoreSetupPage;
             this.viewModel = viewModel;
-            ((MagentoWizardSettingsControl) elementHost.Child).DataContext = viewModel;
+            ((MagentoStoreSetupControl) elementHost.Child).DataContext = viewModel;
             this.messageHelper = messageHelper;
         }
 

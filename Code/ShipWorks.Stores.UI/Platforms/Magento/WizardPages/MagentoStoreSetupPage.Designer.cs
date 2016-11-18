@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.elementHost = new System.Windows.Forms.Integration.ElementHost();
-            this.accountSettingsControl = new ShipWorks.Stores.UI.Platforms.Magento.WizardPages.MagentoWizardSettingsControl();
+            this.accountSettingsControl = new ShipWorks.Stores.UI.Platforms.Magento.WizardPages.MagentoStoreSetupControl();
             this.SuspendLayout();
             //
             // elementHost
@@ -56,6 +56,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost elementHost;
-        private ShipWorks.Stores.UI.Platforms.Magento.WizardPages.MagentoWizardSettingsControl accountSettingsControl;
+        private ShipWorks.Stores.UI.Platforms.Magento.WizardPages.MagentoStoreSetupControl accountSettingsControl;
     }
 }

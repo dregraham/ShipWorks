@@ -174,8 +174,8 @@
       <DependentUpon>MagentoAccountSettingsHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Magento\WizardPages\IMagentoWizardSettingsControlViewModel.cs" />
-    <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControl.xaml.cs">
-      <DependentUpon>MagentoWizardSettingsControl.xaml</DependentUpon>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControl.xaml.cs">
+      <DependentUpon>MagentoStoreSetupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.cs">
       <SubType>UserControl</SubType>
@@ -183,7 +183,7 @@
     <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.Designer.cs">
       <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml.cs">
       <DependentUpon>OdbcImportMappingControl.xaml</DependentUpon>
     </Compile>
@@ -455,7 +455,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControl.xaml">
+    <Page Include="Platforms\Magento\WizardPages\MagentoStoreSetupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

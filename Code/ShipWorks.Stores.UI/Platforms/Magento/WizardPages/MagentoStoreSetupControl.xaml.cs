@@ -1,11 +1,11 @@
 ﻿namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 {
     /// <summary>
-    /// Interaction logic for MagentoWizardSettingsControl.xaml
+    /// Interaction logic for MagentoStoreSetupWizardPage.xaml
     /// </summary>
-    public partial class MagentoWizardSettingsControl
+    public partial class MagentoStoreSetupControl
     {
-        public MagentoWizardSettingsControl()
+        public MagentoStoreSetupControl()
         {
             InitializeComponent();
         }

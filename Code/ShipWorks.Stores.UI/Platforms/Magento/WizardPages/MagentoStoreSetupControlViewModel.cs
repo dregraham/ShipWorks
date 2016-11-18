@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
     /// ViewModel for MagentoWizardSettingsControl
     /// </summary>
     [Component]
-    public class MagentoWizardSettingsControlViewModel : INotifyPropertyChanged, IMagentoWizardSettingsControlViewModel
+    public class MagentoStoreSetupControlViewModel : INotifyPropertyChanged, IMagentoWizardSettingsControlViewModel
     {
         private bool isMagento1;
         private string username;
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoWizardSettingsControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes)
+        public MagentoStoreSetupControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         }
 
         /// <summary>
-        /// Validate Settings. 
+        /// Validate Settings.
         /// </summary>
         private void ValidateSettings(MagentoStoreEntity store)
         {

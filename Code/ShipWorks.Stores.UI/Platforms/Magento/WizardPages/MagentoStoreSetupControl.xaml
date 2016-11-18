@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Magento.WizardPages.MagentoWizardSettingsControl"
+﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Magento.WizardPages.MagentoStoreSetupControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -38,13 +38,13 @@
         <StackPanel Margin="0">
             <StackPanel>
                 <TextBlock FontWeight="Bold" Text="Version" />
-                <RadioButton Content="Magento 1" 
-                             GroupName="Version" 
+                <RadioButton Content="Magento 1"
+                             GroupName="Version"
                              IsChecked="{Binding IsMagento1,
                                                  Converter={StaticResource RadioButtonCheckedConverter},
                                                  ConverterParameter={StaticResource True}}" />
-                <RadioButton Content="Magento 2" 
-                             GroupName="Version" 
+                <RadioButton Content="Magento 2"
+                             GroupName="Version"
                              IsChecked="{Binding IsMagento1,
                                                  Converter={StaticResource RadioButtonCheckedConverter},
                                                  ConverterParameter={StaticResource False}}" />
@@ -71,7 +71,7 @@
                     <TextBox Grid.Row="0"
                              Grid.Column="1"
                              Grid.ColumnSpan="2"
-                             Margin="4" 
+                             Margin="4"
                              Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
@@ -86,13 +86,13 @@
                                Text="Store Url:" />
                     <TextBox Grid.Row="2"
                              Grid.Column="1"
-                             Grid.ColumnSpan="2" 
+                             Grid.ColumnSpan="2"
                              Text="{Binding StoreUrl, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="3"
                                Grid.Column="0"
                                Text="Store code:" />
-                    <TextBox Grid.Row="3" 
-                             Grid.Column="1" 
+                    <TextBox Grid.Row="3"
+                             Grid.Column="1"
                              Text="{Binding StoreCode, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock Grid.Row="3"
                                Grid.Column="2"
