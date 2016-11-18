@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
@@ -16,6 +17,7 @@ using log4net;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
@@ -158,13 +160,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
         /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
         /// </summary>
-        public override List<FilterEntity> CreateInitialFilters() =>
-            new List<FilterEntity>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            List<FilterEntity> filters = new List<FilterEntity>
+                {
+                    CreateFilterReadyToShip(),
+                    CreateFilterShipped(),
+                };
+
+            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.Amazon))
             {
-                CreateFilterReadyToShip(),
-                CreateFilterShipped(),
-                CreateFilterAmazonPrime()
-            };
+                filters.Add(CreateFilterAmazonPrime());
+            }
+
+            return filters;
+        }
 
         /// <summary>
         /// Creates the filter for Amazon Prime orders
@@ -185,6 +195,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             primeCondition.Operator = EqualityOperator.Equals;
             primeCondition.Value = ChannelAdvisorIsAmazonPrime.Yes;
             definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
+
+            // Is fulfilled by seller
+            ChannelAdvisorIsFBACondition fbaCondition = new ChannelAdvisorIsFBACondition();
+            fbaCondition.Operator = EqualityOperator.Equals;
+            fbaCondition.Value = false;
+            definition.RootContainer.FirstGroup.Conditions.Add(fbaCondition);
 
             return new FilterEntity
             {
