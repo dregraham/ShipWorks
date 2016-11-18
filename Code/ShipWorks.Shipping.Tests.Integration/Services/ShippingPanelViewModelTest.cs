@@ -42,10 +42,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
                     mock.Provide<Control>(new Control());
                     mock.Provide<Func<Control>>(() => new Control());
+                    mock.Override<ITangoWebClient>();
+                    mock.Override<IMessageHelper>();
                 });
-
-            context.Mock.Override<ITangoWebClient>();
-            context.Mock.Override<IMessageHelper>();
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -56,7 +55,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         {
             IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.BestRate, ShipmentTypeCode.None };
 
-            foreach (var value in EnumHelper.GetEnumList<ShipmentTypeCode>().Select(x => x.Value).Except(excludedTypes))
+            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
             {
                 ShipmentTypeSetupWizardForm service = container.ResolveKeyed<ShipmentTypeSetupWizardForm>(value);
                 Assert.NotNull(service);

@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public WorldShipSetupWizard(IShipmentTypeManager shipmentTypeManager) :
             base(ShipmentTypeCode.UpsWorldShip, false, shipmentTypeManager)
         {
-
         }
     }
 }

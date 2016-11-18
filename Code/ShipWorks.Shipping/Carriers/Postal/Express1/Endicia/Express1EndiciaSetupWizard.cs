@@ -22,7 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Endicia
             Express1EndiciaAccountRepository accountRepository) :
             base(buyPostageDialog, accountManagerControl, optionsControl, registration, accountRepository)
         {
-
         }
     }
 }

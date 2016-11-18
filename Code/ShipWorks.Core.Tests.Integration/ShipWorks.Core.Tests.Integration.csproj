@@ -146,6 +146,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
+    <Compile Include="Common\ApplyValidatorsTest.cs" />
+    <Compile Include="Common\ApplyOrderedManipulatorsTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Data\DataAccessAdapterTest.cs" />
     <Compile Include="Data\DeletionServiceTest.cs" />

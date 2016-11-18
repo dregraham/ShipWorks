@@ -4,13 +4,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// State used when processing shipments
     /// </summary>
-    internal class ShipmentProcessorExecutionState
+    internal class ShipmentProcessorExecutionState : IProcessShipmentsWorkflowResult
     {
         /// <summary>
         /// Constructor

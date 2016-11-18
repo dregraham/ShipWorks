@@ -519,7 +519,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
         /// had been deleted.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "IParcel", typeof(IParcelShipmentEntity), refreshIfPresent);
 

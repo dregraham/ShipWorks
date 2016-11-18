@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts => AccountRepository.Accounts.Any();
+        public override bool HasAccounts => AccountRepository.AccountsReadOnly.Any();
 
         /// <summary>
         /// Gets or sets the log entry factory.
@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public bool ShouldRateShop(ShipmentEntity shipment)
         {
             return shipment.Postal.Usps.RateShop &&
-                AccountRepository.Accounts.Count() > 1;
+                AccountRepository.AccountsReadOnly.Count() > 1;
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Update the dyamic data of the shipment
+        /// Update the dynamic data of the shipment
         /// </summary>
         /// <param name="shipment"></param>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
@@ -267,9 +267,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Ensures that the USPS specific data for the shipment is loaded.  If the data already exists, nothing is done.  It is not refreshed.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            base.LoadShipmentData(shipment, refreshIfPresent);
+            base.LoadShipmentDataInternal(shipment, refreshIfPresent);
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment.Postal, "Usps", typeof(UspsShipmentEntity), refreshIfPresent);
         }
 
@@ -319,7 +319,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns>An instance of a UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            if (AccountRepository.Accounts.Any())
+            if (AccountRepository.AccountsReadOnly.Any())
             {
                 // We have an account that is completely setup, so use the normal broker
                 return new UspsBestRateBroker(this, AccountRepository);
@@ -340,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             UspsProfileEntity usps = profile.Postal.Usps;
 
-            usps.UspsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().UspsAccountID : 0;
+            usps.UspsAccountID = AccountRepository.AccountsReadOnly.Any() ? AccountRepository.AccountsReadOnly.First().UspsAccountID : 0;
             usps.RequireFullAddressValidation = true;
             usps.HidePostage = true;
 

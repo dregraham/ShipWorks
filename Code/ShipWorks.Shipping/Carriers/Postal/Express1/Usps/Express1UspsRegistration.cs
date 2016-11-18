@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Usps
                 Express1RegistrationValidator validator) :
             base(ShipmentTypeCode.Express1Usps, gateway, repository, encryptionStrategy, validator)
         {
-
         }
     }
 }

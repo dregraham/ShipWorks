@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Endicia
                 Express1RegistrationValidator validator) :
             base(ShipmentTypeCode.Express1Endicia, gateway, repository, encryptionStrategy, validator)
         {
-
         }
     }
 }

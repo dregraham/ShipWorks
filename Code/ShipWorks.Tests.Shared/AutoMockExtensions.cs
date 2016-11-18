@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
@@ -167,6 +169,22 @@ namespace ShipWorks.Tests.Shared
             where TOut : class
         {
             return returns.Returns(returnMock.Object);
+        }
+
+        /// <summary>
+        /// Allow setup for default mocks created when resolving an enumerable
+        /// </summary>
+        /// <remarks>Unfortunately, AutoMock seems to create a default mock when creating an enumerable, even
+        /// if concrete types are registered with Autofac. This lets you configure them to not get in the way.</remarks>
+        public static void SetupDefaultMocksForEnumerable<T>(this AutoMock mock, Action<Mock<T>> action) where T : class
+        {
+            foreach (var item in mock.Container
+                .Resolve<IEnumerable<T>>()
+                .Where(x => x.GetType().Namespace.Contains("Castle"))
+                .Select(x => Mock.Get(x)))
+            {
+                action(item);
+            }
         }
     }
 }

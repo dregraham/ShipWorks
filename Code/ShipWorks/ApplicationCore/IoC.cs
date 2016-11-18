@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Core;
+using Autofac.Extras.Attributed;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
@@ -14,6 +14,7 @@ using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -88,6 +89,10 @@ namespace ShipWorks.ApplicationCore
         {
             Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
+
+            builder.RegisterModule<AttributedMetadataModule>();
+
+            builder.RegisterSource(new OrderedRegistrationSource());
 
             builder.RegisterType<ClipboardHelper>()
                 .AsSelf();
@@ -183,6 +188,12 @@ namespace ShipWorks.ApplicationCore
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
                 .AsImplementedInterfaces();
 
+            builder.RegisterGeneric(typeof(ApplyOrderedManipulators<,>))
+                .As(typeof(IApplyOrderedManipulators<,>));
+
+            builder.RegisterGeneric(typeof(ApplyValidators<,>))
+                .As(typeof(IApplyValidators<,>));
+
             ComponentAttribute.Register(builder, allAssemblies);
             ServiceAttribute.Register(builder, allAssemblies);
             KeyedComponentAttribute.Register(builder, allAssemblies);
@@ -192,10 +203,7 @@ namespace ShipWorks.ApplicationCore
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
 
-            foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
-            {
-                container.ComponentRegistry.Register(registration);
-            }
+            builder.Update(container);
 
             return container;
         }

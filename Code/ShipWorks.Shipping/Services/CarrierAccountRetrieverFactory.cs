@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public CarrierAccountRetrieverFactory(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> lookup) : base(lookup)
         {
-
         }
     }
 }

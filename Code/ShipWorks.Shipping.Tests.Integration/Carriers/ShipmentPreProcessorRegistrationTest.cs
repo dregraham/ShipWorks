@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Startup;
@@ -30,9 +29,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Fact]
         public void EnsureAllCarriersExceptBestRateUseGenericShipmentPreProcessor()
         {
-            foreach (var value in EnumHelper.GetEnumList<ShipmentTypeCode>().Where(x => x.Value != ShipmentTypeCode.BestRate))
+            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Where(x => x != ShipmentTypeCode.BestRate))
             {
-                IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(value.Value);
+                IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(value);
                 Assert.IsType<GenericShipmentPreProcessor>(service);
             }
         }

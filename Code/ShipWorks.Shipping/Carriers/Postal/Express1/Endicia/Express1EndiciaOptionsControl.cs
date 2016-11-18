@@ -14,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Endicia
         /// </summary>
         public Express1EndiciaOptionsControl() : base(EndiciaReseller.Express1)
         {
-
         }
     }
 }

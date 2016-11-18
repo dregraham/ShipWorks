@@ -7,6 +7,5 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public interface IShipmentTypeSetupWizardFactory : IFactory<ShipmentTypeCode, IShipmentTypeSetupWizard>
     {
-
     }
 }

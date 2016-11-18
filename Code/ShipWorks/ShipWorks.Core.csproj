@@ -307,6 +307,7 @@
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -681,6 +682,11 @@
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\KeyedComponent.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedRegistrationExtensions.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedRegistrationSource.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedResolutionExtensions.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderAttribute.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\TypeExtensions.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\RegistrationType.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\ResolveWithAttributes.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\ServiceAttribute.cs" />
@@ -917,6 +923,14 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\ApplyOrderedManipulators.cs" />
+    <Compile Include="Common\ApplyValidators.cs" />
+    <Compile Include="Common\ApplyValidatorsResult.cs" />
+    <Compile Include="Common\IApplyOrderedManipulators.cs" />
+    <Compile Include="Common\IApplyValidators.cs" />
+    <Compile Include="Common\IManipulator.cs" />
+    <Compile Include="Common\IValidationResult.cs" />
+    <Compile Include="Common\IValidator.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />

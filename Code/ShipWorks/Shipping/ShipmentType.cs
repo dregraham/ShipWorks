@@ -494,7 +494,40 @@ namespace ShipWorks.Shipping
         /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
         /// had been deleted.
         /// </summary>
-        public abstract void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent);
+        public void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        {
+            LoadShipmentDataInternal(shipment, refreshIfPresent);
+
+            if (!shipment.Processed)
+            {
+                UpdateAccountIDIfNecessary(shipment);
+            }
+        }
+
+        /// <summary>
+        /// Update the account ID on the shipment if necessary
+        /// </summary>
+        private void UpdateAccountIDIfNecessary(ShipmentEntity shipment)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(ShipmentTypeCode);
+
+                if (accountRetriever.GetAccountReadOnly(shipment) == null)
+                {
+                    ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
+                    carrierAccount?.ApplyTo(shipment);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
+        /// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
+        /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
+        /// had been deleted.
+        /// </summary>
+        protected abstract void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent);
 
         /// <summary>
         /// Apply the configured defaults and profile rule settings to the given shipment

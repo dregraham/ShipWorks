@@ -22,7 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Usps
             Express1UspsAccountRepository accountRepository) :
             base(buyPostageDialog, accountManagerControl, optionsControl, registration, accountRepository)
         {
-
         }
     }
 }

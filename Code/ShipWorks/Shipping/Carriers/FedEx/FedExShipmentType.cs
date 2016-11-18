@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Ensures that the FedEx specific data for the shipment is loaded.  If the data already exists, nothing is done.  It is not refreshed.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "FedEx", typeof(FedExShipmentEntity), refreshIfPresent);
 
@@ -799,7 +799,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             RedistributeContentWeight(shipment);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.FedEx.Packages.Any(p => p.Insurance);

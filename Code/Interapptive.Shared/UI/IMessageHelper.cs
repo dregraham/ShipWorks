@@ -63,5 +63,10 @@ namespace Interapptive.Shared.UI
         /// Show a warning message
         /// </summary>
         void ShowWarning(string message);
+
+        /// <summary>
+        /// Show a message
+        /// </summary>
+        void ShowMessage(string message);
     }
 }

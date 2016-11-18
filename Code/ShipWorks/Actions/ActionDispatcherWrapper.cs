@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -11,6 +12,12 @@ namespace ShipWorks.Actions
     [Component]
     public class ActionDispatcherWrapper : IActionDispatcher
     {
+        /// <summary>
+        /// Called when a batch of shipments has finished processing
+        /// </summary>
+        public void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startingTime, int shipmentCount, int errorCount) =>
+            ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorCount);
+
         /// <summary>
         /// Called each time a shipment has been successfully processed
         /// </summary>

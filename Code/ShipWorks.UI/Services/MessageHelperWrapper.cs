@@ -42,6 +42,11 @@ namespace ShipWorks.UI.Services
         public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
 
         /// <summary>
+        /// Show a message
+        /// </summary>
+        public void ShowMessage(string message) => MessageHelper.ShowMessage(ownerFactory(), message);
+
+        /// <summary>
         /// Show a yes/no question with the given text
         /// </summary>
         public DialogResult ShowQuestion(string message)

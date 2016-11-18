@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -84,9 +84,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Fact]
         public void EnsureAllCarriersHaveAccountRepositoryRegistered()
         {
-            foreach (var value in EnumHelper.GetEnumList<ShipmentTypeCode>())
+            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>())
             {
-                ICarrierAccountRetriever service = container.ResolveKeyed<ICarrierAccountRetriever>(value.Value);
+                ICarrierAccountRetriever service = container.ResolveKeyed<ICarrierAccountRetriever>(value);
             }
         }
 

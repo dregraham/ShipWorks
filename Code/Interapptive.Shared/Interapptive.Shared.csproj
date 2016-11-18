@@ -494,6 +494,7 @@
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
+    <Compile Include="Utility\Result.cs" />
     <Compile Include="Utility\SerializableObject.cs" />
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />

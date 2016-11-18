@@ -12,7 +12,6 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,7 +21,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Services.ShipmentProcessorPhases;
+using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 
@@ -35,31 +34,30 @@ namespace ShipWorks.Shipping.Services
     public class ShipmentProcessor : IShipmentProcessor
     {
         private readonly IShippingErrorManager errorManager;
-        private readonly IShippingManager shippingManager;
         private readonly Func<Control> ownerRetriever;
         private readonly ILifetimeScope lifetimeScope;
         private readonly ILicenseService licenseService;
-        Control owner;
-        private readonly PrepareShipmentPhase prepareShipmentPhase;
-        private readonly GetLabelPhase getLabelPhase;
-        private readonly SaveLabelPhase saveLabelPhase;
-        private readonly CompleteLabelPhase completeLabelPhase;
+        private readonly IProcessShipmentsWorkflowFactory workflowFactory;
+        private readonly IMessageHelper messageHelper;
+        private readonly IShippingSettings shippingSettings;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IActionDispatcher actionDispatcher;
+        private Control owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShipmentProcessor(Func<Control> ownerRetriever, IShippingErrorManager errorManager,
-            ILifetimeScope lifetimeScope, IShippingManager shippingManager, ILicenseService licenseService,
-            PrepareShipmentPhase prepareShipmentPhase,
-            GetLabelPhase getLabelPhase,
-            SaveLabelPhase saveLabelPhase,
-            CompleteLabelPhase completeLabelPhase)
+            ILifetimeScope lifetimeScope, ILicenseService licenseService, IMessageHelper messageHelper,
+            IProcessShipmentsWorkflowFactory workflowFactory, IShippingSettings shippingSettings,
+            ISqlAdapterFactory sqlAdapterFactory, IActionDispatcher actionDispatcher)
         {
-            this.completeLabelPhase = completeLabelPhase;
-            this.saveLabelPhase = saveLabelPhase;
-            this.getLabelPhase = getLabelPhase;
-            this.prepareShipmentPhase = prepareShipmentPhase;
-            this.shippingManager = shippingManager;
+            this.actionDispatcher = actionDispatcher;
+            this.sqlAdapterFactory = sqlAdapterFactory;
+            this.shippingSettings = shippingSettings;
+            this.messageHelper = messageHelper;
+            this.workflowFactory = workflowFactory;
             this.errorManager = errorManager;
             this.ownerRetriever = ownerRetriever;
             this.lifetimeScope = lifetimeScope;
@@ -96,7 +94,7 @@ namespace ShipWorks.Shipping.Services
 
             if (!clonedShipments.Any())
             {
-                MessageHelper.ShowMessage(owner, "There are no shipments to process.");
+                messageHelper.ShowMessage("There are no shipments to process.");
 
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
@@ -110,40 +108,24 @@ namespace ShipWorks.Shipping.Services
             // Check for shipment type process shipment nudges
             ShowShipmentTypeProcessingNudges(clonedShipments);
 
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(owner,
-                "Processing Shipments",
-                "ShipWorks is processing the shipments.",
-                "Shipment {0} of {1}",
-                false);
+            IProcessShipmentsWorkflow workflow = workflowFactory.Create();
+            IProcessShipmentsWorkflowResult result = await workflow.Process(clonedShipments, chosenRateResult, counterRateCarrierConfiguredWhileProcessingAction);
 
-            prepareShipmentPhase.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
-            ShipmentProcessorExecutionState executionState = new ShipmentProcessorExecutionState(chosenRateResult);
-
-            // What to do before it gets started (but is on the background thread)
-            // sender is a ShipWorks.Common.Threading.BackgroundExecutor<ShipWorks.Data.Model.EntityClasses.ShipmentEntity>
-            executor.ExecuteStarting += (sender, args) =>
-            {
-                // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
-                executionState.ConcurrencyErrors = shippingManager.SaveShipmentsToDatabase(clonedShipments, true);
-            };
-
-            await executor.ExecuteAsync(ProcessShipment, clonedShipments, executionState);
-
-            HandleProcessingException(executionState);
+            HandleProcessingException(result);
 
             // See if we are supposed to open WorldShip
-            if (executionState.WorldshipExported && ShippingSettings.FetchReadOnly().WorldShipLaunch)
+            if (result.WorldshipExported && shippingSettings.FetchReadOnly().WorldShipLaunch)
             {
                 WorldShipUtility.LaunchWorldShip(owner);
             }
 
-            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, executionState.OrderHashes);
+            RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, result.OrderHashes);
 
             shipmentRefresher.FinishProcessing();
 
-            using (SqlAdapter adapter = SqlAdapter.Create(false))
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                ActionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
+                actionDispatcher.DispatchProcessingBatchFinished(adapter, startingTime, shipmentCount, errorManager.ShipmentCount());
             }
 
             ShowPostProcessingMessage(clonedShipments);
@@ -214,35 +196,6 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Process a single shipment
-        /// </summary>
-        private void ProcessShipment(ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder)
-        {
-            ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
-            ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
-
-            PrepareShipmentResult phase1Result = prepareShipmentPhase.PrepareShipment(initial);
-            GetLabelResult phase2Result = getLabelPhase.GetLabel(phase1Result);
-            ISaveLabelResult phase3Result = saveLabelPhase.SaveLabel(phase2Result);
-            ICompleteLabelCreationResult phase4Result = completeLabelPhase.Finish(phase3Result);
-
-            // When we introduce Akka.net, the rest of this method would go into the reducer method
-            if (!string.IsNullOrEmpty(phase4Result.ErrorMessage))
-            {
-                executionState.NewErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + phase4Result.ErrorMessage);
-            }
-            
-            executionState.OutOfFundsException = executionState.OutOfFundsException ?? phase4Result.OutOfFundsException;
-            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? phase4Result.TermsAndConditionsException;
-            executionState.WorldshipExported |= phase4Result.WorldshipExported;
-
-            if (phase4Result.Success)
-            {
-                executionState.OrderHashes.Add(shipment.Order.ShipSenseHashKey);
-            }
-        }
-
-        /// <summary>
         /// Create a process shipment result from the given shipment
         /// </summary>
         private ProcessShipmentResult CreateResultFromShipment(ShipmentEntity shipment) =>
@@ -251,12 +204,12 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(ShipmentProcessorExecutionState executionState)
+        private void HandleProcessingException(IProcessShipmentsWorkflowResult executionState)
         {
             // If any accounts were out of funds we show that instead of the errors
             if (executionState.OutOfFundsException != null)
             {
-                DialogResult answer = MessageHelper.ShowQuestion(owner,
+                DialogResult answer = messageHelper.ShowQuestion(
                     $"You do not have sufficient funds in {executionState.OutOfFundsException.Provider} account {executionState.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
                     "Would you like to purchase more now?");
 
@@ -270,7 +223,7 @@ namespace ShipWorks.Shipping.Services
             }
             else if (executionState.TermsAndConditionsException != null)
             {
-                MessageHelper.ShowError(owner, executionState.NewErrors.FirstOrDefault());
+                messageHelper.ShowError(executionState.NewErrors.FirstOrDefault());
                 executionState.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
             }
             else
@@ -288,7 +241,7 @@ namespace ShipWorks.Shipping.Services
                     message += "\n\nSee the shipment list for all errors.";
                 }
 
-                lifetimeScope.Resolve<IMessageHelper>().ShowError(message);
+                messageHelper.ShowError(message);
             }
         }
 
@@ -297,11 +250,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void ShowShipmentTypeProcessingNudges(IEnumerable<ShipmentEntity> shipments)
         {
-            // Get a distinct list of shipment types from the list of shipments to process
-            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode) s.ShipmentType).Distinct().ToList();
-
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
-            if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))
+            if (shipments.Any(s => s.ShipmentTypeCode == ShipmentTypeCode.Endicia))
             {
                 NudgeManager.ShowNudge(owner, NudgeManager.GetFirstNudgeOfType(NudgeType.ProcessEndicia));
             }

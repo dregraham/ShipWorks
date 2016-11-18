@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Utility;
@@ -20,17 +21,20 @@ namespace Interapptive.Shared.Collections
         /// <param name="source">Collection that will be broken into chunks</param>
         /// <param name="size">Size of each chunk</param>
         /// <returns>Collection of chunks of the specified type</returns>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "nameof is only being used for error information, not binding")]
         public static IEnumerable<IEnumerable<T>> SplitIntoChunksOf<T>(this IEnumerable<T> source, int size)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
 
             if (size < 1)
             {
-                throw new ArgumentOutOfRangeException("size");
+                throw new ArgumentOutOfRangeException(nameof(size));
             }
 
             return SplitIntoChunksOfImplementation(source, size);
         }
+
         /// <summary>
         /// Breaks a collection up into chunks of the selected size
         /// </summary>
@@ -61,7 +65,6 @@ namespace Interapptive.Shared.Collections
         /// </summary>
         /// <typeparam name="TSource">Type of data in the collection</typeparam>
         /// <param name="source">Collection that will be broken into chunks</param>
-        /// <param name="size">Max value for each chunk</param>
         /// <returns>Collection of chunks of the specified type</returns>
         public static IEnumerable<IEnumerable<TSource>> SplitIntoChunks<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector, double maxValue)
         {
@@ -77,7 +80,6 @@ namespace Interapptive.Shared.Collections
         /// </summary>
         /// <typeparam name="TSource">Type of data in the collection</typeparam>
         /// <param name="source">Collection that will be broken into chunks</param>
-        /// <param name="size">Max value for each chunk</param>
         /// <returns>Collection of chunks of the specified type</returns>
         public static IEnumerable<IEnumerable<TSource>> SplitIntoChunksImplementation<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector, double maxValue)
         {
@@ -123,13 +125,15 @@ namespace Interapptive.Shared.Collections
         /// <param name="source">Collection to repeat</param>
         /// <param name="count">Number of times the collection will be repeated</param>
         /// <returns></returns>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "nameof is only being used for error information, not binding")]
         public static IEnumerable<T> Repeat<T>(this IEnumerable<T> source, int count)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
 
             if (count < 0)
             {
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
             }
 
             return RepeatIterator(source, count);

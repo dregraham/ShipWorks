@@ -180,9 +180,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Ensures that the USPS specific data for the shipment is loaded.  If the data already exists, nothing is done.  It is not refreshed.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            base.LoadShipmentData(shipment, refreshIfPresent);
+            base.LoadShipmentDataInternal(shipment, refreshIfPresent);
 
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment.Postal, "Endicia", typeof(EndiciaShipmentEntity), refreshIfPresent);
         }

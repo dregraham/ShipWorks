@@ -13,10 +13,8 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="lookup"></param>
         public ShipmentPreProcessorFactory(IIndex<ShipmentTypeCode, IShipmentPreProcessor> lookup) : base(lookup)
         {
-
         }
     }
 }

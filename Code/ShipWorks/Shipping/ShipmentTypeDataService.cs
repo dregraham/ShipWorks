@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Autofac;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
 {
@@ -75,14 +72,6 @@ namespace ShipWorks.Shipping
                             property.SetValue(parent, null, null);
                             adapter.SaveAndRefetch(childEntity);
                             property.SetValue(parent, childEntity, null);
-                        }
-
-                        ICarrierAccountRetriever accountRetriever = lifetimeScope.ResolveKeyed<ICarrierAccountRetriever>(shipmentType.ShipmentTypeCode);
-
-                        if (accountRetriever?.GetAccountReadOnly(shipment) == null)
-                        {
-                            ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
-                            carrierAccount?.ApplyTo(shipment);
                         }
 
                         adapter.Commit();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -43,6 +44,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GenericShipmentPreProcessor(IShippingManager shippingManager,
             IShipmentTypeManager shipmentTypeManager,
             IShippingSettings shippingSettings,
@@ -67,7 +69,6 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="selectedRate">The selected rate.</param>
-        /// <returns></returns>
         /// <exception cref="ShippingException">An account must be created to process this shipment.</exception>
         public virtual IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {

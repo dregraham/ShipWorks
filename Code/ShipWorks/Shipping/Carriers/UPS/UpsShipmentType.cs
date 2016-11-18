@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the UPS specific table rows
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Ups", typeof(UpsShipmentEntity), refreshIfPresent);
 

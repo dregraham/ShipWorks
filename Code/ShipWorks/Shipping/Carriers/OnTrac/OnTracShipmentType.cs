@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create OnTrac specific information
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(
                 this, shipment, shipment, "OnTrac", typeof(OnTracShipmentEntity), refreshIfPresent);
