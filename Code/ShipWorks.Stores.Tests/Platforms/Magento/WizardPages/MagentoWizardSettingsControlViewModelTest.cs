@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
     {
         readonly AutoMock mock;
         readonly MagentoStoreEntity store;
-        readonly MagentoWizardSettingsControlViewModel testObject;
+        readonly MagentoStoreSetupControlViewModel testObject;
         readonly GenericResult<Uri> sucessResult;
         readonly Mock<IIndex<MagentoVersion, IMagentoProbe>> probeIIndex;
 
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
             probeIIndex = mock.MockRepository.Create<IIndex<MagentoVersion, IMagentoProbe>>();
             mock.Provide(probeIIndex.Object);
 
-            testObject = mock.Create<MagentoWizardSettingsControlViewModel>();
+            testObject = mock.Create<MagentoStoreSetupControlViewModel>();
         }
 
         private void SetupProbeResult(MagentoVersion magentoVersion, bool success, string url = "http://www.shipworks.com/")
@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
         {
             string expectedUrl = "http://www.shipworks.com/shipworks.php";
             testObject.IsMagento1 = false;
-            
+
             testObject.StoreUrl = "http://www.shipworks.com/";
             SetupProbeResult(MagentoVersion.MagentoTwo, true, expectedUrl);
 

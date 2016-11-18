@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Interapptive.Shared.Security;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 {
@@ -30,15 +31,17 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly PropertyChangedHandler handler;
         private readonly IIndex<MagentoVersion, IMagentoProbe> magentoProbes;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoStoreSetupControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes)
+        public MagentoStoreSetupControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes, IEncryptionProviderFactory encryptionProviderFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.magentoProbes = magentoProbes;
+            this.encryptionProviderFactory = encryptionProviderFactory;
             IsMagento1 = true;
         }
 
@@ -104,11 +107,22 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
             }
 
             store.ModuleUsername = username;
-            store.ModulePassword = password;
+            store.ModulePassword =
+                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username).Encrypt(password);
             store.ModuleUrl = storeUrl;
             store.ModuleOnlineStoreCode = StoreCode;
 
             ValidateSettings(store);
+
+            try
+            {
+                GenericModuleStoreType storeType = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+                storeType.InitializeFromOnlineModule();
+            }
+            catch (GenericStoreException ex)
+            {
+                throw new MagentoException($"Could not connect to Magento: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -141,10 +155,12 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
             {
                 IMagentoProbe probe = magentoProbes[firstVersionToTry];
                 GenericResult<Uri> compatibleUrlResult = probe.FindCompatibleUrl(store);
+                store.MagentoVersion = (int) firstVersionToTry;
                 if (!compatibleUrlResult.Success)
                 {
                     probe = magentoProbes[secondVersionToTry];
                     compatibleUrlResult = probe.FindCompatibleUrl(store);
+                    store.MagentoVersion = (int) secondVersionToTry;
                 }
 
                 if (!compatibleUrlResult.Success)
