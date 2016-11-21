@@ -14,6 +14,9 @@ namespace ShipWorks.Data.Connection
     public static class SqlServerInfo
     {
         private const string FetchQuery = @"
+        sp_configure 'show advanced options', 1
+        RECONFIGURE WITH OVERRIDE;
+
         CREATE TABLE #MemoryValues
         (
             [Name]  sysname,
