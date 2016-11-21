@@ -3552,7 +3552,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T15:38:34.3925065Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -3766,7 +3766,7 @@
                     <Field Name="MarketplaceID" Ordinal="16" DbType="12" Length="50" />
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
-                    <Field Name="AmazonShippingToken" Ordinal="19" HasDefaultValue="true" DefaultValue="N'hlkH7XeEA5GehLVXyC7ZpSjpPQVzOciXTvoFKlnobEJblNvBlX/dasYvkTYKkOQfL5Oy6kfyeZI='" DbType="12" Length="500" />
+                    <Field Name="AmazonShippingToken" Ordinal="19" HasDefaultValue="true" DefaultValue="N'hlkH7XeEA5FYCRxMs0u1N6zpcqsml4KRBK3sMwKQcDgIQiHPhi/G5ai6uq+RI35z'" DbType="12" Length="500" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
@@ -6580,7 +6580,7 @@
                     <Field Name="SearsEmail" Ordinal="2" DbType="12" Length="75" />
                     <Field Name="Password" Ordinal="3" DbType="12" Length="75" />
                     <Field Name="SecretKey" Ordinal="4" DbType="12" Length="255" />
-                    <Field Name="SellerID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="15" />
+                    <Field Name="SellerID" Ordinal="5" DbType="12" Length="15" />
                   </Fields>
                 </Table>
                 <Table Name="ServerMessage">
@@ -7159,8 +7159,18 @@
                   <PkConstraintName Name="PK_ThreeDCartStore" />
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="StoreUrl" Ordinal="2" DbType="12" Length="110" />
-                    <Field Name="ApiUserKey" Ordinal="3" DbType="12" Length="65" />
+                    <Field Name="StoreUrl" Ordinal="2" DbType="12" Length="110">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="Store URL" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="ApiUserKey" Ordinal="3" DbType="12" Length="65">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="0" />
+                        <CustomProperty Name="AuditName" Value="User Key" />
+                      </CustomProperties>
+                    </Field>
                     <Field Name="TimeZoneID" Ordinal="4" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="StatusCodes" Ordinal="5" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="6" DbType="8" Precision="10" />
