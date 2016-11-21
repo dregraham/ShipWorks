@@ -45,12 +45,9 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
                 using (IHttpResponseReader response = request.GetResponse())
                 {
                     string resultXml = response.ReadResult(Encoding.UTF8);
-                    resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
-                    GenericModuleResponse genericResponse = new GenericModuleResponse(resultXml);
+                    string result = XmlUtility.StripInvalidXmlCharacters(resultXml);
 
-                    string result = XPathUtility.Evaluate(genericResponse.XPath, "//response", string.Empty);
-
-                    if (result != "This is your ShipWorks module URL")
+                    if (result != "\"This is your ShipWorks module URL\"")
                     {
                         return GenericResult.FromError("ShipWorks could not find a compatible module at the given url.", request.Uri);
                     }
