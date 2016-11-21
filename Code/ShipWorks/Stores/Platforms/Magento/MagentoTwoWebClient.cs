@@ -7,7 +7,9 @@ using ShipWorks.ApplicationCore.Logging;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml;
+using Autofac;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -124,8 +126,25 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private GenericModuleResponse ProcessRequestInternal(HttpRequestSubmitter request, string action)
         {
-            request.Headers.Add(HttpRequestHeader.Authorization,
-                $"Bearer {SecureText.Decrypt(store.ModulePassword, store.ModuleUsername)}");
+            if (store.ModuleUsername == string.Empty)
+            {
+                request.Headers.Add(HttpRequestHeader.Authorization,
+                    $"Bearer {SecureText.Decrypt(store.ModulePassword, store.ModuleUsername)}");
+            }
+            else
+            {
+                string token;
+
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    IMagentoTwoRestClient magentoRestClient = scope.Resolve<IMagentoTwoRestClient>();
+                    Uri uri = new Uri(store.ModuleUrl.Replace("/rest/V1/shipworks", ""));
+                    token = magentoRestClient.GetToken(uri, store.ModuleUsername,
+                        SecureText.Decrypt(store.ModulePassword, store.ModuleUsername));
+                }
+
+                request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {token}");
+            }
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Magento, action);
             logEntry.LogRequest(request);

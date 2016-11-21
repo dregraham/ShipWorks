@@ -19,8 +19,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public string GetToken(Uri storeUri, string username, string password)
         {
-            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Post, new Uri($"{storeUri.AbsoluteUri}{TokenEndpoint}"));
-            request.Variables.Add(new HttpVariable(string.Empty, JsonConvert.SerializeObject(new[] {username, password})));
+            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{TokenEndpoint}"));
+            request.RequestBody = $"{{\"username\":\"{username}\",\"password\":\"{password}\"}}";
 
             return ProcessRequest<string>(request);
         }
@@ -30,7 +31,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public OrdersResponse GetOrders(DateTime start, Uri storeUri, string token)
         {
-            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get, new Uri($"{storeUri.AbsoluteUri}{OrdersEndpoint}"), token);
+            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
+                new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"), token);
             AddOrdersSearchCriteria(request, start);
 
             return ProcessRequest<OrdersResponse>(request);
@@ -68,9 +70,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void AddOrdersSearchCriteria(HttpVariableRequestSubmitter request, DateTime startDate)
         {
-            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]", "updated_at", false));
-            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]", "gt", false));
-            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]", $"{startDate:yyyy-MM-dd HH:mm:ff}", false));
+            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]", "updated_at",
+                false));
+            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]", "gt",
+                false));
+            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]",
+                $"{startDate:yyyy-MM-dd HH:mm:ff}", false));
         }
 
         /// <summary>
@@ -78,9 +83,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private T ProcessRequest<T>(HttpVariableRequestSubmitter request)
         {
-            using (IHttpResponseReader response = request.GetResponse())
+            try
             {
-                return DeserializeResponse<T>(response.ReadResult());
+                using (IHttpResponseReader response = request.GetResponse())
+                {
+                    return DeserializeResponse<T>(response.ReadResult());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new MagentoException(ex);
             }
         }
 
