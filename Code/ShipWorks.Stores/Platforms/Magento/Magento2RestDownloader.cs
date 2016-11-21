@@ -4,11 +4,15 @@ using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -16,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
+    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST)]
     public class Magento2RestDownloader : StoreDownloader
     {
         private readonly IMagentoTwoRestClient webClient;
@@ -52,18 +57,26 @@ namespace ShipWorks.Stores.Platforms.Magento
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             string token = webClient.GetToken(storeUrl, magentoStore.ModuleUsername,
-                magentoStore.ModulePassword);
+                SecureText.Decrypt(magentoStore.ModulePassword, magentoStore.ModuleUsername));
 
-            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
-
-            OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token);
-
-            foreach (Order magentoOrder in ordersResponse.Orders)
+            while (true)
             {
-                MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.entity_id, "", "");
-                OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
-                LoadOrder(orderEntity, magentoOrder);
-                sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+
+                OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token);
+
+                foreach (Order magentoOrder in ordersResponse.Orders)
+                {
+                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.entity_id, "", "");
+                    OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
+                    LoadOrder(orderEntity, magentoOrder);
+                    sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                }
+
+                if (ordersResponse.Orders.None())
+                {
+                    break;
+                }
             }
         }
 

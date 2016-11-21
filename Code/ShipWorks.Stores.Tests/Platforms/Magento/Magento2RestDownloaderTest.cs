@@ -17,10 +17,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         private readonly Mock<IMagentoTwoRestClient> webClient;
         private readonly Mock<ISqlAdapterRetry> sqlAdapter;
 
-        private string magentoOrder;
-        private Order order;
-        private Magento2RestDownloader testObject;
-        private MagentoOrderEntity orderEntity;
+        private readonly string magentoOrder;
+        private readonly Order order;
+        private readonly Magento2RestDownloader testObject;
+        private readonly MagentoOrderEntity orderEntity;
 
         public Magento2RestDownloaderTest()
         {

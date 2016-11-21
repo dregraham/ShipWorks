@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
@@ -16,13 +14,15 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
     public class MagentoTwoRestProbe : IMagentoProbe
     {
         private readonly IMagentoTwoRestClient client;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoTwoRestProbe(IMagentoTwoRestClient client)
+        public MagentoTwoRestProbe(IMagentoTwoRestClient client, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.client = client;
+            this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
         /// <summary>
@@ -32,7 +32,11 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         {
             try
             {
-                client.GetToken(new Uri(store.ModuleUrl), store.ModuleUsername, store.ModulePassword);
+                string password =
+                    encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ModuleUsername)
+                        .Decrypt(store.ModulePassword);
+
+                client.GetToken(new Uri(store.ModuleUrl), store.ModuleUsername, password);
                 return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
             }
             catch (Exception ex)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Core;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
@@ -245,6 +246,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+            if (magentoStore?.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
+                    new TypedParameter(typeof(StoreEntity), Store));
+            }
+
             return new MagentoDownloader(Store);
         }
 
@@ -275,6 +284,26 @@ namespace ShipWorks.Stores.Platforms.Magento
                 default:
                     throw new NotImplementedException("Magento Version not supported");
             }
+        }
+
+        /// <summary>
+        /// If the store is Magento Two rest dont initialize from onlinemodule
+        /// </summary>
+        public override void InitializeFromOnlineModule()
+        {
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+            if (magentoStore == null)
+            {
+                throw new InvalidOperationException("Not a magento store.");
+            }
+
+            if (magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
+            {
+                magentoStore.SchemaVersion = "1.1.0.0";
+                return;
+            }
+            base.InitializeFromOnlineModule();
         }
     }
 }
