@@ -796,7 +796,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [step next new account payment and billing].
         /// </summary>
-        private void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
+        private async void OnStepNextNewAccountPaymentAndBilling(object sender, WizardStepEventArgs e)
         {
             if (!paymentAndBillingAddress.ValidateData())
             {
@@ -808,7 +808,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
 
-                AssociateShipWorksWithItselfResponse response = request.Execute();
+                AssociateShipWorksWithItselfResponse response = await request.Execute();
 
                 if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
                 {
@@ -849,7 +849,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Called when [step next postage meter address].
         /// </summary>
-        private void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
+        private async void OnStepNextPostageMeterAddress(object sender, WizardStepEventArgs e)
         {
             using (ILifetimeScope ioc = IoC.BeginLifetimeScope())
             {
@@ -866,7 +866,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
                 request.PhysicalAddress = meterAddressAdapter;
 
-                AssociateShipWorksWithItselfResponse response = request.Execute();
+                AssociateShipWorksWithItselfResponse response = await request.Execute();
 
                 switch (response.ResponseType)
                 {

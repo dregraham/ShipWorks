@@ -105,13 +105,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Executes the associate ShipWorks with itself request
         /// </summary>
-        public AssociateShipWorksWithItselfResponse Execute()
+        public async Task<AssociateShipWorksWithItselfResponse> Execute()
         {
             if (PhysicalAddress != null)
             {
                 // Call AV server
-	            Task<UspsAddressValidationResults> validationTask = uspsWebClient.ValidateAddressAsync(PhysicalAddress);
-	            UspsAddressValidationResults uspsResult = validationTask.Result;
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(PhysicalAddress);
 
                 if (!uspsResult.IsSuccessfulMatch)
                 {
