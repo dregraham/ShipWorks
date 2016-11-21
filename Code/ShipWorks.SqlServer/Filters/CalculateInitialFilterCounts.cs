@@ -12,7 +12,7 @@ using ShipWorks.SqlServer.General;
 public partial class StoredProcedures
 {
     [SqlProcedure]
-    public static void CalculateInitialFilterCounts()
+    public static void CalculateInitialFilterCounts(out SqlInt32 nodesUpdated)
     {
         // Attach to the connection
         using (SqlConnection con = new SqlConnection("Context connection = true"))
@@ -27,6 +27,7 @@ public partial class StoredProcedures
             string calculation;
 
             int countsTaken = 0;
+            nodesUpdated = 0;
 
             TimeSpan timeLimit = TimeSpan.FromSeconds(15);
 
@@ -67,6 +68,7 @@ public partial class StoredProcedures
                     finally
                     {
                         ActiveCalculationUtility.ReleaseCalculatingLock(con);
+                        nodesUpdated = countsTaken;
                     }
                 }
             }

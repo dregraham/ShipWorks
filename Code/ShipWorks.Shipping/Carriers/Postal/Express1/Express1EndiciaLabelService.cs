@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     /// <summary>
     /// Label Service for Express1 Endicia
     /// </summary>
-    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.Endicia)]
+    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.Express1Endicia)]
     [Component(RegistrationType.Self)]
     public class Express1EndiciaLabelService : ILabelService
     {

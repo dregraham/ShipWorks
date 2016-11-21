@@ -344,6 +344,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PendingInitialAccount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("GlobalPostAvailability", fieldHashtable);
 		}
 		#endregion
 
@@ -640,6 +642,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)UspsAccountFieldIndex.PendingInitialAccount, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.PendingInitialAccount, value); }
+		}
+
+		/// <summary> The GlobalPostAvailability property of the Entity UspsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."GlobalPostAvailability"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 GlobalPostAvailability
+		{
+			get { return (System.Int32)GetValue((int)UspsAccountFieldIndex.GlobalPostAvailability, true); }
+			set	{ SetValue((int)UspsAccountFieldIndex.GlobalPostAvailability, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
