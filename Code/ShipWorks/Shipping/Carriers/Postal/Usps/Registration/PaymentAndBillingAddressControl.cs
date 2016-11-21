@@ -37,7 +37,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            EnumHelper.BindComboBox<CreditCardType>(cardType);
+            // Load the card types
+            EnumHelper.BindComboBox<CreditCardTypeInternal>(cardType);
 
             // Set the minimum/maximum value of the credit card expiration month and year to adjust
             // for the current date
