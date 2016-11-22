@@ -164,9 +164,11 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Magento\IMagentoAccountSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Magento\MagentoAccountSettingsControl.xaml.cs">
       <DependentUpon>MagentoAccountSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.cs">
       <SubType>UserControl</SubType>
     </Compile>

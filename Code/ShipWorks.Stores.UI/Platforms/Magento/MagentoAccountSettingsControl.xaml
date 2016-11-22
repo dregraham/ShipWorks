@@ -1,14 +1,26 @@
-﻿<UserControl x:Class="ShipWorks.Stores.UI.Platforms.Magento.MagentoAccountSettingsControl"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ShipWorks.Stores.UI.Platforms.Magento" 
              xmlns:ui="http://schemas.shipworks.com/ui"
+            xmlns:magentoEnums="clr-namespace:ShipWorks.Stores.Platforms.Magento.Enums;assembly=ShipWorks.Core" 
+            x:Class="ShipWorks.Stores.UI.Platforms.Magento.MagentoAccountSettingsControl"
              Background="White"
              d:DesignHeight="500"
              d:DesignWidth="500"
-             mc:Ignorable="d">
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance local:MagentoAccountSettingsControlViewModel}"
+             >
+    <Control.Resources>
+        <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <magentoEnums:MagentoVersion x:Key="PhpFile">PhpFile</magentoEnums:MagentoVersion>
+        <magentoEnums:MagentoVersion x:Key="MagentoConnect">MagentoConnect</magentoEnums:MagentoVersion>
+        <magentoEnums:MagentoVersion x:Key="MagentoTwo">MagentoTwo</magentoEnums:MagentoVersion>
+        <magentoEnums:MagentoVersion x:Key="MagentoTwoREST">MagentoTwoREST</magentoEnums:MagentoVersion>
+    </Control.Resources>
     <Grid Margin="10">
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}">
@@ -27,10 +39,22 @@
         <StackPanel Margin="0">
             <StackPanel>
                 <TextBlock FontWeight="Bold" Text="Version" />
-                <RadioButton Content="Magento 1 Module" GroupName="Version" />
-                <RadioButton Content="Magento 1 Connect" GroupName="Version" />
-                <RadioButton Content="Magento 2 Module" GroupName="Version" />
-                <RadioButton Content="Magento 2 REST API" GroupName="Version" />
+                <RadioButton Content="Magento 1 Module" GroupName="Version" 
+                             IsChecked="{Binding MagentoVersion,
+                                            Converter={StaticResource RadioButtonCheckedConverter},
+                                            ConverterParameter={StaticResource PhpFile}}" />
+                <RadioButton Content="Magento 1 Connect" GroupName="Version" 
+                             IsChecked="{Binding MagentoVersion,
+                                            Converter={StaticResource RadioButtonCheckedConverter},
+                                            ConverterParameter={StaticResource MagentoConnect}}"/>
+                <RadioButton Content="Magento 2 Module" GroupName="Version" 
+                             IsChecked="{Binding MagentoVersion,
+                                            Converter={StaticResource RadioButtonCheckedConverter},
+                                            ConverterParameter={StaticResource MagentoTwo}}"/>
+                <RadioButton Content="Magento 2 REST API" GroupName="Version" 
+                             IsChecked="{Binding MagentoVersion,
+                                            Converter={StaticResource RadioButtonCheckedConverter},
+                                            ConverterParameter={StaticResource MagentoTwoREST}}"/>
             </StackPanel>
             <StackPanel>
                 <TextBlock FontWeight="Bold" Text="Account Credentials" />
@@ -53,27 +77,32 @@
                     <TextBox Grid.Row="0"
                              Grid.Column="1"
                              Grid.ColumnSpan="2"
-                             Margin="4" />
+                             Margin="4"
+                             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Text="Password:" />
-                    <TextBox Grid.Row="1"
+                    <PasswordBox Grid.Row="1"
                              Grid.Column="1"
-                             Grid.ColumnSpan="2">
+                             Grid.ColumnSpan="2"
+                             Margin="4">
                         <i:Interaction.Behaviors>
-                            <ui:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+                            <ui:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         </i:Interaction.Behaviors>
-                    </TextBox>
+                    </PasswordBox>
                     <TextBlock Grid.Row="2"
                                Grid.Column="0"
                                Text="Store Url:" />
                     <TextBox Grid.Row="2"
                              Grid.Column="1"
-                             Grid.ColumnSpan="2" />
+                             Grid.ColumnSpan="2" 
+                              Text="{Binding StoreUrl, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="3"
                                Grid.Column="0"
                                Text="Store code:" />
-                    <TextBox Grid.Row="3" Grid.Column="1" />
+                    <TextBox Grid.Row="3" 
+                             Grid.Column="1" 
+                             Text="{Binding StoreCode, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Grid.Row="3"
                                Grid.Column="2"
                                Foreground="Gray"

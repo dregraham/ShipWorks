@@ -1,5 +1,9 @@
 ﻿namespace ShipWorks.Stores.UI.Platforms.Magento
 {
+    /// <summary>
+    /// Hosts the Magento WPF Settings Control
+    /// </summary>
+    /// <seealso cref="ShipWorks.Stores.Management.AccountSettingsControlBase" />
     partial class MagentoAccountSettingsHost
     {
         /// <summary>
