@@ -19,6 +19,7 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
@@ -168,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     CreateFilterShipped(),
                 };
 
-            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.Amazon))
+            if (ShippingSettings.Fetch().ConfiguredTypes.Contains(ShipmentTypeCode.Amazon))
             {
                 filters.Add(CreateFilterAmazonPrime());
             }
@@ -196,11 +197,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             primeCondition.Value = ChannelAdvisorIsAmazonPrime.Yes;
             definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
-            // Is fulfilled by seller
+            // All the order items are not FBA
+            ForEveryItemCondition everyItem = new ForEveryItemCondition();
+            definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
+
             ChannelAdvisorIsFBACondition fbaCondition = new ChannelAdvisorIsFBACondition();
             fbaCondition.Operator = EqualityOperator.Equals;
             fbaCondition.Value = false;
-            definition.RootContainer.FirstGroup.Conditions.Add(fbaCondition);
+            everyItem.Container.FirstGroup.Conditions.Add(fbaCondition);
 
             return new FilterEntity
             {

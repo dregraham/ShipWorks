@@ -19,6 +19,7 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -166,7 +167,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     CreateFilterFba(),
                 };
 
-            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.Amazon))
+            if (ShippingSettings.Fetch().ConfiguredTypes.Contains(ShipmentTypeCode.Amazon))
             {
                 filters.Add(CreateFilterAmazonPrime());
             }
