@@ -19,7 +19,6 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
@@ -169,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     CreateFilterShipped(),
                 };
 
-            if (ShippingSettings.Fetch().ConfiguredTypes.Contains(ShipmentTypeCode.Amazon))
+            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.Amazon))
             {
                 filters.Add(CreateFilterAmazonPrime());
             }
