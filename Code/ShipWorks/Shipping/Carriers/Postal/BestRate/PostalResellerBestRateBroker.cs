@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Autofac;
 using Interapptive.Shared.Utility;
@@ -141,9 +142,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
 
-            currentShipment.Postal.DimsHeight = currentShipment.BestRate.DimsHeight;
-            currentShipment.Postal.DimsWidth = currentShipment.BestRate.DimsWidth;
-            currentShipment.Postal.DimsLength = currentShipment.BestRate.DimsLength;
+            currentShipment.Postal.DimsHeight = originalShipment.BestRate.DimsHeight;
+            currentShipment.Postal.DimsWidth = originalShipment.BestRate.DimsWidth;
+            currentShipment.Postal.DimsLength = originalShipment.BestRate.DimsLength;
+            currentShipment.Postal.DimsProfileID = originalShipment.BestRate.DimsProfileID;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.Postal.DimsWeight = originalShipment.BestRate.DimsWeight;
@@ -220,7 +222,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 
                 OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
 
-                // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
                 StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
                 storeType.OverrideShipmentDetails(shipment);
 
@@ -234,6 +235,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 
             // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
             rates.Rates.ForEach(UseProperUspsLogo);
+
+            rates.Carrier = shipment.ShipmentTypeCode;
 
             return rates;
         }

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<package>
+    <name>ShipWorks_Multi_Carrier_Shipping_Software</name>
+    <version>4.0.4</version>
+    <stability>stable</stability>
+    <license uri="www.shipworks.com">commercial</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>ShipWorks Integration</summary>
+    <description>ShipWorks Magento Extension connects your Magento store to ShipWorks shipping software.</description>
+    <notes>ShipWorks Magento Extension&#xD;
+&#xD;
+Version 4.0.4&#xD;
+August 17, 2015&#xD;
+Features:&#xD;
+Resolved Issues:&#xD;
+- Addressed issues found in Magento code audit. &#xD;
+&#xD;
+Version 4.0.3&#xD;
+July 23, 2015&#xD;
+Features:&#xD;
+Resolved Issues:&#xD;
+- Fixed bug related to Customer Emails not downloading into ShipWorks.&#xD;
+&#xD;
+Version 4.0.2&#xD;
+July 2, 2015&#xD;
+Features:&#xD;
+Resolved Issues:&#xD;
+- Fixed bug related to tracking uploads&#xD;
+&#xD;
+Version 4.0.1&#xD;
+July 2, 2015&#xD;
+Features:&#xD;
+Resolved Issues:&#xD;
+- Fixed address downloading issues&#xD;
+&#xD;
+Version 4.0.0&#xD;
+June 30, 2015&#xD;
+Features:&#xD;
+Resolved Issues:&#xD;
+- Fixed various bugs&#xD;
+&#xD;
+Version 3.10&#xD;
+April 10, 2015&#xD;
+Features:&#xD;
+- Added support to upload multiple tracking numbers to a single shipment in Magento&#xD;
+- Added admin menu for custom mapping attributes from Magento into ShipWorks&#xD;
+Resolved Issues:&#xD;
+- Fixed bug causing emails to not send when choosing to notify customer after processing a shipment in ShipWorks&#xD;
+&#xD;
+Initial Release Version 2.9&#xD;
+November 06, 2010&#xD;
+Features:&#xD;
+- Download orders from MagentoConnect into ShipWorks&#xD;
+- Upload tracking information and invoice orders after shipping in ShipWorks&#xD;
+- Complete orders in Magento after shipping in ShipWorks&#xD;
+- Notify customer when a shipment has been processed in ShipWorks</notes>
+    <authors><author><name>ShipWorks</name><user>Administrator</user><email>support@shipworks.com</email></author></authors>
+    <date>2015-08-17</date>
+    <time>14:36:20</time>
+    <contents><target name="magecommunity"><dir name="Interapptive"><dir name="ShipWorks"><dir name="Helper"><file name="Data.php" hash="40106263bc0aafbf7eb7ce785ed5e04f"/></dir><dir name="Model"><file name="Api.php" hash="4205c2808ef2a43a34ebe9b76f0f1b2e"/><file name="ItemAttributes.php" hash="00f7314642712fd389fea33de9936480"/><dir name="Order"><file name="Repo.php" hash="06aa69acd4ac2259d81cb05807cc3fc4"/><file name="XMLWriter.php" hash="a2c2bfd01b0309f9923abf4941010b28"/></dir><file name="Order.php" hash="851e2d4ed3817457f8bcf49176a9cbdf"/><file name="ShipWorks.php" hash="c7ad1c19dddd49aa79d2d9d1df5c3441"/><file name="Shipment.php" hash="97aef1118be6943a5e93aeddf8a2434a"/><file name="Store.php" hash="f0385b0d6faddcf7d12f8f7f4fe4021b"/><file name="Version.php" hash="1eca7eebff4f07b6a849b890073c0327"/></dir><dir name="etc"><file name="adminhtml.xml" hash="0cdeaa65b96336eaf9c56e34619408e5"/><file name="api.xml" hash="b677d811ea7e0b6644fc036c6473708f"/><file name="config.xml" hash="d1e426047ae24e0aace8438007484d7f"/><file name="system.xml" hash="7134c38264cdab7021131021f7321201"/></dir></dir></dir><dir name=".."><dir name=".."><dir name="etc"><dir name="modules"><file name="Interapptive_ShipWorks.xml" hash="5b105ad38acfab7c8613e3e174c3d3e9"/></dir></dir></dir></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.3.0</min><max>7.0.0</max></php></required></dependencies>
+</package>

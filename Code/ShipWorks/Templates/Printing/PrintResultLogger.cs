@@ -7,6 +7,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using System.Diagnostics;
+using System.Transactions;
 using Interapptive.Shared;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +15,7 @@ using ShipWorks.Users;
 using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Templates.Printing
@@ -89,106 +91,145 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Log the result of the print
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static void LogPrintResultContent(TemplateResult templateResult, PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier)
         {
             TemplateEntity template = templateResult.XPathSource.Template;
+            PrintResultEntity result = null;
 
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (SqlAdapter adapter = new SqlAdapter(false))
             {
-                PrintResultEntity result = new PrintResultEntity();
-                
-                // Placeholder until we get the real ID
-                result.ContentResourceID = -1;
-
-                result.JobIdentifier = jobIdentifier;
-                result.ComputerID = UserSession.Computer.ComputerID;
-                result.PrintDate = DateTime.UtcNow;
-
-                result.RelatedObjectID = relatedEntityID;
-                result.ContextObjectID = contextEntityID;
-
-                result.TemplateID = template.TemplateID;
-                result.TemplateType = template.Type;
-                result.OutputFormat = template.OutputFormat;
-
-                // If its a label sheet, store the label sheet id used
-                if (settings.LabelSettings != null)
-                {
-                    result.LabelSheetID = settings.LabelSettings.LabelSheetID;
-                }
-
-                result.PrinterName = settings.PrinterName;
-                result.PaperSource = settings.PaperSource;
-                result.PaperSourceName = settings.PaperSourceName;
-
-                result.Copies = settings.Copies;
-                result.Collated = settings.Collate;
-
-                if (settings.PageSettings != null)
-                {
-                    result.PageWidth = settings.PageSettings.PageWidth;
-                    result.PageHeight = settings.PageSettings.PageHeight;
-                    result.PageMarginLeft = settings.PageSettings.MarginLeft;
-                    result.PageMarginRight = settings.PageSettings.MarginRight;
-                    result.PageMarginTop = settings.PageSettings.MarginTop;
-                    result.PageMarginBottom = settings.PageSettings.MarginBottom;
-                }
-                else
-                {
-                    result.PageWidth = 0;
-                    result.PageHeight = 0;
-                    result.PageMarginLeft = 0;
-                    result.PageMarginRight = 0;
-                    result.PageMarginTop = 0;
-                    result.PageMarginBottom = 0;
-                }
+                result = CreatePrintResultEntry(settings, relatedEntityID, contextEntityID, jobIdentifier, template);
 
                 // Save it now, b\c we need the ID to use for the resource manager
                 adapter.SaveAndRefetch(result);
 
-                string printContent = templateResult.ReadResult();
-
-                // If its html content, then process all the images
-                if (template.OutputFormat == (int) TemplateOutputFormat.Html)
+                try
                 {
-                    TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor();
-                    imageProcessor.LocalImages = true;
-                    imageProcessor.OnlineImages = false;
+                    string printContent = templateResult.ReadResult();
 
-                    // Process all the images in the document
-                    printContent = imageProcessor.Process(printContent, (HtmlAttribute attribute, Uri srcUri, string imageName) =>
+                    // If its html content, then process all the images
+                    if (template.OutputFormat == (int)TemplateOutputFormat.Html)
                     {
-                        try
+                        TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor
                         {
-                            DataResourceReference resource = DataResourceManager.CreateFromFile(srcUri.LocalPath, result.PrintResultID);
+                            LocalImages = true,
+                            OnlineImages = false
+                        };
 
-                            // Update the attribute with the new filename
-                            attribute.Value = resource.Filename;
+                        // Process all the images in the document
+                        printContent = imageProcessor.Process(printContent, (attribute, srcUri, imageName) =>
+                            {
+                                ImageProcessorImageHandler(srcUri, result, attribute, imageName);
+                            });
+                    }
 
-                            HtmlNode img = attribute.OwnerNode;
+                    // Save the print content as a resource as well
+                    DataResourceReference contentResource = DataResourceManager.CreateFromText(printContent, result.PrintResultID);
+                    result.ContentResourceID = contentResource.ReferenceID;
 
-                            // Add the shipworks special attributes for template resources
-                            img.Attributes.Append("importedFrom", imageName);
-                        }
-                        catch (Exception ex)
+                    // Save the result while in a transaction
+                    using (new LoggedStopwatch(log, "PrintResultLogger.LogPrintResultContent - comitted: "))
+                    {
+                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                         {
-                            // We are here b\c a copy operation failed.  Missing one file does
-                            // not fail the whole process.  Lots could go wrong, so for now I am having
-                            // it just catch the general Exception case.
-                            log.Error(string.Format("Error localizing URI '{0}'.", srcUri), ex);
+                            adapter.SaveEntity(result);
+
+                            scope.Complete();
                         }
-                    });
+                    }
                 }
+                catch (Exception ex)
+                {
+                    log.Error(ex.Message);
 
-                // Save the print content as a resource as well
-                DataResourceReference contentResource = DataResourceManager.CreateFromText(printContent, result.PrintResultID);
-                result.ContentResourceID = contentResource.ReferenceID;
+                    // Delete the result we created.  If other resources were created, they should be cleaned up
+                    // by the deleted abandoned resources task.
+                    SqlAdapter.Default.DeleteEntity(result);
 
-                adapter.SaveAndRefetch(result);
-
-                adapter.Commit();
+                    throw;
+                }
             }
+
+        }
+
+        /// <summary>
+        /// Handles any image needs for the html
+        /// </summary>
+        static void ImageProcessorImageHandler(Uri srcUri, PrintResultEntity result, HtmlAttribute attribute, string imageName)
+        {
+            try
+            {
+                DataResourceReference resource = DataResourceManager.CreateFromFile(srcUri.LocalPath, result.PrintResultID);
+
+                // Update the attribute with the new filename
+                attribute.Value = resource.Filename;
+
+                HtmlNode img = attribute.OwnerNode;
+
+                // Add the shipworks special attributes for template resources
+                img.Attributes.Append("importedFrom", imageName);
+            }
+            catch (Exception ex)
+            {
+                // We are here b\c a copy operation failed.  Missing one file does
+                // not fail the whole process.  Lots could go wrong, so for now I am having
+                // it just catch the general Exception case.
+                log.Error(string.Format("Error localizing URI '{0}'.", srcUri), ex);
+            }
+        }
+
+        /// <summary>
+        /// Create a PrintResultEntity for the print job
+        /// </summary>
+        public static PrintResultEntity CreatePrintResultEntry(PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier, TemplateEntity template)
+        {
+            PrintResultEntity result = new PrintResultEntity
+            {
+                // Placeholder until we get the real ID
+                ContentResourceID = -1,
+                JobIdentifier = jobIdentifier,
+                ComputerID = UserSession.Computer.ComputerID,
+                PrintDate = DateTime.UtcNow,
+                RelatedObjectID = relatedEntityID,
+                ContextObjectID = contextEntityID,
+                TemplateID = template.TemplateID,
+                TemplateType = template.Type,
+                OutputFormat = template.OutputFormat
+            };
+
+            // If its a label sheet, store the label sheet id used
+            if (settings.LabelSettings != null)
+            {
+                result.LabelSheetID = settings.LabelSettings.LabelSheetID;
+            }
+
+            result.PrinterName = settings.PrinterName;
+            result.PaperSource = settings.PaperSource;
+            result.PaperSourceName = settings.PaperSourceName;
+
+            result.Copies = settings.Copies;
+            result.Collated = settings.Collate;
+
+            if (settings.PageSettings != null)
+            {
+                result.PageWidth = settings.PageSettings.PageWidth;
+                result.PageHeight = settings.PageSettings.PageHeight;
+                result.PageMarginLeft = settings.PageSettings.MarginLeft;
+                result.PageMarginRight = settings.PageSettings.MarginRight;
+                result.PageMarginTop = settings.PageSettings.MarginTop;
+                result.PageMarginBottom = settings.PageSettings.MarginBottom;
+            }
+            else
+            {
+                result.PageWidth = 0;
+                result.PageHeight = 0;
+                result.PageMarginLeft = 0;
+                result.PageMarginRight = 0;
+                result.PageMarginTop = 0;
+                result.PageMarginBottom = 0;
+            }
+
+            return result;
         }
 
         /// <summary>

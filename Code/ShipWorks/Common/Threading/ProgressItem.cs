@@ -289,11 +289,7 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         private void RaiseChanged()
         {
-            EventHandler changed = Changed;
-            if (changed != null)
-            {
-                changed(this, EventArgs.Empty);
-            }
+            Changed?.Invoke(this, EventArgs.Empty);
         }
 
     }

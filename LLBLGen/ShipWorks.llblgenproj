@@ -2631,6 +2631,7 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="17" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="GlobalPostAvailability" Type="int" Precision="10" FieldIndex="24" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
@@ -3518,7 +3519,11 @@
     </InheritanceHierarchies>
   </EntityModel>
   <SPCallDefinitions>
-    <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9" />
+    <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9">
+      <Parameters>
+        <Parameter Name="NodesUpdated" Type="int" Precision="10" Direction="3" />
+      </Parameters>
+    </SPCallDefinition>
     <SPCallDefinition Name="CalculateUpdateFilterCounts" ObjectID="38ab1dd3-02d1-46ea-b52d-d920e4ab0192" />
     <SPCallDefinition Name="CalculateUpdateQuickFilterCounts" ObjectID="fddaffaa-ec40-4fba-8d51-896e2dc55952" />
     <SPCallDefinition Name="DeleteAbandonedFilterCounts" ObjectID="b8baa903-5f71-4fd4-bca1-1ef1b299f578" />
@@ -3548,7 +3553,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-21T16:00:15.459721Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-12T14:33:45.2615195Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7535,6 +7540,7 @@
                     <Field Name="ContractType" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
+                    <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -7824,7 +7830,11 @@
                 </Table>
               </Tables>
               <StoredProcedures>
-                <StoredProcedure Name="CalculateInitialFilterCounts" />
+                <StoredProcedure Name="CalculateInitialFilterCounts">
+                  <Parameters>
+                    <Parameter Name="@nodesUpdated" Direction="3" Ordinal="1" DbType="8" Precision="10" />
+                  </Parameters>
+                </StoredProcedure>
                 <StoredProcedure Name="CalculateUpdateFilterCounts" />
                 <StoredProcedure Name="CalculateUpdateQuickFilterCounts" />
                 <StoredProcedure Name="DeleteAbandonedFilterCounts" />
@@ -11253,6 +11263,7 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="GlobalPostAvailability" TargetFieldName="GlobalPostAvailability" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
@@ -11534,7 +11545,9 @@
       <TypedViewMappings />
       <SPCallMappings>
         <SPCallMapping SPCallName=":CalculateInitialFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateInitialFilterCounts">
-          <FieldMappings />
+          <FieldMappings>
+            <FieldMapping FieldName="NodesUpdated" TargetFieldName="@nodesUpdated" />
+          </FieldMappings>
         </SPCallMapping>
         <SPCallMapping SPCallName=":CalculateUpdateFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateUpdateFilterCounts">
           <FieldMappings />

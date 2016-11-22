@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+    <modules>
+        <ShipWorks>
+            <version>0.1</version>
+        </ShipWorks>
+    </modules>
+    <api>
+        <resources>
+            <shipWorksApi translate="title" module="Interapptive_ShipWorks">
+                <title>ShipWorks API</title>
+                <model>Interapptive_ShipWorks_Model_Api</model>
+                <methods>
+                    <getModule translate="title" module="Interapptive_ShipWorks">
+                        <Title>Get Module</Title>
+                    </getModule>
+
+                    <getCount translate="title" module="Interapptive_ShipWorks">
+                        <Title>Get Order Count</Title>
+                    </getCount>
+
+                    <getStore translate="title" module="Interapptive_ShipWorks">
+                        <Title>Get Store</Title>
+                    </getStore>
+
+                    <getOrders translate="title" module="Interapptive_ShipWorks">
+                        <Title>Get Orders</Title>
+                    </getOrders>
+
+                    <getStatusCodes translate="title" module="Interapptive_ShipWorks">
+                        <Title>Get Status Codes</Title>
+                    </getStatusCodes>
+
+                    <updateOrder translate="title" module="Interapptive_ShipWorks">
+                        <Title>Update Order</Title>
+                    </updateOrder>
+                </methods>
+            </shipWorksApi>
+        </resources>
+    </api>
+</config>

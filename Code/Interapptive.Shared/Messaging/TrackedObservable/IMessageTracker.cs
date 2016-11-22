@@ -47,5 +47,10 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
         /// Track a select call
         /// </summary>
         IMessageTracker<TReturn> Select<TReturn>(Func<T, TReturn> value, object listener, string callerName);
+
+        /// <summary>
+        /// Track a select many call
+        /// </summary>
+        IObservable<IMessageTracker<TReturn>> SelectMany<TReturn>(Func<T, IObservable<TReturn>> value, object listener, string callerName);
     }
 }

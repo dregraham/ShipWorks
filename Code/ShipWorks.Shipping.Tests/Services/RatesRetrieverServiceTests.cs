@@ -71,6 +71,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
                 schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(500).Ticks);
                 schedulerProvider.TaskPool.Start();
+                schedulerProvider.WindowsFormsEventLoop.Start();
 
                 Assert.NotNull(message);
             }
