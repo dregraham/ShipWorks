@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Security;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// <summary>
         /// Password
         /// </summary>
-        string Password { get; set; }
+        SecureString Password { get; set; }
 
         /// <summary>
         /// StoreCode

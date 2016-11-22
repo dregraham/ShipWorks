@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using Interapptive.Shared.Security;
 
@@ -24,7 +26,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
     {
         private bool isMagento1;
         private string username;
-        private string password;
+        private SecureString password;
         private string storeUrl;
         private string storeCode;
 
@@ -69,7 +71,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// Magento Password
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Password
+        public SecureString Password
         {
             get { return password; }
             set { handler.Set(nameof(Password), ref password, value); }
@@ -106,9 +108,11 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
                 throw new MagentoException("Store Url not in an a valid format.");
             }
 
-            store.ModuleUsername = username;
             store.ModulePassword =
-                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username).Encrypt(password);
+                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username).
+                Encrypt(Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password)));
+
+            store.ModuleUsername = username;
             store.ModuleUrl = storeUrl;
             store.ModuleOnlineStoreCode = StoreCode;
 

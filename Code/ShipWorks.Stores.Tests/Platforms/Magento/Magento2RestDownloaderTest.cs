@@ -14,27 +14,21 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 {
     public class Magento2RestDownloaderTest
     {
-        private readonly Mock<IMagentoTwoRestClient> webClient;
-        private readonly Mock<ISqlAdapterRetry> sqlAdapter;
-
-        private readonly string magentoOrder;
-        private readonly Order order;
-        private readonly Magento2RestDownloader testObject;
         private readonly MagentoOrderEntity orderEntity;
 
         public Magento2RestDownloaderTest()
         {
-             magentoOrder = EmbeddedResourceHelper.GetEmbeddedResourceString(
-                    "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
+            var magentoOrder = EmbeddedResourceHelper.GetEmbeddedResourceString(
+                "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
 
-            order = JsonConvert.DeserializeObject<Order>(magentoOrder);
+            var order = JsonConvert.DeserializeObject<Order>(magentoOrder);
             var response = new OrdersResponse();
             response.Orders = new List<Order>() {order};
-            webClient = new Mock<IMagentoTwoRestClient>();
+            var webClient = new Mock<IMagentoTwoRestClient>();
             webClient.Setup(w => w.GetToken(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<string>())).Returns("token");
             webClient.Setup(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<Uri>(), It.IsAny<string>())).Returns(response);
 
-            sqlAdapter = new Mock<ISqlAdapterRetry>();
+            var sqlAdapter = new Mock<ISqlAdapterRetry>();
             sqlAdapter.Setup((r => r.ExecuteWithRetry(It.IsAny<Action>()))).Callback((Action x) => x.Invoke());
 
             MagentoStoreEntity store = new MagentoStoreEntity()
@@ -46,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             orderEntity = new MagentoOrderEntity();
 
-            testObject = new Magento2RestDownloader(store, webClient.Object, sqlAdapter.Object);
+            var testObject = new Magento2RestDownloader(store, webClient.Object, sqlAdapter.Object);
             testObject.LoadOrder(orderEntity, order);
         }
 

@@ -2,7 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              Background="White"
              d:DesignHeight="500"
              d:DesignWidth="500"
@@ -57,7 +59,11 @@
                                Text="Password:" />
                     <TextBox Grid.Row="1"
                              Grid.Column="1"
-                             Grid.ColumnSpan="2" />
+                             Grid.ColumnSpan="2">
+                        <i:Interaction.Behaviors>
+                            <ui:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
                     <TextBlock Grid.Row="2"
                                Grid.Column="0"
                                Text="Store Url:" />
