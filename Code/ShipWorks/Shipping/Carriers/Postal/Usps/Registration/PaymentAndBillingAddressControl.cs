@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
@@ -114,6 +115,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
             }
 
             StringBuilder validationMessages = new StringBuilder();
+
+            if (!Regex.IsMatch(creditCardNumber.Text, @"^\d+$"))
+            {
+                validationMessages.AppendLine("Credit card number");
+            }
 
             if (string.IsNullOrEmpty(cardholderName.Text))
             {
