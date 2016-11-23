@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderEntity.OrderDate = DateTime.Parse(magentoOrder.created_at).ToUniversalTime();
                 orderEntity.OrderNumber = magentoOrder.entity_id;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.grand_total);
-
+                ((MagentoOrderEntity) orderEntity).MagentoOrderID = magentoOrder.entity_id;
                 LoadItems(orderEntity, magentoOrder.items);
                 LoadOrderCharges(orderEntity, magentoOrder);
             }
@@ -164,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                 orderItem.Name = item.name;
                 orderItem.Quantity = item.qty_ordered;
-                orderItem.Code = item.sku;
+                orderItem.Code = item.item_id.ToString();
                 orderItem.SKU = item.sku;
                 orderItem.UnitPrice = item.price;
                 orderItem.Weight = item.weight;

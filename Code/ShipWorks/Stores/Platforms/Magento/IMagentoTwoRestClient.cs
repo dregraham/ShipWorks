@@ -19,5 +19,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Gets a token for the given username/password
         /// </summary>
         string GetToken(Uri storeUri, string username, string password);
+
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        void UploadShipmentDetails(string shipmentDetailsJson, Uri storeUri, string token, long magentoOrderId);
     }
 }

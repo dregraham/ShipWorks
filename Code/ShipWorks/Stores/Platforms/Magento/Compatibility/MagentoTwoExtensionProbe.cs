@@ -21,12 +21,12 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store)
         {
             // First try just the given url
-            GenericResult<Uri> result = ProbeUrl(store.ModuleUrl);
+            GenericResult<Uri> result = ProbeUrl($"{store.ModuleUrl}/admin");
 
             if (!result.Success)
             {
                 // If the given url doesnt work try adding shipworks3.php
-                result = ProbeUrl($"{store.ModuleUrl.TrimEnd('/')}/rest/V1/shipworks");
+                result = ProbeUrl($"{store.ModuleUrl.TrimEnd('/')}/admin/rest/V1/shipworks");
             }
 
             return result;

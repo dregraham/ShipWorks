@@ -51,6 +51,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
 
+        private MagentoVersion MagentoVersion
+        {
+            get
+            {
+                MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+                if (magentoStore == null)
+                {
+                    throw new InvalidOperationException("Can not get Magento version for a non-Magento store");
+                }
+
+                return (MagentoVersion) magentoStore.MagentoVersion ;
+            }
+        }
+
         /// <summary>
         /// Create the magento-specific store entity
         /// </summary>
@@ -105,14 +120,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
-
-            if (magentoStore == null)
-            {
-                throw new InvalidOperationException("Not a magento store.");
-            }
-
-            return new MagentoOnlineUpdateActionControl(magentoStore.MagentoVersion == (int)MagentoVersion.MagentoTwo);
+            return new MagentoOnlineUpdateActionControl(MagentoVersion == MagentoVersion.MagentoTwo);
         }
 
         /// <summary>
@@ -139,19 +147,19 @@ namespace ShipWorks.Stores.Platforms.Magento
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // take actions to Cancel the order
-            MenuCommand command = new MenuCommand("Cancel", OnOrderCommand) {Tag = "cancel"};
+            MenuCommand command = new MenuCommand("Cancel", OnOrderCommand) { Tag = "cancel" };
             commands.Add(command);
 
             // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and
             // sets the order "state" online to complete
-            command = new MenuCommand("Complete", OnOrderCommand) {Tag = "complete"};
+            command = new MenuCommand("Complete", OnOrderCommand) { Tag = "complete" };
             commands.Add(command);
 
             // place the order into Hold status
-            command = new MenuCommand("Hold", OnOrderCommand) {Tag = "hold"};
+            command = new MenuCommand("Hold", OnOrderCommand) { Tag = "hold" };
             commands.Add(command);
 
-            command = new MenuCommand("With Comments...", OnOrderCommand) {BreakBefore = true};
+            command = new MenuCommand("With Comments...", OnOrderCommand) { BreakBefore = true };
             commands.Add(command);
 
             return commands;
@@ -212,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             string comments = state["comments"];
 
             // create the updater and execute the command
-            MagentoOnlineUpdater updater = (MagentoOnlineUpdater)CreateOnlineUpdater();
+            IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) CreateOnlineUpdater();
 
             try
             {
@@ -220,12 +228,16 @@ namespace ShipWorks.Stores.Platforms.Magento
                 MagentoStoreEntity store = StoreManager.GetStore(DataProvider.GetOrderHeader(orderID).StoreID) as MagentoStoreEntity;
                 if (store != null)
                 {
-                    updater.ExecuteOrderAction(orderID, action, comments, store.MagentoTrackingEmails);
+                    updater.UploadShipmentDetails(orderID, action, comments, store.MagentoTrackingEmails);
                 }
                 else
                 {
                     log.WarnFormat("Cannot execute online command for Magento order id {0}, the store was deleted.", orderID);
                 }
+            }
+            catch (MagentoException ex)
+            {
+                issueAdder.Add(orderID, ex);
             }
             catch (GenericStoreException ex)
             {
@@ -238,6 +250,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override GenericStoreOnlineUpdater CreateOnlineUpdater()
         {
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    return (GenericStoreOnlineUpdater) scope.ResolveKeyed<IMagentoOnlineUpdater>(MagentoVersion.MagentoTwoREST, new TypedParameter(typeof(GenericModuleStoreEntity), Store));
+                }
+            }
+
             return new MagentoOnlineUpdater((GenericModuleStoreEntity)Store);
         }
 
@@ -246,9 +266,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
-
-            if (magentoStore?.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
                 return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
                     new TypedParameter(typeof(StoreEntity), Store));
@@ -269,7 +287,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 throw new InvalidOperationException("Not a magento store.");
             }
 
-            switch ((MagentoVersion)magentoStore.MagentoVersion)
+            switch (MagentoVersion)
             {
                 case MagentoVersion.PhpFile:
                     return new MagentoWebClient(magentoStore);
@@ -298,11 +316,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                 throw new InvalidOperationException("Not a magento store.");
             }
 
-            if (magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST)
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
                 magentoStore.SchemaVersion = "1.1.0.0";
                 return;
             }
+
             base.InitializeFromOnlineModule();
         }
     }

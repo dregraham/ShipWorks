@@ -13,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     {
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
+        private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
 
         /// <summary>
         /// Get an admin token for the given credentials
@@ -36,6 +37,23 @@ namespace ShipWorks.Stores.Platforms.Magento
             AddOrdersSearchCriteria(request, start);
 
             return ProcessRequest<OrdersResponse>(request);
+        }
+
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        /// <param name="shipmentDetailsJson">The shipment details.</param>
+        /// <param name="storeUri">The store URI.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="magentoOrderId"></param>
+        public void UploadShipmentDetails(string shipmentDetailsJson, Uri storeUri, string token, long magentoOrderId)
+        {
+            HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(ShipmentEndpoint, magentoOrderId)}"), token);
+
+            submitter.RequestBody = shipmentDetailsJson;
+
+            ProcessRequest<string>(submitter);
         }
 
         /// <summary>
