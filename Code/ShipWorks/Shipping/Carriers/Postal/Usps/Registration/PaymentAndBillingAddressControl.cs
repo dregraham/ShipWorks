@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 
             StringBuilder validationMessages = new StringBuilder();
 
-            if (!Regex.IsMatch(creditCardNumber.Text, @"^\d+$"))
+            if (!Regex.IsMatch(creditCardNumber.Text, @"^(?!-)(?!.*--)(?!.*  )[0-9- ]+(?<!-)$"))
             {
                 validationMessages.AppendLine("Credit card number");
             }

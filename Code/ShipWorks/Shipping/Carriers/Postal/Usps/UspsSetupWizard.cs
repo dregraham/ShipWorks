@@ -899,7 +899,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     break;
 
                 default:
-                    BeginInvoke((MethodInvoker) delegate { MessageHelper.ShowError(this, response?.Message); });
+                    string message = string.IsNullOrWhiteSpace(response?.Message) ? "An unknown error occurred." : response.Message;
+                    Invoke((MethodInvoker) delegate { MessageHelper.ShowError(this, message); });
                     e.NextPage = CurrentPage;
                     break;
             }
