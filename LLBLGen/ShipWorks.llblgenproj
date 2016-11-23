@@ -1640,7 +1640,7 @@
           <Field Name="IsManual" Type="bool" FieldIndex="9" />
           <Field Name="LocalStatus" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="OnlineCustomerID" Type="object" IsOptional="true" FieldIndex="11" />
-          <Field Name="OnlineLastModified" Type="datetime" FieldIndex="10" />
+          <Field Name="OnlineLastModified" Type="datetime" Precision="7" FieldIndex="10" />
           <Field Name="OnlineStatus" Type="string" MaxLength="100" FieldIndex="12" />
           <Field Name="OnlineStatusCode" Type="object" IsOptional="true" FieldIndex="13" />
           <Field Name="OrderDate" Type="datetime" FieldIndex="6" />
@@ -3552,7 +3552,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-07T22:10:38.80821Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5993,7 +5993,7 @@
                     </Field>
                     <Field Name="LocalStatus" Ordinal="9" DbType="12" Length="100" />
                     <Field Name="IsManual" Ordinal="10" DbType="2" />
-                    <Field Name="OnlineLastModified" Ordinal="11" DbType="4" />
+                    <Field Name="OnlineLastModified" Ordinal="11" DbType="29" Precision="7" />
                     <Field Name="OnlineCustomerID" Ordinal="12" IsOptional="true" DbType="18">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="1" />
