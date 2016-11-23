@@ -9,10 +9,16 @@ ALTER TABLE [dbo].[FedExPackage] ADD
 [SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryTitle] DEFAULT (('')),
 [SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryPlace] DEFAULT ((''))
 GO
+PRINT N'Updating AlcoholRecipientType to NOT NULL'
+GO
+ALTER TABLE [dbo].[FedExPackage] ADD [AlcoholRecipientType] [int] NOT NULL CONSTRAINT [DF_AlcoholRecipientType] DEFAULT 0
+GO
 PRINT N'Dropping FedExPackage Constraints'
+GO
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryContactName]
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryTitle]
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryPlace]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_AlcoholRecipientType]
 GO
 PRINT N'Altering [dbo].[FedExProfilePackage]'
 GO

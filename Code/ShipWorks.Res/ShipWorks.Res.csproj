@@ -361,10 +361,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.7\5.7.0.0.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.7\5.7.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.9\5.9.0.0.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
