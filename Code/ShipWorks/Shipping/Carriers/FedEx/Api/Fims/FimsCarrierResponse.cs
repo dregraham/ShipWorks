@@ -41,13 +41,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         public void Process()
         {
-            shipmentEntity.TrackingNumber = fimsShipResponse.ParcelID;
+            shipmentEntity.TrackingNumber = string.IsNullOrEmpty(fimsShipResponse.TrackingNumber) ? fimsShipResponse.ParcelID : fimsShipResponse.TrackingNumber;
             shipmentEntity.FedEx.Packages[0].TrackingNumber = fimsShipResponse.ParcelID;
             shipmentEntity.FedEx.MasterFormID = string.Empty;
             shipmentEntity.ShipmentCost = 0;
 
             shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
-            shipmentEntity.ActualLabelFormat = null;
+            shipmentEntity.ActualLabelFormat = fimsShipResponse.LabelFormat == "Z" ? (int?) ThermalLanguage.ZPL : null;
             shipmentEntity.FedEx.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             labelRepository.SaveLabel(fimsShipResponse, shipmentEntity.FedEx.Packages[0].FedExPackageID);

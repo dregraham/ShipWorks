@@ -1,25 +1,39 @@
-﻿using System.Data;
+﻿using ShipWorks.Startup;
+using ShipWorks.Tests.Shared.Database;
+using System;
+using System.Data;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
 {
+    [Collection("Fedex Tests")]
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
         //note: smartpost gets it account number from the spreadsheet.
-        private const bool justLabels = true;
-        private readonly ITestOutputHelper output;
+        private const bool justLabels = false;
 
-        public FedExSmartPostIntegrationTest(ITestOutputHelper output)
+        private readonly ITestOutputHelper output;
+        private DataContext context;
+
+        public FedExSmartPostIntegrationTest(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
+            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+                ShipWorksInitializer.GetShipWorksInstance());
+
         }
 
-        [ExcelData(@"DataSources\FedExAll.xlsx", "IMpB Smartpost test cases")]
+        [ExcelData(@"DataSources\FedExAll\IMpB Smartpost.xlsx", "IMpB Smartpost")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExSmartPost(DataRow row)
         {
+            if (row["SaveLabel"] is DBNull || (string)row["SaveLabel"] != "TRUE")
+            {
+                return;
+            }
+
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
 
             if (PopulateTestObject(row, testObject, FedExSmartPostFixture.SmartPostMapping) &&
@@ -27,7 +41,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
             {
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
     }

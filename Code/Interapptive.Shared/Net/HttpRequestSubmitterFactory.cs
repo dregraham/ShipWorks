@@ -18,5 +18,13 @@ namespace Interapptive.Shared.Net
         {
             return new HttpBinaryPostRequestSubmitter(postData);
         }
+
+        /// <summary>
+        /// Gets an HttpTextPostRequestSubmitter
+        /// </summary>
+        public HttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType)
+        {
+            return new HttpTextPostRequestSubmitter(text, contentType);
+        }
     }
 }

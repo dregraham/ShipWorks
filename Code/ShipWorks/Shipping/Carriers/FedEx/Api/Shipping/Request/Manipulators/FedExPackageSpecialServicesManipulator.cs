@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             PackageSpecialServicesRequested specialServicesRequested = InitializePackageRequest(nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
 
             // Signature
-            FedExSignatureType fedExSignatureType = (FedExSignatureType) fedex.Signature;            
+            FedExSignatureType fedExSignatureType = (FedExSignatureType) fedex.Signature;
             if (fedExSignatureType != FedExSignatureType.ServiceDefault)
             {
                 FedExAccountEntity fedExAccount = request.CarrierAccountEntity as FedExAccountEntity;
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 {
                     // TODO: Will this always be Consumer?  Or do we need a setting?
                     // TODO: If it's a return, would it need to be LICENSEE?
-                    RecipientType = AlcoholRecipientType.CONSUMER,
+                    RecipientType = (AlcoholRecipientType) package.AlcoholRecipientType,
                     RecipientTypeSpecified = true,
                 };
             }

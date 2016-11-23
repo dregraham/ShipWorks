@@ -1,16 +1,14 @@
-﻿using Interapptive.Shared;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Web.Services.Protocols;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
@@ -20,45 +18,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// </summary>
     public class FimsWebClient : IFimsWebClient
     {
-        private static readonly XNamespace fimsWebServiceNamespace = "http://www.fimsform.com";
-        private static readonly Uri productionUri = new Uri("http://www.fimsform.com/pkgFedex/pkgFormService");
+        private static readonly Uri productionUri = new Uri("http://www.shipfims.com/pkgFedex3/pkgFormService");
         private static readonly XNamespace soapenv = "http://schemas.xmlsoap.org/soap/envelope/";
         private static readonly FedExShipmentTokenProcessor tokenProcessor = new FedExShipmentTokenProcessor();
 
+        // FedEx - "labelSource for ShipWorks should be set to 5 always"
+        private const string LabelSource = "5";
+        private const string LabelSize = "6";
+        private const string ResponseErrorMessage = "An error occurred processing the FedEx response.";
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private static ILog log;
+        private readonly IHttpRequestSubmitterFactory requestSubmitterFactory;
+
         /// <summary>
-        /// Ships a FIMS shipment.  
+        /// Constructor
+        /// </summary>
+        public FimsWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory, Func<Type, ILog> logFactory, IHttpRequestSubmitterFactory requestSubmitterFactory)
+        {
+            this.apiLogEntryFactory = apiLogEntryFactory;
+            log = logFactory(typeof(FimsWebClient));
+            this.requestSubmitterFactory = requestSubmitterFactory;
+        }
+
+        /// <summary>
+        /// Ships a FIMS shipment.
         /// To simulate a successfully request, use "success" as the Username.
         /// For a failed request, send "failure" as the Username.
         /// </summary>
         public IFimsShipResponse Ship(IFimsShipRequest fimsShipRequest)
         {
-            FimsShipResponse fimsShipResponse;
-
-            try
+            if (fimsShipRequest == null)
             {
-                if (fimsShipRequest == null)
-                {
-                    throw new ArgumentNullException("fimsShipRequest");
-                }
-
-                XElement fimsRequestXml = BuildLabelRequest(fimsShipRequest);
-
-                string soapRequestText = BuildSoapRequest(fimsRequestXml).ToString();
-
-                byte[] responseBytes = Submit(soapRequestText);
-
-                fimsShipResponse = ProcessResponse(responseBytes);
-            }
-            catch (SoapException ex)
-            {
-                throw new FedExSoapCarrierException(ex);
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+                throw new ArgumentNullException("fimsShipRequest");
             }
 
-            return fimsShipResponse;
+            XElement fimsRequestXml = BuildLabelRequest(fimsShipRequest);
+
+            string soapRequestText = BuildSoapRequest(fimsRequestXml).ToString();
+
+            string response = Submit(soapRequestText);
+
+            return ProcessResponse(response);
         }
 
         /// <summary>
@@ -69,7 +69,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             ShipmentEntity shipment = fimsShipRequest.Shipment;
             FedExShipmentEntity fedExShipment = fimsShipRequest.Shipment.FedEx;
 
-            string labelType = shipment.TotalWeight < 4.4 && shipment.CustomsValue < 350 ? "R" : "P";
+            string responseFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.ZPL ? "Z" : "I";
+            string labelType = GetLabelType(shipment);
 
             string declaration = DetermineDeclaration(fedExShipment);
 
@@ -79,9 +80,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 new XElement("labelRequest",
                     new XElement("custCode", fimsShipRequest.Username),
                     new XElement("serviceId", fimsShipRequest.Password),
+                    new XElement("labelSource", LabelSource),
+                    new XElement("responseFormat", responseFormat),
+                    new XElement("labelSize", LabelSize),
                     new XElement("shipperReference", fedExShipment.ReferenceFIMS),
                     new XElement("labelType", labelType),
                     new XElement("declaration", declaration),
+                    new XElement("pkgWeight", shipment.TotalWeight),
+                    new XElement("pkgLength", fedExShipment.Packages.FirstOrDefault()?.DimsLength),
+                    new XElement("pkgWidth", fedExShipment.Packages.FirstOrDefault()?.DimsWidth),
+                    new XElement("pkgHeight", fedExShipment.Packages.FirstOrDefault()?.DimsHeight),
                     new XElement("shipper",
                         new XElement("name", new PersonName(shipment.OriginFirstName, shipment.OriginMiddleName, shipment.OriginLastName)),
                         new XElement("company", shipment.OriginCompany),
@@ -113,6 +121,34 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             }
 
             return fimsRequestXml;
+        }
+
+        /// <summary>
+        /// Encapsulates the logic to get the correct label type.
+        /// </summary>
+        private static string GetLabelType(ShipmentEntity shipment)
+        {
+            switch ((FedExServiceType) shipment.FedEx.Service)
+            {
+                case FedExServiceType.FedExFimsMailView: 
+                    return CanUseLightWeightService(shipment) ? "41" : "42";
+                case FedExServiceType.FedExFimsMailViewLite:
+                    return CanUseLightWeightService(shipment) ? "51" : "22";
+                case FedExServiceType.FedExFimsStandard:
+                    return CanUseLightWeightService(shipment) ? "31" : "22";
+                case FedExServiceType.FedExFimsPremium:
+                    return CanUseLightWeightService(shipment) ? "21" : "22";
+                default:
+                    throw new FedExException($"Invalid service {shipment.FedEx.Service} sent to FimsWebClient.");
+            }
+        }
+
+        /// <summary>
+        /// Fims uses a different service if package is above 4.4 lbs or valued at over 400lbs
+        /// </summary>
+        private static bool CanUseLightWeightService(ShipmentEntity shipment)
+        {
+            return (shipment.TotalWeight < 4.4 && shipment.CustomsValue < 400);
         }
 
         /// <summary>
@@ -156,28 +192,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
             return commodities;
         }
-        
+
         /// <summary>
         /// Submit the data to FIMS to get the label.
         /// </summary>
-        public static byte[] Submit(string soapRequest)
+        private string Submit(string soapRequest)
         {
-            byte[] response;
+            HttpRequestSubmitter requestSubmitter = requestSubmitterFactory.GetHttpTextPostRequestSubmitter(soapRequest, "");
+            requestSubmitter.Uri = productionUri;
 
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.FedExFims, "Ship");
-            logger.LogRequest(soapRequest, "xml");
+            IApiLogEntry logger = apiLogEntryFactory(ApiLogSource.FedExFims, "Ship");
+            logger.LogRequest(requestSubmitter);
 
-            using (WebClient client = new WebClient())
+            try
             {
-                byte[] data = Encoding.UTF8.GetBytes(soapRequest);
-
-                response = client.UploadData(productionUri.AbsoluteUri, data);
+                using (IHttpResponseReader reader = requestSubmitter.GetResponse())
+                {
+                    string responseText = reader.ReadResult();
+                    logger.LogResponse(responseText, "xml");
+                    return responseText;
+                }                
             }
-
-            string responseText = ASCIIEncoding.Default.GetString(response);
-            logger.LogResponse(responseText, "txt");
-
-            return response;
+            catch (WebException ex)
+            {
+                logger.LogResponse(ex);
+                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+            }
         }
 
         /// <summary>
@@ -203,73 +243,61 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Process the response by array
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private static FimsShipResponse ProcessResponse(byte[] responseBytes)
+        private static FimsShipResponse ProcessResponse(string response)
         {
-            if (responseBytes == null)
+            if (string.IsNullOrEmpty(response))
             {
                 throw new FedExException("FedEx FIMS shipment failed to return a response or label.");
             }
+            
+            XmlDocument xmlResponse = new XmlDocument();
+            xmlResponse.LoadXml(response);
+            
+            CheckResponseForErrors(xmlResponse);
 
-            // Define the byte arrays of the soap xml start/stop.
-            byte[] xmlResponseStartBytes = ASCIIEncoding.Default.GetBytes("<SOAP-ENV:Envelope");
-            byte[] xmlResponseEndBytes = ASCIIEncoding.Default.GetBytes("</SOAP-ENV:Envelope");
-            byte[] bEOF = ASCIIEncoding.Default.GetBytes("%%EOF"); 
-            byte[] bPDF = ASCIIEncoding.Default.GetBytes("%PDF");
+            string parcelID = GetValueFromResponse(xmlResponse, "parcelId");
+            string trackingNumber = GetValueFromResponse(xmlResponse, "trackingNo");
+            string labelFormat = GetValueFromResponse(xmlResponse, "responseFormat");
+            string label = GetValueFromResponse(xmlResponse, "attached_label");
 
-            // Find the start and end of the soap xml response.
-            int xmlResponseStart = ArrayUtility.IndexOfSequence(responseBytes, xmlResponseStartBytes, 0).LastOrDefault();
-            int xmlResponseEnd = ArrayUtility.IndexOfSequence(responseBytes, xmlResponseEndBytes, 0).LastOrDefault() + xmlResponseEndBytes.Length + 1;
+            byte[] labelData = Convert.FromBase64String(label);
 
-            // Get the soap xml response from the byte array
-            byte[] xmlResponseBytes = ArrayUtility.Slice(responseBytes, xmlResponseStart, xmlResponseEnd);
-            string xmlResponseText = ASCIIEncoding.Default.GetString(xmlResponseBytes);
-            XElement xmlResponse = XElement.Parse(xmlResponseText);
+            // Construct the ship response to return.
+            FimsShipResponse fimsShipResponse = new FimsShipResponse(parcelID, labelData, labelFormat, trackingNumber);
 
-            // Check for errors and throw if there are any.
-            List<XElement> errorElements = xmlResponse.Descendants(fimsWebServiceNamespace + "error").ToList();
-            if (errorElements.Any())
+            return fimsShipResponse;
+        }
+
+        /// <summary>
+        /// Parses XML and returns response. 
+        /// </summary>
+        /// <exception cref="FedExException">Response missing element.</exception>
+        private static string GetValueFromResponse(XmlDocument xmlResponse, string elementName)
+        {
+            XmlNode responseElement = xmlResponse.SelectNodes($"//*[local-name()='{elementName}']")?.Cast<XmlNode>()?.FirstOrDefault();
+            if (responseElement == null)
             {
-                string errorMessage = string.Join<string>(System.Environment.NewLine, errorElements.Select(e => e.Value));
+                log.Error($"FedEx FIMS ship response missing {elementName}");
+                throw new FedExException(ResponseErrorMessage);
+            }
+
+            return responseElement.InnerText;
+        }
+
+        /// <summary>
+        /// Check response for errors and throw if there are any.
+        /// </summary>
+        /// <param name="xmlResponse">The XML response.</param>
+        /// <exception cref="FedExException"></exception>
+        private static void CheckResponseForErrors(XmlDocument xmlResponse)
+        {
+            XmlNodeList errorElements = xmlResponse.SelectNodes("//*[local-name()='error']");
+            if ((errorElements?.Count ?? 0) > 0)
+            {
+                string errorMessage = string.Join<string>(System.Environment.NewLine, errorElements.Cast<XmlNode>().Select(e => e.InnerText));
 
                 throw new FedExException(errorMessage);
             }
-
-            // Get the PDF 
-            List<int> pdStartPOS = ArrayUtility.IndexOfSequence(responseBytes, bPDF, 0);
-            List<int> pdfEndPOS = ArrayUtility.IndexOfSequence(responseBytes, bEOF, 0);
-            byte[] pdf = ArrayUtility.Slice(responseBytes, pdStartPOS[0], pdfEndPOS[0] + bEOF.Length);
-            
-            string parcelID = string.Empty;
-            string responseCode = string.Empty;
-
-            XElement responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "parcelId").FirstOrDefault();
-            if (responseElement != null)
-            {
-                parcelID = responseElement.Value;
-            }
-            else
-            {
-                throw new FedExException("FedEx FIMS did not return a ParcelID");
-            }
-
-            responseElement = xmlResponse.Descendants(fimsWebServiceNamespace + "responseCode").FirstOrDefault();
-            if (responseElement != null)
-            {
-                responseCode = responseElement.Value;
-            }
-            else
-            {
-                throw new FedExException("FedEx FIMS did not return a Response Code");
-            }
-
-            // Construct the ship response to return.
-            FimsShipResponse fimsShipResponse = new FimsShipResponse(parcelID, responseCode)
-            {
-                LabelPdfData = pdf
-            };
-
-            return fimsShipResponse;
         }
     }
 }

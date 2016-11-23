@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Interapptive.Shared.Messaging;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.UI.Controls.MultiValueBinders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.UI.Controls.MultiValueBinders;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {

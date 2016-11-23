@@ -13,19 +13,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Track
         [Fact]
         public void EmailNotificationEventType_IsSingleDimensionArray()
         {
-            var trackNotificationPackage = new TrackNotificationPackage() { RecipientDetails = new EMailNotificationEventType[0] };
+            var trackNotificationPackage = new TrackNotificationPackage() { RecipientDetails = new NotificationEventType[0] };
 
             // The object that is gerenated from the WSDL is a 2 dimensional array. It needs to be manually changed 
             // in the Reference.cs file.
-            Assert.IsType<EMailNotificationEventType[]>(trackNotificationPackage.RecipientDetails);
+            Assert.IsType<NotificationEventType[]>(trackNotificationPackage.RecipientDetails);
         }
         
         [Fact]
         public void EmailNotificationEventType_BackingFieldIsTwoDimensionalArray()
         {
             TrackNotificationPackage trackNotificationPackage = new TrackNotificationPackage();
-            EMailNotificationEventType[] array = {
-                new EMailNotificationEventType()
+            NotificationEventType[] array = {
+                new NotificationEventType()
             };
 
             // Will throw an error if backing field is not an array.

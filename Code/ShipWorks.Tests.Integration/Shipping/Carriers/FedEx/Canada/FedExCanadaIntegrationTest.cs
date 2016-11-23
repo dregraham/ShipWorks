@@ -1,26 +1,34 @@
-﻿using System;
-using Xunit;
+﻿using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Shared.Database;
+using System;
 using System.Data;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 {
+    [Collection("Fedex Tests")]
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
-        private const string fedExTestAccountNumber = "607194785";
-        private const bool justLabels = true;
+        private const string fedExTestAccountNumber = "612365903";
+        private const bool justLabels = false;
         private readonly ITestOutputHelper output;
 
-        public FedExCanadaIntegrationTest(ITestOutputHelper output)
+        private DataContext context;
+
+        public FedExCanadaIntegrationTest(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
+
+            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+                ShipWorksInitializer.GetShipWorksInstance());
         }
 
-        [ExcelData(@"DataSources\FedExAll.xlsx", "CA Exp Dom")]
+        [ExcelData(@"DataSources\FedExAll\CA Exp Dom.xlsx", "CA Exp Dom")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExCanadaExpressDomestic(DataRow row)
@@ -36,11 +44,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
 
-        [ExcelData("DataSources\\FedExAll.xlsx", "CA Grn Dom, Intl")]
+        [ExcelData(@"DataSources\FedExAll\CA Grn Dom Intl.xlsx", "CA Grn Dom Intl")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExCanadaGroundDomIntl(DataRow row)
@@ -52,27 +60,35 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             {
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
-        
-        [ExcelData("DataSources\\FedExAll.xlsx", "CA Exp Intl")]
+
+        [ExcelData(@"DataSources\FedExAll\CA Exp Intl.xlsx", "CA Exp Intl")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExCanadaExpressInternational(DataRow row)
         {
+            if (row[0] is DBNull)
+            {
+                return;
+            }
+
+            output.WriteLine($"Beginning transaction {(string) row[3]}");
+
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressInternationalMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                (testObject.IsSaveLabel || !justLabels)) // && (string)row[3] == "IF-1003")
             {
+
                 output.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
                 output.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship();
+                testObject.Ship(context.Order);
             }
         }
     }

@@ -13,6 +13,8 @@ using System.Xml;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -57,6 +59,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>A List of FedExServiceType objects.</returns>
         public static List<FedExServiceType> GetValidServiceTypes(List<ShipmentEntity> shipments)
         {
+            if (shipments.All(s => s.OriginCountryCode == "GB" || s.OriginCountryCode == "UK") &&
+                shipments.All(s => s.ShipCountryCode == "GB" || s.ShipCountryCode == "UK"))
+            {
+                return GetUKServiceTypes();
+            }
+
             FedExShipmentType shipmentType = new FedExShipmentType();
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>();
 
@@ -153,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Add FIMS if enabled
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
-                serviceTypes.Add(FedExServiceType.FedExFims);
+                serviceTypes.AddRange(EnumHelper.GetEnumList<FedExServiceType>().Where(s=>IsFimsService(s.Value)).Select(s=>s.Value));
             }
 
             if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
@@ -163,6 +171,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return serviceTypes;
+        }
+
+        /// <summary>
+        /// FedEx Services types only available in the UK
+        /// </summary>
+        public static List<FedExServiceType> GetUKServiceTypes()
+        {
+            return new List<FedExServiceType>
+            {
+                FedExServiceType.FedExNextDayAfternoon,
+                FedExServiceType.FedExNextDayEarlyMorning,
+                FedExServiceType.FedExNextDayMidMorning,
+                FedExServiceType.FedExNextDayEndOfDay,
+                FedExServiceType.FedExDistanceDeferred,
+                FedExServiceType.FedExNextDayFreight
+            };
         }
 
         /// <summary>
@@ -249,6 +273,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.DryIceWeight = 0;
 
             package.ContainsAlcohol = false;
+            package.AlcoholRecipientType = (int) AlcoholRecipientType.CONSUMER;
 
             package.PriorityAlert = false;
             package.PriorityAlertDetailContent = string.Empty;
@@ -260,6 +285,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.DeclaredValue = 0;
 
             package.TrackingNumber = "";
+
+            package.SignatoryContactName = string.Empty;
+            package.SignatoryTitle = string.Empty;
+            package.SignatoryPlace = string.Empty;
 
             package.DangerousGoodsEnabled = false;
             package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
@@ -284,7 +313,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
-            return service == FedExServiceType.FedExFims;
+            List<FedExServiceType> fimsServices = new List<FedExServiceType>
+            {
+                FedExServiceType.FedExFimsMailView,
+                FedExServiceType.FedExFimsMailViewLite,
+                FedExServiceType.FedExFimsPremium,
+                FedExServiceType.FedExFimsStandard
+            };
+
+            return fimsServices.Contains(service);
         }
 
         /// <summary>
@@ -353,6 +390,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return true;
             }
 
+            if (serviceType == FedExServiceType.FedExNextDayAfternoon ||
+                serviceType == FedExServiceType.FedExNextDayEarlyMorning ||
+                serviceType == FedExServiceType.FedExNextDayMidMorning ||
+                serviceType == FedExServiceType.FedExNextDayEndOfDay ||
+                serviceType == FedExServiceType.FedExNextDayFreight && shipDate.DayOfWeek == DayOfWeek.Friday)
+            {
+                return true;
+            }
             return false;
         }
 

@@ -2,6 +2,8 @@ using System;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
@@ -39,10 +41,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             // We can safely cast this since we've passed initialization
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
-            if (!string.IsNullOrEmpty(request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber))
+            if (request.ShipmentEntity.FedEx.InternationalTrafficInArmsService??false)
             {
                 AddTrafficInArmsOption(nativeRequest);
+            }
 
+            if (!string.IsNullOrEmpty(request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber))
+            {
                 InternationalTrafficInArmsRegulationsDetail armsDetail = new InternationalTrafficInArmsRegulationsDetail();
                 armsDetail.LicenseOrExemptionNumber = request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber;
 
@@ -61,18 +66,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
             }
 
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            }
-
-            // Resize the special service type array so we can add the traffic in arms service type
-            ShipmentSpecialServiceType[] services = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
-            Array.Resize(ref services, services.Length + 1);
-
-            // Add the traffic in arms option and update the native request
-            services[services.Length - 1] = ShipmentSpecialServiceType.INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS;
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = services;
+            List<ShipmentSpecialServiceType> services = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes?.ToList() ?? new List<ShipmentSpecialServiceType>();
+            services.Add(ShipmentSpecialServiceType.INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS);
+            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = services.ToArray();
         }
 
         /// <summary>

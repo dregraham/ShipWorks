@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
 
@@ -17,6 +13,14 @@ namespace Interapptive.Shared.Enums
 
         [Description("CAD")]
         [ApiValue("CAD")]
-        CAD = 1
+        CAD = 1,
+
+        [Description("UKL")]
+        [ApiValue("UKL")]
+        UKL = 2,
+
+        [Description("EUR")]
+        [ApiValue("EUR")]
+        EUR = 3
     }
 }

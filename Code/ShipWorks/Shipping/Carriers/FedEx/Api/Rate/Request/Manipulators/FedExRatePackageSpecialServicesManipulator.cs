@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
-            // We can safely cast this since we've passed initialization 
+            // We can safely cast this since we've passed initialization
             RateRequest nativeRequest = request.NativeRequest as RateRequest;
 
             FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 FedExSignatureType fedExSignatureType = (FedExSignatureType) fedex.Signature;
                 if (fedExSignatureType == FedExSignatureType.NoSignature && fedex.Packages.Any(p => p.DeclaredValue > 500m))
                 {
-                    // The FedEx API allows for this to go through, but per page 170 of the FedExDeveloperGuide2012.pdf document, 
+                    // The FedEx API allows for this to go through, but per page 170 of the FedExDeveloperGuide2012.pdf document,
                     // a signature is required for shipments with a declared value > $500
                     throw new FedExException("A signature is required for shipments containing packages with a declared value over $500.");
                 }
@@ -151,15 +151,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 case FedExServiceType.OneRateExpressSaver:
                 case FedExServiceType.FedExEconomyCanada:
                     return ServiceType.FEDEX_EXPRESS_SAVER;
-                
+
                 case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
                 case FedExServiceType.InternationalEconomy: return ServiceType.INTERNATIONAL_ECONOMY;
                 case FedExServiceType.InternationalFirst: return ServiceType.INTERNATIONAL_FIRST;
                 case FedExServiceType.FedEx1DayFreight: return ServiceType.FEDEX_1_DAY_FREIGHT;
                 case FedExServiceType.FedEx2DayFreight: return ServiceType.FEDEX_2_DAY_FREIGHT;
                 case FedExServiceType.FedEx3DayFreight: return ServiceType.FEDEX_3_DAY_FREIGHT;
-                
-                case FedExServiceType.FedExGround: 
+
+                case FedExServiceType.FedExGround:
                 case FedExServiceType.FedExInternationalGround:
                     return ServiceType.FEDEX_GROUND;
 
@@ -168,6 +168,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 case FedExServiceType.InternationalEconomyFreight: return ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
                 case FedExServiceType.SmartPost: return ServiceType.SMART_POST;
                 case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
+
+                case FedExServiceType.FedExNextDayAfternoon: return ServiceType.FEDEX_NEXT_DAY_AFTERNOON;
+                case FedExServiceType.FedExNextDayEndOfDay: return ServiceType.FEDEX_NEXT_DAY_END_OF_DAY;
+                case FedExServiceType.FedExNextDayMidMorning: return ServiceType.FEDEX_NEXT_DAY_MID_MORNING;
+                case FedExServiceType.FedExNextDayEarlyMorning: return ServiceType.FEDEX_NEXT_DAY_EARLY_MORNING;
+                case FedExServiceType.FedExDistanceDeferred: return ServiceType.FEDEX_DISTANCE_DEFERRED;
+                case FedExServiceType.FedExNextDayFreight: return ServiceType.FEDEX_NEXT_DAY_FREIGHT;
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);

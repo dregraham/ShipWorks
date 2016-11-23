@@ -49,39 +49,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <value>
         /// The CSP credential key.
         /// </value>
-        public string CspCredentialKey
-        {
-            get
-            {
-                // 2015 credential key
-                return "HmTIi6ILfEtv3p42";
-            }
-        }
+        public string CspCredentialKey => "olaPdFVk3aMvbfNA";
 
         /// <summary>
         /// Gets the CSP credential password.
         /// </summary>
-        /// <value>The CSP credential password.</value>
-        public string CspCredentialPassword
-        {
-            get
-            {
-                // 2015 password - YcLZTdWF7NALqoCD0szKwVnif
-                return SecureText.Decrypt("nezzUnZ15oqRucZWu/UnNBaktSIXqglmQalC9U1uN9Q=", "apptive");
-            }
-        }
+        /// <remarks>
+        /// Password - SAISQtME8lAOPurbWNQD2Ft96
+        /// </remarks>
+        public string CspCredentialPassword => SecureText.Decrypt("5SbhB/whSJsVfHFUoLlKA4/B2c5p2/PUgmo8d1uGaZo=", "apptive");
 
         /// <summary>
         /// Gets the user credentials key.
         /// </summary>
         /// <value>The user credentials key.</value>
-        public string UserCredentialsKey
-        {
-            get
-            {
-                return shippingSettings.FedExUsername;
-            }
-        }
+        public string UserCredentialsKey => shippingSettings.FedExUsername;
 
         /// <summary>
         /// Gets the user credentials password.
@@ -95,109 +77,59 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets the client product ID.
         /// </summary>
-        /// <value>
-        /// The client product ID.
-        /// </value>
-        public string ClientProductId
-        {
-            get
-            {
-                // This is the first part of the 2015 VersionCaptureId: IEOQ7038
-                return "IEOQ";
-            }
-        }
+        /// <remarks>
+        /// This is the first part of the 2016 VersionCaptureId: ITSW6828
+        /// </remarks>
+        public string ClientProductId => "ITSW";
 
         /// <summary>
         /// Gets the client product version.
         /// </summary>
-        /// <value>
-        /// The client product version.
-        /// </value>
-        public string ClientProductVersion
-        {
-            get
-            {
-                // This is the last part of the 2015 VersionCaptureId: IEOQ7038
-                return "7038";
-            }
-        }
+        /// <remarks>
+        /// This is the last part of the 2016 VersionCaptureId: ITSW6828
+        /// </remarks>
+        public string ClientProductVersion => "6828";
 
         /// <summary>
         /// Gets the CSP solution ID given to ShipWorks from FedEx.
         /// </summary>
         /// <value>The solution ID.</value>
-        public string CspSolutionId
-        {
-            get
-            {
-                return "086";
-            }
-        }
+        public string CspSolutionId => "086";
 
         /// <summary>
         /// Get the FedEx endpoint URL to use
         /// </summary>
-        public string EndpointUrl
-        {
-            get
-            {
-                return settingsRepository.UseTestServer ? TestingUrl : ProductionUrl;
-            }
-        }
+        public string EndpointUrl => settingsRepository.UseTestServer ? TestingUrl : ProductionUrl;
 
         /// <summary>
         /// Get the FedEx FIMS tracking endpoint URL to use
         /// </summary>
-        public string FimsTrackEndpointUrlFormat
-        {
-            get
-            {
-                return FimsMailViewTrackUrlFormat;
-            }
-        }
+        public string FimsTrackEndpointUrlFormat => FimsMailViewTrackUrlFormat;
 
         /// <summary>
         /// Get the FedEx FIMS Ship endpoint URL to use
         /// </summary>
-        public string FimsShipEndpointUrl
-        {
-            get
-            {
-                return FimsMailViewShipUrl;
-            }
-        }
+        public string FimsShipEndpointUrl => FimsMailViewShipUrl;
 
         /// <summary>
         /// Get the FedEx FIMS username to use
         /// </summary>
-        public string FimsUsername
-        {
-            get
-            {
-                return shippingSettings.FedExFimsUsername;
-            }
-        }
+        public string FimsUsername => shippingSettings.FedExFimsUsername;
 
         /// <summary>
         /// Get the FedEx FIMS password to use
         /// </summary>
-        public string FimsPassword
-        {
-            get
-            {
-                return shippingSettings.FedExFimsPassword;
-            }
-        }
+        public string FimsPassword => shippingSettings.FedExFimsPassword;
 
         /// <summary>
         /// Gets the ship version number.
         /// </summary>
-        public const string ShipVersionNumber = "17";
+        public const string ShipVersionNumber = "19";
 
         /// <summary>
         /// Gets the open ship version number.
         /// </summary>
-        public const string OpenShipVersionNumber = "9";
+        public const string OpenShipVersionNumber = "11";
 
         /// <summary>
         /// Gets the type of the currency.
@@ -206,6 +138,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <returns></returns>
         public CurrencyType GetCurrencyType(ShipmentEntity shipment)
         {
+            if (shipment.FedEx.Currency.HasValue)
+            {
+                return (CurrencyType) shipment.FedEx.Currency;
+            }
+
             FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
             
             if (account == null)

@@ -1,6 +1,6 @@
-using System;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             nativeRequest.Version = new VersionId
             {
                 ServiceId = "crs",
-                Major = 18,
+                Major = 20,
                 Intermediate = 0,
                 Minor = 0
             };

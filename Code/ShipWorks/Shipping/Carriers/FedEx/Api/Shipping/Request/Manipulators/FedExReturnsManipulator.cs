@@ -47,12 +47,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request);
 
             FedExReturnType returnType = (FedExReturnType) request.ShipmentEntity.FedEx.ReturnType;
+            bool returnsClearance = request.ShipmentEntity.FedEx.ReturnsClearance;
 
             // Get current list of ShipmentSpecialServiceTypes. This will be added back later in the function as there might be more
             // ServiceTypes to conditionally add.
             List<ShipmentSpecialServiceType> shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
-            shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.RETURN_SHIPMENT);
-            
+            shipmentSpecialServiceTypes.Add(returnsClearance ? ShipmentSpecialServiceType.RETURNS_CLEARANCE : ShipmentSpecialServiceType.RETURN_SHIPMENT);
+
             // Add Return Detail
             nativeRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail = new ReturnShipmentDetail();
 

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Enums;
+﻿using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International
 {
@@ -79,7 +79,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         public string DangerOfferor { get; set; }
         public string DangerUnits { get; set; }
         public string PackageDangerousGoodsDetail { get; set; }
-
 
         private static List<ColumnPropertyMapDefinition> columnPropertyMap;
 
@@ -247,11 +246,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.TrafficInArmsLicenseNumber = TrafficInArmsLicenseOrExemptionNumber;
+            if (SpecialServiceType1?.Equals("INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS", StringComparison.OrdinalIgnoreCase) ?? false)
+            {
+                shipment.FedEx.InternationalTrafficInArmsService = true;
+            }
+
             shipment.FedEx.WeightUnitType = ShipmentWeightUnits.ToLower() == "lb" ? (int)WeightUnitOfMeasure.Pounds : (int)WeightUnitOfMeasure.Kilograms;
 
             SetupCustomsData(shipment);
@@ -451,16 +455,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
                         package.HazardousMaterialProperName = HazardProperShippingName;
                         package.HazardousMaterialClass = HazardClass;
                         package.HazardousMaterialNumber = HazardDescriptionID;
-
                         package.HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.III;
                         package.HazardousMaterialQuantityValue = int.Parse(HazardQuantityAmount);
 
-                        package.HazardousMaterialQuantityValue = GetUnitInt(HazardQuantityUnits);
-
                         package.DangerousGoodsEmergencyContactPhone = DangerEmergencyContactNumber;
-
                         package.DangerousGoodsOfferor = DangerOfferor;
-
                         package.DangerousGoodsPackagingCount = int.Parse(DangerCounts);
                     }
                 }

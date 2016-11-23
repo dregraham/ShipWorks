@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
@@ -46,7 +43,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
                 dangerousGoods.EmergencyContactNumber = package.DangerousGoodsEmergencyContactPhone;
                 dangerousGoods.Offeror = package.DangerousGoodsOfferor;
-                
+
+                SetupSignatory(package, dangerousGoods);
+
                 if (package.DangerousGoodsType != (int) FedExDangerousGoodsMaterialType.NotApplicable)
                 {
                     dangerousGoods.Options = new HazardousCommodityOptionType[] { GetApiHazardousCommodityType(package) };
@@ -71,22 +70,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         /// <summary>
+        /// Setups the signatory.
+        /// </summary>
+        private static void SetupSignatory(FedExPackageEntity package, DangerousGoodsDetail dangerousGoods)
+        {
+            if (!string.IsNullOrEmpty(package.SignatoryContactName) || !string.IsNullOrEmpty(package.SignatoryPlace) ||
+                !string.IsNullOrEmpty(package.SignatoryTitle))
+            {
+                dangerousGoods.Signatory = new DangerousGoodsSignatory();
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryContactName))
+            {
+                dangerousGoods.Signatory.ContactName = package.SignatoryContactName;
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryTitle))
+            {
+                dangerousGoods.Signatory.Title = package.SignatoryTitle;
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryPlace))
+            {
+                dangerousGoods.Signatory.Place = package.SignatoryPlace;
+            }
+        }
+
+        /// <summary>
         /// Configures the hazardous materials of the DangerousGoodsDetail object..
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="dangerousGoods">The dangerous goods.</param>
         /// <param name="package">The package.</param>
-        /// <exception cref="FedExException">Hazardous materials can only be shipped with the FedEx Ground service.</exception>
         private static void ConfigureHazardousMaterials(CarrierRequest request, DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
         {
             FedExServiceType serviceType = (FedExServiceType) request.ShipmentEntity.FedEx.Service;
-            // HazMat can only be used with the ground service
-            if (serviceType != FedExServiceType.FedExGround && serviceType != FedExServiceType.FedExInternationalGround)
-            {
-                // The check and exception is thrown here since the FedEx error doesn't indicate this is the
-                // the reason for the error.
-                throw new FedExException("Hazardous materials can only be shipped with the FedEx Ground service.");
-            }
 
             // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials 
             dangerousGoods.Containers = new DangerousGoodsContainer[]

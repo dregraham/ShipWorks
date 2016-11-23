@@ -6707,6 +6707,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialTechnicalName);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.AlcoholRecipientType field instance</summary>
+		public static EntityField2 AlcoholRecipientType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.AlcoholRecipientType);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.SignatoryContactName field instance</summary>
+		public static EntityField2 SignatoryContactName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryContactName);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.SignatoryTitle field instance</summary>
+		public static EntityField2 SignatoryTitle
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryTitle);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.SignatoryPlace field instance</summary>
+		public static EntityField2 SignatoryPlace
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryPlace);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
@@ -6892,6 +6912,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferenceFIMS);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ThirdPartyConsignee field instance</summary>
+		public static EntityField2 ThirdPartyConsignee
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ThirdPartyConsignee);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>
@@ -7031,6 +7056,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HazardousMaterialQuanityUnits
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.HazardousMaterialQuanityUnits);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.SignatoryContactName field instance</summary>
+		public static EntityField2 SignatoryContactName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.SignatoryContactName);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.SignatoryTitle field instance</summary>
+		public static EntityField2 SignatoryTitle
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.SignatoryTitle);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.SignatoryPlace field instance</summary>
+		public static EntityField2 SignatoryPlace
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.SignatoryPlace);}
 		}
 	}
 
@@ -7801,6 +7841,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReferenceFIMS
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferenceFIMS);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ThirdPartyConsignee field instance</summary>
+		public static EntityField2 ThirdPartyConsignee
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ThirdPartyConsignee);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.Currency field instance</summary>
+		public static EntityField2 Currency
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.Currency);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.InternationalTrafficInArmsService field instance</summary>
+		public static EntityField2 InternationalTrafficInArmsService
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.InternationalTrafficInArmsService);}
 		}
 	}
 
