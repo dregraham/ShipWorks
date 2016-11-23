@@ -2,32 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared;
 using ShipWorks.Filters;
 using Divelements.SandGrid;
 using ShipWorks.Data;
-using System.Collections;
-using System.Drawing.Drawing2D;
-using Divelements.SandGrid.Rendering;
-using ShipWorks.UI;
 using ComponentFactory.Krypton.Toolkit;
-using System.Diagnostics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Properties;
 using ShipWorks.Filters.Content;
 using ShipWorks.Data.Grid;
 using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Data.Utility;
-using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Filters.Search;
 using log4net;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Threading;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Filters.Grid;
 
@@ -88,7 +82,11 @@ namespace ShipWorks.ApplicationCore
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
         List<long> selectedStoreKeys = null;
- 
+
+        // Debouncing observables for searching
+        IDisposable quickSearchObservable;
+        IDisposable advancedSearchObservable;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -120,6 +118,26 @@ namespace ShipWorks.ApplicationCore
                 searchBox.GotFocus += this.OnSearchBoxFocusChange;
                 searchBox.LostFocus += this.OnSearchBoxFocusChange;
             }
+
+            // Wire up observable for debouncing quick search text box
+            quickSearchObservable = Observable
+                .FromEventPattern(
+                    h => searchBox.TextChanged += h,
+                    h => searchBox.TextChanged -= h)
+                .Throttle(TimeSpan.FromMilliseconds(450))
+                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
+                .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing quick search.", ex))
+                .Subscribe(x => PerformQuickSearch());
+
+            // Wire up observable for debouncing advanced search text box
+            advancedSearchObservable = Observable
+                .FromEventPattern(
+                    h => filterEditor.DefinitionEdited += h,
+                    h => filterEditor.DefinitionEdited -= h)
+                .Throttle(TimeSpan.FromMilliseconds(450))
+                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
+                .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing advanced search.", ex))
+                .Subscribe(x => PerformAdvancedSearch());
         }
 
         /// <summary>
@@ -149,7 +167,7 @@ namespace ShipWorks.ApplicationCore
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose(bool disposing)
@@ -162,6 +180,9 @@ namespace ShipWorks.ApplicationCore
                 {
                     components.Dispose();
                 }
+
+                advancedSearchObservable?.Dispose();
+                quickSearchObservable?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -322,6 +343,12 @@ namespace ShipWorks.ApplicationCore
         {
             ActiveGrid.UpdateGridRows();
 
+            // Auto select the row when doing a filter searach and there is only 1 result
+            if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
+            {
+                ActiveGrid.Rows[0].Selected = true;
+            }
+
             UpdateHeaderContent();
         }
 
@@ -432,7 +459,7 @@ namespace ShipWorks.ApplicationCore
         {
             FilterEntityGrid grid = new FilterEntityGrid(target);
             grid.BorderStyle = BorderStyle.None;
-            
+
             grid.CheckBoxes = true;
             grid.Visible = false;
             grid.Dock = DockStyle.Fill;
@@ -586,7 +613,7 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-          
+
             RaiseSelectionChanged();
         }
 
@@ -599,7 +626,7 @@ namespace ShipWorks.ApplicationCore
 
             SelectionChanged?.Invoke(this, EventArgs.Empty);
         }
-        
+
         /// <summary>
         /// The sort changed in the grid
         /// </summary>
@@ -611,7 +638,7 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-            
+
             RaiseSortChanged();
         }
 
@@ -662,7 +689,7 @@ namespace ShipWorks.ApplicationCore
 
             // Need to initialize the editor before its shown
             if (!AdvancedSearchVisible && !initiatedAdvanced)
-            {            
+            {
                 filterEditor.LoadDefinition(new FilterDefinition(ActiveFilterTarget));
             }
 
@@ -684,9 +711,9 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// The search text content has changed
+        /// Perform the quick search
         /// </summary>
-        private void OnSearchTextChanged(object sender, EventArgs e)
+        private void PerformQuickSearch()
         {
             if (GetBasicSearchText().Length > 0)
             {
@@ -698,7 +725,7 @@ namespace ShipWorks.ApplicationCore
                     StartSearch();
                 }
             }
-            
+
             if (IsSearchActive && !AdvancedSearchResultsActive)
             {
                 // Upate the search with the current definition
@@ -709,9 +736,9 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// The definition in the advanced search area has chnaged
+        /// Perform the advanced search
         /// </summary>
-        private void OnAdvancedSearchDefinitionEdited(object sender, EventArgs e)
+        private void PerformAdvancedSearch()
         {
             if (AdvancedSearchVisible)
             {
@@ -774,7 +801,10 @@ namespace ShipWorks.ApplicationCore
         {
             if (AdvancedSearchResultsActive)
             {
-                if (filterEditor.SaveDefinition())
+                // If the filter definition is empty (no criteria has been selected) don't return
+                // the definition.  An empty definition returns all orders or customers, which is
+                // irrelevant.
+                if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
                 {
                     return filterEditor.FilterDefinition;
                 }
@@ -812,11 +842,11 @@ namespace ShipWorks.ApplicationCore
                 }
                 catch (ObjectDisposedException)
                 {
-                    // If the user is typing as they close the containing window, 
+                    // If the user is typing as they close the containing window,
                     // it's possible that we pass the check above and then get disposed
                     log.Debug("Search was trying to access a disposed main grid control");
                 }
-                
+
                 return;
             }
 
@@ -926,11 +956,11 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private bool AdvancedSearchVisible
         {
-            get 
+            get
             {
-                return filterEditor.Visible; 
+                return filterEditor.Visible;
             }
-            set 
+            set
             {
                 filterEditor.Visible = value;
                 borderAdvanced.Visible = value;
@@ -954,9 +984,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void ClearBasicSearch()
         {
-            searchBox.TextChanged -= new EventHandler(OnSearchTextChanged);
             searchBox.Text = "";
-            searchBox.TextChanged += new EventHandler(OnSearchTextChanged);
         }
 
         /// <summary>

@@ -1,10 +1,17 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -21,13 +28,6 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Begin the order download process
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -497,56 +497,27 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateOrderAddress(EbayOrderEntity order, WebServices.AddressType address)
         {
-            // Put the downloaded address in an adapter
-            AddressAdapter downloadedShipAddress = new AddressAdapter
-            {
-                Street1 = address.Street1 ?? "",
-                Street2 = address.Street2 ?? "",
-                City = address.CityName ?? "",
-                StateProvCode = address.StateOrProvince == null ? string.Empty : Geography.GetStateProvCode(address.StateOrProvince) ?? "",
-                PostalCode = address.PostalCode ?? "",
-                CountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : ""
-            };
-
-            if (!DoesDownloadedAddressMatchOriginal(order, downloadedShipAddress))
-            {
-                // overwrite address with downloaded address
-                AddressAdapter orderAddressAdapter = new AddressAdapter(order, "Ship");
-                AddressAdapter.Copy(downloadedShipAddress, orderAddressAdapter);
-            }
+            // overwrite address with downloaded address
+            order.ShipStreet1 = address.Street1 ?? "";
+            order.ShipStreet2 = address.Street2 ?? "";
+            order.ShipCity = address.CityName ?? "";
+            order.ShipStateProvCode = address.StateOrProvince == null ? string.Empty : Geography.GetStateProvCode(address.StateOrProvince) ?? "";
+            order.ShipPostalCode = address.PostalCode ?? "";
+            order.ShipCountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : "";
+            order.ShipCompany = address.CompanyName ?? "";
+            order.ShipPhone = address.Phone ?? "";
 
             // Split the name
             PersonName personName = PersonName.Parse(address.Name);
 
             order.ShipNameParseStatus = (int) personName.ParseStatus;
             order.ShipUnparsedName = personName.UnparsedName;
-            order.ShipCompany = address.CompanyName ?? "";
             order.ShipFirstName = personName.First;
             order.ShipMiddleName = personName.Middle;
             order.ShipLastName = personName.Last;
-            order.ShipPhone = address.Phone ?? "";
-
+            
             // Fill in billing address from the shipping
             PersonAdapter.Copy(order, "Ship", order, "Bill");
-        }
-
-        /// <summary>
-        /// Does the downloaded address match original.
-        /// </summary>
-        private static bool DoesDownloadedAddressMatchOriginal(EbayOrderEntity order, AddressAdapter downloadedShipAddress)
-        {
-            bool downloadAddressMatchesOriginal = false;
-
-            // See if there is an original address and if it matches the downloaded address.
-            ValidatedAddressEntity originalAddress =
-                ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, "Ship");
-
-            if (originalAddress != null)
-            {
-                AddressAdapter originalAddressAdapter = new AddressAdapter(originalAddress, "");
-                downloadAddressMatchesOriginal = (originalAddressAdapter == downloadedShipAddress);
-            }
-            return downloadAddressMatchesOriginal;
         }
 
         /// <summary>
@@ -634,7 +605,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
 
             List<DateTime> startDates = new DateTimeList();
-            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
             {
                 while (reader.Read())
                 {

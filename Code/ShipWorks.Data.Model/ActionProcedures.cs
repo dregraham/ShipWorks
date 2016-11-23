@@ -18,9 +18,11 @@ namespace ShipWorks.Data.Model
 	{
 
 		/// <summary>Delegate definition for stored procedure 'CalculateInitialFilterCounts' to be used in combination of a UnitOfWork2 object.</summary>
-		public delegate int CalculateInitialFilterCountsCallBack(IDataAccessCore dataAccessProvider);
+		public delegate int CalculateInitialFilterCountsCallBack(ref System.Int32 nodesUpdated, IDataAccessCore dataAccessProvider);
 		/// <summary>Delegate definition for stored procedure 'CalculateUpdateFilterCounts' to be used in combination of a UnitOfWork2 object.</summary>
 		public delegate int CalculateUpdateFilterCountsCallBack(IDataAccessCore dataAccessProvider);
+		/// <summary>Delegate definition for stored procedure 'CalculateUpdateQuickFilterCounts' to be used in combination of a UnitOfWork2 object.</summary>
+		public delegate int CalculateUpdateQuickFilterCountsCallBack(IDataAccessCore dataAccessProvider);
 		/// <summary>Delegate definition for stored procedure 'DeleteAbandonedFilterCounts' to be used in combination of a UnitOfWork2 object.</summary>
 		public delegate int DeleteAbandonedFilterCountsCallBack(IDataAccessCore dataAccessProvider);
 		/// <summary>Delegate definition for stored procedure 'ResetShipSense' to be used in combination of a UnitOfWork2 object.</summary>
@@ -34,23 +36,26 @@ namespace ShipWorks.Data.Model
 
 
 		/// <summary>Calls stored procedure 'CalculateInitialFilterCounts'.<br/><br/></summary>
+		/// <param name="nodesUpdated">InputOutput parameter. </param>
 		/// <returns>Number of rows affected, if the database / routine doesn't suppress rowcounting.</returns>
-		public static int CalculateInitialFilterCounts()
+		public static int CalculateInitialFilterCounts(ref System.Int32 nodesUpdated)
 		{
 			using(DataAccessAdapter dataAccessProvider = new DataAccessAdapter())
 			{
-				return CalculateInitialFilterCounts(dataAccessProvider);
+				return CalculateInitialFilterCounts(ref nodesUpdated, dataAccessProvider);
 			}
 		}
 
 		/// <summary>Calls stored procedure 'CalculateInitialFilterCounts'.<br/><br/></summary>
 		/// <param name="dataAccessProvider">The data access provider.</param>
+		/// <param name="nodesUpdated">InputOutput parameter. </param>
 		/// <returns>Number of rows affected, if the database / routine doesn't suppress rowcounting.</returns>
-		public static int CalculateInitialFilterCounts(IDataAccessCore dataAccessProvider)
+		public static int CalculateInitialFilterCounts(ref System.Int32 nodesUpdated, IDataAccessCore dataAccessProvider)
 		{
-			using(StoredProcedureCall call = CreateCalculateInitialFilterCountsCall(dataAccessProvider))
+			using(StoredProcedureCall call = CreateCalculateInitialFilterCountsCall(dataAccessProvider, nodesUpdated))
 			{
 				int toReturn = call.Call();
+				nodesUpdated = call.GetParameterValue<System.Int32>(0);
 				return toReturn;
 			}
 		}
@@ -71,6 +76,28 @@ namespace ShipWorks.Data.Model
 		public static int CalculateUpdateFilterCounts(IDataAccessCore dataAccessProvider)
 		{
 			using(StoredProcedureCall call = CreateCalculateUpdateFilterCountsCall(dataAccessProvider))
+			{
+				int toReturn = call.Call();
+				return toReturn;
+			}
+		}
+
+		/// <summary>Calls stored procedure 'CalculateUpdateQuickFilterCounts'.<br/><br/></summary>
+		/// <returns>Number of rows affected, if the database / routine doesn't suppress rowcounting.</returns>
+		public static int CalculateUpdateQuickFilterCounts()
+		{
+			using(DataAccessAdapter dataAccessProvider = new DataAccessAdapter())
+			{
+				return CalculateUpdateQuickFilterCounts(dataAccessProvider);
+			}
+		}
+
+		/// <summary>Calls stored procedure 'CalculateUpdateQuickFilterCounts'.<br/><br/></summary>
+		/// <param name="dataAccessProvider">The data access provider.</param>
+		/// <returns>Number of rows affected, if the database / routine doesn't suppress rowcounting.</returns>
+		public static int CalculateUpdateQuickFilterCounts(IDataAccessCore dataAccessProvider)
+		{
+			using(StoredProcedureCall call = CreateCalculateUpdateQuickFilterCountsCall(dataAccessProvider))
 			{
 				int toReturn = call.Call();
 				return toReturn;
@@ -193,10 +220,12 @@ namespace ShipWorks.Data.Model
 		
 		/// <summary>Creates the call object for the call 'CalculateInitialFilterCounts' to stored procedure 'CalculateInitialFilterCounts'.</summary>
 		/// <param name="dataAccessProvider">The data access provider.</param>
+		/// <param name="nodesUpdated">InputOutput parameter</param>
 		/// <returns>Ready to use StoredProcedureCall object</returns>
-		private static StoredProcedureCall CreateCalculateInitialFilterCountsCall(IDataAccessCore dataAccessProvider)
+		private static StoredProcedureCall CreateCalculateInitialFilterCountsCall(IDataAccessCore dataAccessProvider, System.Int32 nodesUpdated)
 		{
-			return new StoredProcedureCall(dataAccessProvider, @"[ShipWorksLocal].[dbo].[CalculateInitialFilterCounts]", "CalculateInitialFilterCounts");
+			return new StoredProcedureCall(dataAccessProvider, @"[ShipWorksLocal].[dbo].[CalculateInitialFilterCounts]", "CalculateInitialFilterCounts")
+							.AddParameter("@nodesUpdated", "Int", 0, ParameterDirection.InputOutput, true, 10, 0, nodesUpdated);
 		}
 
 		/// <summary>Creates the call object for the call 'CalculateUpdateFilterCounts' to stored procedure 'CalculateUpdateFilterCounts'.</summary>
@@ -205,6 +234,14 @@ namespace ShipWorks.Data.Model
 		private static StoredProcedureCall CreateCalculateUpdateFilterCountsCall(IDataAccessCore dataAccessProvider)
 		{
 			return new StoredProcedureCall(dataAccessProvider, @"[ShipWorksLocal].[dbo].[CalculateUpdateFilterCounts]", "CalculateUpdateFilterCounts");
+		}
+
+		/// <summary>Creates the call object for the call 'CalculateUpdateQuickFilterCounts' to stored procedure 'CalculateUpdateQuickFilterCounts'.</summary>
+		/// <param name="dataAccessProvider">The data access provider.</param>
+		/// <returns>Ready to use StoredProcedureCall object</returns>
+		private static StoredProcedureCall CreateCalculateUpdateQuickFilterCountsCall(IDataAccessCore dataAccessProvider)
+		{
+			return new StoredProcedureCall(dataAccessProvider, @"[ShipWorksLocal].[dbo].[CalculateUpdateQuickFilterCounts]", "CalculateUpdateQuickFilterCounts");
 		}
 
 		/// <summary>Creates the call object for the call 'DeleteAbandonedFilterCounts' to stored procedure 'DeleteAbandonedFilterCounts'.</summary>

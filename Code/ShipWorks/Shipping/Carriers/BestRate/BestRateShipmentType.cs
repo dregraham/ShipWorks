@@ -517,7 +517,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns></returns>
         public InsuranceProvider GetShipmentInsuranceProvider(ShipmentEntity shipment)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
             IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers(shipment).Where(b => b.HasAccounts).ToList();
 
             // Default shipmentInsuranceProvider is ShipWorks

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Security;
@@ -398,7 +397,7 @@ namespace ShipWorks.Email
                 EmailOutboundRelationFields.RelationType == (int) relationType);
 
             // Do the fetch
-            using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
             {
                 List<long> keys = new List<long>();
 

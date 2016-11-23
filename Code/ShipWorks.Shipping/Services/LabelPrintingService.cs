@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Services
 
             // What to do before it gets started (but is on the background thread)
             executor.ExecuteStarting += (object s, EventArgs args) =>
-                FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+                FilterHelper.EnsureQuickFiltersUpToDate();
 
             // Some of the printing will be delayed b\c we are waiting for label sheets to fill up
             Dictionary<TemplateEntity, List<long>> delayedPrints = new Dictionary<TemplateEntity, List<long>>(TemplateHelper.TemplateEqualityComparer);

@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ContractType = source.ContractType;
             CreatedDate = source.CreatedDate;
             PendingInitialAccount = source.PendingInitialAccount;
+            GlobalPostAvailability = source.GlobalPostAvailability;
             
             
             
@@ -212,6 +213,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 PendingInitialAccount { get; }
+        /// <summary> The GlobalPostAvailability property of the Entity UspsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UspsAccount"."GlobalPostAvailability"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 GlobalPostAvailability { get; }
         
         
         

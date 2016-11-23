@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// <summary>
         /// Gets the insurance provider.
         /// </summary>
-        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        public override InsuranceProvider GetInsuranceProvider(IShippingSettingsEntity settings)
         {
             return (InsuranceProvider) settings.IParcelInsuranceProvider;
         }
@@ -43,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             currentShipment.IParcel.Packages[0].DimsHeight = originalShipment.BestRate.DimsHeight;
             currentShipment.IParcel.Packages[0].DimsWidth = originalShipment.BestRate.DimsWidth;
             currentShipment.IParcel.Packages[0].DimsLength = originalShipment.BestRate.DimsLength;
+            currentShipment.IParcel.Packages[0].DimsProfileID = originalShipment.BestRate.DimsProfileID;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.IParcel.Packages[0].Weight = originalShipment.ContentWeight;
@@ -55,8 +56,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             currentShipment.IParcel.Service = (int) iParcelServiceType.Saver;
             currentShipment.IParcel.IParcelAccountID = account.IParcelAccountID;
 
-            currentShipment.IParcel.Packages[0].Insurance = currentShipment.Insurance;
-            currentShipment.IParcel.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
+            currentShipment.IParcel.Packages[0].Insurance = originalShipment.Insurance;
+            currentShipment.IParcel.Packages[0].InsuranceValue = originalShipment.BestRate.InsuranceValue;
         }
 
         /// <summary>

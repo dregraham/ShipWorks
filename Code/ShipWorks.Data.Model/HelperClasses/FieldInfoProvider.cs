@@ -1853,7 +1853,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "OrderTotal", typeof(System.Decimal), false, false, false, false,  (int)OrderFieldIndex.OrderTotal, 0, 4, 19);
 			this.AddElementFieldInfo("OrderEntity", "LocalStatus", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.LocalStatus, 100, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderFieldIndex.IsManual, 0, 0, 0);
-			this.AddElementFieldInfo("OrderEntity", "OnlineLastModified", typeof(System.DateTime), false, false, false, false,  (int)OrderFieldIndex.OnlineLastModified, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "OnlineLastModified", typeof(System.DateTime), false, false, false, false,  (int)OrderFieldIndex.OnlineLastModified, 0, 0, 7);
 			this.AddElementFieldInfo("OrderEntity", "OnlineCustomerID", typeof(System.Object), false, false, false, true,  (int)OrderFieldIndex.OnlineCustomerID, 0, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "OnlineStatus", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.OnlineStatus, 100, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "OnlineStatusCode", typeof(System.Object), false, false, false, true,  (int)OrderFieldIndex.OnlineStatusCode, 0, 0, 0);
@@ -2948,6 +2948,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.ContractType, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)UspsAccountFieldIndex.CreatedDate, 0, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "PendingInitialAccount", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.PendingInitialAccount, 0, 0, 10);
+			this.AddElementFieldInfo("UspsAccountEntity", "GlobalPostAvailability", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.GlobalPostAvailability, 0, 0, 10);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()

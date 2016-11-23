@@ -165,6 +165,8 @@
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
+    <Compile Include="Messaging\TrackedObservable\SelectManyImpl.cs" />
     <Compile Include="Metrics\DeobfuscationProcessor.cs" />
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
@@ -231,6 +233,7 @@
     <Compile Include="System.ComponentModel.DataAnnotations\MaxLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\MinLengthAttribute.cs" />
     <Compile Include="System.ComponentModel.DataAnnotations\PhoneAttribute.cs" />
+    <Compile Include="Threading\AsyncSemaphore.cs" />
     <Compile Include="Threading\IProgressReporter.cs" />
     <Compile Include="Threading\ISchedulerProvider.cs" />
     <Compile Include="Net\ApiLogEncryption.cs" />

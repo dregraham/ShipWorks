@@ -1640,7 +1640,7 @@
           <Field Name="IsManual" Type="bool" FieldIndex="9" />
           <Field Name="LocalStatus" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="OnlineCustomerID" Type="object" IsOptional="true" FieldIndex="11" />
-          <Field Name="OnlineLastModified" Type="datetime" FieldIndex="10" />
+          <Field Name="OnlineLastModified" Type="datetime" Precision="7" FieldIndex="10" />
           <Field Name="OnlineStatus" Type="string" MaxLength="100" FieldIndex="12" />
           <Field Name="OnlineStatusCode" Type="object" IsOptional="true" FieldIndex="13" />
           <Field Name="OrderDate" Type="datetime" FieldIndex="6" />
@@ -2630,6 +2630,7 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="17" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="GlobalPostAvailability" Type="int" Precision="10" FieldIndex="24" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
@@ -3517,8 +3518,13 @@
     </InheritanceHierarchies>
   </EntityModel>
   <SPCallDefinitions>
-    <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9" />
+    <SPCallDefinition Name="CalculateInitialFilterCounts" ObjectID="c715fe10-5dce-4a44-b0a6-a99c641d8ae9">
+      <Parameters>
+        <Parameter Name="NodesUpdated" Type="int" Precision="10" Direction="3" />
+      </Parameters>
+    </SPCallDefinition>
     <SPCallDefinition Name="CalculateUpdateFilterCounts" ObjectID="38ab1dd3-02d1-46ea-b52d-d920e4ab0192" />
+    <SPCallDefinition Name="CalculateUpdateQuickFilterCounts" ObjectID="fddaffaa-ec40-4fba-8d51-896e2dc55952" />
     <SPCallDefinition Name="DeleteAbandonedFilterCounts" ObjectID="b8baa903-5f71-4fd4-bca1-1ef1b299f578" />
     <SPCallDefinition Name="ResetShipSense" ObjectID="ea9b5edf-8edb-474a-b8a1-27f858946dfe" />
     <SPCallDefinition Name="ShipmentShipSenseProcedure" ObjectID="9414f6ce-af3a-4cbf-afcf-9230d90b74fc">
@@ -3546,7 +3552,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-09-21T19:21:45.0349887Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5987,7 +5993,7 @@
                     </Field>
                     <Field Name="LocalStatus" Ordinal="9" DbType="12" Length="100" />
                     <Field Name="IsManual" Ordinal="10" DbType="2" />
-                    <Field Name="OnlineLastModified" Ordinal="11" DbType="4" />
+                    <Field Name="OnlineLastModified" Ordinal="11" DbType="29" Precision="7" />
                     <Field Name="OnlineCustomerID" Ordinal="12" IsOptional="true" DbType="18">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="1" />
@@ -7532,6 +7538,7 @@
                     <Field Name="ContractType" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
+                    <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -7821,8 +7828,13 @@
                 </Table>
               </Tables>
               <StoredProcedures>
-                <StoredProcedure Name="CalculateInitialFilterCounts" />
+                <StoredProcedure Name="CalculateInitialFilterCounts">
+                  <Parameters>
+                    <Parameter Name="@nodesUpdated" Direction="3" Ordinal="1" DbType="8" Precision="10" />
+                  </Parameters>
+                </StoredProcedure>
                 <StoredProcedure Name="CalculateUpdateFilterCounts" />
+                <StoredProcedure Name="CalculateUpdateQuickFilterCounts" />
                 <StoredProcedure Name="DeleteAbandonedFilterCounts" />
                 <StoredProcedure Name="GetAssemblySchemaVersion" />
                 <StoredProcedure Name="GetDatabaseGuid" />
@@ -11248,6 +11260,7 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="GlobalPostAvailability" TargetFieldName="GlobalPostAvailability" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
@@ -11529,9 +11542,14 @@
       <TypedViewMappings />
       <SPCallMappings>
         <SPCallMapping SPCallName=":CalculateInitialFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateInitialFilterCounts">
-          <FieldMappings />
+          <FieldMappings>
+            <FieldMapping FieldName="NodesUpdated" TargetFieldName="@nodesUpdated" />
+          </FieldMappings>
         </SPCallMapping>
         <SPCallMapping SPCallName=":CalculateUpdateFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateUpdateFilterCounts">
+          <FieldMappings />
+        </SPCallMapping>
+        <SPCallMapping SPCallName=":CalculateUpdateQuickFilterCounts" TargetName="ShipWorksLocal:dbo:CalculateUpdateQuickFilterCounts">
           <FieldMappings />
         </SPCallMapping>
         <SPCallMapping SPCallName=":DeleteAbandonedFilterCounts" TargetName="ShipWorksLocal:dbo:DeleteAbandonedFilterCounts">

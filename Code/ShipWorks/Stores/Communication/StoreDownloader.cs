@@ -67,22 +67,19 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Gets the address of order from InstantiateOrder
         /// </summary>
-        protected AddressAdapter OriginalShippingAddress { get; private set; }
+        protected AddressAdapter ShippingAddressBeforeDownload { get; private set; }
 
         /// <summary>
         /// Gets the address of order from InstantiateOrder
         /// </summary>
-        protected AddressAdapter OriginalBillingAddress { get; private set; }
+        protected AddressAdapter BillingAddressBeforeDownload { get; private set; }
 
         /// <summary>
         /// The store the downloader downloads from
         /// </summary>
         public StoreEntity Store
         {
-            get
-            {
-                return store;
-            }
+            get { return store; }
         }
 
         /// <summary>
@@ -90,10 +87,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         protected StoreType StoreType
         {
-            get
-            {
-                return storeType;
-            }
+            get { return storeType; }
         }
 
         /// <summary>
@@ -103,7 +97,8 @@ namespace ShipWorks.Stores.Communication
         {
             get
             {
-                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType) store.AddressValidationSetting);
+                AddressValidationStoreSettingType storeSetting =
+                    ((AddressValidationStoreSettingType) store.AddressValidationSetting);
                 return storeSetting;
             }
         }
@@ -113,10 +108,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public IProgressReporter Progress
         {
-            get
-            {
-                return progress;
-            }
+            get { return progress; }
         }
 
         /// <summary>
@@ -124,10 +116,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public int QuantitySaved
         {
-            get
-            {
-                return quantitySaved;
-            }
+            get { return quantitySaved; }
         }
 
         /// <summary>
@@ -135,10 +124,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public int QuantityNew
         {
-            get
-            {
-                return quantityNew;
-            }
+            get { return quantityNew; }
         }
 
         /// <summary>
@@ -317,11 +303,11 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                OriginalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Ship", OriginalShippingAddress);
+                ShippingAddressBeforeDownload = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", ShippingAddressBeforeDownload);
 
-                OriginalBillingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Bill", OriginalBillingAddress);
+                BillingAddressBeforeDownload = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", BillingAddressBeforeDownload);
 
                 return order;
             }
@@ -364,7 +350,8 @@ namespace ShipWorks.Stores.Communication
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
+                RelationPredicateBucket bucket =
+                    new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
                 // We use a prototype approach to determine what to search for
                 OrderEntity prototype = storeType.CreateOrder();
@@ -377,7 +364,8 @@ namespace ShipWorks.Stores.Communication
                 {
                     if (field.IsChanged)
                     {
-                        bucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(field, null, ComparisonOperator.Equal, field.CurrentValue));
+                        bucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(field, null,
+                            ComparisonOperator.Equal, field.CurrentValue));
                     }
                 }
 
@@ -450,7 +438,8 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Creates a new note instance, but only if the note text is non-blank.  If its blank, null is returned.
         /// </summary>
-        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility visibility, bool ignoreDuplicateText = false)
+        protected NoteEntity InstantiateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility visibility, bool ignoreDuplicateText = false)
         {
             if (string.IsNullOrWhiteSpace(noteText))
             {
@@ -474,8 +463,11 @@ namespace ShipWorks.Stores.Communication
                 if (!order.IsNew)
                 {
                     IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
-                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
-                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int) NoteSource.Downloaded));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(
+                        new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(
+                        new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal,
+                            (int) NoteSource.Downloaded));
 
                     using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
                     {
@@ -526,6 +518,9 @@ namespace ShipWorks.Stores.Communication
                 throw new ArgumentNullException("order");
             }
 
+            // Setting this as a local variable because a SaveAndRefetch changes IsNew to false.
+            bool isOrderNew = order.IsNew;
+
             ConfigurationEntity config = ConfigurationData.Fetch();
 
             string orderStatusText = StatusPresetManager.GetStoreDefault(store, StatusPresetTarget.Order).StatusText;
@@ -562,13 +557,15 @@ namespace ShipWorks.Stores.Communication
             // Now we have to see if it was new
             bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
 
+            ResetAddressIfRequired(order, transaction);
+
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
                 using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                 {
                     // Get the customer
-                    if (order.IsNew)
+                    if (isOrderNew)
                     {
                         try
                         {
@@ -576,7 +573,8 @@ namespace ShipWorks.Stores.Communication
                         }
                         catch (CustomerAcquisitionLockException)
                         {
-                            throw new DownloadException("ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
+                            throw new DownloadException(
+                                "ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
                         }
                     }
 
@@ -591,7 +589,7 @@ namespace ShipWorks.Stores.Communication
 
                     // Apply default status to order.  If tokenized, it has to be done after the save.
                     // Don't overwrite it if its already set.
-                    if (order.IsNew && string.IsNullOrEmpty(order.LocalStatus) && !orderStatusHasTokens)
+                    if (isOrderNew && string.IsNullOrEmpty(order.LocalStatus) && !orderStatusHasTokens)
                     {
                         order.LocalStatus = orderStatusText;
                     }
@@ -610,7 +608,7 @@ namespace ShipWorks.Stores.Communication
                     }
 
                     // If it's new and LastModified isn't set, use the date
-                    if (order.IsNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
+                    if (isOrderNew && !order.Fields[(int) OrderFieldIndex.OnlineLastModified].IsChanged)
                     {
                         order.OnlineLastModified = order.OrderDate;
                     }
@@ -618,14 +616,24 @@ namespace ShipWorks.Stores.Communication
                     // Calculate or verify the order total
                     VerifyOrderTotal(order);
 
-                    // Save the order so we can get its OrderID
-                    adapter.SaveAndRefetch(order);
+                    try
+                    {
+                        // Save the order so we can get its OrderID
+                        adapter.SaveAndRefetch(order);
+                    }
+                    catch (ORMQueryExecutionException ex)
+                        when (ex.Message.Contains("SqlDateTime overflow", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new DownloadException(
+                            $"Order {order.OrderNumber} has an invalid Order Date and/or Last Modified Online date/time. " +
+                            "Please ensure that these values are between 1/1/1753 12:00:00 AM and 12/31/9999 11:59:59 PM.");
+                    }
 
                     // Update the note counts
                     NoteManager.AdjustNoteCount(adapter, order.OrderID, order.Notes.Select(n => n.IsNew).Count());
 
                     // Apply default order status, if it contained tokens it has to be after the save.  Don't overwrite what the downloader set.
-                    if (order.IsNew && string.IsNullOrEmpty(order.LocalStatus) && orderStatusHasTokens)
+                    if (isOrderNew && string.IsNullOrEmpty(order.LocalStatus) && orderStatusHasTokens)
                     {
                         order.LocalStatus = TemplateTokenProcessor.ProcessTokens(orderStatusText, order.OrderID);
                         adapter.SaveAndRefetch(order);
@@ -651,21 +659,21 @@ namespace ShipWorks.Stores.Communication
                     adapter.SaveAndRefetch(order);
 
                     // Update unprocessed shipment addresses if the order address has changed
-                    if (!order.IsNew)
+                    if (!isOrderNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        bool shippingAddressChanged = OriginalShippingAddress != newShippingAddress;
+                        bool shippingAddressChanged = ShippingAddressBeforeDownload != newShippingAddress;
                         if (shippingAddressChanged)
                         {
                             SetAddressValidationStatus(order, "Ship", adapter);
                             adapter.SaveAndRefetch(order);
 
-                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, OriginalShippingAddress, newShippingAddress);
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, ShippingAddressBeforeDownload, newShippingAddress);
                         }
 
                         // Update the customer's addresses if necessary
                         AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
-                        bool billingAddressChanged = OriginalBillingAddress != newBillingAddress;
+                        bool billingAddressChanged = BillingAddressBeforeDownload != newBillingAddress;
 
                         if (billingAddressChanged)
                         {
@@ -680,8 +688,8 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID, adapter) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, OriginalBillingAddress, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, OriginalShippingAddress, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedBilling, order, existingCustomer, BillingAddressBeforeDownload, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior) config.CustomerUpdateModifiedShipping, order, existingCustomer, ShippingAddressBeforeDownload, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }
@@ -714,6 +722,60 @@ namespace ShipWorks.Stores.Communication
             }
 
             log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
+        }
+
+        /// <summary>
+        /// If an order's addresses change to the originally validated address, change it back.
+        /// </summary>
+        private void ResetAddressIfRequired(OrderEntity order, DbTransaction transaction)
+        {
+            if (!order.IsNew)
+            {
+                using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
+                {
+                    bool shipAddressReset = ResetAddressIfRequired(order, "Ship", ShippingAddressBeforeDownload);
+                    bool billAddressReset = ResetAddressIfRequired(order, "Bill", BillingAddressBeforeDownload);
+                    if (shipAddressReset || billAddressReset)
+                    {
+                        adapter.SaveAndRefetch(order);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resets the address if required.
+        /// </summary>
+        /// <param name="order">The order that now has the downloaded address.</param>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="addressBeforeDownload">The address before download.</param>
+        /// <remarks>
+        /// If address changed and the new address matches the address pre-address validation (the AV original address)
+        /// from address validation, reset the address back to the original address.
+        /// </remarks>
+        private static bool ResetAddressIfRequired(OrderEntity order, string prefix, AddressAdapter addressBeforeDownload)
+        {
+            bool addressReset = false;
+            AddressAdapter orderAddress = new AddressAdapter(order, prefix);
+
+            if (addressBeforeDownload != orderAddress)
+            {
+                ValidatedAddressEntity addressBeforeValidation =
+                    ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, prefix);
+
+                if (addressBeforeValidation != null)
+                {
+                    AddressAdapter originalAddressAdapter = new AddressAdapter(addressBeforeValidation, string.Empty);
+
+                    if (originalAddressAdapter == orderAddress)
+                    {
+                        AddressAdapter.Copy(addressBeforeDownload, orderAddress);
+                        addressReset = true;
+                    }
+                }
+            }
+
+            return addressReset;
         }
 
         /// <summary>
