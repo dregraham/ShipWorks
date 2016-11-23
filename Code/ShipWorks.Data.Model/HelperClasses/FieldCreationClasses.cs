@@ -22322,6 +22322,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.PendingInitialAccount);}
 		}
+		/// <summary>Creates a new UspsAccountEntity.GlobalPostAvailability field instance</summary>
+		public static EntityField2 GlobalPostAvailability
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.GlobalPostAvailability);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsProfileEntity</summary>

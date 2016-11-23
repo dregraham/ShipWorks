@@ -139,7 +139,7 @@ namespace ShipWorks.ApplicationCore
                 .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing advanced search.", ex))
                 .Subscribe(x => PerformAdvancedSearch());
         }
-        
+
         /// <summary>
         /// Initialization
         /// </summary>
@@ -167,7 +167,7 @@ namespace ShipWorks.ApplicationCore
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose(bool disposing)
@@ -344,7 +344,7 @@ namespace ShipWorks.ApplicationCore
             ActiveGrid.UpdateGridRows();
 
             // Auto select the row when doing a filter searach and there is only 1 result
-            if (ActiveFilterNode.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
+            if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
             {
                 ActiveGrid.Rows[0].Selected = true;
             }
@@ -459,7 +459,7 @@ namespace ShipWorks.ApplicationCore
         {
             FilterEntityGrid grid = new FilterEntityGrid(target);
             grid.BorderStyle = BorderStyle.None;
-            
+
             grid.CheckBoxes = true;
             grid.Visible = false;
             grid.Dock = DockStyle.Fill;
@@ -613,7 +613,7 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-          
+
             RaiseSelectionChanged();
         }
 
@@ -626,7 +626,7 @@ namespace ShipWorks.ApplicationCore
 
             SelectionChanged?.Invoke(this, EventArgs.Empty);
         }
-        
+
         /// <summary>
         /// The sort changed in the grid
         /// </summary>
@@ -638,7 +638,7 @@ namespace ShipWorks.ApplicationCore
                 log.InfoFormat("Grid selection changed while not visible. ({0}, {1})", grid.Rows.Count, grid.Selection.Count);
                 return;
             }
-            
+
             RaiseSortChanged();
         }
 
@@ -689,7 +689,7 @@ namespace ShipWorks.ApplicationCore
 
             // Need to initialize the editor before its shown
             if (!AdvancedSearchVisible && !initiatedAdvanced)
-            {            
+            {
                 filterEditor.LoadDefinition(new FilterDefinition(ActiveFilterTarget));
             }
 
@@ -842,11 +842,11 @@ namespace ShipWorks.ApplicationCore
                 }
                 catch (ObjectDisposedException)
                 {
-                    // If the user is typing as they close the containing window, 
+                    // If the user is typing as they close the containing window,
                     // it's possible that we pass the check above and then get disposed
                     log.Debug("Search was trying to access a disposed main grid control");
                 }
-                
+
                 return;
             }
 
@@ -956,11 +956,11 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private bool AdvancedSearchVisible
         {
-            get 
+            get
             {
-                return filterEditor.Visible; 
+                return filterEditor.Visible;
             }
-            set 
+            set
             {
                 filterEditor.Visible = value;
                 borderAdvanced.Visible = value;

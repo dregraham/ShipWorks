@@ -503,7 +503,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ILicense license = lifetimeScope.Resolve<ILicenseService>().GetLicenses().FirstOrDefault();
-
                 license?.AssociateUspsAccount(UspsAccount);
             }
         }
@@ -902,7 +901,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private AssociateShipworksWithItselfRequest PopulateAssociateWithSelfRequestWithBilling(ILifetimeScope ioc)
         {
             IUspsWebClient uspsWebClient =
-                ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
+                ioc.Resolve<IUspsWebClient>(new TypedParameter(typeof(UspsResellerType), UspsResellerType.None));
 
             AssociateShipworksWithItselfRequest request =
                 ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));

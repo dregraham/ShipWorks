@@ -1,0 +1,47 @@
+ShipWorks Magento Extension
+
+Version 4.0.4
+August 17, 2015
+Features:
+Resolved Issues:
+- Addressed issues found in Magento code audit. 
+
+Version 4.0.3
+July 23, 2015
+Features:
+Resolved Issues:
+- Fixed bug related to Customer Emails not downloading into ShipWorks.
+
+Version 4.0.2
+July 2, 2015
+Features:
+Resolved Issues:
+- Fixed bug related to tracking uploads
+
+Version 4.0.1
+July 2, 2015
+Features:
+Resolved Issues:
+- Fixed address downloading issues
+
+Version 4.0.0
+June 30, 2015
+Features:
+Resolved Issues:
+- Fixed various bugs
+
+Version 3.10
+April 10, 2015
+Features:
+- Added support to upload multiple tracking numbers to a single shipment in Magento
+- Added admin menu for custom mapping attributes from Magento into ShipWorks
+Resolved Issues:
+- Fixed bug causing emails to not send when choosing to notify customer after processing a shipment in ShipWorks
+
+Initial Release Version 2.9
+November 06, 2010
+Features:
+- Download orders from MagentoConnect into ShipWorks
+- Upload tracking information and invoice orders after shipping in ShipWorks
+- Complete orders in Magento after shipping in ShipWorks
+- Notify customer when a shipment has been processed in ShipWorks

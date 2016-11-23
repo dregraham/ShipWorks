@@ -1,8 +1,4 @@
-﻿PRINT N'Dropping foreign keys from [dbo].[FilterNodeContentDetail]'
-GO
-ALTER TABLE [dbo].[FilterNodeContentDetail] DROP CONSTRAINT [FK_FilterNodeContentDetail_FilterNodeContent]
-GO
-PRINT N'Dropping index [IX_FilterNodeCountDetail] from [dbo].[FilterNodeContentDetail]'
+﻿PRINT N'Dropping index [IX_FilterNodeCountDetail] from [dbo].[FilterNodeContentDetail]'
 GO
 DROP INDEX [IX_FilterNodeCountDetail] ON [dbo].[FilterNodeContentDetail]
 GO
@@ -41,8 +37,4 @@ GO
 PRINT N'Creating primary key [PK_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateShipment]'
 GO
 ALTER TABLE [dbo].[FilterNodeUpdateShipment] ADD CONSTRAINT [PK_FilterNodeUpdateShipment] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated]) WITH (IGNORE_DUP_KEY=ON)
-GO
-PRINT N'Adding foreign keys to [dbo].[FilterNodeContentDetail]'
-GO
-ALTER TABLE [dbo].[FilterNodeContentDetail] ADD CONSTRAINT [FK_FilterNodeContentDetail_FilterNodeContent] FOREIGN KEY ([FilterNodeContentID]) REFERENCES [dbo].[FilterNodeContent] ([FilterNodeContentID]) ON DELETE CASCADE
 GO

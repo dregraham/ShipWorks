@@ -401,8 +401,9 @@ namespace ShipWorks.Filters
 
                     if (initial)
                     {
+                        int nodesUpdated = 1;
                         sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                            ActionProcedures.CalculateInitialFilterCounts(adapter)
+                            ActionProcedures.CalculateInitialFilterCounts(ref nodesUpdated, adapter)
                             );
                     }
                     else

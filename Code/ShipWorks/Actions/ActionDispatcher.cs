@@ -122,10 +122,12 @@ namespace ShipWorks.Actions
         /// </summary>
         public static void DispatchProcessingBatchFinished(SqlAdapter adapter, DateTime startDate, int shipmentCount, int shipmentErrorCount)
         {
-            ActionEntity action = GetEligibleActions(ActionTriggerType.None, 0)
-                .FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
+            ActionEntity action = GetEligibleActions(ActionTriggerType.None, 0).FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
 
-            DispatchAction(action, null, adapter, FinishProcessingBatchTask.CreateExtraData(startDate, shipmentCount, shipmentErrorCount));
+            if (action != null)
+            {
+                DispatchAction(action, null, adapter, FinishProcessingBatchTask.CreateExtraData(startDate, shipmentCount, shipmentErrorCount));
+            }
 
             // Ensure the action processor is working
             ActionProcessor.StartProcessing();
