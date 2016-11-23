@@ -1604,6 +1604,7 @@
     <Compile Include="Stores\Platforms\Magento\IMagentoConnectWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
+    <Compile Include="Stores\Platforms\Magento\IMagentoStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoTwoRestClient.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoException.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />

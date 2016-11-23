@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Magento integration
     /// </summary>
-    public class MagentoStoreType : GenericModuleStoreType
+    public class MagentoStoreType : GenericModuleStoreType, IMagentoStoreType
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MagentoStoreType));

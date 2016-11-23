@@ -34,16 +34,18 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         private readonly PropertyChangedHandler handler;
         private readonly IIndex<MagentoVersion, IMagentoProbe> magentoProbes;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoStoreSetupControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes, IEncryptionProviderFactory encryptionProviderFactory)
+        public MagentoStoreSetupControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes, IEncryptionProviderFactory encryptionProviderFactory, IStoreTypeManager storeTypeManager)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.magentoProbes = magentoProbes;
             this.encryptionProviderFactory = encryptionProviderFactory;
+            this.storeTypeManager = storeTypeManager;
             IsMagento1 = true;
         }
 
@@ -120,7 +122,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 
             try
             {
-                GenericModuleStoreType storeType = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+                IMagentoStoreType storeType = (IMagentoStoreType) storeTypeManager.GetType(store);
                 storeType.InitializeFromOnlineModule();
             }
             catch (GenericStoreException ex)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using Autofac.Extras.Moq;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -9,6 +10,8 @@ using ShipWorks.Stores.Platforms.Magento.Enums;
 using Autofac.Features.Indexed;
 using Moq;
 using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
 {
@@ -29,7 +32,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
             probeIIndex = mock.MockRepository.Create<IIndex<MagentoVersion, IMagentoProbe>>();
             mock.Provide(probeIIndex.Object);
 
+            mock.Mock<IStoreTypeManager>()
+                .Setup(s => s.GetType(It.IsAny<StoreEntity>()))
+                .Returns(new MockMagentoStoreType());
+
             testObject = mock.Create<MagentoStoreSetupControlViewModel>();
+            testObject.Username = "";
+            testObject.Password = new SecureString();
         }
 
         private void SetupProbeResult(MagentoVersion magentoVersion, bool success, string url = "http://www.shipworks.com/")
@@ -138,6 +147,45 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
         public void Dispose()
         {
             mock.Dispose();
+        }
+
+        public class MockMagentoStoreType : StoreType, IMagentoStoreType
+        {
+            public override StoreTypeCode TypeCode
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            protected override string InternalLicenseIdentifier
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public override StoreDownloader CreateDownloader()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override StoreEntity CreateStoreInstance()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void InitializeFromOnlineModule()
+            {
+                // Do Nothing
+            }
         }
     }
 }
