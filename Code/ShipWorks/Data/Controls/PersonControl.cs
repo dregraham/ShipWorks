@@ -577,6 +577,8 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public void LoadEntities(List<PersonAdapter> list)
         {
+            lastValidatedAddress = null;
+
             // Ensure we are created and initialized
             EnsureCountryInitialized();
 

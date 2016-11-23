@@ -266,9 +266,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
                 account.CreatedDate = DateTime.UtcNow;
                 account.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+                account.GlobalPostAvailability = (int) GetGlobalPostServiceAvailability(accountInfo);
             }
 
             return account;
+        }
+
+        /// <summary>
+        /// Get GlobalPost service availability from the account info
+        /// </summary>
+        private GlobalPostServiceAvailability GetGlobalPostServiceAvailability(AccountInfo accountInfo)
+        {
+            GlobalPostServiceAvailability gpAvailability = accountInfo.Capabilities.CanPrintGP ?
+                GlobalPostServiceAvailability.GlobalPost :
+                GlobalPostServiceAvailability.None;
+
+            GlobalPostServiceAvailability gpSmartSaverAvailability = accountInfo.Capabilities.CanPrintGPSmartSaver ?
+                GlobalPostServiceAvailability.SmartSaver :
+                GlobalPostServiceAvailability.None;
+
+            return gpAvailability | gpSmartSaverAvailability;
         }
 
         /// <summary>
@@ -317,18 +334,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             using (SwsimV55 webService = CreateWebService("PurchasePostage"))
             {
                 webService.PurchasePostage(
-                    GetCredentials(account), 
-                    amount, 
-                    controlTotal, 
+                    GetCredentials(account),
+                    amount,
+                    controlTotal,
                     null, // MI
                     null, // IntegratorTxID
                     null, // SendEmail
                     false, //SendEmailSpecified
                     null, // Merchant
-                    out purchaseStatus, 
-                    out transactionID, 
-                    out postageBalance, 
-                    out rejectionReason, 
+                    out purchaseStatus,
+                    out transactionID,
+                    out postageBalance,
+                    out rejectionReason,
                     out miRequired_Unused,
                     out purchaseRejectionCode_Unused);
             }
@@ -1409,13 +1426,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                     // We send 0 as the plan id
                     webService.ChangePlan(
-                        credentials, 
-                        0, 
-                        promoCode, 
+                        credentials,
+                        0,
+                        promoCode,
                         null, // ChangeEmail,
                         false, // ChangeEmailSpecified
-                        out purchaseStatus, 
-                        out transactionID, 
+                        out purchaseStatus,
+                        out transactionID,
                         out rejectionReason);
                 }
             }
