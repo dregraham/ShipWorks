@@ -201,7 +201,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <returns></returns>
         public virtual bool Ship(OrderEntity order)
         {
-            // TODO: remove the = null. This is here so the other spreadsheets will still work while I work on smartpost.
             try
             {
                 InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
@@ -213,7 +212,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-
                     FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
                     {
                         Inspector = new FedExShipmentType().CertificateInspector,
@@ -393,7 +391,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             shipment.ShipStreet2 = string.Empty;
             shipment.ShipStreet3 = string.Empty;
             shipment.ShipCity = RecipientCity;
-            shipment.ShipStateProvCode = RecipientStateOrProvinceCode;
+            shipment.ShipStateProvCode = RecipientStateOrProvinceCode ?? string.Empty;
             shipment.ShipPostalCode = RecipientPostalCode;
             shipment.ShipCountryCode = RecipientCountryCode;
             shipment.ShipEmail = string.Empty;
@@ -550,7 +548,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.ShipStreet2 = string.Empty;
                 shipment.ShipStreet3 = string.Empty;
                 shipment.ShipCity = ShipperCity;
-                shipment.ShipStateProvCode = ShipperStateOrProvinceCode;
+                shipment.ShipStateProvCode = ShipperStateOrProvinceCode ?? string.Empty;
                 shipment.ShipPostalCode = ShipperPostalCode;
                 shipment.ShipCountryCode = ShipperCountryCode;
                 shipment.ShipEmail = string.Empty;

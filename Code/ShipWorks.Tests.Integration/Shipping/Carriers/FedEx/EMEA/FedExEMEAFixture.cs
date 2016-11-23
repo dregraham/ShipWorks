@@ -261,6 +261,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
         /// <returns></returns>
         public override ShipmentEntity CreateShipment(OrderEntity order)
         {
+            order.ShipStateProvCode = RecipientStateOrProvinceCode ?? string.Empty;
+
             ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.TrafficInArmsLicenseNumber = TrafficInArmsLicenseOrExemptionNumber;

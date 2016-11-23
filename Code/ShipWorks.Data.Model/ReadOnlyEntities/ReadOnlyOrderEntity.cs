@@ -195,7 +195,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The OnlineLastModified property of the Entity Order<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Order"."OnlineLastModified"<br/>
-        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.DateTime OnlineLastModified { get; }
         /// <summary> The OnlineCustomerID property of the Entity Order<br/><br/>

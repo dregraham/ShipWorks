@@ -3360,6 +3360,8 @@ namespace ShipWorks.Data.Model
 		ThirdPartyConsignee,
 		///<summary>Currency. </summary>
 		Currency,
+		///<summary>InternationalTrafficInArmsService. </summary>
+		InternationalTrafficInArmsService,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9574,6 +9576,8 @@ namespace ShipWorks.Data.Model
 		CreatedDate,
 		///<summary>PendingInitialAccount. </summary>
 		PendingInitialAccount,
+		///<summary>GlobalPostAvailability. </summary>
+		GlobalPostAvailability,
 		/// <summary></summary>
 		AmountOfFields
 	}

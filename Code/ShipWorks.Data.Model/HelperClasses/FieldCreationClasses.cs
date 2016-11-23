@@ -7852,6 +7852,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.Currency);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.InternationalTrafficInArmsService field instance</summary>
+		public static EntityField2 InternationalTrafficInArmsService
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.InternationalTrafficInArmsService);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>
@@ -22316,6 +22321,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PendingInitialAccount
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.PendingInitialAccount);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.GlobalPostAvailability field instance</summary>
+		public static EntityField2 GlobalPostAvailability
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.GlobalPostAvailability);}
 		}
 	}
 

@@ -283,6 +283,7 @@
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00_Test.cs" />
     <Compile Include="Editions\EditionManagerTest.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />

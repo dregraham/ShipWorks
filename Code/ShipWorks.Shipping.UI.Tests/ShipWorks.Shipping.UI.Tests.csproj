@@ -172,6 +172,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\Postal\Usps\GlobalPostAvailabilityServiceTest.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostNotificationTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OrderSelectionChangedHandlerTest.cs" />
@@ -233,6 +234,10 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
       <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>

@@ -143,9 +143,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 OrderEntity downloadedOrder = LoadOrder(odbcRecordsForOrder);
 
-                ResetAddressIfRequired(downloadedOrder, "Ship", OriginalShippingAddress);
-                ResetAddressIfRequired(downloadedOrder, "Bill", OriginalBillingAddress);
-
                 try
                 {
                     SaveDownloadedOrder(downloadedOrder);
@@ -156,39 +153,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 }
 
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
-            }
-        }
-
-        /// <summary>
-        /// Resets the address if required.
-        /// </summary>
-        /// <param name="order">The order that now has the downloaded address.</param>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="addressBeforeDownload">The address before download.</param>
-        /// <remarks>
-        /// If address changed and the new address matches the address pre-address validation (the AV original address)
-        /// from address validation, reset the address back to the original address.
-        /// </remarks>
-        private static void ResetAddressIfRequired(OrderEntity order, string prefix, AddressAdapter addressBeforeDownload)
-        {
-            AddressAdapter orderAddress = new AddressAdapter(order, prefix);
-            if (addressBeforeDownload == orderAddress)
-            {
-                // Address hasn't changed
-                return;
-            }
-
-            ValidatedAddressEntity addressBeforeValidation =
-                ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, prefix);
-
-            if (addressBeforeValidation != null)
-            {
-                AddressAdapter originalAddressAdapter = new AddressAdapter(addressBeforeValidation, string.Empty);
-
-                if (originalAddressAdapter == orderAddress)
-                {
-                    AddressAdapter.Copy(addressBeforeDownload, orderAddress);
-                }
             }
         }
 

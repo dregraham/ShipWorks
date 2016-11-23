@@ -412,7 +412,7 @@ CREATE TABLE [dbo].[Order]
 [OrderTotal] [money] NOT NULL,
 [LocalStatus] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
-[OnlineLastModified] [datetime] NOT NULL,
+[OnlineLastModified] [datetime2] NOT NULL,
 [OnlineCustomerID] [sql_variant] NULL,
 [OnlineStatus] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OnlineStatusCode] [sql_variant] NULL,
@@ -2013,7 +2013,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [MaskedData] [int] NULL,
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ThirdPartyConsignee] [bit] NOT NULL,
-[Currency] [int] NULL
+[Currency] [int] NULL,
+[InternationalTrafficInArmsService] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -4978,7 +4979,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
-[PendingInitialAccount] [int] NOT NULL
+[PendingInitialAccount] [int] NOT NULL,
+[GlobalPostAvailability] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'

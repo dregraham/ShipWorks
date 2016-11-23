@@ -1,8 +1,6 @@
 ﻿using System.Data;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
-using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
@@ -45,7 +43,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
 
                 testObject.FedExAccountNumber = GetAccountForCountry(testObject.ShipperCountryCode);
 
-                //testObject.CommercialInvoiceFileElectronically = true;
+                if (testObject.CustomerTransactionId == "EMEA-504" || testObject.CustomerTransactionId == "EMEA-509" ||
+                    testObject.CustomerTransactionId == "EMEA-514" || testObject.CustomerTransactionId == "EMEA-519")
+                {
+                    testObject.CommercialInvoiceFileElectronically = true;
+                }
 
                 testObject.Ship(context.Order);
             }
