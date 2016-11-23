@@ -784,10 +784,10 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_RowVersion' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
 CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_RowVersion] ON [dbo].[QuickFilterNodeContentDirty] ([RowVersion])
 GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ParentIDObjectType] on [dbo].[QuickFilterNodeContentDirty]'
+PRINT N'Creating index [IX_QuickFilterNodeContentDirty_IgnoreDuplicates] on [dbo].[QuickFilterNodeContentDirty]'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_ParentIDObjectType' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ParentIDObjectType] ON [dbo].[QuickFilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_IgnoreDuplicates' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
+CREATE UNIQUE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_IgnoreDuplicates] ON [dbo].[QuickFilterNodeContentDirty] ([ParentID], [ObjectType], [ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ColumnsUpdated] on [dbo].[QuickFilterNodeContentDirty]'
 GO
@@ -4403,9 +4403,9 @@ PRINT N'Creating index [IX_FilterNodeContentDirty_RowVersion] on [dbo].[FilterNo
 GO
 CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_RowVersion] ON [dbo].[FilterNodeContentDirty] ([RowVersion])
 GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_ParentIDObjectType] on [dbo].[FilterNodeContentDirty]'
+PRINT N'Creating index [IX_FilterNodeContentDirty_IgnoreDuplicates] on [dbo].[FilterNodeContentDirty]'
 GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_IgnoreDuplicates] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType], [ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating index [IX_FilterNodeContentDirty_ColumnsUpdated] on [dbo].[FilterNodeContentDirty]'
 GO
