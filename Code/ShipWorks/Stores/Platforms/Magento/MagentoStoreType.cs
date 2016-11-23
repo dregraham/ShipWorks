@@ -128,7 +128,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<AccountSettingsControlBase>(StoreTypeCode.Magento);
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                return scope.ResolveKeyed<AccountSettingsControlBase>(StoreTypeCode.Magento);
+            }
         }
 
         /// <summary>
@@ -235,11 +238,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     log.WarnFormat("Cannot execute online command for Magento order id {0}, the store was deleted.", orderID);
                 }
             }
-            catch (MagentoException ex)
-            {
-                issueAdder.Add(orderID, ex);
-            }
-            catch (GenericStoreException ex)
+            catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
             {
                 issueAdder.Add(orderID, ex);
             }
@@ -268,8 +267,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
-                    new TypedParameter(typeof(StoreEntity), Store));
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    return scope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
+                        new TypedParameter(typeof(StoreEntity), Store));
+                }
             }
 
             return new MagentoDownloader(Store);

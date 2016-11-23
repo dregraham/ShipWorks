@@ -22,19 +22,28 @@ using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
+    /// <summary>
+    /// Online updater for Magento 2 stores using the REST API
+    /// </summary>
+    /// <seealso cref="ShipWorks.Stores.Platforms.GenericModule.GenericStoreOnlineUpdater" />
+    /// <seealso cref="ShipWorks.Stores.Platforms.Magento.IMagentoOnlineUpdater" />
     [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST)]
-
     public class MagentoTwoRestOnlineUpdater : GenericStoreOnlineUpdater, IMagentoOnlineUpdater
     {
         private readonly MagentoStoreEntity store;
         private static readonly ILog log = LogManager.GetLogger(typeof(MagentoTwoRestOnlineUpdater));
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MagentoTwoRestOnlineUpdater"/> class.
+        /// </summary>
         public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store) : base(store)
         {
             this.store = (MagentoStoreEntity) store;
         }
 
+        /// <summary>
+        /// Uploads shipment details to Magento
+        /// </summary>
         public void UploadShipmentDetails(long orderID, string action, string comments, bool emailCustomer)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
@@ -47,6 +56,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
+        /// <summary>
+        /// Uploads shipment details to Magento
+        /// </summary>
         public void UploadShipmentDetails(long orderID, string action, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
             MagentoOrderEntity order = DataProvider.GetEntity(orderID) as MagentoOrderEntity;
@@ -56,27 +68,31 @@ namespace ShipWorks.Stores.Platforms.Magento
                 {
                     string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
 
+                    Uri storeUri = new Uri(store.ModuleUrl);
+
+                    string shipmentDetails = GetShipmentDetails(order, processedComments, emailCustomer);
+
                     using (var scope = IoC.BeginLifetimeScope())
                     {
                         IMagentoTwoRestClient webClient = scope.Resolve<IMagentoTwoRestClient>();
-                        Uri storeUri = new Uri(store.ModuleUrl);
-
 
                         string token = webClient.GetToken(storeUri, store.ModuleUsername, SecureText.Decrypt(store.ModulePassword, store.ModuleUsername));
 
-
-                        // look for any shipping information if we're Completing an order
-                        string carrier = "";
-                        string tracking = "";
-
-                        string shipmentDetails = GetShipmentDetails(order, action, processedComments, emailCustomer);
-
-
-                        // execute the action
-                        webClient.UploadShipmentDetails(shipmentDetails, storeUri, token, order.MagentoOrderID);
-
-                        unitOfWork.AddForSave(order);
+                        switch (action)
+                        {
+                            case "complete":
+                                webClient.UploadShipmentDetails(shipmentDetails, storeUri, token, order.MagentoOrderID);
+                                break;
+                            case "hold":
+                                webClient.HoldOrder(storeUri, token, order.MagentoOrderID);
+                                break;
+                            case "cancel":
+                                webClient.CancelOrder(storeUri, token, order.MagentoOrderID);
+                                break;
+                        }
                     }
+
+                    unitOfWork.AddForSave(order);
                 }
                 else
                 {
@@ -85,7 +101,10 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
-        private string GetShipmentDetails(MagentoOrderEntity order, string action, string comments, bool emailCustomer)
+        /// <summary>
+        /// Gets the shipment details string from the request
+        /// </summary>
+        private string GetShipmentDetails(MagentoOrderEntity order, string comments, bool emailCustomer)
         {
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
             ShippingManager.EnsureShipmentLoaded(shipment);
@@ -131,6 +150,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             return JsonConvert.SerializeObject(request);
         }
 
+        /// <summary>
+        /// Gets the carrier code.
+        /// </summary>
         private string GetCarrierCode(ShipmentEntity shipment)
         {
             string code = "";

@@ -24,5 +24,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Uploads the shipment details.
         /// </summary>
         void UploadShipmentDetails(string shipmentDetailsJson, Uri storeUri, string token, long magentoOrderId);
+
+        /// <summary>
+        /// Place a hold on a Magento order
+        /// </summary>
+        void HoldOrder(Uri storeUri, string token, long magentoOrderID);
+
+        /// <summary>
+        /// Cancels a Magento order
+        /// </summary>
+        void CancelOrder(Uri storeUri, string token, long magentoOrderID);
     }
 }

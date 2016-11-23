@@ -5,12 +5,12 @@ namespace ShipWorks.Stores.Platforms.Magento
     public interface IMagentoOnlineUpdater
     {
         /// <summary>
-        /// Executes an action on the specified order
+        /// Uploads shipment details to Magento
         /// </summary>
         void UploadShipmentDetails(long orderID, string action, string comments, bool emailCustomer);
 
         /// <summary>
-        /// Executes an action on the specified order
+        /// Uploads shipment details to Magento
         /// </summary>
         void UploadShipmentDetails(long orderID, string action, string comments, bool emailCustomer, UnitOfWork2 unitOfWork);
     }

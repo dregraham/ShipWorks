@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Net;
 using Newtonsoft.Json;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.DTO;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -14,6 +13,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
+        private const string HoldEndpoint = "rest/V1/orders/{0}/hold";
+        private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
 
         /// <summary>
         /// Get an admin token for the given credentials
@@ -52,6 +53,28 @@ namespace ShipWorks.Stores.Platforms.Magento
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(ShipmentEndpoint, magentoOrderId)}"), token);
 
             submitter.RequestBody = shipmentDetailsJson;
+
+            ProcessRequest<string>(submitter);
+        }
+
+        /// <summary>
+        /// Place a hold on a Magento order
+        /// </summary>
+        public void HoldOrder(Uri storeUri, string token, long magentoOrderID)
+        {
+            HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(HoldEndpoint, magentoOrderID)}"), token);
+
+            ProcessRequest<string>(submitter);
+        }
+
+        /// <summary>
+        /// Cancels a Magento order
+        /// </summary>
+        public void CancelOrder(Uri storeUri, string token, long magentoOrderID)
+        {
+            HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(CancelEndpoint, magentoOrderID)}"), token);
 
             ProcessRequest<string>(submitter);
         }

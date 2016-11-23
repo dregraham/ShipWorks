@@ -108,11 +108,7 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
                     updater.UploadShipmentDetails(entityID, "complete", comment, magentoSendEmail, context.CommitWork);
                 }
             }
-            catch (MagentoException ex)
-            {
-                throw new ActionTaskRunException(ex.Message, ex);
-            }
-            catch (GenericStoreException ex)
+            catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }
