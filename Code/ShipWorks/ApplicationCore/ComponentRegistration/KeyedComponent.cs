@@ -12,10 +12,20 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class KeyedComponentAttribute : Attribute
     {
-        public KeyedComponentAttribute(Type service, object key)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyedComponentAttribute"/> class.
+        /// </summary>
+        public KeyedComponentAttribute(Type service, object key):this(service, key, false)
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyedComponentAttribute"/> class.
+        /// </summary>
+        public KeyedComponentAttribute(Type service, object key, bool externallyOwned)
         {
             Service = service;
             Key = key;
+            ExternallyOwned = externallyOwned;
         }
 
         /// <summary>
@@ -27,6 +37,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// Key that will be used for the service registration
         /// </summary>
         public object Key { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether [externally owned].
+        /// </summary>
+        public bool ExternallyOwned { get; private set; }
 
         /// <summary>
         /// Register all components that use this attribute
@@ -45,8 +60,12 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (var attribute in item.Attributes)
                 {
-                    builder.RegisterType(item.Component)
-                        .Keyed(attribute.Key, attribute.Service);
+                    var registration = builder.RegisterType(item.Component).Keyed(attribute.Key, attribute.Service);
+
+                    if (attribute.ExternallyOwned)
+                    {
+                        registration.ExternallyOwned();
+                    }
                 }
             }
         }

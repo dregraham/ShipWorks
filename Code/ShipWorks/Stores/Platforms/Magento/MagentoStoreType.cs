@@ -105,18 +105,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Create the custom wizard pages for Magento
-        /// </summary>
-        /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            return new List<WizardPage>
-                {
-                    scope.ResolveKeyed<WizardPage>(StoreTypeCode.Magento)
-                };
-        }
-
-        /// <summary>
         /// Create the control used to create online update actions in the add store wizard
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
@@ -248,10 +236,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                {
-                    return (GenericStoreOnlineUpdater) scope.ResolveKeyed<IMagentoOnlineUpdater>(MagentoVersion.MagentoTwoREST, new TypedParameter(typeof(GenericModuleStoreEntity), Store));
-                }
+                return (GenericStoreOnlineUpdater) IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IMagentoOnlineUpdater>(MagentoVersion.MagentoTwoREST, new TypedParameter(typeof(GenericModuleStoreEntity), Store));
             }
 
             return new MagentoOnlineUpdater((GenericModuleStoreEntity)Store);
@@ -264,11 +249,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                {
-                    return scope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
-                        new TypedParameter(typeof(StoreEntity), Store));
-                }
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
+                    new TypedParameter(typeof(StoreEntity), Store));
             }
 
             return new MagentoDownloader(Store);

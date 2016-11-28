@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
-    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST)]
+    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, true)]
     public class Magento2RestDownloader : StoreDownloader
     {
         private readonly IMagentoTwoRestClient webClient;
