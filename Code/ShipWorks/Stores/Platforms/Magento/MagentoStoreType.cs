@@ -125,17 +125,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Create the custom account settings control
-        /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                return scope.ResolveKeyed<AccountSettingsControlBase>(StoreTypeCode.Magento);
-            }
-        }
-
-        /// <summary>
         /// Create the magento-custom control for store options
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
