@@ -147,6 +147,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                 false));
             request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]",
                 $"{startDate:yyyy-MM-dd HH:mm:ff}", false));
+            request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][field]", "updated_at", false));
+            request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][direction]", "asc", false));
         }
 
         /// <summary>

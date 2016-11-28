@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO
         public string protect_code { get; set; }
         public int quote_id { get; set; }
         public string remote_ip { get; set; }
-        public int shipping_amount { get; set; }
+        public double shipping_amount { get; set; }
         public string shipping_description { get; set; }
         public int shipping_discount_amount { get; set; }
         public int shipping_discount_tax_compensation_amount { get; set; }
@@ -196,9 +196,9 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO
         public string store_name { get; set; }
         public int store_to_base_rate { get; set; }
         public int store_to_order_rate { get; set; }
-        public int subtotal { get; set; }
-        public int subtotal_incl_tax { get; set; }
-        public int tax_amount { get; set; }
+        public double subtotal { get; set; }
+        public double subtotal_incl_tax { get; set; }
+        public double tax_amount { get; set; }
         public double total_due { get; set; }
         public int total_item_count { get; set; }
         public int total_qty_ordered { get; set; }

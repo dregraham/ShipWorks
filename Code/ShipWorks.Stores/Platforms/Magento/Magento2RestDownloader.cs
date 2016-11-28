@@ -85,7 +85,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
         {
-            orderEntity.OnlineLastModified = DateTime.Parse(magentoOrder.updated_at).ToUniversalTime();
+            orderEntity.OnlineLastModified =
+                DateTime.SpecifyKind(DateTime.Parse(magentoOrder.updated_at), DateTimeKind.Utc);
             orderEntity.OnlineStatus = magentoOrder.status;
             orderEntity.RequestedShipping = magentoOrder.shipping_description;
 
@@ -93,7 +94,8 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (orderEntity.IsNew)
             {
-                orderEntity.OrderDate = DateTime.Parse(magentoOrder.created_at).ToUniversalTime();
+                orderEntity.OrderDate = 
+                    DateTime.SpecifyKind(DateTime.Parse(magentoOrder.created_at), DateTimeKind.Utc);
                 orderEntity.OrderNumber = magentoOrder.entity_id;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.grand_total);
                 ((MagentoOrderEntity) orderEntity).MagentoOrderID = magentoOrder.entity_id;
@@ -173,12 +175,25 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         /// <summary>
         /// Loads the order charges.
-        /// </summary
+        /// </summary>
         private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
         {
-            InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.tax_amount));
-            InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping", Convert.ToDecimal(magentoOrder.shipping_amount));
-            InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description ?? "discount", Convert.ToDecimal(magentoOrder.discount_amount));
+            if (Math.Abs(magentoOrder.tax_amount) > .001)
+            {
+                InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.tax_amount));
+            }
+
+            if (Math.Abs(magentoOrder.shipping_amount) > .001)
+            {
+                InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping",
+                    Convert.ToDecimal(magentoOrder.shipping_amount));
+            }
+
+            if (Math.Abs(magentoOrder.discount_amount) > .001)
+            {
+                InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description ?? "discount",
+                    Convert.ToDecimal(magentoOrder.discount_amount));
+            }
         }
     }
 }
