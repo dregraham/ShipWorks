@@ -1598,8 +1598,10 @@
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoTwoRestProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoInvoiceRequest.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestUploadShipmentRequest.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\OrdersResponse.cs" />
+    <Compile Include="Stores\Platforms\Magento\Enums\MagentoUploadCommand.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoConnectWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoOnlineUpdater.cs" />

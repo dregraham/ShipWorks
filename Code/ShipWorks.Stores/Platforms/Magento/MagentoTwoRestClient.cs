@@ -14,7 +14,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
         private const string HoldEndpoint = "rest/V1/orders/{0}/hold";
+        private const string UnholdEndpoint = "rest/V1/orders/{0}/unhold";
         private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
+        private const string CommentEndpoint = "rest/V1/orders/{0}/comments";
+        private const string InvoiceEndpoint = "rest/V1/invoices";
 
         /// <summary>
         /// Get an admin token for the given credentials
@@ -43,16 +46,32 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        /// <param name="shipmentDetailsJson">The shipment details.</param>
-        /// <param name="storeUri">The store URI.</param>
-        /// <param name="token">The token.</param>
-        /// <param name="magentoOrderId"></param>
-        public void UploadShipmentDetails(string shipmentDetailsJson, Uri storeUri, string token, long magentoOrderId)
+        public void UploadShipmentDetails(string shipmentDetailsJson, string invoice, Uri storeUri, string token, long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(ShipmentEndpoint, magentoOrderId)}"), token);
 
             submitter.RequestBody = shipmentDetailsJson;
+
+            ProcessRequest<string>(submitter);
+
+            submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{InvoiceEndpoint}"), token);
+
+            submitter.RequestBody = invoice;
+
+            ProcessRequest<string>(submitter);
+        }
+
+        /// <summary>
+        /// Uploads comments only
+        /// </summary>
+        public void UploadComments(string comments, Uri storeUri, string token, long magentoOrderID)
+        {
+            HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(CommentEndpoint, magentoOrderID)}"), token);
+
+            submitter.RequestBody = $"\"comments\":\"{comments}\"";
 
             ProcessRequest<string>(submitter);
         }
@@ -64,6 +83,17 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(HoldEndpoint, magentoOrderID)}"), token);
+
+            ProcessRequest<string>(submitter);
+        }
+
+        /// <summary>
+        /// Take hold off of a Magento order
+        /// </summary>
+        public void UnholdOrder(Uri storeUri, string token, long magentoOrderID)
+        {
+            HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(UnholdEndpoint, magentoOrderID)}"), token);
 
             ProcessRequest<string>(submitter);
         }
@@ -148,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to deserializes {typeof(T)}", ex);
+                throw new Exception($"Failed to deserialize {typeof(T)}", ex);
             }
         }
     }

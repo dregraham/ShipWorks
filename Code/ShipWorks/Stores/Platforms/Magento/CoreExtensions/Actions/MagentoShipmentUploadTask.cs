@@ -14,6 +14,7 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Actions;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 {
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 
                 foreach (long entityID in inputKeys)
                 {
-                    updater.UploadShipmentDetails(entityID, "complete", comment, magentoSendEmail, context.CommitWork);
+                    updater.UploadShipmentDetails(entityID, MagentoUploadCommand.Complete, comment, magentoSendEmail, context.CommitWork);
                 }
             }
             catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)

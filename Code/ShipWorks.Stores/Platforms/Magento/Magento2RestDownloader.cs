@@ -178,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.tax_amount));
             InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping", Convert.ToDecimal(magentoOrder.shipping_amount));
-            InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description, Convert.ToDecimal(magentoOrder.discount_amount));
+            InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description ?? "discount", Convert.ToDecimal(magentoOrder.discount_amount));
         }
     }
 }

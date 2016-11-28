@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
@@ -150,19 +151,26 @@ namespace ShipWorks.Stores.Platforms.Magento
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // take actions to Cancel the order
-            MenuCommand command = new MenuCommand("Cancel", OnOrderCommand) { Tag = "cancel" };
+            MenuCommand command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Cancel), OnOrderCommand) { Tag = MagentoUploadCommand.Cancel };
             commands.Add(command);
 
             // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and
             // sets the order "state" online to complete
-            command = new MenuCommand("Complete", OnOrderCommand) { Tag = "complete" };
+            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Complete), OnOrderCommand) { Tag = MagentoUploadCommand.Complete };
             commands.Add(command);
 
             // place the order into Hold status
-            command = new MenuCommand("Hold", OnOrderCommand) { Tag = "hold" };
+            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Hold), OnOrderCommand) { Tag = MagentoUploadCommand.Hold };
             commands.Add(command);
 
-            command = new MenuCommand("With Comments...", OnOrderCommand) { BreakBefore = true };
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                // take the order out of Hold status
+                command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Unhold), OnOrderCommand) { Tag = MagentoUploadCommand.Unhold };
+                commands.Add(command);
+            }
+
+            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Comments), OnOrderCommand) { Tag = MagentoUploadCommand.Comments, BreakBefore = true };
             commands.Add(command);
 
             return commands;
@@ -179,12 +187,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                 "Updating order {0} of {1}...");
 
             MenuCommand command = context.MenuCommand;
-            string action;
+            MagentoUploadCommand action;
             string comments = "";
-            if (command.Tag == null)
+            if ((MagentoUploadCommand) command.Tag == MagentoUploadCommand.Comments)
             {
                 // open a window for the user to select an action and comments
-                using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg())
+                using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg(MagentoVersion))
                 {
                     if (dlg.ShowDialog(context.Owner) == DialogResult.OK)
                     {
@@ -201,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             else
             {
-                action = (string)command.Tag;
+                action = (MagentoUploadCommand) command.Tag;
             }
 
             executor.ExecuteCompleted += (o, e) =>
@@ -210,7 +218,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 };
 
             executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys,
-                new Dictionary<string, string> { { "action", action }, { "comments", comments } });
+                new Dictionary<string, string> { { "action", EnumHelper.GetDescription(action) }, { "comments", comments } });
         }
 
         /// <summary>
@@ -219,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private void ExecuteOrderCommandCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             Dictionary<string, string> state = (Dictionary<string, string>)userState;
-            string action = state["action"];
+            MagentoUploadCommand action = (MagentoUploadCommand) Enum.Parse(typeof(MagentoUploadCommand), state["action"]);
             string comments = state["comments"];
 
             // create the updater and execute the command
