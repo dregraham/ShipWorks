@@ -15,6 +15,9 @@ namespace ShipWorks.UI.Behaviors
     [Obfuscation(Exclude = true)]
     public class PasswordBoxBindingBehavior : Behavior<PasswordBox>
     {
+        /// <summary>
+        /// The password property
+        /// </summary>
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password",
             typeof(SecureString), typeof(PasswordBoxBindingBehavior), new PropertyMetadata(null, new PropertyChangedCallback(OnBoundPasswordChanged)));
 
@@ -27,7 +30,7 @@ namespace ShipWorks.UI.Behaviors
         private static void OnBoundPasswordChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             PasswordBox passwordBox = ((PasswordBoxBindingBehavior) d).AssociatedObject;
-            passwordBox.Password = ((SecureString)e.NewValue).ToInsecureString();
+            passwordBox.Password = ((SecureString) e.NewValue).ToInsecureString();
         }
 
         /// <summary>

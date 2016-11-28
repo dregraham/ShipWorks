@@ -171,6 +171,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Magento\Magento2RestDownloaderTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />

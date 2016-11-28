@@ -18,6 +18,11 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         private IMessageHelper messageHelper;
         private IMagentoAccountSettingsControlViewModel viewModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MagentoAccountSettingsHost"/> class.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="messageHelper">The message helper.</param>
         public MagentoAccountSettingsHost(IMagentoAccountSettingsControlViewModel viewModel, IMessageHelper messageHelper)
         {
             InitializeComponent();
@@ -26,11 +31,17 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             this.messageHelper = messageHelper;
         }
 
+        /// <summary>
+        /// Load the data from the given store into the control
+        /// </summary>
         public override void LoadStore(StoreEntity store)
         {
             viewModel.Load((MagentoStoreEntity) store);
         }
 
+        /// <summary>
+        /// Save the data into the StoreEntity.  Nothing is saved to the database.
+        /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
             try

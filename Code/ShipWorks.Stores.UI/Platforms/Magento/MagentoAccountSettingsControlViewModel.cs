@@ -24,6 +24,9 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
     [Component]
     public class MagentoAccountSettingsControlViewModel : IMagentoAccountSettingsControlViewModel
     {
+        public const string UrlNotInValidFormat = "Store Url not in valid format";
+        public const string CouldNotConnect = "Could not connect to Magento.";
+        public const string UrlDoesntMatchProbe = "Could not connect to Magento using provided Url.";
         private MagentoVersion magentoVersion;
         private string username;
         private SecureString password;
@@ -38,7 +41,9 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoAccountSettingsControlViewModel"/> class.
         /// </summary>
-        public MagentoAccountSettingsControlViewModel(IIndex<MagentoVersion, IMagentoProbe> magentoProbes, IEncryptionProviderFactory encryptionProviderFactory)
+        public MagentoAccountSettingsControlViewModel(
+            IIndex<MagentoVersion, IMagentoProbe> magentoProbes, 
+            IEncryptionProviderFactory encryptionProviderFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             this.encryptionProviderFactory = encryptionProviderFactory;
@@ -133,16 +138,24 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         private void ValidateSettings(MagentoStoreEntity store)
         {
             IMagentoProbe probe = magentoProbes[(MagentoVersion)store.MagentoVersion];
+
+            Uri storeUri;
+            if(!Uri.TryCreate(store.ModuleUrl, UriKind.Absolute, out storeUri))
+            {
+                throw new MagentoException(UrlNotInValidFormat);
+            }
+
             GenericResult<Uri> compatibleUrlResult = probe.FindCompatibleUrl(store);
 
             if(!compatibleUrlResult.Success)
             {
-                throw new MagentoException("Could not connect to Magento.");
+                throw new MagentoException(CouldNotConnect);
             }
 
-            if(!string.Equals(compatibleUrlResult.Value.ToString(), store.ModuleUrl, StringComparison.OrdinalIgnoreCase))
+            if(!Uri.Equals(storeUri, compatibleUrlResult.Value))
             {
-                throw new MagentoException($"Could not connect to Magento using provided Url. {Environment.NewLine}{Environment.NewLine}" +
+                throw new MagentoException(UrlDoesntMatchProbe +
+                    $"{Environment.NewLine}{Environment.NewLine}" +
                     $"Did you mean {compatibleUrlResult.Value}?");
             }
         }
