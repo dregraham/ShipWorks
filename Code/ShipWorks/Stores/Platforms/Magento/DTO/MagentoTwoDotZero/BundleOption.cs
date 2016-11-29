@@ -1,10 +1,16 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
     public class BundleOption
     {
+        public BundleOption(ExtensionAttributes extensionAttributes)
+        {
+            ExtensionAttributes = extensionAttributes;
+        }
+
         [JsonProperty("optionId")]
         public int OptionId { get; set; }
 
@@ -15,6 +21,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
         public IList<int> OptionSelections { get; set; }
 
         [JsonProperty("extensionAttributes")]
-        public ExtensionAttributes ExtensionAttributes { get; set; }
+        public IExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

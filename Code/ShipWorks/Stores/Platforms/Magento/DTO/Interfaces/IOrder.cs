@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.Interfaces
         double GrandTotal { get; set; }
         string IncrementId { get; set; }
         int IsVirtual { get; set; }
-        IList<IItem> Items { get; set; }
+        IEnumerable<IItem> Items { get; set; }
         string OrderCurrencyCode { get; set; }
         IPayment Payment { get; set; }
         string ProtectCode { get; set; }

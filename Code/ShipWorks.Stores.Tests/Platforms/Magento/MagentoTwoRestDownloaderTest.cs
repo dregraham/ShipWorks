@@ -7,6 +7,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -22,8 +23,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
                 "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
 
             var order = JsonConvert.DeserializeObject<Order>(magentoOrder);
-            var response = new OrdersResponse();
-            response.Orders = new List<Order>() {order};
+
+            var response = new OrdersResponse(new List<Order>() { order });
             var webClient = new Mock<IMagentoTwoRestClient>();
             webClient.Setup(w => w.GetToken(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<string>())).Returns("token");
             webClient.Setup(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<Uri>(), It.IsAny<string>())).Returns(response);

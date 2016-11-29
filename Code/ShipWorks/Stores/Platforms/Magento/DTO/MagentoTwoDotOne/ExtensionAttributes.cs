@@ -6,7 +6,12 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class ExtensionAttributes : IExtensionAttributes
     {
+        public ExtensionAttributes(IEnumerable<ShippingAssignment> shippingAssignments)
+        {
+            ShippingAssignments = shippingAssignments;
+        }
+
         [JsonProperty("shipping_assignments")]
-        public IList<IShippingAssignment> ShippingAssignments { get; set; }
+        public IEnumerable<IShippingAssignment> ShippingAssignments { get; set; }
     }
 }

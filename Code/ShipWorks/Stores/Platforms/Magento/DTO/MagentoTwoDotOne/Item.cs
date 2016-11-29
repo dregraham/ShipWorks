@@ -5,6 +5,11 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class Item : IItem
     {
+        public Item(ParentItem parentItem)
+        {
+            ParentItem = parentItem;
+        }
+
         [JsonProperty("amount_refunded")]
         public double AmountRefunded { get; set; }
 

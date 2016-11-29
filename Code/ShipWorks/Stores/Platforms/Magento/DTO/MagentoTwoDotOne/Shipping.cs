@@ -5,6 +5,12 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class Shipping : IShipping
     {
+        public Shipping(ShippingAddress address, Total total)
+        {
+            Address = address;
+            Total = total;
+        }
+
         [JsonProperty("address")]
         public IShippingAddress Address { get; set; }
 

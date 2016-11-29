@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the items.
         /// </summary>
-        private void LoadItems(OrderEntity orderEntity, IList<IItem> items)
+        private void LoadItems(OrderEntity orderEntity, IEnumerable<IItem> items)
         {
             foreach (IItem item in items)
             {

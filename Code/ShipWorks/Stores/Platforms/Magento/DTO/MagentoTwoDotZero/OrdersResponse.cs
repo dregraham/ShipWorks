@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
     public class OrdersResponse : IOrdersResponse
     {
         [JsonProperty("items")]
-        public IList<IOrder> Orders { get; set; }
+        public IEnumerable<IOrder> Orders { get; set; }
 
         [JsonProperty("searchCriteria")]
         public SearchCriteria SearchCriteria { get; set; }

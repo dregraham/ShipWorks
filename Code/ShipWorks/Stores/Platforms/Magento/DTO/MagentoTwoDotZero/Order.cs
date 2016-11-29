@@ -403,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
         public string XForwardedFor { get; set; }
 
         [JsonProperty("items")]
-        public IList<IItem> Items { get; set; }
+        public IEnumerable<IItem> Items { get; set; }
 
         [JsonProperty("billingAddress")]
         public IBillingAddress BillingAddress { get; set; }

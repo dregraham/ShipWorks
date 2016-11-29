@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
@@ -6,6 +7,21 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class Order : IOrder
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Order"/> class.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <param name="billingAddress">The billing address.</param>
+        /// <param name="payment">The payment.</param>
+        /// <param name="extensionAttributes">The extension attributes.</param>
+        public Order(IList<Item> items, BillingAddress billingAddress, Payment payment, ExtensionAttributes extensionAttributes)
+        {
+            Items = items;
+            BillingAddress = billingAddress;
+            Payment = payment;
+            ExtensionAttributes = extensionAttributes;
+        }
+
         [JsonProperty("adjustment_negative")]
         public double AdjustmentNegative { get; set; }
 
@@ -205,7 +221,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
         public double Weight { get; set; }
 
         [JsonProperty("items")]
-        public IList<IItem> Items { get; set; }
+        public IEnumerable<IItem> Items { get; set; }
 
         [JsonProperty("billing_address")]
         public IBillingAddress BillingAddress { get; set; }

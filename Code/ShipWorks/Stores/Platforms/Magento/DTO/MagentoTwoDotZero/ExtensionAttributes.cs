@@ -6,8 +6,13 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
     public class ExtensionAttributes : IExtensionAttributes
     {
+        public ExtensionAttributes()
+        {
+            
+        }
+
         [JsonProperty("shippingAssignments")]
-        public IList<IShippingAssignment> ShippingAssignments { get; set; }
+        public IEnumerable<IShippingAssignment> ShippingAssignments { get; set; }
 
         [JsonProperty("customOptions")]
         public IList<CustomOption> CustomOptions { get; set; }

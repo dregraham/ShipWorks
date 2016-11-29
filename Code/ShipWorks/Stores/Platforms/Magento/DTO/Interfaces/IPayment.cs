@@ -14,7 +14,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.Interfaces
         string CcSsStartMonth { get; set; }
         string CcSsStartYear { get; set; }
         int EntityId { get; set; }
-        IExtensionAttributes ExtensionAttributes { get; set; }
         string Method { get; set; }
         int ParentId { get; set; }
         double ShippingAmount { get; set; }

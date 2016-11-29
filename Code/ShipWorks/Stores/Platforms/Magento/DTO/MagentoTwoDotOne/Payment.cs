@@ -44,8 +44,5 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 
         [JsonProperty("shipping_amount")]
         public double ShippingAmount { get; set; }
-
-        [JsonProperty("extension_attributes")]
-        public IExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

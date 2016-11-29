@@ -6,10 +6,15 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class ShippingAssignment : IShippingAssignment
     {
+        public ShippingAssignment(Shipping shipping, IEnumerable<Item> items)
+        {
+            Shipping = shipping;
+            Items = items;
+        }
         [JsonProperty("shipping")]
         public IShipping Shipping { get; set; }
 
         [JsonProperty("items")]
-        public IList<IItem> Items { get; set; }
+        public IEnumerable<IItem> Items { get; set; }
     }
 }

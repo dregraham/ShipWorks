@@ -3,6 +3,7 @@ using Interapptive.Shared.Net;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"), token);
             AddOrdersSearchCriteria(request, start);
 
-            return ProcessRequest<IOrdersResponse>(request);
+            return ProcessRequest<OrdersResponse>(request);
         }
 
         /// <summary>
