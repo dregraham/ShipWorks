@@ -53,14 +53,14 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             submitter.RequestBody = shipmentDetailsJson;
 
-            ProcessRequest<string>(submitter);
+            ProcessRequest(submitter);
 
             submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{InvoiceEndpoint}"), token);
 
             submitter.RequestBody = invoice;
 
-            ProcessRequest<string>(submitter);
+            ProcessRequest(submitter);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             submitter.RequestBody = $"\"comments\":\"{comments}\"";
 
-            ProcessRequest<string>(submitter);
+            ProcessRequest(submitter);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(HoldEndpoint, magentoOrderID)}"), token);
 
-            ProcessRequest<string>(submitter);
+            ProcessRequest(submitter);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(UnholdEndpoint, magentoOrderID)}"), token);
 
-            ProcessRequest<string>(submitter);
+            ProcessRequest(submitter);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(CancelEndpoint, magentoOrderID)}"), token);
 
-            ProcessRequest<string>(submitter);
+            ProcessRequest(submitter);
         }
 
         /// <summary>
@@ -149,6 +149,21 @@ namespace ShipWorks.Stores.Platforms.Magento
                 $"{startDate:yyyy-MM-dd HH:mm:ff}", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][field]", "updated_at", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][direction]", "asc", false));
+        }
+
+        /// <summary>
+        /// Processes the request.
+        /// </summary>
+        private void ProcessRequest(HttpVariableRequestSubmitter request)
+        {
+            try
+            {
+                request.GetResponse();
+            }
+            catch (Exception ex)
+            {
+                throw new MagentoException(ex);
+            }
         }
 
         /// <summary>

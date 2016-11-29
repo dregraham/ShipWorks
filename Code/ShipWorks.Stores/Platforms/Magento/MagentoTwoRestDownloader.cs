@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
     [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, true)]
-    public class Magento2RestDownloader : StoreDownloader
+    public class MagentoTwoRestDownloader : StoreDownloader
     {
         private readonly IMagentoTwoRestClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
@@ -29,21 +29,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly MagentoStoreEntity magentoStore;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Magento2RestDownloader" /> class.
+        /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader" /> class.
         /// </summary>
         /// <param name="store"></param>
-        public Magento2RestDownloader(StoreEntity store) :
+        public MagentoTwoRestDownloader(StoreEntity store) :
             this(store, new MagentoTwoRestClient(), new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Magento2RestDownloader"/> class.
+        /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
-        public Magento2RestDownloader(StoreEntity store, IMagentoTwoRestClient webClient, ISqlAdapterRetry sqlAdapter) : base(store)
+        public MagentoTwoRestDownloader(StoreEntity store, IMagentoTwoRestClient webClient, ISqlAdapterRetry sqlAdapter) : base(store)
         {
             magentoStore = (MagentoStoreEntity) store;
             storeUrl = new Uri(magentoStore.ModuleUrl);
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                 foreach (Order magentoOrder in ordersResponse.Orders)
                 {
-                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.entity_id, "", "");
+                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                     OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
                     LoadOrder(orderEntity, magentoOrder);
                     sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
@@ -86,20 +86,20 @@ namespace ShipWorks.Stores.Platforms.Magento
         public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
         {
             orderEntity.OnlineLastModified =
-                DateTime.SpecifyKind(DateTime.Parse(magentoOrder.updated_at), DateTimeKind.Utc);
-            orderEntity.OnlineStatus = magentoOrder.status;
-            orderEntity.RequestedShipping = magentoOrder.shipping_description;
+                DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
+			orderEntity.OnlineStatus = magentoOrder.Status;
+			orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
             LoadAddresses(orderEntity, magentoOrder);
 
             if (orderEntity.IsNew)
             {
                 orderEntity.OrderDate = 
-                    DateTime.SpecifyKind(DateTime.Parse(magentoOrder.created_at), DateTimeKind.Utc);
-                orderEntity.OrderNumber = magentoOrder.entity_id;
-                orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.grand_total);
-                ((MagentoOrderEntity) orderEntity).MagentoOrderID = magentoOrder.entity_id;
-                LoadItems(orderEntity, magentoOrder.items);
+                    DateTime.SpecifyKind(DateTime.Parse(magentoOrder.CreatedAt), DateTimeKind.Utc);
+                orderEntity.OrderNumber = magentoOrder.EntityId;
+                orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
+                ((MagentoOrderEntity) orderEntity).MagentoOrderID = magentoOrder.EntityId;
+                LoadItems(orderEntity, magentoOrder.Items);
                 LoadOrderCharges(orderEntity, magentoOrder);
             }
         }
@@ -110,47 +110,47 @@ namespace ShipWorks.Stores.Platforms.Magento
         private void LoadAddresses(OrderEntity orderEntity, Order magentoOrder)
         {
             Address shippingAddress =
-                magentoOrder.extension_attributes.shipping_assignments.FirstOrDefault()?.shipping.address;
+                magentoOrder.ExtensionAttributes.ShippingAssignments.FirstOrDefault()?.Shipping.Address;
 
             if (shippingAddress != null)
             {
                 new PersonAdapter(orderEntity, "Ship")
                 {
-                    FirstName = shippingAddress.firstname,
-                    MiddleName = shippingAddress.middlename,
-                    LastName = shippingAddress.lastname,
-                    Company = shippingAddress.company,
-                    Phone = shippingAddress.telephone,
-                    Email = shippingAddress.email,
-                    Street1 = shippingAddress.street.ElementAtOrDefault(0),
-                    Street2 = shippingAddress.street.ElementAtOrDefault(1),
-                    Street3 = shippingAddress.street.ElementAtOrDefault(2),
-                    City = shippingAddress.city,
-                    StateProvCode = Geography.GetStateProvCode(shippingAddress.region_code),
-                    PostalCode = shippingAddress.postcode,
-                    CountryCode = Geography.GetCountryCode(shippingAddress.country_id),
+                    FirstName = shippingAddress.Firstname,
+                    MiddleName = shippingAddress.Middlename,
+                    LastName = shippingAddress.Lastname,
+                    Company = shippingAddress.Company,
+                    Phone = shippingAddress.Telephone,
+                    Email = shippingAddress.Email,
+                    Street1 = shippingAddress.Street.ElementAtOrDefault(0),
+                    Street2 = shippingAddress.Street.ElementAtOrDefault(1),
+                    Street3 = shippingAddress.Street.ElementAtOrDefault(2),
+                    City = shippingAddress.City,
+                    StateProvCode = Geography.GetStateProvCode(shippingAddress.RegionCode),
+                    PostalCode = shippingAddress.Postcode,
+                    CountryCode = Geography.GetCountryCode(shippingAddress.CountryId),
                 };
             }
 
-            BillingAddress billingAddress = magentoOrder.billing_address;
+            BillingAddress billingAddress = magentoOrder.BillingAddress;
 
             if (billingAddress != null)
             {
                 new PersonAdapter(orderEntity, "Bill")
                 {
-                    FirstName = billingAddress.firstname,
-                    MiddleName = billingAddress.middlename,
-                    LastName = billingAddress.lastname,
-                    Company = billingAddress.company,
-                    Phone = billingAddress.telephone,
-                    Email = billingAddress.email,
-                    Street1 = billingAddress.street.ElementAtOrDefault(0),
-                    Street2 = billingAddress.street.ElementAtOrDefault(1),
-                    Street3 = billingAddress.street.ElementAtOrDefault(2),
-                    City = billingAddress.city,
-                    StateProvCode = Geography.GetStateProvCode(billingAddress.region_code),
-                    PostalCode = billingAddress.postcode,
-                    CountryCode = Geography.GetCountryCode(billingAddress.country_id)
+                    FirstName = billingAddress.Firstname,
+                    MiddleName = billingAddress.Middlename,
+                    LastName = billingAddress.Lastname,
+                    Company = billingAddress.Company,
+                    Phone = billingAddress.Telephone,
+                    Email = billingAddress.Email,
+                    Street1 = billingAddress.Street.ElementAtOrDefault(0),
+                    Street2 = billingAddress.Street.ElementAtOrDefault(1),
+                    Street3 = billingAddress.Street.ElementAtOrDefault(2),
+                    City = billingAddress.City,
+                    StateProvCode = Geography.GetStateProvCode(billingAddress.RegionCode),
+                    PostalCode = billingAddress.Postcode,
+                    CountryCode = Geography.GetCountryCode(billingAddress.CountryId)
                 };
             }
         }
@@ -164,12 +164,12 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
-                orderItem.Name = item.name;
-                orderItem.Quantity = item.qty_ordered;
-                orderItem.Code = item.item_id.ToString();
-                orderItem.SKU = item.sku;
-                orderItem.UnitPrice = item.price;
-                orderItem.Weight = item.weight;
+                orderItem.Name = item.Name;
+                orderItem.Quantity = item.QtyOrdered;
+                orderItem.Code = item.ItemId.ToString();
+                orderItem.SKU = item.Sku;
+                orderItem.UnitPrice = Convert.ToDecimal(item.Price);
+                orderItem.Weight = item.Weight;
             }
         }
 
@@ -178,21 +178,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
         {
-            if (Math.Abs(magentoOrder.tax_amount) > .001)
+            if (Math.Abs(magentoOrder.TaxAmount) > .001)
             {
-                InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.tax_amount));
+                InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.TaxAmount));
             }
 
-            if (Math.Abs(magentoOrder.shipping_amount) > .001)
+            if (Math.Abs(magentoOrder.ShippingAmount) > .001)
             {
                 InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping",
-                    Convert.ToDecimal(magentoOrder.shipping_amount));
+                    Convert.ToDecimal(magentoOrder.ShippingAmount));
             }
 
-            if (Math.Abs(magentoOrder.discount_amount) > .001)
+            if (Math.Abs(magentoOrder.DiscountAmount) > .001)
             {
-                InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.discount_description ?? "discount",
-                    Convert.ToDecimal(magentoOrder.discount_amount));
+                InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.DiscountDescription ?? "discount",
+                    Convert.ToDecimal(magentoOrder.DiscountAmount));
             }
         }
     }

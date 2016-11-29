@@ -12,11 +12,11 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Magento
 {
-    public class Magento2RestDownloaderTest
+    public class MagentoTwoRestDownloaderTest
     {
         private readonly MagentoOrderEntity orderEntity;
 
-        public Magento2RestDownloaderTest()
+        public MagentoTwoRestDownloaderTest()
         {
             var magentoOrder = EmbeddedResourceHelper.GetEmbeddedResourceString(
                 "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             orderEntity = new MagentoOrderEntity();
 
-            var testObject = new Magento2RestDownloader(store, webClient.Object, sqlAdapter.Object);
+            var testObject = new MagentoTwoRestDownloader(store, webClient.Object, sqlAdapter.Object);
             testObject.LoadOrder(orderEntity, order);
         }
 
