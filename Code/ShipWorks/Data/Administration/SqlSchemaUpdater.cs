@@ -456,7 +456,7 @@ namespace ShipWorks.Data.Administration
                 // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
                 // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
                 // give this plenty of time.
-                adapter.CommandTimeOut = 0;
+                adapter.CommandTimeOut = int.MaxValue;
 
                 log.DebugFormat("Begin initial filter counts during database upgrade.");
 
