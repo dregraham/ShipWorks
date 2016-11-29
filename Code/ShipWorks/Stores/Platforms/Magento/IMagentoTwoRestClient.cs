@@ -1,6 +1,7 @@
 ﻿using System;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -13,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets Orders from the store using the start date
         /// </summary>
-        OrdersResponse GetOrders(DateTime start, Uri storeUri, string token);
+        IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token);
 
         /// <summary>
         /// Gets a token for the given username/password

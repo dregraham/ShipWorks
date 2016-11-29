@@ -11,7 +11,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -63,9 +63,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
 
-                OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token);
+                IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token);
 
-                foreach (Order magentoOrder in ordersResponse.Orders)
+                foreach (IOrder magentoOrder in ordersResponse.Orders)
                 {
                     MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                     OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
+        public void LoadOrder(OrderEntity orderEntity, IOrder magentoOrder)
         {
             orderEntity.OnlineLastModified =
                 DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (orderEntity.IsNew)
             {
-                orderEntity.OrderDate = 
+                orderEntity.OrderDate =
                     DateTime.SpecifyKind(DateTime.Parse(magentoOrder.CreatedAt), DateTimeKind.Utc);
                 orderEntity.OrderNumber = magentoOrder.EntityId;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
@@ -107,9 +107,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the addresses.
         /// </summary>
-        private void LoadAddresses(OrderEntity orderEntity, Order magentoOrder)
+        private void LoadAddresses(OrderEntity orderEntity, IOrder magentoOrder)
         {
-            Address shippingAddress =
+            IShippingAddress shippingAddress =
                 magentoOrder.ExtensionAttributes.ShippingAssignments.FirstOrDefault()?.Shipping.Address;
 
             if (shippingAddress != null)
@@ -132,7 +132,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 };
             }
 
-            BillingAddress billingAddress = magentoOrder.BillingAddress;
+            IBillingAddress billingAddress = magentoOrder.BillingAddress;
 
             if (billingAddress != null)
             {
@@ -158,9 +158,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the items.
         /// </summary>
-        private void LoadItems(OrderEntity orderEntity, List<Item> items)
+        private void LoadItems(OrderEntity orderEntity, IList<IItem> items)
         {
-            foreach (Item item in items)
+            foreach (IItem item in items)
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
@@ -176,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order charges.
         /// </summary>
-        private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
+        private void LoadOrderCharges(OrderEntity orderEntity, IOrder magentoOrder)
         {
             if (Math.Abs(magentoOrder.TaxAmount) > .001)
             {

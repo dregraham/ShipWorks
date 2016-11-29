@@ -2,6 +2,7 @@
 using Interapptive.Shared.Net;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -34,13 +35,13 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Get orders from the given store/start date
         /// </summary>
-        public OrdersResponse GetOrders(DateTime start, Uri storeUri, string token)
+        public IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"), token);
             AddOrdersSearchCriteria(request, start);
 
-            return ProcessRequest<OrdersResponse>(request);
+            return ProcessRequest<IOrdersResponse>(request);
         }
 
         /// <summary>
