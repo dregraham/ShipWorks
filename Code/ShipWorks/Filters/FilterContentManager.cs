@@ -375,45 +375,48 @@ namespace ShipWorks.Filters
             bool initial = (bool)castedState[0];
             ApplicationBusyToken token = (ApplicationBusyToken)castedState[1];
 
-            // Get a connection that will not timeout
-            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            using (SqlDeadlockPriorityScope deadlockPriorityScope = new SqlDeadlockPriorityScope(-6))
             {
-                // Create a new connection
-                using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
+                // Get a connection that will not timeout
+                using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
                 {
-                    // adapter.LogInfoMessages = true;
-
-                    // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
-                    // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
-                    // give this plenty of time.
-                    adapter.CommandTimeOut = int.MaxValue;
-
-                    if (adapter.InSystemTransaction)
+                    // Create a new connection
+                    using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                     {
-                        // If there is no way around this, then wrap it in a TransactionScope with Suppress.
-                        throw new InvalidOperationException("This cannot be within a transaction.");
+                        // adapter.LogInfoMessages = true;
+
+                        // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
+                        // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
+                        // give this plenty of time.
+                        adapter.CommandTimeOut = int.MaxValue;
+
+                        if (adapter.InSystemTransaction)
+                        {
+                            // If there is no way around this, then wrap it in a TransactionScope with Suppress.
+                            throw new InvalidOperationException("This cannot be within a transaction.");
+                        }
+
+                        log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
+
+                        SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
+                            new SqlAdapterRetry<SqlException>(5, -6, "FilterContentManager.InitiateCalculationThread");
+
+                        if (initial)
+                        {
+                            int nodesUpdated = 1;
+                            sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
+                                ActionProcedures.CalculateInitialFilterCounts(ref nodesUpdated, adapter)
+                                );
+                        }
+                        else
+                        {
+                            sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
+                                ActionProcedures.CalculateUpdateFilterCounts(adapter)
+                                );
+                        }
+
+                        log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");
                     }
-
-                    log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
-
-                    SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
-                        new SqlAdapterRetry<SqlException>(5, -5, "FilterContentManager.InitiateCalculationThread");
-
-                    if (initial)
-                    {
-                        int nodesUpdated = 1;
-                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                            ActionProcedures.CalculateInitialFilterCounts(ref nodesUpdated, adapter)
-                            );
-                    }
-                    else
-                    {
-                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                            ActionProcedures.CalculateUpdateFilterCounts(adapter)
-                            );
-                    }
-
-                    log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");
                 }
             }
 
