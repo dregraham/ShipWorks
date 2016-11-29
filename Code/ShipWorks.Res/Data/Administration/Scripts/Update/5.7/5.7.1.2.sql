@@ -35,11 +35,11 @@ GO
 PRINT N'Creating index [IX_FilterNodeContentDirty_ParentIDObjectType] on [dbo].[FilterNodeContentDirty]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_FilterNodeContentDirty_ParentIDObjectType' AND object_id = OBJECT_ID(N'[dbo].[FilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ColumnsUpdated],[ComputerID])
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
 GO
 
 PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ParentIDObjectType] on [dbo].[QuickFilterNodeContentDirty]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_ParentIDObjectType' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ParentIDObjectType] ON [dbo].[QuickFilterNodeContentDirty] ([ColumnsUpdated],[ComputerID])
+CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ParentIDObjectType] ON [dbo].[QuickFilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
 GO
