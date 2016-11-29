@@ -386,7 +386,7 @@ namespace ShipWorks.Filters
                     // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
                     // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
                     // give this plenty of time.
-                    adapter.CommandTimeOut = 0;
+                    adapter.CommandTimeOut = int.MaxValue;
 
                     if (adapter.InSystemTransaction)
                     {
@@ -423,7 +423,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Initiate a quick filter calculation 
+        /// Initiate a quick filter calculation
         /// </summary>
         private static void InitiateQuickFilterCalculation()
         {
@@ -446,7 +446,7 @@ namespace ShipWorks.Filters
                 ExceptionMonitor.WrapWorkItem(InitiateQuickFilterCalculationThread),
                 new object[] { });
 
-            // Wait for it to finish.  
+            // Wait for it to finish.
             calculatingQuickFilterEvent.WaitOne(WaitForever, false);
         }
 
@@ -461,7 +461,7 @@ namespace ShipWorks.Filters
                 // Create a new connection
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                 {
-                    adapter.CommandTimeOut = 0;
+                    adapter.CommandTimeOut = int.MaxValue;
 
                     if (adapter.InSystemTransaction)
                     {
@@ -507,7 +507,7 @@ namespace ShipWorks.Filters
                 using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                 {
                     // This needs to run as long as it has work to do
-                    adapter.CommandTimeOut = 0;
+                    adapter.CommandTimeOut = int.MaxValue;
 
                     try
                     {
