@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.UI.Wizard
 {
@@ -57,5 +59,10 @@ namespace ShipWorks.UI.Wizard
             get { return skipping; }
             set { skipping = value; }
         }
+
+        /// <summary>
+        /// Task to await before moving to the next page
+        /// </summary>
+        public Task AwaitTask { get; set; }
     }
 }

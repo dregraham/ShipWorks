@@ -328,7 +328,7 @@ namespace ShipWorks.UI.Wizard
         // Determines if the last page is just a Finish page, or it it can be cancelled still
         // at that point.
         bool lastPageCancelable = false;
-        
+
         // Internal collection actually holding the pages
         List<WizardPage> pages = new List<WizardPage>();
 
@@ -350,7 +350,7 @@ namespace ShipWorks.UI.Wizard
 
             FinishCancels = false;
 
-            // Create our page collection 
+            // Create our page collection
             pageCollection = new WizardPageCollection(this);
 		}
 
@@ -506,7 +506,7 @@ namespace ShipWorks.UI.Wizard
         }
 
         /// <summary>
-        /// Determine's of the last page is just a Finish button, or if its cancelable and can be 
+        /// Determine's of the last page is just a Finish button, or if its cancelable and can be
         /// gone back from.
         /// </summary>
         [Category("Behavior")]
@@ -616,13 +616,13 @@ namespace ShipWorks.UI.Wizard
         }
 
         /// <summary>
-        /// If true, canceling 
+        /// If true, canceling
         /// </summary>
         /// <value>
         ///   <c>true</c> if [finish cancels]; otherwise, <c>false</c>.
         /// </value>
         public bool FinishCancels { get; set; }
-        
+
 
         /// <summary>
         /// Show the page at the given index
@@ -717,11 +717,11 @@ namespace ShipWorks.UI.Wizard
                             {
                                 throw new InvalidOperationException("NextPage cannot be null.");
                             }
-                                
+
                             // Update the page to skip to
                             args.SkipToPage = stepArgs.NextPage;
 
-                            // If the SkipToPage is the same page being skipped, then their stuck on the page 
+                            // If the SkipToPage is the same page being skipped, then their stuck on the page
                             // that was supposed to be skipped.  Just go back to the page before this, which will
                             // look to the user like no page change, which is probably what is desired.
                             if (args.SkipToPage == page)
@@ -774,7 +774,7 @@ namespace ShipWorks.UI.Wizard
         private void UpdateWizardButtons()
         {
             int index = CurrentIndex;
-    
+
             // Nav buttons
             back.Enabled = back.Enabled && canCancel && index > 0;
 
@@ -872,7 +872,7 @@ namespace ShipWorks.UI.Wizard
         /// <summary>
         /// The Next button was pressed
         /// </summary>
-        private void OnNext(object sender, System.EventArgs e)
+        private async void OnNext(object sender, System.EventArgs e)
         {
             if (CurrentPage == null)
                 return;
@@ -897,9 +897,13 @@ namespace ShipWorks.UI.Wizard
             {
                 // See if the current page is ok with going next
                 CurrentPage.RaiseSteppingNext(args);
+                if (args.AwaitTask != null)
+                {
+                    await args.AwaitTask;
+                }
             }
 
-            // If its the last page, then if NextPage is still null 
+            // If its the last page, then if NextPage is still null
             // we just close
             if (newIndex >= pages.Count)
             {
@@ -928,7 +932,7 @@ namespace ShipWorks.UI.Wizard
             if (shownPage != fromPage)
             {
                 // If its already in the back navigation, then we assume the wizard skipped backwards,
-                // and we leave the back navigation as it would be if the user had clicked back as many 
+                // and we leave the back navigation as it would be if the user had clicked back as many
                 // times as it took to get to the shownPage.
                 if (!backNavigation.ContainsKey(shownPage))
                 {
