@@ -10,12 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -72,6 +70,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             ILifetimeScope lifetimeScope = IoC.UnsafeGlobalLifetimeScope;
             IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
+            ISchedulerProvider schedulerProvider = lifetimeScope.Resolve<ISchedulerProvider>();
 
             messenger.Where(x => x.Sender is ShippingDlg)
                 .Subscribe(_ => ReloadContent());
@@ -85,9 +84,10 @@ namespace ShipWorks.Stores.Content.Panels
                 .Subscribe(_ => ReloadContent());
 
             messenger.OfType<OrderSelectionChangedMessage>()
-                .ObserveOn(lifetimeScope.Resolve<ISchedulerProvider>().WindowsFormsEventLoop)
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
+                .Do(_ => SelectFirstRow())
                 .Subscribe();
 
             messenger.OfType<PanelShownMessage>()
@@ -101,6 +101,21 @@ namespace ShipWorks.Stores.Content.Panels
                     ratesControl.Visible = true;
                     RefreshSelectedShipments();
                 });
+        }
+
+        /// <summary>
+        /// Select the first row, which should be the first shipment
+        /// </summary>
+        private void SelectFirstRow()
+        {
+            GridRow firstShipment = entityGrid.Rows.OfType<GridRow>().FirstOrDefault();
+
+            if (firstShipment == null)
+            {
+                return;
+            }
+
+            entityGrid.SelectRow(firstShipment);
         }
 
         /// <summary>
@@ -196,7 +211,6 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 RefreshSelectedShipments();
             }
-
         }
 
         /// <summary>
@@ -205,6 +219,8 @@ namespace ShipWorks.Stores.Content.Panels
         private void OnShipmentSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RefreshSelectedShipments();
+
+            Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
         }
 
         /// <summary>
@@ -304,7 +320,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         protected override void OnEntityDoubleClicked(long entityID)
         {
-            EditShipments(new[] { entityID } , InitialShippingTabDisplay.Shipping);
+            EditShipments(new[] { entityID }, InitialShippingTabDisplay.Shipping);
         }
 
         /// <summary>
@@ -383,7 +399,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count == 1)
             {
-                EditShipments(new [] {entityGrid.Selection.Keys.First()}, initialTab);
+                EditShipments(new[] { entityGrid.Selection.Keys.First() }, initialTab);
             }
         }
 

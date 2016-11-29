@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Email;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Stores.Content.Panels.CoreExtensions.Grid
 {
@@ -22,7 +17,7 @@ namespace ShipWorks.Stores.Content.Panels.CoreExtensions.Grid
         public GridShipmentEditViewDisplayType()
             : base(string.Empty, GridLinkAction.Edit)
         {
-            
+
         }
 
         /// <summary>
@@ -44,7 +39,8 @@ namespace ShipWorks.Stores.Content.Panels.CoreExtensions.Grid
                 return string.Empty;
             }
 
-            if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entity.OrderID))
+            // During shutdown, Security can be null
+            if (UserSession.Security?.HasPermission(PermissionType.ShipmentsCreateEditProcess, entity.OrderID) != true)
             {
                 return "View";
             }

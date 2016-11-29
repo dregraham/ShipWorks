@@ -29,6 +29,11 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
         T Value { get; }
 
         /// <summary>
+        /// Dump the current contents of a message
+        /// </summary>
+        IMessageTracker<T> Dump(object listener, string callerName);
+
+        /// <summary>
         /// Track a Do call
         /// </summary>
         IMessageTracker<T> Do(Action<T> value, object listener, string callerName);

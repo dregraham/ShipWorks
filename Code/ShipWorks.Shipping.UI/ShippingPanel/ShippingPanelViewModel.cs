@@ -29,6 +29,14 @@ using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
+    public enum OpenShippingDialogType
+    {
+        None,
+        AllShipments,
+        SelectedShipment,
+        SelectedOrders,
+    }
+
     /// <summary>
     /// Main view model for the shipment panel
     /// </summary>
@@ -36,9 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
     {
         private readonly PropertyChangedHandler handler;
         private LoadedOrderSelection loadedOrderSelection;
-
         private readonly HashSet<string> internalFields = new HashSet<string> { nameof(AllowEditing) };
-
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
         private readonly IPipelineRegistrationContainer pipelines;
@@ -46,9 +52,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
         private readonly Func<ISecurityContext> securityContextRetriever;
-
         private IDisposable shipmentChangedSubscription;
         private long[] selectedOrderIds;
+        private long? lastSelectedShipmentID;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -83,7 +89,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             log = logFactory(typeof(ShippingPanelViewModel));
             this.securityContextRetriever = securityContextRetriever;
 
-            OpenShippingDialogCommand = new RelayCommand(SendShowShippingDlgMessage);
+            OpenShippingDialogCommand = new RelayCommand<OpenShippingDialogType>(SendShowShippingDlgMessage);
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
@@ -98,6 +104,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             TrackShipmentCommand = new RelayCommand(TrackShipment);
             CopyTrackingNumberToClipboardCommand = new RelayCommand(CopyTrackingNumberToClipboard);
         }
+
+        /// <summary>
+        /// List of currently selected shipments
+        /// </summary>
+        public IEnumerable<long> SelectedShipments { get; set; }
 
         /// <summary>
         /// Is the shipment currently being loaded
@@ -180,8 +191,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ErrorMessage = string.Empty;
             ShipmentStatus = ShipmentStatus.None;
             selectedOrderIds = orderMessage.LoadedOrderSelection.Select(x => x.OrderID).ToArray();
-            ComparisonResult orders = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().CompareCountTo(1);
-            if (orders != ComparisonResult.Equal)
+            bool hasOneOrder = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().IsCountEqualTo(1);
+
+            if (!hasOneOrder)
             {
                 UnloadShipment();
 
@@ -196,18 +208,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
-
-            // If multiple shipment adapters or multiple shipments on an order are received,
-            // tell the rating panel
-            if (loadedOrderSelection.ShipmentAdapters?.Count() > 1 ||
-                loadedOrderSelection.ShipmentAdapters?.Sum(sa => sa.Shipment?.Order?.Shipments?.Count) > 1)
-            {
-                messenger.Send(new RatesNotSupportedMessage(this, "Unable to get rates for orders with multiple shipments."));
-            }
+            HasMultipleShipments = loadedOrderSelection.ShipmentAdapters.IsCountGreaterThan(1);
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
-                LoadShipment(loadedOrderSelection.ShipmentAdapters.Single());
+                LoadShipment(GetShipmentToLoad());
             }
             else
             {
@@ -225,6 +230,25 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
+        /// Get the shipment that should be loaded
+        /// </summary>
+        private ICarrierShipmentAdapter GetShipmentToLoad()
+        {
+            long loadShipmentID = lastSelectedShipmentID.GetValueOrDefault();
+            lastSelectedShipmentID = null;
+
+            return GetShipmentAdapterWithID(loadShipmentID) ?? loadedOrderSelection.ShipmentAdapters.First();
+        }
+
+        /// <summary>
+        /// Get a shipment adapter with the given ID, if any
+        /// </summary>
+        public virtual ICarrierShipmentAdapter GetShipmentAdapterWithID(long shipmentID)
+        {
+            return loadedOrderSelection.ShipmentAdapters?.FirstOrDefault(s => s.Shipment.ShipmentID == shipmentID);
+        }
+
+        /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
         private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(LoadedOrderSelection loadedSelection)
@@ -234,14 +258,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.Error;
             }
 
-            ComparisonResult moreOrLessThanOne = loadedSelection.ShipmentAdapters.CompareCountTo(1);
-
-            if (moreOrLessThanOne == ComparisonResult.More)
-            {
-                return ShippingPanelLoadedShipmentResult.Multiple;
-            }
-
-            if (moreOrLessThanOne == ComparisonResult.Less)
+            if (loadedSelection.ShipmentAdapters.None())
             {
                 return ShippingPanelLoadedShipmentResult.NotCreated;
             }
@@ -277,15 +294,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             fromShipmentAdapter.UpdateDynamicData();
             ShipmentAdapter = fromShipmentAdapter;
 
-            // If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
-            // be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
-            // and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
-            // panels update correctly.
-            List<ICarrierShipmentAdapter> tmpShipmentAdapters = loadedOrderSelection.ShipmentAdapters.Where(
-                sa => sa?.Shipment?.ShipmentID != fromShipmentAdapter?.Shipment?.ShipmentID).ToList();
-            tmpShipmentAdapters.Add(fromShipmentAdapter);
-
-            loadedOrderSelection = new LoadedOrderSelection(loadedOrderSelection.Order, tmpShipmentAdapters, loadedOrderSelection.DestinationAddressEditable);
+            UpdateStoredShipment(fromShipmentAdapter);
 
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
@@ -317,6 +326,29 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             messenger.Send(new ShipmentChangedMessage(this, ShipmentAdapter, changedField));
         }
+
+        /// <summary>
+        /// Update a stored shipment
+        /// </summary>
+        public virtual void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            // If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
+            // be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
+            // and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
+            // panels update correctly.
+            IEnumerable<ICarrierShipmentAdapter> shipmentAdapters = loadedOrderSelection.ShipmentAdapters
+                .Where(sa => sa?.Shipment?.ShipmentID != shipmentAdapter?.Shipment?.ShipmentID)
+                .Concat(new[] { shipmentAdapter })
+                .ToList();
+
+            loadedOrderSelection = new LoadedOrderSelection(loadedOrderSelection.Order, shipmentAdapters, loadedOrderSelection.DestinationAddressEditable);
+        }
+
+        /// <summary>
+        /// Load the shipment with the given ID when it becomes available
+        /// </summary>
+        /// <param name="shipmentID"></param>
+        public virtual void LoadShipmentWhenAvailable(long shipmentID) => lastSelectedShipmentID = shipmentID;
 
         /// <summary>
         /// Process the current shipment using the specified processor
@@ -436,12 +468,17 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentAdapter = null;
             ShipmentStatus = ShipmentStatus.None;
             StatusDate = DateTime.MinValue;
+            LoadedShipmentResult = ShippingPanelLoadedShipmentResult.NotLoaded;
+
+            lastSelectedShipmentID = null;
+            HasMultipleShipments = false;
+            SelectedShipments = null;
         }
 
         /// <summary>
         /// Send a message to open the shipping dialog for the selected shipment
         /// </summary>
-        private void SendShowShippingDlgMessage()
+        private void SendShowShippingDlgMessage(OpenShippingDialogType type)
         {
             // Call save before asking the shipping dialog to open, that way the shipment is in the db
             // prior to the shipping dialog getting the shipment.
@@ -452,13 +489,24 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // If there's no shipment and at least one order id, send the message to open the shipping
             // dialog with order ids.
             // Otherwise, send the single shipment message if the shipment isn't null.
-            if (Shipment == null && selectedOrderIds.Length > 0)
+            if (type == OpenShippingDialogType.SelectedOrders && SelectedShipments != null)
+            {
+                messenger.Send(new OpenShippingDialogMessage(this,
+                    SelectedShipments.Select(x => loadedOrderSelection.ShipmentAdapters.FirstOrDefault(s => s.Shipment.ShipmentID == x))
+                        .Where(x => x != null)
+                        .Select(x => x.Shipment)));
+            }
+            else if (type == OpenShippingDialogType.SelectedOrders && Shipment == null && selectedOrderIds.Length > 0)
             {
                 messenger.Send(new OpenShippingDialogWithOrdersMessage(this, selectedOrderIds));
             }
-            else if (Shipment != null)
+            else if (type == OpenShippingDialogType.SelectedShipment && Shipment != null)
             {
                 messenger.Send(new OpenShippingDialogMessage(this, new[] { Shipment }));
+            }
+            else if (type == OpenShippingDialogType.AllShipments)
+            {
+                messenger.Send(new OpenShippingDialogMessage(this, loadedOrderSelection.ShipmentAdapters.Select(x => x.Shipment)));
             }
         }
 

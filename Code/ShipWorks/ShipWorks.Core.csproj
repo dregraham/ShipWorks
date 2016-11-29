@@ -959,6 +959,7 @@
     <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogWithOrdersMessage.cs" />
     <Compile Include="Messaging\Messages\Panels\PanelHiddenMessage.cs" />
     <Compile Include="Messaging\Messages\Panels\PanelShownMessage.cs" />
+    <Compile Include="Messaging\Messages\ShipmentSelectionChangedMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\BasicOrderSelection.cs" />
     <Compile Include="Messaging\Messages\Shipping\ApplyProfileMessage.cs" />
     <Compile Include="Messaging\Messages\Shipping\CreateReturnShipmentMessage.cs" />

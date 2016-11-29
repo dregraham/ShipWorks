@@ -28,6 +28,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private ShipmentStatus shipmentStatus;
         private string errorMessage;
         private bool? isDomestic;
+        private bool isShipmentsPanelHidden;
+        private bool hasMultipleShipments;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -235,6 +237,26 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return isDomestic; }
             set { handler.Set(nameof(IsDomestic), ref isDomestic, value); }
+        }
+
+        /// <summary>
+        /// Is the shipments panel currently hidden
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public virtual bool IsShipmentsPanelHidden
+        {
+            get { return isShipmentsPanelHidden; }
+            set { handler.Set(nameof(IsShipmentsPanelHidden), ref isShipmentsPanelHidden, value); }
+        }
+
+        /// <summary>
+        /// Does the current order have multiple shipments
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public virtual bool HasMultipleShipments
+        {
+            get { return hasMultipleShipments; }
+            set { handler.Set(nameof(HasMultipleShipments), ref hasMultipleShipments, value); }
         }
     }
 }

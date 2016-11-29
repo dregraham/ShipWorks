@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace Interapptive.Shared.Messaging.TrackedObservable
 {
     /// <summary>
-    /// Impelementation of the trackable switch statement
+    /// Implementation of the trackable switch statement
     /// </summary>
     public static class SwitchImpl
     {

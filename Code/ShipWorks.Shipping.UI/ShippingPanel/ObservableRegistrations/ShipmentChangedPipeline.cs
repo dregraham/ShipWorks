@@ -64,6 +64,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             {
                 viewModel.LoadShipment(shipmentChangedMessage.ShipmentAdapter);
             }
+            else
+            {
+                viewModel.UpdateStoredShipment(shipmentChangedMessage.ShipmentAdapter);
+            }
         }
 
         /// <summary>

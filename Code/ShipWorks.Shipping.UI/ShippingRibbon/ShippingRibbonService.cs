@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared.Collections;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Core.UI.SandRibbon;
@@ -12,7 +12,6 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -28,6 +27,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private ShipmentEntity currentShipment;
         private IEnumerable<long> currentOrderIDs = Enumerable.Empty<long>();
         private readonly Func<ISecurityContext> securityContextRetriever;
+        private LoadedOrderSelection currentOrder;
+        private long? lastSelectedShipmentID;
+        private IEnumerable<long> currentShipmentSelection;
 
         /// <summary>
         /// Constructor
@@ -67,7 +69,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             subscription = new CompositeDisposable(
                 messages.OfType<ShipmentChangedMessage>().Subscribe(HandleShipmentChanged),
+                messages.OfType<OrderSelectionChangingMessage>().Subscribe(HandleOrderSelectionChanging),
                 messages.OfType<OrderSelectionChangedMessage>().Subscribe(HandleOrderSelectionChanged),
+                messages.OfType<ShipmentSelectionChangedMessage>().Subscribe(HandleShipmentSelectionChanged),
                 messages.OfType<ShipmentsProcessedMessage>().Subscribe(HandleShipmentsProcessed),
                 messages.OfType<ShipmentsVoidedMessage>().Subscribe(HandleLabelsVoided)
             );
@@ -151,6 +155,13 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             {
                 messages.Send(new CreateLabelMessage(this, currentShipment.ShipmentID));
             }
+            else if (currentShipmentSelection?.Any() == true)
+            {
+                messages.Send(new OpenShippingDialogMessage(this,
+                    currentOrder.ShipmentAdapters
+                        .Where(x => currentShipmentSelection.Contains(x.Shipment.ShipmentID))
+                        .Select(x => x.Shipment)));
+            }
             else if (currentOrderIDs.Count() > 1)
             {
                 messages.Send(new OpenShippingDialogWithOrdersMessage(this, currentOrderIDs));
@@ -191,19 +202,66 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Handle order selection changed message
         /// </summary>
+        private void HandleOrderSelectionChanging(OrderSelectionChangingMessage message)
+        {
+            currentShipment = null;
+            currentOrder = default(LoadedOrderSelection);
+            currentShipmentSelection = Enumerable.Empty<long>();
+            lastSelectedShipmentID = null;
+
+            SetEnabledOnButtons();
+        }
+
+        /// <summary>
+        /// Handle order selection changed message
+        /// </summary>
         private void HandleOrderSelectionChanged(OrderSelectionChangedMessage message)
         {
             List<IOrderSelection> orderSelections = message.LoadedOrderSelection.ToList();
             List<LoadedOrderSelection> loadedOrders = orderSelections.OfType<LoadedOrderSelection>().ToList();
 
             currentShipment = null;
+            currentOrder = default(LoadedOrderSelection);
+            currentShipmentSelection = Enumerable.Empty<long>();
             currentOrderIDs = orderSelections.Select(x => x.OrderID).ToList();
 
             if (loadedOrders.Count == 1)
             {
-                currentShipment = loadedOrders[0].ShipmentAdapters.Count() == 1 ?
-                    loadedOrders[0].ShipmentAdapters.Single().Shipment :
-                    null;
+                currentOrder = loadedOrders.Single();
+                currentShipment = currentOrder.ShipmentAdapters
+                        .FirstOrDefault(x => x.Shipment.ShipmentID == lastSelectedShipmentID.GetValueOrDefault())?.Shipment ??
+                    currentOrder.ShipmentAdapters.FirstOrDefault()?.Shipment;
+
+                lastSelectedShipmentID = null;
+            }
+
+            SetEnabledOnButtons();
+        }
+
+        /// <summary>
+        /// Handle the shipment selection changed message
+        /// </summary>
+        private void HandleShipmentSelectionChanged(ShipmentSelectionChangedMessage message)
+        {
+            IEnumerable<long> shipmentIDs = message.SelectedShipmentIDs;
+            currentShipmentSelection = shipmentIDs;
+
+            if (shipmentIDs.CompareCountTo(1) != ComparisonResult.Equal)
+            {
+                currentShipment = null;
+                return;
+            }
+
+            long shipmentID = shipmentIDs.Single();
+            var shipment = currentOrder.ShipmentAdapters?.FirstOrDefault(s => s.Shipment.ShipmentID == shipmentID)?.Shipment;
+
+            if (shipment != null)
+            {
+                currentShipment = shipment;
+            }
+            else
+            {
+                lastSelectedShipmentID = shipmentID;
             }
 
             SetEnabledOnButtons();
@@ -214,6 +272,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleShipmentChanged(ShipmentChangedMessage message)
         {
+            UpdateStoredShipment(message.ShipmentAdapter);
+
             // We only want to set the current shipment if it's an updated version
             // We only handle changing the shipment when the order selection changes
             if (currentShipment?.ShipmentID == message.ShipmentAdapter?.Shipment?.ShipmentID)
@@ -230,16 +290,16 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private void SetEnabledOnButtons()
         {
             // If the shipment is null or it's a non-supported shipping panel carrier, disable buttons
-            if (currentShipment == null ||   
+            if (currentShipment == null ||
                 currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
                 currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
             {
-                    shippingRibbonActions.CreateLabel.Enabled = false;
-                    shippingRibbonActions.Void.Enabled = false;
-                    shippingRibbonActions.Return.Enabled = false;
-                    shippingRibbonActions.Reprint.Enabled = false;
-                    shippingRibbonActions.ShipAgain.Enabled = false;
-                    shippingRibbonActions.ApplyProfile.Enabled = false;
+                shippingRibbonActions.CreateLabel.Enabled = false;
+                shippingRibbonActions.Void.Enabled = false;
+                shippingRibbonActions.Return.Enabled = false;
+                shippingRibbonActions.Reprint.Enabled = false;
+                shippingRibbonActions.ShipAgain.Enabled = false;
+                shippingRibbonActions.ApplyProfile.Enabled = false;
             }
             else
             {
@@ -256,7 +316,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
         /// <summary>
         /// Set the enabled state for the manage profiles button.
-        /// 
+        ///
         /// If order with no shipment is selected, disable the button.
         /// If a single order is selected for which the user has shipment create/edit/process rights, enable the button.
         /// If a single order is selected for which the user does NOT shipment create/edit/process rights, disable the button.
@@ -269,7 +329,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             // Get the list of current order ids.  If a single order is selected, this will be empty.
             List<long> orderIDs = currentOrderIDs.ToList();
-            
+
             // If no orders selected or the user does not have permission for at least one order, return false.  Otherwise, true.
             bool manageProfilesAllowed = orderIDs.Any() && !orderIDs.Any(orderID => !securityContext.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID));
 
@@ -292,6 +352,28 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
             shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
+        }
+
+        /// <summary>
+        /// Update stored shipments with the given shipment data
+        /// </summary>
+        internal void UpdateStoredShipment(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            if (currentOrder.ShipmentAdapters == null)
+            {
+                return;
+            }
+
+            // If LoadShipment is called directly without going through LoadOrder, the LoadedShipmentResult could
+            // be out of sync.  So we find the requested shipment in the list of order selection shipment adapters
+            // and replace it with the requested shipment adapter.  Then update the LoadedShipmentResult so that
+            // panels update correctly.
+            IEnumerable<ICarrierShipmentAdapter> shipmentAdapters = currentOrder.ShipmentAdapters
+                .Where(sa => sa?.Shipment?.ShipmentID != shipmentAdapter?.Shipment?.ShipmentID)
+                .Concat(new[] { shipmentAdapter })
+                .ToList();
+
+            currentOrder = new LoadedOrderSelection(currentOrder.Order, shipmentAdapters, currentOrder.DestinationAddressEditable);
         }
 
         /// <summary>

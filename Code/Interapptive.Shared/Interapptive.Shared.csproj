@@ -165,7 +165,9 @@
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
+    <Compile Include="Messaging\TrackedObservable\DumpImpl.cs" />
     <Compile Include="Messaging\TrackedObservable\SelectManyImpl.cs" />
     <Compile Include="Metrics\DeobfuscationProcessor.cs" />
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
