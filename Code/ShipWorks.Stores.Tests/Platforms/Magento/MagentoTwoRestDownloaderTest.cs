@@ -30,8 +30,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             };
 
             var webClient = new Mock<IMagentoTwoRestClient>();
-            webClient.Setup(w => w.GetToken(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<string>())).Returns("token");
-            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<int>())).Returns(response);
+            webClient.Setup(w => w.GetToken()).Returns("token");
+            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(response);
 
             var sqlAdapter = new Mock<ISqlAdapterRetry>();
             sqlAdapter.Setup((r => r.ExecuteWithRetry(It.IsAny<Action>()))).Callback((Action x) => x.Invoke());
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             orderEntity = new MagentoOrderEntity();
 
-            var testObject = new MagentoTwoRestDownloader(store, webClient.Object, sqlAdapter.Object);
+            var testObject = new MagentoTwoRestDownloader(store, sqlAdapter.Object);
             testObject.LoadOrder(orderEntity, order);
         }
 

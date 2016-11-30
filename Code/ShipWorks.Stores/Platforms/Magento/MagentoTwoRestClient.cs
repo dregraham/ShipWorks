@@ -74,19 +74,20 @@ namespace ShipWorks.Stores.Platforms.Magento
                 RequestBody = $"{{\"username\":\"{store.ModuleUsername}\",\"password\":\"{password}\"}}"
             };
 
-            return ProcessRequest<string>(request);
+            return ProcessRequest(request).Trim('"');
         }
 
         /// <summary>
         /// Get orders from the given store/start date
         /// </summary>
-        public IOrdersResponse GetOrders(DateTime start, int currentPage)
+        public IOrdersResponse GetOrders(DateTime? start, int currentPage)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"));
             AddOrdersSearchCriteria(request, start, currentPage);
 
-            return ProcessRequest<OrdersResponse>(request);
+            string response = ProcessRequest(request);
+            return DeserializeResponse<IOrdersResponse, OrdersResponse, DTO.MagentoTwoDotZero.OrdersResponse>(response);
         }
 
         public IOrder GetOrder(long magentoOrderId)
@@ -94,7 +95,8 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}/{magentoOrderId}"));
 
-            return ProcessRequest<Order>(request);
+            string response = ProcessRequest(request);
+            return DeserializeResponse<IOrder, Order, DTO.MagentoTwoDotZero.Order>(response);
         }
 
         /// <summary>
@@ -182,14 +184,18 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Add the order search criteria to the request
         /// </summary>
-        private void AddOrdersSearchCriteria(HttpVariableRequestSubmitter request, DateTime startDate, int currentPage)
+        private void AddOrdersSearchCriteria(HttpVariableRequestSubmitter request, DateTime? startDate, int currentPage)
         {
-            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]", "updated_at",
-                false));
-            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]", "gt",
-                false));
-            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]",
-                $"{startDate:yyyy-MM-dd HH:mm:ss}", false));
+            if (startDate.HasValue)
+            {
+                request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]",
+                    "updated_at", false));
+                request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]",
+                    "gt", false));
+                request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]",
+                    $"{startDate:yyyy-MM-dd HH:mm:ss}", false));
+            }
+
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][field]", "updated_at", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][direction]", "asc", false));
             request.Variables.Add(new HttpVariable("searchCriteria[pageSize]", PageSize.ToString(), false));
@@ -199,29 +205,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Processes the request.
         /// </summary>
-        private void ProcessRequest(HttpVariableRequestSubmitter request)
+        private string ProcessRequest(HttpVariableRequestSubmitter request)
         {
             try
             {
-                request.GetResponse();
-            }
-            catch (Exception ex)
-            {
-                throw new MagentoException(ex);
-            }
-        }
-
-        /// <summary>
-        /// Process the request and deserialize the response
-        /// </summary>
-        private T ProcessRequest<T>(HttpVariableRequestSubmitter request)
-        {
-            try
-            {
-                using (IHttpResponseReader response = request.GetResponse())
-                {
-                    return DeserializeResponse<T>(response.ReadResult());
-                }
+                return request.GetResponse().ReadResult();
             }
             catch (Exception ex)
             {
@@ -232,15 +220,23 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Deserializes the response
         /// </summary>
-        private T DeserializeResponse<T>(string response)
+        private TCommonInterface DeserializeResponse<TCommonInterface, TFirstTypeToTry, TSecondTypeToTry>(string response) 
+            where TFirstTypeToTry : TCommonInterface where TSecondTypeToTry : TCommonInterface
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(response);
+                return JsonConvert.DeserializeObject<TFirstTypeToTry>(response);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to deserialize {typeof(T)}", ex);
+                try
+                {
+                    return JsonConvert.DeserializeObject<TSecondTypeToTry>(response);
+                }
+                catch (Exception)
+                {
+                    throw new MagentoException($"Failed to deserialize {typeof(TCommonInterface)}", ex);
+                }
             }
         }
     }

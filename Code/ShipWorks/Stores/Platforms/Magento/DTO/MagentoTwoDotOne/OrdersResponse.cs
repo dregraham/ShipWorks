@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
+    [Component]
     public class OrdersResponse : IOrdersResponse
     {
         [JsonProperty("items")]

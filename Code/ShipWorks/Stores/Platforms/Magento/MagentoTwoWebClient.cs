@@ -126,10 +126,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private GenericModuleResponse ProcessRequestInternal(HttpRequestSubmitter request, string action)
         {
+
             if (store.ModuleUsername == string.Empty)
             {
                 request.Headers.Add(HttpRequestHeader.Authorization,
-                    $"Bearer {SecureText.Decrypt(store.ModulePassword, store.ModuleUsername)}");
+                    $"Bearer {SecureText.Decrypt(store.ModulePassword, string.Empty)}");
             }
             else
             {

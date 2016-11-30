@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                         scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity),
                             magentoStore));
 
-                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, currentPage);
+                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
                     totalOrders = ordersResponse.TotalCount;
                     foreach (IOrder magentoOrder in ordersResponse.Orders)
                     {

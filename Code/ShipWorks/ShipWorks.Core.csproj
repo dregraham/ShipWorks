@@ -1642,7 +1642,6 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ParentItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\Payment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ProductOption.cs" />
-    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\SearchCriteria.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\Shipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ShippingAssignment.cs" />

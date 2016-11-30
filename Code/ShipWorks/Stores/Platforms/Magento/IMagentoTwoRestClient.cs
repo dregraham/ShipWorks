@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets Orders from the store using the start date
         /// </summary>
-        IOrdersResponse GetOrders(DateTime start, int currentPage);
+        IOrdersResponse GetOrders(DateTime? start, int currentPage);
 
         /// <summary>
         /// Gets a single Magento order with detailed information (attributes)
