@@ -138,9 +138,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     IMagentoTwoRestClient magentoRestClient = scope.Resolve<IMagentoTwoRestClient>();
-                    Uri uri = new Uri(store.ModuleUrl.Replace("/rest/V1/shipworks", ""));
-                    token = magentoRestClient.GetToken(uri, store.ModuleUsername,
-                        SecureText.Decrypt(store.ModulePassword, store.ModuleUsername));
+                    token = magentoRestClient.GetToken();
                 }
 
                 request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {token}");

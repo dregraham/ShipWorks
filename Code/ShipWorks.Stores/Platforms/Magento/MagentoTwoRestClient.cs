@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Security.Cryptography;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 
@@ -12,6 +14,8 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     public class MagentoTwoRestClient : IMagentoTwoRestClient
     {
+        private readonly MagentoStoreEntity store;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
@@ -22,14 +26,53 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string InvoiceEndpoint = "rest/V1/invoices";
         private const int PageSize = 5;
 
+        private string token;
+        private readonly Uri storeUri;
+
+        public MagentoTwoRestClient(MagentoStoreEntity store, IEncryptionProviderFactory encryptionProviderFactory)
+        {
+            this.store = store;
+            this.encryptionProviderFactory = encryptionProviderFactory;
+            storeUri = new Uri(store.ModuleUrl);
+        }
+
+        /// <summary>
+        /// Magento api access token
+        /// </summary>
+        private string Token
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    token = GetToken();
+                }
+                return token;
+            }
+        }
+
         /// <summary>
         /// Get an admin token for the given credentials
         /// </summary>
-        public string GetToken(Uri storeUri, string username, string password)
+        public string GetToken()
         {
-            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{TokenEndpoint}"));
-            request.RequestBody = $"{{\"username\":\"{username}\",\"password\":\"{password}\"}}";
+            string password;
+            try
+            {
+                password = encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ModuleUsername)
+                    .Decrypt(store.ModulePassword);
+            }
+            catch (CryptographicException)
+            {
+                throw new MagentoException("Error decrypting Magento password");
+            }
+
+            HttpJsonVariableRequestSubmitter request = new HttpJsonVariableRequestSubmitter
+            {
+                Uri = new Uri($"{storeUri.AbsoluteUri}/{TokenEndpoint}"),
+                Verb = HttpVerb.Post,
+                RequestBody = $"{{\"username\":\"{store.ModuleUsername}\",\"password\":\"{password}\"}}"
+            };
 
             return ProcessRequest<string>(request);
         }
@@ -37,19 +80,19 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Get orders from the given store/start date
         /// </summary>
-        public IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token, int currentPage)
+        public IOrdersResponse GetOrders(DateTime start, int currentPage)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
-                new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"));
             AddOrdersSearchCriteria(request, start, currentPage);
 
             return ProcessRequest<OrdersResponse>(request);
         }
 
-        public IOrder GetOrder(Uri storeUri, string token, long magentoOrderId)
+        public IOrder GetOrder(long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
-                new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}/{magentoOrderId}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}/{magentoOrderId}"));
 
             return ProcessRequest<Order>(request);
         }
@@ -57,17 +100,17 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(string shipmentDetailsJson, string invoice, Uri storeUri, string token, long magentoOrderId)
+        public void UploadShipmentDetails(string shipmentDetailsJson, string invoice, long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{string.Format(ShipmentEndpoint, magentoOrderId)}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(ShipmentEndpoint, magentoOrderId)}"));
 
             submitter.RequestBody = shipmentDetailsJson;
 
             ProcessRequest(submitter);
 
             submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{InvoiceEndpoint}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{InvoiceEndpoint}"));
 
             submitter.RequestBody = invoice;
 
@@ -77,10 +120,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads comments only
         /// </summary>
-        public void UploadComments(string comments, Uri storeUri, string token, long magentoOrderID)
+        public void UploadComments(string comments, long magentoOrderID)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{string.Format(CommentEndpoint, magentoOrderID)}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(CommentEndpoint, magentoOrderID)}"));
 
             submitter.RequestBody = $"\"comments\":\"{comments}\"";
 
@@ -90,10 +133,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Place a hold on a Magento order
         /// </summary>
-        public void HoldOrder(Uri storeUri, string token, long magentoOrderID)
+        public void HoldOrder(long magentoOrderID)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{string.Format(HoldEndpoint, magentoOrderID)}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(HoldEndpoint, magentoOrderID)}"));
 
             ProcessRequest(submitter);
         }
@@ -101,10 +144,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Take hold off of a Magento order
         /// </summary>
-        public void UnholdOrder(Uri storeUri, string token, long magentoOrderID)
+        public void UnholdOrder(long magentoOrderID)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{string.Format(UnholdEndpoint, magentoOrderID)}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(UnholdEndpoint, magentoOrderID)}"));
 
             ProcessRequest(submitter);
         }
@@ -112,10 +155,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Cancels a Magento order
         /// </summary>
-        public void CancelOrder(Uri storeUri, string token, long magentoOrderID)
+        public void CancelOrder(long magentoOrderID)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{string.Format(CancelEndpoint, magentoOrderID)}"), token);
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(CancelEndpoint, magentoOrderID)}"));
 
             ProcessRequest(submitter);
         }
@@ -125,24 +168,13 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private HttpJsonVariableRequestSubmitter GetRequestSubmitter(HttpVerb verb, Uri uri)
         {
-            return GetRequestSubmitter(verb, uri, string.Empty);
-        }
-
-        /// <summary>
-        /// Create a request submitter with the given parameters
-        /// </summary>
-        private HttpJsonVariableRequestSubmitter GetRequestSubmitter(HttpVerb verb, Uri uri, string authToken)
-        {
             HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter
             {
                 Uri = uri,
                 Verb = verb
             };
 
-            if (authToken != string.Empty)
-            {
-                submitter.Headers.Add("Authorization", $"Bearer {authToken}");
-            }
+            submitter.Headers.Add("Authorization", $"Bearer {Token}");
 
             return submitter;
         }

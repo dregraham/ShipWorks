@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
@@ -23,7 +25,6 @@ namespace ShipWorks.Stores.Platforms.Magento
     [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, true)]
     public class MagentoTwoRestDownloader : StoreDownloader
     {
-        private readonly IMagentoTwoRestClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly Uri storeUrl;
         private readonly MagentoStoreEntity magentoStore;
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         /// <param name="store"></param>
         public MagentoTwoRestDownloader(StoreEntity store) :
-            this(store, new MagentoTwoRestClient(), new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"))
+            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"))
         {
         }
 
@@ -43,11 +44,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
-        public MagentoTwoRestDownloader(StoreEntity store, IMagentoTwoRestClient webClient, ISqlAdapterRetry sqlAdapter) : base(store)
+        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter) : base(store)
         {
             magentoStore = (MagentoStoreEntity) store;
             storeUrl = new Uri(magentoStore.ModuleUrl);
-            this.webClient = webClient;
             this.sqlAdapter = sqlAdapter;
         }
 
@@ -56,34 +56,36 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
-            string token = webClient.GetToken(storeUrl, magentoStore.ModuleUsername,
-                SecureText.Decrypt(magentoStore.ModulePassword, magentoStore.ModuleUsername));
-
             int currentPage = 1;
             int totalOrders = 0;
             int savedOrders = 0;
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
 
-            do
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token,
-                    currentPage);
-                totalOrders = ordersResponse.TotalCount;
-                foreach (IOrder magentoOrder in ordersResponse.Orders)
+                do
                 {
-                    IOrder orderDetail = webClient.GetOrder(storeUrl, token, magentoOrder.EntityId);
+                    IMagentoTwoRestClient webClient =
+                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity),
+                            magentoStore));
 
-                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
-                    OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
-                    LoadOrder(orderEntity, orderDetail);
-                    sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
-                    savedOrders++;
-                }
+                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, currentPage);
+                    totalOrders = ordersResponse.TotalCount;
+                    foreach (IOrder magentoOrder in ordersResponse.Orders)
+                    {
+                        IOrder orderDetail = webClient.GetOrder(magentoOrder.EntityId);
 
-                currentPage++;
+                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
+                        OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
+                        LoadOrder(orderEntity, orderDetail);
+                        sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                        savedOrders++;
+                    }
+
+                    currentPage++;
+                } while (savedOrders < totalOrders);
             }
-            while (savedOrders < totalOrders);
         }
 
         /// <summary>

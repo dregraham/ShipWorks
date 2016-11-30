@@ -1,6 +1,8 @@
 ﻿using System;
+using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Stores.Platforms.Magento.Enums;
@@ -13,18 +15,6 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
     [KeyedComponent(typeof(IMagentoProbe), MagentoVersion.MagentoTwoREST)]
     public class MagentoTwoRestProbe : IMagentoProbe
     {
-        private readonly IMagentoTwoRestClient client;
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public MagentoTwoRestProbe(IMagentoTwoRestClient client, IEncryptionProviderFactory encryptionProviderFactory)
-        {
-            this.client = client;
-            this.encryptionProviderFactory = encryptionProviderFactory;
-        }
-
         /// <summary>
         /// Check to see if the store is compatible with Magento 1
         /// </summary>
@@ -32,12 +22,13 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         {
             try
             {
-                string password =
-                    encryptionProviderFactory.CreateSecureTextEncryptionProvider(store.ModuleUsername)
-                        .Decrypt(store.ModulePassword);
-
-                client.GetToken(new Uri(store.ModuleUrl), store.ModuleUsername, password);
-                return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    IMagentoTwoRestClient client =
+                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
+                    client.GetToken();
+                    return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
+                }
             }
             catch (Exception ex)
             {
