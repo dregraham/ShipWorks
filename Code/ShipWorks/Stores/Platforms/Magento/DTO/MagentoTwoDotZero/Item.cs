@@ -1,3 +1,4 @@
+using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
@@ -249,6 +250,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
         public ProductOption ProductOption { get; set; }
 
         [JsonProperty("extensionAttributes")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IExtensionAttributes, ExtensionAttributes>))]
         public ExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

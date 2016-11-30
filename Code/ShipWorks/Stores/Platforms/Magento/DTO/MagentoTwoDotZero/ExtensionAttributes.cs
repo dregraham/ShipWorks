@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
@@ -6,12 +7,8 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
     public class ExtensionAttributes : IExtensionAttributes
     {
-        public ExtensionAttributes()
-        {
-            
-        }
-
         [JsonProperty("shippingAssignments")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IShippingAssignment>, List<ShippingAssignment>>))]
         public IEnumerable<IShippingAssignment> ShippingAssignments { get; set; }
 
         [JsonProperty("customOptions")]

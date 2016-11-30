@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
@@ -6,15 +7,12 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class ShippingAssignment : IShippingAssignment
     {
-        public ShippingAssignment(Shipping shipping, IEnumerable<Item> items)
-        {
-            Shipping = shipping;
-            Items = items;
-        }
         [JsonProperty("shipping")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IShipping, Shipping>))]
         public IShipping Shipping { get; set; }
 
         [JsonProperty("items")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IItem>, List<Item>>))]
         public IEnumerable<IItem> Items { get; set; }
     }
 }

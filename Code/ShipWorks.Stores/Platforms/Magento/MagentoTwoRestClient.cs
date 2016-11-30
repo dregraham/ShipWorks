@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
         private const string CommentEndpoint = "rest/V1/orders/{0}/comments";
         private const string InvoiceEndpoint = "rest/V1/invoices";
+        private const int PageSize = 5;
 
         /// <summary>
         /// Get an admin token for the given credentials
@@ -36,11 +37,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Get orders from the given store/start date
         /// </summary>
-        public IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token)
+        public IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token, int currentPage)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"), token);
-            AddOrdersSearchCriteria(request, start);
+            AddOrdersSearchCriteria(request, start, currentPage);
 
             return ProcessRequest<OrdersResponse>(request);
         }
@@ -141,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Add the order search criteria to the request
         /// </summary>
-        private void AddOrdersSearchCriteria(HttpVariableRequestSubmitter request, DateTime startDate)
+        private void AddOrdersSearchCriteria(HttpVariableRequestSubmitter request, DateTime startDate, int currentPage)
         {
             request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]", "updated_at",
                 false));
@@ -151,6 +152,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                 $"{startDate:yyyy-MM-dd HH:mm:ff}", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][field]", "updated_at", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][direction]", "asc", false));
+            request.Variables.Add(new HttpVariable("searchCriteria[pageSize]", PageSize.ToString(), false));
+            request.Variables.Add(new HttpVariable("searchCriteria[currentPage]", currentPage.ToString(), false));
         }
 
         /// <summary>

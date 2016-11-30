@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets Orders from the store using the start date
         /// </summary>
-        IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token);
+        IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token, int currentPage);
 
         /// <summary>
         /// Gets a token for the given username/password

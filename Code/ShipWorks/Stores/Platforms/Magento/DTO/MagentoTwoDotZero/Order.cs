@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
@@ -403,18 +404,21 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
         public string XForwardedFor { get; set; }
 
         [JsonProperty("items")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IExtensionAttributes>, List<ExtensionAttributes>>))]
         public IEnumerable<IItem> Items { get; set; }
 
         [JsonProperty("billingAddress")]
         public IBillingAddress BillingAddress { get; set; }
 
         [JsonProperty("payment")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IExtensionAttributes>, List<ExtensionAttributes>>))]
         public IPayment Payment { get; set; }
 
         [JsonProperty("statusHistories")]
         public IList<StatusHistory> StatusHistories { get; set; }
 
         [JsonProperty("extensionAttributes")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IExtensionAttributes>, List<ExtensionAttributes>>))]
         public IExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

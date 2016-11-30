@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
@@ -7,21 +7,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class Order : IOrder
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Order"/> class.
-        /// </summary>
-        /// <param name="items">The items.</param>
-        /// <param name="billingAddress">The billing address.</param>
-        /// <param name="payment">The payment.</param>
-        /// <param name="extensionAttributes">The extension attributes.</param>
-        public Order(IList<Item> items, BillingAddress billingAddress, Payment payment, ExtensionAttributes extensionAttributes)
-        {
-            Items = items;
-            BillingAddress = billingAddress;
-            Payment = payment;
-            ExtensionAttributes = extensionAttributes;
-        }
-
         [JsonProperty("adjustment_negative")]
         public double AdjustmentNegative { get; set; }
 
@@ -221,15 +206,19 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
         public double Weight { get; set; }
 
         [JsonProperty("items")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IItem>, List<Item>>))]
         public IEnumerable<IItem> Items { get; set; }
 
         [JsonProperty("billing_address")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IBillingAddress, BillingAddress>))]
         public IBillingAddress BillingAddress { get; set; }
 
         [JsonProperty("payment")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IPayment, Payment>))]
         public IPayment Payment { get; set; }
 
         [JsonProperty("extension_attributes")]
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IExtensionAttributes, ExtensionAttributes>))]
         public IExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

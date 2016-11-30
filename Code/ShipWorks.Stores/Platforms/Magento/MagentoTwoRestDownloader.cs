@@ -59,25 +59,29 @@ namespace ShipWorks.Stores.Platforms.Magento
             string token = webClient.GetToken(storeUrl, magentoStore.ModuleUsername,
                 SecureText.Decrypt(magentoStore.ModulePassword, magentoStore.ModuleUsername));
 
-            while (true)
+            int currentPage = 1;
+            int totalOrders = 0;
+            int savedOrders = 0;
+
+            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+
+            do
             {
-                DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
-
-                IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token);
-
+                IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token,
+                    currentPage);
+                totalOrders = ordersResponse.TotalCount;
                 foreach (IOrder magentoOrder in ordersResponse.Orders)
                 {
                     MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                     OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
                     LoadOrder(orderEntity, magentoOrder);
                     sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                    savedOrders++;
                 }
 
-                if (ordersResponse.Orders.None())
-                {
-                    break;
-                }
+                currentPage++;
             }
+            while (savedOrders < totalOrders);
         }
 
         /// <summary>
