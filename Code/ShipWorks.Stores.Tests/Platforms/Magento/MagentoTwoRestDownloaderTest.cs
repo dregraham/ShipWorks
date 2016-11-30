@@ -24,10 +24,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             var order = JsonConvert.DeserializeObject<Order>(magentoOrder);
 
-            var response = new OrdersResponse(new List<Order>() { order });
+            var response = new OrdersResponse()
+            {
+                Orders = new List<Order> { order }
+            };
+
             var webClient = new Mock<IMagentoTwoRestClient>();
             webClient.Setup(w => w.GetToken(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<string>())).Returns("token");
-            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<Uri>(), It.IsAny<string>())).Returns(response);
+            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<int>())).Returns(response);
 
             var sqlAdapter = new Mock<ISqlAdapterRetry>();
             sqlAdapter.Setup((r => r.ExecuteWithRetry(It.IsAny<Action>()))).Callback((Action x) => x.Invoke());
