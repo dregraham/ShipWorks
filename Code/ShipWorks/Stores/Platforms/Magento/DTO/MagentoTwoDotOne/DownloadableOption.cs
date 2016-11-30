@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
-namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
+namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
     public class DownloadableOption : IDownloadableOption
     {
-        [JsonProperty("downloadableLinks")]
+        [JsonProperty("downloadable_links")]
         public IEnumerable<int> DownloadableLinks { get; set; }
     }
 }

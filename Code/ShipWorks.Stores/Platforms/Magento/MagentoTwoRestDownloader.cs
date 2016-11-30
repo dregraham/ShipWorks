@@ -72,9 +72,11 @@ namespace ShipWorks.Stores.Platforms.Magento
                 totalOrders = ordersResponse.TotalCount;
                 foreach (IOrder magentoOrder in ordersResponse.Orders)
                 {
-                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
+                    IOrder orderDetail = webClient.GetOrder(storeUrl, token, magentoOrder.EntityId);
+
+                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
                     OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
-                    LoadOrder(orderEntity, magentoOrder);
+                    LoadOrder(orderEntity, orderDetail);
                     sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
                     savedOrders++;
                 }

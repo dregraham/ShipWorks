@@ -3,13 +3,8 @@ using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
-    public class ConfigurableItemOption
+    public class ConfigurableItemOption : IConfigurableItemOption
     {
-        public ConfigurableItemOption(ExtensionAttributes extensionAttributes)
-        {
-            ExtensionAttributes = extensionAttributes;
-        }
-
         [JsonProperty("optionId")]
         public string OptionId { get; set; }
 

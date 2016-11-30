@@ -1599,6 +1599,10 @@
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IBillingAddress.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IBundleOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IConfigurableItemOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\ICustomOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IDownloadableOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IExtensionAttributes.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IOrder.cs" />
@@ -1611,6 +1615,10 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoInvoiceRequest.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IParentItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\BillingAddress.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\BundleOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ConfigurableItemOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\CustomOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\DownloadableOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ExtensionAttributes.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Item.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Order.cs" />

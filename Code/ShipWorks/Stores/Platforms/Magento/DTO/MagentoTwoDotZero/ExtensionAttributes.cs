@@ -12,16 +12,20 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
         public IEnumerable<IShippingAssignment> ShippingAssignments { get; set; }
 
         [JsonProperty("customOptions")]
-        public IList<CustomOption> CustomOptions { get; set; }
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<ICustomOption>, List<CustomOption>>))]
+        public IEnumerable<ICustomOption> CustomOptions { get; set; }
 
         [JsonProperty("bundleOptions")]
-        public IList<BundleOption> BundleOptions { get; set; }
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IBundleOption>, List<BundleOption>>))]
+        public IEnumerable<IBundleOption> BundleOptions { get; set; }
 
         [JsonProperty("downloadableOption")]
-        public DownloadableOption DownloadableOption { get; set; }
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IDownloadableOption, DownloadableOption>))]
+        public IDownloadableOption DownloadableOption { get; set; }
 
         [JsonProperty("configurableItemOptions")]
-        public IList<ConfigurableItemOption> ConfigurableItemOptions { get; set; }
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IConfigurableItemOption>, List<ConfigurableItemOption>>))]
+        public IEnumerable<IConfigurableItemOption> ConfigurableItemOptions { get; set; }
 
         [JsonProperty("fileInfo")]
         public FileInfo FileInfo { get; set; }

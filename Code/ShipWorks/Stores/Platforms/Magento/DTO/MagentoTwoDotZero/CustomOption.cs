@@ -3,13 +3,8 @@ using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
-    public class CustomOption
+    public class CustomOption : ICustomOption
     {
-        public CustomOption(ExtensionAttributes extensionAttributes)
-        {
-            ExtensionAttributes = extensionAttributes;
-        }
-
         [JsonProperty("optionId")]
         public string OptionId { get; set; }
 

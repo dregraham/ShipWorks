@@ -16,6 +16,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         IOrdersResponse GetOrders(DateTime start, Uri storeUri, string token, int currentPage);
 
+
+        /// <summary>
+        /// Gets a single Magento order with detailed information (attributes)
+        /// </summary>
+        IOrder GetOrder(Uri storeUri, string token, long magentoOrderId);
+
         /// <summary>
         /// Gets a token for the given username/password
         /// </summary>

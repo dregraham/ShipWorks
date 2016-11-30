@@ -46,6 +46,14 @@ namespace ShipWorks.Stores.Platforms.Magento
             return ProcessRequest<OrdersResponse>(request);
         }
 
+        public IOrder GetOrder(Uri storeUri, string token, long magentoOrderId)
+        {
+            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
+                new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}/{magentoOrderId}"), token);
+
+            return ProcessRequest<Order>(request);
+        }
+
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
@@ -149,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]", "gt",
                 false));
             request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]",
-                $"{startDate:yyyy-MM-dd HH:mm:ff}", false));
+                $"{startDate:yyyy-MM-dd HH:mm:ss}", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][field]", "updated_at", false));
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][direction]", "asc", false));
             request.Variables.Add(new HttpVariable("searchCriteria[pageSize]", PageSize.ToString(), false));
