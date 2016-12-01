@@ -4386,8 +4386,6 @@ GO
 ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
 
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ColumnsUpdated] ON [dbo].[FilterNodeContentDirty] ([ColumnsUpdated])
-GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
 CREATE TABLE [dbo].[FilterNodeRootDirty]
