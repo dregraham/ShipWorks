@@ -29,6 +29,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         private string token;
         private readonly Uri storeUri;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MagentoTwoRestClient"/> class.
+        /// </summary>
         public MagentoTwoRestClient(MagentoStoreEntity store, IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.store = store;
@@ -220,7 +223,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Deserializes the response
         /// </summary>
-        private TCommonInterface DeserializeResponse<TCommonInterface, TFirstTypeToTry, TSecondTypeToTry>(string response) 
+        /// <typeparam name="TCommonInterface">The interface being returned.</typeparam>
+        /// <typeparam name="TFirstTypeToTry">An Implementation of TCommonInterface. We attempt to deserialize the string as this type first.</typeparam>
+        /// <typeparam name="TSecondTypeToTry">
+        /// An Implementation of TCommonInterface.
+        /// If deserialization to the first type fails, we attempt to deserialize the string as this type.
+        /// </typeparam>
+        /// <param name="response">The response.</param>
+        /// <returns>The deserialized string as either TfirstTypeToTry or TSecondTypeToTry if the first fails</returns>
+        private TCommonInterface DeserializeResponse<TCommonInterface, TFirstTypeToTry, TSecondTypeToTry>(string response)
             where TFirstTypeToTry : TCommonInterface where TSecondTypeToTry : TCommonInterface
         {
             try
