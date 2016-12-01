@@ -35,14 +35,16 @@ namespace ShipWorks.Stores.Platforms.Magento
     [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST, true)]
     public class MagentoTwoRestOnlineUpdater : GenericStoreOnlineUpdater, IMagentoOnlineUpdater
     {
+        private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;
         private readonly MagentoStoreEntity store;
         private static readonly ILog log = LogManager.GetLogger(typeof(MagentoTwoRestOnlineUpdater));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestOnlineUpdater"/> class.
         /// </summary>
-        public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store) : base(store)
+        public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store, Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) : base(store)
         {
+            this.webClientFactory = webClientFactory;
             this.store = (MagentoStoreEntity) store;
         }
 
@@ -77,45 +79,73 @@ namespace ShipWorks.Stores.Platforms.Magento
                 return;
             }
 
+            IMagentoTwoRestClient webClient = webClientFactory(store);
+
             string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
+            long magentoOrderID = orderEntity.MagentoOrderID;
 
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            switch (command)
             {
-                IMagentoTwoRestClient webClient = scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
-
-                long magentoOrderID = orderEntity.MagentoOrderID;
-
-                switch (command)
-                {
-                    case MagentoUploadCommand.Complete:
-                        IOrder order = webClient.GetOrder(orderEntity.MagentoOrderID);
-                        string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer, order.Items);
-                        string invoice = GetInvoice(orderEntity, order.Items);
-                        webClient.UploadShipmentDetails(shipmentDetails, invoice, magentoOrderID);
-                        SaveOnlineStatus(orderEntity, "complete");
-                        break;
-                    case MagentoUploadCommand.Hold:
-                        webClient.HoldOrder(orderEntity.MagentoOrderID);
-                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-                        SaveOnlineStatus(orderEntity, "hold");
-                        break;
-                    case MagentoUploadCommand.Unhold:
-                        webClient.UnholdOrder(magentoOrderID);
-                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-                        SaveOnlineStatus(orderEntity, "pending");
-                        break;
-                    case MagentoUploadCommand.Cancel:
-                        webClient.CancelOrder(magentoOrderID);
-                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-                        SaveOnlineStatus(orderEntity, "canceled");
-                        break;
-                    case MagentoUploadCommand.Comments:
-                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-                        break;
-                }
+                case MagentoUploadCommand.Complete:
+                    UpdateAsComplete(emailCustomer, orderEntity, webClient, processedComments, magentoOrderID);
+                    break;
+                case MagentoUploadCommand.Hold:
+                    UpdateAsHold(orderEntity, webClient, processedComments, magentoOrderID);
+                    break;
+                case MagentoUploadCommand.Unhold:
+                    UpdateAsPending(webClient, magentoOrderID, processedComments, orderEntity);
+                    break;
+                case MagentoUploadCommand.Cancel:
+                    UploadAsCancel(orderEntity, webClient, processedComments, magentoOrderID);
+                    break;
+                case MagentoUploadCommand.Comments:
+                    UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+                    break;
             }
 
             unitOfWork.AddForSave(orderEntity);
+        }
+
+        /// <summary>
+        /// Completes the order with Magento and saves online status.
+        /// </summary>
+        private void UpdateAsComplete(bool emailCustomer, MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
+        {
+            IOrder order = webClient.GetOrder(orderEntity.MagentoOrderID);
+            string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer,
+                order.Items);
+            string invoice = GetInvoice(orderEntity, order.Items);
+            webClient.UploadShipmentDetails(shipmentDetails, invoice, magentoOrderID);
+            SaveOnlineStatus(orderEntity, "complete");
+        }
+
+        /// <summary>
+        /// Cancels order and saves online status
+        /// </summary>
+        private void UploadAsCancel(MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
+        {
+            webClient.CancelOrder(magentoOrderID);
+            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+            SaveOnlineStatus(orderEntity, "canceled");
+        }
+        /// <summary>
+        /// Takes order off hold and saves online status
+        /// </summary>
+        private void UpdateAsPending(IMagentoTwoRestClient webClient, long magentoOrderID, string processedComments, MagentoOrderEntity orderEntity)
+        {
+            webClient.UnholdOrder(magentoOrderID);
+            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+            SaveOnlineStatus(orderEntity, "pending");
+        }
+
+        /// <summary>
+        /// Puts order on hold and saves online status.
+        /// </summary>
+        private void UpdateAsHold(MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
+        {
+            webClient.HoldOrder(orderEntity.MagentoOrderID);
+            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+            SaveOnlineStatus(orderEntity, "hold");
         }
 
         /// <summary>
