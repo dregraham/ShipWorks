@@ -52,7 +52,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [Fact]
         public void LoadOrder_LoadsOnlineLastModified()
         {
-            var date = new DateTime(2016, 10, 18, 19, 22, 1).ToUniversalTime();
+            var date = new DateTime(2016, 10, 18, 19, 22, 1, DateTimeKind.Utc);
+
             Assert.Equal(date, orderEntity.OnlineLastModified);
         }
 
@@ -83,7 +84,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [Fact]
         public void LoadOrder_LoadsOrderDate()
         {
-            var date = new DateTime(2016, 10, 18, 19, 22, 0).ToUniversalTime();
+            var date = new DateTime(2016, 10, 18, 19, 22, 0, DateTimeKind.Utc);
+
             Assert.Equal(date, orderEntity.OrderDate);
         }
 
