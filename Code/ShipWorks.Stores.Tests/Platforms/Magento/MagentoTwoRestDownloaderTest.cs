@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
@@ -13,12 +15,15 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Magento
 {
-    public class MagentoTwoRestDownloaderTest
+    public class MagentoTwoRestDownloaderTest : IDisposable
     {
         private readonly MagentoOrderEntity orderEntity;
+        private AutoMock mock;
 
         public MagentoTwoRestDownloaderTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             var magentoOrder = EmbeddedResourceHelper.GetEmbeddedResourceString(
                 "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
 
@@ -29,9 +34,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
                 Orders = new List<Order> { order }
             };
 
-            var webClient = new Mock<IMagentoTwoRestClient>();
-            webClient.Setup(w => w.GetToken()).Returns("token");
-            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(response);
 
             var sqlAdapter = new Mock<ISqlAdapterRetry>();
             sqlAdapter.Setup((r => r.ExecuteWithRetry(It.IsAny<Action>()))).Callback((Action x) => x.Invoke());
@@ -43,9 +45,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
                 ModulePassword = "sweet"
             };
 
+            var webClient = mock.MockRepository.Create<IMagentoTwoRestClient>();
+            webClient.Setup(w => w.GetToken()).Returns("token");
+            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(response);
+
+            mock.MockFunc<MagentoStoreEntity, IMagentoTwoRestClient>(webClient);
+            
             orderEntity = new MagentoOrderEntity();
 
-            var testObject = new MagentoTwoRestDownloader(store, sqlAdapter.Object);
+            var testObject = mock.Create<MagentoTwoRestDownloader>(new TypedParameter(typeof(StoreEntity), store));
             testObject.LoadOrder(orderEntity, order);
         }
 
@@ -111,6 +119,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         public void LoadOrder_LoadsOrderCharges()
         {
             Assert.Equal(-18.45m, orderEntity.OrderCharges.FirstOrDefault(c => c.Type=="DISCOUNT")?.Amount);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }
