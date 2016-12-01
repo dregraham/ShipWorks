@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly Uri storeUrl;
         private readonly MagentoStoreEntity magentoStore;
+        private IMagentoTwoRestClient webClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader" /> class.
@@ -64,9 +65,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 do
                 {
-                    IMagentoTwoRestClient webClient =
-                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity),
-                            magentoStore));
+                    webClient = scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), magentoStore));
 
                     IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
                     totalOrders = ordersResponse.TotalCount;
@@ -176,6 +175,19 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderItem.SKU = item.Sku;
                 orderItem.UnitPrice = Convert.ToDecimal(item.Price);
                 orderItem.Weight = item.Weight;
+
+                IItem magentoOrderItem = webClient.GetItem(item.ItemId);
+
+                if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
+                {
+                    foreach (ICustomOption option in magentoOrderItem.ProductOption.ExtensionAttributes?.CustomOptions)
+                    {
+                        OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(orderItem);
+                        orderItemAttribute.Description = option.OptionValue;
+                        orderItemAttribute.Name = option.OptionId;
+                        orderItemAttribute.UnitPrice = 0;
+                    }
+                }
             }
         }
 

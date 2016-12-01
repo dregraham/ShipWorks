@@ -1608,6 +1608,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IOrder.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IOrdersResponse.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IPayment.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IProductOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IShipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IShippingAssignment.cs" />
@@ -1624,6 +1625,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Order.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ParentItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Payment.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ProductOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Shipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ShippingAssignment.cs" />

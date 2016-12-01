@@ -52,5 +52,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.Interfaces
         double Weight { get; set; }
         int? ParentItemId { get; set; }
         IParentItem ParentItem { get; set; }
+        IProductOption ProductOption { get; set; }
     }
 }

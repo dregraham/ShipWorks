@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -18,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
+        private const string ItemsEndpoint = "rest/V1/orders/items";
         private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
         private const string HoldEndpoint = "rest/V1/orders/{0}/hold";
         private const string UnholdEndpoint = "rest/V1/orders/{0}/unhold";
@@ -198,6 +200,16 @@ namespace ShipWorks.Stores.Platforms.Magento
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(CancelEndpoint, magentoOrderID)}"));
 
             ProcessRequest(submitter);
+        }
+
+        public IItem GetItem(long itemId)
+        {
+            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
+                new Uri($"{storeUri.AbsoluteUri}/{ItemsEndpoint}/{itemId}"));
+
+            string response = ProcessRequest(request);
+
+            return DeserializeResponse<IItem, Item, DTO.MagentoTwoDotZero.Item>(response);
         }
 
         /// <summary>

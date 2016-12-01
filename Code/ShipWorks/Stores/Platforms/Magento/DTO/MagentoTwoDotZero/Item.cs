@@ -247,7 +247,8 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
         public IParentItem ParentItem { get; set; }
 
         [JsonProperty("productOption")]
-        public ProductOption ProductOption { get; set; }
+        [JsonConverter(typeof(InterfaceToClassJsonConverter<IProductOption, ProductOption>))]
+        public IProductOption ProductOption { get; set; }
 
         [JsonProperty("extensionAttributes")]
         [JsonConverter(typeof(InterfaceToClassJsonConverter<IExtensionAttributes, ExtensionAttributes>))]

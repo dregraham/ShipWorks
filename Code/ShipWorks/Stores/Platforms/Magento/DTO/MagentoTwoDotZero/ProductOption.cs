@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
-    public class ProductOption
+    public class ProductOption : IProductOption
     {
-
         [JsonProperty("extensionAttributes")]
-        public ExtensionAttributes ExtensionAttributes { get; set; }
+        public IExtensionAttributes ExtensionAttributes { get; set; }
     }
 }
