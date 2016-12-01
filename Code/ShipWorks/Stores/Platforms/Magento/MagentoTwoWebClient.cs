@@ -138,7 +138,9 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    IMagentoTwoRestClient magentoRestClient = scope.Resolve<IMagentoTwoRestClient>();
+                    IMagentoTwoRestClient magentoRestClient =
+                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
+
                     token = magentoRestClient.GetToken();
                 }
 

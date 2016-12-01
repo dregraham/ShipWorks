@@ -24,16 +24,15 @@ namespace ShipWorks.Stores.Platforms.Magento
     public class MagentoTwoRestDownloader : StoreDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;
-        private readonly Uri storeUrl;
-        private readonly MagentoStoreEntity magentoStore;
-        private IMagentoTwoRestClient webClient;
+        private readonly IMagentoTwoRestClient webClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader" /> class.
         /// </summary>
         /// <param name="store"></param>
-        public MagentoTwoRestDownloader(StoreEntity store) :
-            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"))
+        /// <param name="webClientFactory"></param>
+        public MagentoTwoRestDownloader(StoreEntity store, Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) :
+            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"), webClientFactory)
         {
         }
 
@@ -41,13 +40,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
-        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter) : base(store)
+        /// <param name="webClientFactory"></param>
+        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter, Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) : base(store)
         {
-            magentoStore = (MagentoStoreEntity) store;
-            storeUrl = new Uri(magentoStore.ModuleUrl);
+            MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
+            new Uri(magentoStore.ModuleUrl);
             this.sqlAdapter = sqlAdapter;
+            webClient = webClientFactory(magentoStore);
         }
 
         /// <summary>
@@ -61,28 +61,23 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
 
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            do
             {
-                do
+                IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
+                totalOrders = ordersResponse.TotalCount;
+                foreach (IOrder magentoOrder in ordersResponse.Orders)
                 {
-                    webClient = scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), magentoStore));
+                    IOrder orderDetail = webClient.GetOrder(magentoOrder.EntityId);
 
-                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
-                    totalOrders = ordersResponse.TotalCount;
-                    foreach (IOrder magentoOrder in ordersResponse.Orders)
-                    {
-                        IOrder orderDetail = webClient.GetOrder(magentoOrder.EntityId);
+                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
+                    OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
+                    LoadOrder(orderEntity, orderDetail);
+                    sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                    savedOrders++;
+                }
 
-                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
-                        OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
-                        LoadOrder(orderEntity, orderDetail);
-                        sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
-                        savedOrders++;
-                    }
-
-                    currentPage++;
-                } while (savedOrders < totalOrders);
-            }
+                currentPage++;
+            } while (savedOrders < totalOrders);
         }
 
         /// <summary>

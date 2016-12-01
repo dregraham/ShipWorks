@@ -14,6 +14,13 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
     [KeyedComponent(typeof(IMagentoProbe), MagentoVersion.MagentoTwoREST)]
     public class MagentoTwoRestProbe : IMagentoProbe
     {
+        private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;
+
+        public MagentoTwoRestProbe(Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory)
+        {
+            this.webClientFactory = webClientFactory;
+        }
+
         /// <summary>
         /// Check to see if the store is compatible with Magento 1
         /// </summary>
@@ -21,17 +28,15 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         {
             try
             {
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                {
-                    IMagentoTwoRestClient client =
-                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
-                    client.GetToken();
-                    return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
-                }
+                IMagentoTwoRestClient client = webClientFactory(store);
+                client.GetToken();
+                return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
             }
             catch (Exception ex)
             {
-                return GenericResult.FromError<Uri>($"An error occurred while attempting to connect to Magento. {ex.Message}");
+                return
+                    GenericResult.FromError<Uri>(
+                        $"An error occurred while attempting to connect to Magento. {ex.Message}");
             }
         }
     }
