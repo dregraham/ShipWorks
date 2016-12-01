@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        void UploadShipmentDetails(string shipmentDetailsJson, string invoice, long magentoOrderId);
+        void UploadShipmentDetails(string shipment, string invoice, long magentoOrderId);
 
         /// <summary>
         /// Uploads comments only

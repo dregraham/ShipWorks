@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string UnholdEndpoint = "rest/V1/orders/{0}/unhold";
         private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
         private const string CommentEndpoint = "rest/V1/orders/{0}/comments";
-        private const string InvoiceEndpoint = "rest/V1/invoices";
+        private const string InvoiceEndpoint = "rest/V1/order/{0}/invoice";
         private const int PageSize = 5;
 
         private string token;
@@ -105,19 +105,51 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(string shipmentDetailsJson, string invoice, long magentoOrderId)
+        public void UploadShipmentDetails(string shipment, string invoice, long magentoOrderId)
+        {
+            string baseErrorMessage = "Error uploading shipment details.";
+            string errorMessage = baseErrorMessage;
+
+            try
+            {
+                UploadShipment(shipment, magentoOrderId);
+            }
+            catch (MagentoException ex)
+            {
+                errorMessage += $"\nMagento returned an error when creating the shipment: \"{ex.Message}\".";
+            }
+            try
+            {
+                UploadInvoice(invoice, magentoOrderId);
+            }
+            catch (MagentoException ex)
+            {
+                errorMessage += $"\nMagento returned an error when creating the invoice: \"{ex.Message}\"";
+            }
+
+            if (errorMessage != baseErrorMessage)
+            {
+                throw new MagentoException(errorMessage);
+            }
+        }
+
+        private void UploadInvoice(string invoice, long magentoOrderId)
+        {
+            HttpJsonVariableRequestSubmitter submitter;
+            submitter = GetRequestSubmitter(HttpVerb.Post,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(InvoiceEndpoint, magentoOrderId)}"));
+
+            submitter.RequestBody = invoice;
+
+            ProcessRequest(submitter);
+        }
+
+        private void UploadShipment(string shipmentDetailsJson, long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(ShipmentEndpoint, magentoOrderId)}"));
 
             submitter.RequestBody = shipmentDetailsJson;
-
-            ProcessRequest(submitter);
-
-            submitter = GetRequestSubmitter(HttpVerb.Post,
-                new Uri($"{storeUri.AbsoluteUri}/{InvoiceEndpoint}"));
-
-            submitter.RequestBody = invoice;
 
             ProcessRequest(submitter);
         }

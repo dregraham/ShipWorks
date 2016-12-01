@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;

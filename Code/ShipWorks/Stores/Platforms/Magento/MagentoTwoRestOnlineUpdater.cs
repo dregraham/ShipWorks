@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -14,6 +15,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.DTO;
@@ -75,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
 
-            using (var scope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 IMagentoTwoRestClient webClient = scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
 
@@ -136,19 +140,16 @@ namespace ShipWorks.Stores.Platforms.Magento
             return JsonConvert.SerializeObject(request);
         }
 
-        private double GetQuantity(MagentoOrderEntity orderEntity, IItem item)
+        /// <summary>
+        /// First tries to get the actual quantity from the ShipWorks order, but if it cannot
+        /// match the item, return the quantity from Magento
+        /// </summary>
+        private double GetQuantity(MagentoOrderEntity orderEntity, IItem magentoItem)
         {
-            IEnumerable<OrderItemEntity> matchingShipWorksItems = new List<OrderItemEntity>
-                {
-                    orderEntity.OrderItems.FirstOrDefault(x => x.Code == item.ItemId.ToString()),
-                    orderEntity.OrderItems.FirstOrDefault(x => x.SKU == item.Sku),
-                    orderEntity.OrderItems.FirstOrDefault(x => x.Name == item.Name)
-                }
-                .Distinct();
-
-            return matchingShipWorksItems.Any() ?
-                matchingShipWorksItems.FirstOrDefault().Quantity :
-                item.QtyOrdered;
+            return
+                orderEntity.OrderItems.FirstOrDefault(
+                    x => x.Code == magentoItem.ItemId.ToString() || x.SKU == magentoItem.Sku || x.Name == magentoItem.Name)?.Quantity ??
+                magentoItem.QtyOrdered;
         }
 
         /// <summary>
@@ -202,7 +203,9 @@ namespace ShipWorks.Stores.Platforms.Magento
                 request.Tracks = new List<Track>();
                 request.Tracks.Add(new Track
                 {
-                    CarrierCode = GetCarrierCode(shipment), TrackNumber = shipment.TrackingNumber
+                    CarrierCode = GetCarrierCode(shipment),
+                    Title = GetShippingService(shipment),
+                    TrackNumber = shipment.TrackingNumber
                 });
             }
 
@@ -257,6 +260,36 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
 
             return code;
+        }
+
+        /// <summary>
+        /// Gets the shipping service.
+        /// </summary>
+        private string GetShippingService(ShipmentEntity shipment)
+        {
+            string service = "";
+            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            {
+                case ShipmentTypeCode.FedEx:
+                    service = EnumHelper.GetDescription((FedExServiceType)shipment.FedEx.Service);
+                    break;
+                case ShipmentTypeCode.UpsOnLineTools:
+                case ShipmentTypeCode.UpsWorldShip:
+                    service = EnumHelper.GetDescription((UpsServiceType)shipment.Ups.Service);
+                    break;
+                case ShipmentTypeCode.PostalWebTools:
+                case ShipmentTypeCode.Endicia:
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Usps:
+                case ShipmentTypeCode.Usps:
+                    service = EnumHelper.GetDescription((PostalServiceType)shipment.Postal.Service);
+                    break;
+                default:
+                    service = shipment.Other.Service;
+                    break;
+            }
+
+            return service;
         }
     }
 }
