@@ -49,9 +49,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <returns>The component instances that provide the service.</returns>
         public static IOrderedEnumerable<TService> ResolveOrdered<TService>(this IComponentContext context, IEnumerable<Parameter> parameters)
         {
-            var registeredType = typeof(IEnumerable<>).MakeGenericType(
+            Type registeredType = typeof(IEnumerable<>).MakeGenericType(
                                  typeof(Meta<>).MakeGenericType(typeof(TService)));
-            var resolved = (Meta<TService>[]) context.Resolve(registeredType, parameters);
+            Meta<TService>[] resolved = (Meta<TService>[]) context.Resolve(registeredType, parameters);
             return resolved.Where(HasOrderingMetadata)
                            .OrderBy(GetOrderFromMetadata)
                            .Select(t => t.Value)
@@ -70,7 +70,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// </summary>
         private static object GetOrderFromMetadata<TService>(Meta<TService> instance)
         {
-            var orderingFunction = instance.Metadata[OrderedRegistrationSource.OrderingMetadataKey];
+            object orderingFunction = instance.Metadata[OrderedRegistrationSource.OrderingMetadataKey];
             return ((Delegate) orderingFunction).DynamicInvoke(UnwrapValue(instance.Value));
         }
 
@@ -79,7 +79,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// </summary>
         private static object UnwrapValue(object value)
         {
-            var type = value.GetType();
+            Type type = value.GetType();
             if (!IsMetadata(type))
             {
                 return value;

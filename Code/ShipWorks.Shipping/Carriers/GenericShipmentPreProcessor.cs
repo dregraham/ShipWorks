@@ -67,9 +67,6 @@ namespace ShipWorks.Shipping.Carriers
         /// provided when trying to process a shipment without any accounts for this shipment type in ShipWorks,
         /// otherwise the shipment is unchanged.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <param name="selectedRate">The selected rate.</param>
-        /// <exception cref="ShippingException">An account must be created to process this shipment.</exception>
         public virtual IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {
             ICarrierAccountRetriever accountRetriever = accountRetrieverFactory.Create(shipment.ShipmentTypeCode);

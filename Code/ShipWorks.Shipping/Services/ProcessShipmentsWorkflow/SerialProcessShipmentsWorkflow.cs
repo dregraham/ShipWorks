@@ -80,22 +80,22 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
             ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
 
-            IPrepareShipmentResult phase1Result = prepareShipmentTask.PrepareShipment(initial);
-            IGetLabelResult phase2Result = getLabelTask.GetLabel(phase1Result);
-            ISaveLabelResult phase3Result = saveLabelTask.SaveLabel(phase2Result);
-            ICompleteLabelCreationResult phase4Result = completeLabelTask.Complete(phase3Result);
+            IPrepareShipmentResult prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
+            IGetLabelResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
+            ISaveLabelResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
+            ICompleteLabelCreationResult completeLabelResult = completeLabelTask.Complete(saveLabelResult);
 
             // When we introduce Akka.net, the rest of this method would go into the reducer method
-            if (!string.IsNullOrEmpty(phase4Result.ErrorMessage))
+            if (!string.IsNullOrEmpty(completeLabelResult.ErrorMessage))
             {
-                executionState.NewErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + phase4Result.ErrorMessage);
+                executionState.NewErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + completeLabelResult.ErrorMessage);
             }
 
-            executionState.OutOfFundsException = executionState.OutOfFundsException ?? phase4Result.OutOfFundsException;
-            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? phase4Result.TermsAndConditionsException;
-            executionState.WorldshipExported |= phase4Result.WorldshipExported;
+            executionState.OutOfFundsException = executionState.OutOfFundsException ?? completeLabelResult.OutOfFundsException;
+            executionState.TermsAndConditionsException = executionState.TermsAndConditionsException ?? completeLabelResult.TermsAndConditionsException;
+            executionState.WorldshipExported |= completeLabelResult.WorldshipExported;
 
-            if (phase4Result.Success)
+            if (completeLabelResult.Success)
             {
                 executionState.OrderHashes.Add(shipment.Order.ShipSenseHashKey);
             }
