@@ -105,6 +105,18 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
+        /// Create the custom wizard pages for Magento
+        /// </summary>
+        /// <param name="scope"></param>
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
+        {
+            return new List<WizardPage>
+            {
+                scope.ResolveKeyed<WizardPage>(StoreTypeCode.Magento)
+            };
+        }
+
+        /// <summary>
         /// Create the control used to create online update actions in the add store wizard
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()

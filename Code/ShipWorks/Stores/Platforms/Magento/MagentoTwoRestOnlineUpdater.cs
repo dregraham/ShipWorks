@@ -17,6 +17,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Templates.Tokens;
 
@@ -61,82 +62,93 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
-            MagentoOrderEntity order = DataProvider.GetEntity(orderID) as MagentoOrderEntity;
-            if (order == null)
+            MagentoOrderEntity orderEntity = DataProvider.GetEntity(orderID) as MagentoOrderEntity;
+            if (orderEntity == null)
             {
                 return;
             }
-            if (order.IsManual)
+            if (orderEntity.IsManual)
             {
-                log.InfoFormat("Not executing online action since order {0} is manual.", order.OrderID);
+                log.InfoFormat("Not executing online action since order {0} is manual.", orderEntity.OrderID);
                 return;
             }
 
             string processedComments = TemplateTokenProcessor.ProcessTokens(comments, orderID);
 
-            Uri storeUri = new Uri(store.ModuleUrl);
-
             using (var scope = IoC.BeginLifetimeScope())
             {
-                IMagentoTwoRestClient webClient = scope.Resolve<IMagentoTwoRestClient>();
+                IMagentoTwoRestClient webClient = scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
 
-                string token = webClient.GetToken(storeUri, store.ModuleUsername,
-                    SecureText.Decrypt(store.ModulePassword, store.ModuleUsername));
-
-                long magentoOrderID = order.MagentoOrderID;
+                long magentoOrderID = orderEntity.MagentoOrderID;
 
                 switch (command)
                 {
                     case MagentoUploadCommand.Complete:
-                        string shipmentDetails = GetShipmentDetails(order, processedComments, emailCustomer);
-                        string invoice = GetInvoice(order);
-                        webClient.UploadShipmentDetails(shipmentDetails, invoice, storeUri, token, magentoOrderID);
-                        SaveOnlineStatus(order, "complete");
+                        IOrder order = webClient.GetOrder(orderEntity.MagentoOrderID);
+                        string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer, order.Items);
+                        string invoice = GetInvoice(orderEntity, order.Items);
+                        webClient.UploadShipmentDetails(shipmentDetails, invoice, magentoOrderID);
+                        SaveOnlineStatus(orderEntity, "complete");
                         break;
                     case MagentoUploadCommand.Hold:
-                        webClient.HoldOrder(storeUri, token, order.MagentoOrderID);
-                        UploadCommentsIfPresent(webClient, processedComments, storeUri, token, magentoOrderID);
-                        SaveOnlineStatus(order, "hold");
+                        webClient.HoldOrder(orderEntity.MagentoOrderID);
+                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+                        SaveOnlineStatus(orderEntity, "hold");
                         break;
                     case MagentoUploadCommand.Unhold:
-                        webClient.UnholdOrder(storeUri, token, magentoOrderID);
-                        UploadCommentsIfPresent(webClient, processedComments, storeUri, token, magentoOrderID);
-                        SaveOnlineStatus(order, "pending");
+                        webClient.UnholdOrder(magentoOrderID);
+                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+                        SaveOnlineStatus(orderEntity, "pending");
                         break;
                     case MagentoUploadCommand.Cancel:
-                        webClient.CancelOrder(storeUri, token, magentoOrderID);
-                        UploadCommentsIfPresent(webClient, processedComments, storeUri, token, magentoOrderID);
-                        SaveOnlineStatus(order, "canceled");
+                        webClient.CancelOrder(magentoOrderID);
+                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+                        SaveOnlineStatus(orderEntity, "canceled");
                         break;
                     case MagentoUploadCommand.Comments:
-                        UploadCommentsIfPresent(webClient, processedComments, storeUri, token, magentoOrderID);
+                        UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
                         break;
                 }
             }
 
-            unitOfWork.AddForSave(order);
+            unitOfWork.AddForSave(orderEntity);
         }
 
         /// <summary>
         /// Gets the invoice.
         /// </summary>
-        private string GetInvoice(MagentoOrderEntity order)
+        private string GetInvoice(MagentoOrderEntity orderEntity, IEnumerable<IItem> items)
         {
             MagentoInvoiceRequest request = new MagentoInvoiceRequest();
-            request.Invoice.MagentoOrderID = order.MagentoOrderID;
+            request.Invoice.MagentoOrderID = orderEntity.MagentoOrderID;
 
-            foreach (var item in order.OrderItems)
+            foreach (IItem item in items)
             {
-                request.Invoice.Items.Add(new MagentoInvoiceItem()
+                MagentoInvoiceItem magentoInvoiceItem = new MagentoInvoiceItem
                 {
-                    MagentoOrderItemId = Convert.ToInt64(item.Code),
-                    Qty = item.Quantity
-                });
-
-                request.Invoice.TotalQty += item.Quantity;
+                    Qty = GetQuantity(orderEntity, item),
+                    MagentoOrderItemId = item.ItemId
+                };
+                request.Invoice.Items.Add(magentoInvoiceItem);
+                request.Invoice.TotalQty += item.QtyOrdered;
             }
 
             return JsonConvert.SerializeObject(request);
+        }
+
+        private double GetQuantity(MagentoOrderEntity orderEntity, IItem item)
+        {
+            IEnumerable<OrderItemEntity> matchingShipWorksItems = new List<OrderItemEntity>
+                {
+                    orderEntity.OrderItems.FirstOrDefault(x => x.Code == item.ItemId.ToString()),
+                    orderEntity.OrderItems.FirstOrDefault(x => x.SKU == item.Sku),
+                    orderEntity.OrderItems.FirstOrDefault(x => x.Name == item.Name)
+                }
+                .Distinct();
+
+            return matchingShipWorksItems.Any() ?
+                matchingShipWorksItems.FirstOrDefault().Quantity :
+                item.QtyOrdered;
         }
 
         /// <summary>
@@ -154,20 +166,20 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Tell web client to upload comments if they are present
         /// </summary>
-        private void UploadCommentsIfPresent(IMagentoTwoRestClient webClient, string comments, Uri storeUri, string token, long magentoOrderID)
+        private void UploadCommentsIfPresent(IMagentoTwoRestClient webClient, string comments, long magentoOrderID)
         {
             if (!string.IsNullOrWhiteSpace(comments))
             {
-                webClient.UploadComments(comments, storeUri, token, magentoOrderID);
+                webClient.UploadComments(comments, magentoOrderID);
             }
         }
 
         /// <summary>
         /// Gets the shipment details string from the request
         /// </summary>
-        private string GetShipmentDetails(MagentoOrderEntity order, string comments, bool emailCustomer)
+        private string GetShipmentDetails(MagentoOrderEntity orderEntity, string comments, bool emailCustomer, IEnumerable<IItem> items)
         {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderEntity.OrderID);
             if (shipment == null)
             {
                 return string.Empty;
@@ -197,17 +209,20 @@ namespace ShipWorks.Stores.Platforms.Magento
             // Fetch the order items
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                adapter.FetchEntityCollection(orderEntity.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == orderEntity.OrderID));
             }
-            if (!order.OrderItems.IsNullOrEmpty())
+            if (!orderEntity.OrderItems.IsNullOrEmpty())
             {
                 request.Items = new List<ShipmentItem>();
-                foreach (var item in order.OrderItems)
+
+                foreach (IItem item in items)
                 {
-                    request.Items.Add(new ShipmentItem()
+                    ShipmentItem magentoInvoiceItem = new ShipmentItem()
                     {
-                        OrderItemId = Convert.ToInt64(item.Code), Qty = item.Quantity
-                    });
+                        Qty = GetQuantity(orderEntity, item),
+                        OrderItemId = item.ItemId
+                    };
+                    request.Items.Add(magentoInvoiceItem);
                 }
             }
 

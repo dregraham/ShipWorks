@@ -19,6 +19,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Constructor
         /// </summary>
+        public MagentoException(string message, Exception innerException) : base(message, innerException)
+        { }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MagentoException(Exception innerException) : base(innerException.Message, innerException)
         { }
     }

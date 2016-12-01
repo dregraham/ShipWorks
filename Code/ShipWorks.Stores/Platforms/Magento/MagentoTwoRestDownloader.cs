@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -23,7 +25,6 @@ namespace ShipWorks.Stores.Platforms.Magento
     [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, true)]
     public class MagentoTwoRestDownloader : StoreDownloader
     {
-        private readonly IMagentoTwoRestClient webClient;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly Uri storeUrl;
         private readonly MagentoStoreEntity magentoStore;
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         /// <param name="store"></param>
         public MagentoTwoRestDownloader(StoreEntity store) :
-            this(store, new MagentoTwoRestClient(), new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"))
+            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"))
         {
         }
 
@@ -43,11 +44,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="store">The store.</param>
         /// <param name="webClient">The web client.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
-        public MagentoTwoRestDownloader(StoreEntity store, IMagentoTwoRestClient webClient, ISqlAdapterRetry sqlAdapter) : base(store)
+        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter) : base(store)
         {
             magentoStore = (MagentoStoreEntity) store;
             storeUrl = new Uri(magentoStore.ModuleUrl);
-            this.webClient = webClient;
             this.sqlAdapter = sqlAdapter;
         }
 
@@ -56,34 +56,42 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
-            string token = webClient.GetToken(storeUrl, magentoStore.ModuleUsername,
-                SecureText.Decrypt(magentoStore.ModulePassword, magentoStore.ModuleUsername));
+            int currentPage = 1;
+            int totalOrders = 0;
+            int savedOrders = 0;
 
-            while (true)
+            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
-
-                OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate.Value, storeUrl, token);
-
-                foreach (Order magentoOrder in ordersResponse.Orders)
+                do
                 {
-                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
-                    OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
-                    LoadOrder(orderEntity, magentoOrder);
-                    sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
-                }
+                    IMagentoTwoRestClient webClient =
+                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity),
+                            magentoStore));
 
-                if (ordersResponse.Orders.None())
-                {
-                    break;
-                }
+                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
+                    totalOrders = ordersResponse.TotalCount;
+                    foreach (IOrder magentoOrder in ordersResponse.Orders)
+                    {
+                        IOrder orderDetail = webClient.GetOrder(magentoOrder.EntityId);
+
+                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
+                        OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
+                        LoadOrder(orderEntity, orderDetail);
+                        sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                        savedOrders++;
+                    }
+
+                    currentPage++;
+                } while (savedOrders < totalOrders);
             }
         }
 
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
+        public void LoadOrder(OrderEntity orderEntity, IOrder magentoOrder)
         {
             orderEntity.OnlineLastModified =
                 DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
@@ -94,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (orderEntity.IsNew)
             {
-                orderEntity.OrderDate = 
+                orderEntity.OrderDate =
                     DateTime.SpecifyKind(DateTime.Parse(magentoOrder.CreatedAt), DateTimeKind.Utc);
                 orderEntity.OrderNumber = magentoOrder.EntityId;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
@@ -107,9 +115,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the addresses.
         /// </summary>
-        private void LoadAddresses(OrderEntity orderEntity, Order magentoOrder)
+        private void LoadAddresses(OrderEntity orderEntity, IOrder magentoOrder)
         {
-            Address shippingAddress =
+            IShippingAddress shippingAddress =
                 magentoOrder.ExtensionAttributes.ShippingAssignments.FirstOrDefault()?.Shipping.Address;
 
             if (shippingAddress != null)
@@ -132,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 };
             }
 
-            BillingAddress billingAddress = magentoOrder.BillingAddress;
+            IBillingAddress billingAddress = magentoOrder.BillingAddress;
 
             if (billingAddress != null)
             {
@@ -158,9 +166,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the items.
         /// </summary>
-        private void LoadItems(OrderEntity orderEntity, List<Item> items)
+        private void LoadItems(OrderEntity orderEntity, IEnumerable<IItem> items)
         {
-            foreach (Item item in items)
+            foreach (IItem item in items)
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
@@ -176,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order charges.
         /// </summary>
-        private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
+        private void LoadOrderCharges(OrderEntity orderEntity, IOrder magentoOrder)
         {
             if (Math.Abs(magentoOrder.TaxAmount) > .001)
             {

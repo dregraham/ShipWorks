@@ -7,6 +7,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.DTO;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -22,11 +23,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
                 "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
 
             var order = JsonConvert.DeserializeObject<Order>(magentoOrder);
-            var response = new OrdersResponse();
-            response.Orders = new List<Order>() {order};
+
+            var response = new OrdersResponse()
+            {
+                Orders = new List<Order> { order }
+            };
+
             var webClient = new Mock<IMagentoTwoRestClient>();
-            webClient.Setup(w => w.GetToken(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<string>())).Returns("token");
-            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<Uri>(), It.IsAny<string>())).Returns(response);
+            webClient.Setup(w => w.GetToken()).Returns("token");
+            webClient.Setup(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(response);
 
             var sqlAdapter = new Mock<ISqlAdapterRetry>();
             sqlAdapter.Setup((r => r.ExecuteWithRetry(It.IsAny<Action>()))).Callback((Action x) => x.Invoke());
@@ -40,14 +45,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             orderEntity = new MagentoOrderEntity();
 
-            var testObject = new MagentoTwoRestDownloader(store, webClient.Object, sqlAdapter.Object);
+            var testObject = new MagentoTwoRestDownloader(store, sqlAdapter.Object);
             testObject.LoadOrder(orderEntity, order);
         }
 
         [Fact]
         public void LoadOrder_LoadsOnlineLastModified()
         {
-            var date = new DateTime(2016, 10, 18, 19, 22, 1).ToUniversalTime();
+            var date = new DateTime(2016, 10, 18, 19, 22, 1, DateTimeKind.Utc);
+
             Assert.Equal(date, orderEntity.OnlineLastModified);
         }
 
@@ -78,7 +84,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [Fact]
         public void LoadOrder_LoadsOrderDate()
         {
-            var date = new DateTime(2016, 10, 18, 19, 22, 0).ToUniversalTime();
+            var date = new DateTime(2016, 10, 18, 19, 22, 0, DateTimeKind.Utc);
+
             Assert.Equal(date, orderEntity.OrderDate);
         }
 
