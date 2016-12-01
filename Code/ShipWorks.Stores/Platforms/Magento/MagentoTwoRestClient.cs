@@ -164,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(CommentEndpoint, magentoOrderID)}"));
 
-            submitter.RequestBody = $"\"comments\":\"{comments}\"";
+            submitter.RequestBody = $"{{\"statusHistory\":{{\"comment\":\"{comments}\"}}}}";
 
             ProcessRequest(submitter);
         }

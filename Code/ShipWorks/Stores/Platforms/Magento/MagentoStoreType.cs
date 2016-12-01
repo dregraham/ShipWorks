@@ -207,7 +207,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 };
 
             executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys,
-                new Dictionary<string, string> { { "action", EnumHelper.GetDescription(action) }, { "comments", comments } });
+                new Dictionary<string, string> { { "action", action.ToString() }, { "comments", comments } });
         }
 
         /// <summary>

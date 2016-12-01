@@ -93,10 +93,10 @@ namespace ShipWorks.Stores.Platforms.Magento
                     UpdateAsHold(orderEntity, webClient, processedComments, magentoOrderID);
                     break;
                 case MagentoUploadCommand.Unhold:
-                    UpdateAsPending(webClient, magentoOrderID, processedComments, orderEntity);
+                    UpdateAsPending(webClient, processedComments, magentoOrderID);
                     break;
                 case MagentoUploadCommand.Cancel:
-                    UploadAsCancel(orderEntity, webClient, processedComments, magentoOrderID);
+                    UploadAsCancel(webClient, processedComments, magentoOrderID);
                     break;
                 case MagentoUploadCommand.Comments:
                     UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
@@ -116,36 +116,32 @@ namespace ShipWorks.Stores.Platforms.Magento
                 order.Items);
             string invoice = GetInvoice(orderEntity, order.Items);
             webClient.UploadShipmentDetails(shipmentDetails, invoice, magentoOrderID);
-            SaveOnlineStatus(orderEntity, "complete");
         }
 
         /// <summary>
         /// Cancels order and saves online status
         /// </summary>
-        private void UploadAsCancel(MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
+        private void UploadAsCancel(IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
             webClient.CancelOrder(magentoOrderID);
             UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-            SaveOnlineStatus(orderEntity, "canceled");
         }
         /// <summary>
         /// Takes order off hold and saves online status
         /// </summary>
-        private void UpdateAsPending(IMagentoTwoRestClient webClient, long magentoOrderID, string processedComments, MagentoOrderEntity orderEntity)
+        private void UpdateAsPending(IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
             webClient.UnholdOrder(magentoOrderID);
             UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-            SaveOnlineStatus(orderEntity, "pending");
         }
 
         /// <summary>
-        /// Puts order on hold and saves online status.
+        /// Puts order on hold
         /// </summary>
         private void UpdateAsHold(MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
             webClient.HoldOrder(orderEntity.MagentoOrderID);
             UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
-            SaveOnlineStatus(orderEntity, "hold");
         }
 
         /// <summary>
@@ -180,18 +176,6 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderEntity.OrderItems.FirstOrDefault(
                     x => x.Code == magentoItem.ItemId.ToString() || x.SKU == magentoItem.Sku || x.Name == magentoItem.Name)?.Quantity ??
                 magentoItem.QtyOrdered;
-        }
-
-        /// <summary>
-        /// Saves the online status to the ShipWorks OrderEntity
-        /// </summary>
-        /// <param name="order">The order.</param>
-        /// <param name="status">The status.</param>
-        private void SaveOnlineStatus(OrderEntity order, string status)
-        {
-            // set status to what was returned
-            order.OnlineStatusCode = status;
-            order.OnlineStatus = status;
         }
 
         /// <summary>
