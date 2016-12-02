@@ -216,6 +216,14 @@ namespace ShipWorks.Stores
         /// <param name="scope"></param>
         public virtual List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
+            return CreateAddStoreWizardPagesViaIoC(scope);
+        }
+
+        /// <summary>
+        /// Creates the add store wizard pages via io c.
+        /// </summary>
+        protected List<WizardPage> CreateAddStoreWizardPagesViaIoC(ILifetimeScope scope)
+        {
             if (scope.IsRegisteredWithKey<WizardPage>(TypeCode))
             {
                 return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
@@ -311,6 +319,16 @@ namespace ShipWorks.Stores
         /// Create the control that is used for editing the account settings in the Store Settings window.
         /// </summary>
         public virtual AccountSettingsControlBase CreateAccountSettingsControl()
+        {
+            return CreateAccountSettingsControlViaIoC();
+        }
+
+        /// <summary>
+        /// Create the control that is used for editing the account settings via IoC.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.InvalidOperationException">Invalid store type.  + TypeCode</exception>
+        protected AccountSettingsControlBase CreateAccountSettingsControlViaIoC()
         {
             if (!IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<Func<StoreEntity, AccountSettingsControlBase>>(TypeCode))
             {
