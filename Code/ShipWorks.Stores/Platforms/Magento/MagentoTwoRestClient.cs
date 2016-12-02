@@ -213,6 +213,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             ProcessRequest("CancelOrder", submitter);
         }
 
+        /// <summary>
+        /// Get item details from Magento
+        /// </summary>
         public IItem GetItem(long itemId)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
