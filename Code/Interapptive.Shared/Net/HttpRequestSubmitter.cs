@@ -145,12 +145,12 @@ namespace Interapptive.Shared.Net
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
             webRequest.UserAgent = DefaultUserAgent;
+            webRequest.AllowAutoRedirect = allowAutoRedirect;
 
             // If it's not get set the content type and redirect option.  Set them before applying the headers, so any headers will override
             if (Verb != HttpVerb.Get)
             {
                 webRequest.ContentType = contentType;
-                webRequest.AllowAutoRedirect = allowAutoRedirect;
             }
 
             if (headers.Count > 0)

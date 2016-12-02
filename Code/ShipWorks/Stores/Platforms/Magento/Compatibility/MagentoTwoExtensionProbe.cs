@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
             try
             {
                 request.Uri = new Uri(url);
+                request.AllowAutoRedirect = false;
                 using (IHttpResponseReader response = request.GetResponse())
                 {
                     string resultXml = response.ReadResult(Encoding.UTF8);
