@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
     public class CustomOption : ICustomOption
     {
         [JsonProperty("optionId")]
-        public string OptionId { get; set; }
+        public long OptionID { get; set; }
 
         [JsonProperty("optionValue")]
         public string OptionValue { get; set; }

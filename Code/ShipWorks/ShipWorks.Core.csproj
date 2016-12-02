@@ -1621,11 +1621,16 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\CustomOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\DownloadableOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ExtensionAttributes.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IProductOptionDetail.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\ICustomAttribute.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\Interfaces\IProduct.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Item.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Order.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ParentItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Payment.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Product.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ProductOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ProductOptionDetails.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Shipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ShippingAssignment.cs" />
@@ -1644,6 +1649,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ParentItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\Payment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ProductOption.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ProductOptionDetails.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\Shipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotZero\ShippingAssignment.cs" />

@@ -3,7 +3,7 @@
     public interface ICustomOption
     {
         IExtensionAttributes ExtensionAttributes { get; set; }
-        string OptionId { get; set; }
+        long OptionID { get; set; }
         string OptionValue { get; set; }
     }
 }

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,7 +29,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         /// <param name="store"></param>
         /// <param name="webClientFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store, Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) :
+        public MagentoTwoRestDownloader(StoreEntity store,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) :
             this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"), webClientFactory)
         {
         }
@@ -42,7 +41,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="store">The store.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter, Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) : base(store)
+        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) : base(store)
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
             new Uri(magentoStore.ModuleUrl);
@@ -61,23 +61,29 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
 
-            do
+            try
             {
-                IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
-                totalOrders = ordersResponse.TotalCount;
-                foreach (IOrder magentoOrder in ordersResponse.Orders)
+                do
                 {
-                    IOrder orderDetail = webClient.GetOrder(magentoOrder.EntityId);
+                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
+                    totalOrders = ordersResponse.TotalCount;
+                    foreach (IOrder magentoOrder in ordersResponse.Orders)
+                    {
+                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "",
+                            "");
+                        OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
+                        LoadOrder(orderEntity, magentoOrder);
+                        sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+                        savedOrders++;
+                    }
 
-                    MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(orderDetail.EntityId, "", "");
-                    OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
-                    LoadOrder(orderEntity, orderDetail);
-                    sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
-                    savedOrders++;
-                }
-
-                currentPage++;
-            } while (savedOrders < totalOrders);
+                    currentPage++;
+                } while (savedOrders < totalOrders);
+            }
+            catch (MagentoException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
         }
 
         /// <summary>
@@ -87,8 +93,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             orderEntity.OnlineLastModified =
                 DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
-			orderEntity.OnlineStatus = magentoOrder.Status;
-			orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
+            orderEntity.OnlineStatus = magentoOrder.Status;
+            orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
             LoadAddresses(orderEntity, magentoOrder);
 
@@ -160,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void LoadItems(OrderEntity orderEntity, IEnumerable<IItem> items)
         {
-            foreach (IItem item in items)
+            foreach (IItem item in items.Where(i => i.ProductType != "configurable"))
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
@@ -168,20 +174,56 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderItem.Quantity = item.QtyOrdered;
                 orderItem.Code = item.ItemId.ToString();
                 orderItem.SKU = item.Sku;
-                orderItem.UnitPrice = Convert.ToDecimal(item.Price);
+                orderItem.UnitPrice = Convert.ToDecimal(item.ParentItem?.Price ?? item.Price);
                 orderItem.Weight = item.Weight;
 
                 IItem magentoOrderItem = webClient.GetItem(item.ItemId);
 
                 if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
                 {
-                    foreach (ICustomOption option in magentoOrderItem.ProductOption.ExtensionAttributes?.CustomOptions)
+                    AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions);
+                }
+
+                if (magentoOrderItem?.ParentItemId != null)
+                {
+                    IItem magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
+
+                    if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
                     {
-                        OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(orderItem);
+                        AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all of the custom options for the order item
+        /// </summary>
+        private void AddCustomOptions(OrderItemEntity item, IEnumerable<ICustomOption> customOptions)
+        {
+            ICustomOption[] options = customOptions as ICustomOption[] ?? customOptions.ToArray();
+
+            if (options.Any())
+            {
+                try
+                {
+                    // We have to get the option from magento to get the option title
+                    IProduct product = webClient.GetProduct(item.SKU);
+
+                    foreach (ICustomOption option in options)
+                    {
+                        IProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+
+                        OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
                         orderItemAttribute.Description = option.OptionValue;
-                        orderItemAttribute.Name = option.OptionId;
+                        orderItemAttribute.Name = optionDetail?.Title ?? "Option";
                         orderItemAttribute.UnitPrice = 0;
                     }
+                }
+                catch (MagentoException ex)
+                {
+                    // if there is an issue getting product options keep going
+                    // we dont want options to keep the download from succeeding
                 }
             }
         }

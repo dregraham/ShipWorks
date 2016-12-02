@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             webClient.Setup(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(response);
 
             mock.MockFunc<MagentoStoreEntity, IMagentoTwoRestClient>(webClient);
-            
+
             orderEntity = new MagentoOrderEntity();
 
             var testObject = mock.Create<MagentoTwoRestDownloader>(new TypedParameter(typeof(StoreEntity), store));

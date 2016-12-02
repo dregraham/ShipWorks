@@ -51,8 +51,19 @@ namespace ShipWorks.Stores.Platforms.Magento
         void CancelOrder(long magentoOrderID);
 
         /// <summary>
-        ///  Get item details from Magento
+        /// Gets the specified item
         /// </summary>
+        /// <returns></returns>
         IItem GetItem(long itemId);
+
+        /// <summary>
+        /// Gets the product for the given sku
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <returns>
+        /// Product is similar to item except it contains product details
+        /// and is not order specific details like option names and image urls
+        /// </returns>
+        IProduct GetProduct(string sku);
     }
 }

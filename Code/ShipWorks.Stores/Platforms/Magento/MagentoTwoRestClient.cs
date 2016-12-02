@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
 using Interapptive.Shared.Net;
@@ -23,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ItemsEndpoint = "rest/V1/orders/items";
+        private const string ProductEndpoint = "rest/V1/products/{0}";
         private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
         private const string HoldEndpoint = "rest/V1/orders/{0}/hold";
         private const string UnholdEndpoint = "rest/V1/orders/{0}/unhold";
@@ -214,16 +214,29 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Get item details from Magento
+        /// Gets the specified item
         /// </summary>
-        public IItem GetItem(long itemId)
+        public IItem GetItem(long itemID)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
-                new Uri($"{storeUri.AbsoluteUri}/{ItemsEndpoint}/{itemId}"));
+                new Uri($"{storeUri.AbsoluteUri}/{ItemsEndpoint}/{itemID}"));
 
             string response = ProcessRequest("GetItem", request);
 
             return DeserializeResponse<IItem, Item, DTO.MagentoTwoDotZero.Item>(response);
+        }
+
+        /// <summary>
+        /// Gets the product for the speified sku
+        /// </summary>
+        public IProduct GetProduct(string sku)
+        {
+            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
+                new Uri($"{storeUri.AbsoluteUri}/{string.Format(ProductEndpoint, sku)}"));
+
+            string response = ProcessRequest("GetProduct", request);
+
+            return DeserializeResponse <IProduct, Product, Product>(response);
         }
 
         /// <summary>
