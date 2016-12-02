@@ -5,6 +5,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     public class MagentoTwoRestDownloader : StoreDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;
+        private readonly ILog log;
         private readonly IMagentoTwoRestClient webClient;
 
         /// <summary>
@@ -29,9 +31,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         /// <param name="store"></param>
         /// <param name="webClientFactory"></param>
+        /// <param name="logFactory"></param>
         public MagentoTwoRestDownloader(StoreEntity store,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) :
-            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"), webClientFactory)
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) :
+            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"), webClientFactory, logFactory)
         {
         }
 
@@ -41,12 +44,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="store">The store.</param>
         /// <param name="sqlAdapter">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
+        /// <param name="logFactory"></param>
         public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) : base(store)
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) : base(store)
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
             new Uri(magentoStore.ModuleUrl);
             this.sqlAdapter = sqlAdapter;
+            log = logFactory(typeof(MagentoTwoRestDownloader));
             webClient = webClientFactory(magentoStore);
         }
 
@@ -224,6 +229,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 {
                     // if there is an issue getting product options keep going
                     // we dont want options to keep the download from succeeding
+                    log.Error($"Error getting Item Options {ex.Message}");
                 }
             }
         }
