@@ -249,19 +249,20 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             if (shipmentIDs.CompareCountTo(1) != ComparisonResult.Equal)
             {
                 currentShipment = null;
-                return;
-            }
-
-            long shipmentID = shipmentIDs.Single();
-            var shipment = currentOrder.ShipmentAdapters?.FirstOrDefault(s => s.Shipment.ShipmentID == shipmentID)?.Shipment;
-
-            if (shipment != null)
-            {
-                currentShipment = shipment;
             }
             else
             {
-                lastSelectedShipmentID = shipmentID;
+                long shipmentID = shipmentIDs.Single();
+                var shipment = currentOrder.ShipmentAdapters?.FirstOrDefault(s => s.Shipment.ShipmentID == shipmentID)?.Shipment;
+
+                if (shipment != null)
+                {
+                    currentShipment = shipment;
+                }
+                else
+                {
+                    lastSelectedShipmentID = shipmentID;
+                }
             }
 
             SetEnabledOnButtons();

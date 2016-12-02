@@ -68,9 +68,9 @@ namespace ShipWorks.Stores.Content.Panels
             // Load the copy menu
             menuCopy.DropDownItems.AddRange(entityGrid.CreateCopyMenuItems(false));
 
-            ILifetimeScope lifetimeScope = IoC.UnsafeGlobalLifetimeScope;
-            IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
-            ISchedulerProvider schedulerProvider = lifetimeScope.Resolve<ISchedulerProvider>();
+            ILifetimeScope globalLifetimeScope = IoC.UnsafeGlobalLifetimeScope;
+            IMessenger messenger = globalLifetimeScope.Resolve<IMessenger>();
+            ISchedulerProvider schedulerProvider = globalLifetimeScope.Resolve<ISchedulerProvider>();
 
             messenger.Where(x => x.Sender is ShippingDlg)
                 .Subscribe(_ => ReloadContent());

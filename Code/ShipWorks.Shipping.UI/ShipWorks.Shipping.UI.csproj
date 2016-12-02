@@ -239,6 +239,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\RateSelectedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\StoreChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\WindowUnloadingPipeline.cs" />
+    <Compile Include="ShippingPanel\OpenShippingDialogType.cs" />
     <Compile Include="ShippingPanel\PipelineRegistrationContainer.cs" />
     <Compile Include="ShippingPanel\ShipmentControl\BestRateShipmentControl.xaml.cs">
       <DependentUpon>BestRateShipmentControl.xaml</DependentUpon>

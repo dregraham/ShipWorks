@@ -232,6 +232,7 @@
     <Compile Include="ValueConverters\EnumImageConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverters\IsEmptyConverter.cs" />
+    <Compile Include="ValueConverters\PluralizingValueConverter.cs" />
     <Compile Include="ValueConverters\RadioButtonCheckedConverter.cs" />
     <Compile Include="ValueConverters\StateProvinceConverter.cs" />
     <Compile Include="ValueConverters\StringEmptyWhenEqualToParameterConverter.cs" />

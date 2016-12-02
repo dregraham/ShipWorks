@@ -46,6 +46,7 @@
             <ui:DefaultWhenNullOrEmptyConverter x:Key="DefaultWhenNullOrEmpty" />
             <ui:FriendlyDateConverter x:Key="FriendlyDate" />
             <ui:TypeBasedTemplateSelector x:Key="TypeBasedTemplateSelector" />
+            <ui:PluralizingValueConverter x:Key="Pluralizing" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -115,22 +116,27 @@
                     <ui:NotificationBorder.IsEnabled>
                         <MultiBinding Converter="{StaticResource BooleanAnd}">
                             <Binding Path="IsShipmentsPanelHidden" Mode="OneWay" />
-                            <Binding Path="HasMultipleShipments" />
+                            <Binding Path="HasMultipleShipments" Mode="OneWay" />
                         </MultiBinding>
                     </ui:NotificationBorder.IsEnabled>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Order has other shipments"
-                                   FontSize="16"
+                        <TextBlock FontSize="16"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource Yellow}"
                                    Margin="0,0,8,0">
+                            Order has <Run Text="{Binding MoreShipmentCount, Mode=OneWay}" /> more
+                            <Run Text="{Binding MoreShipmentCount, Mode=OneWay,
+                                Converter={StaticResource Pluralizing},
+                                ConverterParameter='shipment'}" />
                         </TextBlock>
 
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                    Margin="0, 4, 0, 4">
                             <Hyperlink Command="{Binding OpenShippingDialogCommand}"
                                     CommandParameter="{x:Static local:OpenShippingDialogType.AllShipments}">Click here </Hyperlink>
-                            to manage all shipments.
+                            to manage all
+                            <Run Text="{Binding ShipmentCount, Mode=OneWay}" />
+                            shipments
                         </TextBlock>
                     </StackPanel>
                 </ui:NotificationBorder>

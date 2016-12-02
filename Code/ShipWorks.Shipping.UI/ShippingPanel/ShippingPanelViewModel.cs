@@ -29,14 +29,6 @@ using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
-    public enum OpenShippingDialogType
-    {
-        None,
-        AllShipments,
-        SelectedShipment,
-        SelectedOrders,
-    }
-
     /// <summary>
     /// Main view model for the shipment panel
     /// </summary>
@@ -208,7 +200,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
-            HasMultipleShipments = loadedOrderSelection.ShipmentAdapters.IsCountGreaterThan(1);
+            ShipmentCount = loadedOrderSelection.ShipmentAdapters.Count();
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
             {
@@ -471,7 +463,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             LoadedShipmentResult = ShippingPanelLoadedShipmentResult.NotLoaded;
 
             lastSelectedShipmentID = null;
-            HasMultipleShipments = false;
+            ShipmentCount = 0;
             SelectedShipments = null;
         }
 
@@ -486,9 +478,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = false;
 
-            // If there's no shipment and at least one order id, send the message to open the shipping
-            // dialog with order ids.
-            // Otherwise, send the single shipment message if the shipment isn't null.
             if (type == OpenShippingDialogType.SelectedOrders && SelectedShipments != null)
             {
                 messenger.Send(new OpenShippingDialogMessage(this,
