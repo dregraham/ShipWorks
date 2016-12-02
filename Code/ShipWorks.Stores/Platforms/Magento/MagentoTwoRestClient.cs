@@ -98,6 +98,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             return DeserializeResponse<IOrdersResponse, OrdersResponse, DTO.MagentoTwoDotZero.OrdersResponse>(response);
         }
 
+        /// <summary>
+        /// Gets a single Magento order with detailed information (attributes)
+        /// </summary>
         public IOrder GetOrder(long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
@@ -138,6 +141,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
+        /// <summary>
+        /// Uploads the invoice.
+        /// </summary>
         private void UploadInvoice(string invoice, long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
@@ -148,6 +154,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             ProcessRequest("UploadInvoice", submitter);
         }
 
+        /// <summary>
+        /// Uploads the shipment.
+        /// </summary>
         private void UploadShipment(string shipmentDetailsJson, long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,

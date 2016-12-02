@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Stores.Platforms.Magento.DTO;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -53,9 +51,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         void CancelOrder(long magentoOrderID);
 
         /// <summary>
-        /// Gets all the items in a Magento Order
+        ///  Get item details from Magento
         /// </summary>
-        /// <returns></returns>
         IItem GetItem(long itemId);
     }
 }

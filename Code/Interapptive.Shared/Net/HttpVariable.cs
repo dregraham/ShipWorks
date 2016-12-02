@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Interapptive.Shared.Net
 {
     /// <summary>
@@ -17,7 +13,6 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public HttpVariable()
         {
-
         }
 
         /// <summary>

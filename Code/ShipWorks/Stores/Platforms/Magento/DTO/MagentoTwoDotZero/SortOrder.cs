@@ -4,7 +4,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
     public class SortOrder
     {
-
         [JsonProperty("field")]
         public string Field { get; set; }
 

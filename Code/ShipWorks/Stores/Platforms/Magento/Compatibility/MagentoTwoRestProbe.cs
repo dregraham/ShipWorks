@@ -16,6 +16,9 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
     {
         private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MagentoTwoRestProbe"/> class.
+        /// </summary>
         public MagentoTwoRestProbe(Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory)
         {
             this.webClientFactory = webClientFactory;

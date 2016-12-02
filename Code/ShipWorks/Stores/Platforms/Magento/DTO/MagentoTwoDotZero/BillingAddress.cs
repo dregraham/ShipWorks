@@ -6,11 +6,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotZero
 {
     public class BillingAddress : IBillingAddress
     {
-        public BillingAddress(ExtensionAttributes extensionAttributes)
-        {
-            ExtensionAttributes = extensionAttributes;
-        }
-
         [JsonProperty("addressType")]
         public string AddressType { get; set; }
 
