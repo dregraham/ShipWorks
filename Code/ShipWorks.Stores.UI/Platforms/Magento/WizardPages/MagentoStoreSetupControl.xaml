@@ -31,6 +31,10 @@
                 <Setter Property="Margin" Value="4" />
                 <Setter Property="Padding" Value="2" />
             </Style>
+            <Style TargetType="{x:Type PasswordBox}">
+                <Setter Property="Margin" Value="4" />
+                <Setter Property="Padding" Value="2" />
+            </Style>
             <Style TargetType="{x:Type RadioButton}">
                 <Setter Property="Margin" Value="20 4 0 4" />
             </Style>
@@ -71,7 +75,6 @@
                     <TextBox Grid.Row="0"
                              Grid.Column="1"
                              Grid.ColumnSpan="2"
-                             Margin="4"
                              Text="{Binding Username,
                                             UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock Grid.Row="1"
@@ -79,8 +82,7 @@
                                Text="Password:" />
                     <PasswordBox Grid.Row="1"
                                  Grid.Column="1"
-                                 Grid.ColumnSpan="2"
-                                 Margin="4">
+                                 Grid.ColumnSpan="2">
                         <i:Interaction.Behaviors>
                             <ui:PasswordBoxBindingBehavior Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
                         </i:Interaction.Behaviors>
@@ -108,7 +110,7 @@
                                Grid.Column="1"
                                Grid.ColumnSpan="2">
                         <Run>For help adding your Magento store,</Run>
-                        <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000049745">click here.</Hyperlink>
+                        <Hyperlink NavigateUri="http://support.shipworks.com/support/solutions/articles/4000049745" RequestNavigate="HyperlinkOnRequestNavigate">click here.</Hyperlink>
                     </TextBlock>
                 </Grid>
             </StackPanel>
