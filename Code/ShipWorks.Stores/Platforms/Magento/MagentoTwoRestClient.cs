@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Security.Cryptography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Newtonsoft.Json;
@@ -231,12 +232,23 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public IProduct GetProduct(string sku)
         {
+            LruCache<string, IProduct> productCache = MagentoProductCache.Instance.GetStoreProductCache(store.StoreID);
+
+            IProduct product = productCache[sku];
+            if (product != null)
+            {
+                return productCache[sku];
+            }
+
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(ProductEndpoint, sku)}"));
 
             string response = ProcessRequest("GetProduct", request);
 
-            return DeserializeResponse <IProduct, Product, Product>(response);
+            product = DeserializeResponse <IProduct, Product, Product>(response);
+            productCache[sku] = product;
+
+            return product;
         }
 
         /// <summary>
