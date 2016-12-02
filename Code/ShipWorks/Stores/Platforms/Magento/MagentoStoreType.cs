@@ -317,5 +317,19 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             base.InitializeFromOnlineModule();
         }
+
+        /// <summary>
+        /// Customize what columns we support based on the configured properties of the generic store
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST &&
+                (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified))
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
+        }
     }
 }
