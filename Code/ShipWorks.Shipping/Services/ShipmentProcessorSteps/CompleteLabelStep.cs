@@ -131,12 +131,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         private Exception LogSuccessfulShipment(ShipmentEntity shipment, StoreEntity store)
         {
-            ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
             Exception exception = null;
 
             try
             {
-                LogShipmentToTango(shipment, store, shipmentType);
+                LogShipmentToTango(shipment, store);
             }
             catch (Exception ex)
             {
@@ -147,6 +146,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 // Log to the knowledge base after everything else has been successful, so an error logging
                 // to the knowledge base does not prevent the shipment from being actually processed.
+                ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
                 knowledgebase.LogShipment(shipmentType, shipment);
             }
             catch (Exception ex)
@@ -161,12 +161,12 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Log the shipment to Tango
         /// </summary>
-        private void LogShipmentToTango(ShipmentEntity shipment, StoreEntity store, ShipmentType shipmentType)
+        private void LogShipmentToTango(ShipmentEntity shipment, StoreEntity store)
         {
             log.InfoFormat("Shipment {0}  - Committed", shipment.ShipmentID);
 
             // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
-            if (!shipmentType.ProcessingCompletesExternally)
+            if (!shipment.ProcessingCompletesExternally())
             {
                 tangoWebClient.LogShipment(store, shipment);
 

@@ -155,8 +155,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var adapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.CreateTransacted()).Returns(adapter);
 
-            mock.WithShipmentTypeFromShipmentManager(s =>
-                s.SetupGet(x => x.ProcessingCompletesExternally).Returns(false));
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Usps;
 
             testObject.SaveLabel(input.Object);
 
@@ -170,8 +169,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var adapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.CreateTransacted()).Returns(adapter);
 
-            mock.WithShipmentTypeFromShipmentManager(s =>
-                s.SetupGet(x => x.ProcessingCompletesExternally).Returns(true));
+            shipment.ShipmentTypeCode = ShipmentTypeCode.UpsWorldShip;
 
             testObject.SaveLabel(input.Object);
 

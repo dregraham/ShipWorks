@@ -24,7 +24,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly IActionDispatcher actionDispatcher;
         private readonly IUserSession userSession;
         private readonly IInsureShipService insureShipService;
-        private readonly IShipmentTypeManager shipmentTypeFactory;
 
         /// <summary>
         /// Constructor
@@ -35,10 +34,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IActionDispatcher actionDispatcher,
             IUserSession userSession,
             IInsureShipService insureShipService,
-            IShipmentTypeManager shipmentTypeFactory,
             Func<Type, ILog> createLogger)
         {
-            this.shipmentTypeFactory = shipmentTypeFactory;
             this.insureShipService = insureShipService;
             this.userSession = userSession;
             this.actionDispatcher = actionDispatcher;
@@ -96,10 +93,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         adapter.SaveAndRefetch(shipment);
 
-                        ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
-
                         // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
-                        if (!shipmentType.ProcessingCompletesExternally)
+                        if (!shipment.ProcessingCompletesExternally())
                         {
                             // Dispatch the shipment processed event
                             actionDispatcher.DispatchShipmentProcessed(shipment, adapter);

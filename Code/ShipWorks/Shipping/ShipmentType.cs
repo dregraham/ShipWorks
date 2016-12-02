@@ -145,16 +145,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
-        /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hard coding WorldShip if statements
-        /// to use this instead so its easier to track down all the usages by doing Find References on this property.
-        /// </summary>
-        public virtual bool ProcessingCompletesExternally
-        {
-            get { return false; }
-        }
-
-        /// <summary>
         /// Gets or sets the certificate inspector that should be used when wanting to add additional security
         /// around API calls to shipping partners. This is defaulted to the trusting inspector so that calls
         /// will continue to work as expected. Calls that require specific inspection should assign this property

@@ -552,6 +552,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponseTest.cs" />
+    <Compile Include="Shipping\IShipmentEntityExtensionsTest.cs" />
     <Compile Include="Shipping\Policies\RateResultCountShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicyTest.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesTest.cs" />
