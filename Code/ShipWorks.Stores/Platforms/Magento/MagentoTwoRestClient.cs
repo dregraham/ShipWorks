@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Cryptography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
@@ -119,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             catch (MagentoException ex)
             {
-                errorMessage += $"\nMagento returned an error when creating the shipment: \"{ex.Message}\".";
+                errorMessage += $"\nMagento returned an error when creating the shipment: \n{ex.Message}\n";
             }
             try
             {
@@ -127,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             catch (MagentoException ex)
             {
-                errorMessage += $"\nMagento returned an error when creating the invoice: \"{ex.Message}\"";
+                errorMessage += $"\nMagento returned an error when creating the invoice: \n{ex.Message}\n";
             }
 
             if (errorMessage != baseErrorMessage)
@@ -259,14 +261,33 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             try
             {
-                string result = request.GetResponse().ReadResult();
+                request.AllowAutoRedirect = false;
+                request.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
+                IHttpResponseReader httpResponseReader = request.GetResponse();
+                string result = httpResponseReader.ReadResult();
                 apiLogEntry.LogResponse(result, "json");
+
+                ValidateResult(httpResponseReader, result);
+
                 return result;
             }
             catch (Exception ex)
             {
                 apiLogEntry.LogResponse(ex);
                 throw new MagentoException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Validates the result.
+        /// </summary>
+        private static void ValidateResult(IHttpResponseReader httpResponseReader, string result)
+        {
+            if (httpResponseReader.HttpWebResponse.StatusCode == HttpStatusCode.BadRequest)
+            {
+                JObject badResult = JObject.Parse(result);
+                string message = (string) badResult["message"];
+                throw new MagentoException(message ?? "An error occured when communicating with Magento");
             }
         }
 
