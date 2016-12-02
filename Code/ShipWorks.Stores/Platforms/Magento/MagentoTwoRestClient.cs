@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Newtonsoft.Json;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 RequestBody = $"{{\"username\":\"{store.ModuleUsername}\",\"password\":\"{password}\"}}"
             };
 
-            return ProcessRequest(request).Trim('"');
+            return ProcessRequest("GetToken", request).Trim('"');
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"));
             AddOrdersSearchCriteria(request, start, currentPage);
 
-            string response = ProcessRequest(request);
+            string response = ProcessRequest("GetOrders", request);
             return DeserializeResponse<IOrdersResponse, OrdersResponse, DTO.MagentoTwoDotZero.OrdersResponse>(response);
         }
 
@@ -100,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}/{magentoOrderId}"));
 
-            string response = ProcessRequest(request);
+            string response = ProcessRequest("GetOrder", request);
             return DeserializeResponse<IOrder, Order, DTO.MagentoTwoDotZero.Order>(response);
         }
 
@@ -137,13 +138,12 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         private void UploadInvoice(string invoice, long magentoOrderId)
         {
-            HttpJsonVariableRequestSubmitter submitter;
-            submitter = GetRequestSubmitter(HttpVerb.Post,
+            HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(InvoiceEndpoint, magentoOrderId)}"));
 
             submitter.RequestBody = invoice;
 
-            ProcessRequest(submitter);
+            ProcessRequest("UploadInvoice", submitter);
         }
 
         private void UploadShipment(string shipmentDetailsJson, long magentoOrderId)
@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             submitter.RequestBody = shipmentDetailsJson;
 
-            ProcessRequest(submitter);
+            ProcessRequest("UploadShipment", submitter);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             submitter.RequestBody = $"{{\"statusHistory\":{{\"comment\":\"{comments}\"}}}}";
 
-            ProcessRequest(submitter);
+            ProcessRequest("UploadComments", submitter);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(HoldEndpoint, magentoOrderID)}"));
 
-            ProcessRequest(submitter);
+            ProcessRequest("HoldOrder", submitter);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(UnholdEndpoint, magentoOrderID)}"));
 
-            ProcessRequest(submitter);
+            ProcessRequest("UnholdOrder", submitter);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(CancelEndpoint, magentoOrderID)}"));
 
-            ProcessRequest(submitter);
+            ProcessRequest("CancelOrder", submitter);
         }
 
         public IItem GetItem(long itemId)
@@ -207,7 +207,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{ItemsEndpoint}/{itemId}"));
 
-            string response = ProcessRequest(request);
+            string response = ProcessRequest("GetItem", request);
 
             return DeserializeResponse<IItem, Item, DTO.MagentoTwoDotZero.Item>(response);
         }
@@ -252,14 +252,20 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Processes the request.
         /// </summary>
-        private string ProcessRequest(HttpVariableRequestSubmitter request)
+        private string ProcessRequest(string action, HttpVariableRequestSubmitter request)
         {
+            ApiLogEntry apiLogEntry = new ApiLogEntry(ApiLogSource.Magento, action);
+            apiLogEntry.LogRequest(request);
+
             try
             {
-                return request.GetResponse().ReadResult();
+                string result = request.GetResponse().ReadResult();
+                apiLogEntry.LogResponse(result, "json");
+                return result;
             }
             catch (Exception ex)
             {
+                apiLogEntry.LogResponse(ex);
                 throw new MagentoException(ex);
             }
         }
