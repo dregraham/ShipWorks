@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
     public class MagentoTwoRestDownloaderTest : IDisposable
     {
         private readonly MagentoOrderEntity orderEntity;
-        private AutoMock mock;
+        private readonly AutoMock mock;
 
         public MagentoTwoRestDownloaderTest()
         {
