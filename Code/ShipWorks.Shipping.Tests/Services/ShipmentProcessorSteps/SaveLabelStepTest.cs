@@ -19,20 +19,20 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
     public class SaveLabelStepTest : IDisposable
     {
         readonly AutoMock mock;
-        readonly SaveLabelStep testObject;
-        readonly Mock<IGetLabelResult> input;
+        readonly LabelPersistenceStep testObject;
+        readonly Mock<ILabelRetrievalResult> input;
         readonly ShipmentEntity shipment;
         readonly StoreEntity store;
 
         public SaveLabelStepTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<SaveLabelStep>();
+            testObject = mock.Create<LabelPersistenceStep>();
 
             shipment = Create.Shipment(new OrderEntity()).AsOther().Build();
             store = Create.Store<StoreEntity>().Build();
 
-            input = mock.CreateMock<IGetLabelResult>(r =>
+            input = mock.CreateMock<ILabelRetrievalResult>(r =>
             {
                 r.SetupGet(x => x.Success).Returns(true);
                 r.SetupGet(x => x.OriginalShipment).Returns(shipment);

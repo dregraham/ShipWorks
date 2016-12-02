@@ -188,11 +188,11 @@ namespace ShipWorks.ApplicationCore
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
                 .AsImplementedInterfaces();
 
-            builder.RegisterGeneric(typeof(ApplyOrderedManipulators<,>))
-                .As(typeof(IApplyOrderedManipulators<,>));
+            builder.RegisterGeneric(typeof(OrderedCompositeManipulator<,>))
+                .As(typeof(IOrderedCompositeManipulator<,>));
 
-            builder.RegisterGeneric(typeof(ApplyValidators<,>))
-                .As(typeof(IApplyValidators<,>));
+            builder.RegisterGeneric(typeof(CompositeValidator<,>))
+                .As(typeof(ICompositeValidator<,>));
 
             ComponentAttribute.Register(builder, allAssemblies);
             ServiceAttribute.Register(builder, allAssemblies);

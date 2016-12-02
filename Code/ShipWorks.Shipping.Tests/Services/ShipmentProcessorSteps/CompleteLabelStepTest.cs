@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
     public class CompleteLabelStepTest : IDisposable
     {
         readonly AutoMock mock;
-        Mock<ISaveLabelResult> input;
+        Mock<ILabelPersistenceResult> input;
         ShipmentEntity shipment;
         StoreEntity store;
         private readonly CompleteLabelStep testObject;
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             shipment = Create.Shipment(new OrderEntity()).AsOther().Set(x => x.ShipmentID, 1234).Build();
             store = Create.Store<StoreEntity>().Build();
 
-            input = mock.Mock<ISaveLabelResult>();
+            input = mock.Mock<ILabelPersistenceResult>();
             input.SetupGet(x => x.OriginalShipment).Returns(shipment);
             input.SetupGet(x => x.Store).Returns(store);
             input.SetupGet(x => x.Success).Returns(true);

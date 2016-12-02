@@ -17,12 +17,12 @@ namespace ShipWorks.Shipping.Tests.Carriers
     public class GenericShipmentPreProcessorTest : IDisposable
     {
         readonly AutoMock mock;
-        readonly GenericShipmentPreProcessor testObject;
+        readonly DefaultShipmentPreProcessor testObject;
 
         public GenericShipmentPreProcessorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<GenericShipmentPreProcessor>();
+            testObject = mock.Create<DefaultShipmentPreProcessor>();
         }
 
         public class WhenInitiallyReadyToShip : GenericShipmentPreProcessorTest

@@ -17,9 +17,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     [Component]
     public class SerialProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
-        readonly PrepareShipmentStep prepareShipmentTask;
-        readonly GetLabelStep getLabelTask;
-        readonly SaveLabelStep saveLabelTask;
+        readonly ShipmentPreparationStep prepareShipmentTask;
+        readonly LabelRetrievalStep getLabelTask;
+        readonly LabelPersistenceStep saveLabelTask;
         readonly CompleteLabelStep completeLabelTask;
         readonly IShippingManager shippingManager;
         readonly Func<Control> ownerRetriever;
@@ -29,9 +29,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         [NDependIgnoreTooManyParams]
         public SerialProcessShipmentsWorkflow(
-            PrepareShipmentStep prepareShipmentTask,
-            GetLabelStep getLabelTask,
-            SaveLabelStep saveLabelTask,
+            ShipmentPreparationStep prepareShipmentTask,
+            LabelRetrievalStep getLabelTask,
+            LabelPersistenceStep saveLabelTask,
             CompleteLabelStep completeLabelTask,
             IShippingManager shippingManager,
             Func<Control> ownerRetriever)
@@ -80,9 +80,9 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
             ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
 
-            IPrepareShipmentResult prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
-            IGetLabelResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
-            ISaveLabelResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
+            IShipmentPreparationResult prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
+            ILabelRetrievalResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
+            ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
             ICompleteLabelCreationResult completeLabelResult = completeLabelTask.Complete(saveLabelResult);
 
             // When we introduce Akka.net, the rest of this method would go into the reducer method

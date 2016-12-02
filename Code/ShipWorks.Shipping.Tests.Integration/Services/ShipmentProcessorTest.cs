@@ -9,7 +9,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.ShipmentProcessorSteps.GetLabel;
+using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
@@ -32,10 +32,10 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
-            context.Mock.SetupDefaultMocksForEnumerable<IGetLabelValidator>(item =>
+            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>
                 item.Setup(x => x.Validate(It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess()));
 
-            context.Mock.SetupDefaultMocksForEnumerable<IGetLabelManipulator>(item =>
+            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentManipulator>(item =>
                 item.Setup(x => x.Manipulate(It.IsAny<ShipmentEntity>())).Returns((ShipmentEntity s) => s));
 
             context.Mock.Provide<Control>(new Control());

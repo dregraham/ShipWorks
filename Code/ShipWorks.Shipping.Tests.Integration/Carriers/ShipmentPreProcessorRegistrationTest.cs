@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Where(x => x != ShipmentTypeCode.BestRate))
             {
                 IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(value);
-                Assert.IsType<GenericShipmentPreProcessor>(service);
+                Assert.IsType<DefaultShipmentPreProcessor>(service);
             }
         }
 

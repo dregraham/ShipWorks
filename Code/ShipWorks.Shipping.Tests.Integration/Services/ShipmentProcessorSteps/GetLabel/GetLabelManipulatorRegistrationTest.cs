@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
-using ShipWorks.Shipping.Services.ShipmentProcessorSteps.GetLabel;
+using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Startup;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services.ShipmentProcessorSteps.G
         [Fact]
         public void EnsureRegistrationOrder()
         {
-            var result = container.Resolve<IOrderedEnumerable<IGetLabelManipulator>>();
+            var result = container.Resolve<IOrderedEnumerable<ILabelRetrievalShipmentManipulator>>();
 
             Assert.IsType<EnsureLoadedManipulator>(result.ElementAt(0));
         }
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services.ShipmentProcessorSteps.G
         [Fact]
         public void EnsureAllManipulatorsAreRegistered()
         {
-            var result = container.Resolve<IOrderedEnumerable<IGetLabelManipulator>>();
+            var result = container.Resolve<IOrderedEnumerable<ILabelRetrievalShipmentManipulator>>();
             var types = result.Select(x => x.GetType()).ToList();
 
             Assert.Contains(typeof(EnsureLoadedManipulator), types);

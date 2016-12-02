@@ -24,8 +24,8 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [Fact]
         public void Registration_ComponentRegistered_ForService()
         {
-            var applicator = container.Resolve<IApplyOrderedManipulators<IThing, int>>();
-            Assert.IsType<ApplyOrderedManipulators<IThing, int>>(applicator);
+            var applicator = container.Resolve<IOrderedCompositeManipulator<IThing, int>>();
+            Assert.IsType<OrderedCompositeManipulator<IThing, int>>(applicator);
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [InlineData(1, 30)]
         public void Apply_WithManipulators_AppliesManipulatorsInCorrectOrder(int input, int expected)
         {
-            var applicator = container.Resolve<IApplyOrderedManipulators<IThing, int>>();
+            var applicator = container.Resolve<IOrderedCompositeManipulator<IThing, int>>();
             var result = applicator.Apply(input);
             Assert.Equal(expected, result);
         }
@@ -49,7 +49,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
 
             using (var container2 = ContainerInitializer.BuildRegistrations(builder.Build()))
             {
-                var applicator = container2.Resolve<IApplyOrderedManipulators<IThing, int>>();
+                var applicator = container2.Resolve<IOrderedCompositeManipulator<IThing, int>>();
                 var result = applicator.Apply(input);
                 Assert.Equal(expected, result);
             }
@@ -60,7 +60,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
         {
             using (var container2 = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build()))
             {
-                var applicator = container2.Resolve<IApplyOrderedManipulators<IThing, int>>();
+                var applicator = container2.Resolve<IOrderedCompositeManipulator<IThing, int>>();
                 Assert.Throws<InvalidOperationException>(() => applicator.Apply(0));
             }
         }

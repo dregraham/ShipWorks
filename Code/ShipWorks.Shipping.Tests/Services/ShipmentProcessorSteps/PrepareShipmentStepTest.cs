@@ -18,13 +18,13 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
     {
         readonly ShipmentEntity shipment;
         readonly AutoMock mock;
-        readonly PrepareShipmentStep testObject;
+        readonly ShipmentPreparationStep testObject;
         private ProcessShipmentState defaultInput;
 
         public PrepareShipmentStepTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<PrepareShipmentStep>();
+            testObject = mock.Create<ShipmentPreparationStep>();
             shipment = Create.Shipment(new OrderEntity()).AsBestRate().Set(x => x.ShipmentID = 2031).Build();
             defaultInput = new ProcessShipmentState(shipment, new Dictionary<long, Exception>(), null);
 

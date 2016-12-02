@@ -35,8 +35,8 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [Fact]
         public void Registration_ComponentRegistered_ForService()
         {
-            var applicator = container.Resolve<IApplyValidators<ITestValidator, int>>();
-            Assert.IsType<ApplyValidators<ITestValidator, int>>(applicator);
+            var applicator = container.Resolve<ICompositeValidator<ITestValidator, int>>();
+            Assert.IsType<CompositeValidator<ITestValidator, int>>(applicator);
         }
 
         [Theory]
@@ -44,7 +44,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [InlineData(1)]
         public void Apply_CallsAllValidators(int input)
         {
-            var applicator = container.Resolve<IApplyValidators<ITestValidator, int>>();
+            var applicator = container.Resolve<ICompositeValidator<ITestValidator, int>>();
             applicator.Apply(input);
 
             first.Verify(x => x.Validate(input));
@@ -61,7 +61,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
             second.Setup(x => x.Validate(It.IsAny<int>()))
                 .Returns(message == "second" ? Result.FromSuccess() : Result.FromError(message));
 
-            var applicator = container.Resolve<IApplyValidators<ITestValidator, int>>();
+            var applicator = container.Resolve<ICompositeValidator<ITestValidator, int>>();
             var result = applicator.Apply(0);
 
             Assert.True(result.Failure);
@@ -75,7 +75,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
             first.Setup(x => x.Validate(It.IsAny<int>())).Returns(Result.FromError("first"));
             second.Setup(x => x.Validate(It.IsAny<int>())).Returns(Result.FromError("second"));
 
-            var applicator = container.Resolve<IApplyValidators<ITestValidator, int>>();
+            var applicator = container.Resolve<ICompositeValidator<ITestValidator, int>>();
             var result = applicator.Apply(0);
 
             Assert.True(result.Failure);
@@ -90,7 +90,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
             first.Setup(x => x.Validate(It.IsAny<int>())).Returns(Result.FromSuccess());
             second.Setup(x => x.Validate(It.IsAny<int>())).Returns(Result.FromSuccess());
 
-            var applicator = container.Resolve<IApplyValidators<ITestValidator, int>>();
+            var applicator = container.Resolve<ICompositeValidator<ITestValidator, int>>();
             var result = applicator.Apply(0);
 
             Assert.True(result.Success);
@@ -102,7 +102,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
         {
             using (var container2 = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build()))
             {
-                var applicator = container2.Resolve<IApplyValidators<ITestValidator, int>>();
+                var applicator = container2.Resolve<ICompositeValidator<ITestValidator, int>>();
                 Assert.Throws<InvalidOperationException>(() => applicator.Apply(0));
             }
         }

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShipmentTypeManager shipmentTypeFactory;
         private readonly IShippingManager shippingManager;
-        readonly IKnowledgebase knowledgebase;
+        private readonly IKnowledgebase knowledgebase;
 
         /// <summary>
         /// Constructor
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Complete the label creation process
         /// </summary>
-        public ICompleteLabelCreationResult Complete(ISaveLabelResult result)
+        public ICompleteLabelCreationResult Complete(ILabelPersistenceResult result)
         {
             ShipmentEntity shipment = result.OriginalShipment;
             Exception exception = result.Exception;
