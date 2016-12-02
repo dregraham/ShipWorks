@@ -29,8 +29,13 @@ namespace ShipWorks.UI.Behaviors
         /// </remarks>
         private static void OnBoundPasswordChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            PasswordBox passwordBox = ((PasswordBoxBindingBehavior) d).AssociatedObject;
-            string newPassword = ((SecureString) e.NewValue).ToInsecureString();
+            PasswordBox passwordBox = ((PasswordBoxBindingBehavior) d)?.AssociatedObject;
+            if (passwordBox == null)
+            {
+                return;
+            }
+
+            string newPassword = ((SecureString) e.NewValue)?.ToInsecureString();
             if (passwordBox.Password != newPassword)
             {
                 passwordBox.Password = newPassword;

@@ -18,14 +18,14 @@ namespace ShipWorks.UI.ValueConverters
         /// <summary>
         /// Constructor
         /// </summary>
-        public BooleanConverter(T trueValue, T falseValue) : this(trueValue, falseValue, false)
+        protected BooleanConverter(T trueValue, T falseValue) : this(trueValue, falseValue, false)
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BooleanConverter(T trueValue, T falseValue, bool inDesignMode)
+        protected BooleanConverter(T trueValue, T falseValue, bool inDesignMode)
         {
             True = trueValue;
             False = falseValue;

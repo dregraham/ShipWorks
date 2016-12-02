@@ -113,6 +113,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -172,6 +173,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverterTest.cs" />
     <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
@@ -270,6 +272,10 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1F6A1DC6-DD72-4279-8747-6789F83711FF}</Project>
+      <Name>ShipWorks.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

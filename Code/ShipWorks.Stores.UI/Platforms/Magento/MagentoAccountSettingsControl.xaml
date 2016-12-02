@@ -20,25 +20,26 @@
         <magentoEnums:MagentoVersion x:Key="MagentoConnect">MagentoConnect</magentoEnums:MagentoVersion>
         <magentoEnums:MagentoVersion x:Key="MagentoTwo">MagentoTwo</magentoEnums:MagentoVersion>
         <magentoEnums:MagentoVersion x:Key="MagentoTwoREST">MagentoTwoREST</magentoEnums:MagentoVersion>
+        <local:MagentoVersionToGridHeightConverter x:Key="MagentoVersionToGridHeightConverter" />
     </Control.Resources>
     <Grid Margin="10">
         <Grid.Resources>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="Padding" Value="2" />
-            </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="4" />
+            <Setter Property="Padding" Value="2" />
+        </Style>
             <Style TargetType="{x:Type PasswordBox}">
                 <Setter Property="Margin" Value="4" />
                 <Setter Property="Padding" Value="2" />
             </Style>
-            <Style TargetType="{x:Type RadioButton}">
-                <Setter Property="Margin" Value="20 4 0 4" />
-            </Style>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="Margin" Value="20 4 0 4" />
+        </Style>
         </Grid.Resources>
         <StackPanel Margin="0">
             <StackPanel>
@@ -77,7 +78,7 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="{Binding MagentoVersion, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MagentoVersionToGridHeightConverter}}" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
                                Grid.Column="0"
