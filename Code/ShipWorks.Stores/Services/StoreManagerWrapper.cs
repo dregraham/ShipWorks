@@ -26,10 +26,8 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Creates the online status filters for the given store.
         /// </summary>
-        public void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store)
-        {
+        public void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store) =>
             StoreManager.CreateStoreStatusFilters(owner, store);
-        }
 
         /// <summary>
         /// Check for any changes that may have been made

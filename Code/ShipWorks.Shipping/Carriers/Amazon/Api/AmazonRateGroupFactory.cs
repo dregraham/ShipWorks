@@ -68,9 +68,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 rateGroup.AddFootnoteFactory(new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory(carrierNames));
             }
 
-            messenger.Send(new AmazonRatesRetrievedMessage(this, rateGroup));
+            RateGroup filteredRateGroup = rateFilters.Aggregate(rateGroup, (rates, filter) => filter.Filter(rates));
 
-            return rateFilters.Aggregate(rateGroup, (rates, filter) => filter.Filter(rates));
+            messenger.Send(new AmazonRatesRetrievedMessage(this, filteredRateGroup));
+
+            return filteredRateGroup;
         }
 
         /// <summary>

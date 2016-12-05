@@ -2,7 +2,7 @@
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
+namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 {
     /// <summary>
     /// ShipWorks update that should be applied for a specific version
@@ -12,6 +12,12 @@ namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
     /// </remarks>
     public class V_03_12_00_00 : IVersionSpecificUpdate
     {
+        /// <summary>
+        /// This isn't critical. We don't want AV filters showing up after every upgrade
+        /// if the user doesn't want them...
+        /// </summary>
+        public bool AlwaysRun => false;
+
         /// <summary>
         /// To which version does this update apply
         /// </summary>

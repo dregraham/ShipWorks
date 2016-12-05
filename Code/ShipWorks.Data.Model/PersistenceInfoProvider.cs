@@ -1948,7 +1948,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "OrderTotal", "OrderTotal", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 7);
 			this.AddElementFieldMapping("OrderEntity", "LocalStatus", "LocalStatus", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("OrderEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
-			this.AddElementFieldMapping("OrderEntity", "OnlineLastModified", "OnlineLastModified", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 10);
+			this.AddElementFieldMapping("OrderEntity", "OnlineLastModified", "OnlineLastModified", false, "DateTime2", 0, 7, 0, false, "", null, typeof(System.DateTime), 10);
 			this.AddElementFieldMapping("OrderEntity", "OnlineCustomerID", "OnlineCustomerID", true, "Variant", 0, 0, 0, false, "", null, typeof(System.Object), 11);
 			this.AddElementFieldMapping("OrderEntity", "OnlineStatus", "OnlineStatus", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("OrderEntity", "OnlineStatusCode", "OnlineStatusCode", true, "Variant", 0, 0, 0, false, "", null, typeof(System.Object), 13);

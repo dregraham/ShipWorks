@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
@@ -37,7 +38,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            EnumHelper.BindComboBox<CreditCardType>(cardType);
+            // Load the card types
+            EnumHelper.BindComboBox<CreditCardTypeInternal>(cardType);
 
             // Set the minimum/maximum value of the credit card expiration month and year to adjust
             // for the current date
@@ -113,6 +115,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
             }
 
             StringBuilder validationMessages = new StringBuilder();
+
+            if (!Regex.IsMatch(creditCardNumber.Text, @"^(?!-)(?!.*--)(?!.*  )[0-9- ]+(?<!-)$"))
+            {
+                validationMessages.AppendLine("Credit card number");
+            }
 
             if (string.IsNullOrEmpty(cardholderName.Text))
             {
