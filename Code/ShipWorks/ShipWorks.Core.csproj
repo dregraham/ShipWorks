@@ -930,6 +930,7 @@
     <Compile Include="Data\Administration\SqlSchemaVersion.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\Connection\SqlDateTimeProvider.cs" />
+    <Compile Include="Data\Connection\SqlServerInfo.cs" />
     <Compile Include="Data\DataProviderWrapper.cs" />
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />

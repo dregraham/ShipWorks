@@ -814,7 +814,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks();
+            Telemetry.TrackStartShipworks(SqlServerInfo.Fetch());
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
