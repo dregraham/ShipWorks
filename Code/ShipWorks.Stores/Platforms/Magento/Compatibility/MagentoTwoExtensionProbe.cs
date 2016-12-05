@@ -18,19 +18,8 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         /// <summary>
         /// Check to see if the store is compatible with Magento 1
         /// </summary>
-        public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store)
-        {
-            // First try just the given url
-            GenericResult<Uri> result = ProbeUrl($"{store.ModuleUrl}/admin");
-
-            if (!result.Success)
-            {
-                // If the given url doesnt work try adding shipworks3.php
-                result = ProbeUrl($"{store.ModuleUrl.TrimEnd('/')}/admin/rest/V1/shipworks");
-            }
-
-            return result;
-        }
+        public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store) => 
+            ProbeUrl(store.ModuleUrl);
 
         /// <summary>
         /// Probe the given url to see if it is a ShipWorks Magento Two Extension
@@ -41,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 
             try
             {
-                request.Uri = new Uri(url);
+                request.Uri = new Uri($"{url.TrimEnd('/')}/rest/V1/shipworks");
                 request.AllowAutoRedirect = false;
                 using (IHttpResponseReader response = request.GetResponse())
                 {
@@ -59,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
                 return GenericResult.FromError("Exception occurred while attempting to connect to ShipWorks Module.", request.Uri);
             }
 
-            return GenericResult.FromSuccess(request.Uri);
+            return GenericResult.FromSuccess(new Uri(url.TrimEnd('/')));
         }
     }
 }

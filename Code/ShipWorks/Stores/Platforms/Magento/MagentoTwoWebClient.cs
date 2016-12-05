@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     {
         private readonly MagentoStoreEntity store;
 
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -101,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
             {
-                Uri = new Uri(Store.ModuleUrl + $"{path}"),
+                Uri = new Uri(Store.ModuleUrl + "/rest/V1/shipworks" + $"{path}"),
                 Verb = HttpVerb.Get
             };
 
