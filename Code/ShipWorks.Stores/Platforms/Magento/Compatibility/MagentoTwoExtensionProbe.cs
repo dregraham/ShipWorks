@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         /// </summary>
         private GenericResult<Uri> ProbeUrl(string url)
         {
-            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter {Verb = HttpVerb.Get};
+            MagentoHttpRequestSubmitter request = new MagentoHttpRequestSubmitter() {Verb = HttpVerb.Get};
 
             try
             {

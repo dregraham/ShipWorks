@@ -25,7 +25,6 @@ namespace Interapptive.Shared.Net
         private bool expect100Continue = true;
 
         // Allow .NET to handle redirect errors by automatically re-requesting.  default to the .NET default of True
-        private bool allowAutoRedirect = true;
 
         // HTTP KeepAlive, defaulting to the .NET default
         private bool keepAlive = true;
@@ -54,11 +53,7 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Gets or sets whether or not HTTP Redirect/Moved codes will cause a re-request automatically
         /// </summary>
-        public bool AllowAutoRedirect
-        {
-            get { return allowAutoRedirect; }
-            set { allowAutoRedirect = value; }
-        }
+        public bool AllowAutoRedirect { get; set; } = true;
 
         /// <summary>
         /// Get or Set whether or not the Expect http header is sent with the request
@@ -145,7 +140,8 @@ namespace Interapptive.Shared.Net
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
             webRequest.UserAgent = DefaultUserAgent;
-            webRequest.AllowAutoRedirect = allowAutoRedirect;
+
+            SetAllowAutoRedirect(webRequest);
 
             // If it's not get set the content type and redirect option.  Set them before applying the headers, so any headers will override
             if (Verb != HttpVerb.Get)
@@ -257,6 +253,22 @@ namespace Interapptive.Shared.Net
             }
 
             return new HttpResponseReader(webRequest, webResponse);
+        }
+
+        /// <summary>
+        /// Sets the allow automatic redirect
+        /// </summary>
+        /// <remarks>
+        /// This is old logic and I'm not sure why it the verb matters, but in order to 
+        /// mitigate risk, I'm putting this in a virtual class so that this behavior can be
+        /// overridden. This logic has been here since Vault...
+        /// </remarks>
+        protected virtual void SetAllowAutoRedirect(HttpWebRequest webRequest)
+        {
+            if (Verb != HttpVerb.Get)
+            {
+                webRequest.AllowAutoRedirect = AllowAutoRedirect;
+            }
         }
 
         /// <summary>

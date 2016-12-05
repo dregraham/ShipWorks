@@ -162,6 +162,11 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\Magento\Compatibility\MagentoOneConnectProbe.cs" />
+    <Compile Include="Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
+    <Compile Include="Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
+    <Compile Include="Platforms\Magento\Compatibility\MagentoTwoRestProbe.cs" />
+    <Compile Include="Platforms\Magento\MagentoHttpRequestSubmitter.cs" />
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
