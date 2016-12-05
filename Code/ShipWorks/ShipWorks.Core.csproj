@@ -1612,6 +1612,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Shipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\ShippingAssignment.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\StatusHistory.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\Total.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestUploadShipmentRequest.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoDotOne\OrdersResponse.cs" />

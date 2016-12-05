@@ -206,6 +206,9 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
         [JsonProperty("items")]
         public IEnumerable<Item> Items { get; set; }
 
+        [JsonProperty("status_histories")]
+        public IEnumerable<StatusHistory> StatusHistories { get; set; }
+
         [JsonProperty("billing_address")]
         public BillingAddress BillingAddress { get; set; }
 

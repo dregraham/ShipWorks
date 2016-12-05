@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
@@ -102,6 +103,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
             LoadAddresses(orderEntity, magentoOrder);
+            LoadNotes(orderEntity, magentoOrder);
 
             if (orderEntity.IsNew)
             {
@@ -112,6 +114,23 @@ namespace ShipWorks.Stores.Platforms.Magento
                 ((MagentoOrderEntity) orderEntity).MagentoOrderID = magentoOrder.EntityId;
                 LoadItems(orderEntity, magentoOrder.Items);
                 LoadOrderCharges(orderEntity, magentoOrder);
+            }
+        }
+
+        /// <summary>
+        /// Load the orders notes
+        /// </summary>
+        private void LoadNotes(OrderEntity orderEntity, Order magentoOrder)
+        {
+            foreach (StatusHistory history in magentoOrder.StatusHistories)
+            {
+                DateTime noteDate;
+                if (!DateTime.TryParse(history.CreatedAt, out noteDate))
+                {
+                    noteDate = DateTime.UtcNow;
+                }
+
+                InstantiateNote(orderEntity, history.Comment, noteDate, NoteVisibility.Internal, true);
             }
         }
 
