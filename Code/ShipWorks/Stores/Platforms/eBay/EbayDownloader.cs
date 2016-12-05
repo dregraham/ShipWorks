@@ -497,56 +497,27 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateOrderAddress(EbayOrderEntity order, WebServices.AddressType address)
         {
-            // Put the downloaded address in an adapter
-            AddressAdapter downloadedShipAddress = new AddressAdapter
-            {
-                Street1 = address.Street1 ?? "",
-                Street2 = address.Street2 ?? "",
-                City = address.CityName ?? "",
-                StateProvCode = address.StateOrProvince == null ? string.Empty : Geography.GetStateProvCode(address.StateOrProvince) ?? "",
-                PostalCode = address.PostalCode ?? "",
-                CountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : ""
-            };
-
-            if (!DoesDownloadedAddressMatchOriginal(order, downloadedShipAddress))
-            {
-                // overwrite address with downloaded address
-                AddressAdapter orderAddressAdapter = new AddressAdapter(order, "Ship");
-                AddressAdapter.Copy(downloadedShipAddress, orderAddressAdapter);
-            }
+            // overwrite address with downloaded address
+            order.ShipStreet1 = address.Street1 ?? "";
+            order.ShipStreet2 = address.Street2 ?? "";
+            order.ShipCity = address.CityName ?? "";
+            order.ShipStateProvCode = address.StateOrProvince == null ? string.Empty : Geography.GetStateProvCode(address.StateOrProvince) ?? "";
+            order.ShipPostalCode = address.PostalCode ?? "";
+            order.ShipCountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : "";
+            order.ShipCompany = address.CompanyName ?? "";
+            order.ShipPhone = address.Phone ?? "";
 
             // Split the name
             PersonName personName = PersonName.Parse(address.Name);
 
             order.ShipNameParseStatus = (int) personName.ParseStatus;
             order.ShipUnparsedName = personName.UnparsedName;
-            order.ShipCompany = address.CompanyName ?? "";
             order.ShipFirstName = personName.First;
             order.ShipMiddleName = personName.Middle;
             order.ShipLastName = personName.Last;
-            order.ShipPhone = address.Phone ?? "";
-
+            
             // Fill in billing address from the shipping
             PersonAdapter.Copy(order, "Ship", order, "Bill");
-        }
-
-        /// <summary>
-        /// Does the downloaded address match original.
-        /// </summary>
-        private static bool DoesDownloadedAddressMatchOriginal(EbayOrderEntity order, AddressAdapter downloadedShipAddress)
-        {
-            bool downloadAddressMatchesOriginal = false;
-
-            // See if there is an original address and if it matches the downloaded address.
-            ValidatedAddressEntity originalAddress =
-                ValidatedAddressManager.GetOriginalAddress(SqlAdapter.Default, order.OrderID, "Ship");
-
-            if (originalAddress != null)
-            {
-                AddressAdapter originalAddressAdapter = new AddressAdapter(originalAddress, "");
-                downloadAddressMatchesOriginal = (originalAddressAdapter == downloadedShipAddress);
-            }
-            return downloadAddressMatchesOriginal;
         }
 
         /// <summary>
