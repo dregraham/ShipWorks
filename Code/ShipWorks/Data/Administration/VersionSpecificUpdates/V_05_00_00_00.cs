@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.ApplicationCore.Licensing;
 
-namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
+namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 {
     /// <summary>
     /// ShipWorks update that should be applied for a specific version
@@ -13,14 +13,21 @@ namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
     public class V_05_00_00_00 : IVersionSpecificUpdate
     {
         private readonly Func<string, ICustomerLicense> getCustomerLicense;
+        private readonly IConfigurationData configurationData;
+
+        /// <summary>
+        /// Always run just in case it has never been run before.
+        /// </summary>
+        public bool AlwaysRun => true;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="customerLicense"></param>
-        public V_05_00_00_00(Func<string, ICustomerLicense> getCustomerLicense)
+        public V_05_00_00_00(Func<string, ICustomerLicense> getCustomerLicense, IConfigurationData configurationData)
         {
             this.getCustomerLicense = getCustomerLicense;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -29,13 +36,18 @@ namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
         public Version AppliesTo => new Version(5, 0, 0, 0);
 
         /// <summary>
-        /// Execute the update
+        /// Execute the update if there is no customerkey.
         /// </summary>
         public void Update()
         {
-            ICustomerLicense customerLicense = getCustomerLicense(string.Empty);
+            configurationData.CheckForChangesNeeded();
 
-            customerLicense.Save();
+            if (string.IsNullOrEmpty(configurationData.FetchReadOnly().CustomerKey))
+            {
+                ICustomerLicense customerLicense = getCustomerLicense(string.Empty);
+
+                customerLicense.Save();
+            } 
         }
     }
 }

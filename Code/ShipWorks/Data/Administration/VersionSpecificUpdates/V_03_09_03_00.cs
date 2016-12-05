@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
+namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 {
     /// <summary>
     /// ShipWorks update that should be applied for a specific version
@@ -11,6 +11,11 @@ namespace ShipWorks.Data.Administration.VersionSpeicifcUpdates
     /// </remarks>
     public class V_03_09_03_00 : IVersionSpecificUpdate
     {
+        /// <summary>
+        /// Always run just in case it has never been run before.
+        /// </summary>
+        public bool AlwaysRun => true;
+        
         /// <summary>
         /// To which version does this update apply
         /// </summary>
