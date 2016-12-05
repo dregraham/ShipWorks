@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
             {
-                Uri = new Uri(Store.ModuleUrl + "/orders/update")
+                Uri = new Uri(Store.ModuleUrl + "/rest/V1/shipworks/orders/update")
             };
 
             // Generate the body of the request and add it to our request
