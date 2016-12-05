@@ -244,7 +244,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             string response = ProcessRequest("GetProduct", request);
 
-            product = DeserializeResponse <Product>(response);
+            product = DeserializeResponse<Product>(response);
             productCache[sku] = product;
 
             return product;
