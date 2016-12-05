@@ -112,19 +112,36 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             optionsControl.LoadSettings();
 
-            if (!allowRegisteringExistingAccount)
+            SetupAllowNewAccountUI();
+
+            SetupWizardPages();
+
+            if (UspsAccount == null)
             {
-                // Registering an existing account is not allowed, so choose new account (since the options have
-                // been hidden from the user)
-                radioNewAccount.Checked = true;
-                radioExistingAccount.Checked = false;
-            }
-            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
-            {
-                radioNewAccount.Checked = false;
-                radioExistingAccount.Checked = true;
+                SetupDefaultAccount();
             }
 
+            // Hide the panel that lets the customer select to register a new account or use an existing account
+            // until USPS has enabled ShipWorks to register new accounts
+            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
+
+            SetupUsageTypes();
+
+            CopyPostalRules();
+
+            if (InitialAccountAddress != null)
+            {
+                // Pre-load the person control with our initial account address (in the event an account is being
+                // created via the Activate Postage Discount dialog
+                PersonControl.LoadEntity(InitialAccountAddress);
+            }
+        }
+
+        /// <summary>
+        /// Setup the wizard pages used by this registration
+        /// </summary>
+        private void SetupWizardPages()
+        {
             Pages.Add(new ShippingWizardPageOrigin(shipmentType));
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
@@ -141,41 +158,56 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 wizardPageOptions.StepNext += OnStepNextPageOptions;
             }
+        }
 
-            if (UspsAccount == null)
+        /// <summary>
+        /// Setup the UI for whether account creation is allowed
+        /// </summary>
+        private void SetupAllowNewAccountUI()
+        {
+            if (!allowRegisteringExistingAccount)
             {
-                // Set default values on the USPS account and load the person control. Now the stampsAccount will
-                // can be referred to throughout the wizard via the personControl
-                UspsAccount = new UspsAccountEntity
-                {
-                    CountryCode = "US",
-                    ContractType = (int) UspsAccountContractType.Unknown,
-                    CreatedDate = DateTime.UtcNow
-                };
-
-                UspsAccount.InitializeNullsToDefault();
-
-                personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
+                // Registering an existing account is not allowed, so choose new account (since the options have
+                // been hidden from the user)
+                radioNewAccount.Checked = true;
+                radioExistingAccount.Checked = false;
             }
+            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
+            {
+                radioNewAccount.Checked = false;
+                radioExistingAccount.Checked = true;
+            }
+        }
 
-            // Hide the panel that lets the customer select to register a new account or use an existing account
-            // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
-
+        /// <summary>
+        /// Setup usage types drop down
+        /// </summary>
+        private void SetupUsageTypes()
+        {
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
             uspsUsageType.SelectedIndex = 0;
+        }
 
-            CopyPostalRules();
-
-            if (InitialAccountAddress != null)
+        /// <summary>
+        /// Setup a default account
+        /// </summary>
+        private void SetupDefaultAccount()
+        {
+            // Set default values on the USPS account and load the person control. Now the stampsAccount will
+            // can be referred to throughout the wizard via the personControl
+            UspsAccount = new UspsAccountEntity
             {
-                // Pre-load the person control with our initial account address (in the event an account is being
-                // created via the Activate Postage Discount dialog
-                PersonControl.LoadEntity(InitialAccountAddress);
-            }
+                CountryCode = "US",
+                ContractType = (int) UspsAccountContractType.Unknown,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            UspsAccount.InitializeNullsToDefault();
+
+            personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
         }
 
         /// <summary>
