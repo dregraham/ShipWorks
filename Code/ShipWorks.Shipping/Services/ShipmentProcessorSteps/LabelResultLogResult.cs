@@ -7,12 +7,12 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     /// <summary>
     /// Results of completing the label creation process
     /// </summary>
-    public class CompleteLabelCreationResult : ICompleteLabelCreationResult
+    public class LabelResultLogResult : ILabelResultLogResult
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public CompleteLabelCreationResult(ILabelPersistenceResult result, bool worldshipExported, string errorMessage,
+        public LabelResultLogResult(ILabelPersistenceResult result, bool worldshipExported, string errorMessage,
             IInsufficientFunds outOfFundsException, ITermsAndConditionsException termsAndConditionsException)
         {
             OriginalShipment = result.OriginalShipment;

@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         readonly ShipmentPreparationStep prepareShipmentTask;
         readonly LabelRetrievalStep getLabelTask;
         readonly LabelPersistenceStep saveLabelTask;
-        readonly CompleteLabelStep completeLabelTask;
+        readonly LabelResultLogStep completeLabelTask;
         readonly IShippingManager shippingManager;
         readonly Func<Control> ownerRetriever;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ShipmentPreparationStep prepareShipmentTask,
             LabelRetrievalStep getLabelTask,
             LabelPersistenceStep saveLabelTask,
-            CompleteLabelStep completeLabelTask,
+            LabelResultLogStep completeLabelTask,
             IShippingManager shippingManager,
             Func<Control> ownerRetriever)
         {
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             IShipmentPreparationResult prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
             ILabelRetrievalResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
             ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
-            ICompleteLabelCreationResult completeLabelResult = completeLabelTask.Complete(saveLabelResult);
+            ILabelResultLogResult completeLabelResult = completeLabelTask.Complete(saveLabelResult);
 
             // When we introduce Akka.net, the rest of this method would go into the reducer method
             if (!string.IsNullOrEmpty(completeLabelResult.ErrorMessage))

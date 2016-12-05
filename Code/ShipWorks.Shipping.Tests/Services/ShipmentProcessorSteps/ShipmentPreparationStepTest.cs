@@ -14,14 +14,14 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 {
-    public class PrepareShipmentStepTest : IDisposable
+    public class ShipmentPreparationStepTest : IDisposable
     {
         readonly ShipmentEntity shipment;
         readonly AutoMock mock;
         readonly ShipmentPreparationStep testObject;
         private ProcessShipmentState defaultInput;
 
-        public PrepareShipmentStepTest()
+        public ShipmentPreparationStepTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<ShipmentPreparationStep>();

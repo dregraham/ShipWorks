@@ -15,15 +15,15 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 {
-    public class CompleteLabelStepTest : IDisposable
+    public class LabelResultLogStep : IDisposable
     {
         readonly AutoMock mock;
         Mock<ILabelPersistenceResult> input;
         ShipmentEntity shipment;
         StoreEntity store;
-        private readonly CompleteLabelStep testObject;
+        private readonly Shipping.Services.ShipmentProcessorSteps.LabelResultLogStep testObject;
 
-        public CompleteLabelStepTest()
+        public LabelResultLogStep()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             input.SetupGet(x => x.Store).Returns(store);
             input.SetupGet(x => x.Success).Returns(true);
 
-            testObject = mock.Create<CompleteLabelStep>();
+            testObject = mock.Create<Shipping.Services.ShipmentProcessorSteps.LabelResultLogStep>();
         }
 
         [Fact]

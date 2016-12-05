@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     /// <summary>
     /// Results of completing the label creation process
     /// </summary>
-    public interface ICompleteLabelCreationResult
+    public interface ILabelResultLogResult
     {
         /// <summary>
         /// Shipment being processed

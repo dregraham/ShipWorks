@@ -180,7 +180,7 @@
     <Compile Include="Services\RatesRetrieverTests.cs" />
     <Compile Include="Services\ShipmentFactoryTest.cs" />
     <Compile Include="Services\ShipmentLoaderServiceTest.cs" />
-    <Compile Include="Services\ShipmentProcessorSteps\CompleteLabelStepTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogStep.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalStepTest.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\AllowedShipmentTypeValidatorTest.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\POBoxLicenseValidatorTest.cs" />
@@ -190,8 +190,8 @@
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ResidentialStatusManipulatorTest.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ShipmentPhoneManipulatorTest.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\SupportsReturnsManipulatorTest.cs" />
-    <Compile Include="Services\ShipmentProcessorSteps\PrepareShipmentStepTest.cs" />
-    <Compile Include="Services\ShipmentProcessorSteps\SaveLabelStepTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ShipmentPreparationStepTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelPersistanceStep.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapperTest.cs" />
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />

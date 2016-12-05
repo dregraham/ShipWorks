@@ -60,6 +60,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 try
                 {
+                    // Insurance makes multiple web calls so it's done outside of the transaction
+                    if (insureShipService.IsInsuredByInsureShip(shipment))
+                    {
+                        log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
+                        insureShipService.Insure(shipment, result.Store);
+                        log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+                    }
+
                     // Transacted
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
@@ -69,13 +77,6 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                         DateTime shipmentDate = dateTimeProvider.UtcNow;
 
                         log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
-
-                        if (insureShipService.IsInsuredByInsureShip(shipment))
-                        {
-                            log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
-                            insureShipService.Insure(shipment, result.Store);
-                            log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
-                        }
 
                         // Now that the label is generated, we can reset the shipping fields the store changed back to their
                         // original values before saving to the database

@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     /// Last step in the label creation process
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class CompleteLabelStep
+    public class LabelResultLogStep
     {
         private readonly ILog log;
         private readonly IShippingErrorManager errorManager;
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// Constructor
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public CompleteLabelStep(IShipmentTypeManager shipmentTypeFactory,
+        public LabelResultLogStep(IShipmentTypeManager shipmentTypeFactory,
             IShippingManager shippingManager,
             IShippingErrorManager errorManager,
             ISqlAdapterFactory sqlAdapterFactory,
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Complete the label creation process
         /// </summary>
-        public ICompleteLabelCreationResult Complete(ILabelPersistenceResult result)
+        public ILabelResultLogResult Complete(ILabelPersistenceResult result)
         {
             ShipmentEntity shipment = result.OriginalShipment;
             Exception exception = result.Exception;
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
             errorMessage = RefreshShipment(shipment, errorMessage);
 
-            return new CompleteLabelCreationResult(result, worldshipExported, errorMessage, outOfFundsException, termsAndConditionsException);
+            return new LabelResultLogResult(result, worldshipExported, errorMessage, outOfFundsException, termsAndConditionsException);
         }
 
         /// <summary>

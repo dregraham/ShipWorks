@@ -267,8 +267,8 @@
     <Compile Include="Services\OrderLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessor.cs" />
     <Compile Include="Services\ShipmentProcessorExecutionState.cs" />
-    <Compile Include="Services\ShipmentProcessorSteps\CompleteLabelCreationResult.cs" />
-    <Compile Include="Services\ShipmentProcessorSteps\CompleteLabelStep.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogStep.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalStep.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\EditionLicenseValidator.cs" />
@@ -281,7 +281,7 @@
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ResidentialStatusManipulator.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ShipmentPhoneManipulator.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\SupportsReturnsManipulator.cs" />
-    <Compile Include="Services\ShipmentProcessorSteps\ICompleteLabelCreationResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ILabelResultLogResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\ILabelRetrievalResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\IShipmentPreparationResult.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\ILabelPersistenceResult.cs" />
