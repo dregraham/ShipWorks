@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility.Json;
 using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class Order : IOrder
+    public class Order
     {
         [JsonProperty("adjustment_negative")]
         public double AdjustmentNegative { get; set; }
@@ -206,19 +204,15 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
         public double Weight { get; set; }
 
         [JsonProperty("items")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IEnumerable<IItem>, List<Item>>))]
-        public IEnumerable<IItem> Items { get; set; }
+        public IEnumerable<Item> Items { get; set; }
 
         [JsonProperty("billing_address")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IBillingAddress, BillingAddress>))]
-        public IBillingAddress BillingAddress { get; set; }
+        public BillingAddress BillingAddress { get; set; }
 
         [JsonProperty("payment")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IPayment, Payment>))]
-        public IPayment Payment { get; set; }
+        public Payment Payment { get; set; }
 
         [JsonProperty("extension_attributes")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IExtensionAttributes, ExtensionAttributes>))]
-        public IExtensionAttributes ExtensionAttributes { get; set; }
+        public ExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

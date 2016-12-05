@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -89,26 +88,26 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Get orders from the given store/start date
         /// </summary>
-        public IOrdersResponse GetOrders(DateTime? start, int currentPage)
+        public OrdersResponse GetOrders(DateTime? start, int currentPage)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}"));
             AddOrdersSearchCriteria(request, start, currentPage);
 
             string response = ProcessRequest("GetOrders", request);
-            return DeserializeResponse<IOrdersResponse, OrdersResponse, DTO.MagentoTwoDotZero.OrdersResponse>(response);
+            return DeserializeResponse<OrdersResponse>(response);
         }
 
         /// <summary>
         /// Gets a single Magento order with detailed information (attributes)
         /// </summary>
-        public IOrder GetOrder(long magentoOrderId)
+        public Order GetOrder(long magentoOrderId)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{OrdersEndpoint}/{magentoOrderId}"));
 
             string response = ProcessRequest("GetOrder", request);
-            return DeserializeResponse<IOrder, Order, DTO.MagentoTwoDotZero.Order>(response);
+            return DeserializeResponse<Order>(response);
         }
 
         /// <summary>
@@ -217,24 +216,24 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets the specified item
         /// </summary>
-        public IItem GetItem(long itemID)
+        public Item GetItem(long itemID)
         {
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
                 new Uri($"{storeUri.AbsoluteUri}/{ItemsEndpoint}/{itemID}"));
 
             string response = ProcessRequest("GetItem", request);
 
-            return DeserializeResponse<IItem, Item, DTO.MagentoTwoDotZero.Item>(response);
+            return DeserializeResponse<Item>(response);
         }
 
         /// <summary>
         /// Gets the product for the speified sku
         /// </summary>
-        public IProduct GetProduct(string sku)
+        public Product GetProduct(string sku)
         {
-            LruCache<string, IProduct> productCache = MagentoProductCache.Instance.GetStoreProductCache(store.StoreID);
+            LruCache<string, Product> productCache = MagentoProductCache.Instance.GetStoreProductCache(store.StoreID);
 
-            IProduct product = productCache[sku];
+            Product product = productCache[sku];
             if (product != null)
             {
                 return productCache[sku];
@@ -245,7 +244,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             string response = ProcessRequest("GetProduct", request);
 
-            product = DeserializeResponse <IProduct, Product, Product>(response);
+            product = DeserializeResponse <Product>(response);
             productCache[sku] = product;
 
             return product;
@@ -331,31 +330,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Deserializes the response
         /// </summary>
-        /// <typeparam name="TCommonInterface">The interface being returned.</typeparam>
-        /// <typeparam name="TFirstTypeToTry">An Implementation of TCommonInterface. We attempt to deserialize the string as this type first.</typeparam>
-        /// <typeparam name="TSecondTypeToTry">
-        /// An Implementation of TCommonInterface.
-        /// If deserialization to the first type fails, we attempt to deserialize the string as this type.
-        /// </typeparam>
-        /// <param name="response">The response.</param>
-        /// <returns>The deserialized string as either TfirstTypeToTry or TSecondTypeToTry if the first fails</returns>
-        private TCommonInterface DeserializeResponse<TCommonInterface, TFirstTypeToTry, TSecondTypeToTry>(string response)
-            where TFirstTypeToTry : TCommonInterface where TSecondTypeToTry : TCommonInterface
+        private T DeserializeResponse<T>(string response)
         {
             try
             {
-                return JsonConvert.DeserializeObject<TFirstTypeToTry>(response);
+                return JsonConvert.DeserializeObject<T>(response);
             }
             catch (Exception ex)
             {
-                try
-                {
-                    return JsonConvert.DeserializeObject<TSecondTypeToTry>(response);
-                }
-                catch (Exception)
-                {
-                    throw new MagentoException($"Failed to deserialize {typeof(TCommonInterface)}", ex);
-                }
+                throw new MagentoException($"Failed to deserialize {typeof(T)}", ex);
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -13,12 +13,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets Orders from the store using the start date
         /// </summary>
-        IOrdersResponse GetOrders(DateTime? start, int currentPage);
+        OrdersResponse GetOrders(DateTime? start, int currentPage);
 
         /// <summary>
         /// Gets a single Magento order with detailed information (attributes)
         /// </summary>
-        IOrder GetOrder(long magentoOrderId);
+        Order GetOrder(long magentoOrderId);
 
         /// <summary>
         /// Gets a token for the given username/password
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Gets the specified item
         /// </summary>
         /// <returns></returns>
-        IItem GetItem(long itemId);
+        Item GetItem(long itemId);
 
         /// <summary>
         /// Gets the product for the given sku
@@ -64,6 +64,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Product is similar to item except it contains product details
         /// and is not order specific details like option names and image urls
         /// </returns>
-        IProduct GetProduct(string sku);
+        Product GetProduct(string sku);
     }
 }

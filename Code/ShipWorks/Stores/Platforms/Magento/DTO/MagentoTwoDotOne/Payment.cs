@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class Payment : IPayment
+    public class Payment
     {
         [JsonProperty("account_status")]
         public string AccountStatus { get; set; }

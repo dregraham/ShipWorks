@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class BillingAddress : IBillingAddress
+    public class BillingAddress
     {
         [JsonProperty("address_type")]
         public string AddressType { get; set; }

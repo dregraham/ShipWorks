@@ -21,7 +21,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.DTO;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Templates.Tokens;
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void UpdateAsComplete(bool emailCustomer, MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
-            IOrder order = webClient.GetOrder(orderEntity.MagentoOrderID);
+            Order order = webClient.GetOrder(orderEntity.MagentoOrderID);
             string shipmentDetails = GetShipmentDetails(orderEntity, processedComments, emailCustomer,
                 order.Items);
             string invoice = GetInvoice(orderEntity, order.Items);
@@ -147,12 +147,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets the invoice.
         /// </summary>
-        private string GetInvoice(MagentoOrderEntity orderEntity, IEnumerable<IItem> items)
+        private string GetInvoice(MagentoOrderEntity orderEntity, IEnumerable<Item> items)
         {
             MagentoInvoiceRequest request = new MagentoInvoiceRequest();
             request.Invoice.MagentoOrderID = orderEntity.MagentoOrderID;
 
-            foreach (IItem item in items)
+            foreach (Item item in items)
             {
                 MagentoInvoiceItem magentoInvoiceItem = new MagentoInvoiceItem
                 {
@@ -170,7 +170,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// First tries to get the actual quantity from the ShipWorks order, but if it cannot
         /// match the item, return the quantity from Magento
         /// </summary>
-        private double GetQuantity(MagentoOrderEntity orderEntity, IItem magentoItem)
+        private double GetQuantity(MagentoOrderEntity orderEntity, Item magentoItem)
         {
             return
                 orderEntity.OrderItems.FirstOrDefault(
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets the shipment details string from the request
         /// </summary>
-        private string GetShipmentDetails(MagentoOrderEntity orderEntity, string comments, bool emailCustomer, IEnumerable<IItem> items)
+        private string GetShipmentDetails(MagentoOrderEntity orderEntity, string comments, bool emailCustomer, IEnumerable<Item> items)
         {
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderEntity.OrderID);
             if (shipment == null)
@@ -232,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 request.Items = new List<ShipmentItem>();
 
-                foreach (IItem item in items)
+                foreach (Item item in items)
                 {
                     ShipmentItem magentoInvoiceItem = new ShipmentItem()
                     {

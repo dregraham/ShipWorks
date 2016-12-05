@@ -1,10 +1,8 @@
-﻿using Interapptive.Shared.Utility.Json;
-using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+﻿using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class ConfigurableItemOption : IConfigurableItemOption
+    public class ConfigurableItemOption
     {
         [JsonProperty("option_id")]
         public string OptionId { get; set; }
@@ -13,7 +11,6 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
         public int OptionValue { get; set; }
 
         [JsonProperty("extension_attributes")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IExtensionAttributes, ExtensionAttributes>))]
-        public IExtensionAttributes ExtensionAttributes { get; set; }
-}
+        public ExtensionAttributes ExtensionAttributes { get; set; }
+    }
 }

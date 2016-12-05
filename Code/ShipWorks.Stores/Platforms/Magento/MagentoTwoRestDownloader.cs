@@ -10,7 +10,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
@@ -70,9 +70,9 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 do
                 {
-                    IOrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
+                    OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
                     totalOrders = ordersResponse.TotalCount;
-                    foreach (IOrder magentoOrder in ordersResponse.Orders)
+                    foreach (Order magentoOrder in ordersResponse.Orders)
                     {
                         MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "",
                             "");
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(OrderEntity orderEntity, IOrder magentoOrder)
+        public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
         {
             orderEntity.OnlineLastModified =
                 DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
@@ -118,9 +118,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the addresses.
         /// </summary>
-        private void LoadAddresses(OrderEntity orderEntity, IOrder magentoOrder)
+        private void LoadAddresses(OrderEntity orderEntity, Order magentoOrder)
         {
-            IShippingAddress shippingAddress =
+            ShippingAddress shippingAddress =
                 magentoOrder.ExtensionAttributes.ShippingAssignments.FirstOrDefault()?.Shipping.Address;
 
             if (shippingAddress != null)
@@ -143,7 +143,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 };
             }
 
-            IBillingAddress billingAddress = magentoOrder.BillingAddress;
+            BillingAddress billingAddress = magentoOrder.BillingAddress;
 
             if (billingAddress != null)
             {
@@ -169,9 +169,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the items.
         /// </summary>
-        private void LoadItems(OrderEntity orderEntity, IEnumerable<IItem> items)
+        private void LoadItems(OrderEntity orderEntity, IEnumerable<Item> items)
         {
-            foreach (IItem item in items.Where(i => i.ProductType != "configurable"))
+            foreach (Item item in items.Where(i => i.ProductType != "configurable"))
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
@@ -182,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderItem.UnitPrice = Convert.ToDecimal(item.ParentItem?.Price ?? item.Price);
                 orderItem.Weight = item.Weight;
 
-                IItem magentoOrderItem = webClient.GetItem(item.ItemId);
+                Item magentoOrderItem = webClient.GetItem(item.ItemId);
 
                 if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
                 {
@@ -191,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                 if (magentoOrderItem?.ParentItemId != null)
                 {
-                    IItem magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
+                    Item magentoParentOrderItem = webClient.GetItem(magentoOrderItem.ParentItemId.Value);
 
                     if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
                     {
@@ -204,20 +204,20 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Add all of the custom options for the order item
         /// </summary>
-        private void AddCustomOptions(OrderItemEntity item, IEnumerable<ICustomOption> customOptions)
+        private void AddCustomOptions(OrderItemEntity item, IEnumerable<CustomOption> customOptions)
         {
-            ICustomOption[] options = customOptions as ICustomOption[] ?? customOptions.ToArray();
+            CustomOption[] options = customOptions as CustomOption[] ?? customOptions.ToArray();
 
             if (options.Any())
             {
                 try
                 {
                     // We have to get the option from magento to get the option title
-                    IProduct product = webClient.GetProduct(item.SKU);
+                    Product product = webClient.GetProduct(item.SKU);
 
-                    foreach (ICustomOption option in options)
+                    foreach (CustomOption option in options)
                     {
-                        IProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+                        ProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
 
                         OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
                         orderItemAttribute.Description = option.OptionValue;
@@ -237,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order charges.
         /// </summary>
-        private void LoadOrderCharges(OrderEntity orderEntity, IOrder magentoOrder)
+        private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
         {
             if (Math.Abs(magentoOrder.TaxAmount) > .001)
             {

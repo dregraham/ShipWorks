@@ -1,10 +1,8 @@
-﻿using Interapptive.Shared.Utility.Json;
-using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+﻿using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class Item : IItem
+    public class Item
     {
         [JsonProperty("amount_refunded")]
         public double AmountRefunded { get; set; }
@@ -154,11 +152,9 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
         public int? ParentItemId { get; set; }
 
         [JsonProperty("parent_item")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IParentItem, ParentItem>))]
-        public IParentItem ParentItem { get; set; }
+        public ParentItem ParentItem { get; set; }
 
         [JsonProperty("product_option")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IProductOption, ProductOption>))]
-        public IProductOption ProductOption { get; set; }
+        public ProductOption ProductOption { get; set; }
     }
 }

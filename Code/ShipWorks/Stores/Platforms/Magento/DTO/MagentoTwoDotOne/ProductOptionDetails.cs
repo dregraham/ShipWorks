@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class ProductOptionDetail : IProductOptionDetail
+    public class ProductOptionDetail
     {
         [JsonProperty("product_sku")]
         public string ProductSku { get; set; }

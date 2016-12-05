@@ -1,20 +1,16 @@
-﻿using Interapptive.Shared.Utility.Json;
-using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
+﻿using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class Shipping : IShipping
+    public class Shipping
     {
         [JsonProperty("address")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<IShippingAddress, ShippingAddress>))]
-        public IShippingAddress Address { get; set; }
+        public ShippingAddress Address { get; set; }
 
         [JsonProperty("method")]
         public string Method { get; set; }
 
         [JsonProperty("total")]
-        [JsonConverter(typeof(InterfaceToClassJsonConverter<ITotal, Total>))]
-        public ITotal Total { get; set; }
+        public Total Total { get; set; }
     }
 }

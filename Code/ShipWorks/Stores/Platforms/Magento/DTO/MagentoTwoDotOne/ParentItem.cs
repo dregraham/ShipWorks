@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class ParentItem : IParentItem
+    public class ParentItem
     {
         [JsonProperty("amount_refunded")]
         public double AmountRefunded { get; set; }

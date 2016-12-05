@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Magento.DTO.Interfaces;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
 {
-    public class Total : ITotal
+    public class Total
     {
         [JsonProperty("base_shipping_amount")]
         public double BaseShippingAmount { get; set; }
