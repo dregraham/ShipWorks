@@ -25,6 +25,7 @@ using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
@@ -56,8 +57,8 @@ namespace ShipWorks.Data.Administration
         WindowsInstallerDownloadPage pageFirstPrerequisite;
 
         // The sql installers
-        SqlServerInstaller sqlInstaller;
-        SqlServerInstaller localDbUpgrader;
+        SqlServerInstaller sqlServerInstaller;
+        SqlServerInstaller localsqlServerInstaller;
 
         // List of instances installed during the lifetime of the wizard
         List<string> installedInstances = new List<string>();
@@ -137,13 +138,11 @@ namespace ShipWorks.Data.Administration
 
             this.setupMode = setupMode;
 
-            sqlInstaller = new SqlServerInstaller();
-            sqlInstaller.InitializeForCurrentSqlSession();
-            sqlInstaller.Exited += new EventHandler(OnInstallerSqlServerExited);
+            sqlServerInstaller = new SqlServerInstaller();
+            sqlServerInstaller.Exited += OnInstallerSqlServerExited;
 
-            localDbUpgrader = new SqlServerInstaller();
-            localDbUpgrader.InitializeForCurrentSqlSession();
-            localDbUpgrader.Exited += new EventHandler(OnUpgradeLocalDbExited);
+            localsqlServerInstaller = new SqlServerInstaller();
+            localsqlServerInstaller.Exited += OnUpgradeLocalDbExited;
 
             // Remove the placeholder...
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
@@ -280,7 +279,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 // Setup which first page the user will see
-                if (SqlServerInstaller.IsSqlServer2012Supported)
+                if (SqlServerInstaller.IsSqlServer2016Supported || SqlServerInstaller.IsSqlServer2014Supported)
                 {
                     Pages.Remove(wizardPageChooseWisely2008);
 
@@ -426,7 +425,7 @@ namespace ShipWorks.Data.Administration
         private void OnStepNextUpgradeLocalDb(object sender, WizardStepEventArgs e)
         {
             // If it was installed, but needs a reboot, move to the last page (which will now be the reboot page)
-            if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired || SqlServerInstaller.IsErrorCodeRebootRequiredBeforeInstall(localDbUpgrader.LastExitCode))
+            if (localsqlServerInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired || SqlServerInstaller.IsErrorCodeRebootRequiredBeforeInstall(localsqlServerInstaller.LastExitCode))
             {
                 e.NextPage = Pages[Pages.Count - 1];
                 return;
@@ -455,7 +454,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                localDbUpgradedInstance = localDbUpgrader.UpgradeLocalDb();
+                localDbUpgradedInstance = localsqlServerInstaller.UpgradeLocalDb();
 
                 progressUpdgradeLocalDb.Value = 0;
                 progressLocalDbTimer.Start();
@@ -485,8 +484,10 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         void OnUpgradeLocalDbProgressTimer(object sender, EventArgs e)
         {
-            FileInfo fileInfo = new FileInfo(localDbUpgrader.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install));
-            long expectedFileSize = localDbUpgrader.GetInstallerFileLength(SqlServerInstallerPurpose.Install);
+            ISqlInstallerInfo sqlInstallerInfo = localsqlServerInstaller.GetSqlInstaller(SqlServerInstallerPurpose.Install);
+            long expectedFileSize = sqlInstallerInfo.FileSize;
+
+            FileInfo fileInfo = new FileInfo(localsqlServerInstaller.GetInstallerLocalFilePath(sqlInstallerInfo));
 
             // Not downloaded at all
             if (!fileInfo.Exists)
@@ -527,7 +528,7 @@ namespace ShipWorks.Data.Administration
             progressLocalDbTimer.Stop();
 
             // If it was successful, we should now be able to connect.
-            if (localDbUpgrader.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(localDbUpgradedInstance))
+            if (localsqlServerInstaller.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(localDbUpgradedInstance))
             {
                 sqlSession.Configuration.Username = "sa";
                 sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
@@ -545,7 +546,7 @@ namespace ShipWorks.Data.Administration
 
                 MoveNext();
             }
-            else if (localDbUpgrader.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired || SqlServerInstaller.IsErrorCodeRebootRequiredBeforeInstall(localDbUpgrader.LastExitCode))
+            else if (localsqlServerInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired || SqlServerInstaller.IsErrorCodeRebootRequiredBeforeInstall(localsqlServerInstaller.LastExitCode))
             {
                 Pages.Add(new RebootRequiredPage(
                     "some prerequisites",
@@ -562,7 +563,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "Support for remote connections could not be enabled.\n\n" + SqlServerInstaller.FormatReturnCode(localDbUpgrader.LastExitCode));
+                    "Support for remote connections could not be enabled.\n\n" + SqlServerInstaller.FormatReturnCode(localsqlServerInstaller.LastExitCode));
 
                 NextEnabled = true;
                 BackEnabled = true;
@@ -1460,7 +1461,7 @@ namespace ShipWorks.Data.Administration
         private void OnStepNextInstallSqlServer(object sender, WizardStepEventArgs e)
         {
             // If it was installed, but needs a reboot, move to the last page (which will now be the reboot page)
-            if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            if (sqlServerInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 e.NextPage = Pages[Pages.Count - 1];
                 return;
@@ -1487,7 +1488,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                sqlInstaller.InstallSqlServer(instanceName.Text, SqlInstanceUtility.ShipWorksSaPassword);
+                sqlServerInstaller.InstallSqlServer(instanceName.Text, SqlInstanceUtility.ShipWorksSaPassword);
 
                 progressPreparing.Value = 0;
                 progressInstallTimer.Start();
@@ -1517,8 +1518,10 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         void OnInstallSqlServerProgressTimer(object sender, EventArgs e)
         {
-            FileInfo fileInfo = new FileInfo(sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Install));
-            long expectedFileSize = sqlInstaller.GetInstallerFileLength(SqlServerInstallerPurpose.Install);
+            ISqlInstallerInfo sqlInstallerInfo = localsqlServerInstaller.GetSqlInstaller(SqlServerInstallerPurpose.Install);
+            long expectedFileSize = sqlInstallerInfo.FileSize;
+
+            FileInfo fileInfo = new FileInfo(sqlServerInstaller.GetInstallerLocalFilePath(sqlInstallerInfo));
 
             // Not downloaded at all
             if (!fileInfo.Exists)
@@ -1559,7 +1562,7 @@ namespace ShipWorks.Data.Administration
             progressInstallTimer.Stop();
 
             // If it was successful, we should now be able to connect.
-            if (sqlInstaller.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))
+            if (sqlServerInstaller.LastExitCode == 0 && SqlInstanceUtility.IsSqlInstanceInstalled(instanceName.Text))
             {
                 sqlSession.Configuration.Username = "sa";
                 sqlSession.Configuration.Password = SqlInstanceUtility.ShipWorksSaPassword;
@@ -1576,7 +1579,7 @@ namespace ShipWorks.Data.Administration
 
                 MoveNext();
             }
-            else if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            else if (sqlServerInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 Pages.Add(new RebootRequiredPage(
                     "SQL Server",
@@ -1594,7 +1597,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "SQL Server was not installed.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
+                    "SQL Server was not installed.\n\n" + SqlServerInstaller.FormatReturnCode(sqlServerInstaller.LastExitCode));
 
                 NextEnabled = true;
                 BackEnabled = true;
@@ -1801,7 +1804,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the page to login to be able to restore a ShipWorks backup.
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnSteppingIntoRestoreLogin(object sender, WizardSteppingIntoEventArgs e)
         {
             userForRestore = -1;

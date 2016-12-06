@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             // If the installer is already available, just skip over the download.
-            if (!SqlServerInstaller.IsDotNet35Required || DotNet35Installer.IsRedistributableAvailable)
+            if (SqlServerInstaller.IsDotNet35Sp1Installed || DotNet35Installer.IsRedistributableAvailable)
             {
                 e.Skip = true;
 

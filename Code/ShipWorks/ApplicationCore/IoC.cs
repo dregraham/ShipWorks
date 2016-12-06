@@ -10,6 +10,7 @@ using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
@@ -23,6 +24,7 @@ using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
@@ -85,7 +87,19 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<ClrHelper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             builder.RegisterType<DateTimeProvider>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<EnvironmentWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<SqlInstallerRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             // If its installed now, we are ok to move on.
-            if (!SqlServerInstaller.IsDotNet35Required)
+            if (SqlServerInstaller.IsDotNet35Sp1Installed)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = true;
@@ -60,7 +60,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             // If its installed now, we are ok to move on.
-            if (!SqlServerInstaller.IsDotNet35Required || dotNet35Installed)
+            if (SqlServerInstaller.IsDotNet35Sp1Installed || dotNet35Installed)
             {
                 e.NextPage = pageAfterInstaller;
                 return;
@@ -107,7 +107,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             DotNet35Installer installer = (DotNet35Installer) sender;
 
             // If it was successful, we should now be able to connect.
-            if (!SqlServerInstaller.IsDotNet35Required || installer.LastExitCode == 0 || installer.LastExitCode == 3010 || installer.LastExitCode == 1614 )
+            if (SqlServerInstaller.IsDotNet35Sp1Installed || installer.LastExitCode == 0 || installer.LastExitCode == 3010 || installer.LastExitCode == 1614 )
             {
                 dotNet35Installed = true;
 

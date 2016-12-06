@@ -297,7 +297,7 @@ namespace ShipWorks
                 {
 
                     // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                    if (SqlServerInstaller.IsSqlServer2012Supported)
+                    if (SqlServerInstaller.IsSqlServer2016Supported || SqlServerInstaller.IsSqlServer2014Supported)
                     {
                         using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
                         {
