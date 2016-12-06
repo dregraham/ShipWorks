@@ -70,7 +70,7 @@ namespace ShipWorks.Data.Administration
         {
             InitializeComponent();
 
-            sqlServerInstaller = new SqlServerInstaller();
+            sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
             sqlServerInstaller.Exited += OnPrepareAutomaticDatabaseExited;
 
             this.lifetimeScope = lifetimeScope;

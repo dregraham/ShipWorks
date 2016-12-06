@@ -43,8 +43,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
     {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(SqlServerInstaller));
-        private static readonly IClrHelper clrHelper;
-        private static readonly IEnumerable<ISqlInstallerInfo> sqlInstallerInfos;
+        private readonly IClrHelper clrHelper;
+        private readonly IEnumerable<ISqlInstallerInfo> sqlInstallerInfos;
 
         // Custom install error codes
         const int msdeUpgrade08Failed = -200;
@@ -66,17 +66,14 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// Raised when the installation executable has exited
         /// </summary>
         public event EventHandler Exited;
-
+        
         /// <summary>
         /// Static constructor
         /// </summary>
-        static SqlServerInstaller()
+        public SqlServerInstaller(ISqlInstallerRepository sqlInstallerRepository, IClrHelper clrHelper)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                sqlInstallerInfos = scope.Resolve<ISqlInstallerRepository>().SqlInstallersForThisMachine();
-                clrHelper = scope.Resolve<IClrHelper>();
-            }
+            this.clrHelper = clrHelper;
+            sqlInstallerInfos = sqlInstallerRepository.SqlInstallersForThisMachine();
         }
 
         #region Initialization and Detection
@@ -92,7 +89,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Indicates if SQL Server 2016 is supported on the current computer
         /// </summary>
-        public static bool IsSqlServer2016Supported
+        public bool IsSqlServer2016Supported
         {
             get
             {
@@ -103,7 +100,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Indicates if SQL Server 2014 is supported on the current computer
         /// </summary>
-        public static bool IsSqlServer2014Supported
+        public bool IsSqlServer2014Supported
         {
             get
             {
@@ -137,7 +134,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// SQL Server requires .NET 3.5
         /// </summary>
-        public static bool IsDotNet35Sp1Installed
+        public bool IsDotNet35Sp1Installed
         {
             get
             {
@@ -1014,98 +1011,105 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     throw new CommandLineCommandArgumentException(CommandName, "action", "The required 'action' parameter was not specified.");
                 }
 
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ExecuteInternal(action, instance, sapassword, lifetimeScope);
+                }
+            }
+
+            /// <summary>
+            /// Execute the actual work for the command.
+            /// </summary>
+            void ExecuteInternal(string action, string instance, string sapassword, ILifetimeScope lifetimeScope)
+            {
                 // Normally this happens as a part of app startup, but not when running command line.
                 SqlSession.Initialize();
+
+                SqlServerInstaller installer = lifetimeScope.Resolve<SqlServerInstaller>();
 
                 try
                 {
                     switch (action)
                     {
                         case "upgrade":
+                        {
+                            // Can't specific instance or password for upgrade - we use SqlSession
+                            if (instance != null || sapassword != null)
                             {
-                                // Can't specific instance or password for upgrade - we use SqlSession
-                                if (instance != null || sapassword != null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
-                                }
-
-                                log.InfoFormat("Processing request to upgrade SQL Sever");
-
-
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
-
-                                UpgradeSqlServerInternal(
-                                    installer.GetInstallerLocalFilePath(sqlInstallerInfo),
-                                    SqlSession.Current);
-
-                                break;
+                                throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
                             }
+
+                            log.InfoFormat("Processing request to upgrade SQL Sever");
+
+                            // We need to initialize an installer to get the correct installer package exe's
+                            ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
+
+                            UpgradeSqlServerInternal(
+                                installer.GetInstallerLocalFilePath(sqlInstallerInfo),
+                                SqlSession.Current);
+
+                            break;
+                        }
 
                         case "install":
+                        {
+                            log.InfoFormat("Processing request to install sql server. {0}", instance);
+
+                            if (instance == null)
                             {
-                                log.InfoFormat("Processing request to install sql server. {0}", instance);
-
-                                if (instance == null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                                }
-
-                                if (sapassword == null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
-                                }
-
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InstallSqlServerInternal(instance, sapassword);
-
-                                break;
+                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
                             }
+
+                            if (sapassword == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
+                            }
+
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.InstallSqlServerInternal(instance, sapassword);
+
+                            break;
+                        }
 
                         case "localdb":
-                            {
-                                log.InfoFormat("Processing request to install LocalDB.");
+                        {
+                            log.InfoFormat("Processing request to install LocalDB.");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InstallLocalDbInternal();
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.InstallLocalDbInternal();
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case "upgradelocaldb":
+                        {
+                            log.InfoFormat("Processing request to upgrade local db. {0}", instance);
+
+                            if (instance == null)
                             {
-                                log.InfoFormat("Processing request to upgrade local db. {0}", instance);
-
-                                if (instance == null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                                }
-
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.UpgradeLocalDbInternal(instance);
-
-                                break;
+                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
                             }
+
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.UpgradeLocalDbInternal(instance);
+
+                            break;
+                        }
 
                         case "assignautomaticdbname":
-                            {
-                                log.InfoFormat("Processing request to assign automatic database name.");
+                        {
+                            log.InfoFormat("Processing request to assign automatic database name.");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.AssignAutomaticDatabaseNameInternal();
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.AssignAutomaticDatabaseNameInternal();
 
-                                break;
-                            }
+                            break;
+                        }
 
                         default:
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
-                            }
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                        }
                     }
                 }
                 catch (Win32Exception ex)

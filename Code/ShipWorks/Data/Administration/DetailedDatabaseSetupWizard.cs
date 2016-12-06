@@ -138,10 +138,10 @@ namespace ShipWorks.Data.Administration
 
             this.setupMode = setupMode;
 
-            sqlServerInstaller = new SqlServerInstaller();
+            sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
             sqlServerInstaller.Exited += OnInstallerSqlServerExited;
 
-            localsqlServerInstaller = new SqlServerInstaller();
+            localsqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
             localsqlServerInstaller.Exited += OnUpgradeLocalDbExited;
 
             // Remove the placeholder...
@@ -278,8 +278,10 @@ namespace ShipWorks.Data.Administration
             }
             else
             {
+                SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
+
                 // Setup which first page the user will see
-                if (SqlServerInstaller.IsSqlServer2016Supported || SqlServerInstaller.IsSqlServer2014Supported)
+                if (sqlServerInstaller.IsSqlServer2016Supported || sqlServerInstaller.IsSqlServer2014Supported)
                 {
                     Pages.Remove(wizardPageChooseWisely2008);
 

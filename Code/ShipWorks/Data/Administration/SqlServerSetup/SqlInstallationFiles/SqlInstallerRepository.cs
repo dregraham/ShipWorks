@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles
 {
     /// <summary>
     /// Class that creates SqlInstallerInfo objects
     /// </summary>
+    [Component]
     public class SqlInstallerRepository : ISqlInstallerRepository
     {
         private List<ISqlInstallerInfo> sqlInstallers = new List<ISqlInstallerInfo>();

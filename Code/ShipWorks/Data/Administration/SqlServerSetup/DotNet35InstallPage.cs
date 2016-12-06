@@ -9,7 +9,9 @@ using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using ShipWorks.ApplicationCore.Interaction;
 using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -39,11 +41,16 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            // If its installed now, we are ok to move on.
-            if (SqlServerInstaller.IsDotNet35Sp1Installed)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.Skip = true;
-                e.RaiseStepEventWhenSkipping = true;
+                SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
+
+                // If its installed now, we are ok to move on.
+                if (sqlServerInstaller.IsDotNet35Sp1Installed)
+                {
+                    e.Skip = true;
+                    e.RaiseStepEventWhenSkipping = true;
+                }
             }
         }
 
@@ -59,11 +66,16 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 return;
             }
 
-            // If its installed now, we are ok to move on.
-            if (SqlServerInstaller.IsDotNet35Sp1Installed || dotNet35Installed)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.NextPage = pageAfterInstaller;
-                return;
+                SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
+
+                // If its installed now, we are ok to move on.
+                if (sqlServerInstaller.IsDotNet35Sp1Installed || dotNet35Installed)
+                {
+                    e.NextPage = pageAfterInstaller;
+                    return;
+                }
             }
 
             Cursor.Current = Cursors.WaitCursor;
@@ -106,28 +118,33 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             DotNet35Installer installer = (DotNet35Installer) sender;
 
-            // If it was successful, we should now be able to connect.
-            if (SqlServerInstaller.IsDotNet35Sp1Installed || installer.LastExitCode == 0 || installer.LastExitCode == 3010 || installer.LastExitCode == 1614 )
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dotNet35Installed = true;
+                SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
 
-                // Add the reboot page as the last page, so it has the finish button.
-                if (installer.LastExitCode > 0)
+                // If it was successful, we should now be able to connect.
+                if (sqlServerInstaller.IsDotNet35Sp1Installed || installer.LastExitCode == 0 || installer.LastExitCode == 3010 || installer.LastExitCode == 1614)
                 {
-                    Wizard.Pages.Add(rebootPage);
+                    dotNet35Installed = true;
+
+                    // Add the reboot page as the last page, so it has the finish button.
+                    if (installer.LastExitCode > 0)
+                    {
+                        Wizard.Pages.Add(rebootPage);
+                    }
+
+                    Wizard.MoveNext();
                 }
+                else
+                {
+                    MessageHelper.ShowError(this,
+                        "The .NET Framework SQL Components were not installed.\n\n" + DotNet35Installer.FormatReturnCode(installer.LastExitCode));
 
-                Wizard.MoveNext();
-            }
-            else
-            {
-                MessageHelper.ShowError(this,
-                    "The .NET Framework SQL Components were not installed.\n\n" + DotNet35Installer.FormatReturnCode(installer.LastExitCode));
-
-                // Reset the gui
-                panelInstallDotNet35.BringToFront();
-                Wizard.NextEnabled = true;
-                Wizard.BackEnabled = true;
+                    // Reset the gui
+                    panelInstallDotNet35.BringToFront();
+                    Wizard.NextEnabled = true;
+                    Wizard.BackEnabled = true;
+                }
             }
         }
 

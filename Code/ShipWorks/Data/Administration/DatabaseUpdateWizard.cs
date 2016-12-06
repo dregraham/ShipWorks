@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
@@ -39,6 +40,8 @@ namespace ShipWorks.Data.Administration
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseUpdateWizard));
 
+        private ILifetimeScope lifetimeScope;
+        
         // Version of the database installed
         Version installed;
 
@@ -77,23 +80,26 @@ namespace ShipWorks.Data.Administration
                 return false;
             }
 
-            using (DatabaseUpdateWizard dlg = new DatabaseUpdateWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return dlg.ShowDialog(owner) == DialogResult.OK;
+                using (DatabaseUpdateWizard dlg = new DatabaseUpdateWizard(lifetimeScope))
+                {
+                    return dlg.ShowDialog(owner) == DialogResult.OK;
+                }
             }
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private DatabaseUpdateWizard()
+        private DatabaseUpdateWizard(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
             installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
-            sqlServerInstaller = new SqlServerInstaller();
+            sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
             sqlServerInstaller.Exited += OnUpgraderSqlServerExited;
 
             ISqlInstallerInfo sqlInstallerInfo = sqlServerInstaller.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);

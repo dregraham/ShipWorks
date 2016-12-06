@@ -83,6 +83,7 @@ namespace Interapptive.Shared.Utility
                 }
             }
         }
+
         /// <summary>
         /// Checking the version using >= will enable forward compatibility.
         /// </summary>

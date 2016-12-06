@@ -24,6 +24,7 @@ using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 using ShipWorks.Editions;
@@ -88,20 +89,14 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<ClrHelper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+                .AsImplementedInterfaces();
 
             builder.RegisterType<DateTimeProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterType<EnvironmentWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<SqlInstallerRepository>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+                .AsImplementedInterfaces();
 
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
@@ -110,6 +105,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterInstance(Messenger.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
+
+            builder.RegisterType<SqlServerInstaller>()
+                .AsSelf();
 
             builder.RegisterType<StampsAddressValidationWebClient>()
                 .AsImplementedInterfaces()
