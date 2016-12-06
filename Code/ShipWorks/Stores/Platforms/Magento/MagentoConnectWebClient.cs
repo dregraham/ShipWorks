@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Class for communivating with MagentoConnect module
     /// </summary>
     [Component]
-    public class MagentoConnectWebClient : MagentoWebClient, IMagentoConnectWebClient
+    public class MagentoConnectWebClient : MagentoWebClient
     {
         // SOAP proxy
         MagentoService service = null;
