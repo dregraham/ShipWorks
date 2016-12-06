@@ -32,8 +32,8 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         /// <summary>
         /// Uploads comments only
-       /// </summary>
-        void UploadComments(string comments, long magentoOrderID);
+        /// </summary>
+        void UploadComments(string comments, long magentoOrderID, bool commentsOnly);
 
         /// <summary>
         /// Place a hold on a Magento order

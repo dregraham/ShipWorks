@@ -170,12 +170,19 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Uploads comments only
         /// </summary>
-        public void UploadComments(string comments, long magentoOrderID)
+        public void UploadComments(string comments, long magentoOrderID, bool commentsOnly)
         {
+            string status = string.Empty;
+
+            if (commentsOnly)
+            {
+                status = $", \"status\":\"{GetOrder(magentoOrderID).Status}\"";
+            }
+
             HttpJsonVariableRequestSubmitter submitter = GetRequestSubmitter(HttpVerb.Post,
                 new Uri($"{storeUri.AbsoluteUri}/{string.Format(CommentEndpoint, magentoOrderID)}"));
 
-            submitter.RequestBody = $"{{\"statusHistory\":{{\"comment\":\"{comments}\"}}}}";
+            submitter.RequestBody = $"{{\"statusHistory\":{{\"comment\":\"{comments}\"{status}}}}}";
 
             ProcessRequest("UploadComments", submitter);
         }

@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     UploadAsCancel(webClient, processedComments, magentoOrderID);
                     break;
                 case MagentoUploadCommand.Comments:
-                    UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
+                    UploadCommentsIfPresent(webClient, processedComments, magentoOrderID, true);
                     break;
             }
 
@@ -123,16 +123,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void UploadAsCancel(IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
+            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID, false);
             webClient.CancelOrder(magentoOrderID);
-            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
         }
         /// <summary>
         /// Takes order off hold and saves online status
         /// </summary>
         private void UpdateAsPending(IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
+            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID, false);
             webClient.UnholdOrder(magentoOrderID);
-            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void UpdateAsHold(MagentoOrderEntity orderEntity, IMagentoTwoRestClient webClient, string processedComments, long magentoOrderID)
         {
+            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID, false);
             webClient.HoldOrder(orderEntity.MagentoOrderID);
-            UploadCommentsIfPresent(webClient, processedComments, magentoOrderID);
         }
 
         /// <summary>
@@ -181,11 +181,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Tell web client to upload comments if they are present
         /// </summary>
-        private void UploadCommentsIfPresent(IMagentoTwoRestClient webClient, string comments, long magentoOrderID)
+        private void UploadCommentsIfPresent(IMagentoTwoRestClient webClient, string comments, long magentoOrderID, bool commentsOnly)
         {
             if (!string.IsNullOrWhiteSpace(comments))
             {
-                webClient.UploadComments(comments, magentoOrderID);
+                webClient.UploadComments(comments, magentoOrderID, commentsOnly);
             }
         }
 
