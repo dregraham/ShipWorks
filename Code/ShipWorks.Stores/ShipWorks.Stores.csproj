@@ -166,6 +166,7 @@
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoRestProbe.cs" />
+    <Compile Include="Platforms\Magento\IMagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoHttpRequestSubmitter.cs" />
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloader.cs" />

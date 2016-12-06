@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     {
         private readonly MagentoStoreEntity store;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
+        private readonly IMagentoProductCache magentoProductCache;
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ItemsEndpoint = "rest/V1/orders/items";
@@ -37,10 +38,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestClient"/> class.
         /// </summary>
-        public MagentoTwoRestClient(MagentoStoreEntity store, IEncryptionProviderFactory encryptionProviderFactory)
+        public MagentoTwoRestClient(MagentoStoreEntity store, IEncryptionProviderFactory encryptionProviderFactory, IMagentoProductCache magentoProductCache)
         {
             this.store = store;
             this.encryptionProviderFactory = encryptionProviderFactory;
+            this.magentoProductCache = magentoProductCache;
             storeUri = new Uri(store.ModuleUrl);
         }
 
@@ -239,7 +241,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public Product GetProduct(string sku)
         {
-            LruCache<string, Product> productCache = MagentoProductCache.Instance.GetStoreProductCache(store.StoreID);
+            LruCache<string, Product> productCache = magentoProductCache.GetStoreProductCache(store.StoreID);
 
             Product product = productCache[sku];
             if (product != null)
