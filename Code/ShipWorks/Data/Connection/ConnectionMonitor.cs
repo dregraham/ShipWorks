@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Connection
         // Once this goes true, no further connections can be made.
         static volatile bool connectionLost = false;
 
-        // Sycnronization between threads for Database Reconnecting
+        // Synchronization between threads for Database Reconnecting
         static ManualResetEvent reconnectEvent = new ManualResetEvent(false);
 
         /// <summary>
@@ -80,6 +80,11 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Time of the last reconnection
+        /// </summary>
+        public static DateTime LastReconnection { get; private set; }
+
+        /// <summary>
         /// Used to check if any background threads have detected a database disconnect and
         /// are waiting to be reconnected.  This is called from the Heartbeat to pickup/reconnect
         /// background disconnects.
@@ -121,6 +126,8 @@ namespace ShipWorks.Data.Connection
                     {
                         connectionLost = true;
                     }
+
+                    LastReconnection = DateTime.Now;
 
                     // signal to all waiting threads that the reconnect process has completed.  Completion doesn't not indicate a reconnect,
                     // just that we are done trying
