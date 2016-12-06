@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {

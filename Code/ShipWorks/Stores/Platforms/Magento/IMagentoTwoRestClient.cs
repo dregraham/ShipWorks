@@ -1,6 +1,6 @@
 ﻿using System;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {

@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.Collections;
 using ShipWorks.Stores.Platforms.Magento;
-using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Magento

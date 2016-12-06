@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 
-namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
+namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 {
     [Component]
     public class OrdersResponse

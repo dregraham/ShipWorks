@@ -12,7 +12,7 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento

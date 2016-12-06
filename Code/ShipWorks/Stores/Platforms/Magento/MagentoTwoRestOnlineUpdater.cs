@@ -21,7 +21,9 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.DTO;
-using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoRestShipment;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestInvoice;
+using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Templates.Tokens;
 

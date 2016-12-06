@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoDotOne
+namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 {
     public class CustomOption
     {
