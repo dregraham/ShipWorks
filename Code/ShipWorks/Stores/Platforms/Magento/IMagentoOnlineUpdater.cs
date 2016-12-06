@@ -3,6 +3,9 @@ using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
+    /// <summary>
+    /// Updates Magento Shipment Details
+    /// </summary>
     public interface IMagentoOnlineUpdater
     {
         /// <summary>

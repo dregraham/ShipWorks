@@ -242,7 +242,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
-                return (GenericStoreOnlineUpdater) IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IMagentoOnlineUpdater>(MagentoVersion.MagentoTwoREST, new TypedParameter(typeof(GenericModuleStoreEntity), Store));
+                return (GenericStoreOnlineUpdater) IoC.UnsafeGlobalLifetimeScope
+                    .ResolveKeyed<IMagentoOnlineUpdater>(MagentoVersion.MagentoTwoREST, new TypedParameter(typeof(GenericModuleStoreEntity), Store));
             }
 
             return new MagentoOnlineUpdater((GenericModuleStoreEntity)Store);

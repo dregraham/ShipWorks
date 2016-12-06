@@ -11,7 +11,7 @@ namespace ShipWorks.UI.ValueConverters
     /// <summary>
     /// Converts the boolean results of the lambda with the given input to another type.
     /// </summary>
-    [Obfuscation(Exclude=true)]
+    [Obfuscation(Exclude = true)]
     public abstract class BooleanLambdaConverter<TInput, TOutput> : IValueConverter
     {
         private readonly Func<TInput, bool> evaluatorFunc;
@@ -19,6 +19,9 @@ namespace ShipWorks.UI.ValueConverters
         private readonly TOutput trueValue;
         private readonly TOutput falseValue;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BooleanLambdaConverter{TInput, TOutput}"/> class.
+        /// </summary>
         protected BooleanLambdaConverter(Func<TInput, bool> evaluatorFunc, TOutput trueValue, TOutput falseValue, bool inDesignMode)
         {
             this.evaluatorFunc = evaluatorFunc;

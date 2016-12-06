@@ -38,8 +38,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 
             if (!result.Success && store.ModuleUrl.Contains("index.php", StringComparison.InvariantCultureIgnoreCase))
             {
-                store.ModuleUrl = store.ModuleUrl.TrimEnd('/');
-                store.ModuleUrl = store.ModuleUrl.Replace("/index.php", "");
+                store.ModuleUrl = store.ModuleUrl.TrimEnd('/').Replace("/index.php", "");
                 result = ProbeUrl(store);
             }
 

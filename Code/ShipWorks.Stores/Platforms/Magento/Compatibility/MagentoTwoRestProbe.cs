@@ -35,11 +35,13 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
                 client.GetToken();
                 return GenericResult.FromSuccess(new Uri(store.ModuleUrl));
             }
-            catch (Exception ex)
+            catch (UriFormatException)
             {
-                return
-                    GenericResult.FromError<Uri>(
-                        $"An error occurred while attempting to connect to Magento. {ex.Message}");
+                return GenericResult.FromError<Uri>("Url not in a valid format.");
+            }
+            catch (MagentoException ex)
+            {
+                return GenericResult.FromError<Uri>($"An error occurred while attempting to connect to Magento. {ex.Message}");
             }
         }
     }

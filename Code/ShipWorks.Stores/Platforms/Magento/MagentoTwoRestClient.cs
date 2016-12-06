@@ -126,6 +126,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 errorMessage += $"\nMagento returned an error when creating the shipment: \n{ex.Message}\n";
             }
+
             try
             {
                 UploadInvoice(invoice, magentoOrderId);
@@ -280,12 +281,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (startDate.HasValue)
             {
-                request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]",
-                    "updated_at", false));
-                request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]",
-                    "gt", false));
-                request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]",
-                    $"{startDate:yyyy-MM-dd HH:mm:ss}", false));
+                string dateFilterPrefix = "searchCriteria[filter_groups][0][filters][0]";
+                request.Variables.Add(new HttpVariable($"{dateFilterPrefix}[field]", "updated_at", false));
+                request.Variables.Add(new HttpVariable($"{dateFilterPrefix}[condition_type]", "gt", false));
+                request.Variables.Add(new HttpVariable($"{dateFilterPrefix}[value]", $"{startDate:yyyy-MM-dd HH:mm:ss}", false));
             }
 
             request.Variables.Add(new HttpVariable("searchCriteria[sortOrders][0][field]", "updated_at", false));

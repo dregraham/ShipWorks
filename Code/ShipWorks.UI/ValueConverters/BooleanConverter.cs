@@ -53,7 +53,7 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ((value is bool && ((bool) value)) || inDesignMode) ^ Invert ? True : False;
+            return inDesignMode || ((value is bool && (bool) value) ^ Invert) ? True : False;
         }
 
         /// <summary>

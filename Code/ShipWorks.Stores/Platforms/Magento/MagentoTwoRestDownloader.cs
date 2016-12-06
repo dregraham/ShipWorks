@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
-    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, true)]
+    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, ExternallyOwned = true)]
     public class MagentoTwoRestDownloader : StoreDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;

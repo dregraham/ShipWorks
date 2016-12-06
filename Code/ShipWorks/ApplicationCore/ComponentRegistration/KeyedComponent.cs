@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Builder;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
@@ -15,17 +16,10 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyedComponentAttribute"/> class.
         /// </summary>
-        public KeyedComponentAttribute(Type service, object key):this(service, key, false)
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="KeyedComponentAttribute"/> class.
-        /// </summary>
-        public KeyedComponentAttribute(Type service, object key, bool externallyOwned)
+        public KeyedComponentAttribute(Type service, object key)
         {
             Service = service;
             Key = key;
-            ExternallyOwned = externallyOwned;
         }
 
         /// <summary>
@@ -41,7 +35,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Gets a value indicating whether [externally owned].
         /// </summary>
-        public bool ExternallyOwned { get; private set; }
+        public bool ExternallyOwned { get; set; }
 
         /// <summary>
         /// Register all components that use this attribute
@@ -58,9 +52,10 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
 
             foreach (var item in keyedComponents)
             {
-                foreach (var attribute in item.Attributes)
+                foreach (KeyedComponentAttribute attribute in item.Attributes)
                 {
-                    var registration = builder.RegisterType(item.Component).Keyed(attribute.Key, attribute.Service);
+                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registration = 
+                        builder.RegisterType(item.Component).Keyed(attribute.Key, attribute.Service);
 
                     if (attribute.ExternallyOwned)
                     {

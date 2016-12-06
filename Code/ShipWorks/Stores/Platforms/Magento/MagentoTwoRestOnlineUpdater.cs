@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Platforms.GenericModule.GenericStoreOnlineUpdater" />
     /// <seealso cref="ShipWorks.Stores.Platforms.Magento.IMagentoOnlineUpdater" />
-    [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST, true)]
+    [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST, ExternallyOwned = true)]
     public class MagentoTwoRestOnlineUpdater : GenericStoreOnlineUpdater, IMagentoOnlineUpdater
     {
         private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;

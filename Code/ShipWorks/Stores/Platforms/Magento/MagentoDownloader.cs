@@ -26,6 +26,11 @@ namespace ShipWorks.Stores.Platforms.Magento
 
         }
 
+        /// <summary>
+        /// Begin order download
+        /// </summary>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
