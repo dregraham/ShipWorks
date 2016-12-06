@@ -145,7 +145,6 @@ namespace ShipWorks.Data.Administration
                     // Since we installed it, we can do this without asking
                     using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
-                        SqlUtility.SetSql2008CompatibilityLevel(con);
                         SqlUtility.EnableClr(con);
                     }
 
@@ -544,7 +543,6 @@ namespace ShipWorks.Data.Administration
                 // Since we installed it, we can do this without asking
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    SqlUtility.SetSql2008CompatibilityLevel(con);
                     SqlUtility.EnableClr(con);
                 }
 
