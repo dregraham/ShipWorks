@@ -259,7 +259,7 @@ namespace Interapptive.Shared.Net
         /// Sets the allow automatic redirect
         /// </summary>
         /// <remarks>
-        /// This is old logic and I'm not sure why it the verb matters, but in order to 
+        /// This is old logic and I'm not sure why the verb matters, but in order to 
         /// mitigate risk, I'm putting this in a virtual class so that this behavior can be
         /// overridden. This logic has been here since Vault...
         /// </remarks>

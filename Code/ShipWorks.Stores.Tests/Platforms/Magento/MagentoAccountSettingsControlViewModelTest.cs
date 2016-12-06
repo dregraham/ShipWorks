@@ -28,10 +28,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         public MagentoAccountSettingsControlViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            store = new MagentoStoreEntity();
-            store.StoreTypeCode = StoreTypeCode.Magento;
+            store = new MagentoStoreEntity {StoreTypeCode = StoreTypeCode.Magento};
 
-            probeIIndex = mock.MockRepository.Create<IIndex<MagentoVersion, IMagentoProbe>>();
+            probeIIndex = mock.CreateMock<IIndex<MagentoVersion, IMagentoProbe>>();
             mock.Provide(probeIIndex.Object);
 
             encryptionProvider = mock.MockRepository.Create<IEncryptionProvider>();

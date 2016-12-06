@@ -15,8 +15,8 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
     [KeyedComponent(typeof(AccountSettingsControlBase), StoreTypeCode.Magento)]
     public partial class MagentoAccountSettingsHost : AccountSettingsControlBase
     {
-        private IMessageHelper messageHelper;
-        private IMagentoAccountSettingsControlViewModel viewModel;
+        private readonly IMessageHelper messageHelper;
+        private readonly IMagentoAccountSettingsControlViewModel viewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoAccountSettingsHost"/> class.

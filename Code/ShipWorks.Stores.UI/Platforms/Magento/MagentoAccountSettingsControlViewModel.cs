@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
                 throw new MagentoException(CouldNotConnect);
             }
 
-            if(!Uri.Equals(storeUri, compatibleUrlResult.Value))
+            if(!Equals(storeUri, compatibleUrlResult.Value))
             {
                 throw new MagentoException(UrlDoesntMatchProbe +
                     $"{Environment.NewLine}{Environment.NewLine}" +

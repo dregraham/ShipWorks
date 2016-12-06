@@ -274,7 +274,11 @@ namespace Interapptive.Shared.Utility
         {
             SecureString secureString = new SecureString();
 
-            value.ToCharArray().ToList().ForEach(c => secureString.AppendChar(c));
+            foreach (char charInValue in value)
+            {
+                secureString.AppendChar(charInValue);
+            }
+
             secureString.MakeReadOnly();
 
             return secureString;

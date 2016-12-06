@@ -5,6 +5,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Administration.Retry;
@@ -28,30 +29,17 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly IMagentoTwoRestClient webClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader" /> class.
-        /// </summary>
-        /// <param name="store"></param>
-        /// <param name="webClientFactory"></param>
-        /// <param name="logFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store,
-            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) :
-            this(store, new SqlAdapterRetry<SqlException>(5, -5, "Magento2RestDownloader.Download"), webClientFactory, logFactory)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        /// <param name="sqlAdapter">The SQL adapter.</param>
+        /// <param name="sqlAdapterRetryFactory">The SQL adapter.</param>
         /// <param name="webClientFactory"></param>
         /// <param name="logFactory"></param>
-        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetry sqlAdapter,
+        public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) : base(store)
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
-            new Uri(magentoStore.ModuleUrl);
-            this.sqlAdapter = sqlAdapter;
+            sqlAdapter = sqlAdapterRetryFactory.Create(5, -5, "MagentoRestDownloader.Download");
             log = logFactory(typeof(MagentoTwoRestDownloader));
             webClient = webClientFactory(magentoStore);
         }
@@ -75,9 +63,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     totalOrders = ordersResponse.TotalCount;
                     foreach (Order magentoOrder in ordersResponse.Orders)
                     {
-                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "",
-                            "");
-                        OrderEntity orderEntity = InstantiateOrder(orderIdentifier);
+                        MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
+                        MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
                         LoadOrder(orderEntity, magentoOrder);
                         sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
                         savedOrders++;
@@ -95,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(OrderEntity orderEntity, Order magentoOrder)
+        public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder)
         {
             orderEntity.OnlineLastModified =
                 DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
@@ -111,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     DateTime.SpecifyKind(DateTime.Parse(magentoOrder.CreatedAt), DateTimeKind.Utc);
                 orderEntity.OrderNumber = magentoOrder.EntityId;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
-                ((MagentoOrderEntity) orderEntity).MagentoOrderID = magentoOrder.EntityId;
+                orderEntity.MagentoOrderID = magentoOrder.EntityId;
                 LoadItems(orderEntity, magentoOrder.Items);
                 LoadOrderCharges(orderEntity, magentoOrder);
             }
@@ -144,44 +131,38 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (shippingAddress != null)
             {
-                new PersonAdapter(orderEntity, "Ship")
-                {
-                    FirstName = shippingAddress.Firstname,
-                    MiddleName = shippingAddress.Middlename,
-                    LastName = shippingAddress.Lastname,
-                    Company = shippingAddress.Company,
-                    Phone = shippingAddress.Telephone,
-                    Email = shippingAddress.Email,
-                    Street1 = shippingAddress.Street.ElementAtOrDefault(0),
-                    Street2 = shippingAddress.Street.ElementAtOrDefault(1),
-                    Street3 = shippingAddress.Street.ElementAtOrDefault(2),
-                    City = shippingAddress.City,
-                    StateProvCode = Geography.GetStateProvCode(shippingAddress.RegionCode),
-                    PostalCode = shippingAddress.Postcode,
-                    CountryCode = Geography.GetCountryCode(shippingAddress.CountryId),
-                };
+                orderEntity.ShipFirstName = shippingAddress.Firstname;
+                orderEntity.ShipMiddleName = shippingAddress.Middlename;
+                orderEntity.ShipLastName = shippingAddress.Lastname;
+                orderEntity.ShipCompany = shippingAddress.Company;
+                orderEntity.ShipPhone = shippingAddress.Telephone;
+                orderEntity.ShipEmail = shippingAddress.Email;
+                orderEntity.ShipStreet1 = shippingAddress.Street.ElementAtOrDefault(0);
+                orderEntity.ShipStreet2 = shippingAddress.Street.ElementAtOrDefault(1);
+                orderEntity.ShipStreet3 = shippingAddress.Street.ElementAtOrDefault(2);
+                orderEntity.ShipCity = shippingAddress.City;
+                orderEntity.ShipStateProvCode = Geography.GetStateProvCode(shippingAddress.RegionCode);
+                orderEntity.ShipPostalCode = shippingAddress.Postcode;
+                orderEntity.ShipCountryCode = Geography.GetCountryCode(shippingAddress.CountryId);
             }
 
             BillingAddress billingAddress = magentoOrder.BillingAddress;
 
             if (billingAddress != null)
             {
-                new PersonAdapter(orderEntity, "Bill")
-                {
-                    FirstName = billingAddress.Firstname,
-                    MiddleName = billingAddress.Middlename,
-                    LastName = billingAddress.Lastname,
-                    Company = billingAddress.Company,
-                    Phone = billingAddress.Telephone,
-                    Email = billingAddress.Email,
-                    Street1 = billingAddress.Street.ElementAtOrDefault(0),
-                    Street2 = billingAddress.Street.ElementAtOrDefault(1),
-                    Street3 = billingAddress.Street.ElementAtOrDefault(2),
-                    City = billingAddress.City,
-                    StateProvCode = Geography.GetStateProvCode(billingAddress.RegionCode),
-                    PostalCode = billingAddress.Postcode,
-                    CountryCode = Geography.GetCountryCode(billingAddress.CountryId)
-                };
+                orderEntity.BillFirstName = billingAddress.Firstname;
+                orderEntity.BillMiddleName = billingAddress.Middlename;
+                orderEntity.BillLastName = billingAddress.Lastname;
+                orderEntity.BillCompany = billingAddress.Company;
+                orderEntity.BillPhone = billingAddress.Telephone;
+                orderEntity.BillEmail = billingAddress.Email;
+                orderEntity.BillStreet1 = billingAddress.Street.ElementAtOrDefault(0);
+                orderEntity.BillStreet2 = billingAddress.Street.ElementAtOrDefault(1);
+                orderEntity.BillStreet3 = billingAddress.Street.ElementAtOrDefault(2);
+                orderEntity.BillCity = billingAddress.City;
+                orderEntity.BillStateProvCode = Geography.GetStateProvCode(billingAddress.RegionCode);
+                orderEntity.BillPostalCode = billingAddress.Postcode;
+                orderEntity.BillCountryCode = Geography.GetCountryCode(billingAddress.CountryId);
             }
         }
 
@@ -248,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 {
                     // if there is an issue getting product options keep going
                     // we dont want options to keep the download from succeeding
-                    log.Error($"Error getting Item Options {ex.Message}");
+                    log.Error($"Error getting Item Options {ex.Message}", ex);
                 }
             }
         }
@@ -258,18 +239,18 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
         {
-            if (Math.Abs(magentoOrder.TaxAmount) > .001)
+            if (magentoOrder.TaxAmount.IsEquivalentTo(0))
             {
                 InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.TaxAmount));
             }
 
-            if (Math.Abs(magentoOrder.ShippingAmount) > .001)
+            if (magentoOrder.ShippingAmount.IsEquivalentTo(0))
             {
                 InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping",
                     Convert.ToDecimal(magentoOrder.ShippingAmount));
             }
 
-            if (Math.Abs(magentoOrder.DiscountAmount) > .001)
+            if (magentoOrder.DiscountAmount.IsEquivalentTo(0))
             {
                 InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.DiscountDescription ?? "discount",
                     Convert.ToDecimal(magentoOrder.DiscountAmount));
