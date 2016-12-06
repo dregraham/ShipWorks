@@ -80,10 +80,20 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ShipmentProcessorExecutionState executionState = (ShipmentProcessorExecutionState) state;
             ProcessShipmentState initial = new ProcessShipmentState(shipment, executionState.LicenseCheckResults, executionState.SelectedRate);
 
-            IShipmentPreparationResult prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
-            ILabelRetrievalResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
-            ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
-            ILabelResultLogResult completeLabelResult = completeLabelTask.Complete(saveLabelResult);
+            IShipmentPreparationResult prepareShipmentResult = null;
+            ILabelResultLogResult completeLabelResult = null;
+
+            try
+            {
+                prepareShipmentResult = prepareShipmentTask.PrepareShipment(initial);
+                ILabelRetrievalResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
+                ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
+                completeLabelResult = completeLabelTask.Complete(saveLabelResult);
+            }
+            finally
+            {
+                prepareShipmentResult?.EntityLock?.Dispose();
+            }
 
             // When we introduce Akka.net, the rest of this method would go into the reducer method
             if (!string.IsNullOrEmpty(completeLabelResult.ErrorMessage))
