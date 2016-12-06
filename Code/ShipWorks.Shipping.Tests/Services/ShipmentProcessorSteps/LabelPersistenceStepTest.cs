@@ -16,7 +16,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 {
-    public class LabelPersistanceStep : IDisposable
+    public class LabelPersistenceStepTest : IDisposable
     {
         readonly AutoMock mock;
         readonly LabelPersistenceStep testObject;
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         readonly ShipmentEntity shipment;
         readonly StoreEntity store;
 
-        public LabelPersistanceStep()
+        public LabelPersistenceStepTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<LabelPersistenceStep>();
