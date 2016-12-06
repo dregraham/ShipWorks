@@ -12,7 +12,6 @@ using Interapptive.Shared.Win32;
 using System.Text.RegularExpressions;
 using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
-using Interapptive.Shared;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {

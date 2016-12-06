@@ -39,8 +39,6 @@ namespace ShipWorks.Data.Administration
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseUpdateWizard));
-
-        private ILifetimeScope lifetimeScope;
         
         // Version of the database installed
         Version installed;
