@@ -2,13 +2,13 @@
 
 /*
 |
-| This file and the source codes contained herein are the property 
-| of Interapptive, Inc.  Use of this file is restricted to the specific 
-| terms and conditions in the License Agreement associated with this 
+| This file and the source codes contained herein are the property
+| of Interapptive, Inc.  Use of this file is restricted to the specific
+| terms and conditions in the License Agreement associated with this
 | file.     Distribution of this file or portions of this file for uses
-| not covered by the License Agreement is not allowed without a written 
+| not covered by the License Agreement is not allowed without a written
 | agreement signed by an officer of Interapptive, Inc.
-| 
+|
 | The code contained herein may not be reproduced, copied or
 | redistributed in any form, as part of another product or otherwise.
 | Modified versions of this code may not be sold or redistributed.
@@ -21,58 +21,20 @@
 
 define('REQUIRE_SECURE', true);
 
-use Tygh\Bootstrap;
-use Tygh\Exceptions\DatabaseException;
-use Tygh\Registry;
-
-// Register autoloader
-$this_dir = dirname(__FILE__);
-$classLoader = require($this_dir . '/app/lib/vendor/autoload.php');
-$classLoader->add('Tygh', $this_dir . '/app');
-
-// Prepare environment and process request vars
-list($_REQUEST, $_SERVER) = Bootstrap::initEnv($_GET, $_POST, $_SERVER, $this_dir);
-
-// Get config data
-$config = require(DIR_ROOT . '/config.php');
-
-// Load core functions
-$fn_list = array(
-    'fn.database.php',
-    'fn.users.php',
-    'fn.catalog.php',
-    'fn.cms.php',
-    'fn.cart.php',
-    'fn.locations.php',
-    'fn.common.php',
-    'fn.fs.php',
-    'fn.images.php',
-    'fn.init.php',
-    'fn.control.php',
-    'fn.search.php',
-    'fn.promotions.php',
-    'fn.log.php',
-    'fn.companies.php',
-    'fn.addons.php'
-);
-
-$fn_list[] = 'fn.' . strtolower(PRODUCT_EDITION) . '.php';
-
-foreach ($fn_list as $file) {
-    require($config['dir']['functions'] . $file);
+$php_value = phpversion();
+if (version_compare($php_value, '5.3.0') == -1) {
+    echo 'Currently installed PHP version (' . $php_value . ') is not supported. Minimal required PHP version is  5.3.0.';
+    die();
 }
 
-Registry::set('class_loader', $classLoader);
-Registry::set('config', $config);
-unset($config);
+define('AREA', 'A');
+define('ACCOUNT_TYPE', 'admin');
 
-// Connect to database
-if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'), Registry::get('config.db_password'), Registry::get('config.db_name'))) {
-    throw new DatabaseException('Cannot connect to the database server');
-}
+    require(dirname(__FILE__) . '/init.php');
+
 
     # ShipWorks configuration
-    $moduleVersion = "3.10.0.0";
+    $moduleVersion = "5.8.0.0";
     $schemaVersion = "1.0.0";
 
     header("Content-Type: text/xml;charset=utf-8");
@@ -83,7 +45,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
     header("Cache-Control: post-check=0, pre-check=0", false);
 
     // HTTP/1.0
-    header("Pragma: no-cache");	
+    header("Pragma: no-cache");
 
     function writeXmlDeclaration()
     {
@@ -105,7 +67,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
 
             foreach ($attributes as $name => $attribValue)
             {
-                echo toUtf8($name. '="'. htmlspecialchars($attribValue). '" ');	
+                echo toUtf8($name. '="'. htmlspecialchars($attribValue). '" ');
             }
         }
 
@@ -140,7 +102,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
 
         foreach ($attributes as $name => $attribValue)
         {
-            echo toUtf8($name. '="'. htmlspecialchars($attribValue). '" ');	
+            echo toUtf8($name. '="'. htmlspecialchars($attribValue). '" ');
         }
         echo '>';
         echo toUtf8(htmlspecialchars($value));
@@ -150,12 +112,12 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
 
     // Function used to output an error and quit.
     function outputError($code, $error)
-    {	
+    {
         writeStartTag("Error");
         writeElement("Code", $code);
         writeElement("Description", $error);
         writeCloseTag("Error");
-    } 	
+    }
 
     $secure = ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == '1');
 
@@ -163,7 +125,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
     writeXmlDeclaration();
     writeStartTag("ShipWorks", array("moduleVersion" => $moduleVersion, "schemaVersion" => $schemaVersion));
 
- 
+
     // Enforse SSL
     if (!$secure && REQUIRE_SECURE)
     {
@@ -175,7 +137,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
         if (checkAdminLogin())
         {
             $action = (isset($_REQUEST['action']) ? $_REQUEST['action'] : '');
-            switch (strtolower($action)) 
+            switch (strtolower($action))
             {
 				case 'getmodule': Action_GetModule(); break;
 				case 'getstore': Action_GetStore(); break;
@@ -189,9 +151,9 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
 			}
         }
     }
-    
+
     writeCloseTag("ShipWorks");
-    
+
     function checkAdminLogin()
     {
         $loginOK = false;
@@ -201,10 +163,10 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             $username = $_REQUEST['username'];
             $password = $_REQUEST['password'];
 
-            $user_data = db_get_row("SELECT user_id, password, salt FROM ?:users WHERE email = ?i", $username);
+            $user_data = db_get_row("SELECT user_id, password, salt FROM ?:users WHERE email = ?s AND user_type = 'A'", $username);
             if (fn_generate_salted_password($password, $user_data['salt']) == $user_data['password'])
             {
-                $loginOK = true;        
+                $loginOK = true;
             }
         }
 
@@ -222,17 +184,17 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
 
         writeElement("Platform", "CS-Cart");
         writeElement("Developer", "Interapptive, Inc. (support@interapptive.com)");
-        
+
         writeStartTag("Capabilities");
             writeElement("DownloadStrategy", "ByOrderNumber");
             writeFullElement("OnlineCustomerID", "", array("supported" => "false"));
             writeFullElement("OnlineStatus", "", array("supported" => "true", "dataType" => "text"));
             writeFullElement("OnlineShipmentUpdate", "", array("supported" => "true"));
         writeCloseTag("Capabilities");
-            
+
         writeCloseTag("Module");
     }
-    
+
     function Action_GetStore()
     {
         $name = Registry::get('settings.Company.company_name');
@@ -249,7 +211,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             writeElement("Country", $country);
         writeCloseTag("Store");
     }
-    
+
     function Action_GetCount()
     {
         $start = 0;
@@ -261,19 +223,19 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
 
         // write the params for easier diagnostics
         writeStartTag("Parameters");
-            writeElement("Start", $start);	
+            writeElement("Start", $start);
         writeCloseTag("Parameters");
 
         $count = db_get_fields("SELECT COUNT(*) FROM ?:orders WHERE order_id > ?i", $start);
 
         writeElement("OrderCount", $count[0]);
     }
-        
+
     function Action_GetOrders()
     {
         $start = 0;
         $maxcount = 50;
-        
+
         if (isset($_REQUEST['start']))
         {
             $start = $_REQUEST['start'];
@@ -287,18 +249,18 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
         // write the parameters out for diagnostics
         writeStartTag("Parameters");
         writeElement("Start", $start);
-        writeElement("MaxCount", $maxcount);	
-        writeCloseTag("Parameters"); 
+        writeElement("MaxCount", $maxcount);
+        writeCloseTag("Parameters");
 
         writeStartTag("Orders");
 
         $orderids = db_get_fields("SELECT order_id FROM ?:orders WHERE order_id > ?i limit ?i", $start, $maxcount);
-        
+
         if($orderids)
 		{
-            foreach ($orderids as $orderid) 
-			{        
-				WriteOrder($orderid);	
+            foreach ($orderids as $orderid)
+			{
+				WriteOrder($orderid);
             }
         }
         writeCloseTag("Orders");
@@ -307,30 +269,30 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
     function WriteOrder($orderid)
     {
         $orderDetails = fn_get_order_info($orderid);
-        
+
         $order_shipping = '';
-		
-		if ($orderDetails['shipping'] && is_array($orderDetails['shipping'])) 
+
+		if ($orderDetails['shipping'] && is_array($orderDetails['shipping']))
 		{
-			foreach ($orderDetails['shipping'] as $ship) 
+			foreach ($orderDetails['shipping'] as $ship)
 			{
-				if ($ship['shipping']) 
+				if ($ship['shipping'])
 				{
 					$order_shipping = $ship['shipping'];
 					break;
 				}
 			}
 		}
-        
-        
+
+
          writeStartTag("Order");
 
             writeElement("OrderNumber", $orderDetails['order_id']);
             writeElement("OrderDate", date('Y-m-d\TH:i:s',$orderDetails['timestamp']));
             writeElement("ShippingMethod", $order_shipping);
-            writeElement("StatusCode", $orderDetails['status']);	
+            writeElement("StatusCode", $orderDetails['status']);
 
-        
+
             //writeStartTag("Notes");
                 //WriteNote($orderDetails['order']['notes'], false);
                 //WriteNote($orderDetails['order']['customer_notes'], true);
@@ -372,7 +334,7 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             writeCloseTag("BillingAddress");
 
             WriteOrderItems($orderDetails['products']);
-            
+
             WriteOrderTotals($orderDetails);
 
         writeCloseTag("Order");
@@ -386,17 +348,17 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             foreach ($orderItems as $item)
             {
 				writeStartTag("Item");
-    
+
 					$itemWeight = db_get_field("SELECT weight FROM ?:products WHERE product_id=?i", $item['product_id']);
-    
+
 					writeElementSafe("Code", $item['product_code']);
 					writeElementSafe("SKU", $item['product_code']);
 					writeElementSafe("Name", $item['product']);
 					writeElement("Quantity", $item['amount']);
 					writeElement("UnitPrice", $item['price']);
-        
+
 					writeElement("Weight", $itemWeight);
-                
+
 				writeCloseTag("Item");
 			}
 
@@ -408,15 +370,15 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
         writeStartTag("Totals");
 
             WriteOrderTotal("Tax",  $order['tax_subtotal'], "Tax", "add");
-        
+
             WriteOrderTotal("Shipping",  $order['shipping_cost'], "Shipping", "add");
-        
+
             WriteOrderTotal("SubTotal",  $order['subtotal'], "SubTotal", "none");
-        
+
             WriteOrderTotal("Total",  $order['total'], "total", "none");
 
             WriteOrderTotal("PaymentSurcharge",  $order['payment_surcharge'], "PaymentFee", "add");
-                        
+
         writeCloseTag("Totals");
     }
 
@@ -427,11 +389,11 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             writeFullElement("Total", $value, array("name" => $name, "class" => $class, "impact" => $impact));
         }
     }
-    
+
     function Action_GetStatusCodes()
     {
         writeStartTag("StatusCodes");
-        
+
             $statuses = fn_get_statuses(STATUSES_ORDER,array(),false,false,'en');
 
             foreach ($statuses as $status)
@@ -441,22 +403,22 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
                 writeElement("Name", $status['description']);
                 writeCloseTag("StatusCode");
             }
-            
+
         writeCloseTag("StatusCodes");
     }
 
     function Action_UpdateShipment()
     {
-        if (isset($_REQUEST['order'])) 
+        if (isset($_REQUEST['order']))
         {
             $orderid = $_REQUEST['order'];
             $order = fn_get_order_info($orderid);
         }
-        
+
         $tracking_number = $_REQUEST['tracking'];
-        
+
         $products = $order['products'];
-    
+
         switch ($_REQUEST['carrier']) {
         case 'USPS':
                 $carrier = 'USP';
@@ -473,9 +435,9 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
         default:
                 $carrier = '';
         }
-       		
+
         if($order)
-        {	
+        {
             $shipment_data = array(
             'shipping_id'=> $order['shipping']['0']['shipping_id'],
             'tracking_number' => $tracking_number,
@@ -504,21 +466,21 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             }
         }
     }
-    
+
     function Action_UpdateStatus()
     {
-        if (isset($_REQUEST['order'])) 
+        if (isset($_REQUEST['order']))
 		{
             $orderid = $_REQUEST['order'];
         }
-        
-        if (isset($_REQUEST['status'])) 
+
+        if (isset($_REQUEST['status']))
 		{
             $statusto = $_REQUEST['status'];
         }
-        
+
         $order = fn_get_order_info($orderid);
-        
+
         if($order)
         {
             $statusfrom = $order['status'];
@@ -531,6 +493,6 @@ if (!db_initiate(Registry::get('config.db_host'), Registry::get('config.db_user'
             if(!fn_change_order_status($orderid, $statusto, $statusfrom, false)){
 
                     outputError(73, "Unable to change order status");
-            } 
-        }	               
+            }
+        }
     }
