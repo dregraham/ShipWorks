@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Users;
 
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 return new LabelPersistenceResult(result);
             }
 
-            var shipment = result.OriginalShipment;
+            ShipmentEntity shipment = result.OriginalShipment;
 
             using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper transaction committed."))
             {

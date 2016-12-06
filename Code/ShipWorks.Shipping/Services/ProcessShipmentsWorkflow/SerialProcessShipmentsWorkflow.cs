@@ -17,12 +17,12 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     [Component]
     public class SerialProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
-        readonly ShipmentPreparationStep prepareShipmentTask;
-        readonly LabelRetrievalStep getLabelTask;
-        readonly LabelPersistenceStep saveLabelTask;
-        readonly LabelResultLogStep completeLabelTask;
-        readonly IShippingManager shippingManager;
-        readonly Func<Control> ownerRetriever;
+        private readonly ShipmentPreparationStep prepareShipmentTask;
+        private readonly LabelRetrievalStep getLabelTask;
+        private readonly LabelPersistenceStep saveLabelTask;
+        private readonly LabelResultLogStep completeLabelTask;
+        private readonly IShippingManager shippingManager;
+        private readonly Func<Control> ownerRetriever;
 
         /// <summary>
         /// Constructor
