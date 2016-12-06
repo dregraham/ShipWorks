@@ -23,8 +23,7 @@ define('REQUIRE_SECURE', true);
 
 $php_value = phpversion();
 if (version_compare($php_value, '5.3.0') == -1) {
-    echo 'Currently installed PHP version (' . $php_value . ') is not supported. Minimal required PHP version is  5.3.0.';
-    die();
+    die('Currently installed PHP version (' . $php_value . ') is not supported. Minimal required PHP version is  5.3.0.');
 }
 
 define('AREA', 'A');
