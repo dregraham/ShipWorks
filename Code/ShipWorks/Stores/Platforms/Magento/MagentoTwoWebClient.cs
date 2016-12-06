@@ -127,7 +127,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private GenericModuleResponse ProcessRequestInternal(HttpRequestSubmitter request, string action)
         {
-
             if (store.ModuleUsername == string.Empty)
             {
                 request.Headers.Add(HttpRequestHeader.Authorization,
@@ -135,17 +134,13 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             else
             {
-                string token;
-
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     IMagentoTwoRestClient magentoRestClient =
                         scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
 
-                    token = magentoRestClient.GetToken();
+                    request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {magentoRestClient.GetToken()}");
                 }
-
-                request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {token}");
             }
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Magento, action);
