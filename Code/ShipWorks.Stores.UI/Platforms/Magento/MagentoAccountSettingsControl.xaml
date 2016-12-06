@@ -24,22 +24,22 @@
     </Control.Resources>
     <Grid Margin="10">
         <Grid.Resources>
-        <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="Margin" Value="4" />
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="4" />
-            <Setter Property="Padding" Value="2" />
-        </Style>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="4" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="4" />
+                <Setter Property="Padding" Value="2" />
+            </Style>
             <Style TargetType="{x:Type PasswordBox}">
                 <Setter Property="Margin" Value="4" />
                 <Setter Property="Padding" Value="2" />
             </Style>
-        <Style TargetType="{x:Type RadioButton}">
-            <Setter Property="Margin" Value="20 4 0 4" />
-        </Style>
+            <Style TargetType="{x:Type RadioButton}">
+                <Setter Property="Margin" Value="20 4 0 4" />
+            </Style>
         </Grid.Resources>
         <StackPanel Margin="0">
             <StackPanel>

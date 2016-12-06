@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -13,19 +10,25 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoException(string message):base(message)
-        {}
+        public MagentoException(string message)
+            : base(message)
+        {
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoException(string message, Exception innerException) : base(message, innerException)
-        { }
+        public MagentoException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoException(Exception innerException) : base(innerException.Message, innerException)
-        { }
+        public MagentoException(Exception innerException)
+            : base(innerException.Message, innerException)
+        {
+        }
     }
 }

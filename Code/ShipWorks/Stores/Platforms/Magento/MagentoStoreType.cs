@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -52,6 +53,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
 
+        /// <summary>
+        /// Gets the magento version for this store instance
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">Can not get Magento version for a non-Magento store</exception>
         private MagentoVersion MagentoVersion
         {
             get
@@ -115,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new MagentoOnlineUpdateActionControl(MagentoVersion == MagentoVersion.MagentoTwo);
-        
+
         /// <summary>
         /// Create the user control used in the Store Manager window.
         /// </summary>
@@ -242,8 +247,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
-                return (GenericStoreOnlineUpdater) IoC.UnsafeGlobalLifetimeScope
-                    .ResolveKeyed<IMagentoOnlineUpdater>(MagentoVersion.MagentoTwoREST, new TypedParameter(typeof(GenericModuleStoreEntity), Store));
+                return (GenericStoreOnlineUpdater)
+                    IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<IMagentoOnlineUpdater>>(
+                        MagentoVersion.MagentoTwoREST,
+                        new TypedParameter(typeof(GenericModuleStoreEntity), Store)).Value;
             }
 
             return new MagentoOnlineUpdater((GenericModuleStoreEntity)Store);
@@ -256,8 +263,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             if (MagentoVersion == MagentoVersion.MagentoTwoREST)
             {
-                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreDownloader>(MagentoVersion.MagentoTwoREST,
-                    new TypedParameter(typeof(StoreEntity), Store));
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<StoreDownloader>>(MagentoVersion.MagentoTwoREST,
+                    new TypedParameter(typeof(StoreEntity), Store)).Value;
             }
 
             return new MagentoDownloader(Store);

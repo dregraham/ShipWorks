@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// Downloader for Magento 2 REST API
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Communication.StoreDownloader" />
-    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, ExternallyOwned = true)]
+    [KeyedComponent(typeof(StoreDownloader), MagentoVersion.MagentoTwoREST, ExternallyOwned = false)]
     public class MagentoTwoRestDownloader : StoreDownloader
     {
         private readonly ISqlAdapterRetry sqlAdapter;
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) : base(store)
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
-            sqlAdapter = sqlAdapterRetryFactory.Create(5, -5, "MagentoRestDownloader.Download");
+            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");
             log = logFactory(typeof(MagentoTwoRestDownloader));
             webClient = webClientFactory(magentoStore);
         }
@@ -239,18 +239,18 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void LoadOrderCharges(OrderEntity orderEntity, Order magentoOrder)
         {
-            if (magentoOrder.TaxAmount.IsEquivalentTo(0))
+            if (!magentoOrder.TaxAmount.IsEquivalentTo(0))
             {
                 InstantiateOrderCharge(orderEntity, "TAX", "tax", Convert.ToDecimal(magentoOrder.TaxAmount));
             }
 
-            if (magentoOrder.ShippingAmount.IsEquivalentTo(0))
+            if (!magentoOrder.ShippingAmount.IsEquivalentTo(0))
             {
                 InstantiateOrderCharge(orderEntity, "SHIPPING", "shipping",
                     Convert.ToDecimal(magentoOrder.ShippingAmount));
             }
 
-            if (magentoOrder.DiscountAmount.IsEquivalentTo(0))
+            if (!magentoOrder.DiscountAmount.IsEquivalentTo(0))
             {
                 InstantiateOrderCharge(orderEntity, "DISCOUNT", magentoOrder.DiscountDescription ?? "discount",
                     Convert.ToDecimal(magentoOrder.DiscountAmount));

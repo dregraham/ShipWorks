@@ -16,15 +16,16 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoVersionToGridHeightConverter():this(DesignModeDetector.IsDesignerHosted())
+        public MagentoVersionToGridHeightConverter()
+            : this(DesignModeDetector.IsDesignerHosted())
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoVersionToGridHeightConverter(bool isDesignerHosted) : 
-            base(IsMagentoOne, new GridLength(1, GridUnitType.Star), new GridLength(0), isDesignerHosted)
+        public MagentoVersionToGridHeightConverter(bool isDesignerHosted)
+            : base(IsMagentoOne, new GridLength(1, GridUnitType.Star), new GridLength(0), isDesignerHosted)
         {
         }
 
@@ -33,8 +34,8 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// </summary>
         private static bool IsMagentoOne(MagentoVersion magentoVersion)
         {
-            return magentoVersion == MagentoVersion.MagentoConnect || 
-                magentoVersion == MagentoVersion.PhpFile;
+            return magentoVersion == MagentoVersion.MagentoConnect ||
+                   magentoVersion == MagentoVersion.PhpFile;
         }
     }
 }

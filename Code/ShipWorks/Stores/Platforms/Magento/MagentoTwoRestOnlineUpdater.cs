@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.Tools.BCLExtensions.CollectionsRelated;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -34,20 +31,26 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     /// <seealso cref="ShipWorks.Stores.Platforms.GenericModule.GenericStoreOnlineUpdater" />
     /// <seealso cref="ShipWorks.Stores.Platforms.Magento.IMagentoOnlineUpdater" />
-    [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST, ExternallyOwned = true)]
+    [KeyedComponent(typeof(IMagentoOnlineUpdater), MagentoVersion.MagentoTwoREST, ExternallyOwned = false)]
     public class MagentoTwoRestOnlineUpdater : GenericStoreOnlineUpdater, IMagentoOnlineUpdater
     {
         private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;
+        private readonly IDataProvider dataProvider;
         private readonly MagentoStoreEntity store;
-        private static readonly ILog log = LogManager.GetLogger(typeof(MagentoTwoRestOnlineUpdater));
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestOnlineUpdater"/> class.
         /// </summary>
-        public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store, Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory) : base(store)
+        public MagentoTwoRestOnlineUpdater(GenericModuleStoreEntity store,
+            Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, IDataProvider dataProvider,
+            Func<Type, ILog> logFactory)
+            : base(store)
         {
             this.webClientFactory = webClientFactory;
+            this.dataProvider = dataProvider;
             this.store = (MagentoStoreEntity) store;
+            log = logFactory(typeof(MagentoTwoRestOnlineUpdater));
         }
 
         /// <summary>
@@ -70,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
-            MagentoOrderEntity orderEntity = DataProvider.GetEntity(orderID) as MagentoOrderEntity;
+            MagentoOrderEntity orderEntity = dataProvider.GetEntity(orderID) as MagentoOrderEntity;
             if (orderEntity == null)
             {
                 return;
@@ -230,6 +233,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 adapter.FetchEntityCollection(orderEntity.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == orderEntity.OrderID));
             }
+
             if (!orderEntity.OrderItems.IsNullOrEmpty())
             {
                 request.Items = new List<ShipmentItem>();

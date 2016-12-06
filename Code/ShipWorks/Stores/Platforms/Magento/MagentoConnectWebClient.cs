@@ -11,7 +11,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
-    /// Class for communivating with MagentoConnect module
+    /// Class for communicating with MagentoConnect module
     /// </summary>
     [Component]
     public class MagentoConnectWebClient : MagentoWebClient
@@ -25,9 +25,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoConnectWebClient(MagentoStoreEntity store) : base(store)
+        public MagentoConnectWebClient(MagentoStoreEntity store)
+            : base(store)
         {
-
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Executes a GetModule request
+        /// Executes a GetStore request
         /// </summary>
         private GenericModuleResponse ProcessGetStore(HttpVariableRequestSubmitter request)
         {

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Data.Administration.Retry
+﻿using System;
+
+namespace ShipWorks.Data.Administration.Retry
 {
     /// <summary>
     /// Factory for creating an instance SqlAdapterRetry
@@ -8,6 +10,7 @@
         /// <summary>
         /// Creates the SqlAdapterRetry
         /// </summary>
-        ISqlAdapterRetry Create(int retries, int deadlockPriority, string commandDescription);
+        ISqlAdapterRetry Create<TException>(int retries, int deadlockPriority, string commandDescription)
+            where TException : Exception;
     }
 }

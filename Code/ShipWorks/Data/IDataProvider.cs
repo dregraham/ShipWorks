@@ -13,5 +13,10 @@ namespace ShipWorks.Data
         /// Get all entities of the given type that are related to the specified entityID
         /// </summary>
         IEnumerable<EntityBase2> GetRelatedEntities(long orderID, EntityType orderItemEntity);
+
+        /// <summary>
+        /// Gets the entity with the given entity ID
+        /// </summary>
+        EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true);
     }
 }
