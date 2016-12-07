@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// Base class for our PHP-module-based integrations as well as the store type used
     /// for generic order downloading from  a URL.
     /// </summary>
-    public class GenericModuleStoreType : StoreType
+    public class GenericModuleStoreType : StoreType, IGenericModuleStoreType
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleStoreType));

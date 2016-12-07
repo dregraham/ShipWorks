@@ -12,6 +12,7 @@ using Moq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
 {
@@ -149,7 +150,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
             mock.Dispose();
         }
 
-        public class MockMagentoStoreType : StoreType, IMagentoStoreType
+        public class MockMagentoStoreType : StoreType, IGenericModuleStoreType
         {
             public override StoreTypeCode TypeCode
             {

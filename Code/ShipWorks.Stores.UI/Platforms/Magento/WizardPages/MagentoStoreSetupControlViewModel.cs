@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 
             try
             {
-                IMagentoStoreType storeType = (IMagentoStoreType) storeTypeManager.GetType(store);
+                IGenericModuleStoreType storeType = (IGenericModuleStoreType) storeTypeManager.GetType(store);
                 storeType.InitializeFromOnlineModule();
             }
             catch (GenericStoreException ex)

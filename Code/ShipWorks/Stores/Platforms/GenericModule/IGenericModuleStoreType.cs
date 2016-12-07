@@ -1,10 +1,10 @@
-﻿namespace ShipWorks.Stores.Platforms.Magento
+﻿namespace ShipWorks.Stores.Platforms.GenericModule
 {
     /// <summary>
-    /// Interface that represents the Magento Store Type
+    /// Interface that represents the GenericModuleStoreType
     /// </summary>
     /// <remarks>This is needed for unit testing/mocking</remarks>
-    public interface IMagentoStoreType
+    public interface IGenericModuleStoreType
     {
         /// <summary>
         /// Initialize a new magento store entity from an online module
