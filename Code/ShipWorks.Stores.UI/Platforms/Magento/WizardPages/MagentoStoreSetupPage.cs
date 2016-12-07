@@ -14,8 +14,8 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
     [KeyedComponent(typeof(WizardPage), StoreTypeCode.Magento)]
     public partial class MagentoStoreSetupPage : AddStoreWizardPage
     {
-        private IMessageHelper messageHelper;
-        private IMagentoWizardSettingsControlViewModel viewModel;
+        private readonly IMessageHelper messageHelper;
+        private readonly IMagentoWizardSettingsControlViewModel viewModel;
 
         /// <summary>
         /// Constructor

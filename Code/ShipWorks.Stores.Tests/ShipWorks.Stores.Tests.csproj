@@ -171,6 +171,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoProduct.json" />
     <Compile Include="Platforms\Magento\MagentoProductCacheTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModelTest.cs" />
@@ -298,6 +299,11 @@
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMapWithDuplicateEntries.json" />
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapSavedToDisk.json" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrder.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\BadMagentoOrder.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoItemWithOptions.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithItemAttributes.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoItem.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoParentItem.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
@@ -326,7 +332,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseWithKitItem.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\WeirdMagentoOrder.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

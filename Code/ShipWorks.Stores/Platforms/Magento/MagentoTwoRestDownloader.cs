@@ -122,8 +122,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                 return;
             }
 
-            orderEntity.OnlineLastModified =
-                DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
+            DateTime lastModifiedDate;
+            if (DateTime.TryParse(magentoOrder.UpdatedAt, out lastModifiedDate))
+            {
+                orderEntity.OnlineLastModified = DateTime.SpecifyKind(lastModifiedDate, DateTimeKind.Utc);
+            }
+
             orderEntity.OnlineStatus = magentoOrder.Status;
             orderEntity.RequestedShipping = magentoOrder.ShippingDescription;
 
@@ -132,8 +136,12 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             if (orderEntity.IsNew)
             {
-                orderEntity.OrderDate =
-                    DateTime.SpecifyKind(DateTime.Parse(magentoOrder.CreatedAt), DateTimeKind.Utc);
+                DateTime createdDate;
+                if (DateTime.TryParse(magentoOrder.CreatedAt, out createdDate))
+                {
+                    orderEntity.OrderDate =
+                        DateTime.SpecifyKind(createdDate, DateTimeKind.Utc);
+                }
                 orderEntity.OrderNumber = magentoOrder.EntityId;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
                 orderEntity.MagentoOrderID = magentoOrder.EntityId;
@@ -209,6 +217,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void LoadItems(OrderEntity orderEntity, IEnumerable<Item> items)
         {
+            if (items == null)
+            {
+                return;
+            }
+
             foreach (Item item in items.Where(i => i.ProductType != "configurable"))
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);

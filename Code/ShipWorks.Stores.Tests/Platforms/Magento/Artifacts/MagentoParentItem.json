@@ -1,0 +1,64 @@
+﻿{
+    "amount_refunded": 0,
+    "base_amount_refunded": 0,
+    "base_discount_amount": 0,
+    "base_discount_invoiced": 0,
+    "base_discount_tax_compensation_amount": 0,
+    "base_original_price": 0.75,
+    "base_price": 0.86,
+    "base_price_incl_tax": 0.9,
+    "base_row_invoiced": 0,
+    "base_row_total": 0.86,
+    "base_row_total_incl_tax": 0.9,
+    "base_tax_amount": 0.04,
+    "base_tax_invoiced": 0,
+    "created_at": "2016-12-02 20:15:07",
+    "discount_amount": 0,
+    "discount_invoiced": 0,
+    "discount_percent": 0,
+    "free_shipping": 0,
+    "discount_tax_compensation_amount": 0,
+    "is_qty_decimal": 0,
+    "is_virtual": 0,
+    "item_id": 14,
+    "name": "Odd Product",
+    "no_discount": 0,
+    "order_id": 12,
+    "original_price": 0.75,
+    "price": 0.86,
+    "price_incl_tax": 0.9,
+    "product_id": 4,
+    "product_type": "configurable",
+    "qty_canceled": 0,
+    "qty_invoiced": 0,
+    "qty_ordered": 1,
+    "qty_refunded": 0,
+    "qty_shipped": 0,
+    "quote_item_id": 15,
+    "row_invoiced": 0,
+    "row_total": 0.86,
+    "row_total_incl_tax": 0.9,
+    "row_weight": 5.25,
+    "sku": "Odd Product-red-123",
+    "store_id": 1,
+    "tax_amount": 0.04,
+    "tax_invoiced": 0,
+    "tax_percent": 5,
+    "updated_at": "2016-12-02 20:15:07",
+    "weight": 5.25,
+    "product_option": {
+        "extension_attributes": {
+            "custom_options": [
+                {
+                    "option_id": "1",
+                    "option_value": "this is some other option blah blah blah"
+                }
+            ], "configurable_item_options": [
+                {
+                    "option_id": "93",
+                    "option_value": 4
+                }
+            ]
+        }
+    }
+}
