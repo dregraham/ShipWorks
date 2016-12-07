@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly ILog log;
         private readonly IMagentoTwoRestClient webClient;
+        private readonly MagentoStoreEntity magentoStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestDownloader"/> class.
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         public MagentoTwoRestDownloader(StoreEntity store, ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory, Func<Type, ILog> logFactory) : base(store)
         {
-            MagentoStoreEntity magentoStore = (MagentoStoreEntity) store;
+            magentoStore = (MagentoStoreEntity) store;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "MagentoRestDownloader.Download");
             log = logFactory(typeof(MagentoTwoRestDownloader));
             webClient = webClientFactory(magentoStore);
@@ -49,7 +50,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
-            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
 
             int currentPage = 1;
@@ -84,19 +84,10 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     foreach (Order magentoOrder in ordersResponse.Orders)
                     {
-                        // Update the status
-                        Progress.Detail = $"Processing order {QuantitySaved + 1}...";
-
-                        // Check if it has been cancelled
-                        if (Progress.IsCancelRequested)
-                        {
-                            return;
-                        }
-
                         MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                         MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
-                        LoadOrder(orderEntity, magentoOrder);
-                        sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
+
+                        LoadOrder(orderEntity, magentoOrder, Progress);
                         savedOrders++;
                     }
 
@@ -114,13 +105,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Loads the order.
         /// </summary>
-        public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder)
+        public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder, IProgressReporter progressReporter)
         {
             // Check if it has been cancelled
-            if (Progress != null && Progress.IsCancelRequested)
+            if (progressReporter.IsCancelRequested)
             {
                 return;
             }
+
+            // Update the status
+            progressReporter.Detail = $"Processing order {QuantitySaved + 1}...";
 
             DateTime lastModifiedDate;
             if (DateTime.TryParse(magentoOrder.UpdatedAt, out lastModifiedDate))
@@ -148,6 +142,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                 LoadItems(orderEntity, magentoOrder.Items);
                 LoadOrderCharges(orderEntity, magentoOrder);
             }
+
+            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
         }
 
         /// <summary>

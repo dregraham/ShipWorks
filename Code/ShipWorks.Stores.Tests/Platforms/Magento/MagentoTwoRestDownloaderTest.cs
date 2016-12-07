@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
@@ -74,6 +75,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
                 ModulePassword = "sweet"
             };
 
+            var progressReport = mock.Mock<IProgressReporter>();
+
             var webClient = mock.MockRepository.Create<IMagentoTwoRestClient>();
             webClient.Setup(w => w.GetToken()).Returns("token");
             webClient.Setup(w => w.GetOrders(It.IsAny<DateTime?>(), It.IsAny<int>())).Returns(response);
@@ -87,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             orderEntity = new MagentoOrderEntity();
 
             var testObject = mock.Create<MagentoTwoRestDownloader>(new TypedParameter(typeof(StoreEntity), store));
-            testObject.LoadOrder(orderEntity, order);
+            testObject.LoadOrder(orderEntity, order, progressReport.Object);
         }
 
         [Fact]
