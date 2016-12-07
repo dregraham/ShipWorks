@@ -58,14 +58,41 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
 
+            Progress.Detail = "Checking for orders...";
+
             try
             {
                 do
                 {
                     OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
                     totalOrders = ordersResponse.TotalCount;
+
+                    if (totalOrders == 0)
+                    {
+                        Progress.Detail = "No orders to download.";
+                        Progress.PercentComplete = 100;
+                        return;
+                    }
+
+                    // Check if it has been cancelled
+                    if (Progress.IsCancelRequested)
+                    {
+                        return;
+                    }
+
+                    Progress.Detail = $"Downloading {totalOrders} orders...";
+
                     foreach (Order magentoOrder in ordersResponse.Orders)
                     {
+                        // Update the status
+                        Progress.Detail = $"Processing order {QuantitySaved + 1}...";
+
+                        // Check if it has been cancelled
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
+
                         MagentoOrderIdentifier orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
                         MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
                         LoadOrder(orderEntity, magentoOrder);
@@ -75,6 +102,8 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     currentPage++;
                 } while (savedOrders < totalOrders);
+
+                Progress.Detail = "Done";
             }
             catch (MagentoException ex)
             {
@@ -87,6 +116,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder)
         {
+            // Check if it has been cancelled
+            if (Progress.IsCancelRequested)
+            {
+                return;
+            }
+
             orderEntity.OnlineLastModified =
                 DateTime.SpecifyKind(DateTime.Parse(magentoOrder.UpdatedAt), DateTimeKind.Utc);
             orderEntity.OnlineStatus = magentoOrder.Status;
