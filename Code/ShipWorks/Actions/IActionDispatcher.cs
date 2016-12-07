@@ -1,6 +1,6 @@
 ﻿using System;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Actions
 {
@@ -18,6 +18,6 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called each time a shipment has been successfully processed
         /// </summary>
-        void DispatchShipmentProcessed(ShipmentEntity shipment, ISqlAdapter adapter);
+        void DispatchShipmentProcessed(IShipmentEntity shipment, ISqlAdapter adapter);
     }
 }

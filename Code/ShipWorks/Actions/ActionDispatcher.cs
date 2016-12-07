@@ -8,6 +8,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
@@ -87,7 +88,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called each time a shipment has been successfully processed
         /// </summary>
-        public static void DispatchShipmentProcessed(ShipmentEntity shipment, ISqlAdapter adapter)
+        public static void DispatchShipmentProcessed(IShipmentEntity shipment, ISqlAdapter adapter)
         {
             List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentProcessed, shipment.Order.StoreID);
 
@@ -96,10 +97,8 @@ namespace ShipWorks.Actions
             {
                 ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger(action.TriggerSettings);
 
-                ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-
                 // Honor the Shipment Type limitation
-                if (trigger.RestrictType && trigger.ShipmentType != shipmentType)
+                if (trigger.RestrictType && trigger.ShipmentType != shipment.ShipmentTypeCode)
                 {
                     continue;
                 }

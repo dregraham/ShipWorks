@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Users;
 
@@ -61,47 +62,19 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 try
                 {
-                    // Insurance makes multiple web calls so it's done outside of the transaction
-                    if (insureShipService.IsInsuredByInsureShip(shipment))
-                    {
-                        log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
-                        insureShipService.Insure(shipment, result.Store);
-                        log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
-                    }
+                    EnsureShipmentIsInsured(result, shipment);
 
-                    // Transacted
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
-                        // Save the label data.
                         result.LabelData.Save();
 
-                        DateTime shipmentDate = dateTimeProvider.UtcNow;
+                        log.InfoFormat("Shipment {0} - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                        log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
+                        ResetTemporaryAddressChanges(result, shipment);
 
-                        // Now that the label is generated, we can reset the shipping fields the store changed back to their
-                        // original values before saving to the database
-                        foreach (ShipmentFieldIndex fieldIndex in result.FieldsToRestore)
-                        {
-                            // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
-                            shipment.SetNewFieldValue((int) fieldIndex, result.Clone.GetCurrentFieldValue((int) fieldIndex));
-                            shipment.Fields[(int) fieldIndex].IsChanged = false;
-                        }
+                        MarkShipmentAsProcessed(shipment, adapter);
 
-                        shipment.Processed = true;
-                        shipment.ProcessedDate = shipmentDate;
-                        shipment.ProcessedUserID = userSession.User.UserID;
-                        shipment.ProcessedComputerID = userSession.Computer.ComputerID;
-
-                        adapter.SaveAndRefetch(shipment);
-
-                        // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
-                        if (!shipment.ProcessingCompletesExternally())
-                        {
-                            // Dispatch the shipment processed event
-                            actionDispatcher.DispatchShipmentProcessed(shipment, adapter);
-                            log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
-                        }
+                        DispatchShipmentProcessedActions(shipment, adapter);
 
                         adapter.Commit();
                     }
@@ -113,6 +86,62 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
 
             return new LabelPersistenceResult(result);
+        }
+
+        /// <summary>
+        /// Mark the shipment as processed
+        /// </summary>
+        private void MarkShipmentAsProcessed(ShipmentEntity shipment, ISqlAdapter adapter)
+        {
+            shipment.Processed = true;
+            shipment.ProcessedDate = dateTimeProvider.UtcNow;
+            shipment.ProcessedUserID = userSession.User.UserID;
+            shipment.ProcessedComputerID = userSession.Computer.ComputerID;
+
+            adapter.SaveAndRefetch(shipment);
+        }
+
+        /// <summary>
+        /// Dispatch shipment processed actions, if necessary
+        /// </summary>
+        private void DispatchShipmentProcessedActions(IShipmentEntity shipment, ISqlAdapter adapter)
+        {
+            // For WorldShip actions don't happen until the shipment comes back in after being processed in WorldShip
+            if (!shipment.ProcessingCompletesExternally())
+            {
+                // Dispatch the shipment processed event
+                actionDispatcher.DispatchShipmentProcessed(shipment, adapter);
+                log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
+            }
+        }
+
+        /// <summary>
+        /// Reset the address changes that were made temporarily for services like GSP
+        /// </summary>
+        private static void ResetTemporaryAddressChanges(ILabelRetrievalResult result, ShipmentEntity shipment)
+        {
+            // Now that the label is generated, we can reset the shipping fields the store changed back to their
+            // original values before saving to the database
+            foreach (ShipmentFieldIndex fieldIndex in result.FieldsToRestore)
+            {
+                // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
+                shipment.SetNewFieldValue((int) fieldIndex, result.Clone.GetCurrentFieldValue((int) fieldIndex));
+                shipment.Fields[(int) fieldIndex].IsChanged = false;
+            }
+        }
+
+        /// <summary>
+        /// Ensure that the shipment is insured by our service, if necessary
+        /// </summary>
+        private void EnsureShipmentIsInsured(ILabelRetrievalResult result, ShipmentEntity shipment)
+        {
+            // Insurance makes multiple web calls so it's done outside of the transaction
+            if (insureShipService.IsInsuredByInsureShip(shipment))
+            {
+                log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
+                insureShipService.Insure(shipment, result.Store);
+                log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+            }
         }
     }
 }
