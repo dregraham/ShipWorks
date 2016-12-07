@@ -49,6 +49,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+            trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
+
             int currentPage = 1;
             int totalOrders = 0;
             int savedOrders = 0;

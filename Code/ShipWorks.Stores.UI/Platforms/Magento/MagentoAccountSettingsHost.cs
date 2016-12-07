@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using Interapptive.Shared.UI;
 using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Magento;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento
@@ -44,16 +45,14 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
-            try
+            GenericResult<MagentoStoreEntity> genericResult = viewModel.Save((MagentoStoreEntity) store);
+            if (genericResult.Success)
             {
-                viewModel.Save((MagentoStoreEntity) store);
                 return true;
             }
-            catch (MagentoException ex)
-            {
-                messageHelper.ShowError(ex.Message);
-                return false;
-            }
+
+            messageHelper.ShowError(genericResult.Message);
+            return false;
         }
     }
 }

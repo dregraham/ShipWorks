@@ -176,9 +176,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual void InitializeFromOnlineModule()
         {
-            GenericModuleStoreEntity generic = (GenericModuleStoreEntity)Store;
+            GenericModuleStoreEntity generic = (GenericModuleStoreEntity) Store;
 
-            GenericStoreWebClient webClient = this.CreateWebClient();
+            GenericStoreWebClient webClient = CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetStore();
 
             // Create the client for connecting to the module

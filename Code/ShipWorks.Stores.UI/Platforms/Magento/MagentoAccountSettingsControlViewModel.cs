@@ -103,19 +103,21 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// <summary>
         /// Saves the specified store.
         /// </summary>
-        public void Save(MagentoStoreEntity store)
+        public GenericResult<MagentoStoreEntity> Save(MagentoStoreEntity store)
         {
-            store.MagentoVersion = (int) MagentoVersion;
-            store.ModuleUsername = username;
+            string validationErrorMessage = GetValidationErrorMessage();
+            if (!string.IsNullOrEmpty(validationErrorMessage))
+            {
+                return GenericResult.FromError<MagentoStoreEntity>(validationErrorMessage);
+            }
 
-            store.ModulePassword = 
-                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username)
-                .Encrypt(password.ToInsecureString());
+            PopulateStore(store);
 
-            store.ModuleUrl = storeUrl;
-            store.ModuleOnlineStoreCode = StoreCode;
-
-            ValidateSettings(store);
+            GenericResult<MagentoStoreEntity> testConnectionResult = TestConnection(store);
+            if (!testConnectionResult.Success)
+            {
+                return testConnectionResult;
+            }
 
             try
             {
@@ -124,8 +126,57 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             }
             catch (GenericStoreException ex)
             {
-                throw new MagentoException($"Could not connect to Magento: {ex.Message}");
+                return GenericResult.FromError<MagentoStoreEntity>($"Could not connect to Magento: {ex.Message}");
             }
+
+            return GenericResult.FromSuccess(store);
+        }
+
+        private string GetValidationErrorMessage()
+        {
+            StringBuilder errorText = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                errorText.AppendLine("Username");
+            }
+
+            if (string.IsNullOrWhiteSpace(password?.ToInsecureString()))
+            {
+                errorText.AppendLine("Password");
+            }
+
+            if (string.IsNullOrWhiteSpace(storeUrl))
+            {
+                errorText.AppendLine("Url");
+            }
+
+            if (errorText.Length != 0)
+            {
+                return $"The following fields are required:{Environment.NewLine}{errorText}";
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Populates the store from user input.
+        /// </summary>
+        private void PopulateStore(MagentoStoreEntity store)
+        {
+            store.MagentoVersion = (int) MagentoVersion;
+            store.ModuleUsername = username;
+
+            store.ModulePassword =
+                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username)
+                .Encrypt(password.ToInsecureString());
+
+            store.ModuleUrl = storeUrl;
+            store.ModuleOnlineStoreCode = StoreCode;
+
+            GenericResult.FromSuccess(store);
+            return;
         }
 
         /// <summary>
@@ -135,29 +186,32 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// Could not connect to Magento.
         /// or Provided Url is invalid.
         /// </exception>
-        private void ValidateSettings(MagentoStoreEntity store)
+        private GenericResult<MagentoStoreEntity> TestConnection(MagentoStoreEntity store)
         {
-            IMagentoProbe probe = magentoProbes[(MagentoVersion)store.MagentoVersion];
+            IMagentoProbe probe = magentoProbes[(MagentoVersion) store.MagentoVersion];
 
             Uri storeUri;
             if(!Uri.TryCreate(store.ModuleUrl, UriKind.Absolute, out storeUri))
             {
-                throw new MagentoException(UrlNotInValidFormat);
+                return GenericResult.FromError<MagentoStoreEntity>(UrlNotInValidFormat);
             }
 
             GenericResult<Uri> compatibleUrlResult = probe.FindCompatibleUrl(store);
 
             if(!compatibleUrlResult.Success)
             {
-                throw new MagentoException(CouldNotConnect);
+                return GenericResult.FromError<MagentoStoreEntity>(CouldNotConnect);
             }
 
             if(!Equals(storeUri, compatibleUrlResult.Value))
             {
-                throw new MagentoException(UrlDoesntMatchProbe +
+                return GenericResult.FromError<MagentoStoreEntity>(
+                    UrlDoesntMatchProbe +
                     $"{Environment.NewLine}{Environment.NewLine}" +
                     $"Did you mean {compatibleUrlResult.Value}?");
             }
+
+            return GenericResult.FromSuccess(store);
         }
 
         /// <summary>

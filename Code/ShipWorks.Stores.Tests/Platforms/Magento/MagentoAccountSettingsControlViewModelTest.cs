@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
         const string defaultUrl = "http://www.shipworks.com";
         const string defaultPassword = "defaultPassword";
+        const string defaultUsername = "defaultUsername";
         
         public MagentoAccountSettingsControlViewModelTest()
         {
@@ -40,6 +41,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
                 .Returns(encryptionProvider.Object);
 
             testObject = mock.Create<MagentoAccountSettingsControlViewModel>();
+            testObject.Username = defaultUsername;
             testObject.StoreUrl = defaultUrl;
             testObject.Password = defaultPassword.ToSecureString();
         }
@@ -206,28 +208,32 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, true);
             testObject.StoreUrl = "badurl";
 
-            string error = Assert.Throws<MagentoException>(() => testObject.Save(store)).Message;
-            Assert.Equal(MagentoAccountSettingsControlViewModel.UrlNotInValidFormat, error);            
+            GenericResult<MagentoStoreEntity> genericResult = testObject.Save(store);
+            Assert.False(genericResult.Success);
+            Assert.Equal(MagentoAccountSettingsControlViewModel.UrlNotInValidFormat, genericResult.Message);            
         }
 
         [Fact]
-        public void Save_ThrowsMagentoException_WhenProbeUnecssfull()
+        public void Save_ReturnsFailure_WhenProbeUnsucessfull()
         {
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, false);
 
-            string error = Assert.Throws<MagentoException>(() => testObject.Save(store)).Message;
-            Assert.Equal(MagentoAccountSettingsControlViewModel.CouldNotConnect, error);
+            GenericResult<MagentoStoreEntity> genericResult = testObject.Save(store);
+            Assert.False(genericResult.Success);
+            Assert.Equal(MagentoAccountSettingsControlViewModel.CouldNotConnect, genericResult.Message);
         }
 
         [Fact]
-        public void Save_ThrowsMagentoException_WhenUrlDoesntMatchDiscoveredUrl()
+        public void Save_ReturnsFailure_WhenUrlDoesntMatchDiscoveredUrl()
         {
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, true, defaultUrl);
             testObject.StoreUrl = "http://www.yahoo.com";
 
-            string error = Assert.Throws<MagentoException>(() => testObject.Save(store)).Message;
-            Assert.StartsWith(MagentoAccountSettingsControlViewModel.UrlDoesntMatchProbe, error);
-            Assert.Contains(defaultUrl, error);
+            GenericResult<MagentoStoreEntity> genericResult = testObject.Save(store);
+
+            Assert.False(genericResult.Success);
+            Assert.StartsWith(MagentoAccountSettingsControlViewModel.UrlDoesntMatchProbe, genericResult.Message);
+            Assert.Contains(defaultUrl, genericResult.Message);
         }
 
         private void SetupMagentoVersion(MagentoVersion magentoVersion, bool success, string url = defaultUrl)

@@ -2,6 +2,7 @@
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Security;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento
 {
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// <summary>
         /// Saves the specified magento store entity.
         /// </summary>
-        void Save(MagentoStoreEntity magentoStoreEntity);
+        GenericResult<MagentoStoreEntity> Save(MagentoStoreEntity magentoStoreEntity);
 
         /// <summary>
         /// Loads the specified store.
