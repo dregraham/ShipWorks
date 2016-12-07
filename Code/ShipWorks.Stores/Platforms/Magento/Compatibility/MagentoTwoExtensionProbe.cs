@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -18,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         /// <summary>
         /// Check to see if the store is compatible with Magento 1
         /// </summary>
-        public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store) => 
+        public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store) =>
             ProbeUrl(store.ModuleUrl);
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
                     }
                 }
             }
-            catch (Exception)
+            catch (WebException)
             {
                 return GenericResult.FromError("Exception occurred while attempting to connect to ShipWorks Module.", request.Uri);
             }

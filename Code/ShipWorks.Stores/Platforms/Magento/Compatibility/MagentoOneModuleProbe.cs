@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -56,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
                     }
                 }
             }
-            catch (Exception)
+            catch (WebException)
             {
                 return GenericResult.FromError("Exception occurred while attempting to connect to ShipWorks Module.", request.Uri);
             }
