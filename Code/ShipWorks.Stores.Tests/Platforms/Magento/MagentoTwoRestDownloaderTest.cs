@@ -18,13 +18,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
     {
         private MagentoOrderEntity orderEntity;
         private readonly AutoMock mock;
-        private string goodMagentoOrder;
-        private string weirdMagentoOrder;
-        private string badMagentoOrder;
-        private string magentoOrderWithAttributes;
-        private string magentoItemWithOptions;
-        private string magentoItem;
-        private string magentoProduct;
+        private readonly string goodMagentoOrder;
+        private readonly string weirdMagentoOrder;
+        private readonly string badMagentoOrder;
+        private readonly string magentoOrderWithAttributes;
+        private readonly string magentoItemWithOptions;
+        private readonly string magentoItem;
+        private readonly string magentoProduct;
 
         public MagentoTwoRestDownloaderTest()
         {
