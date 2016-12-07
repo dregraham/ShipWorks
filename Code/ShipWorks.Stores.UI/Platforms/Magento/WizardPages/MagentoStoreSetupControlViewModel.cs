@@ -7,9 +7,7 @@ using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -24,6 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
     [Component]
     public class MagentoStoreSetupControlViewModel : INotifyPropertyChanged, IMagentoWizardSettingsControlViewModel
     {
+        public const string UrlNotInValidFormat = "Store Url not in a valid format.";
         private bool isMagento1;
         private string username;
         private SecureString password;
@@ -103,22 +102,22 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// Validate and Save Store
         /// </summary>
         /// <param name="store"></param>
-        public void Save(MagentoStoreEntity store)
+        public GenericResult<MagentoStoreEntity> Save(MagentoStoreEntity store)
         {
-            if (!Uri.IsWellFormedUriString(storeUrl, UriKind.Absolute))
+
+            string validationErrorMessage = GetValidationErrorMessage();
+            if (!string.IsNullOrEmpty(validationErrorMessage))
             {
-                throw new MagentoException("Store Url not in an a valid format.");
+                return GenericResult.FromError<MagentoStoreEntity>(validationErrorMessage);
             }
 
-            store.ModulePassword =
-                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username).
-                Encrypt(Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password)));
+            PopulateStore(store);
 
-            store.ModuleUsername = username;
-            store.ModuleUrl = storeUrl;
-            store.ModuleOnlineStoreCode = StoreCode;
-
-            ValidateSettings(store);
+            GenericResult<MagentoStoreEntity> testConnectionResult = TestConnection(store);
+            if (!testConnectionResult.Success)
+            {
+                return testConnectionResult;
+            }
 
             try
             {
@@ -127,14 +126,64 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
             }
             catch (GenericStoreException ex)
             {
-                throw new MagentoException($"Could not connect to Magento: {ex.Message}");
+                return GenericResult.FromError<MagentoStoreEntity>($"Could not connect to Magento: {ex.Message}");
             }
+
+            return GenericResult.FromSuccess(store);
+        }
+
+        /// <summary>
+        /// Populates the store from user input.
+        /// </summary>
+        private void PopulateStore(MagentoStoreEntity store)
+        {
+            store.ModulePassword =
+                encryptionProviderFactory.CreateSecureTextEncryptionProvider(username)
+                .Encrypt(Marshal.PtrToStringBSTR(Marshal.SecureStringToBSTR(password)));
+
+            store.ModuleUsername = username;
+            store.ModuleUrl = storeUrl;
+            store.ModuleOnlineStoreCode = StoreCode;
+        }
+
+        /// <summary>
+        /// Gets the validation error message - Blank if valid
+        /// </summary>
+        private string GetValidationErrorMessage()
+        {
+            StringBuilder errorText = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                errorText.AppendLine("Username");
+            }
+
+            if (string.IsNullOrWhiteSpace(password?.ToInsecureString()))
+            {
+                errorText.AppendLine("Password");
+            }
+
+            if (string.IsNullOrWhiteSpace(storeUrl))
+            {
+                errorText.AppendLine("Url");
+            }
+            else if (!Uri.IsWellFormedUriString(storeUrl, UriKind.Absolute))
+            {
+                errorText.AppendLine(UrlNotInValidFormat);
+            }
+
+
+            if (errorText.Length != 0)
+            {
+                return $"The following fields are required:{Environment.NewLine}{errorText}";
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
         /// Validate Settings.
         /// </summary>
-        private void ValidateSettings(MagentoStoreEntity store)
+        private GenericResult<MagentoStoreEntity> TestConnection(MagentoStoreEntity store)
         {
             MagentoVersion firstVersionToTry;
             MagentoVersion secondVersionToTry;
@@ -149,13 +198,13 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
                 secondVersionToTry = MagentoVersion.MagentoTwoREST;
             }
 
-            FindUrl(firstVersionToTry, secondVersionToTry, store);
+            return FindUrl(firstVersionToTry, secondVersionToTry, store);
         }
 
         /// <summary>
         /// Given 2 versions to try, see if either of them can connect to Magento. If they can, return success and the url to conenct with.
         /// </summary>
-        private void FindUrl(MagentoVersion firstVersionToTry, MagentoVersion secondVersionToTry, MagentoStoreEntity store)
+        private GenericResult<MagentoStoreEntity> FindUrl(MagentoVersion firstVersionToTry, MagentoVersion secondVersionToTry, MagentoStoreEntity store)
         {
             try
             {
@@ -171,14 +220,16 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 
                 if (!compatibleUrlResult.Success)
                 {
-                    throw new MagentoException("Could not connect to Magento");
+                    return GenericResult.FromError<MagentoStoreEntity>("Could not connect to Magento");
                 }
 
                 store.ModuleUrl = compatibleUrlResult.Value.ToString();
+
+                return GenericResult.FromSuccess(store);
             }
             catch (GenericStoreException ex)
             {
-                throw new MagentoException(ex);
+                return GenericResult.FromError<MagentoStoreEntity>(ex);
             }
         }
     }

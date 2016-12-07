@@ -7,14 +7,11 @@ using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using Interapptive.Shared.Security;
 using System.Security;
-using System.Runtime.InteropServices;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento
 {
@@ -132,6 +129,9 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             return GenericResult.FromSuccess(store);
         }
 
+        /// <summary>
+        /// Gets the validation error message - Blank if valid
+        /// </summary>
         private string GetValidationErrorMessage()
         {
             StringBuilder errorText = new StringBuilder();
@@ -149,15 +149,18 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             {
                 errorText.AppendLine("Url");
             }
+            else if (!Uri.IsWellFormedUriString(storeUrl, UriKind.Absolute))
+            {
+                errorText.AppendLine("Store Url not in a valid format.");
+            }
+
 
             if (errorText.Length != 0)
             {
                 return $"The following fields are required:{Environment.NewLine}{errorText}";
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -176,7 +179,6 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             store.ModuleOnlineStoreCode = StoreCode;
 
             GenericResult.FromSuccess(store);
-            return;
         }
 
         /// <summary>

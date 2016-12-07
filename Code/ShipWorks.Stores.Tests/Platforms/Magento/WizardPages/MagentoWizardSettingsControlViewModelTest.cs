@@ -21,14 +21,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
         readonly AutoMock mock;
         readonly MagentoStoreEntity store;
         readonly MagentoStoreSetupControlViewModel testObject;
-        readonly GenericResult<Uri> sucessResult;
+        readonly GenericResult<Uri> successResult;
         readonly Mock<IIndex<MagentoVersion, IMagentoProbe>> probeIIndex;
 
         public MagentoWizardSettingsControlViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             store = new MagentoStoreEntity();
-            sucessResult = GenericResult.FromSuccess<Uri>(new Uri("http://www.shipworks.com"));
+            successResult = GenericResult.FromSuccess<Uri>(new Uri("http://www.shipworks.com"));
 
             probeIIndex = mock.MockRepository.Create<IIndex<MagentoVersion, IMagentoProbe>>();
             mock.Provide(probeIIndex.Object);
@@ -38,8 +38,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
                 .Returns(new MockMagentoStoreType());
 
             testObject = mock.Create<MagentoStoreSetupControlViewModel>();
-            testObject.Username = "";
-            testObject.Password = new SecureString();
+            testObject.Username = "testUsername";
+            testObject.Password = "testPassword".ToSecureString();
+            testObject.StoreUrl = "http://www.shipworks.com";
         }
 
         private void SetupProbeResult(MagentoVersion magentoVersion, bool success, string url = "http://www.shipworks.com/")
@@ -53,9 +54,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
         }
 
         [Fact]
-        public void Save_ThrowsMagentoException_WhenUrlNotWellFormed()
+        public void Save_ReturnsUnsuccessful_WhenUrlNotWellFormed()
         {
-            Assert.Throws<MagentoException>(() => testObject.Save(store));
+            testObject.StoreUrl = "blah";
+            GenericResult<MagentoStoreEntity> saveResult = testObject.Save(store);
+
+            Assert.False(saveResult.Success);
+            Assert.Contains(MagentoStoreSetupControlViewModel.UrlNotInValidFormat, saveResult.Message);
         }
 
         [Fact]

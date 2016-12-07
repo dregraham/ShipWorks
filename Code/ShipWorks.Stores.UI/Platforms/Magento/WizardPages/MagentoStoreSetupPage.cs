@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -33,13 +34,10 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// </summary>
         private void OnStepNextMagentoStoreSetupPage(object sender, WizardStepEventArgs e)
         {
-            try
+            GenericResult<MagentoStoreEntity> genericResult = viewModel.Save(GetStore<MagentoStoreEntity>());
+            if (!genericResult.Success)
             {
-                viewModel.Save(GetStore<MagentoStoreEntity>());
-            }
-            catch (MagentoException ex)
-            {
-                messageHelper.ShowError(ex.Message);
+                messageHelper.ShowError(genericResult.Message);
                 e.NextPage = this;
             }
         }

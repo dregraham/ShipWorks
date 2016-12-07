@@ -131,7 +131,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [Fact]
         public void Save_SetsStoreUsername()
         {
-            string userName = "lkjsadf";
+            string userName = "random name";
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, true);
             testObject.Username = userName;
 
@@ -203,7 +203,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         }
 
         [Fact]
-        public void Save_ThrowsMagentoException_WhenUrlNotInValidFormat()
+        public void Save_ReturnsInvalidUrl_WhenUrlNotInValidFormat()
         {
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, true);
             testObject.StoreUrl = "badurl";
@@ -214,7 +214,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         }
 
         [Fact]
-        public void Save_ReturnsFailure_WhenProbeUnsucessfull()
+        public void Save_ReturnsFailure_WhenProbeUnsuccessful()
         {
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, false);
 
@@ -224,7 +224,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         }
 
         [Fact]
-        public void Save_ReturnsFailure_WhenUrlDoesntMatchDiscoveredUrl()
+        public void Save_ReturnsFailure_WhenUrlDoesNotMatchDiscoveredUrl()
         {
             SetupMagentoVersion(MagentoVersion.MagentoTwoREST, true, defaultUrl);
             testObject.StoreUrl = "http://www.yahoo.com";
@@ -239,7 +239,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         private void SetupMagentoVersion(MagentoVersion magentoVersion, bool success, string url = defaultUrl)
         {
             testObject.MagentoVersion = magentoVersion;
-            GenericResult<Uri> result = success ? GenericResult.FromSuccess<Uri>(new Uri(url)) : GenericResult.FromError<Uri>("error");
+            GenericResult<Uri> result = success ? GenericResult.FromSuccess(new Uri(url)) : GenericResult.FromError<Uri>("error");
 
             var myProbe = mock.MockRepository.Create<IMagentoProbe>();
             myProbe.Setup(p => p.FindCompatibleUrl(store)).Returns(result);

@@ -1,4 +1,5 @@
 ﻿using System.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
@@ -36,6 +37,6 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// <summary>
         /// Save and validate settings
         /// </summary>
-        void Save(MagentoStoreEntity store);
+        GenericResult<MagentoStoreEntity> Save(MagentoStoreEntity store);
     }
 }
