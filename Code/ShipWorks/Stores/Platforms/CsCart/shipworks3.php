@@ -21,9 +21,11 @@
 
 define('REQUIRE_SECURE', true);
 
+use Tygh\Registry;
 $php_value = phpversion();
 if (version_compare($php_value, '5.3.0') == -1) {
-    die('Currently installed PHP version (' . $php_value . ') is not supported. Minimal required PHP version is  5.3.0.');
+    echo 'Currently installed PHP version (' . $php_value . ') is not supported. Minimal required PHP version is  5.3.0.';
+    die();
 }
 
 define('AREA', 'A');
@@ -200,7 +202,6 @@ define('ACCOUNT_TYPE', 'admin');
         $owner = Registry::get('settings.Company.company_name');
         $email = Registry::get('settings.Company.company_site_administrator');
         $country = Registry::get('settings.Company.company_country');
-
 
         writeStartTag("Store");
             writeElement("Name", $name);
