@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         public void LoadOrder(MagentoOrderEntity orderEntity, Order magentoOrder)
         {
             // Check if it has been cancelled
-            if (Progress.IsCancelRequested)
+            if (Progress != null && Progress.IsCancelRequested)
             {
                 return;
             }
