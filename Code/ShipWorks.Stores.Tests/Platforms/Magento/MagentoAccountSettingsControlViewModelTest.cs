@@ -210,7 +210,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             GenericResult<MagentoStoreEntity> genericResult = testObject.Save(store);
             Assert.False(genericResult.Success);
-            Assert.Equal(MagentoAccountSettingsControlViewModel.UrlNotInValidFormat, genericResult.Message);            
+            Assert.Contains(MagentoAccountSettingsControlViewModel.UrlNotInValidFormat, genericResult.Message);            
         }
 
         [Fact]

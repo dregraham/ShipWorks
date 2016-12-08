@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             }
             else if (!Uri.IsWellFormedUriString(storeUrl, UriKind.Absolute))
             {
-                errorText.AppendLine("Store Url not in a valid format.");
+                errorText.AppendLine(UrlNotInValidFormat);
             }
 
 
