@@ -52,20 +52,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
 
-            int currentPage = 1;
-            int totalOrders = 0;
-            int savedOrders = 0;
-
-            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
-
             Progress.Detail = "Checking for orders...";
 
             try
             {
+                OrdersResponse ordersResponse;
                 do
                 {
-                    OrdersResponse ordersResponse = webClient.GetOrders(lastModifiedDate, currentPage);
-                    totalOrders = ordersResponse.TotalCount;
+                    ordersResponse = webClient.GetOrders(GetStartDate(), 1);
+                    int totalOrders = ordersResponse.TotalCount;
 
                     if (totalOrders == 0)
                     {
@@ -88,11 +83,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                         MagentoOrderEntity orderEntity = InstantiateOrder(orderIdentifier) as MagentoOrderEntity;
 
                         LoadOrder(orderEntity, magentoOrder, Progress);
-                        savedOrders++;
                     }
-
-                    currentPage++;
-                } while (savedOrders < totalOrders);
+                } while (ordersResponse.TotalCount > 0);
 
                 Progress.Detail = "Done";
             }
@@ -100,6 +92,16 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Get the start date for the download cycle
+        /// </summary>
+        /// <remarks>if we have not saved any orders yet use the start date minus 5 minutes</remarks>
+        private DateTime GetStartDate()
+        {
+            DateTime onlineLastModifiedStartingPoint = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow;
+            return QuantitySaved == 0 ? onlineLastModifiedStartingPoint.AddMinutes(-5) : onlineLastModifiedStartingPoint;
         }
 
         /// <summary>
