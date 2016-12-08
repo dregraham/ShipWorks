@@ -51,7 +51,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
-
             Progress.Detail = "Checking for orders...";
 
             try

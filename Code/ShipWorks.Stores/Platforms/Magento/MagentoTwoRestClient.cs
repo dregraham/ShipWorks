@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
         private const string CommentEndpoint = "rest/V1/orders/{0}/comments";
         private const string InvoiceEndpoint = "rest/V1/order/{0}/invoice";
-        private const int PageSize = 5;
+        private const int PageSize = 50;
 
         private string token;
         private readonly Uri storeUri;
