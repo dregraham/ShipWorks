@@ -1059,6 +1059,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
+
+            // Per stamps - only send state for domestic - send province for international
+            if (!toAddress.AsAddressAdapter().IsDomesticCountry())
+            {
+                // Only overwrite the Province if the State is not blank
+                if (!string.IsNullOrWhiteSpace(toAddress.State))
+                {
+                    toAddress.Province = toAddress.State;
+                    toAddress.State = string.Empty;
+                }
+            }
         }
 
         /// <summary>
