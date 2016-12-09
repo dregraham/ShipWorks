@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System;
+using ShipWorks.ApplicationCore.Options;
 
 
 namespace ShipWorks.Users
@@ -215,7 +216,7 @@ namespace ShipWorks.Users
                 ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
                 TemplateLastSelected = 0,
                 NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value,
-                SingleScanSettings = 0
+                SingleScanSettings = (int) SingleScanSettings.Disabled
             };
 
             adapter.SaveAndRefetch(settings);
