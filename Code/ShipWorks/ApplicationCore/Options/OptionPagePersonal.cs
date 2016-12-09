@@ -110,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Options
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
                 }
-                else if(singleScan.Checked)
+                else if (singleScan.Checked)
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.Scan;
                 }
