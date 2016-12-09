@@ -214,7 +214,8 @@ namespace ShipWorks.Users
                 CustomerFilterExpandedFolders = null,
                 ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds,
                 TemplateLastSelected = 0,
-                NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value
+                NextGlobalPostNotificationDate = SqlDateTime.MinValue.Value,
+                SingleScanSettings = 0
             };
 
             adapter.SaveAndRefetch(settings);

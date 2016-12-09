@@ -2614,6 +2614,7 @@
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
+          <Field Name="SingleScanSettings" Type="byte" Precision="3" FieldIndex="16" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
           <Field Name="UserID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -3552,7 +3553,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-12-09T15:13:18.9776293Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5349,13 +5350,13 @@
                 <Table Name="FilterNodeContentDirty">
                   <PkConstraintName Name="PK_FilterNodeContentDirty" />
                   <Fields>
-                    <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="ObjectID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="ObjectID" Ordinal="3" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="ParentID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="ObjectType" Ordinal="5" DbType="8" Precision="10" />
-                    <Field Name="ComputerID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="7" DbType="23" Length="100" />
+                    <Field Name="ComputerID" Ordinal="6" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ColumnsUpdated" Ordinal="7" IsPrimaryKey="true" DbType="23" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="FilterNodeRootDirty">
@@ -7509,6 +7510,7 @@
                     <Field Name="CustomerFilterLastActive" Ordinal="14" DbType="0" Precision="19" />
                     <Field Name="CustomerFilterExpandedFolders" Ordinal="15" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="NextGlobalPostNotificationDate" Ordinal="16" DbType="4" />
+                    <Field Name="SingleScanSettings" Ordinal="17" DbType="22" Precision="3" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -11244,6 +11246,7 @@
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
+            <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />
             <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
