@@ -2,6 +2,9 @@
 
 namespace ShipWorks.ApplicationCore.Options
 {
+    /// <summary>
+    /// Single Scan settings
+    /// </summary>
     public enum SingleScanSettings
     {
         [Description("Single scan disabled")]

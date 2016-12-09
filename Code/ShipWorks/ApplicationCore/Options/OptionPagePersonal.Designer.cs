@@ -2,12 +2,12 @@ namespace ShipWorks.ApplicationCore.Options
 {
     partial class OptionPagePersonal
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@ namespace ShipWorks.ApplicationCore.Options
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -48,6 +48,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.filterInitialSort = new System.Windows.Forms.ComboBox();
             this.infotipWeightFormat = new ShipWorks.UI.Controls.InfoTip();
             this.infotipMinimizeRibbon = new ShipWorks.UI.Controls.InfoTip();
+            this.sectionTitle1 = new ShipWorks.UI.Controls.SectionTitle();
+            this.singleScan = new System.Windows.Forms.CheckBox();
+            this.autoPrint = new System.Windows.Forms.CheckBox();
             this.panelInitialFilter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,8 +78,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionDisplay
             // 
-            this.sectionDisplay.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionDisplay.Location = new System.Drawing.Point(10, 10);
             this.sectionDisplay.Name = "sectionDisplay";
             this.sectionDisplay.Size = new System.Drawing.Size(532, 22);
@@ -95,8 +98,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionTitleRibbon
             // 
-            this.sectionTitleRibbon.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitleRibbon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleRibbon.Location = new System.Drawing.Point(10, 100);
             this.sectionTitleRibbon.Name = "sectionTitleRibbon";
             this.sectionTitleRibbon.Size = new System.Drawing.Size(532, 22);
@@ -125,8 +128,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionTitleFilters
             // 
-            this.sectionTitleFilters.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitleFilters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleFilters.Location = new System.Drawing.Point(10, 184);
             this.sectionTitleFilters.Name = "sectionTitleFilters";
             this.sectionTitleFilters.Size = new System.Drawing.Size(532, 22);
@@ -169,7 +172,6 @@ namespace ShipWorks.ApplicationCore.Options
             // filterComboBox
             // 
             this.filterComboBox.DropDownHeight = 350;
-            this.filterComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filterComboBox.IntegralHeight = false;
             this.filterComboBox.Location = new System.Drawing.Point(141, 22);
             this.filterComboBox.Name = "filterComboBox";
@@ -178,8 +180,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionTitleShipping
             // 
-            this.sectionTitleShipping.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitleShipping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleShipping.Location = new System.Drawing.Point(10, 312);
             this.sectionTitleShipping.Name = "sectionTitleShipping";
             this.sectionTitleShipping.Size = new System.Drawing.Size(532, 22);
@@ -215,8 +217,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // panelInitialFilter
             // 
-            this.panelInitialFilter.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelInitialFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelInitialFilter.Controls.Add(this.radioInitialFilterRecent);
             this.panelInitialFilter.Controls.Add(this.filterComboBox);
             this.panelInitialFilter.Controls.Add(this.radioInitialFilterAlways);
@@ -237,7 +239,7 @@ namespace ShipWorks.ApplicationCore.Options
             // infotipWeightFormat
             // 
             this.infotipWeightFormat.Caption = "Regardless of the format the weight is displayed as, you can enter the weight in " +
-                "any format.";
+    "any format.";
             this.infotipWeightFormat.Location = new System.Drawing.Point(364, 347);
             this.infotipWeightFormat.Name = "infotipWeightFormat";
             this.infotipWeightFormat.Size = new System.Drawing.Size(12, 12);
@@ -247,12 +249,43 @@ namespace ShipWorks.ApplicationCore.Options
             // infotipMinimizeRibbon
             // 
             this.infotipMinimizeRibbon.Caption = "When the ribbon is minimized it has the appearance of a regular Windows menu.  \r\n" +
-                "\r\nThe Ribbon can also be minimized by double-clicking a Ribbon tab. ";
+    "\r\nThe Ribbon can also be minimized by double-clicking a Ribbon tab. ";
             this.infotipMinimizeRibbon.Location = new System.Drawing.Point(147, 158);
             this.infotipMinimizeRibbon.Name = "infotipMinimizeRibbon";
             this.infotipMinimizeRibbon.Size = new System.Drawing.Size(12, 12);
             this.infotipMinimizeRibbon.TabIndex = 21;
             this.infotipMinimizeRibbon.Title = "Minimize the Ribbon";
+            // 
+            // sectionTitle1
+            // 
+            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitle1.Location = new System.Drawing.Point(10, 386);
+            this.sectionTitle1.Name = "sectionTitle1";
+            this.sectionTitle1.Size = new System.Drawing.Size(532, 22);
+            this.sectionTitle1.TabIndex = 13;
+            this.sectionTitle1.Text = "Single Scan";
+            // 
+            // singleScan
+            // 
+            this.singleScan.AutoSize = true;
+            this.singleScan.Location = new System.Drawing.Point(28, 414);
+            this.singleScan.Name = "singleScan";
+            this.singleScan.Size = new System.Drawing.Size(175, 17);
+            this.singleScan.TabIndex = 22;
+            this.singleScan.Text = "Search orders by barcode scan";
+            this.singleScan.UseVisualStyleBackColor = true;
+            this.singleScan.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
+            // 
+            // autoPrint
+            // 
+            this.autoPrint.AutoSize = true;
+            this.autoPrint.Location = new System.Drawing.Point(50, 437);
+            this.autoPrint.Name = "autoPrint";
+            this.autoPrint.Size = new System.Drawing.Size(227, 17);
+            this.autoPrint.TabIndex = 23;
+            this.autoPrint.Text = "Automatically print labels on barcode scan";
+            this.autoPrint.UseVisualStyleBackColor = true;
             // 
             // OptionPagePersonal
             // 
@@ -261,6 +294,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(0, 15);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.autoPrint);
+            this.Controls.Add(this.singleScan);
+            this.Controls.Add(this.sectionTitle1);
             this.Controls.Add(this.infotipMinimizeRibbon);
             this.Controls.Add(this.infotipWeightFormat);
             this.Controls.Add(this.filterInitialSort);
@@ -278,7 +314,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.colorScheme);
             this.Controls.Add(this.labelColorScheme);
             this.Controls.Add(this.sectionDisplay);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPagePersonal";
             this.Size = new System.Drawing.Size(556, 652);
             this.Load += new System.EventHandler(this.OnLoad);
@@ -311,5 +347,8 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.ComboBox filterInitialSort;
         private UI.Controls.InfoTip infotipWeightFormat;
         private UI.Controls.InfoTip infotipMinimizeRibbon;
+        private UI.Controls.SectionTitle sectionTitle1;
+        private System.Windows.Forms.CheckBox singleScan;
+        private System.Windows.Forms.CheckBox autoPrint;
     }
 }
