@@ -99,8 +99,19 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <remarks>if we have not saved any orders yet use the start date minus 5 minutes</remarks>
         private DateTime GetStartDate()
         {
-            DateTime onlineLastModifiedStartingPoint = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow;
-            return QuantitySaved == 0 ? onlineLastModifiedStartingPoint.AddMinutes(-5) : onlineLastModifiedStartingPoint;
+            DateTime? onlineLastModifiedStartingPoint = GetOnlineLastModifiedStartingPoint();
+
+            // If this is the first time we've ever downloaded and they picked all orders during setup
+            if (onlineLastModifiedStartingPoint == null)
+            {
+                return DateTime.MinValue;
+            }
+
+            // If we haven't saved any orders yet use the start date minus 5 minutes
+            // add a 5 min buffer to overlap possible server time issues
+            return QuantitySaved == 0 ?
+                onlineLastModifiedStartingPoint.Value.AddMinutes(-5) :
+                onlineLastModifiedStartingPoint.Value;
         }
 
         /// <summary>
