@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
-                .Do(_ => SelectFirstRow())
+                .Do(x => SelectShipmentRows(x.SelectedShipments))
                 .Subscribe();
 
             messenger.OfType<PanelShownMessage>()
@@ -106,8 +106,14 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Select the first row, which should be the first shipment
         /// </summary>
-        private void SelectFirstRow()
+        private void SelectShipmentRows(IEnumerable<long> shipmentsToSelect)
         {
+            if (shipmentsToSelect.Any())
+            {
+                entityGrid.SelectRows(shipmentsToSelect);
+                return;
+            }
+
             GridRow firstShipment = entityGrid.Rows.OfType<GridRow>().FirstOrDefault();
 
             if (firstShipment == null)

@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
-            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
+            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection, orderMessage.SelectedShipments);
             ShipmentCount = loadedOrderSelection.ShipmentAdapters.Count();
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
@@ -243,7 +243,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
-        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(LoadedOrderSelection loadedSelection)
+        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(
+            LoadedOrderSelection loadedSelection, IEnumerable<long> selectedShipments)
         {
             if (loadedSelection.Exception != null)
             {
@@ -261,7 +262,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
             }
 
-            return ShippingPanelLoadedShipmentResult.Success;
+            return selectedShipments.IsCountGreaterThan(1) ?
+                ShippingPanelLoadedShipmentResult.Multiple :
+                ShippingPanelLoadedShipmentResult.Success;
         }
 
         /// <summary>
@@ -288,7 +291,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             UpdateStoredShipment(fromShipmentAdapter);
 
-            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
+            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection, Enumerable.Empty<long>());
 
             // If we are an unsupported shipment type, stop and show the appropriate message.
             if (ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)

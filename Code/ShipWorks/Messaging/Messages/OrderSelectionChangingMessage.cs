@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Messaging.Messages
@@ -14,10 +14,20 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList)
+        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList) :
+            this(sender, orderIdList, Enumerable.Empty<long>())
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList, IEnumerable<long> selectedShipments)
         {
             Sender = sender;
-            OrderIdList = new ReadOnlyCollection<long>(orderIdList.ToList());
+            OrderIdList = orderIdList.ToReadOnly();
+            SelectedShipments = selectedShipments.ToReadOnly();
             MessageId = Guid.NewGuid();
         }
 
@@ -35,5 +45,10 @@ namespace ShipWorks.Messaging.Messages
         /// Get the list of order ids
         /// </summary>
         public IEnumerable<long> OrderIdList { get; }
+
+        /// <summary>
+        /// Get the list of shipments to select when order is loaded
+        /// </summary>
+        public IEnumerable<long> SelectedShipments { get; }
     }
 }
