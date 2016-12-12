@@ -52,6 +52,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CustomerFilterLastActive = source.CustomerFilterLastActive;
             CustomerFilterExpandedFolders = source.CustomerFilterExpandedFolders;
             NextGlobalPostNotificationDate = source.NextGlobalPostNotificationDate;
+            SingleScanSettings = source.SingleScanSettings;
             
             User = source.User?.AsReadOnly(objectMap);
             
@@ -157,6 +158,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.DateTime NextGlobalPostNotificationDate { get; }
+        /// <summary> The SingleScanSettings property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."SingleScanSettings"<br/>
+        /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Byte SingleScanSettings { get; }
         
         public IUserEntity User { get; }
         
