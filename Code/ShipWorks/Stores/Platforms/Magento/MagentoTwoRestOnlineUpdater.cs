@@ -5,7 +5,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using SD.Tools.BCLExtensions.CollectionsRelated;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -17,7 +16,6 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Stores.Platforms.Magento.DTO;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagentoTwoRestShipment;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestInvoice;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
@@ -234,7 +232,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 adapter.FetchEntityCollection(orderEntity.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == orderEntity.OrderID));
             }
 
-            if (!orderEntity.OrderItems.IsNullOrEmpty())
+            if (orderEntity.OrderItems?.Any() ?? false)
             {
                 request.Items = new List<ShipmentItem>();
 
@@ -257,7 +255,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private string GetCarrierCode(ShipmentEntity shipment)
         {
-            string code = "";
+            string code;
             switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.FedEx:
@@ -287,7 +285,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private string GetShippingService(ShipmentEntity shipment)
         {
-            string service = "";
+            string service;
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.FedEx:
