@@ -450,7 +450,18 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         }
 
         /// <summary>
-        /// A shipment has been deleted
+        /// Unload the entire order
+        /// </summary>
+        public virtual void UnloadOrder()
+        {
+            UnloadShipment();
+
+            loadedOrderSelection = default(LoadedOrderSelection);
+
+        }
+
+        /// <summary>
+        /// Unload the current shipment
         /// </summary>
         public virtual void UnloadShipment()
         {
