@@ -56,12 +56,72 @@
             <ScrollViewer.Resources>
                 <SolidColorBrush x:Key="Green" Color="#FF009900" />
                 <SolidColorBrush x:Key="Yellow" Color="#FFE8A800" />
+                <SolidColorBrush x:Key="Blue" Color="#FF0066CC" />
                 <Style TargetType="ui:NotificationBorder">
                     <Setter Property="Margin" Value="0,0,0,12" />
                 </Style>
             </ScrollViewer.Resources>
             <StackPanel Margin="6, 6, 6, 6"
                         MinWidth="296">
+                <ui:NotificationBorder BorderBrush="{StaticResource Blue}"
+                                       Visibility="{Binding IsEnabled,
+                                            RelativeSource={RelativeSource Self},
+                                            Converter={StaticResource BooleanToVisibility}}"
+                                       IconFontFamily="Tahoma">
+                    <ui:NotificationBorder.IsEnabled>
+                        <MultiBinding Converter="{StaticResource BooleanAnd}">
+                            <Binding Path="IsShipmentsPanelHidden" Mode="OneWay" />
+                            <Binding Path="HasMultipleShipments" Mode="OneWay" />
+                        </MultiBinding>
+                    </ui:NotificationBorder.IsEnabled>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource Blue}"
+                                   Margin="0,0,8,0">
+                            Order has <Run Text="{Binding MoreShipmentCount, Mode=OneWay}" /> more
+                            <Run Text="{Binding MoreShipmentCount, Mode=OneWay,
+                                Converter={StaticResource Pluralizing},
+                                ConverterParameter='shipment'}" />
+                        </TextBlock>
+
+                        <WrapPanel>
+                            <TextBlock Style="{StaticResource TextBlock.Empty}"
+                                   Margin="0, 4, 0, 4"
+                                   TextWrapping="Wrap">
+                                <Hyperlink Command="{Binding OpenShippingDialogCommand}"
+                                        CommandParameter="{x:Static local:OpenShippingDialogType.AllShipments}">Click here </Hyperlink>
+                                to manage all
+                                <Run Text="{Binding ShipmentCount, Mode=OneWay}" />
+                                shipments
+                            </TextBlock>
+                            <Image Style="{StaticResource Image.InfoTip}"
+                                   Margin="8,1,0,0"
+                                   ToolTipService.ShowDuration="30000"
+                                   Width="12" Height="12">
+                                <Image.ToolTip>
+                                    <Grid Width="425">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Image Style="{StaticResource Image.Info20x20}"
+                                               VerticalAlignment="Top" />
+
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                            <TextBlock FontWeight="Bold">Multiple Shipments</TextBlock>
+                                            <TextBlock TextWrapping="Wrap"
+                                                       Margin="0,4,0,4">Enabling the Shipments panel allows managing orders that have multiple shipments without using the Ship Orders dialog.</TextBlock>
+                                            <TextBlock TextWrapping="Wrap">To enable the Shipments panel, click: View > Show Panels > Shipments</TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+
+                                </Image.ToolTip>
+                            </Image>
+                        </WrapPanel>
+                    </StackPanel>
+                </ui:NotificationBorder>
                 <ui:NotificationBorder BorderBrush="{StaticResource Green}"
                                        Visibility="{Binding ShipmentStatus, Converter={StaticResource VisibleWhenEqualToParameter}, ConverterParameter={x:Static sw:ShipmentStatus.Processed}}">
                     <ui:NotificationBorder.IconControl>
@@ -106,39 +166,6 @@
                                    Text="{Binding StatusDate,Converter={StaticResource FriendlyDate}}"
                                    FontSize="16" />
                     </WrapPanel>
-                </ui:NotificationBorder>
-                <ui:NotificationBorder BorderBrush="{StaticResource Yellow}"
-                                       Visibility="{Binding IsEnabled,
-                                            RelativeSource={RelativeSource Self},
-                                            Converter={StaticResource BooleanToVisibility}}"
-                                       IconControl="!"
-                                       IconFontFamily="Tahoma">
-                    <ui:NotificationBorder.IsEnabled>
-                        <MultiBinding Converter="{StaticResource BooleanAnd}">
-                            <Binding Path="IsShipmentsPanelHidden" Mode="OneWay" />
-                            <Binding Path="HasMultipleShipments" Mode="OneWay" />
-                        </MultiBinding>
-                    </ui:NotificationBorder.IsEnabled>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="16"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource Yellow}"
-                                   Margin="0,0,8,0">
-                            Order has <Run Text="{Binding MoreShipmentCount, Mode=OneWay}" /> more
-                            <Run Text="{Binding MoreShipmentCount, Mode=OneWay,
-                                Converter={StaticResource Pluralizing},
-                                ConverterParameter='shipment'}" />
-                        </TextBlock>
-
-                        <TextBlock Style="{StaticResource TextBlock.Empty}"
-                                   Margin="0, 4, 0, 4">
-                            <Hyperlink Command="{Binding OpenShippingDialogCommand}"
-                                    CommandParameter="{x:Static local:OpenShippingDialogType.AllShipments}">Click here </Hyperlink>
-                            to manage all
-                            <Run Text="{Binding ShipmentCount, Mode=OneWay}" />
-                            shipments
-                        </TextBlock>
-                    </StackPanel>
                 </ui:NotificationBorder>
 
                 <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Success}}"
