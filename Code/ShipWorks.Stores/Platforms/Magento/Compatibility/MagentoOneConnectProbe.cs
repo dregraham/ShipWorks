@@ -27,8 +27,6 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
         /// </summary>
         public GenericResult<Uri> FindCompatibleUrl(MagentoStoreEntity store)
         {
-            store.ModuleUrl = store.ModuleUrl.TrimEnd('/');
-
             // First try just the given url
             GenericResult<Uri> result = ProbeUrl(store);
 
