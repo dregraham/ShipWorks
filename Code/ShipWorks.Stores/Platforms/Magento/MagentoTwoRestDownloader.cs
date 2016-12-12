@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     ordersResponse = webClient.GetOrders(GetStartDate(), 1);
                     int totalOrders = ordersResponse.TotalCount;
 
-                    if (totalOrders == 0)
+                    if (totalOrders == 0 && QuantitySaved == 0)
                     {
                         Progress.Detail = "No orders to download.";
                         Progress.PercentComplete = 100;
