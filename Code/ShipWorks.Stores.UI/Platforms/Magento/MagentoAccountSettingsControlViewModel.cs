@@ -3,7 +3,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using System;
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
         /// Initializes a new instance of the <see cref="MagentoAccountSettingsControlViewModel"/> class.
         /// </summary>
         public MagentoAccountSettingsControlViewModel(
-            IIndex<MagentoVersion, IMagentoProbe> magentoProbes, 
+            IIndex<MagentoVersion, IMagentoProbe> magentoProbes,
             IEncryptionProviderFactory encryptionProviderFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -111,22 +110,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento
             PopulateStore(store);
 
             GenericResult<MagentoStoreEntity> testConnectionResult = TestConnection(store);
-            if (!testConnectionResult.Success)
-            {
-                return testConnectionResult;
-            }
-
-            try
-            {
-                GenericModuleStoreType storeType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
-                storeType.InitializeFromOnlineModule();
-            }
-            catch (GenericStoreException ex)
-            {
-                return GenericResult.FromError<MagentoStoreEntity>($"Could not connect to Magento: {ex.Message}");
-            }
-
-            return GenericResult.FromSuccess(store);
+            return !testConnectionResult.Success ? testConnectionResult : GenericResult.FromSuccess(store);
         }
 
         /// <summary>
