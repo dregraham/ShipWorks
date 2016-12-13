@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private string GetServiceUrl()
         {
             Uri storeUri = new Uri(Store.ModuleUrl);
-            return $"{storeUri.AbsoluteUri}index.php/api/soap/index/";
+            return $"{storeUri.AbsoluteUri.TrimEnd('/')}/index.php/api/soap/index/";
         }
 
         /// <summary>
