@@ -146,8 +146,10 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderEntity.OrderNumber = magentoOrder.EntityId;
                 orderEntity.OrderTotal = Convert.ToDecimal(magentoOrder.GrandTotal);
                 orderEntity.MagentoOrderID = magentoOrder.EntityId;
+                orderEntity.OnlineCustomerID = magentoOrder.CustomerId;
                 LoadItems(orderEntity, magentoOrder.Items);
                 LoadOrderCharges(orderEntity, magentoOrder);
+                LoadOrderPayment(orderEntity, magentoOrder);
             }
 
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
@@ -213,6 +215,16 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderEntity.BillPostalCode = billingAddress.Postcode;
                 orderEntity.BillCountryCode = Geography.GetCountryCode(billingAddress.CountryId);
             }
+        }
+
+        /// <summary>
+        /// Loads the orders payment information
+        /// </summary>
+        private void LoadOrderPayment(OrderEntity order, Order magentoOrder)
+        {
+            OrderPaymentDetailEntity orderPayment = InstantiateOrderPaymentDetail(order);
+            orderPayment.Label = "Payment Method";
+            orderPayment.Value = magentoOrder?.Payment?.Method;
         }
 
         /// <summary>
