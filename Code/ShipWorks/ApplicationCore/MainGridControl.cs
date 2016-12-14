@@ -365,10 +365,14 @@ namespace ShipWorks.ApplicationCore
             {
                 if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search)
                 {
-                    GridRow onlyGridRow = ActiveGrid?.Rows?.Cast<GridRow>().SingleOrDefault();
-                    if (onlyGridRow != null)
+                    IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
+                    if ((rows?.CompareCountTo(1) ?? ComparisonResult.Less) == ComparisonResult.Equal)
                     {
-                        onlyGridRow.Selected = true;
+                        GridRow onlyGridRow = rows?.FirstOrDefault();
+                        if (onlyGridRow != null)
+                        {
+                            onlyGridRow.Selected = true;
+                        }
                     }
                 }
             }
