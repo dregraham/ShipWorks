@@ -80,9 +80,9 @@ namespace ShipWorks.Shipping
         {
             switch (shipment.ShipResidentialStatus)
             {
-                case (int)ValidationDetailStatusType.Yes:
+                case (int) ValidationDetailStatusType.Yes:
                     return true;
-                case (int)ValidationDetailStatusType.No:
+                case (int) ValidationDetailStatusType.No:
                     return false;
                 default:
                     // Just fall back on testing whether the company is set to determine if the address is commercial
