@@ -22,6 +22,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Filters.Grid;
 
@@ -715,24 +716,44 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void PerformQuickSearch()
         {
-            if (GetBasicSearchText().Length > 0)
-            {
-                AdvancedSearchVisible = false;
-                initiatedAdvanced = false;
 
+            if (AdvancedSearchVisible)
+            {
                 if (!IsSearchActive)
                 {
                     StartSearch();
                 }
-            }
 
-            if (IsSearchActive && !AdvancedSearchResultsActive)
-            {
+                initiatedAdvanced = true;
+
                 // Upate the search with the current definition
                 searchProvider.Search(GetSearchDefinition());
 
                 RaiseSearchQueryChanged();
             }
+
+            else
+            {
+                if (GetBasicSearchText().Length > 0)
+                {
+                    AdvancedSearchVisible = false;
+                    initiatedAdvanced = false;
+
+                    if (!IsSearchActive)
+                    {
+                        StartSearch();
+                    }
+                }
+
+                if (IsSearchActive && !AdvancedSearchResultsActive)
+                {
+                    // Upate the search with the current definition
+                    searchProvider.Search(GetSearchDefinition());
+
+                    RaiseSearchQueryChanged();
+                }
+            }
+
         }
 
         /// <summary>
@@ -806,7 +827,38 @@ namespace ShipWorks.ApplicationCore
                 // irrelevant.
                 if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
                 {
-                    return filterEditor.FilterDefinition;
+                    string search = GetBasicSearchText();
+
+                    if (search.Length == 0)
+                    {
+                        return filterEditor.FilterDefinition;
+                    }
+
+                    FilterDefinition combinedFilter;
+
+                    ////
+                    //combinedFilter = new FilterDefinition(ActiveFilterTarget);
+                    //combinedFilter.RootContainer.ParentContainer = filterEditor.FilterDefinition.RootContainer;
+                    //combinedFilter.RootContainer.SecondGroup = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search).RootContainer;
+
+                    combinedFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search);
+                    FilterDefinition advancedFilter = new FilterDefinition(filterEditor.FilterDefinition.GetXml());
+                    if (combinedFilter.RootContainer.SecondGroup == null)
+                    {
+                        combinedFilter.RootContainer.SecondGroup = advancedFilter.RootContainer;
+                    }
+                    else
+                    {
+                        combinedFilter.RootContainer.SecondGroup.SecondGroup = advancedFilter.RootContainer;
+                    }
+
+                    ////
+                    //combinedFilter = new FilterDefinition(ActiveFilterTarget);
+                    //combinedFilter.RootContainer = filterEditor.FilterDefinition.RootContainer;
+
+                    //combinedFilter.RootContainer.SecondGroup = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search).RootContainer;
+
+                    return combinedFilter;
                 }
 
                 return null;
@@ -939,7 +991,7 @@ namespace ShipWorks.ApplicationCore
         {
             get
             {
-                return IsSearchActive && initiatedAdvanced && GetBasicSearchText().Length == 0;
+                return IsSearchActive && initiatedAdvanced;
             }
         }
 
