@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -42,7 +43,6 @@ namespace Interapptive.Shared.Messaging.Logging
             endpoint = $"http://localhost:9809/ShipWorks/{Guid.NewGuid()}";
             client = new WebClient();
             settings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-
             Observable.Create<ILogItem>(x =>
             {
                 observer = x;
@@ -52,6 +52,17 @@ namespace Interapptive.Shared.Messaging.Logging
             .Select(x => new { Data = JsonConvert.SerializeObject(x, settings), Endpoint = x.Endpoint })
             .Do(x => client.UploadString(endpoint + "/" + x.Endpoint, "POST", x.Data))
             .Subscribe(_ => { }, ex => { });
+        }
+
+        /// <summary>
+        /// Add a converter to the list
+        /// </summary>
+        public void AddConverters(Func<IEnumerable<JsonConverter>> getConverters)
+        {
+            foreach (JsonConverter converter in getConverters())
+            {
+                settings.Converters.Add(converter);
+            }
         }
 
         /// <summary>

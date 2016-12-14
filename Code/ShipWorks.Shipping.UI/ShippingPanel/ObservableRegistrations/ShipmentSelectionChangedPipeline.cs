@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -32,7 +33,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public IDisposable Register(ShippingPanelViewModel viewModel)
         {
             return messenger.OfType<ShipmentSelectionChangedMessage>()
-                .Do(x => HandleShipmentSelectionChanged(x.SelectedShipmentIDs, viewModel))
+                .Trackable()
+                .Do(this, x => HandleShipmentSelectionChanged(x.SelectedShipmentIDs, viewModel))
                 .Subscribe();
         }
 

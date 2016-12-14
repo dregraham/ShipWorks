@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.NotLoaded)
             {
-                LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection, orderMessage.SelectedShipments);
+                LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
             }
 
             ShipmentCount = loadedOrderSelection.ShipmentAdapters.Count();
@@ -250,8 +250,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         /// <summary>
         /// Sets the LoadedShipmentResult based on orderSelectionLoaded
         /// </summary>
-        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(
-            LoadedOrderSelection loadedSelection, IEnumerable<long> selectedShipments)
+        private ShippingPanelLoadedShipmentResult GetLoadedShipmentResult(LoadedOrderSelection loadedSelection)
         {
             if (loadedSelection.Exception != null)
             {
@@ -269,9 +268,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
             }
 
-            //return selectedShipments.IsCountGreaterThan(1) ?
-            //    ShippingPanelLoadedShipmentResult.Multiple :
-            //    ShippingPanelLoadedShipmentResult.Success;
             return ShippingPanelLoadedShipmentResult.Success;
         }
 
@@ -299,7 +295,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             UpdateStoredShipment(fromShipmentAdapter);
 
-            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection, Enumerable.Empty<long>());
+            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
             // If we are an unsupported shipment type, stop and show the appropriate message.
             if (ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
@@ -375,7 +371,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
                 AllowEditing = false;
 
-                messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment }, ShipmentViewModel?.SelectedRate));
+                messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment },
+                    loadedOrderSelection.ShipmentAdapters?.Select(x => x.Shipment),
+                    ShipmentViewModel?.SelectedRate));
             }
         }
 

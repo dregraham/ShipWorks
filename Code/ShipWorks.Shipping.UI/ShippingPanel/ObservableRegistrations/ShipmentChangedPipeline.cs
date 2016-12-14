@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -39,8 +40,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messages.OfType<ShipmentChangedMessage>()
+                .Trackable()
                 .ObserveOn(schedulerProvider.Dispatcher)
-                .Subscribe(msg => OnShipmentChanged(msg, viewModel));
+                .Subscribe(this, msg => OnShipmentChanged(msg, viewModel));
         }
 
         /// <summary>

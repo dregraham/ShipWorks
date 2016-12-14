@@ -941,6 +941,8 @@
     <Compile Include="Data\IDataResourceManager.cs" />
     <Compile Include="Data\IDeletionService.cs" />
     <Compile Include="Data\IObjectReferenceManager.cs" />
+    <Compile Include="Data\JsonConverters\ShipmentEntityJsonConverter.cs" />
+    <Compile Include="Data\JsonConverters\StoreEntityJsonConverter.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\Brown\IBrownEditionUtility.cs" />
@@ -1179,6 +1181,7 @@
     <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
+    <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />

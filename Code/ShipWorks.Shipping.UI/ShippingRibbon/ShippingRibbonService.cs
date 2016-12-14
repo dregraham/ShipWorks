@@ -173,7 +173,10 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         private void HandleShipmentsProcessed(ShipmentsProcessedMessage message)
         {
-            ShipmentEntity processedShipment = message.Shipments.Select(x => x.Shipment).FirstOrDefault(x => x.ShipmentID == currentShipment.ShipmentID);
+            ShipmentEntity processedShipment = message.Shipments
+                .Select(x => x.Shipment)
+                .FirstOrDefault(x => x.ShipmentID == currentShipment?.ShipmentID);
+
             if (processedShipment != null)
             {
                 currentShipment = processedShipment;
@@ -189,7 +192,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             ShipmentEntity voidedShipment = message.VoidShipmentResults.
                 Select(x => x.Shipment).
-                FirstOrDefault(x => x.ShipmentID == currentShipment.ShipmentID);
+                FirstOrDefault(x => x.ShipmentID == currentShipment?.ShipmentID);
 
             if (voidedShipment?.ShipmentID == currentShipment.ShipmentID)
             {
