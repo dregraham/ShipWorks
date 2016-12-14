@@ -465,7 +465,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             orderSelectionLoaded = new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable);
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable) }));
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
+                new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable)
+            }));
 
             Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
         }

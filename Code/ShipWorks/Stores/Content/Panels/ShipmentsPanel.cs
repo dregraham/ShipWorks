@@ -45,10 +45,8 @@ namespace ShipWorks.Stores.Content.Panels
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsPanel));
 
-        // So we don't race condition on fast selection changes to auto-create more than one shipment for an order
-        static HashSet<long> autoCreatingShipments = new HashSet<long>();
-
         private OrderEntity loadedOrder;
+        private bool isThisPanelVisible;
 
         /// <summary>
         /// Constructor
@@ -57,6 +55,18 @@ namespace ShipWorks.Stores.Content.Panels
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Gets all the entity keys from the grid
+        /// </summary>
+        public IEnumerable<long> EntityKeys =>
+            entityGrid.EntityGateway?.GetOrderedKeys() ?? Enumerable.Empty<long>();
+
+        /// <summary>
+        /// Default shipment selection
+        /// </summary>
+        public IEnumerable<long> DefaultShipmentSelection =>
+            EntityKeys.OrderByDescending(x => x).Take(1);
 
         /// <summary>
         /// Initialization
@@ -87,7 +97,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
-                .Do(x => SelectShipmentRows(x.SelectedShipments))
+                .Do(x => SelectShipmentRows(isThisPanelVisible ? x.SelectedShipments : DefaultShipmentSelection))
                 .Subscribe();
 
             messenger.OfType<PanelShownMessage>()
@@ -100,6 +110,22 @@ namespace ShipWorks.Stores.Content.Panels
                 {
                     ratesControl.Visible = true;
                     RefreshSelectedShipments();
+                });
+
+            messenger.OfType<PanelShownMessage>()
+                .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
+                .Subscribe(_ => isThisPanelVisible = true);
+
+            messenger.OfType<PanelHiddenMessage>()
+                .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
+                .Subscribe(_ =>
+                {
+                    if (entityGrid.Selection.Count > 1)
+                    {
+                        SelectShipmentRows(DefaultShipmentSelection);
+                    }
+
+                    isThisPanelVisible = false;
                 });
         }
 
@@ -114,14 +140,20 @@ namespace ShipWorks.Stores.Content.Panels
                 return;
             }
 
-            GridRow firstShipment = entityGrid.Rows.OfType<GridRow>().FirstOrDefault();
+            SelectFirstRow();
+        }
 
-            if (firstShipment == null)
+        /// <summary>
+        /// Select the first row in the list
+        /// </summary>
+        private void SelectFirstRow()
+        {
+            long? firstKey = entityGrid.EntityGateway?.GetKeyFromRow(0);
+
+            if (firstKey.HasValue)
             {
-                return;
+                entityGrid.SelectRows(new[] { firstKey.Value });
             }
-
-            entityGrid.SelectRow(firstShipment);
         }
 
         /// <summary>
@@ -226,7 +258,10 @@ namespace ShipWorks.Stores.Content.Panels
         {
             RefreshSelectedShipments();
 
-            Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
+            if (isThisPanelVisible)
+            {
+                Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
+            }
         }
 
         /// <summary>

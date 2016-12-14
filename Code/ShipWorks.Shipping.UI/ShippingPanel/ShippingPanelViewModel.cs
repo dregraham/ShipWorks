@@ -86,6 +86,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             Origin = shippingViewModelFactory.GetAddressViewModel();
             Destination = shippingViewModelFactory.GetAddressViewModel();
             Destination.IsAddressValidationEnabled = true;
+            LoadedShipmentResult = ShippingPanelLoadedShipmentResult.NotLoaded;
 
             // Wiring up observables needs objects to not be null, so do this last.
             pipelines.RegisterGlobal(this);
@@ -199,7 +200,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             loadedOrderSelection = orderMessage.LoadedOrderSelection.OfType<LoadedOrderSelection>().Single();
-            LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection, orderMessage.SelectedShipments);
+
+            if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.NotLoaded)
+            {
+                LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection, orderMessage.SelectedShipments);
+            }
+
             ShipmentCount = loadedOrderSelection.ShipmentAdapters.Count();
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
@@ -229,7 +235,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             long loadShipmentID = lastSelectedShipmentID.GetValueOrDefault();
             lastSelectedShipmentID = null;
 
-            return GetShipmentAdapterWithID(loadShipmentID) ?? loadedOrderSelection.ShipmentAdapters.First();
+            return GetShipmentAdapterWithID(loadShipmentID) ??
+                loadedOrderSelection.ShipmentAdapters.OrderByDescending(x => x.Shipment.ShipmentID).First();
         }
 
         /// <summary>
@@ -262,9 +269,10 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 return ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
             }
 
-            return selectedShipments.IsCountGreaterThan(1) ?
-                ShippingPanelLoadedShipmentResult.Multiple :
-                ShippingPanelLoadedShipmentResult.Success;
+            //return selectedShipments.IsCountGreaterThan(1) ?
+            //    ShippingPanelLoadedShipmentResult.Multiple :
+            //    ShippingPanelLoadedShipmentResult.Success;
+            return ShippingPanelLoadedShipmentResult.Success;
         }
 
         /// <summary>
@@ -460,7 +468,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             UnloadShipment();
 
             loadedOrderSelection = default(LoadedOrderSelection);
-
+            ShipmentCount = 0;
         }
 
         /// <summary>
@@ -477,7 +485,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             LoadedShipmentResult = ShippingPanelLoadedShipmentResult.NotLoaded;
 
             lastSelectedShipmentID = null;
-            ShipmentCount = 0;
             SelectedShipments = null;
         }
 

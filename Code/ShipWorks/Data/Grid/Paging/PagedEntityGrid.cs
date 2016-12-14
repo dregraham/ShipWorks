@@ -1463,6 +1463,7 @@ namespace ShipWorks.Data.Grid.Paging
         public void SelectRows(IEnumerable<long> keys)
         {
             suspendSelectionProcessing = true;
+            base.SelectedElements.Clear();
             ClearVirtualSelectionAll(false);
 
             foreach (long row in keys)
@@ -1471,8 +1472,8 @@ namespace ShipWorks.Data.Grid.Paging
             }
 
             suspendSelectionProcessing = false;
-
             OnSelectionChanged(null);
+            UpdateGridRows();
         }
 
         #endregion

@@ -230,7 +230,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 currentOrder = loadedOrders.Single();
                 currentShipment = currentOrder.ShipmentAdapters
                         .FirstOrDefault(x => x.Shipment.ShipmentID == lastSelectedShipmentID.GetValueOrDefault())?.Shipment ??
-                    currentOrder.ShipmentAdapters.FirstOrDefault()?.Shipment;
+                    currentOrder.ShipmentAdapters.OrderByDescending(x => x.Shipment.ShipmentID).FirstOrDefault()?.Shipment;
 
                 lastSelectedShipmentID = null;
             }
