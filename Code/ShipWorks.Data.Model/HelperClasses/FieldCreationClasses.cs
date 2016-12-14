@@ -6707,11 +6707,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialTechnicalName);}
 		}
-		/// <summary>Creates a new FedExPackageEntity.AlcoholRecipientType field instance</summary>
-		public static EntityField2 AlcoholRecipientType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.AlcoholRecipientType);}
-		}
 		/// <summary>Creates a new FedExPackageEntity.SignatoryContactName field instance</summary>
 		public static EntityField2 SignatoryContactName
 		{
@@ -6726,6 +6721,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SignatoryPlace
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.SignatoryPlace);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.AlcoholRecipientType field instance</summary>
+		public static EntityField2 AlcoholRecipientType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.AlcoholRecipientType);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.ContainerType field instance</summary>
+		public static EntityField2 ContainerType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.ContainerType);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.NumberOfContainers field instance</summary>
+		public static EntityField2 NumberOfContainers
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.NumberOfContainers);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.PackingDetailsCargoAircraftOnly field instance</summary>
+		public static EntityField2 PackingDetailsCargoAircraftOnly
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.PackingDetailsCargoAircraftOnly);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.PackingDetailsPackingInstructions field instance</summary>
+		public static EntityField2 PackingDetailsPackingInstructions
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.PackingDetailsPackingInstructions);}
 		}
 	}
 
@@ -7071,6 +7091,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SignatoryPlace
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.SignatoryPlace);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.ContainerType field instance</summary>
+		public static EntityField2 ContainerType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.ContainerType);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.NumberOfContainers field instance</summary>
+		public static EntityField2 NumberOfContainers
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.NumberOfContainers);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.PackingDetailsCargoAircraftOnly field instance</summary>
+		public static EntityField2 PackingDetailsCargoAircraftOnly
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackingDetailsCargoAircraftOnly);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.PackingDetailsPackingInstructions field instance</summary>
+		public static EntityField2 PackingDetailsPackingInstructions
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions);}
 		}
 	}
 

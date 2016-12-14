@@ -7,25 +7,34 @@ GO
 ALTER TABLE [dbo].[FedExPackage] ADD
 [SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryContactName] DEFAULT (('')),
 [SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryTitle] DEFAULT (('')),
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryPlace] DEFAULT ((''))
-GO
-PRINT N'Updating AlcoholRecipientType to NOT NULL'
-GO
-ALTER TABLE [dbo].[FedExPackage] ADD [AlcoholRecipientType] [int] NOT NULL CONSTRAINT [DF_AlcoholRecipientType] DEFAULT 0
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_SignatoryPlace] DEFAULT (('')),
+[AlcoholRecipientType] [int] NOT NULL CONSTRAINT [DF_FedExPackage_AlcoholRecipientType] DEFAULT ((0)),
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_ContainerType] DEFAULT (''),
+[NumberOfContainers] [int] NOT NULL CONSTRAINT [DF_FedExPackage_NumberOfContainers] DEFAULT ((0)),
+[PackingDetailsCargoAircraftOnly] [bit] NOT NULL CONSTRAINT [DF_FedExPackage_PackingDetailsCargoAircraftOnly] DEFAULT ((0)),
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExPackage_PackingDetailsPackingInstructions] DEFAULT ('')
 GO
 PRINT N'Dropping FedExPackage Constraints'
 GO
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryContactName]
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryTitle]
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_SignatoryPlace]
-ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_AlcoholRecipientType]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_AlcoholRecipientType]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_ContainerType]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_NumberOfContainers]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_PackingDetailsCargoAircraftOnly]
+ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_PackingDetailsPackingInstructions]
 GO
 PRINT N'Altering [dbo].[FedExProfilePackage]'
 GO
 ALTER TABLE [dbo].[FedExProfilePackage] ADD
 [SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NumberOfContainers] [int] NULL,
+[PackingDetailsCargoAircraftOnly] [bit] NULL,
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 GO
 PRINT N'Altering [dbo].[FedExShipment]'
 GO

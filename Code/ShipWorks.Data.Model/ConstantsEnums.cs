@@ -2890,14 +2890,22 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuanityUnits,
 		///<summary>HazardousMaterialTechnicalName. </summary>
 		HazardousMaterialTechnicalName,
-		///<summary>AlcoholRecipientType. </summary>
-		AlcoholRecipientType,
 		///<summary>SignatoryContactName. </summary>
 		SignatoryContactName,
 		///<summary>SignatoryTitle. </summary>
 		SignatoryTitle,
 		///<summary>SignatoryPlace. </summary>
 		SignatoryPlace,
+		///<summary>AlcoholRecipientType. </summary>
+		AlcoholRecipientType,
+		///<summary>ContainerType. </summary>
+		ContainerType,
+		///<summary>NumberOfContainers. </summary>
+		NumberOfContainers,
+		///<summary>PackingDetailsCargoAircraftOnly. </summary>
+		PackingDetailsCargoAircraftOnly,
+		///<summary>PackingDetailsPackingInstructions. </summary>
+		PackingDetailsPackingInstructions,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3044,6 +3052,14 @@ namespace ShipWorks.Data.Model
 		SignatoryTitle,
 		///<summary>SignatoryPlace. </summary>
 		SignatoryPlace,
+		///<summary>ContainerType. </summary>
+		ContainerType,
+		///<summary>NumberOfContainers. </summary>
+		NumberOfContainers,
+		///<summary>PackingDetailsCargoAircraftOnly. </summary>
+		PackingDetailsCargoAircraftOnly,
+		///<summary>PackingDetailsPackingInstructions. </summary>
+		PackingDetailsPackingInstructions,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -290,6 +290,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.SignatoryTitle = string.Empty;
             package.SignatoryPlace = string.Empty;
 
+            package.ContainerType = string.Empty;
+            package.NumberOfContainers = 0;
+            package.PackingDetailsCargoAircraftOnly = false;
+            package.PackingDetailsPackingInstructions = string.Empty;
+
             package.DangerousGoodsEnabled = false;
             package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
