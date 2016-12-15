@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             // We can safely cast this since we've passed initialization
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
-            if (request.ShipmentEntity.FedEx.InternationalTrafficInArmsService??false)
+            if (request.ShipmentEntity.FedEx.InternationalTrafficInArmsService ?? false)
             {
                 AddTrafficInArmsOption(nativeRequest);
             }

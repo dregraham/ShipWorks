@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 expressFreightDetail.ShippersLoadAndCount = fedex.FreightLoadAndCount.ToString();
             }
 
-            // For certification, so far, everyting is true.  
+            // For certification, so far, everything is true.  
             if (SettingsRepository.IsInterapptiveUser)
             {
                 expressFreightDetail.PackingListEnclosed = true;

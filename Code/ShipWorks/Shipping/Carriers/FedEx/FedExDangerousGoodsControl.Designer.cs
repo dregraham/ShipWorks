@@ -30,6 +30,10 @@
         {
             this.dangerousGoodsEnabled = new System.Windows.Forms.CheckBox();
             this.panelDangerousGoodsDetails = new System.Windows.Forms.Panel();
+            this.containerTypeLabel = new System.Windows.Forms.Label();
+            this.containerType = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.numberOfContainersLabel = new System.Windows.Forms.Label();
+            this.numberOfContainers = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.signatoryPlace = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.signatoryContactNameLabel = new System.Windows.Forms.Label();
@@ -44,6 +48,10 @@
             this.packagingLabel = new System.Windows.Forms.Label();
             this.dangerousGoodsAccessibility = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.hazardousMaterialGroupBox = new System.Windows.Forms.GroupBox();
+            this.packingInstructions = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.packingInstructionsLabel = new System.Windows.Forms.Label();
+            this.packingDetailsAircraftOnlyLabel = new System.Windows.Forms.Label();
+            this.packingDetailsAircraftOnly = new System.Windows.Forms.CheckBox();
             this.hazardousMaterialTechnicalName = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.hazardousMaterialTechnicalNameLabel = new System.Windows.Forms.Label();
             this.hazardousMaterialQuantityValue = new ShipWorks.UI.Controls.MultiValueTextBox();
@@ -84,6 +92,10 @@
             // 
             this.panelDangerousGoodsDetails.AutoSize = true;
             this.panelDangerousGoodsDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelDangerousGoodsDetails.Controls.Add(this.containerTypeLabel);
+            this.panelDangerousGoodsDetails.Controls.Add(this.containerType);
+            this.panelDangerousGoodsDetails.Controls.Add(this.numberOfContainersLabel);
+            this.panelDangerousGoodsDetails.Controls.Add(this.numberOfContainers);
             this.panelDangerousGoodsDetails.Controls.Add(this.groupBox1);
             this.panelDangerousGoodsDetails.Controls.Add(this.aircraftLabel);
             this.panelDangerousGoodsDetails.Controls.Add(this.dangerousGoodsCargoAircraftOnly);
@@ -101,9 +113,47 @@
             this.panelDangerousGoodsDetails.Controls.Add(this.emergencyContactPhone);
             this.panelDangerousGoodsDetails.Location = new System.Drawing.Point(0, 18);
             this.panelDangerousGoodsDetails.Name = "panelDangerousGoodsDetails";
-            this.panelDangerousGoodsDetails.Size = new System.Drawing.Size(283, 476);
+            this.panelDangerousGoodsDetails.Size = new System.Drawing.Size(306, 585);
             this.panelDangerousGoodsDetails.TabIndex = 1;
             this.panelDangerousGoodsDetails.Visible = false;
+            // 
+            // containerTypeLabel
+            // 
+            this.containerTypeLabel.AutoSize = true;
+            this.containerTypeLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.containerTypeLabel.Location = new System.Drawing.Point(32, 169);
+            this.containerTypeLabel.Name = "containerTypeLabel";
+            this.containerTypeLabel.Size = new System.Drawing.Size(85, 13);
+            this.containerTypeLabel.TabIndex = 17;
+            this.containerTypeLabel.Text = "Container Type:";
+            this.containerTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // containerType
+            // 
+            this.containerType.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.containerType.Location = new System.Drawing.Point(118, 166);
+            this.containerType.Name = "containerType";
+            this.containerType.Size = new System.Drawing.Size(171, 21);
+            this.containerType.TabIndex = 13;
+            // 
+            // numberOfContainersLabel
+            // 
+            this.numberOfContainersLabel.AutoSize = true;
+            this.numberOfContainersLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.numberOfContainersLabel.Location = new System.Drawing.Point(30, 196);
+            this.numberOfContainersLabel.Name = "numberOfContainersLabel";
+            this.numberOfContainersLabel.Size = new System.Drawing.Size(87, 13);
+            this.numberOfContainersLabel.TabIndex = 15;
+            this.numberOfContainersLabel.Text = "# of Containers:";
+            this.numberOfContainersLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // numberOfContainers
+            // 
+            this.numberOfContainers.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.numberOfContainers.Location = new System.Drawing.Point(118, 193);
+            this.numberOfContainers.Name = "numberOfContainers";
+            this.numberOfContainers.Size = new System.Drawing.Size(171, 21);
+            this.numberOfContainers.TabIndex = 14;
             // 
             // groupBox1
             // 
@@ -113,24 +163,24 @@
             this.groupBox1.Controls.Add(this.signatoryPlaceLabel);
             this.groupBox1.Controls.Add(this.signatoryTitleLabel);
             this.groupBox1.Controls.Add(this.signatoryTitle);
-            this.groupBox1.Location = new System.Drawing.Point(9, 166);
+            this.groupBox1.Location = new System.Drawing.Point(9, 222);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(271, 116);
+            this.groupBox1.Size = new System.Drawing.Size(294, 116);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Dangerous Goods Signatory";
             // 
             // signatoryPlace
             // 
-            this.signatoryPlace.Location = new System.Drawing.Point(100, 82);
+            this.signatoryPlace.Location = new System.Drawing.Point(109, 82);
             this.signatoryPlace.Name = "signatoryPlace";
-            this.signatoryPlace.Size = new System.Drawing.Size(143, 21);
+            this.signatoryPlace.Size = new System.Drawing.Size(171, 21);
             this.signatoryPlace.TabIndex = 23;
             // 
             // signatoryContactNameLabel
             // 
             this.signatoryContactNameLabel.AutoSize = true;
-            this.signatoryContactNameLabel.Location = new System.Drawing.Point(7, 31);
+            this.signatoryContactNameLabel.Location = new System.Drawing.Point(21, 31);
             this.signatoryContactNameLabel.Name = "signatoryContactNameLabel";
             this.signatoryContactNameLabel.Size = new System.Drawing.Size(87, 13);
             this.signatoryContactNameLabel.TabIndex = 18;
@@ -139,15 +189,15 @@
             // 
             // signatoryContactName
             // 
-            this.signatoryContactName.Location = new System.Drawing.Point(100, 28);
+            this.signatoryContactName.Location = new System.Drawing.Point(109, 28);
             this.signatoryContactName.Name = "signatoryContactName";
-            this.signatoryContactName.Size = new System.Drawing.Size(143, 21);
+            this.signatoryContactName.Size = new System.Drawing.Size(171, 21);
             this.signatoryContactName.TabIndex = 19;
             // 
             // signatoryPlaceLabel
             // 
             this.signatoryPlaceLabel.AutoSize = true;
-            this.signatoryPlaceLabel.Location = new System.Drawing.Point(9, 85);
+            this.signatoryPlaceLabel.Location = new System.Drawing.Point(23, 85);
             this.signatoryPlaceLabel.Name = "signatoryPlaceLabel";
             this.signatoryPlaceLabel.Size = new System.Drawing.Size(85, 13);
             this.signatoryPlaceLabel.TabIndex = 22;
@@ -157,7 +207,7 @@
             // signatoryTitleLabel
             // 
             this.signatoryTitleLabel.AutoSize = true;
-            this.signatoryTitleLabel.Location = new System.Drawing.Point(14, 58);
+            this.signatoryTitleLabel.Location = new System.Drawing.Point(28, 58);
             this.signatoryTitleLabel.Name = "signatoryTitleLabel";
             this.signatoryTitleLabel.Size = new System.Drawing.Size(80, 13);
             this.signatoryTitleLabel.TabIndex = 20;
@@ -166,16 +216,16 @@
             // 
             // signatoryTitle
             // 
-            this.signatoryTitle.Location = new System.Drawing.Point(100, 55);
+            this.signatoryTitle.Location = new System.Drawing.Point(109, 55);
             this.signatoryTitle.Name = "signatoryTitle";
-            this.signatoryTitle.Size = new System.Drawing.Size(143, 21);
+            this.signatoryTitle.Size = new System.Drawing.Size(171, 21);
             this.signatoryTitle.TabIndex = 21;
             // 
             // aircraftLabel
             // 
             this.aircraftLabel.AutoSize = true;
             this.aircraftLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.aircraftLabel.Location = new System.Drawing.Point(56, 144);
+            this.aircraftLabel.Location = new System.Drawing.Point(70, 144);
             this.aircraftLabel.Name = "aircraftLabel";
             this.aircraftLabel.Size = new System.Drawing.Size(47, 13);
             this.aircraftLabel.TabIndex = 11;
@@ -185,7 +235,7 @@
             // dangerousGoodsCargoAircraftOnly
             // 
             this.dangerousGoodsCargoAircraftOnly.AutoSize = true;
-            this.dangerousGoodsCargoAircraftOnly.Location = new System.Drawing.Point(109, 143);
+            this.dangerousGoodsCargoAircraftOnly.Location = new System.Drawing.Point(118, 143);
             this.dangerousGoodsCargoAircraftOnly.Name = "dangerousGoodsCargoAircraftOnly";
             this.dangerousGoodsCargoAircraftOnly.Size = new System.Drawing.Size(116, 17);
             this.dangerousGoodsCargoAircraftOnly.TabIndex = 12;
@@ -196,7 +246,7 @@
             // 
             this.dangerousGoodsPackagingUnits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dangerousGoodsPackagingUnits.FormattingEnabled = true;
-            this.dangerousGoodsPackagingUnits.Location = new System.Drawing.Point(204, 111);
+            this.dangerousGoodsPackagingUnits.Location = new System.Drawing.Point(213, 111);
             this.dangerousGoodsPackagingUnits.Name = "dangerousGoodsPackagingUnits";
             this.dangerousGoodsPackagingUnits.PromptText = "(Multiple Values)";
             this.dangerousGoodsPackagingUnits.Size = new System.Drawing.Size(76, 21);
@@ -205,7 +255,7 @@
             // dangerousGoodsPackagingCounts
             // 
             this.dangerousGoodsPackagingCounts.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.dangerousGoodsPackagingCounts.Location = new System.Drawing.Point(109, 111);
+            this.dangerousGoodsPackagingCounts.Location = new System.Drawing.Point(118, 111);
             this.dangerousGoodsPackagingCounts.Name = "dangerousGoodsPackagingCounts";
             this.dangerousGoodsPackagingCounts.Size = new System.Drawing.Size(89, 21);
             this.dangerousGoodsPackagingCounts.TabIndex = 9;
@@ -214,7 +264,7 @@
             // 
             this.packagingLabel.AutoSize = true;
             this.packagingLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.packagingLabel.Location = new System.Drawing.Point(46, 114);
+            this.packagingLabel.Location = new System.Drawing.Point(58, 114);
             this.packagingLabel.Name = "packagingLabel";
             this.packagingLabel.Size = new System.Drawing.Size(59, 13);
             this.packagingLabel.TabIndex = 8;
@@ -225,7 +275,7 @@
             // 
             this.dangerousGoodsAccessibility.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dangerousGoodsAccessibility.FormattingEnabled = true;
-            this.dangerousGoodsAccessibility.Location = new System.Drawing.Point(109, 29);
+            this.dangerousGoodsAccessibility.Location = new System.Drawing.Point(118, 29);
             this.dangerousGoodsAccessibility.Name = "dangerousGoodsAccessibility";
             this.dangerousGoodsAccessibility.PromptText = "(Multiple Values)";
             this.dangerousGoodsAccessibility.Size = new System.Drawing.Size(171, 21);
@@ -233,6 +283,10 @@
             // 
             // hazardousMaterialGroupBox
             // 
+            this.hazardousMaterialGroupBox.Controls.Add(this.packingInstructions);
+            this.hazardousMaterialGroupBox.Controls.Add(this.packingInstructionsLabel);
+            this.hazardousMaterialGroupBox.Controls.Add(this.packingDetailsAircraftOnlyLabel);
+            this.hazardousMaterialGroupBox.Controls.Add(this.packingDetailsAircraftOnly);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardousMaterialTechnicalName);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardousMaterialTechnicalNameLabel);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardousMaterialQuantityValue);
@@ -245,24 +299,62 @@
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardClass);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardousMaterialCodeLabel);
             this.hazardousMaterialGroupBox.Controls.Add(this.hazardClassLabel);
-            this.hazardousMaterialGroupBox.Location = new System.Drawing.Point(9, 288);
+            this.hazardousMaterialGroupBox.Location = new System.Drawing.Point(9, 344);
             this.hazardousMaterialGroupBox.Name = "hazardousMaterialGroupBox";
-            this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(271, 185);
+            this.hazardousMaterialGroupBox.Size = new System.Drawing.Size(294, 238);
             this.hazardousMaterialGroupBox.TabIndex = 13;
             this.hazardousMaterialGroupBox.TabStop = false;
             this.hazardousMaterialGroupBox.Text = "Hazardous Material Details";
             // 
+            // packingInstructions
+            // 
+            this.packingInstructions.Location = new System.Drawing.Point(109, 208);
+            this.packingInstructions.Name = "packingInstructions";
+            this.packingInstructions.Size = new System.Drawing.Size(171, 21);
+            this.packingInstructions.TabIndex = 13;
+            // 
+            // packingInstructionsLabel
+            // 
+            this.packingInstructionsLabel.AutoSize = true;
+            this.packingInstructionsLabel.Location = new System.Drawing.Point(1, 211);
+            this.packingInstructionsLabel.Name = "packingInstructionsLabel";
+            this.packingInstructionsLabel.Size = new System.Drawing.Size(107, 13);
+            this.packingInstructionsLabel.TabIndex = 15;
+            this.packingInstructionsLabel.Text = "Packing Instructions:";
+            this.packingInstructionsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // packingDetailsAircraftOnlyLabel
+            // 
+            this.packingDetailsAircraftOnlyLabel.AutoSize = true;
+            this.packingDetailsAircraftOnlyLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.packingDetailsAircraftOnlyLabel.Location = new System.Drawing.Point(61, 186);
+            this.packingDetailsAircraftOnlyLabel.Name = "packingDetailsAircraftOnlyLabel";
+            this.packingDetailsAircraftOnlyLabel.Size = new System.Drawing.Size(47, 13);
+            this.packingDetailsAircraftOnlyLabel.TabIndex = 13;
+            this.packingDetailsAircraftOnlyLabel.Text = "Aircraft:";
+            this.packingDetailsAircraftOnlyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // packingDetailsAircraftOnly
+            // 
+            this.packingDetailsAircraftOnly.AutoSize = true;
+            this.packingDetailsAircraftOnly.Location = new System.Drawing.Point(109, 185);
+            this.packingDetailsAircraftOnly.Name = "packingDetailsAircraftOnly";
+            this.packingDetailsAircraftOnly.Size = new System.Drawing.Size(116, 17);
+            this.packingDetailsAircraftOnly.TabIndex = 12;
+            this.packingDetailsAircraftOnly.Text = "Cargo aircraft only";
+            this.packingDetailsAircraftOnly.UseVisualStyleBackColor = true;
+            // 
             // hazardousMaterialTechnicalName
             // 
-            this.hazardousMaterialTechnicalName.Location = new System.Drawing.Point(100, 105);
+            this.hazardousMaterialTechnicalName.Location = new System.Drawing.Point(109, 105);
             this.hazardousMaterialTechnicalName.Name = "hazardousMaterialTechnicalName";
-            this.hazardousMaterialTechnicalName.Size = new System.Drawing.Size(143, 21);
+            this.hazardousMaterialTechnicalName.Size = new System.Drawing.Size(171, 21);
             this.hazardousMaterialTechnicalName.TabIndex = 7;
             // 
             // hazardousMaterialTechnicalNameLabel
             // 
             this.hazardousMaterialTechnicalNameLabel.AutoSize = true;
-            this.hazardousMaterialTechnicalNameLabel.Location = new System.Drawing.Point(9, 108);
+            this.hazardousMaterialTechnicalNameLabel.Location = new System.Drawing.Point(23, 108);
             this.hazardousMaterialTechnicalNameLabel.Name = "hazardousMaterialTechnicalNameLabel";
             this.hazardousMaterialTechnicalNameLabel.Size = new System.Drawing.Size(85, 13);
             this.hazardousMaterialTechnicalNameLabel.TabIndex = 6;
@@ -271,15 +363,15 @@
             // 
             // hazardousMaterialQuantityValue
             // 
-            this.hazardousMaterialQuantityValue.Location = new System.Drawing.Point(100, 158);
+            this.hazardousMaterialQuantityValue.Location = new System.Drawing.Point(109, 158);
             this.hazardousMaterialQuantityValue.Name = "hazardousMaterialQuantityValue";
-            this.hazardousMaterialQuantityValue.Size = new System.Drawing.Size(143, 21);
+            this.hazardousMaterialQuantityValue.Size = new System.Drawing.Size(171, 21);
             this.hazardousMaterialQuantityValue.TabIndex = 11;
             // 
             // quantityLabel
             // 
             this.quantityLabel.AutoSize = true;
-            this.quantityLabel.Location = new System.Drawing.Point(41, 161);
+            this.quantityLabel.Location = new System.Drawing.Point(55, 161);
             this.quantityLabel.Name = "quantityLabel";
             this.quantityLabel.Size = new System.Drawing.Size(53, 13);
             this.quantityLabel.TabIndex = 10;
@@ -291,16 +383,16 @@
             this.hazardousMaterialPackingGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.hazardousMaterialPackingGroup.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.hazardousMaterialPackingGroup.FormattingEnabled = true;
-            this.hazardousMaterialPackingGroup.Location = new System.Drawing.Point(100, 131);
+            this.hazardousMaterialPackingGroup.Location = new System.Drawing.Point(109, 131);
             this.hazardousMaterialPackingGroup.Name = "hazardousMaterialPackingGroup";
             this.hazardousMaterialPackingGroup.PromptText = "(Multiple Values)";
-            this.hazardousMaterialPackingGroup.Size = new System.Drawing.Size(143, 21);
+            this.hazardousMaterialPackingGroup.Size = new System.Drawing.Size(171, 21);
             this.hazardousMaterialPackingGroup.TabIndex = 9;
             // 
             // packingGroupLabel
             // 
             this.packingGroupLabel.AutoSize = true;
-            this.packingGroupLabel.Location = new System.Drawing.Point(15, 134);
+            this.packingGroupLabel.Location = new System.Drawing.Point(29, 134);
             this.packingGroupLabel.Name = "packingGroupLabel";
             this.packingGroupLabel.Size = new System.Drawing.Size(79, 13);
             this.packingGroupLabel.TabIndex = 8;
@@ -309,15 +401,15 @@
             // 
             // hazardousMaterialProperName
             // 
-            this.hazardousMaterialProperName.Location = new System.Drawing.Point(100, 79);
+            this.hazardousMaterialProperName.Location = new System.Drawing.Point(109, 79);
             this.hazardousMaterialProperName.Name = "hazardousMaterialProperName";
-            this.hazardousMaterialProperName.Size = new System.Drawing.Size(143, 21);
+            this.hazardousMaterialProperName.Size = new System.Drawing.Size(171, 21);
             this.hazardousMaterialProperName.TabIndex = 5;
             // 
             // hazardousMaterialProperNameLabel
             // 
             this.hazardousMaterialProperNameLabel.AutoSize = true;
-            this.hazardousMaterialProperNameLabel.Location = new System.Drawing.Point(22, 82);
+            this.hazardousMaterialProperNameLabel.Location = new System.Drawing.Point(35, 82);
             this.hazardousMaterialProperNameLabel.Name = "hazardousMaterialProperNameLabel";
             this.hazardousMaterialProperNameLabel.Size = new System.Drawing.Size(73, 13);
             this.hazardousMaterialProperNameLabel.TabIndex = 4;
@@ -326,23 +418,23 @@
             // 
             // hazardousMaterialId
             // 
-            this.hazardousMaterialId.Location = new System.Drawing.Point(100, 28);
+            this.hazardousMaterialId.Location = new System.Drawing.Point(109, 28);
             this.hazardousMaterialId.Name = "hazardousMaterialId";
-            this.hazardousMaterialId.Size = new System.Drawing.Size(143, 21);
+            this.hazardousMaterialId.Size = new System.Drawing.Size(171, 21);
             this.hazardousMaterialId.TabIndex = 1;
             // 
             // hazardClass
             // 
-            this.hazardClass.Location = new System.Drawing.Point(100, 54);
+            this.hazardClass.Location = new System.Drawing.Point(109, 54);
             this.hazardClass.Name = "hazardClass";
-            this.hazardClass.Size = new System.Drawing.Size(143, 21);
+            this.hazardClass.Size = new System.Drawing.Size(171, 21);
             this.hazardClass.TabIndex = 3;
             // 
             // hazardousMaterialCodeLabel
             // 
             this.hazardousMaterialCodeLabel.AutoSize = true;
             this.hazardousMaterialCodeLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.hazardousMaterialCodeLabel.Location = new System.Drawing.Point(31, 31);
+            this.hazardousMaterialCodeLabel.Location = new System.Drawing.Point(45, 31);
             this.hazardousMaterialCodeLabel.Name = "hazardousMaterialCodeLabel";
             this.hazardousMaterialCodeLabel.Size = new System.Drawing.Size(63, 13);
             this.hazardousMaterialCodeLabel.TabIndex = 0;
@@ -352,7 +444,7 @@
             // 
             this.hazardClassLabel.AutoSize = true;
             this.hazardClassLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.hazardClassLabel.Location = new System.Drawing.Point(22, 57);
+            this.hazardClassLabel.Location = new System.Drawing.Point(35, 57);
             this.hazardClassLabel.Name = "hazardClassLabel";
             this.hazardClassLabel.Size = new System.Drawing.Size(73, 13);
             this.hazardClassLabel.TabIndex = 2;
@@ -362,7 +454,7 @@
             // 
             this.offerorLabel.AutoSize = true;
             this.offerorLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.offerorLabel.Location = new System.Drawing.Point(61, 87);
+            this.offerorLabel.Location = new System.Drawing.Point(70, 87);
             this.offerorLabel.Name = "offerorLabel";
             this.offerorLabel.Size = new System.Drawing.Size(47, 13);
             this.offerorLabel.TabIndex = 6;
@@ -373,7 +465,7 @@
             // 
             this.emergencyContactPhoneLabel.AutoSize = true;
             this.emergencyContactPhoneLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.emergencyContactPhoneLabel.Location = new System.Drawing.Point(6, 60);
+            this.emergencyContactPhoneLabel.Location = new System.Drawing.Point(20, 60);
             this.emergencyContactPhoneLabel.Name = "emergencyContactPhoneLabel";
             this.emergencyContactPhoneLabel.Size = new System.Drawing.Size(97, 13);
             this.emergencyContactPhoneLabel.TabIndex = 4;
@@ -384,7 +476,7 @@
             // 
             this.accessibilityLabel.AutoSize = true;
             this.accessibilityLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.accessibilityLabel.Location = new System.Drawing.Point(8, 32);
+            this.accessibilityLabel.Location = new System.Drawing.Point(22, 32);
             this.accessibilityLabel.Name = "accessibilityLabel";
             this.accessibilityLabel.Size = new System.Drawing.Size(95, 13);
             this.accessibilityLabel.TabIndex = 2;
@@ -395,7 +487,7 @@
             // 
             this.dangerousGoodsTypeLabel.AutoSize = true;
             this.dangerousGoodsTypeLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.dangerousGoodsTypeLabel.Location = new System.Drawing.Point(29, 4);
+            this.dangerousGoodsTypeLabel.Location = new System.Drawing.Point(41, 4);
             this.dangerousGoodsTypeLabel.Name = "dangerousGoodsTypeLabel";
             this.dangerousGoodsTypeLabel.Size = new System.Drawing.Size(76, 13);
             this.dangerousGoodsTypeLabel.TabIndex = 0;
@@ -405,7 +497,7 @@
             // offeror
             // 
             this.offeror.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.offeror.Location = new System.Drawing.Point(109, 84);
+            this.offeror.Location = new System.Drawing.Point(118, 84);
             this.offeror.Name = "offeror";
             this.offeror.Size = new System.Drawing.Size(171, 21);
             this.offeror.TabIndex = 7;
@@ -415,7 +507,7 @@
             this.dangerousGoodsMaterialType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dangerousGoodsMaterialType.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.dangerousGoodsMaterialType.FormattingEnabled = true;
-            this.dangerousGoodsMaterialType.Location = new System.Drawing.Point(109, 1);
+            this.dangerousGoodsMaterialType.Location = new System.Drawing.Point(118, 1);
             this.dangerousGoodsMaterialType.Name = "dangerousGoodsMaterialType";
             this.dangerousGoodsMaterialType.PromptText = "(Multiple Values)";
             this.dangerousGoodsMaterialType.Size = new System.Drawing.Size(171, 21);
@@ -425,7 +517,7 @@
             // emergencyContactPhone
             // 
             this.emergencyContactPhone.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.emergencyContactPhone.Location = new System.Drawing.Point(109, 57);
+            this.emergencyContactPhone.Location = new System.Drawing.Point(118, 57);
             this.emergencyContactPhone.Name = "emergencyContactPhone";
             this.emergencyContactPhone.Size = new System.Drawing.Size(171, 21);
             this.emergencyContactPhone.TabIndex = 5;
@@ -441,7 +533,7 @@
             this.Controls.Add(this.dangerousGoodsEnabled);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExDangerousGoodsControl";
-            this.Size = new System.Drawing.Size(286, 497);
+            this.Size = new System.Drawing.Size(309, 606);
             this.panelDangerousGoodsDetails.ResumeLayout(false);
             this.panelDangerousGoodsDetails.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -490,5 +582,13 @@
         private UI.Controls.MultiValueTextBox signatoryContactName;
         private System.Windows.Forms.Label signatoryContactNameLabel;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label containerTypeLabel;
+        private UI.Controls.MultiValueTextBox containerType;
+        private System.Windows.Forms.Label numberOfContainersLabel;
+        private UI.Controls.MultiValueTextBox numberOfContainers;
+        private System.Windows.Forms.Label packingDetailsAircraftOnlyLabel;
+        private System.Windows.Forms.CheckBox packingDetailsAircraftOnly;
+        private UI.Controls.MultiValueTextBox packingInstructions;
+        private System.Windows.Forms.Label packingInstructionsLabel;
     }
 }

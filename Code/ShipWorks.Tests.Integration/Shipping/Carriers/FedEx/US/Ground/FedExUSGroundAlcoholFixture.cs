@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
 {
     public class FedExUSGroundAlcoholFixture : FedExPrototypeFixture
     {

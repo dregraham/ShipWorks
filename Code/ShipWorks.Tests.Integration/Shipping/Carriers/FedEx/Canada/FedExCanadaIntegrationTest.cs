@@ -1,15 +1,16 @@
-﻿using ShipWorks.Startup;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.International;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
-using ShipWorks.Tests.Shared.Database;
-using System;
+﻿using System;
 using System.Data;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Express.Domestic;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Ground;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada
 {
     [Collection("Fedex Tests")]
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
@@ -36,7 +37,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             FedExCanadaExpressDomesticMapping testObject = new FedExCanadaExpressDomesticMapping();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressDomesticMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                (testObject.IsSaveLabel || !justLabels)) // && (string) row["ProcessShipmentRequest#TransactionDetail"] == "1F-1001")
             {
                 output.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");

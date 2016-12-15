@@ -1,10 +1,10 @@
-﻿using Interapptive.Shared.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Enums;
+using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International
 {
     public class FedExInternationalPrototypeFixture : FedExPrototypeFixture
     {
@@ -41,6 +41,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         public string CustomsOptionType { get; set; }
         public string CustomsOptionDescription { get; set; }
         public bool CommercialInvoiceFileElectronically { get; set; }
+
+
+        public string SignatoryContactName { get; set; }
+        public string SignatoryTitle { get; set; }
+        public string SignatoryPlace { get; set; }
+
+        public string ContainerType { get; set; }
+        public string NumberOfContainers { get; set; }
+        public string PackingDetailsCargoAircraftOnly { get; set; }
+        public string PackingDetailsPackingInstructions { get; set; }
 
         /// <summary>
         /// Creates the shipment.

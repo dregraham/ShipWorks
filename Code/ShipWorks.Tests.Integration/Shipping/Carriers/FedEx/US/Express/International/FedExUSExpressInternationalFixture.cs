@@ -1,11 +1,13 @@
-﻿using Interapptive.Shared.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International
 {
     public class FedExUSExpressInternationalFixture : FedExInternationalPrototypeFixture
     {
@@ -207,17 +209,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.InsuredValue.Amount", PropertyName = "PackageLineItemInsuredValueAmount", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.InsuredValue.Currency", PropertyName = "PackageLineItemInsuredValueCurrency", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Accessibility", PropertyName = "DangerousGoodsAccessibility", SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.ContainerType", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.ContainerType", PropertyName = "ContainerType", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.NumberOfContainers", PropertyName = "NumberOfContainers", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.HazardClass", PropertyName = "HazardClass", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.ID", PropertyName = "HazardDescriptionID", SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.CargoAircraftOnly", PropertyName = "", SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.PackingInstructions", PropertyName = "", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.CargoAircraftOnly", PropertyName = "PackingDetailsCargoAircraftOnly", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingDetails.PackingInstructions", PropertyName = "PackingDetailsPackingInstructions", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.PackingGroup", PropertyName = "HazardousPackingGroup", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.ProperShippingName", PropertyName = "HazardProperShippingName", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Description.SequenceNumber", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Amount", PropertyName = "HazardQuantityAmount", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.HazardousCommodities.Quantity.Units", PropertyName = "HazardQuantityUnits", SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Containers.NumberOfContainers", PropertyName = "DangerCounts", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Options", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.ContactName", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedPackageLineItems.SpecialServicesRequested.DangerousGoodsDetail.Signatory.EmergencyContactNumber", PropertyName = "DangerEmergencyContactNumber", SpreadsheetColumnIndex = -1 });
@@ -455,12 +457,36 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
                         package.HazardousMaterialProperName = HazardProperShippingName;
                         package.HazardousMaterialClass = HazardClass;
                         package.HazardousMaterialNumber = HazardDescriptionID;
-                        package.HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.III;
+
+                        FedExHazardousMaterialsPackingGroup? group =
+                            EnumHelper.TryParseEnum<FedExHazardousMaterialsPackingGroup>(HazardousPackingGroup);
+                        package.HazardousMaterialPackingGroup = (int) (group ?? FedExHazardousMaterialsPackingGroup.III);
+
                         package.HazardousMaterialQuantityValue = int.Parse(HazardQuantityAmount);
+                        package.HazardousMaterialQuanityUnits = GetUnitInt(HazardQuantityUnits);
 
                         package.DangerousGoodsEmergencyContactPhone = DangerEmergencyContactNumber;
                         package.DangerousGoodsOfferor = DangerOfferor;
-                        package.DangerousGoodsPackagingCount = int.Parse(DangerCounts);
+
+                        int dangerousGoodsPackagingCount;
+                        if (int.TryParse(DangerCounts, out dangerousGoodsPackagingCount))
+                        {
+                            package.DangerousGoodsPackagingCount = dangerousGoodsPackagingCount;
+                        }
+
+                        package.SignatoryContactName = SignatoryContactName;
+                        package.SignatoryPlace = SignatoryPlace;
+                        package.SignatoryTitle = SignatoryTitle;
+
+                        package.ContainerType = ContainerType;
+                        int numberOfContainers;
+                        if (int.TryParse(NumberOfContainers, out numberOfContainers))
+                        {
+                            package.NumberOfContainers = numberOfContainers;
+                        }
+
+                        package.PackingDetailsCargoAircraftOnly = PackingDetailsCargoAircraftOnly == "1";
+                        package.PackingDetailsPackingInstructions = PackingDetailsPackingInstructions;
                     }
                 }
             }

@@ -1,9 +1,10 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.SmartPost
 {
     public class FedExSmartPostFixture : FedExPrototypeFixture
     {
