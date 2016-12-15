@@ -142,13 +142,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.InternationalPriority,
                 FedExServiceType.InternationalEconomy,
                 FedExServiceType.InternationalPriorityFreight,
-                FedExServiceType.InternationalEconomyFreight,
-                FedExServiceType.FedExInternationalGroundDistribution,
-                FedExServiceType.FedExInternationalDirectDistribution,
-                FedExServiceType.FedExInternationalEconomyDirectDistribution,
-                FedExServiceType.FedExInternationalPriorityDirectDistribution,
-                FedExServiceType.FedExInternationalDirectDistributionSurfaceSolutionsUStoCanada,
-                FedExServiceType.FedExInternationalDirectDistributionFreight
+                FedExServiceType.InternationalEconomyFreight
             };
 
             if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") ||

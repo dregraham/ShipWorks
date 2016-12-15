@@ -93,50 +93,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx International Ground®")]
         FedExInternationalGround = 28,
 
-        [Description("FedEx International Ground® Distribution")]
-        FedExInternationalGroundDistribution = 29,
-
-        [Description("FedEx International DirectDistribution®")]
-        FedExInternationalDirectDistribution = 30,
-
-        [Description("FedEx International Economy DirectDistribution℠ Service")]
-        FedExInternationalEconomyDirectDistribution = 31,
-
-        [Description("FedEx International Priority DirectDistribution®")]
-        FedExInternationalPriorityDirectDistribution = 32,
-
-        [Description("FedEx International DirectDistribution Surface Solutions U.S. to Canada")]
-        FedExInternationalDirectDistributionSurfaceSolutionsUStoCanada = 33,
-
-        [Description("FedEx International DirectDistribution® Freight")]
-        FedExInternationalDirectDistributionFreight = 34,
-
         // Services needed for Intra certification tests
         [Description("FedEx Next Day Afternoon")]
-        FedExNextDayAfternoon = 35,
+        FedExNextDayAfternoon = 29,
 
         [Description("FedEx Next Day Early Morning")]
-        FedExNextDayEarlyMorning = 36,
+        FedExNextDayEarlyMorning = 30,
 
         [Description("FedEx Next Day Mid Morning")]
-        FedExNextDayMidMorning = 37,
+        FedExNextDayMidMorning = 31,
 
         [Description("FedEx Next Day End Of Day")]
-        FedExNextDayEndOfDay = 38,
+        FedExNextDayEndOfDay = 32,
 
         [Description("FedEx Distance Deferred")]
-        FedExDistanceDeferred = 39,
+        FedExDistanceDeferred = 33,
 
         [Description("FedEx Next Day Freight")]
-        FedExNextDayFreight = 40,
+        FedExNextDayFreight = 34,
 
         [Description("FedEx FIMS Mailview Lite")]
-        FedExFimsMailViewLite = 41,
+        FedExFimsMailViewLite = 35,
 
         [Description("FedEx FIMS Standard")]
-        FedExFimsStandard = 42,
+        FedExFimsStandard = 36,
 
         [Description("FedEx FIMS Premium")]
-        FedExFimsPremium = 43
+        FedExFimsPremium = 37
     }
 }
