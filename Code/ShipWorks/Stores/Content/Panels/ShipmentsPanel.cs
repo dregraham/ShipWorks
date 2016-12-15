@@ -100,18 +100,16 @@ namespace ShipWorks.Stores.Content.Panels
                 .Do(x => SelectShipmentRows(isThisPanelVisible ? x.SelectedShipments : DefaultShipmentSelection))
                 .Subscribe();
 
-            messenger.OfType<PanelShownMessage>()
-                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
-                .Subscribe(_ => ratesControl.Visible = false);
+            HandleRatingPanelToggle(messenger);
 
-            messenger.OfType<PanelHiddenMessage>()
-                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
-                .Subscribe(_ =>
-                {
-                    ratesControl.Visible = true;
-                    RefreshSelectedShipments();
-                });
+            HandleShipmentsPanelToggle(messenger);
+        }
 
+        /// <summary>
+        /// Listen for when the shipments panel is added or removed
+        /// </summary>
+        private void HandleShipmentsPanelToggle(IMessenger messenger)
+        {
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
                 .Subscribe(_ => isThisPanelVisible = true);
@@ -126,6 +124,24 @@ namespace ShipWorks.Stores.Content.Panels
                     }
 
                     isThisPanelVisible = false;
+                });
+        }
+
+        /// <summary>
+        /// Listen for when the rating panel is added or removed
+        /// </summary>
+        private void HandleRatingPanelToggle(IMessenger messenger)
+        {
+            messenger.OfType<PanelShownMessage>()
+                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Subscribe(_ => ratesControl.Visible = false);
+
+            messenger.OfType<PanelHiddenMessage>()
+                .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Subscribe(_ =>
+                {
+                    ratesControl.Visible = true;
+                    RefreshSelectedShipments();
                 });
         }
 
