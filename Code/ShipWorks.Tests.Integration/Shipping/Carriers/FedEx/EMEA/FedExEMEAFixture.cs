@@ -71,9 +71,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
         public string DangerUnits { get; set; }
         public string PackageDangerousGoodsDetail { get; set; }
         public string DangerousGoodsContainerType { get; set; }
-        public string SignatoryContactName { get; set; }
-        public string SignatoryTitle { get; set; }
-        public string SignatoryPlace { get; set; }
         public string PackageCargoAircraftOnly { get; set; }
         public string PackagePackingInstructions { get; set; }
 
