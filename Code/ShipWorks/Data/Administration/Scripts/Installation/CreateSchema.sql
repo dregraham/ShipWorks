@@ -777,26 +777,9 @@ GO
 PRINT N'Creating primary key [PK_QuickFilterNodeContentDirty] on [dbo].[QuickFilterNodeContentDirty]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_QuickFilterNodeContentDirty' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-ALTER TABLE [dbo].[QuickFilterNodeContentDirty] ADD CONSTRAINT [PK_QuickFilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
+ALTER TABLE [dbo].[QuickFilterNodeContentDirty] ADD CONSTRAINT [PK_QuickFilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_RowVersion] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_RowVersion' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_RowVersion] ON [dbo].[QuickFilterNodeContentDirty] ([RowVersion])
-GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_IgnoreDuplicates] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_IgnoreDuplicates] ON [dbo].[QuickFilterNodeContentDirty] ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
-GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ParentIDObjectType] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ParentIDObjectType] ON [dbo].[QuickFilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
-GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ColumnsUpdated] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_ColumnsUpdated' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ColumnsUpdated] ON [dbo].[QuickFilterNodeContentDirty] ([ColumnsUpdated])
-GO
+
 PRINT N'Creating [dbo].[QuickFilterNodeUpdateCheckpoint]'
 GO
 IF OBJECT_ID(N'[dbo].[QuickFilterNodeUpdateCheckpoint]', 'U') IS NULL
@@ -4400,24 +4383,9 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
 GO
-ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
+ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_RowVersion] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_RowVersion] ON [dbo].[FilterNodeContentDirty] ([RowVersion])
-GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_IgnoreDuplicates] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_IgnoreDuplicates] ON [dbo].[FilterNodeContentDirty] ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
-GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_ParentIDObjectType] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
-GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_ColumnsUpdated] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ColumnsUpdated] ON [dbo].[FilterNodeContentDirty] ([ColumnsUpdated])
-GO
+
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
 CREATE TABLE [dbo].[FilterNodeRootDirty]
