@@ -22,7 +22,9 @@ using System.Reactive.Linq;
 using System.Threading;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using SD.Tools.BCLExtensions.CollectionsRelated;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Special;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Filters.Grid;
 
@@ -595,7 +597,7 @@ namespace ShipWorks.ApplicationCore
             if (IsSearchActive)
             {
                 buttonEndSearch.Image = searchProvider.IsSearching ? Resources.stop_small : Resources.clear_small;
-                searchBox.WaterText = AdvancedSearchResultsActive ? "Advanced search active..." : "";
+                searchBox.WaterText = AdvancedSearchResultsActive ? "Search these results" : "";
             }
             else
             {
@@ -820,60 +822,55 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private FilterDefinition GetSearchDefinition()
         {
-            if (AdvancedSearchResultsActive)
+            FilterDefinition quickSearchFilter = null;
+
+            string quickSearchText = GetBasicSearchText();
+            if (quickSearchText.Length != 0)
             {
-                // If the filter definition is empty (no criteria has been selected) don't return
-                // the definition.  An empty definition returns all orders or customers, which is
-                // irrelevant.
-                if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
+                quickSearchFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, quickSearchText);
+            }
+
+            return AdvancedSearchResultsActive ?
+                CreateAdvancedSearchDefinition(quickSearchFilter) :
+                quickSearchFilter;
+        }
+        /// <summary>
+        /// Creates a filter that uses the quick search to search the results of an advanced search
+        /// </summary>
+        private FilterDefinition CreateAdvancedSearchDefinition(FilterDefinition quickFilter)
+        {
+            // If the filter definition is empty (no criteria has been selected) don't return
+            // the definition.  An empty definition returns all orders or customers, which is
+            // irrelevant
+            if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
+            {
+                FilterDefinition advancedFilter = new FilterDefinition(filterEditor.FilterDefinition.GetXml());
+
+                IList<Condition> quickSearchConditions = new List<Condition>();
+
+                if (quickFilter?.RootContainer?.FirstGroup?.Conditions != null)
                 {
-                    string search = GetBasicSearchText();
-
-                    if (search.Length == 0)
-                    {
-                        return filterEditor.FilterDefinition;
-                    }
-
-                    FilterDefinition combinedFilter;
-
-                    ////
-                    //combinedFilter = new FilterDefinition(ActiveFilterTarget);
-                    //combinedFilter.RootContainer.ParentContainer = filterEditor.FilterDefinition.RootContainer;
-                    //combinedFilter.RootContainer.SecondGroup = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search).RootContainer;
-
-                    combinedFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search);
-                    FilterDefinition advancedFilter = new FilterDefinition(filterEditor.FilterDefinition.GetXml());
-                    if (combinedFilter.RootContainer.SecondGroup == null)
-                    {
-                        combinedFilter.RootContainer.SecondGroup = advancedFilter.RootContainer;
-                    }
-                    else
-                    {
-                        combinedFilter.RootContainer.SecondGroup.SecondGroup = advancedFilter.RootContainer;
-                    }
-
-                    ////
-                    //combinedFilter = new FilterDefinition(ActiveFilterTarget);
-                    //combinedFilter.RootContainer = filterEditor.FilterDefinition.RootContainer;
-
-                    //combinedFilter.RootContainer.SecondGroup = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search).RootContainer;
-
-                    return combinedFilter;
+                    quickSearchConditions.AddRange(quickFilter.RootContainer.FirstGroup.Conditions);
                 }
 
-                return null;
-            }
-            else
-            {
-                string search = GetBasicSearchText();
-
-                if (search.Length == 0)
+                // When quick searching the customer grid, there is no second group.
+                if (quickFilter?.RootContainer?.SecondGroup?.FirstGroup?.Conditions != null)
                 {
-                    return null;
+                    quickSearchConditions.AddRange(quickFilter.RootContainer.SecondGroup.FirstGroup.Conditions);
                 }
+                ConditionGroup quickSearchConditionGroup = new ConditionGroup();
+                quickSearchConditionGroup.Conditions.AddRange(quickSearchConditions);
+                quickSearchConditionGroup.JoinType = ConditionJoinType.Any;
 
-                return QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, search);
+                FilterDefinition combinedFilter = new FilterDefinition(ActiveFilterTarget);
+                combinedFilter.RootContainer.FirstGroup = quickSearchConditionGroup;
+                combinedFilter.RootContainer.SecondGroup = advancedFilter.RootContainer;
+                combinedFilter.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                return combinedFilter;
             }
+
+            return null;
         }
 
         /// <summary>
