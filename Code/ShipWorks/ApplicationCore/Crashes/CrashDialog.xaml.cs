@@ -12,6 +12,7 @@ using Interapptive.Shared.Win32;
 using log4net;
 using log4net.Appender;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
 using Form = System.Windows.Forms.Form;
 using FormsApplication = System.Windows.Forms.Application;
 
@@ -53,7 +54,11 @@ namespace ShipWorks.ApplicationCore.Crashes
             // Dump the report to the log
             try
             {
-                Telemetry.TrackException(exception, new Dictionary<string, string> { { "Crash Log", logName } });
+                Telemetry.TrackException(exception, new Dictionary<string, string> {
+                    { "Crash Log", logName },
+                    { "ConnectionMonitorStatus", ConnectionMonitor.Status.ToString() },
+                    { "TimeSinceReconnect", DateTime.Now.Subtract(ConnectionMonitor.LastReconnection).TotalSeconds.ToString() }
+                });
 
                 crashContent = CrashSubmitter.GetContent(exception, "");
 

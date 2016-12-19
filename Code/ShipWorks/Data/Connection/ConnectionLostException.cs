@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ShipWorks.Data.Connection
 {
     /// <summary>
-    /// Exception thrown when the connection to the database is permenantly lost.
+    /// Exception thrown when the connection to the database is permanently lost.
     /// </summary>
     class ConnectionLostException : Exception
     {

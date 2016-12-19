@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Connection;
 using log4net;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 
@@ -77,6 +78,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private static List<GrouponTracking> GetGrouponTracking(ShipmentEntity shipment)
         {
+            ShippingManager.EnsureShipmentLoaded(shipment);
             OrderEntity order = shipment.Order;
 
             if (order.IsManual)
