@@ -6,7 +6,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Logging implementation of Trackable
     /// </summary>
-    public static class TrackableImpl
+    public static class TrackableImplementation
     {
         /// <summary>
         /// Convert Observable stream to a trackable observable stream

@@ -7,7 +7,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Implementation of Where extension methods
     /// </summary>
-    public static class WhereImpl
+    public static class WhereImplementation
     {
         /// <summary>
         /// Where method

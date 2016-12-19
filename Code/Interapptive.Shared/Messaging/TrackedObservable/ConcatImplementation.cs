@@ -8,7 +8,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Implementation of the trackable concat statement
     /// </summary>
-    public static class ConcatImpl
+    public static class ConcatImplementation
     {
         /// <summary>
         /// Implementation of the trackable concat statement

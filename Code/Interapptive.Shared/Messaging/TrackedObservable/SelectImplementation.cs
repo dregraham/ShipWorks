@@ -7,7 +7,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Logging implementation of Select methods
     /// </summary>
-    public static class SelectImpl
+    public static class SelectImplementation
     {
         /// <summary>
         /// Select a new value from an existing one

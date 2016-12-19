@@ -7,7 +7,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Implementation of the dump operation
     /// </summary>
-    public static class DumpImpl
+    public static class DumpImplementation
     {
         /// <summary>
         /// Dumps the current value to the log

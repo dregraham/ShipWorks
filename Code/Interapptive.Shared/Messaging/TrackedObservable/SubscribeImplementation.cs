@@ -6,7 +6,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Logging implementation of Subscribe methods
     /// </summary>
-    public static class SubscribeImpl
+    public static class SubscribeImplementation
     {
         /// <summary>
         /// Subscribe to an observable stream

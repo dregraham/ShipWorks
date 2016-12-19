@@ -8,7 +8,7 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
     /// <summary>
     /// Implementation of the trackable switch statement
     /// </summary>
-    public static class SwitchImpl
+    public static class SwitchImplementation
     {
         /// <summary>
         /// Implementation of the trackable switch statement
