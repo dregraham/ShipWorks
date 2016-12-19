@@ -22,9 +22,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
-using SD.Tools.BCLExtensions.CollectionsRelated;
 using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.Special;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Filters.Grid;
 
@@ -808,16 +806,25 @@ namespace ShipWorks.ApplicationCore
 
                 if (quickFilter?.RootContainer?.FirstGroup?.Conditions != null)
                 {
-                    quickSearchConditions.AddRange(quickFilter.RootContainer.FirstGroup.Conditions);
+                    foreach (Condition condition in quickFilter.RootContainer.FirstGroup.Conditions)
+                    {
+                        quickSearchConditions.Add(condition);
+                    }
                 }
 
                 // When quick searching the customer grid, there is no second group.
                 if (quickFilter?.RootContainer?.SecondGroup?.FirstGroup?.Conditions != null)
                 {
-                    quickSearchConditions.AddRange(quickFilter.RootContainer.SecondGroup.FirstGroup.Conditions);
+                    foreach (Condition condition in quickFilter.RootContainer.SecondGroup.FirstGroup.Conditions)
+                    {
+                        quickSearchConditions.Add(condition);
+                    }
                 }
                 ConditionGroup quickSearchConditionGroup = new ConditionGroup();
-                quickSearchConditionGroup.Conditions.AddRange(quickSearchConditions);
+                foreach (Condition quickSearchCondition in quickSearchConditions)
+                {
+                    quickSearchConditionGroup.Conditions.Add(quickSearchCondition);
+                }
                 quickSearchConditionGroup.JoinType = ConditionJoinType.Any;
 
                 FilterDefinition combinedFilter = new FilterDefinition(ActiveFilterTarget);
@@ -940,15 +947,9 @@ namespace ShipWorks.ApplicationCore
 
         /// <summary>
         /// Indicate if search results from the advanced search are what is currently displayed in the grid.  This could be true even
-        /// when AdvancedSearchVisible is false if they had done an advanced search and then just collpased it.
+        /// when AdvancedSearchVisible is false if they had done an advanced search and then just collapsed it.
         /// </summary>
-        private bool AdvancedSearchResultsActive
-        {
-            get
-            {
-                return IsSearchActive && initiatedAdvanced;
-            }
-        }
+        private bool AdvancedSearchResultsActive => IsSearchActive && initiatedAdvanced;
 
         /// <summary>
         /// Get the normalized text of the basic search box.
