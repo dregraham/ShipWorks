@@ -40,12 +40,7 @@ namespace ShipWorks.Filters.Search
                     
                     // Apply common customer conditions
                     ApplyCustomerConditions(definition.RootContainer.FirstGroup, search);
-
-                    // Apply store-specific conditions
-                    foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())
-                    {
-                        storeSpecific.Add(storeType.CreateBasicSearchCustomerConditions(search));
-                    }
+                    
 
                     break;
 

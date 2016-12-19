@@ -952,6 +952,8 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Filters\Search\CustomerDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\IFilterDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
