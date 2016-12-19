@@ -720,15 +720,18 @@ namespace ShipWorks.ApplicationCore
                 initiatedAdvanced = true;
             }
 
-            if (!IsSearchActive)
+            if (GetBasicSearchText().Length > 0 || AdvancedSearchVisible)
             {
-                StartSearch();
+                if (!IsSearchActive)
+                {
+                    StartSearch();
+                }
+
+                // Update the search with the current definition
+                searchProvider.Search(GetSearchDefinition());
+
+                RaiseSearchQueryChanged();
             }
-
-            // Update the search with the current definition
-            searchProvider.Search(GetSearchDefinition());
-
-            RaiseSearchQueryChanged();
         }
 
         /// <summary>
@@ -800,25 +803,19 @@ namespace ShipWorks.ApplicationCore
             // irrelevant
             if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
             {
-                FilterDefinition advancedFilter = new FilterDefinition(filterEditor.FilterDefinition.GetXml());
+                FilterDefinition advancedFilter = filterEditor.FilterDefinition;
 
-                IList<Condition> quickSearchConditions = new List<Condition>();
+                List<Condition> quickSearchConditions = new List<Condition>();
 
                 if (quickFilter?.RootContainer?.FirstGroup?.Conditions != null)
                 {
-                    foreach (Condition condition in quickFilter.RootContainer.FirstGroup.Conditions)
-                    {
-                        quickSearchConditions.Add(condition);
-                    }
+                    quickSearchConditions.AddRange(quickFilter.RootContainer.FirstGroup.Conditions);
                 }
 
                 // When quick searching the customer grid, there is no second group.
                 if (quickFilter?.RootContainer?.SecondGroup?.FirstGroup?.Conditions != null)
                 {
-                    foreach (Condition condition in quickFilter.RootContainer.SecondGroup.FirstGroup.Conditions)
-                    {
-                        quickSearchConditions.Add(condition);
-                    }
+                    quickSearchConditions.AddRange(quickFilter.RootContainer.SecondGroup.FirstGroup.Conditions);
                 }
                 ConditionGroup quickSearchConditionGroup = new ConditionGroup();
                 foreach (Condition quickSearchCondition in quickSearchConditions)
