@@ -77,7 +77,7 @@ namespace ShipWorks.ApplicationCore
         // Indicates if the user is currently searching
         SearchProvider searchProvider = null;
 
-        // Indiciates if advanced search has been initiated during the current search round
+        // Indicates if advanced search has been initiated during the current search round
         bool initiatedAdvanced = false;
 
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
@@ -127,7 +127,7 @@ namespace ShipWorks.ApplicationCore
                     h => searchBox.TextChanged -= h)
                 .Throttle(TimeSpan.FromMilliseconds(450))
                 .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing quick search.", ex))
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
                 .Subscribe(x => PerformSearch());
 
             // Wire up observable for debouncing advanced search text box
@@ -137,7 +137,7 @@ namespace ShipWorks.ApplicationCore
                     h => filterEditor.DefinitionEdited -= h)
                 .Throttle(TimeSpan.FromMilliseconds(450))
                 .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing advanced search.", ex))
+                .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
                 .Subscribe(x => PerformSearch());
         }
 
@@ -148,7 +148,7 @@ namespace ShipWorks.ApplicationCore
         {
             if (entityGrids.ContainsKey(filterTarget))
             {
-                throw new InvalidOperationException("Already initialized for target {0}.  Use Reset first if you need to reinitialize.");
+                throw new InvalidOperationException("Already initialized for target {0}. Use Reset first if you need to reinitialize.");
             }
 
             entityGrids[filterTarget] = CreateGrid(filterTarget);
@@ -255,8 +255,8 @@ namespace ShipWorks.ApplicationCore
                 }
                 else if (AdvancedSearchVisible)
                 {
-                    // Advanced search isn't active, its just visibible with no Filter Definition in it. (If there was, the IsSearchActive test would have been true)
-                    // Close the Advanced Search, which will coincide with the functionality that ends the search if it ws active
+                    // Advanced search isn't active, its just visible with no Filter Definition in it. (If there was, the IsSearchActive test would have been true)
+                    // Close the Advanced Search, which will coincide with the functionality that ends the search if it was active
                     AdvancedSearchVisible = false;
                 }
 
@@ -338,13 +338,13 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Syncronize the grids virtual row count with the current filter node count
+        /// Synchronize the grids virtual row count with the current filter node count
         /// </summary>
         public void UpdateFiltering()
         {
             ActiveGrid.UpdateGridRows();
 
-            // Auto select the row when doing a filter searach and there is only 1 result
+            // Auto select the row when doing a filter search and there is only 1 result
             if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
             {
                 ActiveGrid.Rows[0].Selected = true;
@@ -443,7 +443,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Canel the search mode.  IsSearchActive must be true, or this will throw an exception.
+        /// Cancel the search mode.  IsSearchActive must be true, or this will throw an exception.
         /// </summary>
         public void CancelSearch()
         {
@@ -711,7 +711,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Perform the quick search
+        /// Perform the search
         /// </summary>
         private void PerformSearch()
         {
@@ -725,7 +725,7 @@ namespace ShipWorks.ApplicationCore
                 StartSearch();
             }
 
-            // Upate the search with the current definition
+            // Update the search with the current definition
             searchProvider.Search(GetSearchDefinition());
 
             RaiseSearchQueryChanged();
@@ -796,7 +796,7 @@ namespace ShipWorks.ApplicationCore
         private FilterDefinition CreateAdvancedSearchDefinition(FilterDefinition quickFilter)
         {
             // If the filter definition is empty (no criteria has been selected) don't return
-            // the definition.  An empty definition returns all orders or customers, which is
+            // the definition. An empty definition returns all orders or customers, which is
             // irrelevant
             if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
             {
@@ -985,14 +985,6 @@ namespace ShipWorks.ApplicationCore
         private void OnAdvancedSearchRequiredHeightChanged(object sender, EventArgs e)
         {
             filterEditor.Height = Math.Min(filterEditor.RequiredHeight, Height / 2) + 4;
-        }
-
-        /// <summary>
-        /// Clears the basic search box without raising TextChanged event
-        /// </summary>
-        private void ClearBasicSearch()
-        {
-            searchBox.Text = "";
         }
 
         /// <summary>
