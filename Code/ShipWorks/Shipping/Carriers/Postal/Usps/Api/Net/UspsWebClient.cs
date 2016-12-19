@@ -1063,8 +1063,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Per stamps - only send state for domestic - send province for international
             if (!toAddress.AsAddressAdapter().IsDomesticCountry())
             {
-                toAddress.Province = toAddress.State;
-                toAddress.State = string.Empty;
+                // Only overwrite the Province if the State is not blank
+                if (!string.IsNullOrWhiteSpace(toAddress.State))
+                {
+                    toAddress.Province = toAddress.State;
+                    toAddress.State = string.Empty;
+                }
             }
         }
 

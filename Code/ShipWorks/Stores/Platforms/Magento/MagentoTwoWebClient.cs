@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml;
 using Interapptive.Shared.Security;
+using System.Web;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -141,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
-                    GenericModuleResponse response = new GenericModuleResponse(xpath.Value);
+                    GenericModuleResponse response = new GenericModuleResponse(HttpUtility.HtmlDecode(xpath.Value));
 
                     // Valid the module version and schema version
                     ValidateModuleVersion(response.ModuleVersion);
