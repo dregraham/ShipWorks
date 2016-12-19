@@ -130,7 +130,7 @@ namespace ShipWorks.ApplicationCore
                 .Throttle(TimeSpan.FromMilliseconds(450))
                 .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
                 .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing quick search.", ex))
-                .Subscribe(x => PerformQuickSearch());
+                .Subscribe(x => PerformSearch());
 
             // Wire up observable for debouncing advanced search text box
             advancedSearchObservable = Observable
@@ -140,7 +140,7 @@ namespace ShipWorks.ApplicationCore
                 .Throttle(TimeSpan.FromMilliseconds(450))
                 .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
                 .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing advanced search.", ex))
-                .Subscribe(x => PerformAdvancedSearch());
+                .Subscribe(x => PerformSearch());
         }
 
         /// <summary>
@@ -700,7 +700,6 @@ namespace ShipWorks.ApplicationCore
 
             if (AdvancedSearchVisible && IsSearchActive && initiatedAdvanced)
             {
-                ClearBasicSearch();
                 filterEditor.Focus();
             }
 
@@ -716,68 +715,22 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Perform the quick search
         /// </summary>
-        private void PerformQuickSearch()
-        {
-
-            if (AdvancedSearchVisible)
-            {
-                if (!IsSearchActive)
-                {
-                    StartSearch();
-                }
-
-                initiatedAdvanced = true;
-
-                // Upate the search with the current definition
-                searchProvider.Search(GetSearchDefinition());
-
-                RaiseSearchQueryChanged();
-            }
-
-            else
-            {
-                if (GetBasicSearchText().Length > 0)
-                {
-                    AdvancedSearchVisible = false;
-                    initiatedAdvanced = false;
-
-                    if (!IsSearchActive)
-                    {
-                        StartSearch();
-                    }
-                }
-
-                if (IsSearchActive && !AdvancedSearchResultsActive)
-                {
-                    // Upate the search with the current definition
-                    searchProvider.Search(GetSearchDefinition());
-
-                    RaiseSearchQueryChanged();
-                }
-            }
-
-        }
-
-        /// <summary>
-        /// Perform the advanced search
-        /// </summary>
-        private void PerformAdvancedSearch()
+        private void PerformSearch()
         {
             if (AdvancedSearchVisible)
             {
-                if (!IsSearchActive)
-                {
-                    StartSearch();
-                }
-
                 initiatedAdvanced = true;
-                ClearBasicSearch();
-
-                // Upate the search with the current definition
-                searchProvider.Search(GetSearchDefinition());
-
-                RaiseSearchQueryChanged();
             }
+
+            if (!IsSearchActive)
+            {
+                StartSearch();
+            }
+
+            // Upate the search with the current definition
+            searchProvider.Search(GetSearchDefinition());
+
+            RaiseSearchQueryChanged();
         }
 
         /// <summary>
@@ -830,10 +783,15 @@ namespace ShipWorks.ApplicationCore
                 quickSearchFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, quickSearchText);
             }
 
-            return AdvancedSearchResultsActive ?
-                CreateAdvancedSearchDefinition(quickSearchFilter) :
-                quickSearchFilter;
+            if (AdvancedSearchResultsActive)
+            {
+                return CreateAdvancedSearchDefinition(quickSearchFilter);
+            }
+
+            // If not advanced search is not active, and quick search is empty, we still want to show all orders (new filter definition)
+            return quickSearchFilter ?? new FilterDefinition(ActiveFilterTarget);
         }
+
         /// <summary>
         /// Creates a filter that uses the quick search to search the results of an advanced search
         /// </summary>
