@@ -51,10 +51,10 @@ namespace ShipWorks.Filters.Search
             {
                 group.JoinType = ConditionJoinType.Any;
 
-                group.Conditions.Add(CreateAddressCondition(typeof(CustomerFirstNameCondition), BillShipAddressOperator.ShipOrBill, StringOperator.BeginsWith, search));
-                group.Conditions.Add(CreateAddressCondition(typeof(CustomerLastNameCondition), BillShipAddressOperator.ShipOrBill, StringOperator.BeginsWith, search));
+                group.Conditions.Add(CreateAddressCondition(typeof(CustomerFirstNameCondition), search));
+                group.Conditions.Add(CreateAddressCondition(typeof(CustomerLastNameCondition), search));
 
-                group.Conditions.Add(CreateAddressCondition(typeof(CustomerEmailAddressCondition), BillShipAddressOperator.ShipOrBill, StringOperator.BeginsWith, search));
+                group.Conditions.Add(CreateAddressCondition(typeof(CustomerEmailAddressCondition), search));
             }
             else
             {
@@ -62,20 +62,20 @@ namespace ShipWorks.Filters.Search
 
                 group.JoinType = ConditionJoinType.All;
 
-                group.Conditions.Add(CreateAddressCondition(typeof(CustomerFirstNameCondition), BillShipAddressOperator.ShipOrBill, StringOperator.BeginsWith, name.First));
-                group.Conditions.Add(CreateAddressCondition(typeof(CustomerLastNameCondition), BillShipAddressOperator.ShipOrBill, StringOperator.BeginsWith, name.Last));
+                group.Conditions.Add(CreateAddressCondition(typeof(CustomerFirstNameCondition), name.First));
+                group.Conditions.Add(CreateAddressCondition(typeof(CustomerLastNameCondition), name.Last));
             }
         }
 
         /// <summary>
         /// Create an AddressCondition of the specified type with the given properties
         /// </summary>
-        private Condition CreateAddressCondition(Type type, BillShipAddressOperator addressOperator, StringOperator stringOperator, string targetValue)
+        private Condition CreateAddressCondition(Type type, string targetValue)
         {
             BillShipAddressStringCondition condition = (BillShipAddressStringCondition)Activator.CreateInstance(type);
 
-            condition.AddressOperator = addressOperator;
-            condition.Operator = stringOperator;
+            condition.AddressOperator = BillShipAddressOperator.ShipOrBill;
+            condition.Operator = StringOperator.BeginsWith;
             condition.TargetValue = targetValue;
 
             return condition;

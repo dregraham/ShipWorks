@@ -291,6 +291,7 @@
     <Compile Include="Filters\Content\Conditions\Shipments\CarrierConditionTests.cs" />
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResultTest.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProviderTest.cs" />
+    <Compile Include="Filters\Search\CustomerDefinitionProviderTest.cs" />
     <Compile Include="Filters\Search\FilterDefinitionProviderFactoryTest.cs" />
     <Compile Include="Filters\Search\OrderDefinitionProviderTest.cs" />
     <Compile Include="Interapptive.Shared\Business\GeographyTest.cs" />
