@@ -20,6 +20,7 @@ using log4net;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using ShipWorks.Filters.Content.Conditions;
@@ -776,21 +777,28 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private FilterDefinition GetSearchDefinition()
         {
-            FilterDefinition quickSearchFilter = null;
+            //FilterDefinition quickSearchFilter = null;
 
-            string quickSearchText = GetBasicSearchText();
-            if (quickSearchText.Length != 0)
+            //string quickSearchText = GetBasicSearchText();
+            //if (quickSearchText.Length != 0)
+            //{
+            //    quickSearchFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, quickSearchText);
+            //}
+
+            //if (AdvancedSearchResultsActive)
+            //{
+            //    return CreateAdvancedSearchDefinition(quickSearchFilter);
+            //}
+
+            //// If not advanced search is not active, and quick search is empty, we still want to show all orders (new filter definition)
+            //return quickSearchFilter ?? new FilterDefinition(ActiveFilterTarget);
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                quickSearchFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, quickSearchText);
+                FilterDefinitionProviderFactory definitionProviderFactory = scope.Resolve<FilterDefinitionProviderFactory>();
+                IFilterDefinitionProvider definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition);
+                return definitionProvider.GetDefinition(GetBasicSearchText());
             }
-
-            if (AdvancedSearchResultsActive)
-            {
-                return CreateAdvancedSearchDefinition(quickSearchFilter);
-            }
-
-            // If not advanced search is not active, and quick search is empty, we still want to show all orders (new filter definition)
-            return quickSearchFilter ?? new FilterDefinition(ActiveFilterTarget);
         }
 
         /// <summary>
