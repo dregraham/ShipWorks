@@ -721,7 +721,7 @@ namespace ShipWorks.ApplicationCore
                 initiatedAdvanced = true;
             }
 
-            if (GetBasicSearchText().Length > 0 || AdvancedSearchVisible)
+            if (GetBasicSearchText().Length > 0 || AdvancedSearchResultsActive)
             {
                 if (!IsSearchActive)
                 {
@@ -732,6 +732,13 @@ namespace ShipWorks.ApplicationCore
                 searchProvider.Search(GetSearchDefinition());
 
                 RaiseSearchQueryChanged();
+            }
+            else
+            {
+                if (IsSearchActive)
+                {
+                    EndSearch();
+                }
             }
         }
 
