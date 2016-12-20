@@ -36,6 +36,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             // targetValueBox
             // 
             this.targetValueBox.Location = new System.Drawing.Point(67, 3);
+            this.targetValueBox.MaxLength = 3998;
             this.targetValueBox.Name = "targetValueBox";
             this.targetValueBox.Size = new System.Drawing.Size(233, 21);
             this.targetValueBox.TabIndex = 1;
