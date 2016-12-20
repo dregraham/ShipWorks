@@ -5,7 +5,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Tests.Integration.MSTest;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK
 {

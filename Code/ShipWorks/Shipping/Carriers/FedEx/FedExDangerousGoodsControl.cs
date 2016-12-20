@@ -37,6 +37,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             dangerousGoodsCargoAircraftOnly.ApplyMultiCheck(package.DangerousGoodsCargoAircraftOnly);
             dangerousGoodsPackagingCounts.ApplyMultiText(package.DangerousGoodsPackagingCount.ToString());
             dangerousGoodsPackagingUnits.ApplyMultiValue((FedExHazardousMaterialsQuantityUnits) package.HazardousMaterialQuanityUnits);
+            containerType.ApplyMultiText(package.ContainerType);
+            numberOfContainers.ApplyMultiText(package.NumberOfContainers.ToString());
 
             emergencyContactPhone.ApplyMultiText(package.DangerousGoodsEmergencyContactPhone);
             offeror.ApplyMultiText(package.DangerousGoodsOfferor);
@@ -49,8 +51,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             hazardClass.ApplyMultiText(package.HazardousMaterialClass);
             hazardousMaterialProperName.ApplyMultiText(package.HazardousMaterialProperName);
             hazardousMaterialTechnicalName.ApplyMultiText(package.HazardousMaterialTechnicalName);
-            hazardousMaterialPackingGroup.ApplyMultiValue((FedExHazardousMaterialsPackingGroup)package.HazardousMaterialPackingGroup);
+            hazardousMaterialPackingGroup.ApplyMultiValue((FedExHazardousMaterialsPackingGroup) package.HazardousMaterialPackingGroup);
             hazardousMaterialQuantityValue.ApplyMultiText(package.HazardousMaterialQuantityValue.ToString());
+            packingDetailsAircraftOnly.ApplyMultiCheck(package.PackingDetailsCargoAircraftOnly);
+            packingInstructions.ApplyMultiText(package.PackingDetailsPackingInstructions);
 
             UpdateUI();
         }
@@ -66,11 +70,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 dangerousGoodsEnabled.ReadMultiCheck(c => package.DangerousGoodsEnabled = c);
 
-                dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int)v);
-                dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int)v);
+                dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int) v);
+                dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int) v);
                 dangerousGoodsCargoAircraftOnly.ReadMultiCheck(c => package.DangerousGoodsCargoAircraftOnly = c);
                 dangerousGoodsPackagingCounts.ReadMultiText(t => package.DangerousGoodsPackagingCount = ReadIntegerValue(t));
-                dangerousGoodsPackagingUnits.ReadMultiValue(v => package.HazardousMaterialQuanityUnits = (int)v);
+                dangerousGoodsPackagingUnits.ReadMultiValue(v => package.HazardousMaterialQuanityUnits = (int) v);
+                containerType.ReadMultiText(v => package.ContainerType = v);
+                numberOfContainers.ReadMultiText(v => package.NumberOfContainers = ReadIntegerValue(v));
 
                 offeror.ReadMultiText(t => package.DangerousGoodsOfferor = t);
                 emergencyContactPhone.ReadMultiText(t => package.DangerousGoodsEmergencyContactPhone = t);
@@ -83,9 +89,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
                 hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
                 hazardousMaterialTechnicalName.ReadMultiText(t => package.HazardousMaterialTechnicalName = t);
-                hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int)v);
+                hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int) v);
                 hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
-
+                packingDetailsAircraftOnly.ReadMultiCheck(t => package.PackingDetailsCargoAircraftOnly = t);
+                packingInstructions.ReadMultiText(t => package.PackingDetailsPackingInstructions = t);
             }
         }
 

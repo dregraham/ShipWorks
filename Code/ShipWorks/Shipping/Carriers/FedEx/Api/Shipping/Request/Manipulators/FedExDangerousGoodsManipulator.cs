@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
                 if (package.DangerousGoodsType == (int)FedExDangerousGoodsMaterialType.HazardousMaterials)
                 {
-                    ConfigureHazardousMaterials(request, dangerousGoods, package);
+                    ConfigureHazardousMaterials(dangerousGoods, package);
                 }
                 else
                 {
@@ -135,9 +135,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = requestedShippingDocumentTypes.ToArray();
 
-            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail()
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
             {
-                Format = new ShippingDocumentFormat()
+                Format = new ShippingDocumentFormat
                 {
                     ImageType = ShippingDocumentImageType.PDF,
                     ImageTypeSpecified = true,
@@ -150,30 +150,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <summary>
         /// Configures the hazardous materials of the DangerousGoodsDetail object..
         /// </summary>
-        /// <param name="request">The request.</param>
         /// <param name="dangerousGoods">The dangerous goods.</param>
         /// <param name="package">The package.</param>
-        private static void ConfigureHazardousMaterials(CarrierRequest request, DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
+        private static void ConfigureHazardousMaterials(DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
         {
-            FedExServiceType serviceType = (FedExServiceType) request.ShipmentEntity.FedEx.Service;
-
             // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials 
-            dangerousGoods.Containers = new DangerousGoodsContainer[]
+            dangerousGoods.Containers = new[]
             {
-                new DangerousGoodsContainer()
+                new DangerousGoodsContainer
                 {
-                    HazardousCommodities = new HazardousCommodityContent[]
+                    ContainerType = package.ContainerType,
+                    NumberOfContainers = package.NumberOfContainers.ToString(),
+                    HazardousCommodities = new[]
                     {
-                        new HazardousCommodityContent()
+                        new HazardousCommodityContent
                         {
                             Description = new HazardousCommodityDescription
                             {
                                 Id = package.HazardousMaterialNumber,
                                 HazardClass = package.HazardousMaterialClass,
+                                PackingDetails = new HazardousCommodityPackingDetail
+                                {
+                                    CargoAircraftOnlySpecified = true,
+                                    CargoAircraftOnly = package.PackingDetailsCargoAircraftOnly,
+                                    PackingInstructions = package.PackingDetailsPackingInstructions
+                                },
                                 ProperShippingName = package.HazardousMaterialProperName,
                                 TechnicalName = package.HazardousMaterialTechnicalName,
                             },
-                            Quantity = new HazardousCommodityQuantityDetail()
+                            Quantity = new HazardousCommodityQuantityDetail
                             {
                                 Amount = (decimal) package.HazardousMaterialQuantityValue,
                                 AmountSpecified = true,
@@ -190,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 dangerousGoods.Containers[0].HazardousCommodities[0].Description.PackingGroupSpecified = true;
             }
 
-            dangerousGoods.Packaging = new HazardousCommodityPackagingDetail()
+            dangerousGoods.Packaging = new HazardousCommodityPackagingDetail
             {
                 Count = package.DangerousGoodsPackagingCount.ToString(),
                 Units = EnumHelper.GetDescription((FedExHazardousMaterialsQuantityUnits) package.HazardousMaterialQuanityUnits)

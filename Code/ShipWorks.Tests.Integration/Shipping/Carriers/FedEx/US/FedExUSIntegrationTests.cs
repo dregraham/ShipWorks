@@ -1,15 +1,16 @@
-﻿using ShipWorks.Startup;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground;
-using ShipWorks.Tests.Shared.Database;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Domestic;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground;
+using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
 {
     [Collection("Fedex Tests")]
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
@@ -110,7 +111,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))// && (string) row[5] == "413230")
+                (testObject.IsSaveLabel || !justLabels))// && (string) row[5] == "413105")
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -146,7 +147,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         public void Ship_FedExExpressDomestic(DataRow row)
         {
             output.WriteLine($"Preparing customer transaction ID {row[5]}");
-            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels))
+            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels)) // || (string) row[5] != "323234")
             {
                 output.WriteLine("Skipping");
                 return;

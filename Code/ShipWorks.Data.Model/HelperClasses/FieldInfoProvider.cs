@@ -1027,10 +1027,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuantityValue", typeof(System.Double), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuantityValue, 0, 0, 38);
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuanityUnits", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialTechnicalName", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, 64, 0, 0);
-			this.AddElementFieldInfo("FedExPackageEntity", "AlcoholRecipientType", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.AlcoholRecipientType, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryContactName", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.SignatoryContactName, 100, 0, 0);
 			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryTitle", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.SignatoryTitle, 100, 0, 0);
 			this.AddElementFieldInfo("FedExPackageEntity", "SignatoryPlace", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.SignatoryPlace, 100, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "AlcoholRecipientType", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.AlcoholRecipientType, 0, 0, 10);
+			this.AddElementFieldInfo("FedExPackageEntity", "ContainerType", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.ContainerType, 100, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "NumberOfContainers", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.NumberOfContainers, 0, 0, 10);
+			this.AddElementFieldInfo("FedExPackageEntity", "PackingDetailsCargoAircraftOnly", typeof(System.Boolean), false, false, false, false,  (int)FedExPackageFieldIndex.PackingDetailsCargoAircraftOnly, 0, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "PackingDetailsPackingInstructions", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.PackingDetailsPackingInstructions, 50, 0, 0);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
 		private void InitFedExProfileEntityInfos()
@@ -1108,6 +1112,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "SignatoryContactName", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.SignatoryContactName, 100, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "SignatoryTitle", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.SignatoryTitle, 100, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "SignatoryPlace", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.SignatoryPlace, 100, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "ContainerType", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.ContainerType, 100, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "NumberOfContainers", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.NumberOfContainers, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackingDetailsCargoAircraftOnly", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PackingDetailsCargoAircraftOnly, 0, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackingDetailsPackingInstructions", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions, 50, 0, 0);
 		}
 		/// <summary>Inits FedExShipmentEntity's FieldInfo objects</summary>
 		private void InitFedExShipmentEntityInfos()

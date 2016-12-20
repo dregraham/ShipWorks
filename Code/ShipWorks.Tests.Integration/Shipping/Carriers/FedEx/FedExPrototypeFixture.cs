@@ -1,4 +1,11 @@
-﻿using Interapptive.Shared.Enums;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
@@ -12,18 +19,11 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Tests.Integration.MSTest.Utilities;
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using ShipWorks.Tests.Integration.MSTest.Utilities;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
-using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 {
     public class FedExPrototypeFixture
     {
@@ -666,6 +666,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             package.SignatoryContactName = string.Empty;
             package.SignatoryTitle = string.Empty;
             package.SignatoryPlace = string.Empty;
+            package.ContainerType = string.Empty;
+            package.NumberOfContainers = 0;
 
             package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsPackagingCount = 0;
@@ -682,6 +684,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             package.HazardousMaterialTechnicalName = string.Empty;
             package.HazardousMaterialQuanityUnits = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
             package.HazardousMaterialQuantityValue = 0;
+            package.PackingDetailsCargoAircraftOnly = false;
+            package.PackingDetailsPackingInstructions = string.Empty;
 
             package.AlcoholRecipientType = 0;
         }

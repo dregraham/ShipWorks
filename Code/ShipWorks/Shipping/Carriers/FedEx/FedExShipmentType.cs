@@ -652,7 +652,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsEmergencyContactPhone, package, FedExPackageFields.DangerousGoodsEmergencyContactPhone);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsOfferor, package, FedExPackageFields.DangerousGoodsOfferor);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsPackagingCount, package, FedExPackageFields.DangerousGoodsPackagingCount);
-
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.ContainerType, package, FedExPackageFields.ContainerType);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.NumberOfContainers, package, FedExPackageFields.NumberOfContainers);
+                
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryContactName, package, FedExPackageFields.SignatoryContactName);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryTitle, package, FedExPackageFields.SignatoryTitle);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryPlace, package, FedExPackageFields.SignatoryPlace);
@@ -663,6 +665,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialPackingGroup, package, FedExPackageFields.HazardousMaterialPackingGroup);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuantityValue, package, FedExPackageFields.HazardousMaterialQuantityValue);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
             }
 
             // Remove any packages that are too many for the profile

@@ -46,6 +46,8 @@ IPRC					14		CA			N/A					OTHER									10/24/2016				Needed by FedEx
 IPRC					14		CB			N/A					Passport								10/24/2016				Needed by FedEx
 IERC					14		CA			N/A					OTHER									10/24/2016				Needed by FedEx
 IERC					14		CB			N/A					Passport								10/24/2016				Needed by FedEx
+IP-1012					12		AE			N/A					INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS 12/15/16				We were sending a InternationalTrafficInArmsRegulationsDetail but not the special service.
+IPF-1002				13		AE			N/A					INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS 12/15/16				We were sending a InternationalTrafficInArmsRegulationsDetail but not the special service.
 
 =================================================================================
 CHANGES (CA Exp Dom)

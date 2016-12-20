@@ -70,10 +70,14 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             HazardousMaterialQuantityValue = source.HazardousMaterialQuantityValue;
             HazardousMaterialQuanityUnits = source.HazardousMaterialQuanityUnits;
             HazardousMaterialTechnicalName = source.HazardousMaterialTechnicalName;
-            AlcoholRecipientType = source.AlcoholRecipientType;
             SignatoryContactName = source.SignatoryContactName;
             SignatoryTitle = source.SignatoryTitle;
             SignatoryPlace = source.SignatoryPlace;
+            AlcoholRecipientType = source.AlcoholRecipientType;
+            ContainerType = source.ContainerType;
+            NumberOfContainers = source.NumberOfContainers;
+            PackingDetailsCargoAircraftOnly = source.PackingDetailsCargoAircraftOnly;
+            PackingDetailsPackingInstructions = source.PackingDetailsPackingInstructions;
             
             
             FedExShipment = source.FedExShipment?.AsReadOnly(objectMap);
@@ -287,12 +291,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String HazardousMaterialTechnicalName { get; }
-        /// <summary> The AlcoholRecipientType property of the Entity FedExPackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "FedExPackage"."AlcoholRecipientType"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 AlcoholRecipientType { get; }
         /// <summary> The SignatoryContactName property of the Entity FedExPackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FedExPackage"."SignatoryContactName"<br/>
@@ -311,6 +309,36 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String SignatoryPlace { get; }
+        /// <summary> The AlcoholRecipientType property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."AlcoholRecipientType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 AlcoholRecipientType { get; }
+        /// <summary> The ContainerType property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."ContainerType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ContainerType { get; }
+        /// <summary> The NumberOfContainers property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."NumberOfContainers"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 NumberOfContainers { get; }
+        /// <summary> The PackingDetailsCargoAircraftOnly property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."PackingDetailsCargoAircraftOnly"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean PackingDetailsCargoAircraftOnly { get; }
+        /// <summary> The PackingDetailsPackingInstructions property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."PackingDetailsPackingInstructions"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String PackingDetailsPackingInstructions { get; }
         
         
         public IFedExShipmentEntity FedExShipment { get; }

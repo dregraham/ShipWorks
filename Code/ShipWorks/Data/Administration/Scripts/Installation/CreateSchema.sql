@@ -42,7 +42,6 @@ CREATE TABLE [dbo].[FedExPackage]
 [PriorityAlertDetailContent] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DryIceWeight] [float] NOT NULL,
 [ContainsAlcohol] [bit] NOT NULL,
-[AlcoholRecipientType] [int] NOT NULL,
 [DangerousGoodsEnabled] [bit] NOT NULL,
 [DangerousGoodsType] [int] NOT NULL,
 [DangerousGoodsAccessibilityType] [int] NOT NULL,
@@ -59,7 +58,12 @@ CREATE TABLE [dbo].[FedExPackage]
 [HazardousMaterialTechnicalName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AlcoholRecipientType] [int] NOT NULL,
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[NumberOfContainers] [int] NOT NULL,
+[PackingDetailsCargoAircraftOnly] [bit] NOT NULL,
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
@@ -2095,7 +2099,11 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 [HazardousMaterialQuanityUnits] [int] NULL,
 [SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NumberOfContainers] [int] NULL,
+[PackingDetailsCargoAircraftOnly] [bit] NULL,
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'

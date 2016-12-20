@@ -1,11 +1,12 @@
-﻿using ShipWorks.Startup;
-using ShipWorks.Tests.Shared.Database;
-using System;
+﻿using System;
 using System.Data;
+using ShipWorks.Startup;
+using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.SmartPost
 {
     [Collection("Fedex Tests")]
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase

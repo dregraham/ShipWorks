@@ -1,11 +1,13 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
 {
     public class FedExUSGroundFixture : FedExInternationalPrototypeFixture
     {
@@ -37,10 +39,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
         public string PackageDangerousGoodsDetail { get; set; }
         public string PackageLineItemDimensionUnits { get; set; }
         public string PackageSignatureOptionType { get; set; }
-        
-        public string SignatoryContactName { get; set; }
-        public string SignatoryTitle { get; set; }
-        public string SignatoryPlace { get; set; }
 
         /// <summary>
         /// Creates the shipment.
@@ -286,19 +284,37 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                         package.HazardousMaterialClass = HazardClass;
                         package.HazardousMaterialNumber = HazardDescriptionID;
 
-                        package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.III;
+                        FedExHazardousMaterialsPackingGroup? group =
+                            EnumHelper.TryParseEnum<FedExHazardousMaterialsPackingGroup>(HazardousPackingGroup);
+                        package.HazardousMaterialPackingGroup = (int) (group ?? FedExHazardousMaterialsPackingGroup.III);
+
                         package.HazardousMaterialQuantityValue = int.Parse(HazardQuantityAmount);
                         package.HazardousMaterialQuanityUnits = GetUnitInt(HazardQuantityUnits);
+                        
 
                         package.DangerousGoodsEmergencyContactPhone = DangerEmergencyContactNumber;
 
                         package.DangerousGoodsOfferor = DangerOfferor;
 
-                        package.DangerousGoodsPackagingCount = int.Parse(DangerCounts);
+                        int dangerousGoodsPackagingCount;
+                        package.DangerousGoodsPackagingCount = int.TryParse(DangerCounts,
+                            out dangerousGoodsPackagingCount)
+                            ? dangerousGoodsPackagingCount
+                            : 1;
 
                         package.SignatoryContactName = SignatoryContactName;
                         package.SignatoryPlace = SignatoryPlace;
                         package.SignatoryTitle = SignatoryTitle;
+
+                        package.ContainerType = ContainerType;
+                        int numberOfContainers;
+                        if (int.TryParse(NumberOfContainers, out numberOfContainers))
+                        {
+                            package.NumberOfContainers = numberOfContainers;
+                        }
+
+                        package.PackingDetailsCargoAircraftOnly = PackingDetailsCargoAircraftOnly == "1";
+                        package.PackingDetailsPackingInstructions = PackingDetailsPackingInstructions;
                     }
                 }
             }
