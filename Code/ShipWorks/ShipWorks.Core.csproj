@@ -954,7 +954,6 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\CustomerDefinitionProvider.cs" />
-    <Compile Include="Filters\Search\EmptyDefinitionProvider.cs" />
     <Compile Include="Filters\Search\FilterDefinitionProviderFactory.cs" />
     <Compile Include="Filters\Search\IFilterDefinitionProvider.cs" />
     <Compile Include="Filters\Search\OrderDefinitionProvider.cs" />
@@ -6624,7 +6623,6 @@
     <Compile Include="Data\Grid\Columns\DisplayTypes\StoreProperty.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\TimeDisplayFormat.cs" />
     <Compile Include="Filters\Search\QuickLookupCriteria.cs" />
-    <Compile Include="Filters\Search\QuickSearchCriteria.cs" />
     <Compile Include="Filters\Search\SearchManager.cs" />
     <Compile Include="Filters\Search\SearchProvider.cs" />
     <Compile Include="Filters\Search\SearchSqlGenerator.cs" />
