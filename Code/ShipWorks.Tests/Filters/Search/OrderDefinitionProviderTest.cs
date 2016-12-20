@@ -102,7 +102,6 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_IncludesStoreSpecificCriteria_WhenStoreHasCriteria()
         {
-
             var storeType = mock.CreateMock<StoreType>();
             ConditionGroup storeCondition = new ConditionGroup();
             storeType.Setup(s => s.CreateBasicSearchOrderConditions(testOneWordQuery)).Returns(storeCondition);
@@ -112,13 +111,11 @@ namespace ShipWorks.Tests.Filters.Search
                 .Returns(new List<StoreType> {storeType.Object});
 
             var definition = testObject.GetDefinition(testOneWordQuery);
-
-
+            
             ConditionGroup condition =
                 definition.RootContainer.SecondGroup.FirstGroup.Conditions.Cast<CombinedResultCondition>()
                     .Single()
                     .Container.FirstGroup;
-                    
 
             Assert.Equal(storeCondition, condition);
         }
