@@ -2,30 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters;
-using Divelements.SandGrid;
-using ShipWorks.Data;
-using ComponentFactory.Krypton.Toolkit;
-using Interapptive.Shared.Utility;
-using ShipWorks.Properties;
-using ShipWorks.Filters.Content;
-using ShipWorks.Data.Grid;
-using ShipWorks.ApplicationCore.Appearance;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Grid.DetailView;
-using ShipWorks.Filters.Search;
-using log4net;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
+using System.Windows.Forms;
 using Autofac;
+using ComponentFactory.Krypton.Toolkit;
+using Divelements.SandGrid;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.UI.Controls.Design;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Data;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.DetailView;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Grid;
+using ShipWorks.Filters.Search;
+using ShipWorks.Properties;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -76,14 +74,14 @@ namespace ShipWorks.ApplicationCore
         public event EventHandler SearchQueryChanged;
 
         // Indicates if the user is currently searching
-        SearchProvider searchProvider = null;
+        SearchProvider searchProvider;
 
         // Indicates if advanced search has been initiated during the current search round
-        bool initiatedAdvanced = false;
+        bool initiatedAdvanced;
 
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
-        List<long> selectedStoreKeys = null;
+        List<long> selectedStoreKeys;
 
         // Debouncing observables for searching
         IDisposable quickSearchObservable;
@@ -117,8 +115,8 @@ namespace ShipWorks.ApplicationCore
             {
                 AdvancedSearchVisible = false;
 
-                searchBox.GotFocus += this.OnSearchBoxFocusChange;
-                searchBox.LostFocus += this.OnSearchBoxFocusChange;
+                searchBox.GotFocus += OnSearchBoxFocusChange;
+                searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
             // Wire up observable for debouncing quick search text box
@@ -178,10 +176,7 @@ namespace ShipWorks.ApplicationCore
             {
                 Reset();
 
-                if (components != null)
-                {
-                    components.Dispose();
-                }
+                components?.Dispose();
 
                 advancedSearchObservable?.Dispose();
                 quickSearchObservable?.Dispose();
@@ -287,10 +282,7 @@ namespace ShipWorks.ApplicationCore
         /// The DetailViewSettings currently in use in the active grid.
         /// </summary>
         [Browsable(false)]
-        public DetailViewSettings ActiveDetailViewSettings
-        {
-            get { return ActiveGrid != null ? ActiveGrid.DetailViewSettings : null; }
-        }
+        public DetailViewSettings ActiveDetailViewSettings => ActiveGrid?.DetailViewSettings;
 
         /// <summary>
         /// The total number of rows being displayed in the grid
@@ -298,7 +290,7 @@ namespace ShipWorks.ApplicationCore
         [Browsable(false)]
         public int TotalCount
         {
-            get { return ActiveGrid != null ? ActiveGrid.Rows.Count : 0; }
+            get { return ActiveGrid?.Rows.Count ?? 0; }
         }
 
         /// <summary>
@@ -307,7 +299,7 @@ namespace ShipWorks.ApplicationCore
         [Browsable(false)]
         public IGridSelection Selection
         {
-            get { return ActiveGrid != null ? ActiveGrid.Selection : new StaticGridSelection(); }
+            get { return ActiveGrid?.Selection ?? new StaticGridSelection(); }
         }
 
         /// <summary>
@@ -324,14 +316,10 @@ namespace ShipWorks.ApplicationCore
 
                 if (selectedStoreKeys == null)
                 {
-                    if (ActiveGrid != null)
-                    {
-                        selectedStoreKeys = ActiveGrid.Selection.Keys.Select(orderID => DataProvider.GetOrderHeader(orderID).StoreID).Distinct().ToList();
-                    }
-                    else
-                    {
-                        selectedStoreKeys = new List<long>();
-                    }
+                    selectedStoreKeys =
+                        ActiveGrid?.Selection.Keys.Select(orderID => DataProvider.GetOrderHeader(orderID).StoreID)
+                            .Distinct()
+                            .ToList() ?? new List<long>();
                 }
 
                 return selectedStoreKeys;
@@ -381,10 +369,7 @@ namespace ShipWorks.ApplicationCore
                 return;
             }
 
-            if (ActiveGrid != null)
-            {
-                ActiveGrid.Clear();
-            }
+            ActiveGrid?.Clear();
 
             if (IsSearchActive)
             {
@@ -438,10 +423,7 @@ namespace ShipWorks.ApplicationCore
         /// Indicates if the grid is currently displaying search results
         /// </summary>
         [Browsable(false)]
-        public bool IsSearchActive
-        {
-            get { return searchProvider != null; }
-        }
+        public bool IsSearchActive => searchProvider != null;
 
         /// <summary>
         /// Cancel the search mode.  IsSearchActive must be true, or this will throw an exception.
@@ -469,11 +451,11 @@ namespace ShipWorks.ApplicationCore
             grid.StretchPrimaryGrid = false;
 
             grid.ColumnsReordered += OnColumnsReordered;
-            grid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
-            grid.SortChanged += new GridEventHandler(OnGridSortChanged);
-            grid.KeyDown += new KeyEventHandler(OnGridKeyDown);
+            grid.SelectionChanged += OnGridSelectionChanged;
+            grid.SortChanged += OnGridSortChanged;
+            grid.KeyDown += OnGridKeyDown;
 
-            grid.RowActivated += new GridRowEventHandler(OnGridRowActivated);
+            grid.RowActivated += OnGridRowActivated;
 
             return grid;
         }
@@ -649,10 +631,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void RaiseSortChanged()
         {
-            if (SortChanged != null)
-            {
-                SortChanged(this, EventArgs.Empty);
-            }
+            SortChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -664,10 +643,7 @@ namespace ShipWorks.ApplicationCore
             // We had a situation where a customer's volume keys were triggering the delete, and the period key would cause it as well.
             if (e.KeyCode == Keys.Delete)
             {
-                if (DeleteKeyPressed != null)
-                {
-                    DeleteKeyPressed(this, EventArgs.Empty);
-                }
+                DeleteKeyPressed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -676,10 +652,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         void OnGridRowActivated(object sender, GridRowEventArgs e)
         {
-            if (RowActivated != null)
-            {
-                RowActivated(this, e);
-            }
+            RowActivated?.Invoke(this, e);
         }
 
         /// <summary>
@@ -749,10 +722,7 @@ namespace ShipWorks.ApplicationCore
         {
             UpdateHeaderContent();
 
-            if (SearchQueryChanged != null)
-            {
-                SearchQueryChanged(this, EventArgs.Empty);
-            }
+            SearchQueryChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -767,7 +737,7 @@ namespace ShipWorks.ApplicationCore
 
             // Create a new search provider
             searchProvider = new SearchProvider(ActiveFilterTarget);
-            searchProvider.StatusChanged += new EventHandler(OnSearchStatusChanged);
+            searchProvider.StatusChanged += OnSearchStatusChanged;
 
             // Start the search
             ActiveGrid.ActiveFilterNode = searchProvider.SearchResultsNode;
@@ -784,22 +754,6 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private FilterDefinition GetSearchDefinition()
         {
-            //FilterDefinition quickSearchFilter = null;
-
-            //string quickSearchText = GetBasicSearchText();
-            //if (quickSearchText.Length != 0)
-            //{
-            //    quickSearchFilter = QuickSearchCriteria.CreateDefinition(ActiveFilterTarget, quickSearchText);
-            //}
-
-            //if (AdvancedSearchResultsActive)
-            //{
-            //    return CreateAdvancedSearchDefinition(quickSearchFilter);
-            //}
-
-            //// If not advanced search is not active, and quick search is empty, we still want to show all orders (new filter definition)
-            //return quickSearchFilter ?? new FilterDefinition(ActiveFilterTarget);
-
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 FilterDefinitionProviderFactory definitionProviderFactory = scope.Resolve<FilterDefinitionProviderFactory>();
@@ -816,48 +770,6 @@ namespace ShipWorks.ApplicationCore
 
                 return definitionProvider.GetDefinition(GetBasicSearchText());
             }
-        }
-
-        /// <summary>
-        /// Creates a filter that uses the quick search to search the results of an advanced search
-        /// </summary>
-        private FilterDefinition CreateAdvancedSearchDefinition(FilterDefinition quickFilter)
-        {
-            // If the filter definition is empty (no criteria has been selected) don't return
-            // the definition. An empty definition returns all orders or customers, which is
-            // irrelevant
-            if (filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
-            {
-                FilterDefinition advancedFilter = filterEditor.FilterDefinition;
-
-                List<Condition> quickSearchConditions = new List<Condition>();
-
-                if (quickFilter?.RootContainer?.FirstGroup?.Conditions != null)
-                {
-                    quickSearchConditions.AddRange(quickFilter.RootContainer.FirstGroup.Conditions);
-                }
-
-                // When quick searching the customer grid, there is no second group.
-                if (quickFilter?.RootContainer?.SecondGroup?.FirstGroup?.Conditions != null)
-                {
-                    quickSearchConditions.AddRange(quickFilter.RootContainer.SecondGroup.FirstGroup.Conditions);
-                }
-                ConditionGroup quickSearchConditionGroup = new ConditionGroup();
-                foreach (Condition quickSearchCondition in quickSearchConditions)
-                {
-                    quickSearchConditionGroup.Conditions.Add(quickSearchCondition);
-                }
-                quickSearchConditionGroup.JoinType = ConditionJoinType.Any;
-
-                FilterDefinition combinedFilter = new FilterDefinition(ActiveFilterTarget);
-                combinedFilter.RootContainer.FirstGroup = quickSearchConditionGroup;
-                combinedFilter.RootContainer.SecondGroup = advancedFilter.RootContainer;
-                combinedFilter.RootContainer.JoinType = ConditionGroupJoinType.And;
-
-                return combinedFilter;
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -940,7 +852,7 @@ namespace ShipWorks.ApplicationCore
 
             ActiveGrid.ActiveFilterNode = null;
 
-            searchProvider.StatusChanged -= new EventHandler(OnSearchStatusChanged);
+            searchProvider.StatusChanged -= OnSearchStatusChanged;
             searchProvider.Cancel();
             searchProvider.Dispose();
             searchProvider = null;
@@ -961,10 +873,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void RaiseSearchActiveChanged()
         {
-            if (SearchActiveChanged != null)
-            {
-                SearchActiveChanged(this, EventArgs.Empty);
-            }
+            SearchActiveChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
