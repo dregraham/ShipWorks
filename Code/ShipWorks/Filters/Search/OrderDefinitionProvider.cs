@@ -17,6 +17,17 @@ namespace ShipWorks.Filters.Search
     /// </summary>
     public class OrderDefinitionProvider : IFilterDefinitionProvider
     {
+        private readonly IStoreManager storeManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderDefinitionProvider"/> class.
+        /// </summary>
+        /// <param name="storeManager">The store manager.</param>
+        public OrderDefinitionProvider(IStoreManager storeManager)
+        {
+            this.storeManager = storeManager;
+        }
+
         /// <summary>
         /// Gets a filter definition based on the provided quick search string.
         /// </summary>
@@ -27,47 +38,9 @@ namespace ShipWorks.Filters.Search
             // Apply common order conditions
             ApplyOrderConditions(definition.RootContainer.FirstGroup, quickSearchString);
 
-            ApplyStoreSpecificCriteria(quickSearchString, definition);
+            ApplyStoreSpecificCriteria(definition.RootContainer, quickSearchString);
 
             return definition;
-        }
-
-        /// <summary>
-        /// Merges the store criteria.
-        /// </summary>
-        private static void ApplyStoreSpecificCriteria(string quickSearchString, FilterDefinition definition)
-        {
-            // Will hold any store-specific conditions
-            List<ConditionGroup> storeSpecific = new List<ConditionGroup>();
-
-            // Apply store-specific conditions
-            foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes())
-            {
-                storeSpecific.Add(storeType.CreateBasicSearchOrderConditions(quickSearchString));
-            }
-
-            ConditionGroup parentGroup = null;
-
-            // Get all the groups that are not null
-            foreach (ConditionGroup group in storeSpecific.Where(g => g != null))
-            {
-                // Lazy create the container for them.
-                if (parentGroup == null)
-                {
-                    parentGroup = new ConditionGroup();
-                    parentGroup.JoinType = ConditionJoinType.Any;
-
-                    definition.RootContainer.SecondGroup = new ConditionGroupContainer(parentGroup);
-                    definition.RootContainer.JoinType = ConditionGroupJoinType.Or;
-                }
-
-                // Create a combined result to hold the group of conditions for this store
-                CombinedResultCondition combinedResult = new CombinedResultCondition();
-                combinedResult.Container.FirstGroup = group;
-
-                // Add the combined result to the parent, which joins them all together with an Any
-                parentGroup.Conditions.Add(combinedResult);
-            }
         }
 
         /// <summary>
@@ -134,6 +107,44 @@ namespace ShipWorks.Filters.Search
             condition.TargetValue = targetValue;
 
             return condition;
+        }
+
+        /// <summary>
+        /// Merges the store criteria.
+        /// </summary>
+        private void ApplyStoreSpecificCriteria(ConditionGroupContainer rootContainer, string quickSearchString)
+        {
+            // Will hold any store-specific conditions
+            List<ConditionGroup> storeSpecific = new List<ConditionGroup>();
+
+            // Apply store-specific conditions
+            foreach (StoreType storeType in storeManager.GetUniqueStoreTypes())
+            {
+                storeSpecific.Add(storeType.CreateBasicSearchOrderConditions(quickSearchString));
+            }
+
+            ConditionGroup parentGroup = null;
+
+            // Get all the groups that are not null
+            foreach (ConditionGroup group in storeSpecific.Where(g => g != null))
+            {
+                // Lazy create the container for them.
+                if (parentGroup == null)
+                {
+                    parentGroup = new ConditionGroup();
+                    parentGroup.JoinType = ConditionJoinType.Any;
+
+                    rootContainer.SecondGroup = new ConditionGroupContainer(parentGroup);
+                    rootContainer.JoinType = ConditionGroupJoinType.Or;
+                }
+
+                // Create a combined result to hold the group of conditions for this store
+                CombinedResultCondition combinedResult = new CombinedResultCondition();
+                combinedResult.Container.FirstGroup = group;
+
+                // Add the combined result to the parent, which joins them all together with an Any
+                parentGroup.Conditions.Add(combinedResult);
+            }
         }
     }
 }
