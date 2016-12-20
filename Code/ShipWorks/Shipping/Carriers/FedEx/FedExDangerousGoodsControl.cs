@@ -64,36 +64,44 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <param name="packages">The packages.</param>
         [NDependIgnoreLongMethod]
-        public void SaveToPackage(IEnumerable<FedExPackageEntity> packages)
+        public void SaveToPackages(IEnumerable<FedExPackageEntity> packages)
         {
             foreach (FedExPackageEntity package in packages)
             {
-                dangerousGoodsEnabled.ReadMultiCheck(c => package.DangerousGoodsEnabled = c);
-
-                dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int) v);
-                dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int) v);
-                dangerousGoodsCargoAircraftOnly.ReadMultiCheck(c => package.DangerousGoodsCargoAircraftOnly = c);
-                dangerousGoodsPackagingCounts.ReadMultiText(t => package.DangerousGoodsPackagingCount = ReadIntegerValue(t));
-                dangerousGoodsPackagingUnits.ReadMultiValue(v => package.HazardousMaterialQuanityUnits = (int) v);
-                containerType.ReadMultiText(v => package.ContainerType = v);
-                numberOfContainers.ReadMultiText(v => package.NumberOfContainers = ReadIntegerValue(v));
-
-                offeror.ReadMultiText(t => package.DangerousGoodsOfferor = t);
-                emergencyContactPhone.ReadMultiText(t => package.DangerousGoodsEmergencyContactPhone = t);
-
-                signatoryContactName.ReadMultiText(t => package.SignatoryContactName = t);
-                signatoryTitle.ReadMultiText(t => package.SignatoryTitle = t);
-                signatoryPlace.ReadMultiText(t => package.SignatoryPlace = t);
-
-                hazardousMaterialId.ReadMultiText(t => package.HazardousMaterialNumber = t);
-                hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
-                hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
-                hazardousMaterialTechnicalName.ReadMultiText(t => package.HazardousMaterialTechnicalName = t);
-                hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int) v);
-                hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
-                packingDetailsAircraftOnly.ReadMultiCheck(t => package.PackingDetailsCargoAircraftOnly = t);
-                packingInstructions.ReadMultiText(t => package.PackingDetailsPackingInstructions = t);
+                SaveToPackage(package);
             }
+        }
+
+        /// <summary>
+        /// Saves the state of the controls to the package.
+        /// </summary>
+        private void SaveToPackage(FedExPackageEntity package)
+        {
+            dangerousGoodsEnabled.ReadMultiCheck(c => package.DangerousGoodsEnabled = c);
+
+            dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int) v);
+            dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int) v);
+            dangerousGoodsCargoAircraftOnly.ReadMultiCheck(c => package.DangerousGoodsCargoAircraftOnly = c);
+            dangerousGoodsPackagingCounts.ReadMultiText(t => package.DangerousGoodsPackagingCount = ReadIntegerValue(t));
+            dangerousGoodsPackagingUnits.ReadMultiValue(v => package.HazardousMaterialQuanityUnits = (int) v);
+            containerType.ReadMultiText(v => package.ContainerType = v);
+            numberOfContainers.ReadMultiText(v => package.NumberOfContainers = ReadIntegerValue(v));
+
+            offeror.ReadMultiText(t => package.DangerousGoodsOfferor = t);
+            emergencyContactPhone.ReadMultiText(t => package.DangerousGoodsEmergencyContactPhone = t);
+
+            signatoryContactName.ReadMultiText(t => package.SignatoryContactName = t);
+            signatoryTitle.ReadMultiText(t => package.SignatoryTitle = t);
+            signatoryPlace.ReadMultiText(t => package.SignatoryPlace = t);
+
+            hazardousMaterialId.ReadMultiText(t => package.HazardousMaterialNumber = t);
+            hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
+            hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
+            hazardousMaterialTechnicalName.ReadMultiText(t => package.HazardousMaterialTechnicalName = t);
+            hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int) v);
+            hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
+            packingDetailsAircraftOnly.ReadMultiCheck(t => package.PackingDetailsCargoAircraftOnly = t);
+            packingInstructions.ReadMultiText(t => package.PackingDetailsPackingInstructions = t);
         }
 
         /// <summary>

@@ -269,7 +269,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 // Save the priority alerts and dangerous goods
                 priorityAlertControl.SavePriorityAlertToPackage(packages);
-                dangerousGoodsControl.SaveToPackage(packages);
+                dangerousGoodsControl.SaveToPackages(packages);
             }
         }
 
