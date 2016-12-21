@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Filters.Search
         }
 
         [Fact]
-        public void GetDefinition_GetsQuickSearchFilterDefinitionFromQuickSearchDefinitionProvider()
+        public void GetDefinition_GetsQuickSearchFilterDefinitionFromQuickSearchDefinitionProvider_WhenQuickSearchStringIsNotEmpty()
         {
             Mock<IFilterDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<IFilterDefinitionProvider>();
             quickFilterDefinitionProvider.Setup(q => q.GetDefinition(It.IsAny<string>()))
@@ -53,6 +53,32 @@ namespace ShipWorks.Tests.Filters.Search
             testObject.GetDefinition("something");
 
             quickFilterDefinitionProvider.Verify(q => q.GetDefinition("something"));
+        }
+
+
+        [Fact]
+        public void GetDefinition_DoesNotGetQuickSearchFilterDefinitionFromQuickSearchDefinitionProvider_WhenQuickSearchStringIsEmpty()
+        {
+            Mock<IFilterDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<IFilterDefinitionProvider>();
+            quickFilterDefinitionProvider.Setup(q => q.GetDefinition(It.IsAny<string>()))
+                .Returns(new FilterDefinition(FilterTarget.Orders));
+
+            FilterDefinition advancedDefinitions = new FilterDefinition(FilterTarget.Orders)
+            {
+                RootContainer = new ConditionGroupContainer(new ConditionGroup())
+            };
+
+            advancedDefinitions.RootContainer.FirstGroup.Conditions.Add(new OrderNumberCondition
+            {
+                IsNumeric = false,
+                StringOperator = StringOperator.BeginsWith,
+                StringValue = "something"
+            });
+
+            AdvancedSearchDefinitionProvider testObject = mock.Create<AdvancedSearchDefinitionProvider>(new TypedParameter(typeof(FilterDefinition), advancedDefinitions));
+            testObject.GetDefinition(string.Empty);
+
+            quickFilterDefinitionProvider.Verify(q => q.GetDefinition(string.Empty), Times.Never);
         }
 
         public void Dispose()
