@@ -38,7 +38,8 @@ namespace ShipWorks.ApplicationCore
         // Active target.  Or last target, if there is no active node
 
         // The grids
-        readonly Dictionary<FilterTarget, FilterEntityGrid> entityGrids = new Dictionary<FilterTarget, FilterEntityGrid>();
+        readonly Dictionary<FilterTarget, FilterEntityGrid> entityGrids =
+            new Dictionary<FilterTarget, FilterEntityGrid>();
 
         // Text that is displayed when a search is in progress
         readonly string searchingText;
@@ -139,15 +140,18 @@ namespace ShipWorks.ApplicationCore
                 .CatchAndContinue((Exception ex) => log.Error("Error occured while debouncing advanced search.", ex))
                 .Subscribe(x => PerformAdvancedSearch());
         }
-        
+
         /// <summary>
         /// Initialization
         /// </summary>
-        public void InitializeForTarget(FilterTarget filterTarget, ContextMenuStrip orderMenu, ToolStripMenuItem copyMenu)
+        public void InitializeForTarget(FilterTarget filterTarget,
+            ContextMenuStrip orderMenu,
+            ToolStripMenuItem copyMenu)
         {
             if (entityGrids.ContainsKey(filterTarget))
             {
-                throw new InvalidOperationException("Already initialized for target {0}.  Use Reset first if you need to reinitialize.");
+                throw new InvalidOperationException(
+                    "Already initialized for target {0}.  Use Reset first if you need to reinitialize.");
             }
 
             entityGrids[filterTarget] = CreateGrid(filterTarget);
@@ -269,7 +273,8 @@ namespace ShipWorks.ApplicationCore
                 {
                     if (value != null)
                     {
-                        throw new InvalidOperationException("Cannot update ActiveFilterNode when there is no active grid.");
+                        throw new InvalidOperationException(
+                            "Cannot update ActiveFilterNode when there is no active grid.");
                     }
                 }
             }
@@ -324,7 +329,10 @@ namespace ShipWorks.ApplicationCore
                 {
                     if (ActiveGrid != null)
                     {
-                        selectedStoreKeys = ActiveGrid.Selection.Keys.Select(orderID => DataProvider.GetOrderHeader(orderID).StoreID).Distinct().ToList();
+                        selectedStoreKeys =
+                            ActiveGrid.Selection.Keys.Select(orderID => DataProvider.GetOrderHeader(orderID).StoreID)
+                                .Distinct()
+                                .ToList();
                     }
                     else
                     {
@@ -337,19 +345,41 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Syncronize the grids virtual row count with the current filter node count
+        /// Synchronize the grids virtual row count with the current filter node count
         /// </summary>
         public void UpdateFiltering()
         {
             ActiveGrid.UpdateGridRows();
 
-            // Auto select the row when doing a filter searach and there is only 1 result
-            if (ActiveFilterNode.Purpose == (int) FilterNodePurpose.Search && ActiveGrid.Rows.Count == 1)
-            {
-                ActiveGrid.Rows[0].Selected = true;
-            }
+            AutoSelectSingleRow();
 
             UpdateHeaderContent();
+        }
+
+        /// <summary>
+        /// Auto select the row when doing a filter search and there is only 1 result
+        /// </summary>
+        private void AutoSelectSingleRow()
+        {
+            try
+            {
+                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search)
+                {
+                    IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
+                    if ((rows?.CompareCountTo(1) ?? ComparisonResult.Less) == ComparisonResult.Equal)
+                    {
+                        GridRow onlyGridRow = rows?.FirstOrDefault();
+                        if (onlyGridRow != null)
+                        {
+                            onlyGridRow.Selected = true;
+                        }
+                    }
+                }
+            }
+            catch (NullReferenceException ex)
+            {
+                log.Error("Exception thrown when attempting to auto-select", ex);
+            }
         }
 
         /// <summary>
