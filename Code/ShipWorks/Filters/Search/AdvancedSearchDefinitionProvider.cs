@@ -5,7 +5,7 @@ using ShipWorks.Filters.Content.Conditions;
 namespace ShipWorks.Filters.Search
 {
     /// <summary>
-    /// Advanced Search Definition Provider
+    /// Generate FilterDefinitions for when using the advanced search in ShipWorks
     /// </summary>
     public class AdvancedSearchDefinitionProvider : ISearchDefinitionProvider
     {
@@ -43,14 +43,24 @@ namespace ShipWorks.Filters.Search
             FilterDefinition quickFilterDefinition = quickSearchDefinitionProvider.GetDefinition(quickSearchString);
 
             List<Condition> quickSearchConditions = new List<Condition>();
+            // Grap all of the conditions from the quick filter
             if (quickFilterDefinition?.RootContainer?.FirstGroup?.Conditions != null)
             {
                 quickSearchConditions.AddRange(quickFilterDefinition.RootContainer.FirstGroup.Conditions);
             }
 
-            // When quick searching the customer grid, there is no second group.
             if (quickFilterDefinition?.RootContainer?.SecondGroup?.FirstGroup?.Conditions != null)
             {
+                // Quick search stores customer conditions in the secondGroups firstGroup, there is no second group.
+                //
+                //                                           - FirstGroup (ConditionGroup)
+                //                                          /
+                // RootContainer (ConditionGroupContainer) -                                           - FirstGroup (ConditionGroup)
+                //                                          \                                         /
+                //                                           - SecondGroup (ConditionGroupContainer) -
+                //                                                                                    \
+                //                                                                                     - SecondGroup (ConditionGroupContainer)
+
                 quickSearchConditions.AddRange(quickFilterDefinition.RootContainer.SecondGroup.FirstGroup.Conditions);
             }
 
