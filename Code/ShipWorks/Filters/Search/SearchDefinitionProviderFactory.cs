@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Filters.Content;
 using ShipWorks.Stores;
+using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Search
 {
@@ -15,14 +14,17 @@ namespace ShipWorks.Filters.Search
     public class SearchDefinitionProviderFactory
     {
         private readonly IStoreManager storeManager;
+        private readonly byte singleScanSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchDefinitionProviderFactory"/> class.
         /// </summary>
         /// <param name="storeManager">The store manager.</param>
-        public SearchDefinitionProviderFactory(IStoreManager storeManager)
+        /// <param name="userSession">The user session</param>
+        public SearchDefinitionProviderFactory(IStoreManager storeManager, IUserSession userSession)
         {
             this.storeManager = storeManager;
+            singleScanSettings = userSession.User.Settings.SingleScanSettings;
         }
 
         /// <summary>
@@ -41,15 +43,22 @@ namespace ShipWorks.Filters.Search
                     quickSearchDefinitionProvider = new CustomerQuickSearchDefinitionProvider();
                     break;
                 case FilterTarget.Orders:
-                    quickSearchDefinitionProvider = new OrderQuickSearchDefinitionProvider(storeManager);
+                    if (singleScanSettings != (int) SingleScanSettings.Disabled)
+                    {
+                        quickSearchDefinitionProvider = new SingleScanSearchDefinitionProvider();
+                    }
+                    else
+                    {
+                        quickSearchDefinitionProvider = new OrderQuickSearchDefinitionProvider(storeManager);
+                    }
                     break;
                 default:
                     throw new IndexOutOfRangeException($"Unknown target {target} in FilterDefinitionProviderFactory.Create");
             }
 
-            return advancedSearchDefinition == null
-                ? quickSearchDefinitionProvider
-                : new AdvancedSearchDefinitionProvider(advancedSearchDefinition, quickSearchDefinitionProvider);
+            return advancedSearchDefinition == null ?
+                quickSearchDefinitionProvider :
+                new AdvancedSearchDefinitionProvider(advancedSearchDefinition, quickSearchDefinitionProvider);
         }
 
         /// <summary>
