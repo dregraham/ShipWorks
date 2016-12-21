@@ -35,6 +35,11 @@ namespace ShipWorks.Filters.Search
                 return null;
             }
 
+            if (string.IsNullOrWhiteSpace(quickSearchString))
+            {
+                return advancedFilterDefinition;
+            }
+
             FilterDefinition quickFilterDefinition = quickFilterDefinitionProvider.GetDefinition(quickSearchString);
 
             List<Condition> quickSearchConditions = new List<Condition>();
