@@ -1,4 +1,6 @@
-﻿namespace Interapptive.Shared.Utility
+﻿using System;
+
+namespace Interapptive.Shared.Utility
 {
     public struct GenericResult
     {
@@ -19,6 +21,12 @@
         /// </summary>
         public static GenericResult<T> FromError<T>(string message, T value) =>
             new GenericResult<T>(false, value, message);
+
+        /// <summary>
+        /// Get a not found read result from exception
+        /// </summary>
+        public static GenericResult<T> FromError<T>(Exception ex) =>
+            new GenericResult<T>(false, default(T), ex.Message);
     }
 
     /// <summary>

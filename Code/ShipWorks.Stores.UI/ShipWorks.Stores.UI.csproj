@@ -164,6 +164,28 @@
     <Compile Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Magento\IMagentoAccountSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsControl.xaml.cs">
+      <DependentUpon>MagentoAccountSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsHost.Designer.cs">
+      <DependentUpon>MagentoAccountSettingsHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\IMagentoWizardSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControl.xaml.cs">
+      <DependentUpon>MagentoStoreSetupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.Designer.cs">
+      <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Magento\WizardPages\MagentoStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml.cs">
       <DependentUpon>OdbcImportMappingControl.xaml</DependentUpon>
     </Compile>
@@ -326,6 +348,12 @@
     <EmbeddedResource Include="Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
       <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Magento\MagentoAccountSettingsHost.resx">
+      <DependentUpon>MagentoAccountSettingsHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Magento\WizardPages\MagentoStoreSetupPage.resx">
+      <DependentUpon>MagentoStoreSetupPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcConnectionSettingsControl.resx">
       <DependentUpon>OdbcConnectionSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -407,6 +435,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverter.cs" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +454,14 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Platforms\Magento\MagentoAccountSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Magento\WizardPages\MagentoStoreSetupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Platforms\Odbc\Controls\Import\OdbcImportMappingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

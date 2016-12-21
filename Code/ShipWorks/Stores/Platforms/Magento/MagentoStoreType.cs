@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Core;
+using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
@@ -23,9 +27,9 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     public class MagentoStoreType : GenericModuleStoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MagentoStoreType));
-						  
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -48,6 +52,25 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// The url to support article
         /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000049745";
+
+        /// <summary>
+        /// Gets the magento version for this store instance
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">Can not get Magento version for a non-Magento store</exception>
+        private MagentoVersion MagentoVersion
+        {
+            get
+            {
+                MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+                if (magentoStore == null)
+                {
+                    throw new InvalidOperationException("Can not get Magento version for a non-Magento store");
+                }
+
+                return (MagentoVersion) magentoStore.MagentoVersion ;
+            }
+        }
 
         /// <summary>
         /// Create the magento-specific store entity
@@ -90,44 +113,23 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Create the custom wizard pages for Magento
         /// </summary>
         /// <param name="scope"></param>
-        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
-        {
-            return new List<WizardPage> 
-            {
-                new MagentoAccountPage()
-            };
-        }
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope) => CreateAddStoreWizardPagesViaIoC(scope);
 
         /// <summary>
         /// Create the control used to create online update actions in the add store wizard
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
-
-            if (magentoStore == null)
-            {
-                throw new InvalidOperationException("Not a magento store.");
-            }
-
-            return new MagentoOnlineUpdateActionControl(magentoStore.MagentoVersion == (int)MagentoVersion.MagentoTwo);
-        }
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new MagentoOnlineUpdateActionControl(MagentoVersion == MagentoVersion.MagentoTwo);
 
         /// <summary>
-        /// Create the custom account settings control
+        /// Create the user control used in the Store Manager window.
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            return new MagentoAccountSettingsControl(); 
-        }
+        public override AccountSettingsControlBase CreateAccountSettingsControl() => CreateAccountSettingsControlViaIoC();
 
         /// <summary>
         /// Create the magento-custom control for store options
         /// </summary>
-        public override StoreSettingsControlBase CreateStoreSettingsControl()
-        {
-            return new MagentoStoreSettingsControl();
-        }
+        public override StoreSettingsControlBase CreateStoreSettingsControl() => new MagentoStoreSettingsControl();
 
         /// <summary>
         /// Create the menu commands for updating status
@@ -137,19 +139,26 @@ namespace ShipWorks.Stores.Platforms.Magento
             List<MenuCommand> commands = new List<MenuCommand>();
 
             // take actions to Cancel the order
-            MenuCommand command = new MenuCommand("Cancel", OnOrderCommand) {Tag = "cancel"};
+            MenuCommand command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Cancel), OnOrderCommand) { Tag = MagentoUploadCommand.Cancel };
             commands.Add(command);
 
-            // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and 
+            // try to complete the shipment - which creates an invoice (online), uploads shipping details if they exist, and
             // sets the order "state" online to complete
-            command = new MenuCommand("Complete", OnOrderCommand) {Tag = "complete"};
+            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Complete), OnOrderCommand) { Tag = MagentoUploadCommand.Complete };
             commands.Add(command);
 
             // place the order into Hold status
-            command = new MenuCommand("Hold", OnOrderCommand) {Tag = "hold"};
+            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Hold), OnOrderCommand) { Tag = MagentoUploadCommand.Hold };
             commands.Add(command);
 
-            command = new MenuCommand("With Comments...", OnOrderCommand) {BreakBefore = true};
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                // take the order out of Hold status
+                command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Unhold), OnOrderCommand) { Tag = MagentoUploadCommand.Unhold };
+                commands.Add(command);
+            }
+
+            command = new MenuCommand(EnumHelper.GetDescription(MagentoUploadCommand.Comments), OnOrderCommand) { Tag = MagentoUploadCommand.Comments, BreakBefore = true };
             commands.Add(command);
 
             return commands;
@@ -166,12 +175,12 @@ namespace ShipWorks.Stores.Platforms.Magento
                 "Updating order {0} of {1}...");
 
             MenuCommand command = context.MenuCommand;
-            string action;
+            MagentoUploadCommand action;
             string comments = "";
-            if (command.Tag == null)
+            if ((MagentoUploadCommand) command.Tag == MagentoUploadCommand.Comments)
             {
                 // open a window for the user to select an action and comments
-                using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg())
+                using (MagentoActionCommentsDlg dlg = new MagentoActionCommentsDlg(MagentoVersion))
                 {
                     if (dlg.ShowDialog(context.Owner) == DialogResult.OK)
                     {
@@ -188,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
             else
             {
-                action = (string)command.Tag;
+                action = (MagentoUploadCommand) command.Tag;
             }
 
             executor.ExecuteCompleted += (o, e) =>
@@ -196,8 +205,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     context.Complete(e.Issues, MenuCommandResult.Error);
                 };
 
-            executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys, 
-                new Dictionary<string, string> { { "action", action }, { "comments", comments } });
+            executor.ExecuteAsync(ExecuteOrderCommandCallback, context.SelectedKeys,
+                new Dictionary<string, string> { { "action", action.ToString() }, { "comments", comments } });
         }
 
         /// <summary>
@@ -206,11 +215,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         private void ExecuteOrderCommandCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
             Dictionary<string, string> state = (Dictionary<string, string>)userState;
-            string action = state["action"];
+            MagentoUploadCommand action = (MagentoUploadCommand) Enum.Parse(typeof(MagentoUploadCommand), state["action"]);
             string comments = state["comments"];
 
             // create the updater and execute the command
-            MagentoOnlineUpdater updater = (MagentoOnlineUpdater)CreateOnlineUpdater();
+            IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) CreateOnlineUpdater();
 
             try
             {
@@ -218,14 +227,14 @@ namespace ShipWorks.Stores.Platforms.Magento
                 MagentoStoreEntity store = StoreManager.GetStore(DataProvider.GetOrderHeader(orderID).StoreID) as MagentoStoreEntity;
                 if (store != null)
                 {
-                    updater.ExecuteOrderAction(orderID, action, comments, store.MagentoTrackingEmails);
+                    updater.UploadShipmentDetails(orderID, action, comments, store.MagentoTrackingEmails);
                 }
                 else
                 {
                     log.WarnFormat("Cannot execute online command for Magento order id {0}, the store was deleted.", orderID);
                 }
             }
-            catch (GenericStoreException ex)
+            catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
             {
                 issueAdder.Add(orderID, ex);
             }
@@ -236,6 +245,14 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override GenericStoreOnlineUpdater CreateOnlineUpdater()
         {
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                return (GenericStoreOnlineUpdater)
+                    IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<IMagentoOnlineUpdater>>(
+                        MagentoVersion.MagentoTwoREST,
+                        new TypedParameter(typeof(GenericModuleStoreEntity), Store)).Value;
+            }
+
             return new MagentoOnlineUpdater((GenericModuleStoreEntity)Store);
         }
 
@@ -244,6 +261,12 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<StoreDownloader>>(MagentoVersion.MagentoTwoREST,
+                    new TypedParameter(typeof(StoreEntity), Store)).Value;
+            }
+
             return new MagentoDownloader(Store);
         }
 
@@ -259,7 +282,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 throw new InvalidOperationException("Not a magento store.");
             }
 
-            switch ((MagentoVersion)magentoStore.MagentoVersion)
+            switch (MagentoVersion)
             {
                 case MagentoVersion.PhpFile:
                     return new MagentoWebClient(magentoStore);
@@ -274,6 +297,41 @@ namespace ShipWorks.Stores.Platforms.Magento
                 default:
                     throw new NotImplementedException("Magento Version not supported");
             }
+        }
+
+        /// <summary>
+        /// If the store is Magento Two rest dont initialize from onlinemodule
+        /// </summary>
+        public override void InitializeFromOnlineModule()
+        {
+            MagentoStoreEntity magentoStore = Store as MagentoStoreEntity;
+
+            if (magentoStore == null)
+            {
+                throw new InvalidOperationException("Not a magento store.");
+            }
+
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST)
+            {
+                magentoStore.SchemaVersion = "1.1.0.0";
+                return;
+            }
+
+            base.InitializeFromOnlineModule();
+        }
+
+        /// <summary>
+        /// Customize what columns we support based on the configured properties of the generic store
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (MagentoVersion == MagentoVersion.MagentoTwoREST &&
+                (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified))
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
         }
     }
 }
