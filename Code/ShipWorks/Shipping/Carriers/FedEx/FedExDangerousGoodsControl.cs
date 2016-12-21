@@ -78,7 +78,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void SaveToPackage(FedExPackageEntity package)
         {
             dangerousGoodsEnabled.ReadMultiCheck(c => package.DangerousGoodsEnabled = c);
-
             dangerousGoodsMaterialType.ReadMultiValue(v => package.DangerousGoodsType = (int) v);
             dangerousGoodsAccessibility.ReadMultiValue(v => package.DangerousGoodsAccessibilityType = (int) v);
             dangerousGoodsCargoAircraftOnly.ReadMultiCheck(c => package.DangerousGoodsCargoAircraftOnly = c);
@@ -90,10 +89,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             offeror.ReadMultiText(t => package.DangerousGoodsOfferor = t);
             emergencyContactPhone.ReadMultiText(t => package.DangerousGoodsEmergencyContactPhone = t);
 
+            SaveSignatoryToPackage(package);
+
+            SaveHazardousMaterialToPackage(package);
+        }
+
+        /// <summary>
+        /// Saves the signatory to package.
+        /// </summary>
+        private void SaveSignatoryToPackage(FedExPackageEntity package)
+        {
             signatoryContactName.ReadMultiText(t => package.SignatoryContactName = t);
             signatoryTitle.ReadMultiText(t => package.SignatoryTitle = t);
             signatoryPlace.ReadMultiText(t => package.SignatoryPlace = t);
+        }
 
+        /// <summary>
+        /// Saves the hazardous material to package.
+        /// </summary>
+        private void SaveHazardousMaterialToPackage(FedExPackageEntity package)
+        {
             hazardousMaterialId.ReadMultiText(t => package.HazardousMaterialNumber = t);
             hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
             hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
