@@ -1022,6 +1022,8 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             /// </summary>
             void ExecuteInternal(string action, string instance, string sapassword, ILifetimeScope lifetimeScope)
             {
+                ValidateArguments(action, instance, sapassword);
+
                 // Normally this happens as a part of app startup, but not when running command line.
                 SqlSession.Initialize();
 
@@ -1033,12 +1035,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     {
                         case "upgrade":
                         {
-                            // Can't specific instance or password for upgrade - we use SqlSession
-                            if (instance != null || sapassword != null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
-                            }
-
                             log.InfoFormat("Processing request to upgrade SQL Sever");
 
                             // We need to initialize an installer to get the correct installer package exe's
@@ -1054,16 +1050,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                         case "install":
                         {
                             log.InfoFormat("Processing request to install sql server. {0}", instance);
-
-                            if (instance == null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                            }
-
-                            if (sapassword == null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
-                            }
 
                             // We need to initialize an installer to get the correct installer package exe's
                             installer.InstallSqlServerInternal(instance, sapassword);
@@ -1084,11 +1070,6 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                         case "upgradelocaldb":
                         {
                             log.InfoFormat("Processing request to upgrade local db. {0}", instance);
-
-                            if (instance == null)
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                            }
 
                             // We need to initialize an installer to get the correct installer package exe's
                             installer.UpgradeLocalDbInternal(instance);
@@ -1116,6 +1097,56 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 {
                     log.Error("Failed to process firewall request.", ex);
                     Environment.ExitCode = ex.NativeErrorCode;
+                }
+            }
+
+            /// <summary>
+            /// Validate the command arguments
+            /// </summary>
+            private void ValidateArguments(string action, string instance, string sapassword)
+            {
+                switch (action)
+                {
+                    case "upgrade":
+                        {
+                            // Can't specific instance or password for upgrade - we use SqlSession
+                            if (instance != null || sapassword != null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
+                            }
+
+                            break;
+                        }
+
+                    case "install":
+                        {
+                            if (instance == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
+                            }
+
+                            if (sapassword == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
+                            }
+                                
+                            break;
+                        }
+
+                    case "upgradelocaldb":
+                        {
+                            if (instance == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
+                            }
+
+                            break;
+                        }
+
+                    default:
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                        }
                 }
             }
         }
