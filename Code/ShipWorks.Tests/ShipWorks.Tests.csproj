@@ -291,9 +291,9 @@
     <Compile Include="Filters\Content\Conditions\Shipments\CarrierConditionTests.cs" />
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResultTest.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProviderTest.cs" />
-    <Compile Include="Filters\Search\CustomerDefinitionProviderTest.cs" />
-    <Compile Include="Filters\Search\FilterDefinitionProviderFactoryTest.cs" />
-    <Compile Include="Filters\Search\OrderDefinitionProviderTest.cs" />
+    <Compile Include="Filters\Search\CustomerQuickSearchDefinitionProviderTest.cs" />
+    <Compile Include="Filters\Search\SearchDefinitionProviderFactoryTest.cs" />
+    <Compile Include="Filters\Search\OrderQuickSearchDefinitionProviderTest.cs" />
     <Compile Include="Interapptive.Shared\Business\GeographyTest.cs" />
     <Compile Include="Interapptive.Shared\Business\PersonUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Collections\ArrayUtilityTest.cs" />

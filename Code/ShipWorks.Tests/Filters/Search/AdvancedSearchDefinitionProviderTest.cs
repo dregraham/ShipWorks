@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_GetsQuickSearchFilterDefinitionFromQuickSearchDefinitionProvider_WhenQuickSearchStringIsNotEmpty()
         {
-            Mock<IFilterDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<IFilterDefinitionProvider>();
+            Mock<ISearchDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<ISearchDefinitionProvider>();
             quickFilterDefinitionProvider.Setup(q => q.GetDefinition(It.IsAny<string>()))
                 .Returns(new FilterDefinition(FilterTarget.Orders));
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_DoesNotGetQuickSearchFilterDefinitionFromQuickSearchDefinitionProvider_WhenQuickSearchStringIsEmpty()
         {
-            Mock<IFilterDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<IFilterDefinitionProvider>();
+            Mock<ISearchDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<ISearchDefinitionProvider>();
             quickFilterDefinitionProvider.Setup(q => q.GetDefinition(It.IsAny<string>()))
                 .Returns(new FilterDefinition(FilterTarget.Orders));
 

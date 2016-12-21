@@ -8,13 +8,13 @@ using Xunit;
 
 namespace ShipWorks.Tests.Filters.Search
 {
-    public class CustomerDefinitionProviderTest
+    public class CustomerQuickSearchDefinitionProviderTest
     {
-        private readonly CustomerDefinitionProvider testObject;
+        private readonly CustomerQuickSearchDefinitionProvider testObject;
 
-        public CustomerDefinitionProviderTest()
+        public CustomerQuickSearchDefinitionProviderTest()
         {
-            testObject = new CustomerDefinitionProvider();
+            testObject = new CustomerQuickSearchDefinitionProvider();
         }
 
         [Fact]

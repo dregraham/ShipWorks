@@ -7,19 +7,19 @@ namespace ShipWorks.Filters.Search
     /// <summary>
     /// Advanced Search Definition Provider
     /// </summary>
-    public class AdvancedSearchDefinitionProvider : IFilterDefinitionProvider
+    public class AdvancedSearchDefinitionProvider : ISearchDefinitionProvider
     {
         private readonly FilterDefinition advancedFilterDefinition;
-        private readonly IFilterDefinitionProvider quickFilterDefinitionProvider;
+        private readonly ISearchDefinitionProvider quickSearchDefinitionProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AdvancedSearchDefinitionProvider(FilterDefinition advancedFilterDefinition,
-            IFilterDefinitionProvider quickFilterDefinitionProvider)
+            ISearchDefinitionProvider quickSearchDefinitionProvider)
         {
             this.advancedFilterDefinition = new FilterDefinition(advancedFilterDefinition.GetXml());
-            this.quickFilterDefinitionProvider = quickFilterDefinitionProvider;
+            this.quickSearchDefinitionProvider = quickSearchDefinitionProvider;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ShipWorks.Filters.Search
                 return advancedFilterDefinition;
             }
 
-            FilterDefinition quickFilterDefinition = quickFilterDefinitionProvider.GetDefinition(quickSearchString);
+            FilterDefinition quickFilterDefinition = quickSearchDefinitionProvider.GetDefinition(quickSearchString);
 
             List<Condition> quickSearchConditions = new List<Condition>();
             if (quickFilterDefinition?.RootContainer?.FirstGroup?.Conditions != null)

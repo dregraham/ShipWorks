@@ -9,7 +9,7 @@ using ShipWorks.Filters.Content.Conditions.Special;
 
 namespace ShipWorks.Filters.Search
 {
-    public class CustomerDefinitionProvider : IFilterDefinitionProvider
+    public class CustomerQuickSearchDefinitionProvider : ISearchDefinitionProvider
     {
         public FilterDefinition GetDefinition(string quickSearchString)
         {

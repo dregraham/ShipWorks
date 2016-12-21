@@ -756,9 +756,9 @@ namespace ShipWorks.ApplicationCore
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                FilterDefinitionProviderFactory definitionProviderFactory = scope.Resolve<FilterDefinitionProviderFactory>();
+                SearchDefinitionProviderFactory definitionProviderFactory = scope.Resolve<SearchDefinitionProviderFactory>();
 
-                IFilterDefinitionProvider definitionProvider;
+                ISearchDefinitionProvider definitionProvider;
                 if (AdvancedSearchResultsActive && filterEditor.SaveDefinition() && !filterEditor.FilterDefinition.IsEmpty())
                 {
                     definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition);

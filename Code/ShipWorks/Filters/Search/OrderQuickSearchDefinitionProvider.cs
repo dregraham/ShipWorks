@@ -15,15 +15,15 @@ namespace ShipWorks.Filters.Search
     /// <summary>
     /// Creates Order Filter Definitions for Quick Search
     /// </summary>
-    public class OrderDefinitionProvider : IFilterDefinitionProvider
+    public class OrderQuickSearchDefinitionProvider : ISearchDefinitionProvider
     {
         private readonly IStoreManager storeManager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderDefinitionProvider"/> class.
+        /// Initializes a new instance of the <see cref="OrderQuickSearchDefinitionProvider"/> class.
         /// </summary>
         /// <param name="storeManager">The store manager.</param>
-        public OrderDefinitionProvider(IStoreManager storeManager)
+        public OrderQuickSearchDefinitionProvider(IStoreManager storeManager)
         {
             this.storeManager = storeManager;
         }

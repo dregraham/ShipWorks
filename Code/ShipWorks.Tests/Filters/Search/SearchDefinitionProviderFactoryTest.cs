@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using Autofac.Extras.Moq;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -10,32 +8,32 @@ using Xunit;
 
 namespace ShipWorks.Tests.Filters.Search
 {
-    public class FilterDefinitionProviderFactoryTest : IDisposable
+    public class SearchDefinitionProviderFactoryTest : IDisposable
     {
         readonly AutoMock mock;
 
-        public FilterDefinitionProviderFactoryTest()
+        public SearchDefinitionProviderFactoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
 
         [Theory]
-        [InlineData(FilterTarget.Orders, typeof(OrderDefinitionProvider))]
-        [InlineData(FilterTarget.Customers, typeof(CustomerDefinitionProvider))]
+        [InlineData(FilterTarget.Orders, typeof(OrderQuickSearchDefinitionProvider))]
+        [InlineData(FilterTarget.Customers, typeof(CustomerQuickSearchDefinitionProvider))]
         public void CreateWithTargetAndNullDefinition_ReturnsCorrectDefinitionProvider(FilterTarget target, Type expectedType)
         {
-            var testObject = mock.Create<FilterDefinitionProviderFactory>();
+            var testObject = mock.Create<SearchDefinitionProviderFactory>();
             var filterDefinitionProvider = testObject.Create(target, null);
 
             Assert.IsType(expectedType, filterDefinitionProvider);
         }
 
         [Theory]
-        [InlineData(FilterTarget.Orders, typeof(OrderDefinitionProvider))]
-        [InlineData(FilterTarget.Customers, typeof(CustomerDefinitionProvider))]
+        [InlineData(FilterTarget.Orders, typeof(OrderQuickSearchDefinitionProvider))]
+        [InlineData(FilterTarget.Customers, typeof(CustomerQuickSearchDefinitionProvider))]
         public void CreateWithTarget_ReturnsCorrectDefinitionProvider(FilterTarget target, Type expectedType)
         {
-            var testObject = mock.Create<FilterDefinitionProviderFactory>();
+            var testObject = mock.Create<SearchDefinitionProviderFactory>();
             var filterDefinitionProvider = testObject.Create(target);
 
             Assert.IsType(expectedType, filterDefinitionProvider);
@@ -46,7 +44,7 @@ namespace ShipWorks.Tests.Filters.Search
         [InlineData(FilterTarget.Customers)]
         public void CreateWithTargetAndDefinition_ReturnsAdvancedSearchDefinitionProvider(FilterTarget target)
         {
-            var testObject = mock.Create<FilterDefinitionProviderFactory>();
+            var testObject = mock.Create<SearchDefinitionProviderFactory>();
             var filterDefinitionProvider = testObject.Create(target, new FilterDefinition(target));
 
             Assert.IsType<AdvancedSearchDefinitionProvider>(filterDefinitionProvider);
@@ -57,7 +55,7 @@ namespace ShipWorks.Tests.Filters.Search
         [InlineData(FilterTarget.Shipments)]
         public void CreateWithTarget_ThrowsWhenTargetIsUnexpected(FilterTarget target)
         {
-            var testObject = mock.Create<FilterDefinitionProviderFactory>();
+            var testObject = mock.Create<SearchDefinitionProviderFactory>();
 
             Assert.Throws<IndexOutOfRangeException>(() => testObject.Create(target));
         }

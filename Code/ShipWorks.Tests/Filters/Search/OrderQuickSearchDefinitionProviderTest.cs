@@ -15,20 +15,20 @@ using Xunit;
 
 namespace ShipWorks.Tests.Filters.Search
 {
-    public class OrderDefinitionProviderTest : IDisposable
+    public class OrderQuickSearchDefinitionProviderTest : IDisposable
     {
         readonly AutoMock mock;
 
         private const string testNumericQuery = "42";
         private const string testOneWordQuery = "WordUp";
         private const string testTwoWordQuery = "First Last";
-        OrderDefinitionProvider testObject;
+        OrderQuickSearchDefinitionProvider testObject;
 
 
-        public OrderDefinitionProviderTest()
+        public OrderQuickSearchDefinitionProviderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<OrderDefinitionProvider>();
+            testObject = mock.Create<OrderQuickSearchDefinitionProvider>();
         }
 
         [Fact]
