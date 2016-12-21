@@ -1142,6 +1142,10 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
                             break;
                         }
+                    case "localdb":
+                    case "assignautomaticdbname":
+                        // Nothing to validate here
+                        break;
 
                     default:
                         {
