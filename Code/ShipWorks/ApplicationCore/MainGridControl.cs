@@ -694,7 +694,7 @@ namespace ShipWorks.ApplicationCore
                 initiatedAdvanced = true;
             }
 
-            if (GetBasicSearchText().Length > 0 || AdvancedSearchResultsActive)
+            if (GetBasicSearchText().Length > 0 || AdvancedSearchVisible || AdvancedSearchResultsActive)
             {
                 if (!IsSearchActive)
                 {
