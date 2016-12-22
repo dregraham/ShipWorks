@@ -759,8 +759,9 @@ namespace ShipWorks.ApplicationCore
                 SearchDefinitionProviderFactory definitionProviderFactory = scope.Resolve<SearchDefinitionProviderFactory>();
 
                 ISearchDefinitionProvider definitionProvider;
-                if (AdvancedSearchResultsActive && filterEditor.SaveDefinition())
+                if (AdvancedSearchResultsActive)
                 {
+                    filterEditor.SaveDefinition();
                     definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition);
                 }
                 else
