@@ -8,6 +8,7 @@ using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 
@@ -50,8 +51,11 @@ namespace ShipWorks.Shipping.Services
             Debug.Assert(subscription == null, "Subscription is already initialized");
             EndSession();
 
+            // Ignore shipment changes from the GridProvider. This means someone changed the carrier from the
+            // shipments panel, and if it is for the current shipment, we'll get another request for rates from
+            // the shipping panel
             subscription = messenger.OfType<ShipmentChangedMessage>()
-                .Where(x => x.ShipmentAdapter != null)
+                .Where(x => x.ShipmentAdapter != null && !(x.Sender is GridProviderDisplayType))
                 .Select(x => new
                 {
                     Message = x,
