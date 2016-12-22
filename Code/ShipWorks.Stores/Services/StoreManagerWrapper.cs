@@ -81,5 +81,11 @@ namespace ShipWorks.Stores.Services
         /// </summary>
         public bool DoAnyStoresHaveAutomaticValidationEnabled() =>
             StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
+
+        /// <summary>
+        /// Get a collection of each store type in use by the current database. These are just a distinct list of the non-instanced types... with no stores attached.
+        /// </summary>
+        public IEnumerable<StoreType> GetUniqueStoreTypes() =>
+            StoreManager.GetUniqueStoreTypes();
     }
 }

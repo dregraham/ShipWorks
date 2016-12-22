@@ -366,14 +366,6 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Create the search conditions that are specific to this store type that should be applied when user is doing a Basic Search.
-        /// </summary>
-        public virtual ConditionGroup CreateBasicSearchCustomerConditions(string search)
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Create any MenuCommand's that are applied to the whole StoreType - regardless of how many specific store instances there are.
         /// </summary>
         public virtual List<MenuCommand> CreateOnlineUpdateCommonCommands()
