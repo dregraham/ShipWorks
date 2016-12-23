@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -229,6 +231,30 @@ namespace ShipWorks.Shipping.Tests.Services
             testObject.Process(shipments,
                 context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
+
+        /// <summary>
+        /// Tests that trying to process a shipment that is already locked for processing will fail.
+        /// </summary>
+        [Fact]
+        public async Task Process_Fails_WhenEntityLockAlreadyExistsOnDifferentConnection()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            using (SqlConnection con = new SqlConnection(SqlAdapter.Default.ConnectionString))
+            {
+                con.Open();
+
+                using (SqlEntityLock processLock = new SqlEntityLock(con, shipment.ShipmentID, "Process Shipment"))
+                {
+                    testObject = context.Mock.Create<ShipmentProcessor>();
+
+                    IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+                    Assert.True(results.Any(r => !r.IsSuccessful && r.Error.Message.Contains("The shipment was being processed on another computer.")));
+                }
+            }
+        }
 
         public void Dispose()
         {
