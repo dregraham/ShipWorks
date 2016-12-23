@@ -2,12 +2,15 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
@@ -52,10 +55,10 @@ namespace ShipWorks.Shipping.Tests.Services
 
             Create.Profile().AsPrimary().AsOther().Save();
 
-            var settings = ShippingSettings.Fetch();
-            settings.ConfiguredTypes = new[] { ShipmentTypeCode.Other };
-            settings.ActivatedTypes = new[] { ShipmentTypeCode.Other };
-            ShippingSettings.Save(settings);
+            //var settings = ShippingSettings.Fetch();
+            //settings.ConfiguredTypes = new[] { ShipmentTypeCode.Other, ShipmentTypeCode.Usps };
+            //settings.ActivatedTypes = new[] { ShipmentTypeCode.Other, ShipmentTypeCode.Usps };
+            //ShippingSettings.Save(settings);
 
             ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);
 
@@ -177,6 +180,28 @@ namespace ShipWorks.Shipping.Tests.Services
                 null, null);
 
             Assert.False(shipment.Processed);
+        }
+
+        [Fact]
+        public async Task Process_ShowsAddAccountDialog_WhenProcessingWithNoAccount()
+        {
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                Func<IForm> dialogCreator = null;
+                lifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+                context.Mock.Mock<IMessageHelper>()
+                    .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
+                    .Callback((Func<IForm> x) => dialogCreator = x);
+
+                testObject = context.Mock.Create<ShipmentProcessor>();
+
+                await testObject.Process(new[] { shipment },
+                    context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                    null, null);
+
+                Assert.IsType<UspsSetupWizard>(dialogCreator?.Invoke());
+            }
         }
 
         public void Dispose()
