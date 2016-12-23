@@ -10,7 +10,14 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.OnTrac;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Express1.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
@@ -54,11 +61,6 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Save();
 
             Create.Profile().AsPrimary().AsOther().Save();
-
-            //var settings = ShippingSettings.Fetch();
-            //settings.ConfiguredTypes = new[] { ShipmentTypeCode.Other, ShipmentTypeCode.Usps };
-            //settings.ActivatedTypes = new[] { ShipmentTypeCode.Other, ShipmentTypeCode.Usps };
-            //ShippingSettings.Save(settings);
 
             ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);
 
@@ -182,26 +184,33 @@ namespace ShipWorks.Shipping.Tests.Services
             Assert.False(shipment.Processed);
         }
 
-        [Fact]
-        public async Task Process_ShowsAddAccountDialog_WhenProcessingWithNoAccount()
+        [Theory]
+        [InlineData(ShipmentTypeCode.Usps, typeof(UspsSetupWizard))]
+        [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
+        [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]
+        [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaSetupWizard))]
+        [InlineData(ShipmentTypeCode.FedEx, typeof(FedExSetupWizard))]
+        [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(UpsSetupWizard))]
+        [InlineData(ShipmentTypeCode.iParcel, typeof(iParcelSetupWizard))]
+        [InlineData(ShipmentTypeCode.OnTrac, typeof(OnTracSetupWizard))]
+        public async Task Process_ShowsAddAccountDialog_WhenProcessingWithNoAccount(
+            ShipmentTypeCode shipmentType, Type expectedWizardType)
         {
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                Func<IForm> dialogCreator = null;
-                lifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(shipmentType);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(shipmentType, shipment);
 
-                context.Mock.Mock<IMessageHelper>()
-                    .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
-                    .Callback((Func<IForm> x) => dialogCreator = x);
+            Func<IForm> dialogCreator = null;
+            context.Mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
+                .Callback((Func<IForm> x) => dialogCreator = x);
 
-                testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Mock.Create<ShipmentProcessor>();
 
-                await testObject.Process(new[] { shipment },
-                    context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                    null, null);
+            await testObject.Process(new[] { shipment },
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
 
-                Assert.IsType<UspsSetupWizard>(dialogCreator?.Invoke());
-            }
+            Assert.IsType(expectedWizardType, dialogCreator?.Invoke());
         }
 
         public void Dispose()
