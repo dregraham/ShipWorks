@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -41,7 +42,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new UspsWebClient((UspsResellerType)account.UspsReseller).AuthenticateUser(account.Username, password.Text);
+                new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, (UspsResellerType) account.UspsReseller)
+                    .AuthenticateUser(account.Username, password.Text);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

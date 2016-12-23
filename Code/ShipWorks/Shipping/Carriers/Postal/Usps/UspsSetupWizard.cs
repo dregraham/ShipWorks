@@ -494,7 +494,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new UspsWebClient(UspsResellerType.None).AuthenticateUser(userID, password.Text);
+                new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, UspsResellerType.None).AuthenticateUser(userID, password.Text);
 
                 SaveUspsAccount(userID, SecureText.Encrypt(password.Text, userID));
                 registrationComplete = true;
@@ -516,7 +516,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Saves the usps accountand initializes the stamps info control.
+        /// Saves the usps account and initializes the stamps info control.
         /// </summary>
         /// <param name="accountUserName">The username.</param>
         /// <param name="encryptedPassword">The encrypted password.</param>

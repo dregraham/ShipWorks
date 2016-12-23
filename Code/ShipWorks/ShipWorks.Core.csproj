@@ -1154,6 +1154,8 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebServiceFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsWebServiceFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\GlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\GlobalPostServiceAvailability.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostAvailabilityService.cs" />

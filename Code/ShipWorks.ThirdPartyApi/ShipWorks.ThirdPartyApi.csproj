@@ -216,6 +216,10 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateIndiciumParameters.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateIndiciumResult.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV55.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV55.Implementation.cs" />
     <Compile Include="Web References\ApplicationCore.Licensing.Activation.WebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

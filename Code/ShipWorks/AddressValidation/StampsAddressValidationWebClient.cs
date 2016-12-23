@@ -1,11 +1,12 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -34,7 +35,7 @@ namespace ShipWorks.AddressValidation
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
 
-            UspsWebClient session = new UspsWebClient(UspsResellerType.None);
+            UspsWebClient session = new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, UspsResellerType.None);
 
             try
             {
@@ -84,7 +85,7 @@ namespace ShipWorks.AddressValidation
 
             addressValidationResult.ParseStreet1();
             addressValidationResult.ApplyAddressCasing();
-            
+
             return addressValidationResult;
         }
 
@@ -147,7 +148,7 @@ namespace ShipWorks.AddressValidation
         {
             if (!isPoBox.HasValue)
             {
-                return ValidationDetailStatusType.Unknown; 
+                return ValidationDetailStatusType.Unknown;
             }
 
             return isPoBox.Value ? ValidationDetailStatusType.Yes : ValidationDetailStatusType.No;

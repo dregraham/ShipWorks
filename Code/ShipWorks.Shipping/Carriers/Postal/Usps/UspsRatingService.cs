@@ -1,4 +1,9 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -6,7 +11,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -21,11 +25,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -388,7 +387,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual IUspsWebClient CreateWebClient()
         {
-            return new UspsWebClient(accountRepository, new LogEntryFactory(), CertificateInspector(), UspsResellerType.None);
+            return ((UspsShipmentType) shipmentTypeManager[ShipmentTypeCode.Usps]).CreateWebClient();
         }
 
         /// <summary>
@@ -416,7 +415,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void SortRateGroup(RateGroup rateGroup)
         {
-            // Move all of the global post services to the top. Order by descending as we insert them to the 
+            // Move all of the global post services to the top. Order by descending as we insert them to the
             // beginning, one at a time, so they will then be in alphabetical order which is what we want.
             IEnumerable<RateResult> globalPostPriority = rateGroup.Rates
                 .Where(r => r.Description.Contains("GlobalPost"))

@@ -1,4 +1,14 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web.Services.Protocols;
+using System.Xml.Linq;
+using Autofac;
+using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -10,25 +20,15 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Common.Threading;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web.Services.Protocols;
-using System.Xml.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         private const int MaxCustomsItemDescriptionLength = 60;
 
         private readonly ILog log;
-        private readonly ILogEntryFactory logEntryFactory;
+        private readonly IUspsWebServiceFactory webServiceFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
@@ -60,15 +60,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
         /// </summary>
         /// <param name="uspsResellerType">Type of the USPS reseller.</param>
-        public UspsWebClient(UspsResellerType uspsResellerType)
-            : this(new UspsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), uspsResellerType)
+        public UspsWebClient(ILifetimeScope lifetimeScope, UspsResellerType uspsResellerType)
+            : this(new UspsAccountRepository(),
+                  lifetimeScope.Resolve<Owned<IUspsWebServiceFactory>>().Value,
+                  new TrustingCertificateInspector(),
+                  uspsResellerType)
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
-            ILogEntryFactory logEntryFactory, Func<string, ICertificateInspector> certificateInspectorFactory,
+            IUspsWebServiceFactory webServiceFactory, Func<string, ICertificateInspector> certificateInspectorFactory,
             UspsResellerType uspsResellerType)
-            : this(accountRepository, logEntryFactory, certificateInspectorFactory(string.Empty), uspsResellerType)
+            : this(accountRepository, webServiceFactory, certificateInspectorFactory(string.Empty), uspsResellerType)
         {
         }
 
@@ -76,13 +82,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        /// <param name="logEntryFactory">The log entry factory.</param>
+        /// <param name="webServiceFactory">The web service factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
         /// <param name="uspsResellerType">Type of the USPS reseller.</param>
-        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, UspsResellerType uspsResellerType)
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
+            IUspsWebServiceFactory webServiceFactory, ICertificateInspector certificateInspector,
+            UspsResellerType uspsResellerType)
         {
             this.accountRepository = accountRepository;
-            this.logEntryFactory = logEntryFactory;
+            this.webServiceFactory = webServiceFactory;
             this.log = LogManager.GetLogger(typeof(UspsWebClient));
             this.certificateInspector = certificateInspector;
             this.uspsResellerType = uspsResellerType;
@@ -98,17 +106,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
-        /// Gets the service URL to use when contacting the USPS API.
-        /// </summary>
-        private static string ServiceUrl
-        {
-            get { return UseTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV55.asmx" : "https://swsim.stamps.com/swsim/SwsimV55.asmx"; }
-        }
-
-        /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV55 CreateWebService(string logName)
+        private ISwsimV55 CreateWebService(string logName)
         {
             return CreateWebService(logName, LogActionType.Other);
         }
@@ -124,15 +124,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV55 CreateWebService(string logName, LogActionType logActionType)
-        {
-            SwsimV55 webService = new SwsimV55(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
-            {
-                Url = ServiceUrl
-            };
-
-            return webService;
-        }
+        private ISwsimV55 CreateWebService(string logName, LogActionType logActionType) =>
+           webServiceFactory.Create(logName, logActionType);
 
         /// <summary>
         /// Authenticate the given user with USPS
@@ -149,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 bool passwordExpired = false;
                 bool codewordsSet;
 
-                using (SwsimV55 webService = CreateWebService("Authenticate"))
+                using (ISwsimV55 webService = CreateWebService("Authenticate"))
                 {
                     CheckCertificate(webService.Url);
 
@@ -203,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             AccountInfo accountInfo;
 
-            using (SwsimV55 webService = CreateWebService("GetAccountInfo"))
+            using (ISwsimV55 webService = CreateWebService("GetAccountInfo"))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
@@ -231,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <returns></returns>
         public UspsAccountEntity PopulateUspsAccountEntityInternal(UspsAccountEntity account)
         {
-            using (SwsimV55 webService = CreateWebService("GetAccountInfo"))
+            using (ISwsimV55 webService = CreateWebService("GetAccountInfo"))
             {
                 AccountInfo accountInfo;
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
@@ -286,7 +279,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             string url;
 
-            using (SwsimV55 webService = CreateWebService("GetURL"))
+            using (ISwsimV55 webService = CreateWebService("GetURL"))
             {
                 webService.GetURL(GetCredentials(account), urlType, string.Empty, out url);
             }
@@ -314,21 +307,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             bool miRequired_Unused;
             PurchaseRejectionCode? purchaseRejectionCode_Unused;
 
-            using (SwsimV55 webService = CreateWebService("PurchasePostage"))
+            using (ISwsimV55 webService = CreateWebService("PurchasePostage"))
             {
                 webService.PurchasePostage(
-                    GetCredentials(account), 
-                    amount, 
-                    controlTotal, 
+                    GetCredentials(account),
+                    amount,
+                    controlTotal,
                     null, // MI
                     null, // IntegratorTxID
                     null, // SendEmail
                     false, //SendEmailSpecified
                     null, // Merchant
-                    out purchaseStatus, 
-                    out transactionID, 
-                    out postageBalance, 
-                    out rejectionReason, 
+                    out purchaseStatus,
+                    out transactionID,
+                    out postageBalance,
+                    out rejectionReason,
                     out miRequired_Unused,
                     out purchaseRejectionCode_Unused);
             }
@@ -476,7 +469,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             RateV20[] rateResults;
 
-            using (SwsimV55 webService = CreateWebService("GetRates", LogActionType.GetRates))
+            using (ISwsimV55 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
                 webService.GetRates(GetCredentials(account), rate, out rateResults);
@@ -626,7 +619,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private Task<CleanseAddressCompletedEventArgs> CleanseAddressAsync(UspsAccountEntity account, Address address)
         {
-            using (SwsimV55 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
+            using (ISwsimV55 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
                 using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                 {
@@ -673,7 +666,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (SwsimV55 webService = CreateWebService("RegisterAccount"))
+                using (ISwsimV55 webService = CreateWebService("RegisterAccount"))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API
                     // for cleansing an address assumes there are existing credentials. Question is out to USPS
@@ -750,7 +743,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string scanFormUspsId = string.Empty;
             string scanFormUrl = string.Empty;
 
-            using (SwsimV55 webService = CreateWebService("ScanForm"))
+            using (ISwsimV55 webService = CreateWebService("ScanForm"))
             {
                 webService.CreateScanForm
                     (
@@ -813,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            using (SwsimV55 webService = CreateWebService("Void"))
+            using (ISwsimV55 webService = CreateWebService("Void"))
             {
                 webService.CancelIndicium(
                     GetCredentials(account),
@@ -932,7 +925,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to USPS as of v. 22
-                using (SwsimV55 webService = CreateWebService("Process"))
+                using (ISwsimV55 webService = CreateWebService("Process"))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -959,49 +952,61 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV55 webService = CreateWebService("Process"))
+                using (ISwsimV55 webService = CreateWebService("Process"))
                 {
-                    webService.CreateIndicium(GetCredentials(account), ref integratorGuid,
-                        ref tracking,
-                        ref rate,
-                        fromAddress,
-                        toAddress,
-                        null,
-                        customs,
-                        false,  // Sample only,
-                        shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal,
-                        thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
-                        EltronPrinterDPIType.Default,
-                        UspsUtility.BuildMemoField(shipment.Postal), // Memo
-                        0, // Cost Code
-                        false, // delivery notify
-                        null, // shipment notification
-                        0, // Rotation
-                        null, false, // horizontal offset
-                        null, false, // vertical offset
-                        null, false, // print density
-                        null, false, // print memo
-                        false, true, // print instructions
-                        false, // request postage hash
-                        NonDeliveryOption.Return, // return to sender
-                        null, // redirectTo
-                        null, // OriginalPostageHash
-                        true, true, // returnImageData,
-                        null,
-                        PaperSizeV1.Default,
-                        null,
-                        false, // PayOnPrint
-                        null, // ReturnLabelExpirationDays
-                        false, // ReturnLabelExpirationDaysSpecified,
-                        ImageDpi.ImageDpi203, // ImageDpi
-                        null, // RateToken
-                        null, // OrderId
-                        out uspsGuid,
-                        out labelUrl,
-                        out postageBalance,
-                        out mac_Unused,
-                        out postageHash,
-                        out imageData);
+                    CreateIndiciumResult result = webService.CreateIndicium(
+                        new CreateIndiciumParameters
+                        {
+                            Item = GetCredentials(account),
+                            IntegratorTxID = integratorGuid,
+                            TrackingNumber = tracking,
+                            Rate = rate,
+                            From = fromAddress,
+                            To = toAddress,
+                            CustomerID = null,
+                            Customs = customs,
+                            SampleOnly = false,  // Sample only,
+                            PostageMode = shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal,
+                            ImageType = thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
+                            EltronPrinterDPIType = EltronPrinterDPIType.Default,
+                            Memo = UspsUtility.BuildMemoField(shipment.Postal), // Memo
+                            CostCodeId = 0, // Cost Code
+                            DeliveryNotification = false, // delivery notify
+                            ShipmentNotification = null, // shipment notification
+                            RotationDegrees = 0, // Rotation
+                            HorizontalOffset = null,
+                            HorizontalOffsetSpecified = false, // horizontal offset
+                            VerticalOffset = null,
+                            VerticalOffsetSpecified = false, // vertical offset
+                            PrintDensity = null,
+                            PrintDensitySpecified = false, // print density
+                            PrintMemo = null,
+                            PrintMemoSpecified = false, // print memo
+                            PrintInstructions = false,
+                            PrintInstructionsSpecified = true, // print instructions
+                            RequestPostageHash = false, // request postage hash
+                            NonDeliveryOption = NonDeliveryOption.Return, // return to sender
+                            RedirectTo = null, // redirectTo
+                            OriginalPostageHash = null, // OriginalPostageHash
+                            ReturnImageData = true,
+                            ReturnImageDataSpecified = true, // returnImageData,
+                            InternalTransactionNumber = null,
+                            PaperSize = PaperSizeV1.Default,
+                            EmailLabelTo = null,
+                            PayOnPrint = false, // PayOnPrint
+                            ReturnLabelExpirationDays = null, // ReturnLabelExpirationDays
+                            ReturnLabelExpirationDaysSpecified = false, // ReturnLabelExpirationDaysSpecified,
+                            ImageDpi = ImageDpi.ImageDpi203, // ImageDpi
+                            RateToken = null, // RateToken
+                            OrderId = null, // OrderId
+                        });
+
+                    uspsGuid = result.StampsTxID;
+                    labelUrl = result.URL;
+                    postageBalance = result.PostageBalance;
+                    mac_Unused = result.Mac;
+                    postageHash = result.PostageHash;
+                    imageData = result.ImageData;
                 }
             }
 
@@ -1403,19 +1408,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                using (SwsimV55 webService = CreateWebService("ChangePlan"))
+                using (ISwsimV55 webService = CreateWebService("ChangePlan"))
                 {
-                    webService.Url = ServiceUrl;
-
                     // We send 0 as the plan id
                     webService.ChangePlan(
-                        credentials, 
-                        0, 
-                        promoCode, 
+                        credentials,
+                        0,
+                        promoCode,
                         null, // ChangeEmail,
                         false, // ChangeEmailSpecified
-                        out purchaseStatus, 
-                        out transactionID, 
+                        out purchaseStatus,
+                        out transactionID,
                         out rejectionReason);
                 }
             }
@@ -1441,7 +1444,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             AccountInfo accountInfo;
 
-            using (SwsimV55 webService = CreateWebService("GetContractType"))
+            using (ISwsimV55 webService = CreateWebService("GetContractType"))
             {
                 CheckCertificate(webService.Url);
 

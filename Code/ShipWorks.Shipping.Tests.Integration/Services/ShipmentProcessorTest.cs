@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -11,6 +12,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -23,6 +25,8 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
@@ -43,10 +47,16 @@ namespace ShipWorks.Shipping.Tests.Services
         private ShipmentProcessor testObject;
         private readonly DataContext context;
         private ShipmentEntity shipment;
+        private Mock<IUspsWebServiceFactory> webServiceFactory;
 
         public ShipmentProcessorTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
+                mock =>
+                {
+                    webServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
+                    mock.Provide(webServiceFactory.Object);
+                });
 
             context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>
                 item.Setup(x => x.Validate(It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess()));
@@ -226,6 +236,74 @@ namespace ShipWorks.Shipping.Tests.Services
             Assert.IsType(expectedWizardType, dialogCreator?.Invoke());
         }
 
+        [Fact]
+        public async Task Process_ShowsErrorMessage_WhenServerReturns500()
+        {
+            Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
+            {
+                SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
+            });
+
+            string errorMessage = string.Empty;
+            context.Mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowError(It.IsAny<string>()))
+                .Callback((string x) => errorMessage = x);
+
+            webServiceFactory
+                .Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            await ProcessShipment();
+
+            Assert.Contains("There was an error", errorMessage);
+        }
+
+        [Fact]
+        public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
+        {
+            Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
+            {
+                SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Returns(new CreateIndiciumResult
+                    {
+                        ImageData = new[] { new byte[] { 0x20, 0x20 } },
+                    });
+            });
+
+            webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            string errorMessage = string.Empty;
+            context.Mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowError(It.IsAny<string>()))
+                .Callback((string x) => errorMessage = x);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            await ProcessShipment();
+
+            Assert.Contains("Parameter is not valid", errorMessage);
+        }
+
         private Task<IEnumerable<ProcessShipmentResult>> ProcessShipment() =>
             ProcessShipments(new[] { shipment });
 
@@ -323,6 +401,23 @@ namespace ShipWorks.Shipping.Tests.Services
                     Assert.True(0 == count, "ProcessShipment added rows to PrintResult, even though it should not.");
                 }
             }
+        }
+		
+        private static void SetupAddressValidationResponse(Mock<ISwsimV55> mock)
+        {
+            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
+                .Raises(x => x.CleanseAddressCompleted += null, new CleanseAddressCompletedEventArgs(new object[] {
+                    "", // Result
+                    new Address(),
+                    true,
+                    true,
+                    ResidentialDeliveryIndicatorType.Yes,
+                    false,
+                    false,
+                    new Address[] { },
+                    new StatusCodes(),
+                    new RateV20[] { },
+                }, null, false, null));
         }
 
         public void Dispose()

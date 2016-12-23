@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -42,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             // Use the "live" versions by default
             AccountRepository = new UspsAccountRepository();
-            LogEntryFactory = new LogEntryFactory();
         }
 
         /// <summary>
@@ -54,12 +55,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
         public override bool HasAccounts => AccountRepository.AccountsReadOnly.Any();
-
-        /// <summary>
-        /// Gets or sets the log entry factory.
-        /// </summary>
-        public LogEntryFactory LogEntryFactory { get; set; }
-
 
         /// <summary>
         /// Indicates if the shipment service type supports return shipments
@@ -98,9 +93,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public virtual IUspsWebClient CreateWebClient()
         {
             // This needs to be created each time rather than just being an instance property,
-            // because of counter rates where the account repository is swapped out out prior
+            // because of counter rates where the account repository is swapped out prior
             // to creating the web client.
-            return new UspsWebClient(AccountRepository, LogEntryFactory, CertificateInspector, ResellerType);
+            IUspsWebServiceFactory webServiceFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IUspsWebServiceFactory>>().Value;
+            return new UspsWebClient(AccountRepository, webServiceFactory, CertificateInspector, ResellerType);
         }
 
         /// <summary>
@@ -216,7 +212,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void ValidateShipment(ShipmentEntity shipment)
         {
-            if (shipment.TotalWeight == 0)
+            if (shipment.TotalWeight.IsEquivalentTo(0))
             {
                 throw new ShippingException("The shipment weight cannot be zero.");
             }
