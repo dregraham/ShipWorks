@@ -150,7 +150,8 @@ namespace ShipWorks.Shipping.Services.Dialogs
             // it could be we put out a server message related to it.
             DashboardManager.DownloadLatestServerMessages();
 
-            messenger.Send(new OrderSelectionChangingMessage(this, message.Shipments.Select(x => x.OrderID).Distinct()));
+            messenger.Send(new OrderSelectionChangingMessage(this,
+                message.Shipments.Select(x => x.OrderID).Distinct(), message.Shipments.Select(x => x.ShipmentID)));
         }
 
         /// <summary>

@@ -226,6 +226,18 @@ namespace Interapptive.Shared.Collections
             new ReadOnlyCollection<T>(source?.ToList() ?? new List<T>());
 
         /// <summary>
+        /// Is the count of the collection greater than the specified amount
+        /// </summary>
+        public static bool IsCountGreaterThan<T>(this IEnumerable<T> source, int count) =>
+            source.CompareCountTo(count) == ComparisonResult.More;
+
+        /// <summary>
+        /// Is the count of the collection equal to the specified amount
+        /// </summary>
+        public static bool IsCountEqualTo<T>(this IEnumerable<T> source, int count) =>
+            source.CompareCountTo(count) == ComparisonResult.Equal;
+
+        /// <summary>
         /// Returns whether the collection has more, less, or equal to the specified count
         /// </summary>
         public static ComparisonResult CompareCountTo<T>(this IEnumerable<T> source, int count)

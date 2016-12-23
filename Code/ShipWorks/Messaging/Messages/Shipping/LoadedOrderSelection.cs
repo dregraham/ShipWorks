@@ -33,7 +33,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         public LoadedOrderSelection(Exception ex, OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
         {
             Order = order;
-            ShipmentAdapters = shipmentAdapters;
+            ShipmentAdapters = shipmentAdapters.ToReadOnly();
             Exception = ex;
             DestinationAddressEditable = destinationAddressEditable;
         }

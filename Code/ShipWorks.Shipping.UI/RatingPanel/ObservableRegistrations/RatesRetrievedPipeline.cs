@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
@@ -35,29 +36,32 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         {
             return new CompositeDisposable(
                 messenger.OfType<RatesRetrievingMessage>()
+                    .Trackable()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .IgnoreBetweenMessages(
                         messenger.OfType<OpenShippingDialogMessage>(),
                         messenger.OfType<OrderSelectionChangingMessage>())
-                    .Subscribe(_ => viewModel.ShowSpinner()),
+                    .Subscribe(this, _ => viewModel.ShowSpinner()),
                 messenger.OfType<RatesRetrievingMessage>()
-                    .Select(GetMatchingRatesRetrievedMessage)
-                    .Switch()
+                    .Trackable()
+                    .Select(this, GetMatchingRatesRetrievedMessage)
+                    .Switch(this)
                     .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .ObserveOn(schedulerProvider.Dispatcher)
+                    .Dump(this)
                     .IgnoreBetweenMessages(
-                        messenger.OfType<OpenShippingDialogMessage>().Select(x => (object) x).Merge(messenger.OfType<RatesNotSupportedMessage>()),
-                        messenger.OfType<OrderSelectionChangingMessage>())
-                    .Subscribe(viewModel.LoadRates));
+                        messenger.OfType<OpenShippingDialogMessage>().Trackable().Select(this, x => "Window closing"),
+                        messenger.OfType<OrderSelectionChangingMessage>().Trackable().Select(this, x => "Window opening"))
+                    .Subscribe(this, viewModel.LoadRates));
         }
 
         /// <summary>
         /// Get rates retrieved messages that match the rates retrieving message
         /// </summary>
-        private IObservable<RatesRetrievedMessage> GetMatchingRatesRetrievedMessage(RatesRetrievingMessage rateRetrievingMsg)
+        private IObservable<IMessageTracker<RatesRetrievedMessage>> GetMatchingRatesRetrievedMessage(RatesRetrievingMessage rateRetrievingMsg)
         {
-            return messenger.OfType<RatesRetrievedMessage>()
-               .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash);
+            return messenger.OfType<RatesRetrievedMessage>().Trackable()
+               .Where(this, rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash);
         }
     }
 }
