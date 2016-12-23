@@ -26,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public event EventHandler PackageDetailsChanged;
 
+        public event EventHandler DangerousGoodsChanged;
+
         // So we know when not to raise the changed event
         bool loading = false;
 
@@ -36,6 +38,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Gets a value indicating whether[dangerous goods checked].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [dangerous goods checked]; otherwise, <c>false</c>.
+        /// </value>
+        public bool DangerousGoodsChecked => dangerousGoodsControl.DangerousGoodsChecked;
 
         /// <summary>
         /// Load the shipments into the packaging control
@@ -86,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     }
                 }
             }
-            
+
             // Add in each bucket as a row in the grid
             foreach (List<FedExPackageEntity> bucket in packageBuckets)
             {
@@ -174,9 +184,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 labelSkidPieces.Visible = false;
                 skidPieces.Visible = false;
 
-                labelDangerousGoods.Location = new Point(labelDangerousGoods.Location.X, 
+                labelDangerousGoods.Location = new Point(labelDangerousGoods.Location.X,
                     labelSkidPieces.Location.Y);
-                dangerousGoodsControl.Location = new Point(dangerousGoodsControl.Location.X, 
+                dangerousGoodsControl.Location = new Point(dangerousGoodsControl.Location.X,
                     skidPieces.Location.Y + 3);
             }
 
@@ -282,9 +292,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Indicates that the user has changed values 
+        /// Indicates that the user has changed values
         /// </summary>
-        private void OnPackageDetailsChanged(object sender, EventArgs e)
+        public void OnPackageDetailsChanged(object sender, EventArgs e)
         {
             if (loading)
             {
@@ -295,6 +305,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 PackageDetailsChanged(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// Called when [dangerous goods checked].
+        /// </summary>
+        public void OnDangerousGoodsChecked(object sender, EventArgs e)
+        {
+            DangerousGoodsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

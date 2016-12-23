@@ -11,6 +11,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 {
     public partial class FedExDangerousGoodsControl : UserControl
     {
+        public event EventHandler DangerousGoodsChanged;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExDangerousGoodsControl" /> class.
         /// </summary>
@@ -23,6 +25,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExHazardousMaterialsPackingGroup>(hazardousMaterialPackingGroup);
             EnumHelper.BindComboBox<FedExHazardousMaterialsQuantityUnits>(dangerousGoodsPackagingUnits);
         }
+
+        /// <summary>
+        /// Gets a value indicating whether [dangerous goods checked].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [dangerous goods checked]; otherwise, <c>false</c>.
+        /// </value>
+        public bool DangerousGoodsChecked => hazardousMaterialGroupBox.Visible;
 
         /// <summary>
         /// Loads the dangerous goods data.
@@ -174,8 +184,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void UpdateHazardousMaterialsUI()
         {
             bool showHazardousMaterialGroupBox = false;
-            
-            // The hazardous materials group box (and all its controls) is only enabled if the dangerous goods option is checked 
+
+            // The hazardous materials group box (and all its controls) is only enabled if the dangerous goods option is checked
             // and the material type is Hazardous Materials
             if (dangerousGoodsMaterialType.SelectedValue != null)
             {
@@ -205,7 +215,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnDangerousGoodsEnabledChanged(object sender, EventArgs e)
         {
             UpdateUI();
-        }
 
+            DangerousGoodsChanged?.Invoke(this, e);
+        }
     }
 }

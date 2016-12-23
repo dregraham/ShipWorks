@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that modifies the DangerousGoodsDetail
-    /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment 
+    /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment
     /// has dangerous goods enabled.
     /// </summary>
     public class FedExDangerousGoodsManipulator : FedExShippingRequestManipulatorBase
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             // We can safely cast this since we've passed initialization
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            
+
             if (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DangerousGoodsEnabled)
             {
                 InitializeLineItem(nativeRequest);
@@ -118,6 +118,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// Configures the shipping documents for OP_900
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
+        /// <param name="labelFormat">The format to print shipping documents</param>
         private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.ShippingDocumentSpecification == null)
@@ -134,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             requestedShippingDocumentTypes.Add(RequestedShippingDocumentType.OP_900);
 
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = requestedShippingDocumentTypes.ToArray();
-
+            
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
             {
                 Format = new ShippingDocumentFormat
@@ -154,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="package">The package.</param>
         private static void ConfigureHazardousMaterials(DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
         {
-            // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials 
+            // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials
             dangerousGoods.Containers = new[]
             {
                 new DangerousGoodsContainer
@@ -210,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         {
             if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested == null)
             {
-                // Initialize the requested special services 
+                // Initialize the requested special services
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested = new PackageSpecialServicesRequested();
             }
 

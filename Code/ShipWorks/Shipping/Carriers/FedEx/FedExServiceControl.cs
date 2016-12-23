@@ -457,6 +457,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnableCodTaxId(codEnabled.Checked && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);
         }
 
+
+
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
@@ -860,6 +862,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Called when [dangerous goods checked].
+        /// </summary>
+        private void OnDangerousGoodsChecked(object sender, EventArgs e)
+        {
+            UpdateLabelFormat();
+        }
+
+        /// <summary>
         /// A rate has been selected
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
@@ -1147,6 +1157,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
         {
             if (format == ThermalLanguage.EPL && LoadedShipments.Any(shipment => shipment.FedEx != null && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service)))
+            {
+                return false;
+            }
+
+            if (format != ThermalLanguage.None && packageDetailsControl.DangerousGoodsChecked)
             {
                 return false;
             }
