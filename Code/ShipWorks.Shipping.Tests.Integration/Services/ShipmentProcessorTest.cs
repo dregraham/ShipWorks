@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,6 +11,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -48,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Services
             context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentManipulator>(item =>
                 item.Setup(x => x.Manipulate(It.IsAny<ShipmentEntity>())).Returns((ShipmentEntity s) => s));
 
-            context.Mock.Provide<Control>(new Control());
+            context.Mock.Provide(new Control());
             context.Mock.Provide<Func<Control>>(() => new Control());
             context.Mock.Override<ITangoWebClient>();
             context.Mock.Override<IMessageHelper>();
@@ -74,9 +76,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            var result = await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            var result = await ProcessShipment();
 
             Assert.Equal(1, result.Count());
             Assert.False(result.Single().IsSuccessful);
@@ -88,12 +88,31 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            await ProcessShipment();
 
             context.Mock.Mock<IMessageHelper>()
                 .Verify(x => x.ShowError(It.IsAny<string>()));
+        }
+
+        [Fact]
+        public async Task Process_DisplaysMoreErrorsMessage_WhenMoreThanThreeShipmentsCannotBeProcessed()
+        {
+            string errorMessage = string.Empty;
+            context.Mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowError(It.IsAny<string>()))
+                .Callback((string x) => errorMessage = x);
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            var shippingManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>();
+            await ProcessShipments(Enumerable.Repeat(shipment, 4).Select(shippingManager.CreateShipmentCopy));
+
+            var errorCount = errorMessage.Split('\n')
+                .Where(x => x.Contains("No carrier is specified"))
+                .Count();
+
+            Assert.Contains("See the shipment list for all errors", errorMessage);
+            Assert.Equal(3, errorCount);
         }
 
         [Fact]
@@ -106,9 +125,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            var result = await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            var result = await ProcessShipment();
 
             Assert.Equal(1, result.Count());
             Assert.True(result.Single().IsSuccessful);
@@ -128,9 +145,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            var result = await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            var result = await ProcessShipment();
 
             Assert.True(result.Single().Shipment.Processed);
             Assert.Equal(new DateTime(2016, 1, 20, 10, 30, 0), result.Single().Shipment.ProcessedDate);
@@ -151,9 +166,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            await ProcessShipment();
 
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
@@ -177,9 +190,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            await ProcessShipment();
 
             Assert.False(shipment.Processed);
         }
@@ -206,12 +217,18 @@ namespace ShipWorks.Shipping.Tests.Services
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 
-            await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+            await ProcessShipment();
 
             Assert.IsType(expectedWizardType, dialogCreator?.Invoke());
         }
+
+        private Task<IEnumerable<ProcessShipmentResult>> ProcessShipment() =>
+            ProcessShipments(new[] { shipment });
+
+        private Task<IEnumerable<ProcessShipmentResult>> ProcessShipments(IEnumerable<ShipmentEntity> shipments) =>
+            testObject.Process(shipments,
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
 
         public void Dispose()
         {
