@@ -8,13 +8,15 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Templates.Tokens;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
     /// Handles performing actions on Magento orders
     /// </summary>
-    public class MagentoOnlineUpdater : GenericStoreOnlineUpdater
+    public class MagentoOnlineUpdater : GenericStoreOnlineUpdater, IMagentoOnlineUpdater
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MagentoOnlineUpdater));
@@ -81,10 +83,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on the specified order
         /// </summary>
-        public void ExecuteOrderAction(long orderID, string action, string comments, bool magentoEmails)
+        public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            ExecuteOrderAction(orderID, action, comments, magentoEmails, unitOfWork);
+            UploadShipmentDetails(orderID, command, comments, emailCustomer, unitOfWork);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -96,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on the specified order
         /// </summary>
-        public void ExecuteOrderAction(long orderID, string action, string comments, bool magentoEmails, UnitOfWork2 unitOfWork)
+        public void UploadShipmentDetails(long orderID, MagentoUploadCommand command, string comments, bool emailCustomer, UnitOfWork2 unitOfWork)
         {
             MagentoOrderEntity order = DataProvider.GetEntity(orderID) as MagentoOrderEntity;
             if (order != null)
@@ -110,13 +112,13 @@ namespace ShipWorks.Stores.Platforms.Magento
                     // look for any shipping information if we're Completing an order
                     string carrier = "";
                     string tracking = "";
-                    if (action == "complete")
+                    if (command == MagentoUploadCommand.Complete)
                     {
                         GetShipmentDetails(order, ref carrier, ref tracking);
                     }
 
                     // execute the action
-                    string newStatus = webclient.ExecuteAction(order.MagentoOrderID, action, processedComments, carrier, tracking, magentoEmails);
+                    string newStatus = webclient.ExecuteAction(order.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer);
 
                     // set status to what was returned
                     order.OnlineStatusCode = newStatus;

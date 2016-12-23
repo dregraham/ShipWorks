@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using log4net;
+using System.Security;
+using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace Interapptive.Shared.Utility
 {
@@ -260,5 +263,47 @@ namespace Interapptive.Shared.Utility
         /// <returns></returns>
         public static bool Contains(this string source, string value, StringComparison comp)
             => source.IndexOf(value, comp) >= 0;
+
+        /// <summary>
+        /// Converts a string to a secure string. 
+        /// </summary>
+        /// <remarks>
+        /// This defeats the purporse of using a secure string...
+        /// </remarks>
+        public static SecureString ToSecureString(this string value)
+        {
+            SecureString secureString = new SecureString();
+
+            foreach (char charInValue in value)
+            {
+                secureString.AppendChar(charInValue);
+            }
+
+            secureString.MakeReadOnly();
+
+            return secureString;
+        }
+
+        /// <summary>
+        /// Converts a SecureString to an insecure string
+        /// </summary>
+        /// <remarks>
+        /// This defeats the purporse of using a secure string...
+        /// </remarks>
+        public static string ToInsecureString(this SecureString value)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(value);
+               
+            IntPtr unmanagedString = IntPtr.Zero;
+            try
+            {
+                unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(value);
+                return Marshal.PtrToStringUni(unmanagedString);
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
+            }
+        }
     }
 }

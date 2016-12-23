@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.GenericModule;
+﻿using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using System.Xml.XPath;
+using Interapptive.Shared.Metrics;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -21,7 +19,19 @@ namespace ShipWorks.Stores.Platforms.Magento
         public MagentoDownloader(StoreEntity store)
             : base(store)
         {
+        }
 
+        /// <summary>
+        /// Begin order download
+        /// </summary>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
+        /// associate any store-specific download properties/metrics.</param>
+        protected override void Download(TrackedDurationEvent trackedDurationEvent)
+        {
+            MagentoStoreEntity magentoStore = (MagentoStoreEntity) Store;
+            trackedDurationEvent.AddProperty("Magento", ((MagentoVersion) magentoStore.MagentoVersion).ToString());
+
+            base.Download(trackedDurationEvent);
         }
 
         /// <summary>
@@ -33,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             // pull out the order number
             long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
             string orderPostfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
-            
+
             // Look in the old location if can't find it in new location
             if (string.IsNullOrEmpty(orderPostfix))
             {
