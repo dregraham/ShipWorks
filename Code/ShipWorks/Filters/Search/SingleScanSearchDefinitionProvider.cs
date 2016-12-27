@@ -11,7 +11,7 @@ namespace ShipWorks.Filters.Search
     public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider
     {
         /// <summary>
-        /// Gets a filter definition that only searches order number
+        /// Gets a filter definition that searches for an exact order number
         /// </summary>
         public FilterDefinition GetDefinition(string quickSearchString)
         {

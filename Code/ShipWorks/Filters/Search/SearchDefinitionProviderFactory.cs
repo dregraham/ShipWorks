@@ -14,7 +14,7 @@ namespace ShipWorks.Filters.Search
     public class SearchDefinitionProviderFactory
     {
         private readonly IStoreManager storeManager;
-        private readonly byte singleScanSettings;
+        private readonly int singleScanSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchDefinitionProviderFactory"/> class.
