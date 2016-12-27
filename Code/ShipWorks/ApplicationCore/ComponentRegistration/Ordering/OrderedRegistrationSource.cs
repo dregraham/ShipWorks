@@ -60,6 +60,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <summary>
         /// Create an ordered registration
         /// </summary>
+        [Obfuscation(Exclude = true)]
         private static IComponentRegistration CreateOrderedRegistration<TService>()
         {
             return RegistrationBuilder
