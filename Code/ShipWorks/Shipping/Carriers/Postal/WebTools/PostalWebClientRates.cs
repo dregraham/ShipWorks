@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             if (packaging == PostalPackagingType.FlatRatePaddedEnvelope ||
                 packaging == PostalPackagingType.FlatRateLegalEnvelope ||
                 packaging == PostalPackagingType.RateRegionalBoxA ||
-                packaging == PostalPackagingType.RateRegionalBoxB || 
+                packaging == PostalPackagingType.RateRegionalBoxB ||
                 packaging == PostalPackagingType.RateRegionalBoxC)
             {
                 throw new ShippingException(string.Format("{0} is not supported by {1}.", EnumHelper.GetDescription(packaging), ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools).ShipmentTypeName));
@@ -71,13 +71,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("Service", "ONLINE");
                     xmlWriter.WriteElementString("ZipOrigination", fromAdapter.PostalCode5);
                     xmlWriter.WriteElementString("ZipDestination", toAdapter.PostalCode5);
-                    
+
                     WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
                     xmlWriter.WriteElementString("Container", string.Empty); // Required element, but value is not
 
-                    
+
                     xmlWriter.WriteElementString("Size", GetSizeValue(shipment.Postal, dimensions));
                     xmlWriter.WriteElementString("Width", dimensions.Width.ToString());
                     xmlWriter.WriteElementString("Length", dimensions.Length.ToString());
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteStartElement("IntlRateV2Request");
                     xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
                     xmlWriter.WriteAttributeString("PASSWORD", PostalWebUtility.UspsPassword);
-                    
+
                     xmlWriter.WriteElementString("Revision", "2");
 
                     xmlWriter.WriteStartElement("Package");
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("Length", dimensions.Length.ToString());
                     xmlWriter.WriteElementString("Height", dimensions.Height.ToString());
                     xmlWriter.WriteElementString("Girth", dimensions.Girth.ToString());
-                    
+
                     xmlWriter.WriteElementString("OriginZip", fromAdapter.PostalCode);
                     xmlWriter.WriteElementString("AcceptanceDateTime", DateTime.Now.ToString("O"));
                     xmlWriter.WriteElementString("DestinationPostalCode", toAdapter.PostalCode);
@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlRequest = writer.ToString();
             }
 
-            
+
             IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.UspsNoPostage, "Rate", LogActionType.GetRates);
 
             logger.LogRequest(xmlRequest);
@@ -173,8 +173,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(string xmlRequest, string api)
         {
             // The production server URL
-            string serverUrl = string.Format("http://{0}.shippingapis.com/ShippingApi.dll?API={1}&XML=",
-                PostalWebUtility.UseTestServer ? "stg-production" : "production",
+            string serverUrl = string.Format("https://{0}.shippingapis.com/ShippingApi.dll?API={1}&XML=",
+                PostalWebUtility.UseTestServer ? "stg-secure" : "secure",
                 api);
 
             try
@@ -263,7 +263,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 XPathNavigator rateNode = DetermineDomesticRateMatch(pair.Value, serviceType, packaging);
 
                 decimal amount = XPathUtility.Evaluate(rateNode, "Rate", 0m);
-            
+
                 if (serviceType == PostalServiceType.ExpressMail)
                 {
                     rates.Add(new RateResult(
@@ -309,7 +309,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 PostalUtility.SetServiceDetails(rate);
                 rate.ShipmentType = ShipmentTypeCode.PostalWebTools;
             }
-            
+
             return rates;
         }
 
@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 {
                     string description = XPathUtility.Evaluate(rateNode, "MailService", "");
 
-                    if (description.Contains("Flat") && 
+                    if (description.Contains("Flat") &&
                             (packaging == PostalPackagingType.Envelope  ||
                              packaging == PostalPackagingType.FlatRateEnvelope ||
                              packaging == PostalPackagingType.LargeEnvelope))
@@ -386,9 +386,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                         bestNode = rateNode;
                     }
 
-                    if (classID == 1 && 
-                            packaging != PostalPackagingType.FlatRateLargeBox && 
-                            packaging != PostalPackagingType.FlatRateMediumBox && 
+                    if (classID == 1 &&
+                            packaging != PostalPackagingType.FlatRateLargeBox &&
+                            packaging != PostalPackagingType.FlatRateMediumBox &&
                             packaging != PostalPackagingType.FlatRateSmallBox &&
                             packaging != PostalPackagingType.FlatRateEnvelope)
                     {
@@ -459,9 +459,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 string days = XPathUtility.Evaluate(rateNode, "SvcCommitments", "").Replace("Days", "");
 
                 rates.Add(new RateResult(
-                    EnumHelper.GetDescription(serviceType), 
-                    days, 
-                    amount, 
+                    EnumHelper.GetDescription(serviceType),
+                    days,
+                    amount,
                     new PostalRateSelection(serviceType, PostalConfirmationType.None))
                     {
                         ShipmentType = ShipmentTypeCode.PostalWebTools,
@@ -542,9 +542,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                         bestNode = rateNode;
                     }
 
-                    if (classID == 2 && 
-                            packaging != PostalPackagingType.FlatRateLargeBox && 
-                            packaging != PostalPackagingType.FlatRateMediumBox && 
+                    if (classID == 2 &&
+                            packaging != PostalPackagingType.FlatRateLargeBox &&
+                            packaging != PostalPackagingType.FlatRateMediumBox &&
                             packaging != PostalPackagingType.FlatRateSmallBox &&
                             packaging != PostalPackagingType.FlatRateEnvelope)
                     {
@@ -583,7 +583,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     return "LARGE";
                 }
             }
-            
+
             return "REGULAR";
         }
 
@@ -592,7 +592,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         private static string GetContainerValue(PostalShipmentEntity postalShipment, PostalPackagingType packaging, bool nonRectangular)
         {
-            
+
             switch (packaging)
             {
                 case PostalPackagingType.FlatRateSmallBox: return "SM FLAT RATE BOX";
