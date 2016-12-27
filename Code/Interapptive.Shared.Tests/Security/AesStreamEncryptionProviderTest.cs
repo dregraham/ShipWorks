@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -32,6 +33,7 @@ namespace Interapptive.Shared.Tests.Security
         [InlineData(1001)]
         [InlineData(2000)]
         [InlineData(2001)]
+        [SuppressMessage("Microsoft.Design", "CA5350")]
         public void Encrypt_ReturnsEncryptedStream_WhenGivenDecryptedStream(long sizeInKb)
         {
             // Create a file of the given size and store it's hash.
@@ -84,6 +86,7 @@ namespace Interapptive.Shared.Tests.Security
         /// <summary>
         /// Create a test file of requested size in KB, returning it's computed hash.
         /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA5350")]
         private byte[] CreateTestFile(long sizeInKb)
         {
             byte[] buffer = Enumerable.Repeat((byte)0x20, 1024).ToArray();
