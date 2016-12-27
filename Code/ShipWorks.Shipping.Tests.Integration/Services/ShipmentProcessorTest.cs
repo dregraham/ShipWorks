@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -40,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.Services
     {
         private ShipmentProcessor testObject;
         private readonly DataContext context;
-        private readonly ShipmentEntity shipment;
+        private ShipmentEntity shipment;
 
         public ShipmentProcessorTest(DatabaseFixture db)
         {
@@ -252,6 +254,73 @@ namespace ShipWorks.Shipping.Tests.Services
                     IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
                     Assert.True(results.Any(r => !r.IsSuccessful && r.Error.Message.Contains("The shipment was being processed on another computer.")));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Tests that processing a WorldShip shipment adds a row to the WorldShipShipment table but
+        /// does not add anything to the action queue or print result tables.
+        /// </summary>
+        [Fact]
+        public async Task Process_SuccessfullyAddsWorldShipShipmentRowsButDoesNotPrintALabel()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsWorldShip);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsWorldShip, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
+
+            var account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            shipment = Create.Shipment(context.Order)
+                .AsUpsWorldShip(s => s.WithPackage())
+                .Save();
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            shipment.Ups.Packages[0].DimsWidth = 6;
+            shipment.Ups.Packages[0].DimsLength = 6;
+            shipment.Ups.Packages[0].DimsHeight = 6;
+            shipment.Ups.Packages[0].DimsAddWeight = true;
+            shipment.Ups.Packages[0].DimsWeight = 10;
+
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+            Assert.True(results.All(r => r.IsSuccessful), $"ProcessShipment failed with error: {results.First().Error?.Message}");
+            
+            using (SqlConnection connection = new SqlConnection(SqlAdapter.Default.ConnectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = $"select count(*) from WorldShipShipment where ShipmentID = {shipment.ShipmentID}";
+
+                    int count = int.Parse(cmd.ExecuteScalar().ToString());
+                    Assert.True(1 == count, "ProcessShipment failed to save the correct number of rows to WorldShipShipment.");
+                }
+
+                using (SqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = $"select count(*) from ActionQueue where ObjectID = {shipment.ShipmentID}";
+                    
+                    int count = int.Parse(cmd.ExecuteScalar().ToString());
+                    Assert.True(0 == count, "ProcessShipment added rows to ActionQueue, even though it should not.");
+                }
+
+                using (SqlCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = $"select count(*) from PrintResult where ContextObjectID = {shipment.ShipmentID}";
+                    
+                    int count = int.Parse(cmd.ExecuteScalar().ToString());
+                    Assert.True(0 == count, "ProcessShipment added rows to PrintResult, even though it should not.");
                 }
             }
         }
