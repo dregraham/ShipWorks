@@ -294,7 +294,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Indicates that the user has changed values
         /// </summary>
-        public void OnPackageDetailsChanged(object sender, EventArgs e)
+        private void OnPackageDetailsChanged(object sender, EventArgs e)
         {
             if (loading)
             {
@@ -310,9 +310,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Called when [dangerous goods checked].
         /// </summary>
-        public void OnDangerousGoodsChecked(object sender, EventArgs e)
-        {
-            DangerousGoodsChanged?.Invoke(this, EventArgs.Empty);
-        }
+        public void OnDangerousGoodsChecked(object sender, EventArgs e) => DangerousGoodsChanged?.Invoke(this, EventArgs.Empty);
     }
 }
