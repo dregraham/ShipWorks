@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Tests.Filters;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -17,6 +18,10 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -418,6 +423,56 @@ namespace ShipWorks.Shipping.Tests.Services
                     new StatusCodes(),
                     new RateV20[] { },
                 }, null, false, null));
+        }
+
+        /// <summary>
+        /// Tests that processing a WorldShip shipment adds a row to the WorldShipShipment table but
+        /// does not add anything to the action queue or print result tables.
+        /// </summary>
+        [Fact]
+        public async Task FiltersUpdate_WhenShipmentSuccessfullyProcessed()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsWorldShip);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsWorldShip, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
+
+            var account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            shipment = Create.Shipment(context.Order)
+                .AsUpsWorldShip(s => s.WithPackage())
+                .Save();
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            shipment.Ups.Packages[0].DimsWidth = 6;
+            shipment.Ups.Packages[0].DimsLength = 6;
+            shipment.Ups.Packages[0].DimsHeight = 6;
+            shipment.Ups.Packages[0].DimsAddWeight = true;
+            shipment.Ups.Packages[0].DimsWeight = 10;
+
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
+            ConditionGroup group = definition.RootContainer.FirstGroup;
+            group.Conditions.Add(new ShipmentStatusCondition() {Value = ShipmentStatusType.Processed });
+
+            FilterNodeEntity filterNode = FilterTestingHelper.CreateFilterNode(definition);
+
+            FilterTestingHelper.CalculateInitialCounts();
+
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+            Assert.True(results.All(r => r.IsSuccessful), $"ProcessShipment failed with error: {results.First().Error?.Message}");
+
+            FilterContentManager.CalculateUpdateCounts();
+            FilterTestingHelper.WaitForFilterCountsToFinish();
+
+            int afterProcessCount = FilterTestingHelper.GetFilterNodeContentCount(filterNode.FilterNodeContentID);
+
+            Assert.True(afterProcessCount != 0, "Processing the shipment did not update filter counts.");
         }
 
         public void Dispose()
