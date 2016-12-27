@@ -866,6 +866,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void OnDangerousGoodsChecked(object sender, EventArgs e)
         {
+            SaveToShipments();
             UpdateLabelFormat();
         }
 
@@ -1156,12 +1157,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
         {
-            if (format == ThermalLanguage.EPL && LoadedShipments.Any(shipment => shipment.FedEx != null && FedExUtility.IsFimsService((FedExServiceType) shipment.FedEx.Service)))
+            List<FedExShipmentEntity> fedExShipments =
+                LoadedShipments.Where(shipment => shipment.FedEx != null).Select(shipment => shipment.FedEx).ToList();
+
+            if (format == ThermalLanguage.EPL &&
+                fedExShipments.Any(fedExShipment => FedExUtility.IsFimsService((FedExServiceType) fedExShipment.Service)))
             {
                 return false;
             }
 
-            if (format != ThermalLanguage.None && packageDetailsControl.DangerousGoodsChecked)
+            if (format != ThermalLanguage.None &&
+                fedExShipments.Any(fedExShipment => fedExShipment.Packages?.Any(package => package.DangerousGoodsEnabled) ?? false))
             {
                 return false;
             }

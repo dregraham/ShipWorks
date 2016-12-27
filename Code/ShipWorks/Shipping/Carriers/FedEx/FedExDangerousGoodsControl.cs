@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <value>
         /// <c>true</c> if [dangerous goods checked]; otherwise, <c>false</c>.
         /// </value>
-        public bool DangerousGoodsChecked => hazardousMaterialGroupBox.Visible;
+        public bool DangerousGoodsChecked => dangerousGoodsEnabled.Checked;
 
         /// <summary>
         /// Loads the dangerous goods data.
