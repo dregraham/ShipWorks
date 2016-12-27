@@ -14,18 +14,18 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers
 {
-    public class GenericShipmentPreProcessorTest : IDisposable
+    public class DefaultShipmentPreProcessorTest : IDisposable
     {
         readonly AutoMock mock;
         readonly DefaultShipmentPreProcessor testObject;
 
-        public GenericShipmentPreProcessorTest()
+        public DefaultShipmentPreProcessorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<DefaultShipmentPreProcessor>();
         }
 
-        public class WhenInitiallyReadyToShip : GenericShipmentPreProcessorTest
+        public class WhenInitiallyReadyToShip : DefaultShipmentPreProcessorTest
         {
             ShipmentEntity shipment;
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
         }
 
-        public class WhenNotInitiallyReadyToShipAndCancelsDialog : GenericShipmentPreProcessorTest
+        public class WhenNotInitiallyReadyToShipAndCancelsDialog : DefaultShipmentPreProcessorTest
         {
             ShipmentEntity shipment;
 
@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
         }
 
-        public class WhenNotInitiallyReadyToShipAndAcceptsDialog : GenericShipmentPreProcessorTest
+        public class WhenNotInitiallyReadyToShipAndAcceptsDialog : DefaultShipmentPreProcessorTest
         {
             ShipmentEntity shipment;
             Mock<ICarrierAccount> account;
