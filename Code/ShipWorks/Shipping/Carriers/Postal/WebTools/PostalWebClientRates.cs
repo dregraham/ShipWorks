@@ -173,9 +173,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(string xmlRequest, string api)
         {
             // The production server URL
-            string serverUrl = string.Format("https://{0}.shippingapis.com/ShippingApi.dll?API={1}&XML=",
-                PostalWebUtility.UseTestServer ? "stg-secure" : "secure",
-                api);
+            string serverUrl =$"{PostalWebUtility.ServerUrl}?API={api}&XML=";
 
             try
             {
