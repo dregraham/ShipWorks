@@ -353,7 +353,7 @@ namespace ShipWorks.Shipping.Tests.Services
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
 
-            var account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+            UpsAccountEntity account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
@@ -437,7 +437,7 @@ namespace ShipWorks.Shipping.Tests.Services
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
 
-            var account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+            UpsAccountEntity account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
 
             Create.Profile().AsPrimary()
                 .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
@@ -473,6 +473,76 @@ namespace ShipWorks.Shipping.Tests.Services
             int afterProcessCount = FilterTestingHelper.GetFilterNodeContentCount(filterNode.FilterNodeContentID);
 
             Assert.True(afterProcessCount != 0, "Processing the shipment did not update filter counts.");
+        }
+
+        /// <summary>
+        /// Test that a message is displayed when dimensions are missing.
+        /// </summary>
+        [Fact]
+        public async Task Process_DisplaysMessage_WhenShipmentDimensionsAreMissing()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsWorldShip);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsWorldShip, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
+
+            UpsAccountEntity account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            shipment = Create.Shipment(context.Order)
+                .AsUpsWorldShip(s => s.WithPackage())
+                .Save();
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+            Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have.");
+            Assert.True(results.All(r => r.Error.Message.Contains("has invalid dimensions", StringComparison.InvariantCultureIgnoreCase)),
+                "ProcessShipment succeeded even though it was missing dimensions.");
+
+            context.Mock.Mock<IMessageHelper>()
+                .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
+        }
+
+        /// <summary>
+        /// Test that a message is displayed when dimensions are invalid.
+        /// </summary>
+        [Fact]
+        public async Task Process_DisplaysMessage_WhenShipmentDimensionsAreIncorrect()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsWorldShip);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsWorldShip, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
+
+            UpsAccountEntity account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            shipment = Create.Shipment(context.Order)
+                .AsUpsWorldShip(s => s.WithPackage())
+                .Save();
+
+            shipment.Ups.Packages[0].DimsWidth = int.MaxValue;
+            shipment.Ups.Packages[0].DimsLength = int.MaxValue;
+            shipment.Ups.Packages[0].DimsHeight = int.MaxValue;
+            shipment.Ups.Packages[0].DimsAddWeight = true;
+            shipment.Ups.Packages[0].DimsWeight = int.MaxValue;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+            Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have.");
+
+            context.Mock.Mock<IMessageHelper>()
+                .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
         }
 
         public void Dispose()
