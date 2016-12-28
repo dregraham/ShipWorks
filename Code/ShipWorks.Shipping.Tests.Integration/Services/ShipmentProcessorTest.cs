@@ -545,6 +545,90 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
         }
 
+        /// <summary>
+        /// Test that a message is displayed when dimensions are missing.
+        /// </summary>
+        [Fact]
+        public async Task Process_DisplaysMessage_WhenShipmentWeightMissing()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsWorldShip);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsWorldShip, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
+
+            UpsAccountEntity account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            shipment = Create.Shipment(context.Order)
+                .AsUpsWorldShip(s => s.WithPackage())
+                .Save();
+
+            shipment.Ups.Packages[0].DimsWidth = 6;
+            shipment.Ups.Packages[0].DimsLength = 6;
+            shipment.Ups.Packages[0].DimsHeight = 6;
+            shipment.Ups.Packages[0].DimsAddWeight = true;
+            shipment.Ups.Packages[0].DimsWeight = 0;
+
+            shipment.Ups.Packages[0].Weight = 0;
+            shipment.TotalWeight = 0;
+            shipment.BilledWeight = 0;
+            shipment.ContentWeight = 0;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+            Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have due to missing weight.");
+
+            context.Mock.Mock<IMessageHelper>()
+                .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
+        }
+
+        /// <summary>
+        /// Test that a message is displayed when dimensions are invalid.
+        /// </summary>
+        [Fact]
+        public async Task Process_DisplaysMessage_WhenShipmentWeightIsIncorrect()
+        {
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsWorldShip);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsWorldShip, shipment);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.UpsOnLineTools);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.UpsOnLineTools, shipment);
+
+            UpsAccountEntity account = Create.CarrierAccount<UpsAccountEntity, IUpsAccountEntity>().Save();
+
+            Create.Profile().AsPrimary()
+                .AsUps(p => p.Set(x => x.UpsAccountID, account.AccountId + 2000))
+                .Save();
+
+            shipment = Create.Shipment(context.Order)
+                .AsUpsWorldShip(s => s.WithPackage())
+                .Save();
+
+            shipment.Ups.Packages[0].DimsWidth = 6;
+            shipment.Ups.Packages[0].DimsLength = 6;
+            shipment.Ups.Packages[0].DimsHeight = 6;
+            shipment.Ups.Packages[0].DimsAddWeight = true;
+            shipment.Ups.Packages[0].DimsWeight = 0;
+
+            shipment.Ups.Packages[0].Weight = int.MaxValue;
+            shipment.TotalWeight = int.MaxValue;
+            shipment.BilledWeight = int.MaxValue;
+            shipment.ContentWeight = int.MaxValue;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+
+            Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have due to invalid weight.");
+
+            context.Mock.Mock<IMessageHelper>()
+                .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
+        }
+
         public void Dispose()
         {
             context?.Dispose();
