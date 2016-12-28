@@ -5,7 +5,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
 using System.Windows.Forms;
+using System.Xml;
 using Autofac;
 using Interapptive.Shared.Tests.Filters;
 using Interapptive.Shared.UI;
@@ -242,7 +244,7 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public async Task Process_ShowsErrorMessage_WhenServerReturns500()
+        public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
         {
             Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
             {
@@ -309,13 +311,40 @@ namespace ShipWorks.Shipping.Tests.Services
             Assert.Contains("Parameter is not valid", errorMessage);
         }
 
-        private Task<IEnumerable<ProcessShipmentResult>> ProcessShipment() =>
-            ProcessShipments(new[] { shipment });
+        [Fact]
+        public async Task Process_ShowsErrorMessage_WhenServerReturns500()
+        {
+            Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
+            {
+                XmlDocument details = new XmlDocument();
+                details.LoadXml("<error><details code=\"bar\" /></error>");
 
-        private Task<IEnumerable<ProcessShipmentResult>> ProcessShipments(IEnumerable<ShipmentEntity> shipments) =>
-            testObject.Process(shipments,
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
-                null, null);
+                SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
+            });
+
+            webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            string errorMessage = string.Empty;
+            context.Mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowError(It.IsAny<string>()))
+                .Callback((string x) => errorMessage = x);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            await ProcessShipment();
+
+            Assert.Contains("There was an error", errorMessage);
+        }
 
         /// <summary>
         /// Tests that trying to process a shipment that is already locked for processing will fail.
@@ -374,7 +403,7 @@ namespace ShipWorks.Shipping.Tests.Services
             IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
             Assert.True(results.All(r => r.IsSuccessful), $"ProcessShipment failed with error: {results.First().Error?.Message}");
-            
+
             using (SqlConnection connection = new SqlConnection(SqlAdapter.Default.ConnectionString))
             {
                 connection.Open();
@@ -392,7 +421,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 {
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = $"select count(*) from ActionQueue where ObjectID = {shipment.ShipmentID}";
-                    
+
                     int count = int.Parse(cmd.ExecuteScalar().ToString());
                     Assert.True(0 == count, "ProcessShipment added rows to ActionQueue, even though it should not.");
                 }
@@ -401,28 +430,11 @@ namespace ShipWorks.Shipping.Tests.Services
                 {
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = $"select count(*) from PrintResult where ContextObjectID = {shipment.ShipmentID}";
-                    
+
                     int count = int.Parse(cmd.ExecuteScalar().ToString());
                     Assert.True(0 == count, "ProcessShipment added rows to PrintResult, even though it should not.");
                 }
             }
-        }
-		
-        private static void SetupAddressValidationResponse(Mock<ISwsimV55> mock)
-        {
-            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
-                .Raises(x => x.CleanseAddressCompleted += null, new CleanseAddressCompletedEventArgs(new object[] {
-                    "", // Result
-                    new Address(),
-                    true,
-                    true,
-                    ResidentialDeliveryIndicatorType.Yes,
-                    false,
-                    false,
-                    new Address[] { },
-                    new StatusCodes(),
-                    new RateV20[] { },
-                }, null, false, null));
         }
 
         /// <summary>
@@ -457,7 +469,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             FilterDefinition definition = new FilterDefinition(FilterTarget.Shipments);
             ConditionGroup group = definition.RootContainer.FirstGroup;
-            group.Conditions.Add(new ShipmentStatusCondition() {Value = ShipmentStatusType.Processed });
+            group.Conditions.Add(new ShipmentStatusCondition() { Value = ShipmentStatusType.Processed });
 
             FilterNodeEntity filterNode = FilterTestingHelper.CreateFilterNode(definition);
 
@@ -627,6 +639,31 @@ namespace ShipWorks.Shipping.Tests.Services
 
             context.Mock.Mock<IMessageHelper>()
                 .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
+        }
+
+        private Task<IEnumerable<ProcessShipmentResult>> ProcessShipment() =>
+            ProcessShipments(new[] { shipment });
+
+        private Task<IEnumerable<ProcessShipmentResult>> ProcessShipments(IEnumerable<ShipmentEntity> shipments) =>
+            testObject.Process(shipments,
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
+
+        private static void SetupAddressValidationResponse(Mock<ISwsimV55> mock)
+        {
+            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
+                .Raises(x => x.CleanseAddressCompleted += null, new CleanseAddressCompletedEventArgs(new object[] {
+                    "", // Result
+                    new Address(),
+                    true,
+                    true,
+                    ResidentialDeliveryIndicatorType.Yes,
+                    false,
+                    false,
+                    new Address[] { },
+                    new StatusCodes(),
+                    new RateV20[] { },
+                }, null, false, null));
         }
 
         public void Dispose()
