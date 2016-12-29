@@ -84,10 +84,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [Fact]
-        public void Manipulate_NoException_WhenDangerousGoodsNotEnabled_AndThermalLabelRequested()
+        [Theory]
+        [InlineData(ThermalLanguage.ZPL)]
+        [InlineData(ThermalLanguage.EPL)]
+        public void Manipulate_NoException_WhenDangerousGoodsNotEnabled_AndThermalLabelRequested(ThermalLanguage language)
         {
-            shipmentEntity.FedEx.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+            shipmentEntity.FedEx.RequestedLabelFormat = (int) language;
 
             shipmentEntity.FedEx.Packages[0].DangerousGoodsEnabled = false;
 
