@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public async void Initialize_SendsMessage_WhenSelectionIsChanging()
+        public async Task Initialize_SendsMessage_WhenSelectionIsChanging()
         {
             var waiter = new TaskCompletionSource<bool>();
 

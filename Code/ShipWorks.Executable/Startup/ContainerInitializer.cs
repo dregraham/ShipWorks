@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
+using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.UI.Platforms.LemonStand;
 using ShipWorks.UI.ValueConverters;
 
@@ -28,6 +30,8 @@ namespace ShipWorks.Startup
                 typeof(ShippingDialogService).Assembly,
                 typeof(ShippingModule).Assembly,
                 typeof(LemonStandStoreModule).Assembly,
-                typeof(EnumImageConverter).Assembly);
+                typeof(EnumImageConverter).Assembly,
+                typeof(MagentoTwoRestClient).Assembly,
+                typeof(NoneLabelService).Assembly);
     }
 }

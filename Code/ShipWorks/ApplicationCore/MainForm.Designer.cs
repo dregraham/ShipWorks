@@ -1,3 +1,5 @@
+using ShipWorks.ApplicationCore;
+
 namespace ShipWorks
 {
     partial class MainForm
@@ -984,7 +986,7 @@ namespace ShipWorks
             //
             this.dockableWindowShipments.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowShipments.Controls.Add(this.panelShipments);
-            this.dockableWindowShipments.Guid = new System.Guid("b65cc6d7-1b93-43ad-b0e6-23bc4b1ec699");
+            this.dockableWindowShipments.Guid = DockPanelIdentifiers.ShipmentsPanelGuid;
             this.dockableWindowShipments.Location = new System.Drawing.Point(382, 25);
             this.dockableWindowShipments.Name = "dockableWindowShipments";
             this.dockableWindowShipments.ShowOptions = false;

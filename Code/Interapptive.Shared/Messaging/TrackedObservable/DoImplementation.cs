@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Interapptive.Shared.Messaging.TrackedObservable
 {
-    public static class DoImpl
+    public static class DoImplementation
     {
         //
         // Summary:

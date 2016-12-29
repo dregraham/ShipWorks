@@ -15,10 +15,12 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentsMessage(object sender, IEnumerable<ShipmentEntity> shipments, RateResult selectedRate)
+        public ProcessShipmentsMessage(object sender, IEnumerable<ShipmentEntity> shipments,
+            IEnumerable<ShipmentEntity> shipmentsInContext, RateResult selectedRate)
         {
             Sender = sender;
             Shipments = shipments.ToReadOnly();
+            ShipmentsInContext = shipmentsInContext.ToReadOnly();
             SelectedRate = selectedRate;
             MessageId = Guid.NewGuid();
         }
@@ -37,6 +39,11 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// Read only collection of shipments that should be processed
         /// </summary>
         public IEnumerable<ShipmentEntity> Shipments { get; }
+
+        /// <summary>
+        /// Read only collection of all shipments in the current context
+        /// </summary>
+        public IEnumerable<ShipmentEntity> ShipmentsInContext { get; }
 
         /// <summary>
         /// Selected rate that should be used if processing requires it
