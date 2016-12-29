@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -27,6 +29,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity()
+                {
+                    RequestedLabelFormat = (int) ThermalLanguage.None
+                }
             };
 
             FedExPackageEntity package = new FedExPackageEntity
@@ -41,7 +46,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Add the package containing dangerous goods to the fedex shipment
             shipmentEntity.FedEx.Packages.Add(package);
-
 
             // Create an "empty" process shipment request to use for our tests
             nativeRequest = new ProcessShipmentRequest
@@ -68,6 +72,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+        }
+
+        [Fact]
+        public void Manipulate_ThrowsFedExException_WhenDangerousGoodsEnabled_AndThermalLabelRequested()
+        {
+            shipmentEntity.FedEx.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
+
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
+        }
+
+        [Fact]
+        public void Manipulate_NoException_WhenDangerousGoodsNotEnabled_AndThermalLabelRequested()
+        {
+            shipmentEntity.FedEx.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsEnabled = false;
+
+            testObject.Manipulate(carrierRequest.Object);
         }
 
         [Fact]

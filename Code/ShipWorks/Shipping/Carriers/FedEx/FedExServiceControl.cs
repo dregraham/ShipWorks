@@ -457,8 +457,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnableCodTaxId(codEnabled.Checked && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);
         }
 
-
-
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>

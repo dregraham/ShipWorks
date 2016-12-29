@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
             var testObject = new FedExUSGroundFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                (testObject.IsSaveLabel || !justLabels)) // && (string) row[5] == "605634")
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 

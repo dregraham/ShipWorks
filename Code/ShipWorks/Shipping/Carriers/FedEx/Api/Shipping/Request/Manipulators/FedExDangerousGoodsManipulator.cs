@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -41,6 +42,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="request">The request being manipulated.</param>
         public override void Manipulate(CarrierRequest request)
         {
+            ValidateRequest(request);
+
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
@@ -87,6 +90,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 }
 
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail = dangerousGoods;
+            }
+        }
+
+        private void ValidateRequest(CarrierRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            if (request.ShipmentEntity.FedEx.RequestedLabelFormat != (int) ThermalLanguage.None && request.ShipmentEntity.FedEx.Packages.Any(package=>package.DangerousGoodsEnabled))
+            {
+                throw new FedExException("Cannot create thermal dangerous goods label.");
+            }
+
+            // We'll potentially be adding COD at the package level, so initialize the package index
+            currentPackageIndex = request.SequenceNumber;
+
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
+            if (nativeRequest == null)
+            {
+                // Abort - we have an unexpected native request
+                throw new CarrierException("An unexpected request type was provided.");
             }
         }
 
@@ -321,21 +348,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private void InitializeRequest(CarrierRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // We'll potentially be adding COD at the package level, so initialize the package index
-            currentPackageIndex = request.SequenceNumber;
-
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
 
             // Make sure the RequestedShipment is there
             if (nativeRequest.RequestedShipment == null)
