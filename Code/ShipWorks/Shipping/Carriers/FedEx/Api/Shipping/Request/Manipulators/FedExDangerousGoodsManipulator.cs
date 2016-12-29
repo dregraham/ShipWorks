@@ -100,7 +100,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 throw new ArgumentNullException("request");
             }
 
-            if (request.ShipmentEntity.FedEx.RequestedLabelFormat != (int) ThermalLanguage.None && request.ShipmentEntity.FedEx.Packages.Any(package=>package.DangerousGoodsEnabled))
+            if (request.ShipmentEntity.FedEx.RequestedLabelFormat != (int) ThermalLanguage.None &&
+                request.ShipmentEntity.FedEx.Packages.Any(package => package.DangerousGoodsEnabled))
             {
                 throw new FedExException("Cannot create thermal dangerous goods label.");
             }
