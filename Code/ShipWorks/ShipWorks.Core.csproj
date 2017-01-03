@@ -953,6 +953,12 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\CustomerQuickSearchDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\SearchDefinitionProviderFactory.cs" />
+    <Compile Include="Filters\Search\ISearchDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\OrderQuickSearchDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
@@ -6619,7 +6625,6 @@
     <Compile Include="Data\Grid\Columns\DisplayTypes\StoreProperty.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\TimeDisplayFormat.cs" />
     <Compile Include="Filters\Search\QuickLookupCriteria.cs" />
-    <Compile Include="Filters\Search\QuickSearchCriteria.cs" />
     <Compile Include="Filters\Search\SearchManager.cs" />
     <Compile Include="Filters\Search\SearchProvider.cs" />
     <Compile Include="Filters\Search\SearchSqlGenerator.cs" />

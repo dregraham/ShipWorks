@@ -643,11 +643,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The SingleScanSettings property of the Entity UserSettings<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UserSettings"."SingleScanSettings"<br/>
-		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Byte SingleScanSettings
+		public virtual System.Int32 SingleScanSettings
 		{
-			get { return (System.Byte)GetValue((int)UserSettingsFieldIndex.SingleScanSettings, true); }
+			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.SingleScanSettings, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.SingleScanSettings, value); }
 		}
 

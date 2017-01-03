@@ -3073,7 +3073,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "CustomerFilterLastActive", "CustomerFilterLastActive", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 13);
 			this.AddElementFieldMapping("UserSettingsEntity", "CustomerFilterExpandedFolders", "CustomerFilterExpandedFolders", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("UserSettingsEntity", "NextGlobalPostNotificationDate", "NextGlobalPostNotificationDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
-			this.AddElementFieldMapping("UserSettingsEntity", "SingleScanSettings", "SingleScanSettings", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 16);
+			this.AddElementFieldMapping("UserSettingsEntity", "SingleScanSettings", "SingleScanSettings", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
