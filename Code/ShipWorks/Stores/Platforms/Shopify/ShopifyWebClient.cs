@@ -14,7 +14,9 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Communication.Throttling;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 
 namespace ShipWorks.Stores.Platforms.Shopify
@@ -401,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 ShopifyOrderEntity order = (ShopifyOrderEntity) shipment.Order;
 
-                string carrier = ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
+                string carrier = GetTrackingCompany(shipment);
                 string trackingNumber = shipment.TrackingNumber;
 
                 // Check the order's online status to see if it's Fulfilled.  If it is, don't try to re-ship it...it will throw an error.
@@ -449,6 +451,23 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
             }
+        }
+
+        /// <summary>
+        /// Gets the tracking company for uploading tracking to Shopify
+        /// </summary>
+        private static string GetTrackingCompany(ShipmentEntity shipment)
+        {
+            if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
+                {
+                    return "DHL eCommerce";
+                }
+            }
+
+            return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
 
         /// <summary>
