@@ -1,20 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ShipWorks.Filters.Content.Conditions;
-using Interapptive.Shared;
-using System.Text.RegularExpressions;
-using Interapptive.Shared.Utility;
-using ComponentFactory.Krypton.Toolkit;
 
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
 {
     /// <summary>
-    /// A value editor for condtions that work against a string.
+    /// A value editor for conditions that work against a string.
     /// </summary>
     public partial class StringValueEditor : ValueEditor
     {

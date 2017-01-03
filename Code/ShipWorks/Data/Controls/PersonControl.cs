@@ -648,7 +648,7 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public void SaveToEntities(IEnumerable<PersonAdapter> list)
         {
-            int listCount = list.Count();
+            bool hasOneEntity = list.Count() == 1;
 
             foreach (PersonAdapter person in list)
             {
@@ -671,14 +671,14 @@ namespace ShipWorks.Data.Controls
                     newAddress.AddressValidationError = string.Empty;
                 }
 
-                if (listCount == 1 && lastValidatedAddress != null)
+                if (hasOneEntity && lastValidatedAddress != null)
                 {
                     AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
                     lastValidatedAddress.CopyTo(personAddress);
                     lastValidatedAddress.CopyValidationDataTo(personAddress);
                 }
 
-                if (shouldSaveAddressSuggestions && EnableValidationControls)
+                if (hasOneEntity && shouldSaveAddressSuggestions && EnableValidationControls)
                 {
                     ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);
                 }
