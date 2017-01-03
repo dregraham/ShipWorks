@@ -45,7 +45,7 @@ namespace Interapptive.Shared.Net
                 }
 
                 // Add the value
-                query.Append(UrlEncode(variable.Value, encodingCasing));
+                query.Append(variable.UrlEncode ? UrlEncode(variable.Value, encodingCasing) : variable.Value);
             }
 
             return query.ToString();
