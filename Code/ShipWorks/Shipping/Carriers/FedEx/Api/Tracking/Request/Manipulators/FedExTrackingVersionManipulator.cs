@@ -1,6 +1,6 @@
-using System;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
             return new VersionId
             {
                 ServiceId = "trck",
-                Major = 10,
+                Major = 12,
                 Intermediate = 0,
                 Minor = 0
             };

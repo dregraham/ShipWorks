@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         }
 
         /// <summary>
-        /// Check to see if the user has permission to select a rate (selecting a 
+        /// Check to see if the user has permission to select a rate (selecting a
         /// rate will update the shipment, which some users may not be allowed to do).
         /// </summary>
         private bool UserHasPermissionToSelectRate => orderID.HasValue && securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID);
@@ -102,13 +102,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             if (message.Success)
             {
-                // Do not show rates if the order has more than 1 shipment
-                if (message?.ShipmentAdapter?.Shipment?.Order?.Shipments?.Count > 1)
-                {
-                    SetRateResults(Enumerable.Empty<RateResult>(),
-                        "Unable to get rates for orders with multiple shipments.", Enumerable.Empty<object>());
-                }
-                else if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+                if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon)
                 {
                     SetRateResults(Enumerable.Empty<RateResult>(),
                         "Please use Ship Orders to get rates for this carrier.", Enumerable.Empty<object>());

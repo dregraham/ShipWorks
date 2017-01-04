@@ -1,15 +1,16 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     partial class FedExPackageDetailControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -24,8 +25,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -50,9 +51,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPackageSelector.SuspendLayout();
             this.panelPackageDetails.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // packagesGrid
-            // 
+            //
             this.packagesGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.packagesGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumn});
@@ -68,16 +69,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packagesGrid.TabIndex = 3;
             this.packagesGrid.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
             this.packagesGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnChangeSelectedPackages);
-            // 
+            //
             // gridColumn
-            // 
+            //
             this.gridColumn.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumn.Clickable = false;
             this.gridColumn.HeaderText = "Packages (Select to Edit)";
             this.gridColumn.Width = 203;
-            // 
+            //
             // labelPackages
-            // 
+            //
             this.labelPackages.AutoSize = true;
             this.labelPackages.BackColor = System.Drawing.Color.Transparent;
             this.labelPackages.Location = new System.Drawing.Point(59, 7);
@@ -85,9 +86,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelPackages.Size = new System.Drawing.Size(58, 13);
             this.labelPackages.TabIndex = 4;
             this.labelPackages.Text = "Packages:";
-            // 
+            //
             // mainPanel
-            // 
+            //
             this.mainPanel.AutoSize = true;
             this.mainPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.mainPanel.BackColor = System.Drawing.Color.Transparent;
@@ -98,9 +99,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(343, 297);
             this.mainPanel.TabIndex = 5;
-            // 
+            //
             // panelPackageSelector
-            // 
+            //
             this.panelPackageSelector.AutoSize = true;
             this.panelPackageSelector.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelPackageSelector.Controls.Add(this.labelPackages);
@@ -110,9 +111,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPackageSelector.Name = "panelPackageSelector";
             this.panelPackageSelector.Size = new System.Drawing.Size(331, 66);
             this.panelPackageSelector.TabIndex = 6;
-            // 
+            //
             // panelPackageDetails
-            // 
+            //
             this.panelPackageDetails.AutoSize = true;
             this.panelPackageDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelPackageDetails.BackColor = System.Drawing.Color.Transparent;
@@ -130,9 +131,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.panelPackageDetails.Name = "panelPackageDetails";
             this.panelPackageDetails.Size = new System.Drawing.Size(343, 231);
             this.panelPackageDetails.TabIndex = 7;
-            // 
+            //
             // labelDangerousGoods
-            // 
+            //
             this.labelDangerousGoods.AutoSize = true;
             this.labelDangerousGoods.Location = new System.Drawing.Point(21, 212);
             this.labelDangerousGoods.Name = "labelDangerousGoods";
@@ -140,9 +141,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelDangerousGoods.TabIndex = 19;
             this.labelDangerousGoods.Text = "Dangerous Goods:";
             this.labelDangerousGoods.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
+            //
             // containsAlcohol
-            // 
+            //
             this.containsAlcohol.AutoSize = true;
             this.containsAlcohol.Location = new System.Drawing.Point(121, 135);
             this.containsAlcohol.Name = "containsAlcohol";
@@ -151,9 +152,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.containsAlcohol.Text = "This package contains alcohol";
             this.containsAlcohol.UseVisualStyleBackColor = true;
             this.containsAlcohol.CheckStateChanged += new System.EventHandler(this.OnPackageDetailsChanged);
-            // 
+            //
             // labelAlcohol
-            // 
+            //
             this.labelAlcohol.AutoSize = true;
             this.labelAlcohol.BackColor = System.Drawing.Color.Transparent;
             this.labelAlcohol.Location = new System.Drawing.Point(72, 135);
@@ -161,9 +162,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelAlcohol.Size = new System.Drawing.Size(45, 13);
             this.labelAlcohol.TabIndex = 20;
             this.labelAlcohol.Text = "Alcohol:";
-            // 
+            //
             // dryIceWeight
-            // 
+            //
             this.dryIceWeight.BackColor = System.Drawing.Color.Transparent;
             this.dryIceWeight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dryIceWeight.Location = new System.Drawing.Point(121, 158);
@@ -174,9 +175,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dryIceWeight.TabIndex = 18;
             this.dryIceWeight.Weight = 0D;
             this.dryIceWeight.WeightChanged += new System.EventHandler(this.OnPackageDetailsChanged);
-            // 
+            //
             // dangerousGoodsControl
-            // 
+            //
             this.dangerousGoodsControl.AutoSize = true;
             this.dangerousGoodsControl.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.dangerousGoodsControl.BackColor = System.Drawing.Color.Transparent;
@@ -184,16 +185,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dangerousGoodsControl.Name = "dangerousGoodsControl";
             this.dangerousGoodsControl.Size = new System.Drawing.Size(219, 17);
             this.dangerousGoodsControl.TabIndex = 21;
-            // 
+            this.dangerousGoodsControl.DangerousGoodsChanged += new EventHandler(OnDangerousGoodsChecked);
+            //
             // priorityAlertControl
-            // 
+            //
             this.priorityAlertControl.Location = new System.Drawing.Point(7, 3);
             this.priorityAlertControl.Name = "priorityAlertControl";
             this.priorityAlertControl.Size = new System.Drawing.Size(332, 138);
             this.priorityAlertControl.TabIndex = 16;
-            // 
+            //
             // labelDryIceWeight
-            // 
+            //
             this.labelDryIceWeight.AutoSize = true;
             this.labelDryIceWeight.BackColor = System.Drawing.Color.Transparent;
             this.labelDryIceWeight.Location = new System.Drawing.Point(36, 161);
@@ -201,16 +203,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelDryIceWeight.Size = new System.Drawing.Size(81, 13);
             this.labelDryIceWeight.TabIndex = 17;
             this.labelDryIceWeight.Text = "Dry Ice Weight:";
-            // 
+            //
             // skidPieces
-            // 
+            //
             this.skidPieces.Location = new System.Drawing.Point(121, 185);
             this.skidPieces.Name = "skidPieces";
             this.skidPieces.Size = new System.Drawing.Size(100, 20);
             this.skidPieces.TabIndex = 24;
-            // 
+            //
             // labelSkidPieces
-            // 
+            //
             this.labelSkidPieces.AutoSize = true;
             this.labelSkidPieces.BackColor = System.Drawing.Color.Transparent;
             this.labelSkidPieces.Location = new System.Drawing.Point(38, 188);
@@ -218,9 +220,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelSkidPieces.Size = new System.Drawing.Size(79, 13);
             this.labelSkidPieces.TabIndex = 23;
             this.labelSkidPieces.Text = "Pieces on skid:";
-            // 
+            //
             // FedExPackageDetailControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;

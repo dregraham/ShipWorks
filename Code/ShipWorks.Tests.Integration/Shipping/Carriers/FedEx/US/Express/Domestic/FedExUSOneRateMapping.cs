@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Domestic
 {
     class FedExUSOneRateMapping
     {

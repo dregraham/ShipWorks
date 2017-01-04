@@ -349,6 +349,11 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void FormatWeightText(double weight)
         {
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                return;
+            }
+
             string result = WeightConverter.Current.FormatWeight(weight, displayFormat);
 
             lastDisplay = result;

@@ -117,6 +117,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Actions.Triggers.FilterContentChangeDirection".ToUpperInvariant(),
                 "ShipWorks.Actions.Triggers.OrderDownloadedRestriction".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Appearance.ColorScheme".ToUpperInvariant(),
+                "ShipWorks.ApplicationCore.ComponentRegistration.RegistrationType".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Dashboard.Content.DashboardMessageImageType".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Dashboard.Content.ServerMessageResponseAction".ToUpperInvariant(),
                 "ShipWorks.ApplicationCore.Enums.HeartbeatOptions".ToUpperInvariant(),

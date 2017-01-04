@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             AddValueMapping(fedex, FedExProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(fedex, FedExProfileFields.ReturnsClearance, returnsClearanceState, returnsClearance, labelReturnsClearance);
-
+            AddValueMapping(fedex, FedExProfileFields.ThirdPartyConsignee, consigneeState, thirdPartyConsignee, labelConsignee);
 
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);

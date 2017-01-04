@@ -2,8 +2,9 @@
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.SmartPost
 {
     public class FedExSmartPostFixture : FedExPrototypeFixture
     {
@@ -31,9 +32,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             shipment.FedEx.ReferenceInvoice = string.Empty;
 

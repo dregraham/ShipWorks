@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive;
+using System.Windows.Forms;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -54,6 +53,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             originControl.Initialize(ShipmentTypeCode.Amazon);
             dimensionsControl.Initialize();
+
+            originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
+            dimensionsControl.DimensionsChanged += OnDimensionsChanged;
+            dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
+            weight.WeightChanged += OnShipSenseFieldChanged;
         }
 
         /// <summary>
@@ -103,11 +107,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void CreateUiBindings()
         {
-            originControl.OriginChanged += (s, e) => RaiseRateCriteriaChanged();
-            dimensionsControl.DimensionsChanged += OnDimensionsChanged;
-            dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
-            weight.WeightChanged += OnShipSenseFieldChanged;
-
             deliveryConfirmation.DataBindings.Clear();
             deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue),
                 viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue),
@@ -120,6 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);
             weight.DataBindings.Add(nameof(weight.MultiValued), viewModel, nameof(viewModel.ContentWeightIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
+            service.SelectedValueChanged -= OnServiceSelectedValueChanged;
             service.DataBindings.Clear();
             service.DataBindings.Add(nameof(service.DataSource), viewModel, nameof(viewModel.ServicesAvailable), false, DataSourceUpdateMode.OnPropertyChanged);
             service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingService), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -140,13 +140,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnServiceSelectedValueChanged(object sender, EventArgs e)
         {
-            AmazonRateTag newValue = (AmazonRateTag)service.SelectedItem;
+            AmazonRateTag newValue = service.SelectedItem as AmazonRateTag;
 
             if (newValue?.ShippingServiceId != viewModel?.ShippingService?.ShippingServiceId)
             {
-                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(r => ((AmazonRateTag)r.Tag).ShippingServiceId == newValue?.ShippingServiceId);
+                RateResult rateResult = RateControl.RateGroup.Rates.FirstOrDefault(MatchingAmazonServiceRate(newValue));
                 RateControl.SelectRate(rateResult);
             }
+        }
+
+        /// <summary>
+        /// Get a method that will match amazon rates against the given service
+        /// </summary>
+        private Func<RateResult, bool> MatchingAmazonServiceRate(AmazonRateTag newValue)
+        {
+            return rate =>
+            {
+                AmazonRateTag amazonTag = rate.Tag as AmazonRateTag;
+                return amazonTag?.ShippingServiceId == newValue?.ShippingServiceId;
+            };
         }
 
         /// <summary>

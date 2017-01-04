@@ -430,6 +430,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
 
+            shipment.FedEx.ThirdPartyConsignee = false;
+
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
             shipment.FedEx.Packages.RemovedEntitiesTracker = new FedExPackageCollection();
@@ -550,7 +552,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.PackagingType = (int) FedExPackagingType.Custom;
             profile.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
             profile.FedEx.NonStandardContainer = false;
-            profile.FedEx.ReferenceFIMS = "";
+            profile.FedEx.ReferenceFIMS = "Order {//Order/Number}";
             profile.FedEx.ReferenceCustomer = "Order {//Order/Number}";
             profile.FedEx.ReferenceInvoice = "";
             profile.FedEx.ReferencePO = "";
@@ -582,7 +584,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.RmaReason = string.Empty;
             profile.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
             profile.FedEx.ReturnSaturdayPickup = false;
-
+            profile.FedEx.ReturnsClearance = false;
+            profile.FedEx.ThirdPartyConsignee = false;
         }
 
         /// <summary>
@@ -649,6 +652,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsEmergencyContactPhone, package, FedExPackageFields.DangerousGoodsEmergencyContactPhone);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsOfferor, package, FedExPackageFields.DangerousGoodsOfferor);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsPackagingCount, package, FedExPackageFields.DangerousGoodsPackagingCount);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.ContainerType, package, FedExPackageFields.ContainerType);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.NumberOfContainers, package, FedExPackageFields.NumberOfContainers);
+                
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryContactName, package, FedExPackageFields.SignatoryContactName);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryTitle, package, FedExPackageFields.SignatoryTitle);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryPlace, package, FedExPackageFields.SignatoryPlace);
 
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialNumber, package, FedExPackageFields.HazardousMaterialNumber);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialClass, package, FedExPackageFields.HazardousMaterialClass);
@@ -656,6 +665,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialPackingGroup, package, FedExPackageFields.HazardousMaterialPackingGroup);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuantityValue, package, FedExPackageFields.HazardousMaterialQuantityValue);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
             }
 
             // Remove any packages that are too many for the profile
@@ -731,6 +742,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShippingProfileUtility.ApplyProfileValue(source.RmaNumber, fedex, FedExShipmentFields.RmaNumber);
             ShippingProfileUtility.ApplyProfileValue(source.RmaReason, fedex, FedExShipmentFields.RmaReason);
             ShippingProfileUtility.ApplyProfileValue(source.ReturnSaturdayPickup, fedex, FedExShipmentFields.ReturnSaturdayPickup);
+            ShippingProfileUtility.ApplyProfileValue(source.ThirdPartyConsignee, fedex, FedExShipmentFields.ThirdPartyConsignee);
 
             if (changedPackageWeights)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -41,10 +42,11 @@ namespace ShipWorks.Shipping.Services
         {
             subscription?.Dispose();
             subscription = messenger.OfType<ProcessShipmentsMessage>()
-                .Select(x => Observable.FromAsync(() => ProcessShipments(x)))
-                .Concat()
+                .Trackable()
+                .Select(this, x => Observable.FromAsync(() => ProcessShipments(x)).Trackable())
+                .Concat(this)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while creating label", ex))
-                .Subscribe(x => messenger.Send(x));
+                .Subscribe(this, x => messenger.Send(x));
         }
 
         /// <summary>
@@ -56,6 +58,8 @@ namespace ShipWorks.Shipping.Services
 
             using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
             {
+                refresher.RetrieveShipments = () => message.ShipmentsInContext;
+
                 shipments = await shipmentProcessor.Process(message.Shipments, refresher, message.SelectedRate, null);
             }
 

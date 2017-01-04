@@ -17,6 +17,7 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -158,12 +159,54 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            return new List<FilterEntity>
+            List<FilterEntity> filters = new List<FilterEntity>
                 {
                     CreateFilterReadyToShip(),
                     CreateFilterShipped(),
-                    CreateFilterFba()
+                    CreateFilterFba(),
                 };
+
+            if (ShipmentTypeManager.EnabledShipmentTypeCodes.Contains(ShipmentTypeCode.Amazon))
+            {
+                filters.Add(CreateFilterAmazonPrime());
+            }
+
+            return filters;
+        }
+
+        /// <summary>
+        /// Creates the filter for Amazon Prime orders
+        /// </summary>
+        private FilterEntity CreateFilterAmazonPrime()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+            // [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // Order is Amazon Prime
+            AmazonIsPrimeCondition primeCondition = new AmazonIsPrimeCondition();
+            primeCondition.Operator = EqualityOperator.Equals;
+            primeCondition.Value = AmazonMwsIsPrime.Yes;
+            definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
+
+            // Order is fulfilled by seller
+            AmazonFulfillmentChannelCondition fulfillmentCondition = new AmazonFulfillmentChannelCondition();
+            fulfillmentCondition.Operator = EqualityOperator.Equals;
+            fulfillmentCondition.Value = AmazonMwsFulfillmentChannel.MFN;
+            definition.RootContainer.FirstGroup.Conditions.Add(fulfillmentCondition);
+
+            return new FilterEntity
+            {
+                Name = "Amazon Prime",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
         }
 
         /// <summary>
@@ -203,13 +246,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
             definition.RootContainer.JoinType = ConditionGroupJoinType.And;
 
-
-            //      [Store] == this store
+            // [Store] == this store
             StoreCondition storeCondition = new StoreCondition();
             storeCondition.Operator = EqualityOperator.Equals;
             storeCondition.Value = Store.StoreID;
             definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
-
 
             // [AND]
             definition.RootContainer.JoinType = ConditionGroupJoinType.And;

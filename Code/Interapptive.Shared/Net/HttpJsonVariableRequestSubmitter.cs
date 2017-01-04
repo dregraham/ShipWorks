@@ -45,7 +45,7 @@ namespace Interapptive.Shared.Net
         public override byte[] GetPostContent()
         {
             // Not URL encoding the content since it is being posted as JSON
-            return Encoding.Default.GetBytes(RequestBody);
+            return Encoding.Default.GetBytes(RequestBody ?? string.Empty);
         }
 
         /// <summary>

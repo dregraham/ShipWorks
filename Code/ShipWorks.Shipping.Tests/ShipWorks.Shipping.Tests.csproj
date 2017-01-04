@@ -150,6 +150,8 @@
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\FedEx\Fims\FimsCarrierResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />

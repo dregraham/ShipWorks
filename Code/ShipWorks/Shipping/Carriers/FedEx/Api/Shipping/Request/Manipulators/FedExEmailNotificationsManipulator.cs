@@ -64,93 +64,106 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             // We have notifications request, so add the shipment special service type
             SetShipmentSpecialServiceTypes(requestedShipment);
 
-            EMailNotificationDetail emailDetail = new EMailNotificationDetail();
-            requestedShipment.SpecialServicesRequested.EMailNotificationDetail = emailDetail;
+            ShipmentEventNotificationDetail eventNotificationDetail = new ShipmentEventNotificationDetail();
+            requestedShipment.SpecialServicesRequested.EventNotificationDetail = eventNotificationDetail;
 
             // Set the special message
             if (!string.IsNullOrEmpty(fedExShipment.EmailNotifyMessage))
             {
-                emailDetail.PersonalMessage = fedExShipment.EmailNotifyMessage;
+                eventNotificationDetail.PersonalMessage = fedExShipment.EmailNotifyMessage;
             }
 
-            List<EMailNotificationRecipient> recipients = new List<EMailNotificationRecipient>();
+            List<ShipmentEventNotificationSpecification> eventNotificationSpecifications = new List<ShipmentEventNotificationSpecification>();
 
             // See if any are being sent to the sender
             if (notifySender)
             {
-                EMailNotificationRecipient recipient = AddEmailNotificationRecipient(EMailNotificationRecipientType.SHIPPER, shipment.OriginEmail, fedExShipment.EmailNotifySender);
-                recipients.Add(recipient);
+                ShipmentEventNotificationSpecification notification = CreateShipmentEventNotification(ShipmentNotificationRoleType.SHIPPER, shipment.OriginEmail, fedExShipment.EmailNotifySender);
+                eventNotificationSpecifications.Add(notification);
             }
 
             // See if any are being sent to the recipient
             if (notifyRecipient)
             {
-                EMailNotificationRecipient recipient = AddEmailNotificationRecipient(EMailNotificationRecipientType.RECIPIENT, shipment.ShipEmail, fedExShipment.EmailNotifyRecipient);
-                recipients.Add(recipient);
+                ShipmentEventNotificationSpecification notification = CreateShipmentEventNotification(ShipmentNotificationRoleType.RECIPIENT, shipment.ShipEmail, fedExShipment.EmailNotifyRecipient);
+                eventNotificationSpecifications.Add(notification);
             }
 
             // See if any are being sent to other
             if (notifyOther)
             {
-                EMailNotificationRecipient recipient = AddEmailNotificationRecipient(EMailNotificationRecipientType.OTHER, fedExShipment.EmailNotifyOtherAddress, fedExShipment.EmailNotifyOther);
-                recipients.Add(recipient);
+                ShipmentEventNotificationSpecification notification = CreateShipmentEventNotification(ShipmentNotificationRoleType.OTHER, fedExShipment.EmailNotifyOtherAddress, fedExShipment.EmailNotifyOther);
+                eventNotificationSpecifications.Add(notification);
             }
 
             // See if any are being sent to broker
             if (notifyBroker)
             {
-                EMailNotificationRecipient recipient = AddEmailNotificationRecipient(EMailNotificationRecipientType.BROKER, fedExShipment.BrokerEmail, fedExShipment.EmailNotifyBroker);
-                recipients.Add(recipient);
+                ShipmentEventNotificationSpecification notification = CreateShipmentEventNotification(ShipmentNotificationRoleType.BROKER, fedExShipment.BrokerEmail, fedExShipment.EmailNotifyBroker);
+                eventNotificationSpecifications.Add(notification);
             }
 
-            emailDetail.Recipients = recipients.ToArray();
+            eventNotificationDetail.EventNotifications = eventNotificationSpecifications.ToArray();
         }
 
         /// <summary>
         /// Populates and returns an EMailNotificationRecipient
         /// </summary>
-        /// <param name="recipientType">The EMailNotificationRecipientType for this EMailNotificationRecipient</param>
+        /// <param name="roleType">The EMailNotificationRecipientType for this EMailNotificationRecipient</param>
         /// <param name="emailAddress">The email address for the notification</param>
         /// <param name="notificationTypes">The ShipWorks FedExEmailNotificationType enum, as an int, containing all notification types to return.</param>
         /// <returns></returns>
-        private static EMailNotificationRecipient AddEmailNotificationRecipient(EMailNotificationRecipientType recipientType, string emailAddress, int notificationTypes)
+        private static ShipmentEventNotificationSpecification CreateShipmentEventNotification(ShipmentNotificationRoleType roleType, string emailAddress, int notificationTypes)
         {
-            EMailNotificationRecipient recipient = new EMailNotificationRecipient
-                {
-                    Format = EMailNotificationFormatType.HTML,
-                    Localization = new Localization {LanguageCode = "EN"},
-                    EMailNotificationRecipientType = recipientType,
-                    EMailAddress = emailAddress
+            ShipmentEventNotificationSpecification notification = new ShipmentEventNotificationSpecification
+            {
+                    FormatSpecification = new ShipmentNotificationFormatSpecification()
+                    {
+                        Type = NotificationFormatType.HTML,
+                        TypeSpecified = true
+                    },
+                    NotificationDetail = new NotificationDetail()
+                    {
+                        Localization = new Localization { LanguageCode = "EN" },
+                        NotificationType = NotificationType.EMAIL,
+                        NotificationTypeSpecified = true,
+                        EmailDetail = new EMailDetail()
+                        {
+                            EmailAddress = emailAddress
+                        }
+                    },
+                    Role = roleType,
+                    RoleSpecified = true
                 };
 
-            ApplyEmailRecipientOptions(recipient, notificationTypes);
+            ApplyEmailRecipientOptions(notification, notificationTypes);
 
-            return recipient;
+            return notification;
         }
 
         /// <summary>
         /// Apply the given notification types to the recipient
         /// </summary>
-        private static void ApplyEmailRecipientOptions(EMailNotificationRecipient recipient, int notifcationTypes)
+        private static void ApplyEmailRecipientOptions(ShipmentEventNotificationSpecification recipient, int notifcationTypes)
         {
-            List<EMailNotificationEventType> emailNotificationEventTypes = new List<EMailNotificationEventType>();
+            List<NotificationEventType> notificationEventTypes = new List<NotificationEventType>();
 
             if ((notifcationTypes & (int)FedExEmailNotificationType.Ship) != 0)
             {
-                emailNotificationEventTypes.Add(EMailNotificationEventType.ON_SHIPMENT);
+                notificationEventTypes.Add(NotificationEventType.ON_SHIPMENT);
             }
 
             if ((notifcationTypes & (int)FedExEmailNotificationType.Exception) != 0)
             {
-                emailNotificationEventTypes.Add(EMailNotificationEventType.ON_EXCEPTION);
+                notificationEventTypes.Add(NotificationEventType.ON_EXCEPTION);
             }
 
             if ((notifcationTypes & (int)FedExEmailNotificationType.Deliver) != 0)
             {
-                emailNotificationEventTypes.Add(EMailNotificationEventType.ON_DELIVERY);
+                notificationEventTypes.Add(NotificationEventType.ON_DELIVERY);
             }
 
-            recipient.NotificationEventsRequested = emailNotificationEventTypes.ToArray();
+            recipient.Events = notificationEventTypes.ToArray();
         }
 
         /// <summary>
@@ -163,19 +176,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 requestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
             }
 
-            List<ShipmentSpecialServiceType> shipmentSpecialServicesTypes;
-            if (requestedShipment.SpecialServicesRequested.SpecialServiceTypes != null)
-            {
-                shipmentSpecialServicesTypes = requestedShipment.SpecialServicesRequested.SpecialServiceTypes.OfType<ShipmentSpecialServiceType>().ToList();
-            }
-            else
-            {
-                shipmentSpecialServicesTypes = new List<ShipmentSpecialServiceType>();
-            }
+            List<ShipmentSpecialServiceType> shipmentSpecialServicesTypes =
+                requestedShipment.SpecialServicesRequested.SpecialServiceTypes?.ToList() ?? new List<ShipmentSpecialServiceType>();
 
-            if (!shipmentSpecialServicesTypes.Contains(ShipmentSpecialServiceType.EMAIL_NOTIFICATION))
+            if (!shipmentSpecialServicesTypes.Contains(ShipmentSpecialServiceType.EVENT_NOTIFICATION))
             {
-                shipmentSpecialServicesTypes.Add(ShipmentSpecialServiceType.EMAIL_NOTIFICATION);
+                shipmentSpecialServicesTypes.Add(ShipmentSpecialServiceType.EVENT_NOTIFICATION);
             }
 
             requestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServicesTypes.ToArray();
