@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Enums
@@ -91,10 +87,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx Economy")]
         FedExEconomyCanada = 26,
 
-        [Description("FedEx FIMS")]
-        FedExFims = 27,
+        [Description("FedEx FIMS Mailview")]
+        FedExFimsMailView = 27,
 
         [Description("FedEx International Ground®")]
-        FedExInternationalGround = 28
+        FedExInternationalGround = 28,
+
+        // Services needed for Intra certification tests
+        [Description("FedEx Next Day Afternoon")]
+        FedExNextDayAfternoon = 29,
+
+        [Description("FedEx Next Day Early Morning")]
+        FedExNextDayEarlyMorning = 30,
+
+        [Description("FedEx Next Day Mid Morning")]
+        FedExNextDayMidMorning = 31,
+
+        [Description("FedEx Next Day End Of Day")]
+        FedExNextDayEndOfDay = 32,
+
+        [Description("FedEx Distance Deferred")]
+        FedExDistanceDeferred = 33,
+
+        [Description("FedEx Next Day Freight")]
+        FedExNextDayFreight = 34,
+
+        [Description("FedEx FIMS Mailview Lite")]
+        FedExFimsMailViewLite = 35,
+
+        [Description("FedEx FIMS Standard")]
+        FedExFimsStandard = 36,
+
+        [Description("FedEx FIMS Premium")]
+        FedExFimsPremium = 37
     }
 }

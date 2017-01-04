@@ -39,8 +39,8 @@ namespace ShipWorks.Shipping.Carriers
         // Credentials to use when ShipWorks is using a provider's test environment
         private const string TestCredentialFedExAccountNumber = "607253064";
         private const string TestCredentialFedExMeterNumber = "118689634";
-        private const string TestCredentialFedExUsername = "bMZ0c1Yh92BkjFAT";
-        private const string TestCredentialFedExPassword = "RDgWvCfwjPUeokkuEkeSaoBBkl8E5r+IGkNuDLvC6Fo=";
+        private const string TestCredentialFedExUsername = "jB2cT1YYx9uZfe0v";
+        private const string TestCredentialFedExPassword = "7wnqwmqWl2Q1u03AirUFwp9064noG+Bxb7esO7i0p88=";
         private const string TestCredentialFedExCertificateVerificationData = "<Service><Subject><Value>wsbeta.fedex.com</Value><Value>OU=EIS-WSAS</Value></Subject></Service>";
 
         private const string TestCredentialUpsUserId = "6863e0f62cdd4a1b";

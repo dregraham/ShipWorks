@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International
 {
     public class FedExInternationalPrototypeFixture : FedExPrototypeFixture
     {
@@ -21,16 +20,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         public string CommoditiesUnitPriceCurrency { get; set; }
         public string CommoditiesUnitPriceAmount { get; set; }
         public string CommoditiesCustomsValueCurrency { get; set; }
-
         public string DutiesPaymentType { get; set; }
         public string DutiesAccountNumber { get; set; }
         public string DutiesPersonName { get; set; }
         public string DutiesCountryCode { get; set; }
-
         public string CustomsClearanceDocumentContent { get; set; }
         public string CustomsClearanceValueCurrency { get; set; }
         public string CustomsClearanceValueAmount { get; set; }
-
+        public string ImporterOfRecordAccountNumber { get; set; }
+        public string ImporterOfRecordTinType { get; set; }
+        public string ImporterOfRecordTinNumber { get; set; }
         public string ImporterOfRecordCountryCode { get; set; }
         public string ImporterOfRecordPersonName { get; set; }
         public string ImporterOfRecordCompanyName { get; set; }
@@ -39,19 +38,27 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         public string ImporterOfRecordStateProvinceCode { get; set; }
         public string ImporterOfRecordPostalCode { get; set; }
         public string ImporterOfRecordPhoneNumber { get; set; }
-
         public string CustomsOptionType { get; set; }
         public string CustomsOptionDescription { get; set; }
-
         public bool CommercialInvoiceFileElectronically { get; set; }
+
+
+        public string SignatoryContactName { get; set; }
+        public string SignatoryTitle { get; set; }
+        public string SignatoryPlace { get; set; }
+
+        public string ContainerType { get; set; }
+        public string NumberOfContainers { get; set; }
+        public string PackingDetailsCargoAircraftOnly { get; set; }
+        public string PackingDetailsPackingInstructions { get; set; }
 
         /// <summary>
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             SetupCustomsItems(shipment);
             SetupCustomsShipment(shipment);
@@ -111,11 +118,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             {
                 shipment.FedEx.ImporterOfRecord = true;
 
-                
+
                 List<string> names = ParseName(ImporterOfRecordPersonName);
                 shipment.FedEx.ImporterFirstName = names[0];
                 shipment.FedEx.ImporterLastName = names[1];
-                
+
                 shipment.FedEx.ImporterCompany = ImporterOfRecordCompanyName;
                 shipment.FedEx.ImporterStreet1 = ImporterOfRecordStreetLines;
                 shipment.FedEx.ImporterCity = ImporterOfRecordCity;
@@ -134,7 +141,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             if (!string.IsNullOrEmpty(CommoditiesQuantity) && CommoditiesQuantity != "0")
             {
                 int numberOfItems = int.Parse(CommoditiesQuantity);
-                
+
                 // Add the customs items to the shipment
                 ShipmentCustomsItemEntity customsItem;
                 customsItem = new ShipmentCustomsItemEntity();
@@ -158,7 +165,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         private CurrencyType GetCurrencyType()
         {
             CurrencyType currencyType = CurrencyType.USD;
-            
+
             if (CommoditiesUnitPriceCurrency == "CAD")
             {
                 currencyType = CurrencyType.CAD;

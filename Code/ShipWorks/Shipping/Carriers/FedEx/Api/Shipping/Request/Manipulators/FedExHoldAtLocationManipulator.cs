@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
@@ -106,8 +107,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 holdAtLocationDetail.LocationTypeSpecified = fedExShipment.HoldLocationType.HasValue;
                 if (fedExShipment.HoldLocationType.HasValue)
                 {
-                    holdAtLocationDetail.LocationType = (FedExLocationType) fedExShipment.HoldLocationType;
+                    //(FedExLocationType) fedExShipment.HoldLocationType
+                    holdAtLocationDetail.LocationType = GetLocationType((Enums.FedExLocationType) fedExShipment.HoldLocationType);
                 }
+            }
+        }
+
+        private WebServices.Ship.FedExLocationType GetLocationType(Enums.FedExLocationType holdLocationType)
+        {
+            switch (holdLocationType)
+            {
+                case Enums.FedExLocationType.FedExExpressStation: return WebServices.Ship.FedExLocationType.FEDEX_EXPRESS_STATION;
+                case Enums.FedExLocationType.FedExFreightServiceCenter: return WebServices.Ship.FedExLocationType.FEDEX_FREIGHT_SERVICE_CENTER;
+                case Enums.FedExLocationType.FedExGroundTerminal: return WebServices.Ship.FedExLocationType.FEDEX_GROUND_TERMINAL;
+                case Enums.FedExLocationType.FedExHomeDeliveryStation: return WebServices.Ship.FedExLocationType.FEDEX_HOME_DELIVERY_STATION;
+                case Enums.FedExLocationType.FedExOffice: return WebServices.Ship.FedExLocationType.FEDEX_OFFICE;
+                case Enums.FedExLocationType.FedExSmartPostHub: return WebServices.Ship.FedExLocationType.FEDEX_SMART_POST_HUB;
+                default:
+                    throw new FedExException($"Invalid FedExLocationType: {holdLocationType}");
             }
         }
 

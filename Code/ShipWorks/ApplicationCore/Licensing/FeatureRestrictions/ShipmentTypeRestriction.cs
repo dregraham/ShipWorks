@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Brown;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
+using System;
+using System.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing.FeatureRestrictions
 {

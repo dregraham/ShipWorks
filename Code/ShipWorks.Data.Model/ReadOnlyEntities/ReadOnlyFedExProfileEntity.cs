@@ -72,6 +72,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReturnSaturdayPickup = source.ReturnSaturdayPickup;
             ReturnsClearance = source.ReturnsClearance;
             ReferenceFIMS = source.ReferenceFIMS;
+            ThirdPartyConsignee = source.ThirdPartyConsignee;
             
             ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -299,6 +300,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ReferenceFIMS { get; }
+        /// <summary> The ThirdPartyConsignee property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."ThirdPartyConsignee"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> ThirdPartyConsignee { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

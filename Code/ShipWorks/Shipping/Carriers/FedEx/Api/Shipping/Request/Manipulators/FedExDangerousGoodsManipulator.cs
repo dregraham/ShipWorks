@@ -1,18 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that modifies the DangerousGoodsDetail
-    /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment 
+    /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment
     /// has dangerous goods enabled.
     /// </summary>
     public class FedExDangerousGoodsManipulator : FedExShippingRequestManipulatorBase
@@ -41,12 +42,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="request">The request being manipulated.</param>
         public override void Manipulate(CarrierRequest request)
         {
+            ValidateRequest(request);
+
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
             // We can safely cast this since we've passed initialization
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            
+
             if (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DangerousGoodsEnabled)
             {
                 InitializeLineItem(nativeRequest);
@@ -64,7 +67,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
                 dangerousGoods.EmergencyContactNumber = package.DangerousGoodsEmergencyContactPhone;
                 dangerousGoods.Offeror = package.DangerousGoodsOfferor;
-                
+
+                SetupSignatory(package, dangerousGoods);
+
                 if (package.DangerousGoodsType != (int) FedExDangerousGoodsMaterialType.NotApplicable)
                 {
                     dangerousGoods.Options = new HazardousCommodityOptionType[] { GetApiHazardousCommodityType(package) };
@@ -72,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
                 if (package.DangerousGoodsType == (int)FedExDangerousGoodsMaterialType.HazardousMaterials)
                 {
-                    ConfigureHazardousMaterials(request, dangerousGoods, package);
+                    ConfigureHazardousMaterials(dangerousGoods, package);
                 }
                 else
                 {
@@ -88,10 +93,60 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             }
         }
 
+        private void ValidateRequest(CarrierRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            if (request.ShipmentEntity.FedEx.RequestedLabelFormat != (int) ThermalLanguage.None &&
+                request.ShipmentEntity.FedEx.Packages.Any(package => package.DangerousGoodsEnabled))
+            {
+                throw new FedExException("Cannot create thermal dangerous goods label.");
+            }
+
+            // We'll potentially be adding COD at the package level, so initialize the package index
+            currentPackageIndex = request.SequenceNumber;
+
+            // The native FedEx request type should be a IFedExNativeShipmentRequest
+            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
+            if (nativeRequest == null)
+            {
+                // Abort - we have an unexpected native request
+                throw new CarrierException("An unexpected request type was provided.");
+            }
+        }
+
+        /// <summary>
+        /// Setups the signatory.
+        /// </summary>
+        private static void SetupSignatory(FedExPackageEntity package, DangerousGoodsDetail dangerousGoods)
+        {
+            if (!string.IsNullOrEmpty(package.SignatoryContactName) || !string.IsNullOrEmpty(package.SignatoryPlace) ||
+                !string.IsNullOrEmpty(package.SignatoryTitle))
+            {
+                dangerousGoods.Signatory = new DangerousGoodsSignatory();
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryContactName))
+            {
+                dangerousGoods.Signatory.ContactName = package.SignatoryContactName;
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryTitle))
+            {
+                dangerousGoods.Signatory.Title = package.SignatoryTitle;
+            }
+            if (!string.IsNullOrEmpty(package.SignatoryPlace))
+            {
+                dangerousGoods.Signatory.Place = package.SignatoryPlace;
+            }
+        }
+
         /// <summary>
         /// Configures the shipping documents for OP_900
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
+        /// <param name="labelFormat">The format to print shipping documents</param>
         private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.ShippingDocumentSpecification == null)
@@ -108,10 +163,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             requestedShippingDocumentTypes.Add(RequestedShippingDocumentType.OP_900);
 
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = requestedShippingDocumentTypes.ToArray();
-
-            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail()
+            
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
             {
-                Format = new ShippingDocumentFormat()
+                Format = new ShippingDocumentFormat
                 {
                     ImageType = ShippingDocumentImageType.PDF,
                     ImageTypeSpecified = true,
@@ -124,39 +179,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <summary>
         /// Configures the hazardous materials of the DangerousGoodsDetail object..
         /// </summary>
-        /// <param name="request">The request.</param>
         /// <param name="dangerousGoods">The dangerous goods.</param>
         /// <param name="package">The package.</param>
-        /// <exception cref="FedExException">Hazardous materials can only be shipped with the FedEx Ground service.</exception>
-        private static void ConfigureHazardousMaterials(CarrierRequest request, DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
+        private static void ConfigureHazardousMaterials(DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
         {
-            FedExServiceType serviceType = (FedExServiceType) request.ShipmentEntity.FedEx.Service;
-
-            // HazMat can only be used with the ground service
-            if (serviceType != FedExServiceType.FedExGround && serviceType != FedExServiceType.FedExInternationalGround)
+            // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials
+            dangerousGoods.Containers = new[]
             {
-                // The check and exception is thrown here since the FedEx error doesn't indicate this is the
-                // the reason for the error.
-                throw new FedExException("Hazardous materials can only be shipped with the FedEx Ground service.");
-            }
-
-            // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials 
-            dangerousGoods.Containers = new DangerousGoodsContainer[]
-            {
-                new DangerousGoodsContainer()
+                new DangerousGoodsContainer
                 {
-                    HazardousCommodities = new HazardousCommodityContent[]
+                    ContainerType = package.ContainerType,
+                    NumberOfContainers = package.NumberOfContainers.ToString(),
+                    HazardousCommodities = new[]
                     {
-                        new HazardousCommodityContent()
+                        new HazardousCommodityContent
                         {
                             Description = new HazardousCommodityDescription
                             {
                                 Id = package.HazardousMaterialNumber,
                                 HazardClass = package.HazardousMaterialClass,
+                                PackingDetails = new HazardousCommodityPackingDetail
+                                {
+                                    CargoAircraftOnlySpecified = true,
+                                    CargoAircraftOnly = package.PackingDetailsCargoAircraftOnly,
+                                    PackingInstructions = package.PackingDetailsPackingInstructions
+                                },
                                 ProperShippingName = package.HazardousMaterialProperName,
                                 TechnicalName = package.HazardousMaterialTechnicalName,
                             },
-                            Quantity = new HazardousCommodityQuantityDetail()
+                            Quantity = new HazardousCommodityQuantityDetail
                             {
                                 Amount = (decimal) package.HazardousMaterialQuantityValue,
                                 AmountSpecified = true,
@@ -173,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 dangerousGoods.Containers[0].HazardousCommodities[0].Description.PackingGroupSpecified = true;
             }
 
-            dangerousGoods.Packaging = new HazardousCommodityPackagingDetail()
+            dangerousGoods.Packaging = new HazardousCommodityPackagingDetail
             {
                 Count = package.DangerousGoodsPackagingCount.ToString(),
                 Units = EnumHelper.GetDescription((FedExHazardousMaterialsQuantityUnits) package.HazardousMaterialQuanityUnits)
@@ -188,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         {
             if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested == null)
             {
-                // Initialize the requested special services 
+                // Initialize the requested special services
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested = new PackageSpecialServicesRequested();
             }
 
@@ -298,21 +349,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private void InitializeRequest(CarrierRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // We'll potentially be adding COD at the package level, so initialize the package index
-            currentPackageIndex = request.SequenceNumber;
-
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
 
             // Make sure the RequestedShipment is there
             if (nativeRequest.RequestedShipment == null)

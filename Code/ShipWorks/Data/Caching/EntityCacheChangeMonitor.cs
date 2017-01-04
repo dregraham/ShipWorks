@@ -95,7 +95,7 @@ namespace ShipWorks.Data.Caching
         {
             // If running integration tests, this may throw.
             // Comment it out to run the test...
-            Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
+            //Debug.Assert(!executionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
             lock (disposedLock)
             {
