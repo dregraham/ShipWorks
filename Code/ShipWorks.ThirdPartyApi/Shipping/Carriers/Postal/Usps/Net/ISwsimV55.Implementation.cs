@@ -76,6 +76,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 
             return new CreateIndiciumResult
             {
+                TrackingNumber = trackingNumber,
+                IntegratorTxID = integratorTxID,
+                Rate = rate,
                 Result = result,
                 StampsTxID = stampsTxID,
                 URL = url,

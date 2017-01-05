@@ -1001,6 +1001,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             OrderId = null, // OrderId
                         });
 
+                    rate = result.Rate;
+                    integratorGuid = result.IntegratorTxID;
+                    tracking = result.TrackingNumber;
                     uspsGuid = result.StampsTxID;
                     labelUrl = result.URL;
                     postageBalance = result.PostageBalance;

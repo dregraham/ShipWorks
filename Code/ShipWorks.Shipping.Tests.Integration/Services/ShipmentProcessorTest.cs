@@ -41,6 +41,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -248,7 +249,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
             {
-                SetupAddressValidationResponse(w);
+                UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
             });
@@ -281,10 +282,11 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
             {
-                SetupAddressValidationResponse(w);
+                UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
+                        Rate = new RateV20(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
             });
@@ -319,7 +321,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 XmlDocument details = new XmlDocument();
                 details.LoadXml("<error><details code=\"bar\" /></error>");
 
-                SetupAddressValidationResponse(w);
+                UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
             });
@@ -648,23 +650,6 @@ namespace ShipWorks.Shipping.Tests.Services
             testObject.Process(shipments,
                 context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
-
-        private static void SetupAddressValidationResponse(Mock<ISwsimV55> mock)
-        {
-            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
-                .Raises(x => x.CleanseAddressCompleted += null, new CleanseAddressCompletedEventArgs(new object[] {
-                    "", // Result
-                    new Address(),
-                    true,
-                    true,
-                    ResidentialDeliveryIndicatorType.Yes,
-                    false,
-                    false,
-                    new Address[] { },
-                    new StatusCodes(),
-                    new RateV20[] { },
-                }, null, false, null));
-        }
 
         public void Dispose()
         {

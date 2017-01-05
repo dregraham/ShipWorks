@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\LabelServiceRegistrationTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\ProcessUspsLabelTest.cs" />
     <Compile Include="Carriers\RatingServiceRegistrationTest.cs" />
     <Compile Include="Carriers\ShipmentTypeSetupWizardRegistrationTest.cs" />
     <Compile Include="Carriers\ShipmentPreProcessorRegistrationTest.cs" />
