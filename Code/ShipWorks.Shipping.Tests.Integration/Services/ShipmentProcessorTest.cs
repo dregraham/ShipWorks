@@ -13,6 +13,7 @@ using Interapptive.Shared.Tests.Filters;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
@@ -64,6 +65,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 {
                     webServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
                     mock.Provide(webServiceFactory.Object);
+                    mock.Override<IActionDispatcher>();
                 });
 
             context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>

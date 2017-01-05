@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -41,6 +42,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     webServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
                     mock.Provide(webServiceFactory.Object);
                     mock.Override<IDataResourceManager>();
+                    mock.Override<IActionDispatcher>();
                 });
 
             context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>
