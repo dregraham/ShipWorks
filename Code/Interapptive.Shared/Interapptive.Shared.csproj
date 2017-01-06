@@ -530,6 +530,8 @@
     <Compile Include="Win32\Native\WindowsMessage.cs" />
     <Compile Include="Win32\RegistryHelper.cs" />
     <Compile Include="Win32\SecurityUtility.cs" />
+    <Compile Include="Win32\User32Devices.cs" />
+    <Compile Include="Win32\User32Input.cs" />
     <Compile Include="Win32\WindowsExitType.cs" />
     <Compile Include="Win32\WindowsFirewallException.cs" />
     <Compile Include="Win32\WindowsFirewallUtility.cs" />

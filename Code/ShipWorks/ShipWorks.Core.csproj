@@ -918,7 +918,11 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerIdentifier.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerService.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerIdentifier.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerMessageFilterFactory.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerService.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\ScannerState.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
