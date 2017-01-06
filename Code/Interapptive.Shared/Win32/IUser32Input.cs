@@ -17,6 +17,6 @@ namespace Interapptive.Shared.Win32
         /// <summary>
         /// Get raw input data
         /// </summary>
-        GenericResult<object> GetRawInputData(IntPtr deviceHandle, RawInputCommand commandType);
+        GenericResult<RawInput> GetRawInputData(IntPtr deviceHandle, RawInputCommand commandType);
     }
 }
