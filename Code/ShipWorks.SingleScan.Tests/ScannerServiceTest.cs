@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
@@ -13,12 +12,12 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
 
-namespace ShipWorks.Tests.Common.Hardware.Scanner
+namespace ShipWorks.SingleScan.Tests
 {
     public class ScannerServiceTest : IDisposable
     {
         readonly AutoMock mock;
-        private ScannerService testObject;
+        private readonly ScannerService testObject;
 
         public ScannerServiceTest()
         {

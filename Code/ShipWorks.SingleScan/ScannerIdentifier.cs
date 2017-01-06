@@ -1,6 +1,7 @@
 ﻿using System;
+using ShipWorks.Common.IO.Hardware.Scanner;
 
-namespace ShipWorks.Common.IO.Hardware.Scanner
+namespace ShipWorks.SingleScan
 {
     /// <summary>
     /// Manage identification of the current scanner

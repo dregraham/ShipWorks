@@ -1,7 +1,8 @@
 ﻿using System;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Common.IO.Hardware.Scanner;
 
-namespace ShipWorks.Common.IO.Hardware.Scanner
+namespace ShipWorks.SingleScan
 {
     /// <summary>
     /// Factory for creating message filters

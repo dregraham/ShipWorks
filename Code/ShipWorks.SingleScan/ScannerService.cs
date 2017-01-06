@@ -3,9 +3,12 @@ using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Common;
+using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Users;
 
-namespace ShipWorks.Common.IO.Hardware.Scanner
+namespace ShipWorks.SingleScan
 {
     /// <summary>
     /// Main entry point for interacting with scanners
@@ -17,6 +20,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         private readonly Func<IWin32Window> getWindow;
         private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
+        private readonly IUserSession userSession;
 
         private IScannerMessageFilter scannerMessageFilter;
 
@@ -27,13 +31,12 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
             Func<IWin32Window> getWindow, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession)
         {
+            this.userSession = userSession;
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
             this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
             this.getWindow = getWindow;
             this.user32Devices = user32Devices;
             this.scannerIdentifier = scannerIdentifier;
-
-            //(SingleScanSettings) userSession.User.Settings.SingleScanSettings
         }
 
         /// <summary>
@@ -111,7 +114,12 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            //throw new NotImplementedException();
+            if (userSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.Disabled)
+            {
+                return;
+            }
+
+            Enable();
         }
 
         /// <summary>
