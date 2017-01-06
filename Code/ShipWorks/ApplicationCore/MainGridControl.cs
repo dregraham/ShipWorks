@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Reactive.Linq;
+using System.Reactive.Disposables;
 using System.Windows.Forms;
 using Autofac;
 using ComponentFactory.Krypton.Toolkit;
@@ -82,11 +82,11 @@ namespace ShipWorks.ApplicationCore
 
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
-        List<long> selectedStoreKeys;
 
-        // Debouncing observables for searching
-        IDisposable quickSearchObservable;
-        IDisposable advancedSearchObservable;
+        // Observable subscriptions
+        private IDisposable subscriptions;
+
+        List<long> selectedStoreKeys;
 
         /// <summary>
         /// Constructor
@@ -120,26 +120,42 @@ namespace ShipWorks.ApplicationCore
                 searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
-            // Wire up observable for debouncing quick search text box
-            quickSearchObservable = Observable
-                .FromEventPattern(
-                    h => searchBox.TextChanged += h,
-                    h => searchBox.TextChanged -= h)
-                .Throttle(TimeSpan.FromMilliseconds(450))
-                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
-                .Subscribe(x => PerformSearch());
-
-            // Wire up observable for debouncing advanced search text box
-            advancedSearchObservable = Observable
-                .FromEventPattern(
-                    h => filterEditor.DefinitionEdited += h,
-                    h => filterEditor.DefinitionEdited -= h)
-                .Throttle(TimeSpan.FromMilliseconds(450))
-                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                .Subscribe(x => PerformSearch());
+            // Register any IMainGridControlPipelines 
+            subscriptions = new CompositeDisposable(
+                IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainGridControlPipeline>>().Select(p => p.Register(this)));
         }
+
+        /// <summary>
+        /// Action for adding Search box Text change event
+        /// </summary>
+        public Action<EventHandler> SearchTextChangedAdd => h =>
+        {
+            searchBox.TextChanged += h;
+        };
+
+        /// <summary>
+        /// Action for removing Search box Text change event
+        /// </summary>
+        public Action<EventHandler> SearchTextChangedRemove => h =>
+        {
+            searchBox.TextChanged -= h;
+        };
+
+        /// <summary>
+        /// Action for adding filter editor definition edited event
+        /// </summary>
+        public Action<EventHandler> FilterEditorDefinitionEditedAdd => h =>
+        {
+            filterEditor.DefinitionEdited += h;
+        };
+
+        /// <summary>
+        /// Action for removing filter editor definition edited event
+        /// </summary>
+        public Action<EventHandler> FilterEditorDefinitionEditedRemove => h =>
+        {
+            filterEditor.DefinitionEdited -= h;
+        };
 
         /// <summary>
         /// Initialization
@@ -177,12 +193,11 @@ namespace ShipWorks.ApplicationCore
         {
             if (disposing)
             {
+                subscriptions?.Dispose();
+
                 Reset();
 
                 components?.Dispose();
-
-                advancedSearchObservable?.Dispose();
-                quickSearchObservable?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -713,7 +728,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Perform the search
         /// </summary>
-        private void PerformSearch()
+        public void PerformSearch()
         {
             if (AdvancedSearchVisible)
             {

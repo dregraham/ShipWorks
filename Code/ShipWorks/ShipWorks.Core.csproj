@@ -703,6 +703,7 @@
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
+    <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationService.cs" />
@@ -808,6 +809,7 @@
     <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationCore\MainGridControlPipeline.cs" />
     <Compile Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.cs">
       <SubType>Form</SubType>
     </Compile>
