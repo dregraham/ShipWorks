@@ -854,6 +854,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
+    <Compile Include="ApplicationCore\Options\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactory.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProvider.cs" />
@@ -913,6 +914,16 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerIdentifier.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerService.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerIdentifier.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerMessageFilterFactory.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerService.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerState.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
@@ -961,7 +972,9 @@
     <Compile Include="Filters\Search\SearchDefinitionProviderFactory.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\OrderQuickSearchDefinitionProvider.cs" />
+    <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messaging\Messages\BarcodeScannedMessage.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
     <Compile Include="Messaging\Messages\IEntityDeleted.cs" />

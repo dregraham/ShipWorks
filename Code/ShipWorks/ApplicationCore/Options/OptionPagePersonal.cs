@@ -1,18 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Users;
 using ShipWorks.Filters;
-using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
 
@@ -72,6 +65,11 @@ namespace ShipWorks.ApplicationCore.Options
                 filterInitialSort.SelectedValue = (FilterInitialSortType) settings.FilterInitialSortType;
 
                 comboWeightFormat.SelectedValue = (WeightDisplayFormat) settings.ShippingWeightFormat;
+
+                // Load single scan settings and update ui
+                singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
+                autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
+                UpdateSingleScanSettingsUI();
             }
             else
             {
@@ -107,8 +105,43 @@ namespace ShipWorks.ApplicationCore.Options
                 settings.FilterInitialSpecified = filterComboBox.SelectedFilterNode.FilterNodeID;
 
                 settings.ShippingWeightFormat = (int) comboWeightFormat.SelectedValue;
+
+                if (autoPrint.Checked)
+                {
+                    settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
+                }
+                else if (singleScan.Checked)
+                {
+                    settings.SingleScanSettings = (int) SingleScanSettings.Scan;
+                }
+                else
+                {
+                    settings.SingleScanSettings = (int) SingleScanSettings.Disabled;
+                }
             }
         }
+
+        /// <summary>
+        /// Update auto print checkbox state based on single scan setting
+        /// </summary>
+        private void UpdateSingleScanSettingsUI()
+        {
+            // Only allow auto print to be checked when single scan is enabled
+            if (!singleScan.Checked)
+            {
+                autoPrint.Checked = false;
+                autoPrint.Enabled = false;
+            }
+            else
+            {
+                autoPrint.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Update UI when single scan is enabled
+        /// </summary>
+        private void OnChangeSingleScanSettings(object sender, EventArgs e) => UpdateSingleScanSettingsUI();
 
         /// <summary>
         /// Changing which method of initial filter selection to use

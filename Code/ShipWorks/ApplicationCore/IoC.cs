@@ -154,6 +154,9 @@ namespace ShipWorks.ApplicationCore
             RegisterLicenseEnforcers(builder);
             RegisterDialogs(builder);
 
+            builder.RegisterType<User32Devices>();
+            builder.RegisterType<User32Input>();
+
             builder.RegisterType<UserSessionWrapper>()
                 .AsImplementedInterfaces()
                 .UsingConstructor();

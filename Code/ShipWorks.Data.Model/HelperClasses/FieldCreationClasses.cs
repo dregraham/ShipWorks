@@ -22237,6 +22237,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.NextGlobalPostNotificationDate);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.SingleScanSettings field instance</summary>
+		public static EntityField2 SingleScanSettings
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.SingleScanSettings);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
