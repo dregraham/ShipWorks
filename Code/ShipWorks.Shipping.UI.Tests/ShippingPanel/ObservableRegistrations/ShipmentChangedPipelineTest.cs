@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         }
 
         [Fact]
-        public void Register_DoesNotCallLoadShipment_WhenShipmentIdsDoNotMatch()
+        public void Register_CallsUpdateStoredShipment_WhenShipmentIdsDoNotMatch()
         {
             var viewModel = mock.CreateMock<ShippingPanelViewModel>()
                 .WithShipment(new ShipmentEntity { ShipmentID = 3 })
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var adapter = mock.CreateMock<ICarrierShipmentAdapter>(a => a.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 5 })).Object;
             subject.OnNext(new ShipmentChangedMessage(new object(), adapter));
 
-            viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
+            viewModel.Verify(x => x.UpdateStoredShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Once);
         }
 
         [Fact]
@@ -149,8 +149,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             viewModel.Verify(x => x.LoadShipment(adapter));
         }
-
-
+        
         [Fact]
         public void Register_DoesNotCallLoadShipment_WhenMessageSenderIsNull()
         {

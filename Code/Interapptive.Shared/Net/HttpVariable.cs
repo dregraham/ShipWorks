@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Interapptive.Shared.Net
 {
     /// <summary>
@@ -17,17 +13,33 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public HttpVariable()
         {
-
         }
 
         /// <summary>
         /// Initializer
         /// </summary>
-        public HttpVariable(string name, string value)
+        public HttpVariable(string name, string value, bool urlEncode)
         {
             this.name = name;
             this.value = value;
+            UrlEncode = urlEncode;
         }
+
+        /// <summary>
+        /// Initializer
+        /// </summary>
+        /// <remarks>
+        /// Default to URL Encoding
+        /// </remarks>
+        public HttpVariable(string name, string value) : this(name, value, true)
+        {
+
+        }
+
+        /// <summary>
+        /// Should this variable be UrlEncoded
+        /// </summary>
+        public bool UrlEncode { get; set; }
 
         /// <summary>
         /// The name of the variable to post

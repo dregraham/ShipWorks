@@ -7,7 +7,10 @@ using ShipWorks.ApplicationCore.Logging;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using System.Xml;
+using Autofac;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
+using System.Web;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -17,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     class MagentoTwoWebClient : MagentoWebClient
     {
         private readonly MagentoStoreEntity store;
+
 
         /// <summary>
         /// Constructor
@@ -60,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
             {
-                Uri = new Uri(Store.ModuleUrl + "/orders/update")
+                Uri = new Uri(Store.ModuleUrl + "/rest/V1/shipworks/orders/update")
             };
 
             // Generate the body of the request and add it to our request
@@ -99,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter
             {
-                Uri = new Uri(Store.ModuleUrl + $"{path}"),
+                Uri = new Uri(Store.ModuleUrl + "/rest/V1/shipworks" + $"{path}"),
                 Verb = HttpVerb.Get
             };
 
@@ -124,8 +128,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private GenericModuleResponse ProcessRequestInternal(HttpRequestSubmitter request, string action)
         {
-            request.Headers.Add(HttpRequestHeader.Authorization,
-                $"Bearer {SecureText.Decrypt(store.ModulePassword, store.ModuleUsername)}");
+            if (store.ModuleUsername == string.Empty)
+            {
+                request.Headers.Add(HttpRequestHeader.Authorization,
+                    $"Bearer {SecureText.Decrypt(store.ModulePassword, string.Empty)}");
+            }
+            else
+            {
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    IMagentoTwoRestClient magentoRestClient =
+                        scope.Resolve<IMagentoTwoRestClient>(new TypedParameter(typeof(MagentoStoreEntity), store));
+
+                    request.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {magentoRestClient.GetToken()}");
+                }
+            }
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Magento, action);
             logEntry.LogRequest(request);
@@ -141,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
-                    GenericModuleResponse response = new GenericModuleResponse(xpath.Value);
+                    GenericModuleResponse response = new GenericModuleResponse(HttpUtility.HtmlDecode(xpath.Value));
 
                     // Valid the module version and schema version
                     ValidateModuleVersion(response.ModuleVersion);

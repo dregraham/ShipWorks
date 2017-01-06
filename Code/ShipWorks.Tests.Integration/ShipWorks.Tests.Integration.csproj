@@ -179,6 +179,14 @@
     <Compile Include="Functional\Services\ServiceStatusManagerTest.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\FedExCanadaIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FimsWebClientTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKETDMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUkInternationalMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKIntraFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostIntegrationTest.cs" />
@@ -258,14 +266,65 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataSources\TestsWeWantToChange.txt" />
+    <Content Include="DataSources\FedExAll\TestsWeWantToChange.txt" />
     <Content Include="Utilities\GenerateTestData.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="DataSources\FedExAll.xlsx">
+    <None Include="DataSources\FedExAll\CA Exp Dom.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\CA Exp Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\CA Grn Dom Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\EMEA.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\ETD.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\Grn Alcohol.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\IDF.xlsx" />
+    <None Include="DataSources\FedExAll\IGD.xlsx" />
+    <None Include="DataSources\FedExAll\IMpB Smartpost.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\IPD.xlsx" />
+    <None Include="DataSources\FedExAll\OneRate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\TD Express.xlsx" />
+    <None Include="DataSources\FedExAll\TD Ground.xlsx" />
+    <None Include="DataSources\FedExAll\UK ETD.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\UK International.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\UK Intra.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Exp DG Open Ship.xlsx" />
+    <None Include="DataSources\FedExAll\US Exp Dom-Alcohol.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Exp Dom.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Exp Intl-Alcohol.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Exp Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\iParcel.xlsx">
@@ -286,6 +345,7 @@
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.15.0\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

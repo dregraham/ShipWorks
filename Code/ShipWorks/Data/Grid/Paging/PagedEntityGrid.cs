@@ -71,7 +71,7 @@ namespace ShipWorks.Data.Grid.Paging
         // time that happens, we just maintain our own virtual selection.
         #region Big Explanation
         // It all is the ultimate result of this problem:
-        //   Given a shitton of selected rows, with a filter with a ton of content, when a filter is known to have changed, know which rows are selected once the grid is reloaded.
+        //   Given a ton of selected rows, with a filter with a ton of content, when a filter is known to have changed, know which rows are selected once the grid is reloaded.
         //   1) You select a whole bunch of stuff.  The grid knows exactly what rows are selected.  No problem here.  The grid knows what row indexes are selected, ShipWorks knows what data objects they correspond to.
         //   2) Someone somewhere changes a data object, which causes the filters to be re-figured within SQL Server.  ShipWorks detects this.  It has to reload the grid.   Some data objects may have been added, some removed, or they could have just been edited.
         //   3) Some of the data objects may now be gone that were selected.  Some that were selected may still be matching the filter, but due to the sort order, an what other stuff was added or removed, they could easily have a different row index in the grid.
@@ -103,7 +103,7 @@ namespace ShipWorks.Data.Grid.Paging
         GridRow[] gridRowPool = new GridRow[0];
 
         /// <summary>
-        /// Raised when the rows from a gateway have completed loading into the grid.  This is only after the headers have been loaded - all of the invidual row content may not be loaded yet.
+        /// Raised when the rows from a gateway have completed loading into the grid.  This is only after the headers have been loaded - all of the individual row content may not be loaded yet.
         /// </summary>
         public event EventHandler RowLoadingComplete;
 
@@ -203,7 +203,7 @@ namespace ShipWorks.Data.Grid.Paging
                 /// <summary>
                 /// SandGrid is doing a clear, but just as a faster way of updating the selection
                 /// with some new items.  All items should not be cleared.  If it knew about our virtual
-                /// selection, it would restore it.  But it doesnt.  So we can't clear it.
+                /// selection, it would restore it.  But it doesn't.  So we can't clear it.
                 /// </summary>
                 PsuedoClear
             }
@@ -216,8 +216,8 @@ namespace ShipWorks.Data.Grid.Paging
                 // Every time the SandGrid version changes we want to know so we can make sure the assumption we made in this
                 // reflection cold still hold.  You can read the other comments below, and up and the member variable section of the
                 // grid above... but basically
-                //  1) It is assumed that the only method within SelectedElementCollection that calls its own Clear method is the psuedo-clear ("Revert") one.
-                //  2) It is assumed that if the call to SelectedElementCollection.Clear is not called by that psuedo-clear method, its a full clear, and otherwise
+                //  1) It is assumed that the only method within SelectedElementCollection that calls its own Clear method is the pseudo-clear ("Revert") one.
+                //  2) It is assumed that if the call to SelectedElementCollection.Clear is not called by that pseudo-clear method, its a full clear, and otherwise
                 //     its not a full clear.
                 if (typeof(SandGrid).Assembly.GetName().Version != new Version("2.2.4.1"))
                 {
@@ -271,7 +271,7 @@ namespace ShipWorks.Data.Grid.Paging
                             MethodBase previousMethod = trace.GetFrame(i + 1).GetMethod();
 
                             // As of the version of SandGrid this was written for, the only method within SelectedElementColleciton
-                            // that calls Clear, is the one that is doing the psuedo-clear (described in 2b above).  So checking that the
+                            // that calls Clear, is the one that is doing the pseudo-clear (described in 2b above).  So checking that the
                             // next method up in the stack comes from SelectedElementCollection will tell us if that is what's going on.
                             if (previousMethod.DeclaringType == typeof(SelectedElementCollection))
                             {
@@ -370,7 +370,7 @@ namespace ShipWorks.Data.Grid.Paging
                         owner.ClearVirtualSelectionAll(true);
                         break;
 
-                    // A psuedo clear, which means the grid is just trying to clear, and then restore.  So what we'll do
+                    // A pseudo clear, which means the grid is just trying to clear, and then restore.  So what we'll do
                     // is just clear from our virtual what we know to be selected now.  Then on our OnSelectionChanged handler
                     // what ends up being selected will all be handled back.
                     case ClearAction.PsuedoClear:
@@ -437,7 +437,7 @@ namespace ShipWorks.Data.Grid.Paging
                 throw new InvalidOperationException("Could not get private member 'list' from CollectionBase. WTF.");
             }
 
-            // Replace the ArrayList with our own array list that doesnt bother to sort.
+            // Replace the ArrayList with our own array list that doesn't bother to sort.
             underlyingRowsListInfo.SetValue(Rows, new UnsortedArrayList());
 
             // Again I hate to use reflection.  But this is necessary to make our magic selection preservation work between filter updates.  Since
@@ -1036,7 +1036,7 @@ namespace ShipWorks.Data.Grid.Paging
             log.DebugFormat("Removing virtual selection took: {0}", sw.Elapsed.TotalSeconds);
 
             // Raise the selection change event if any were removed.  We call the base b\c at this point there could still be some on-screen selected rows
-            // in the Reset state, that are not in the virtual selection but havnt been deselected yet (b\c they havnt been loaded yet, so we don't know who they are).
+            // in the Reset state, that are not in the virtual selection but haven't been deselected yet (b\c they haven't been loaded yet, so we don't know who they are).
             // If we called our override of OnSelectionChanged, we'd get the updated HeaderInfo for those selected rows, and add them back in the selection.
             // So like for deletes, we would accurately remove the deleted entity from our selection - but whatever entity takes its place when the rows scoot up
             // would become selected.
@@ -1307,7 +1307,7 @@ namespace ShipWorks.Data.Grid.Paging
 
                 DataPendingRow pendingRow;
 
-                // We don't want to invoke the gui for each one, so we do a bunch at a time
+                // We don't want to invoke the GUI for each one, so we do a bunch at a time
                 List<DataPendingRow> readyToPopulate = new List<DataPendingRow>();
                 bool populatePending = false;
 
@@ -1364,7 +1364,7 @@ namespace ShipWorks.Data.Grid.Paging
                                 pendingRow.LoadDeffered = true;
                             }
 
-                            // And add it to the list of items to be repopulated on the gui thread
+                            // And add it to the list of items to be repopulated on the GUI thread
                             lock (readyToPopulate)
                             {
                                 readyToPopulate.Add(pendingRow);
@@ -1381,7 +1381,7 @@ namespace ShipWorks.Data.Grid.Paging
                             {
                                 populatePending = true;
 
-                                // Have to update the gui row on the gui thread.  Use the MainForm to avoid the race-condition that this grid
+                                // Have to update the GUI row on the GUI thread.  Use the MainForm to avoid the race-condition that this grid
                                 // went away since we checked Disposed and IsHandleCreated
                                 Program.MainForm.BeginInvoke((MethodInvoker) delegate
                                     {
@@ -1455,6 +1455,27 @@ namespace ShipWorks.Data.Grid.Paging
             gridRow.Selected = virtualSelection.Contains(entityID);
 
             suspendSelectionProcessing = false;
+        }
+
+        /// <summary>
+        /// Select the rows with the given keys
+        /// </summary>
+        public void SelectRows(IEnumerable<long> keys)
+        {
+            suspendSelectionProcessing = true;
+
+            base.SelectedElements.Clear();
+            ClearVirtualSelectionAll(false);
+
+            foreach (long row in keys)
+            {
+                AddVirtualSelection(row);
+            }
+
+            suspendSelectionProcessing = false;
+
+            OnSelectionChanged(null);
+            UpdateGridRows();
         }
 
         #endregion

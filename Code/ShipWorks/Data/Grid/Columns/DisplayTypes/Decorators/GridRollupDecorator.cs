@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.ValueProviders;
+using System.Xml.Serialization;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators.Editors;
-using System.Xml.Serialization;
 using ShipWorks.Properties;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
@@ -28,7 +24,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// Create a new instance of the rollup decorator
         /// </summary>
         public GridRollupDecorator(EntityField2 childCountField)
-            :this(childCountField, GridRollupStrategy.SingleChildOrNull)
+            : this(childCountField, GridRollupStrategy.SingleChildOrNull)
         {
 
         }
@@ -119,7 +115,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             // Like if we are rolling up an ebay column and this isn't an ebay store.
             if (countValue != null)
             {
-                formattedValue.Text = FormatRollupText(Convert.ToInt32(countValue), formattedValue);
+                formattedValue.Text = FormatRollupText(Convert.ToInt64(countValue), formattedValue);
 
                 if (ShowMultiImage)
                 {
@@ -134,7 +130,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// <summary>
         /// Get the rollup display based on the child count and what the normal base text would be
         /// </summary>
-        protected string FormatRollupText(int childCount, GridColumnFormattedValue formattedValue)
+        protected string FormatRollupText(long childCount, GridColumnFormattedValue formattedValue)
         {
             if (childCount == 0)
             {

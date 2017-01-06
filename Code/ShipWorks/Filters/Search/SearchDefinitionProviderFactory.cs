@@ -28,6 +28,11 @@ namespace ShipWorks.Filters.Search
         }
 
         /// <summary>
+        /// Creates a SearchDefinitionProvider for the specified target.
+        /// </summary>
+        public ISearchDefinitionProvider Create(FilterTarget target) => Create(target, null);
+
+        /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target and FilterDefinition
         /// </summary>
         /// <remarks>
@@ -60,10 +65,5 @@ namespace ShipWorks.Filters.Search
                 quickSearchDefinitionProvider :
                 new AdvancedSearchDefinitionProvider(advancedSearchDefinition, quickSearchDefinitionProvider);
         }
-
-        /// <summary>
-        /// Creates a SearchDefinitionProvider for the specified target.
-        /// </summary>
-        public ISearchDefinitionProvider Create(FilterTarget target) => Create(target, null);
     }
 }

@@ -2890,6 +2890,22 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuanityUnits,
 		///<summary>HazardousMaterialTechnicalName. </summary>
 		HazardousMaterialTechnicalName,
+		///<summary>SignatoryContactName. </summary>
+		SignatoryContactName,
+		///<summary>SignatoryTitle. </summary>
+		SignatoryTitle,
+		///<summary>SignatoryPlace. </summary>
+		SignatoryPlace,
+		///<summary>AlcoholRecipientType. </summary>
+		AlcoholRecipientType,
+		///<summary>ContainerType. </summary>
+		ContainerType,
+		///<summary>NumberOfContainers. </summary>
+		NumberOfContainers,
+		///<summary>PackingDetailsCargoAircraftOnly. </summary>
+		PackingDetailsCargoAircraftOnly,
+		///<summary>PackingDetailsPackingInstructions. </summary>
+		PackingDetailsPackingInstructions,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2968,6 +2984,8 @@ namespace ShipWorks.Data.Model
 		ReturnsClearance,
 		///<summary>ReferenceFIMS. </summary>
 		ReferenceFIMS,
+		///<summary>ThirdPartyConsignee. </summary>
+		ThirdPartyConsignee,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3028,6 +3046,20 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuantityValue,
 		///<summary>HazardousMaterialQuanityUnits. </summary>
 		HazardousMaterialQuanityUnits,
+		///<summary>SignatoryContactName. </summary>
+		SignatoryContactName,
+		///<summary>SignatoryTitle. </summary>
+		SignatoryTitle,
+		///<summary>SignatoryPlace. </summary>
+		SignatoryPlace,
+		///<summary>ContainerType. </summary>
+		ContainerType,
+		///<summary>NumberOfContainers. </summary>
+		NumberOfContainers,
+		///<summary>PackingDetailsCargoAircraftOnly. </summary>
+		PackingDetailsCargoAircraftOnly,
+		///<summary>PackingDetailsPackingInstructions. </summary>
+		PackingDetailsPackingInstructions,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3340,6 +3372,12 @@ namespace ShipWorks.Data.Model
 		MaskedData,
 		///<summary>ReferenceFIMS. </summary>
 		ReferenceFIMS,
+		///<summary>ThirdPartyConsignee. </summary>
+		ThirdPartyConsignee,
+		///<summary>Currency. </summary>
+		Currency,
+		///<summary>InternationalTrafficInArmsService. </summary>
+		InternationalTrafficInArmsService,
 		/// <summary></summary>
 		AmountOfFields
 	}

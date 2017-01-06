@@ -73,6 +73,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 specialServiceTypes.Add(ShipmentSpecialServiceType.RETURNS_CLEARANCE);
             }
 
+            if (fedExShipmentEntity.ThirdPartyConsignee)
+            {
+                specialServiceTypes.Add(ShipmentSpecialServiceType.THIRD_PARTY_CONSIGNEE);
+            }
+
             // Assign the updated special service types list back to the request
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
         }

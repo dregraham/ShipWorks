@@ -56,7 +56,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// </summary>
         public void EndSession()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// </summary>
         public void Dispose()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

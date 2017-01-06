@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -37,10 +38,11 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         public void Register(ShippingPanelViewModel viewModel)
         {
             subscription = messageStream.OfType<CreateLabelMessage>()
+                .Trackable()
                 .ObserveOn(schedulerProvider.Dispatcher)
-                .Where(x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
+                .Where(this, x => x.ShipmentID == viewModel.Shipment?.ShipmentID)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while handling processed shipment", ex))
-                .Subscribe(_ => viewModel.CreateLabel());
+                .Subscribe(this, _ => viewModel.CreateLabel());
         }
 
         /// <summary>

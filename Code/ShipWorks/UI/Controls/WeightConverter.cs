@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore;
+using ShipWorks.UI.Controls.Design;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls
@@ -34,7 +35,11 @@ namespace ShipWorks.UI.Controls
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         private readonly static Lazy<IWeightConverter> current =
-            new Lazy<IWeightConverter>(() => IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IWeightConverter>>().Value);
+            new Lazy<IWeightConverter>(
+                () =>
+                    DesignModeDetector.IsDesignerHosted() ?
+                        null :
+                        IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IWeightConverter>>().Value);
 
         private readonly IUserSession userSession;
 

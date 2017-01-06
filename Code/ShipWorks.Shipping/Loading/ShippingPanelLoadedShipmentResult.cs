@@ -25,6 +25,9 @@ namespace ShipWorks.Shipping.Loading
         UnsupportedShipmentType = 4,
 
         [Description("Deleted")]
-        Deleted = 5
+        Deleted = 5,
+
+        [Description("NotLoaded")]
+        NotLoaded = 6
     }
 }
