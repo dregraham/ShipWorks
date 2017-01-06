@@ -23,5 +23,13 @@ namespace Interapptive.Shared.Win32
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Register raw input device
+        /// </summary>
+        public bool RegisterRawInputDevice(RawInputDevice device)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

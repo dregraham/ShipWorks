@@ -273,6 +273,7 @@
     <Compile Include="ApplicationCore\Security\EncryptionProviderFactoryTest.cs" />
     <Compile Include="ApplicationCore\Security\AesEncryptionProviderTest.cs" />
     <Compile Include="ApplicationCore\Security\LicenseEncryptionProviderTest.cs" />
+    <Compile Include="Common\Hardware\Scanner\ScannerServiceTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\EnumTest.cs" />

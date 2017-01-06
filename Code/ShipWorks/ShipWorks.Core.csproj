@@ -926,9 +926,11 @@
     <Compile Include="Common\IO\Hardware\Scanner\ScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\ScannerService.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\ScannerState.cs" />
+    <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
+    <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\Retry\ISqlAdapterRetryFactory.cs" />

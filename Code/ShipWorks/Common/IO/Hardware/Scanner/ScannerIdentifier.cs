@@ -8,6 +8,17 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
     public class ScannerIdentifier : IScannerIdentifier
     {
         /// <summary>
+        /// Get the state of the current scanner
+        /// </summary>
+        public ScannerState ScannerState
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
         /// Handle a device being added to Windows
         /// </summary>
         public void HandleDeviceAdded(int deviceHandle)

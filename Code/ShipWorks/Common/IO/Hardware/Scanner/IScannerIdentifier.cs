@@ -6,6 +6,11 @@
     public interface IScannerIdentifier
     {
         /// <summary>
+        /// Gets the current scanner state
+        /// </summary>
+        ScannerState ScannerState { get; }
+
+        /// <summary>
         /// Save the specified handle as the current scanner
         /// </summary>
         void Save(int deviceHandle);

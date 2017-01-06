@@ -16,5 +16,10 @@ namespace Interapptive.Shared.Win32
         /// Get information about a device
         /// </summary>
         RawInputDeviceInfo GetDeviceInfo(RawInputDeviceListItem device);
+
+        /// <summary>
+        /// Register raw input device
+        /// </summary>
+        bool RegisterRawInputDevice(RawInputDevice device);
     }
 }
