@@ -146,6 +146,33 @@ namespace ShipWorks.SingleScan.Tests
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()));
         }
 
+        [Fact]
+        public void InitializeForCurrentSession_DoesNotEnableScanning_WhenSettingIsDisabled()
+        {
+            var user = mock.MockRepository.Create<UserEntity>((long) 1);
+            user.SetupGet(x => x.Settings)
+                .Returns(new UserSettingsEntity
+                {
+                    SingleScanSettings = (int) SingleScanSettings.Disabled
+                });
+
+            mock.Mock<IUserSession>().SetupGet(x => x.User).Returns(user.Object);
+
+            testObject.InitializeForCurrentSession();
+
+            mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()), Times.Never);
+        }
+
+        [Fact]
+        public void InitializeForCurrentSession_DoesNotEnableScanning_WhenUserIsNull()
+        {
+            mock.Mock<IUserSession>().SetupGet(x => x.User).Returns((UserEntity) null);
+
+            testObject.InitializeForCurrentSession();
+
+            mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()), Times.Never);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

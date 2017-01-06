@@ -114,12 +114,12 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            if (userSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.Disabled)
-            {
-                return;
-            }
+            int singleScanSetting = userSession.User?.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
 
-            Enable();
+            if (singleScanSetting != (int) SingleScanSettings.Disabled)
+            {
+                Enable();
+            }
         }
 
         /// <summary>
