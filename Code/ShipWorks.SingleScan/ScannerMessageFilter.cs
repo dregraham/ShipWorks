@@ -67,6 +67,11 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private bool HandleInput(IntPtr deviceHandle)
         {
+            if (!scannerIdentifier.IsScanner(deviceHandle.ToInt32()))
+            {
+                return false;
+            }
+
             GenericResult<RawInput> result = user32Input.GetRawInputData(deviceHandle, RawInputCommand.Input);
             if (!result.Success)
             {
@@ -74,14 +79,15 @@ namespace ShipWorks.SingleScan
                 return false;
             }
 
-            RawInput input = result.Value;
+            shouldBlock = ProcessRawInputData(result.Value);
+            return true;
+        }
 
-            if (input.Header.Type != RawInputDeviceType.Keyboard ||
-                !scannerIdentifier.IsScanner(deviceHandle.ToInt32()))
-            {
-                return false;
-            }
-
+        /// <summary>
+        /// Process the raw input data from a scanner
+        /// </summary>
+        private bool ProcessRawInputData(RawInput input)
+        {
             if (input.Data.Keyboard.Message == WindowsMessage.KEYFIRST)
             {
                 pressedKeys.Add(input.Data.Keyboard.VirtualKey);
@@ -93,8 +99,7 @@ namespace ShipWorks.SingleScan
                 pressedKeys.Remove(input.Data.Keyboard.VirtualKey);
             }
 
-            shouldBlock = pressedKeys.Any();
-            return true;
+            return pressedKeys.Any();
         }
 
         /// <summary>
