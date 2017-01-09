@@ -11,13 +11,15 @@ namespace ShipWorks.SingleScan
     public class ScannerMessageFilterFactory : IScannerMessageFilterFactory
     {
         readonly Func<ScannerMessageFilter> createScannerMessageFilter;
+        private readonly Func<FindScannerMessageFilter> createFindScannerMessageFilter;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerMessageFilterFactory(Func<ScannerMessageFilter> createScannerMessageFilter)
+        public ScannerMessageFilterFactory(Func<ScannerMessageFilter> createScannerMessageFilter, Func<FindScannerMessageFilter> createFindScannerMessageFilter)
         {
             this.createScannerMessageFilter = createScannerMessageFilter;
+            this.createFindScannerMessageFilter = createFindScannerMessageFilter;
         }
 
         /// <summary>
@@ -28,9 +30,6 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Create a find scanner message filter
         /// </summary>
-        public IScannerMessageFilter CreateFindScannerMessageFilter()
-        {
-            throw new NotImplementedException();
-        }
+        public IScannerMessageFilter CreateFindScannerMessageFilter() => createFindScannerMessageFilter();
     }
 }
