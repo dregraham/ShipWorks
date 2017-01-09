@@ -313,5 +313,13 @@ namespace Interapptive.Shared.Utility
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
+
+        /// <summary>
+        /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
+        /// </summary>
+        public static bool IsNullOrEmpty(this string s)
+        {
+            return string.IsNullOrWhiteSpace(s);
+        }
     }
 }

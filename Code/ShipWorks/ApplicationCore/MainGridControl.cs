@@ -726,6 +726,21 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
+        /// Perform a barcode search
+        /// </summary>
+        public void PerformBarcodeSearch(string barcode)
+        {
+            barcode = barcode?.Trim();
+
+            if (barcode.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            searchBox.Text = barcode;
+        }
+
+        /// <summary>
         /// Perform the search
         /// </summary>
         public void PerformSearch()

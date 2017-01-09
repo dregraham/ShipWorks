@@ -4,6 +4,11 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using log4net;
+using ShipWorks.ApplicationCore.Options;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Messaging.Messages;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -15,9 +20,24 @@ namespace ShipWorks.ApplicationCore
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainGridControlPipeline));
 
+        private readonly IMessenger messenger;
+        private readonly IUserSession userSession;
+        private readonly ISchedulerProvider schedulerProvider;
+
         // Debouncing observables for searching
-        IDisposable quickSearchObservable;
-        IDisposable advancedSearchObservable;
+        IDisposable quickSearchSubscription;
+        IDisposable advancedSearchSubscription;
+        IDisposable barcodeScannedMessageSubscription;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public MainGridControlPipeline(IMessenger messenger, IUserSession userSession, ISchedulerProvider schedulerProvider)
+        {
+            this.messenger = messenger;
+            this.userSession = userSession;
+            this.schedulerProvider = schedulerProvider;
+        }
 
         /// <summary>
         /// Register the pipeline with the main grid control
@@ -26,21 +46,38 @@ namespace ShipWorks.ApplicationCore
         {
             return new CompositeDisposable(
                 // Wire up observable for debouncing quick search text box
-                quickSearchObservable = Observable
+                quickSearchSubscription = Observable
                     .FromEventPattern(mainGridControl.SearchTextChangedAdd, mainGridControl.SearchTextChangedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
-                    .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
+                    .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
                     .Subscribe(x => mainGridControl.PerformSearch()),
 
                 // Wire up observable for debouncing advanced search text box
-                advancedSearchObservable = Observable
+                advancedSearchSubscription = Observable
                     .FromEventPattern(mainGridControl.FilterEditorDefinitionEditedAdd, mainGridControl.FilterEditorDefinitionEditedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
-                    .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
+                    .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                    .Subscribe(x => mainGridControl.PerformSearch())
+                    .Subscribe(x => mainGridControl.PerformSearch()),
+
+                // Wire up observable for doing barcode searches
+                barcodeScannedMessageSubscription = messenger.OfType<BarcodeScannedMessage>()
+                    .Where(x => AllowBarcodeSearch(mainGridControl))
+                    .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while performing barcode search search.", ex))
+                    .Subscribe(m => mainGridControl.PerformBarcodeSearch(m.Barcode))
             );
+        }
+
+        /// <summary>
+        /// Determines if the barcode search message should be sent
+        /// </summary>
+        private bool AllowBarcodeSearch(MainGridControl mainGridControl)
+        {
+            return mainGridControl.Visible && 
+                   mainGridControl.CanFocus &&
+                   userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled;
         }
 
         /// <summary>
@@ -48,8 +85,9 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public void Dispose()
         {
-            advancedSearchObservable?.Dispose();
-            quickSearchObservable?.Dispose();
+            quickSearchSubscription?.Dispose();
+            advancedSearchSubscription?.Dispose();
+            barcodeScannedMessageSubscription?.Dispose();
         }
     }
 }
