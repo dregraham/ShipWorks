@@ -12,5 +12,10 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// Create a scanner message filter
         /// </summary>
         IScannerMessageFilter CreateMessageFilter();
+
+        /// <summary>
+        /// Create a find scanner message filter
+        /// </summary>
+        IScannerMessageFilter CreateFindScannerMessageFilter();
     }
 }

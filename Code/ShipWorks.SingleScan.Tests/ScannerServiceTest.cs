@@ -173,6 +173,27 @@ namespace ShipWorks.SingleScan.Tests
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()), Times.Never);
         }
 
+        [Fact]
+        public void BeginFindScanner_DelegatesToMessageFilterFactory()
+        {
+            testObject.BeginFindScanner();
+            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateFindScannerMessageFilter());
+        }
+
+        [Fact]
+        public void BeginFindScanner_DelegatesToWindowsMessageFilterRegistrar()
+        {
+            testObject.BeginFindScanner();
+            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.AddMessageFilter(It.IsAny<IMessageFilter>()));
+        }
+
+        [Fact]
+        public void EndFindScanner_DelegatesToWindowsMessageFilterRegistrar()
+        {
+            testObject.BeginFindScanner();
+            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.AddMessageFilter(It.IsAny<IMessageFilter>()));
+        }
+
         public void Dispose()
         {
             mock.Dispose();

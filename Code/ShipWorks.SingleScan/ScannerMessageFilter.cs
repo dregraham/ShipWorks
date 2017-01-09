@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using log4net;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan
@@ -13,6 +14,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Message filter used by scanner service
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class ScannerMessageFilter : IScannerMessageFilter
     {
         private readonly IUser32Input user32Input;

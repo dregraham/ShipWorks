@@ -23,6 +23,7 @@ namespace ShipWorks.SingleScan
         private readonly IUserSession userSession;
 
         private IScannerMessageFilter scannerMessageFilter;
+        private IScannerMessageFilter findScannerMessageFilter;
 
         /// <summary>
         /// Constructor
@@ -49,7 +50,8 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void BeginFindScanner()
         {
-            throw new NotImplementedException();
+            findScannerMessageFilter = scannerMessageFilterFactory.CreateFindScannerMessageFilter();
+            windowsMessageFilterRegistrar.AddMessageFilter(findScannerMessageFilter);
         }
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void EndFindScanner()
         {
-            throw new NotImplementedException();
+           windowsMessageFilterRegistrar.RemoveMessageFilter(findScannerMessageFilter);
         }
 
         /// <summary>
