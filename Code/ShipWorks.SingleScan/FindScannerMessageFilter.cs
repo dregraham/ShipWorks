@@ -12,7 +12,7 @@ using ShipWorks.Common.IO.Hardware.Scanner;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// Message filter used by scanner service
+    /// Message filter used to identify the scanner
     /// </summary>
     [Component(RegistrationType.Self)]
     public class FindScannerMessageFilter : IScannerMessageFilter

@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FindScannerMessageFilterTest.cs" />
     <Compile Include="ScannerMessageFilterTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
   </ItemGroup>
