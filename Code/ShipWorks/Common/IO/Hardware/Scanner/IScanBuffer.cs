@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Common.IO.Hardware.Scanner
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+
+namespace ShipWorks.Common.IO.Hardware.Scanner
 {
     /// <summary>
     /// Buffer characters that make up a scan
     /// </summary>
+    [Service]
     public interface IScanBuffer
     {
         /// <summary>

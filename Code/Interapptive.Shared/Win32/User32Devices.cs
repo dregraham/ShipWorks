@@ -13,7 +13,8 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public RawInputDeviceListItem[] GetAllRawDevices()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>
@@ -21,7 +22,8 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public RawInputDeviceInfo GetDeviceInfo(RawInputDeviceListItem device)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return new RawInputDeviceInfo();
         }
 
         /// <summary>
@@ -29,7 +31,8 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public bool RegisterRawInputDevice(RawInputDevice device)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return false;
         }
     }
 }

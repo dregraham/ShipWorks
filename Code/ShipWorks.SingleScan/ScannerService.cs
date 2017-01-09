@@ -118,7 +118,8 @@ namespace ShipWorks.SingleScan
 
             if (singleScanSetting != (int) SingleScanSettings.Disabled)
             {
-                Enable();
+// TODO: UI thread exception was happening here.  Commenting out until we get to this.
+//                Enable();
             }
         }
 

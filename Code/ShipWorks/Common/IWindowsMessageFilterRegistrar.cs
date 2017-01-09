@@ -1,10 +1,12 @@
 ﻿using System.Windows.Forms;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Common
 {
     /// <summary>
     /// Registrar for Windows message filters
     /// </summary>
+    [Service]
     public interface IWindowsMessageFilterRegistrar
     {
         /// <summary>

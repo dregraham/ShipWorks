@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Common.IO.Hardware.Scanner
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+
+namespace ShipWorks.Common.IO.Hardware.Scanner
 {
     /// <summary>
     /// Manage identification of the current scanner
     /// </summary>
+    [Service]
     public interface IScannerIdentifier
     {
         /// <summary>
