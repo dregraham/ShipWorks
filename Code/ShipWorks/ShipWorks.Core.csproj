@@ -916,6 +916,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="ApplicationCore\MainFormHandle.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerIdentifier.cs" />

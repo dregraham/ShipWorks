@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
@@ -17,7 +16,7 @@ namespace ShipWorks.SingleScan
     {
         private readonly IScannerIdentifier scannerIdentifier;
         private readonly IUser32Devices user32Devices;
-        private readonly Func<IWin32Window> getWindow;
+        private readonly Func<MainFormHandle> getWindow;
         private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private readonly IUserSession userSession;
@@ -28,7 +27,7 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public ScannerService(IScannerIdentifier scannerIdentifier, IUser32Devices user32Devices,
-            Func<IWin32Window> getWindow, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
+            Func<MainFormHandle> getWindow, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession)
         {
             this.userSession = userSession;
@@ -83,7 +82,7 @@ namespace ShipWorks.SingleScan
             {
                 return;
             }
-
+            
             scannerMessageFilter = scannerMessageFilterFactory.CreateMessageFilter();
             windowsMessageFilterRegistrar.AddMessageFilter(scannerMessageFilter);
 
@@ -114,12 +113,11 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            int singleScanSetting = userSession.User?.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
+            int singleScanSetting = userSession.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
 
             if (singleScanSetting != (int) SingleScanSettings.Disabled)
             {
-// TODO: UI thread exception was happening here.  Commenting out until we get to this.
-//                Enable();
+                Enable();
             }
         }
 

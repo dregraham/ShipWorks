@@ -118,6 +118,9 @@ namespace ShipWorks.ApplicationCore
                 .As<IWin32Window>()
                 .ExternallyOwned();
 
+            builder.RegisterType<MainFormHandle>()
+                .SingleInstance();
+
             builder.RegisterType<SchedulerProvider>()
                 .AsImplementedInterfaces();
 
