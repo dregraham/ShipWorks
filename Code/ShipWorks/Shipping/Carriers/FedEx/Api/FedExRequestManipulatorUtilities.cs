@@ -31,13 +31,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 throw new CarrierException("The native request is not allowed to be Null.");
             }
-            
+
             if (request.NativeRequest is WebServices.Ship.DeleteShipmentRequest)
             {
                 throw new CarrierException("DeleteShipmentRequest is not a valid request type.");
             }
-            
-            if (!(nativeRequest is ProcessShipmentRequest) && 
+
+            if (!(nativeRequest is ProcessShipmentRequest) &&
                 !(nativeRequest is WebServices.Ship.ValidateShipmentRequest))
             {
                 throw new CarrierException(request.NativeRequest.ToString() + " is not a valid request type.");
@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     return WebServices.Ship.ServiceType.PRIORITY_OVERNIGHT;
 
                 case FedExServiceType.StandardOvernight:
-                case FedExServiceType.OneRateStandardOvernight: 
+                case FedExServiceType.OneRateStandardOvernight:
                     return WebServices.Ship.ServiceType.STANDARD_OVERNIGHT;
 
                 case FedExServiceType.FirstOvernight:
@@ -177,15 +177,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     return WebServices.Ship.ServiceType.FIRST_OVERNIGHT;
 
                 case FedExServiceType.FedEx2Day:
-                case FedExServiceType.OneRate2Day: 
+                case FedExServiceType.OneRate2Day:
                     return WebServices.Ship.ServiceType.FEDEX_2_DAY;
 
                 case FedExServiceType.FedEx2DayAM:
-                case FedExServiceType.OneRate2DayAM: 
+                case FedExServiceType.OneRate2DayAM:
                     return WebServices.Ship.ServiceType.FEDEX_2_DAY_AM;
 
                 case FedExServiceType.FedExExpressSaver:
-                case FedExServiceType.OneRateExpressSaver: 
+                case FedExServiceType.OneRateExpressSaver:
                 case FedExServiceType.FedExEconomyCanada:
                     return WebServices.Ship.ServiceType.FEDEX_EXPRESS_SAVER;
 
@@ -195,16 +195,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedEx1DayFreight: return WebServices.Ship.ServiceType.FEDEX_1_DAY_FREIGHT;
                 case FedExServiceType.FedEx2DayFreight: return WebServices.Ship.ServiceType.FEDEX_2_DAY_FREIGHT;
                 case FedExServiceType.FedEx3DayFreight: return WebServices.Ship.ServiceType.FEDEX_3_DAY_FREIGHT;
-                
-                case FedExServiceType.FedExGround: 
+
+                case FedExServiceType.FedExGround:
                 case FedExServiceType.FedExInternationalGround:
                     return WebServices.Ship.ServiceType.FEDEX_GROUND;
-                
+
                 case FedExServiceType.GroundHomeDelivery: return WebServices.Ship.ServiceType.GROUND_HOME_DELIVERY;
                 case FedExServiceType.InternationalPriorityFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
                 case FedExServiceType.InternationalEconomyFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
                 case FedExServiceType.SmartPost: return WebServices.Ship.ServiceType.SMART_POST;
-                case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;                    
+                case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
+                case FedExServiceType.FedExNextDayAfternoon:
+                    return ServiceType.FEDEX_NEXT_DAY_AFTERNOON;
+                case FedExServiceType.FedExNextDayEndOfDay:
+                    return ServiceType.FEDEX_NEXT_DAY_END_OF_DAY;
+                case FedExServiceType.FedExNextDayMidMorning:
+                    return ServiceType.FEDEX_NEXT_DAY_MID_MORNING;
+                case FedExServiceType.FedExNextDayEarlyMorning:
+                    return ServiceType.FEDEX_NEXT_DAY_EARLY_MORNING;
+                case FedExServiceType.FedExDistanceDeferred:
+                    return ServiceType.FEDEX_DISTANCE_DEFERRED;
+                case FedExServiceType.FedExNextDayFreight:
+                    return ServiceType.FEDEX_NEXT_DAY_FREIGHT;
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);

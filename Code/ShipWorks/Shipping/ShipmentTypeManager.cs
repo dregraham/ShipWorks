@@ -187,6 +187,30 @@ namespace ShipWorks.Shipping
             IsEndiciaDhl(postalService) || IsStampsDhl(postalService);
 
         /// <summary>
+        /// Determines whether [is DHL smart mail] [the specified postal service].
+        /// </summary>
+        public static bool IsDhlSmartMail(PostalServiceType postalService)
+        {
+            switch (postalService)
+            {
+                case PostalServiceType.DhlParcelExpedited:
+                case PostalServiceType.DhlParcelGround:
+                case PostalServiceType.DhlParcelPlusExpedited:
+                case PostalServiceType.DhlParcelPlusGround:
+                case PostalServiceType.DhlBpmExpedited:
+                case PostalServiceType.DhlBpmGround:
+                case PostalServiceType.DhlCatalogExpedited:
+                case PostalServiceType.DhlCatalogGround:
+                case PostalServiceType.DhlMediaMailGround:
+                case PostalServiceType.DhlMarketingGround:
+                case PostalServiceType.DhlMarketingExpedited:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Indicates if the given service represents an Endicia consolidator service (that is NOT DHL GM)
         /// </summary>
         public static bool IsConsolidator(PostalServiceType service)

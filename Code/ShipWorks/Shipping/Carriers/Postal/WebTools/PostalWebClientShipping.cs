@@ -346,11 +346,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             xmlWriter.WriteElementString("ImageType", "TIF");
             xmlWriter.WriteElementString("ImageLayout", "ONEPERFILE");
-            
+
             // This field is newly required for Canada
             if (toAdapter.CountryCode == "CA" && ((PostalServiceType)postalShipment.Service) != PostalServiceType.InternationalFirst)
             {
-                xmlWriter.WriteElementString("POZipCode", fromAdapter.PostalCode5);                
+                xmlWriter.WriteElementString("POZipCode", fromAdapter.PostalCode5);
             }
 
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
@@ -444,34 +444,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(PostalShipmentEntity postalShipment, string xmlRequest)
         {
             // The production server URL
-            string serverUrl = PostalWebUtility.UseTestServer ?
-                "https://stg-secure.shippingapis.com/ShippingApi.dll?"
-                : "https://secure.shippingapis.com/ShippingAPI.dll?";
+            string serverUrl = PostalWebUtility.ServerUrl;
 
             if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
             {
                 if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
                 {
-                    serverUrl += "API=ExpressMailLabel&XML=";
+                    serverUrl += "?API=ExpressMailLabel&XML=";
                 }
                 else
                 {
                     // Signature Confirm
                     if (postalShipment.Confirmation == (int)PostalConfirmationType.Signature)
                     {
-                        serverUrl += "API=SignatureConfirmationV4&XML=";
+                        serverUrl += "?API=SignatureConfirmationV4&XML=";
                     }
 
                     // Delivery Confirm
                     else
                     {
-                        serverUrl += "API=DeliveryConfirmationV4&XML=";
+                        serverUrl += "?API=DeliveryConfirmationV4&XML=";
                     }
                 }
             }
             else
             {
-                serverUrl += "API=" + GetInternationalServiceTagBase(postalShipment) + "&XML=";
+                serverUrl += "?API=" + GetInternationalServiceTagBase(postalShipment) + "&XML=";
             }
 
             try

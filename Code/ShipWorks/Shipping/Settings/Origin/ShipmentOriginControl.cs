@@ -99,7 +99,9 @@ namespace ShipWorks.Shipping.Settings.Origin
         /// </summary>
         public void LoadShipments(IEnumerable<ShipmentEntity> shipments, Func<ShipmentEntity, PersonAdapter> adapterCreator)
         {
-            originCombo.SelectedIndexChanged -= this.OnChangeSender;
+            originCombo.SelectedIndexChanged -= OnChangeSender;
+            personControl.ContentChanged -= OnPersonContentChanged;
+            personControl.DestinationChanged -= OnDestinationChanged;
 
             loadedShipments.Clear();
 
@@ -108,6 +110,7 @@ namespace ShipWorks.Shipping.Settings.Origin
             {
                 loadedShipments[shipment] = adapterCreator(shipment);
             }
+
 
             // Load the entities into the address control
             personControl.LoadEntities(loadedShipments.Values.ToList());
@@ -122,7 +125,9 @@ namespace ShipWorks.Shipping.Settings.Origin
 
             UpdateEditableState();
 
-            originCombo.SelectedIndexChanged += this.OnChangeSender;
+            originCombo.SelectedIndexChanged += OnChangeSender;
+            personControl.ContentChanged += OnPersonContentChanged;
+            personControl.DestinationChanged += OnDestinationChanged;
 
             RaiseOriginChanged();
         }

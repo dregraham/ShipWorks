@@ -10,6 +10,7 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.Design;
 using IContainer = System.ComponentModel.IContainer;
 
 namespace ShipWorks.Editions
@@ -195,6 +196,11 @@ namespace ShipWorks.Editions
             /// </summary>
             public void UpdateUI()
             {
+                if (DesignModeDetector.IsDesignerHosted())
+                {
+                    return;
+                }
+
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     ILicenseService service = lifetimeScope.Resolve<ILicenseService>();

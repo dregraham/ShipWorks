@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
@@ -57,12 +57,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo10_ForTracking()
+        public void Manipulate_SetsMajorTo12_ForTracking()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((TrackRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.Equal(10, version.Major);
+            Assert.Equal(12, version.Major);
         }
 
         [Fact]

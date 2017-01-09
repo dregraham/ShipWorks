@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -258,6 +259,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     service.ApplyMultiValue((FedExServiceType) shipment.FedEx.Service);
                     dropoffType.ApplyMultiValue((FedExDropoffType) shipment.FedEx.DropoffType);
                     returnsClearance.ApplyMultiCheck(shipment.FedEx.ReturnsClearance);
+                    thirdPartyConsignee.ApplyMultiCheck(shipment.FedEx.ThirdPartyConsignee);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     packagingType.ApplyMultiValue((FedExPackagingType) shipment.FedEx.PackagingType);
                     nonStandardPackaging.ApplyMultiCheck(shipment.FedEx.NonStandardContainer);
@@ -486,6 +488,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
                 dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
+                thirdPartyConsignee.ReadMultiCheck(v=>shipment.FedEx.ThirdPartyConsignee = v);
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
                 packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
                 nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
@@ -572,6 +575,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 UpdateLayoutForMultipleServices();
             }
 
+            UpdateLabelFormat();
+
             ResumeLayout();
             PerformLayout();
 
@@ -653,7 +658,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             sectionBilling.Visible = visible;
             sectionEmail.Visible = visible;
             sectionServiceOptions.Visible = visible;
-            sectionLabelOptions.Visible = visible;
         }
 
         /// <summary>
@@ -853,6 +857,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Called when [dangerous goods checked].
+        /// </summary>
+        private void OnDangerousGoodsChecked(object sender, EventArgs e)
+        {
+            SaveToShipments();
+            UpdateLabelFormat();
         }
 
         /// <summary>
@@ -1081,12 +1094,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" +
-                "FedEx SmartPost Parcel Select Lightweight\n" +
+                "FedEx SmartPost® parcel select lightweight\n" +
                 "FedEx SmartPost® Bound Printed Matter\n" +
                 "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost Parcel Select\n" +
+                "FedEx SmartPost® parcel select\n" +
                 "FedEx ShipAlert®\n" +
-                "FedEx Priority Alert Plus™\n\n" +
+                "FedEx Priority Alert Plus™\n" +
+                "FedEx International Ground® Distribution\n" +
+                "FedEx® International DirectDistribution\n" +
+                "FedEx International Economy DirectDistribution℠ Service\n" +
+                "FedEx International Priority DirectDistribution®\n" +
+                "FedEx International DirectDistribution Surface Solutions U.S. to Canada\n" +
+                "FedEx International Priority DirectDistribution® Freight\n\n" +
 
                 "FedEx® Envelope\n" +
                 "FedEx® Pak\n" +
@@ -1129,6 +1148,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnNonStandardPackagingChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Return false if EPL and there is a FIMS service.
+        /// </summary>
+        protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            List<FedExShipmentEntity> fedExShipments =
+                LoadedShipments.Where(shipment => shipment.FedEx != null).Select(shipment => shipment.FedEx).ToList();
+
+            if (format == ThermalLanguage.EPL &&
+                fedExShipments.Any(fedExShipment => FedExUtility.IsFimsService((FedExServiceType) fedExShipment.Service)))
+            {
+                return false;
+            }
+
+            if (format != ThermalLanguage.None &&
+                fedExShipments.Any(fedExShipment => fedExShipment.Packages?.Any(package => package.DangerousGoodsEnabled) ?? false))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

@@ -216,6 +216,14 @@ namespace ShipWorks.Stores
         /// <param name="scope"></param>
         public virtual List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
+            return CreateAddStoreWizardPagesViaIoC(scope);
+        }
+
+        /// <summary>
+        /// Creates the add store wizard pages via io c.
+        /// </summary>
+        protected List<WizardPage> CreateAddStoreWizardPagesViaIoC(ILifetimeScope scope)
+        {
             if (scope.IsRegisteredWithKey<WizardPage>(TypeCode))
             {
                 return scope.ResolveKeyed<IEnumerable<WizardPage>>(TypeCode).ToList();
@@ -312,6 +320,16 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual AccountSettingsControlBase CreateAccountSettingsControl()
         {
+            return CreateAccountSettingsControlViaIoC();
+        }
+
+        /// <summary>
+        /// Create the control that is used for editing the account settings via IoC.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="System.InvalidOperationException">Invalid store type.  + TypeCode</exception>
+        protected AccountSettingsControlBase CreateAccountSettingsControlViaIoC()
+        {
             if (!IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<Func<StoreEntity, AccountSettingsControlBase>>(TypeCode))
             {
                 throw new InvalidOperationException("Invalid store type. " + TypeCode);
@@ -343,14 +361,6 @@ namespace ShipWorks.Stores
         /// Create the search conditions that are specific to this store type that should be applied when user is doing a Basic Search.
         /// </summary>
         public virtual ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Create the search conditions that are specific to this store type that should be applied when user is doing a Basic Search.
-        /// </summary>
-        public virtual ConditionGroup CreateBasicSearchCustomerConditions(string search)
         {
             return null;
         }

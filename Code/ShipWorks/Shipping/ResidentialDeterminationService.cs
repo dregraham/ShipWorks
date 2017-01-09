@@ -52,24 +52,42 @@ namespace ShipWorks.Shipping
                         }
                         catch (FedExException ex)
                         {
+                            // If there are no FedEx accounts the user must be trying to get counter rates
+                            // grab the residential status using the old method. If they choose to add a FedEx
+                            // account we will get the residential status from the account they add.
+                            if (ex.Message == "No FedEx account is selected for the shipment.")
+                            {
+                                return AddressValidationResidentialDetermination(shipment);
+                            }
+
                             throw new FedExAddressValidationException(ex.Message, ex);
                         }
                     }
 
                 case ResidentialDeterminationType.FromAddressValidation:
-                    switch (shipment.ShipResidentialStatus)
-                    {
-                        case (int) ValidationDetailStatusType.Yes:
-                            return true;
-                        case (int) ValidationDetailStatusType.No:
-                            return false;
-                        default:
-                            // Just fall back on testing whether the company is set to determine if the address is commercial
-                            return string.IsNullOrEmpty(shipment.ShipCompany);
-                    }
+                    return AddressValidationResidentialDetermination(shipment);
             }
 
             throw new InvalidOperationException("Invalid residential determination type: " + type);
+        }
+
+
+        /// <summary>
+        /// Determine the address residential status based on address validation
+        /// fall back to the old method if address validation failed
+        /// </summary>
+        private static bool AddressValidationResidentialDetermination(ShipmentEntity shipment)
+        {
+            switch (shipment.ShipResidentialStatus)
+            {
+                case (int) ValidationDetailStatusType.Yes:
+                    return true;
+                case (int) ValidationDetailStatusType.No:
+                    return false;
+                default:
+                    // Just fall back on testing whether the company is set to determine if the address is commercial
+                    return string.IsNullOrEmpty(shipment.ShipCompany);
+            }
         }
     }
 }

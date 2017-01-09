@@ -189,6 +189,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReturnsClearance = source.ReturnsClearance;
             MaskedData = source.MaskedData;
             ReferenceFIMS = source.ReferenceFIMS;
+            ThirdPartyConsignee = source.ThirdPartyConsignee;
+            Currency = source.Currency;
+            InternationalTrafficInArmsService = source.InternationalTrafficInArmsService;
             
             Shipment = source.Shipment?.AsReadOnly(objectMap);
             
@@ -1118,6 +1121,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ReferenceFIMS { get; }
+        /// <summary> The ThirdPartyConsignee property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."ThirdPartyConsignee"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ThirdPartyConsignee { get; }
+        /// <summary> The Currency property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."Currency"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> Currency { get; }
+        /// <summary> The InternationalTrafficInArmsService property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."InternationalTrafficInArmsService"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> InternationalTrafficInArmsService { get; }
         
         public IShipmentEntity Shipment { get; }
         

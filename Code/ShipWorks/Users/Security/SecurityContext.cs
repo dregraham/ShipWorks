@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Interapptive.Shared;
 using ShipWorks.Data;
@@ -158,6 +159,12 @@ namespace ShipWorks.Users.Security
             if (isAdmin)
             {
                 return true;
+            }
+
+            // The empty security context has no rights. Not checking this was causing crashes during shutdown
+            if (this == EmptySecurityContext)
+            {
+                return false;
             }
 
             PermissionScope scope = PermissionHelper.GetScope(type);
@@ -360,11 +367,13 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Translate the given objectID into an ID usable for the specified scope
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         private static long? TranslateStoreScope(long? objectID)
         {
             if (objectID == null)
             {
-                throw new ArgumentNullException("objectID");
+                throw new ArgumentNullException(nameof(objectID));
             }
 
             List<long> keys = DataProvider.GetRelatedKeys(objectID.Value, EntityType.StoreEntity);

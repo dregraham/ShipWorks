@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_ResponseTypeIsAddressValidationFailed_CannotValidateAddress()
+        public async void Execute_ResponseTypeIsAddressValidationFailed_CannotValidateAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
@@ -66,13 +66,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            var result = testObject.Execute();
+            var result = await testObject.Execute();
 
             Assert.Equal(AssociateShipWorksWithItselfResponseType.AddressValidationFailed, result.ResponseType);
         }
 
         [Fact]
-        public void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNullSuggestions()
+        public async void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNullSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
@@ -85,14 +85,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            var result = testObject.Execute();
+            var result = await testObject.Execute();
 
-            Assert.Equal(EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed), 
+            Assert.Equal(EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed),
                 result.Message);
         }
 
         [Fact]
-        public void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNoSuggestions()
+        public async void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNoSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
@@ -106,14 +106,14 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            var result = testObject.Execute();
+            var result = await testObject.Execute();
 
             Assert.Equal(EnumHelper.GetDescription(AssociateShipWorksWithItselfResponseType.AddressValidationFailed),
                 result.Message);
         }
 
         [Fact]
-        public void Execute_MessageContainsSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        public async void Execute_MessageContainsSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -129,13 +129,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            var result = testObject.Execute();
+            var result = await testObject.Execute();
 
             Assert.Contains(includedInSuggestedAddress, result.Message);
         }
 
         [Fact]
-        public void Execute_MessageContainsThirdSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        public async void Execute_MessageContainsThirdSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -157,13 +157,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            var result = testObject.Execute();
+            var result = await testObject.Execute();
 
             Assert.Contains(includedInSuggestedAddress, result.Message);
         }
 
         [Fact]
-        public void Execute_MessageDoesNotContainForthSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        public async void Execute_MessageDoesNotContainForthSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -186,7 +186,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            var result = testObject.Execute();
+            var result = await testObject.Execute();
 
             Assert.DoesNotContain(includedInSuggestedAddress, result.Message);
         }
@@ -214,7 +214,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_ResultIsPoBoxNotAllowed_WhenValidationSetsIsPoBoxToTrue()
+        public async void Execute_ResultIsPoBoxNotAllowed_WhenValidationSetsIsPoBoxToTrue()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>()))
@@ -227,8 +227,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
 
             testObject.PhysicalAddress = new PersonAdapter();
-            
-            var result = testObject.Execute();
+
+            var result = await testObject.Execute();
 
             Assert.Equal(AssociateShipWorksWithItselfResponseType.POBoxNotAllowed, result.ResponseType);
         }

@@ -69,6 +69,16 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
         }
 
         /// <summary>
+        /// Dump the current contents of a message
+        /// </summary>
+        public IMessageTracker<T> Dump(object listener, string callerName)
+        {
+            long startingTimestamp = Stopwatch.GetTimestamp();
+            MessageLogger.Current.Log(new DumpOperation(this, Value, listener, callerName, startingTimestamp));
+            return this;
+        }
+
+        /// <summary>
         /// Track a Where call
         /// </summary>
         public bool Where(Func<T, bool> predicate, object listener, string callerName)

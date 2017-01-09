@@ -6,12 +6,14 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using ShipWorks.Stores.Platforms.Magento.WebServices;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
-    /// Class for communivating with MagentoConnect module
+    /// Class for communicating with MagentoConnect module
     /// </summary>
+    [Component]
     public class MagentoConnectWebClient : MagentoWebClient
     {
         // SOAP proxy
@@ -23,9 +25,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoConnectWebClient(MagentoStoreEntity store) : base(store)
+        public MagentoConnectWebClient(MagentoStoreEntity store)
+            : base(store)
         {
-
         }
 
         /// <summary>
@@ -84,8 +86,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private string GetServiceUrl()
         {
             Uri storeUri = new Uri(Store.ModuleUrl);
-
-            return String.Format("{0}://{1}/{2}", storeUri.Scheme, storeUri.Host, "index.php/api/soap/index/");
+            return $"{storeUri.AbsoluteUri.TrimEnd('/')}/index.php/api/soap/index/";
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
-        /// Executes a GetModule request
+        /// Executes a GetStore request
         /// </summary>
         private GenericModuleResponse ProcessGetStore(HttpVariableRequestSubmitter request)
         {

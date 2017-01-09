@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using Interapptive.Shared.Utility;
+using System;
+using System.Reflection;
 using System.Security;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,8 +15,32 @@ namespace ShipWorks.UI.Behaviors
     [Obfuscation(Exclude = true)]
     public class PasswordBoxBindingBehavior : Behavior<PasswordBox>
     {
+        /// <summary>
+        /// The password property
+        /// </summary>
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password",
-            typeof(SecureString), typeof(PasswordBoxBindingBehavior), new PropertyMetadata(null));
+            typeof(SecureString), typeof(PasswordBoxBindingBehavior), new PropertyMetadata(null, new PropertyChangedCallback(OnBoundPasswordChanged)));
+
+        /// <summary>
+        /// Called when [bound password changed].
+        /// </summary>
+        /// <remarks>
+        /// Used to populate the password as the initial value.
+        /// </remarks>
+        private static void OnBoundPasswordChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            PasswordBox passwordBox = ((PasswordBoxBindingBehavior) d)?.AssociatedObject;
+            if (passwordBox == null)
+            {
+                return;
+            }
+
+            string newPassword = ((SecureString) e.NewValue)?.ToInsecureString();
+            if (passwordBox.Password != newPassword)
+            {
+                passwordBox.Password = newPassword;
+            }
+        }
 
         /// <summary>
         /// Called when [attached].

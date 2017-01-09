@@ -400,6 +400,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HazardousMaterialQuantityValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HazardousMaterialQuanityUnits", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SignatoryContactName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SignatoryTitle", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SignatoryPlace", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ContainerType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("NumberOfContainers", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PackingDetailsCargoAircraftOnly", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PackingDetailsPackingInstructions", fieldHashtable);
 		}
 		#endregion
 
@@ -766,6 +780,76 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)FedExProfilePackageFieldIndex.HazardousMaterialQuanityUnits, false); }
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.HazardousMaterialQuanityUnits, value); }
+		}
+
+		/// <summary> The SignatoryContactName property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."SignatoryContactName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String SignatoryContactName
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.SignatoryContactName, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.SignatoryContactName, value); }
+		}
+
+		/// <summary> The SignatoryTitle property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."SignatoryTitle"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String SignatoryTitle
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.SignatoryTitle, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.SignatoryTitle, value); }
+		}
+
+		/// <summary> The SignatoryPlace property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."SignatoryPlace"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String SignatoryPlace
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.SignatoryPlace, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.SignatoryPlace, value); }
+		}
+
+		/// <summary> The ContainerType property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."ContainerType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ContainerType
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.ContainerType, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.ContainerType, value); }
+		}
+
+		/// <summary> The NumberOfContainers property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."NumberOfContainers"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> NumberOfContainers
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)FedExProfilePackageFieldIndex.NumberOfContainers, false); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.NumberOfContainers, value); }
+		}
+
+		/// <summary> The PackingDetailsCargoAircraftOnly property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."PackingDetailsCargoAircraftOnly"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> PackingDetailsCargoAircraftOnly
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfilePackageFieldIndex.PackingDetailsCargoAircraftOnly, false); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.PackingDetailsCargoAircraftOnly, value); }
+		}
+
+		/// <summary> The PackingDetailsPackingInstructions property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."PackingDetailsPackingInstructions"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String PackingDetailsPackingInstructions
+		{
+			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions, true); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

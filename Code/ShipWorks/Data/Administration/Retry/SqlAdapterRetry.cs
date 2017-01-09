@@ -111,7 +111,6 @@ namespace ShipWorks.Data.Administration.Retry
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        /// <param name="method">Method to execute.  </param>
         public void ExecuteWithRetry(Action method)
         {
             int retryCounter = retries;

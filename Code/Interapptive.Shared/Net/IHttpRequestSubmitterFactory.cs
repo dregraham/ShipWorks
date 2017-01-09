@@ -9,5 +9,10 @@ namespace Interapptive.Shared.Net
         /// Get an HttpBinaryPostRequestSubmitter
         /// </summary>
         HttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData);
+
+        /// <summary>
+        /// Gets an HttpTextPostRequestSubmitter
+        /// </summary>
+        HttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType);
     }
 }

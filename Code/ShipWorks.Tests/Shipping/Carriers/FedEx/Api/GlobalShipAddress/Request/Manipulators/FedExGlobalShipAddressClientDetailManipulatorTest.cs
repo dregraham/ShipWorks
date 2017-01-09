@@ -1,5 +1,3 @@
-using System;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -7,6 +5,8 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using System;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
 {
@@ -45,8 +45,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.Equal("IEOQ", nativeRequest.ClientDetail.ClientProductId);
-            Assert.Equal("7038", nativeRequest.ClientDetail.ClientProductVersion);
+            Assert.Equal("ITSW", nativeRequest.ClientDetail.ClientProductId);
+            Assert.Equal("6828", nativeRequest.ClientDetail.ClientProductVersion);
         }
 
         [Fact]

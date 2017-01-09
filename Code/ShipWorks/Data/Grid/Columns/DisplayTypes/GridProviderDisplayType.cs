@@ -25,7 +25,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
     /// <summary>
     /// Shows provider and allows user to choose a different provider.
     /// </summary>
-    internal class GridProviderDisplayType : GridEnumDisplayType<ShipmentTypeCode>
+    public class GridProviderDisplayType : GridEnumDisplayType<ShipmentTypeCode>
     {
         private readonly IMessenger messenger;
 

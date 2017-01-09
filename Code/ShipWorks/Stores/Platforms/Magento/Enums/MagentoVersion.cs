@@ -14,5 +14,8 @@ namespace ShipWorks.Stores.Platforms.Magento.Enums
 
         [Description("Magento Version Two")]
         MagentoTwo = 2,
+
+        [Description("Magento Version Two using Magento 2 REST API")]
+        MagentoTwoREST = 3
     }
 }

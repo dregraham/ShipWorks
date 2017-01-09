@@ -1,0 +1,82 @@
+﻿Changes to all:
+Make sure all fields are text
+
+=================================================================================
+CHANGES (US Grn Dom)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605634					11		CS			GROUND_HOME_DELIVERY FEDEX_GROUND							7/13/2015				Per FedEx
+
+=================================================================================
+CHANGES (US Exp Intl)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+
+
+
+=================================================================================
+CHANGES (US Exp Dom - Alcohol)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605766					7		BP								9012633035								7/13/2015				Error said missing phone number
+
+
+=================================================================================
+CHANGES (US Exp Intl)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+413230					54		L, CT, DI	KG					LB										7/10/2015				Change based on FedEx error
+N/a						N/A		EQ			n/a					n/a										7/14/2015				ETD error was thrown. this overrides and doesn't send ETD when not appropriate
+413235					59		AO			3/17/2015			3/17/2016								7/14/2015				Updated LicenseOrPermitExpirationDate to a date in the future
+413236					60		AO			3/17/2015			3/17/2016								7/14/2015				Updated LicenseOrPermitExpirationDate to a date in the future
+413239					63		AI			RETURNS_CLEARANCE	NULL									10/17/2016				Request was failing with "Invalid return associated outbound tracking number"
+413240					63		DJ			10					60										10/17/2016				Got error "Weight - Package weight exceeds maximum for requested" (also to match baseline)
+413240					63		AI			RETURNS_CLEARANCE	NULL									10/17/2016				Request was failing with "Invalid return associated outbound tracking number"
+413240					63		BU			NULL				OTHER									10/17/2016				This is needed to get the request to match the baseline
+413240					63		DI			KG					LB										10/17/2016				Got error "Weight - Package weight exceeds maximum for requested" (also to match baseline)
+
+
+=================================================================================
+CHANGES (CA Exp Intl)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+N/A						N/A		BJ			N/A					Added column permit number				7/13/2015				Needed by FedEx
+N/A						N/A		DB			N/A					Added column phone number				7/13/2015				Needed by FedEx
+IPRC					14		CA			N/A					OTHER									10/24/2016				Needed by FedEx
+IPRC					14		CB			N/A					Passport								10/24/2016				Needed by FedEx
+IERC					14		CA			N/A					OTHER									10/24/2016				Needed by FedEx
+IERC					14		CB			N/A					Passport								10/24/2016				Needed by FedEx
+IP-1012					12		AE			N/A					INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS 12/15/16				We were sending a InternationalTrafficInArmsRegulationsDetail but not the special service.
+IPF-1002				13		AE			N/A					INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS 12/15/16				We were sending a InternationalTrafficInArmsRegulationsDetail but not the special service.
+
+=================================================================================
+CHANGES (CA Exp Dom)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+SO-1008					13		A			FALSE				TRUE									7/17/2015				Missing from certification
+ES-1009					14		A			FALSE				TRUE									7/17/2015				Missing from certification
+SO-1008					13		J			150					1										7/17/2015				Invalid weight error
+ES-1009					14		J			15					1										7/17/2015				Invalid weight error
+SO-1008					13		AX			155					1										7/17/2015				Invalid weight error
+ES-1009					14		AX			25					1										7/17/2015				Invalid weight error
+
+=================================================================================
+CHANGES (US Grn Dom, Intl & Home Del)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605804					76		BC								USD										10/17/2016				Missing
+605804					76		BD								100										10/17/2016				Missing
+605804					76		EF								OTHER									10/17/2016				Missing
+605804					76		EG								Outbound shipment						10/17/2016				Missing
+
+=================================================================================
+CHANGES (Grn Alcohol)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+605766 					7		BO								9012633035								10/24/2016				Missing
+
+=================================================================================
+CHANGES (EMEA)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+EMEA-515 				18		BY			ES					FI										10/27/2016				Wrong

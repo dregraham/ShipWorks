@@ -150,11 +150,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Utilities
                 // Apply the determined shipment type
                 shipment.ShipmentType = (int) shipmentTypeCode;
 
-                //foreach (var orderItem in orderItems)
-                //{
-                //    shipment.Order.OrderItems.Add(orderItem as OrderItemEntity);
-                //}
-
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
 

@@ -40,9 +40,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// Base class for our PHP-module-based integrations as well as the store type used
     /// for generic order downloading from  a URL.
     /// </summary>
-    public class GenericModuleStoreType : StoreType
+    public class GenericModuleStoreType : StoreType, IGenericModuleStoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleStoreType));
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     //Grab the end of the URL, everything after the last "/"
                     string moduleUrlEnd = moduleUrl.Substring(moduleUrl.LastIndexOf("/") + 1);
 
-                    //Check to see if the end of the module url has a "." 
+                    //Check to see if the end of the module url has a "."
                     if (moduleUrlEnd.Contains("."))
                     {
                         //Use the old version to remove files from the end of the url
@@ -174,11 +174,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Read the details of the GenericStore from the module response of the GetStore call and update the module capabilities.
         /// </summary>
-        public void InitializeFromOnlineModule()
+        public virtual void InitializeFromOnlineModule()
         {
-            GenericModuleStoreEntity generic = (GenericModuleStoreEntity)Store;
+            GenericModuleStoreEntity generic = (GenericModuleStoreEntity) Store;
 
-            GenericStoreWebClient webClient = this.CreateWebClient();
+            GenericStoreWebClient webClient = CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetStore();
 
             // Create the client for connecting to the module
@@ -216,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// has been changed. If nothing has changed false is returned.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public void UpdateOnlineModuleInfo()
+        public virtual void UpdateOnlineModuleInfo()
         {
             GenericStoreWebClient webClient = this.CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetModule();
@@ -408,7 +408,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// Creates an instance of the downloader. To be overridden by derived stores if necessary. 
+        /// Creates an instance of the downloader. To be overridden by derived stores if necessary.
         /// </summary>
         public virtual GenericStoreWebClient CreateWebClient()
         {
@@ -661,7 +661,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// Creates an instance of the status code provider. 
+        /// Creates an instance of the status code provider.
         /// </summary>
         public GenericStoreStatusCodeProvider CreateStatusCodeProvider()
         {

@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         }
 
         [Fact]
-        public void EmptyMessage_Set_WhenRatesRetrievedMessageContainsMultipleShipments()
+        public void EmptyMessage_NotSet_WhenRatesRetrievedMessageContainsMultipleShipments()
         {
             ShipmentEntity shipment = new ShipmentEntity(3);
             OrderEntity order = new OrderEntity(6);
@@ -218,9 +218,8 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
             var testObject = mock.Create<RatingPanelViewModel>();
             testObject.LoadRates(new RatesRetrievedMessage(this, string.Empty, GenericResult.FromSuccess(successRateGroup), shipmentAdapter.Object));
 
-            Assert.True(testObject.ShowEmptyMessage);
-            Assert.NotNull(testObject.EmptyMessage);
-            Assert.False(string.IsNullOrWhiteSpace(testObject.EmptyMessage));
+            Assert.False(testObject.ShowEmptyMessage);
+            Assert.True(string.IsNullOrWhiteSpace(testObject.EmptyMessage));
         }
 
         [Fact]

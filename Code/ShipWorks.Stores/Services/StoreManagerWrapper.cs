@@ -26,10 +26,8 @@ namespace ShipWorks.Stores.Services
         /// <summary>
         /// Creates the online status filters for the given store.
         /// </summary>
-        public void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store)
-        {
+        public void CreateStoreStatusFilters(IWin32Window owner, StoreEntity store) =>
             StoreManager.CreateStoreStatusFilters(owner, store);
-        }
 
         /// <summary>
         /// Check for any changes that may have been made
@@ -83,5 +81,11 @@ namespace ShipWorks.Stores.Services
         /// </summary>
         public bool DoAnyStoresHaveAutomaticValidationEnabled() =>
             StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
+
+        /// <summary>
+        /// Get a collection of each store type in use by the current database. These are just a distinct list of the non-instanced types... with no stores attached.
+        /// </summary>
+        public IEnumerable<StoreType> GetUniqueStoreTypes() =>
+            StoreManager.GetUniqueStoreTypes();
     }
 }

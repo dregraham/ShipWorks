@@ -111,7 +111,7 @@
                     <DataGridTextColumn Header="Rate"
                                         Width="Auto"
                                         ElementStyle="{StaticResource DataGrid.Element.Amount}"
-                                        Binding="{Binding Amount, Converter={StaticResource HalfCentCurrency}}" />
+                                        Binding="{Binding FormattedAmount}" />
                 </DataGrid.Columns>
             </DataGrid>
 
