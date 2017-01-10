@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security;
 using System.Text;
 using System.Xml;
 using Interapptive.Shared.Utility;
@@ -35,11 +34,16 @@ namespace ShipWorks.SingleScan
         {
             MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
 
-            string xml = $"<Scanner><Name>{name}</Name></Scanner>";
-
             try
             {
-                File.WriteAllText(fullPath, xml, Encoding.Unicode);
+                using (XmlTextWriter writer = new XmlTextWriter(fullPath, Encoding.Unicode))
+                {
+                    writer.WriteStartElement("Scanner");
+                    writer.WriteStartElement("Name");
+                    writer.WriteValue(name);
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
+                }
             }
             catch (Exception ex)
             {
