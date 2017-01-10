@@ -20,6 +20,7 @@ namespace ShipWorks.SingleScan
     {
         readonly IMessenger messenger;
         private IObserver<string> observer;
+        private IntPtr lastHandle;
 
         /// <summary>
         /// Constructor
@@ -50,6 +51,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void Append(IntPtr handle, string input)
         {
+            lastHandle = handle;
             observer.OnNext(input);
         }
 
@@ -58,7 +60,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SendScanMessage(IList<string> characters)
         {
-            messenger.Send(new ScanMessage(this, characters.Aggregate((obj, item) => obj += item)));
+            messenger.Send(new ScanMessage(this, characters.Aggregate((obj, item) => obj += item), lastHandle));
         }
     }
 }

@@ -11,11 +11,12 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanMessage(object sender, string scannedText)
+        public ScanMessage(object sender, string scannedText, IntPtr deviceHandle)
         {
             Sender = sender;
             ScannedText = scannedText;
             MessageId = Guid.NewGuid();
+            DeviceHandle = deviceHandle;
         }
 
         /// <summary>
@@ -32,5 +33,10 @@ namespace ShipWorks.Messaging.Messages
         /// Text that was scanned
         /// </summary>
         public string ScannedText { get; }
+
+        /// <summary>
+        /// Gets the device handle of the scanner
+        /// </summary>
+        public IntPtr DeviceHandle { get; }
     }
 }

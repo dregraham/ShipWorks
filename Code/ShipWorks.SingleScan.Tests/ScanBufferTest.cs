@@ -91,6 +91,20 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public void Append_SendsDeviceHandle()
+        {
+            foreach (int i in Enumerable.Range(0, 25))
+            {
+                testObject.Append(deviceHandle, i.ToString());
+            }
+
+            // Wait for the delay buffer to complete before checking for sent messages
+            WaitForBufferComplete();
+
+            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg=>msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
         public void Append_MessageBarcodeMatches_WhenInputIsMultipleCharacters()
         {
             string barcode = "0123456789101112131415161718192021222324";
