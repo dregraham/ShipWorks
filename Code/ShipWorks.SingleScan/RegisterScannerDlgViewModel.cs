@@ -1,20 +1,35 @@
 ﻿using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan
 {
-    public class RegisterScannerDlgViewModel
+    [Component]
+    public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel
     {
+        private readonly IScannerService scannerService;
+        private readonly IScannerConfigurationRepository scannerConfigRepo;
         private string dots = "...";
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterScannerDlgViewModel"/> class.
         /// </summary>
-        public RegisterScannerDlgViewModel()
+        public RegisterScannerDlgViewModel(IScannerService scannerService, IScannerConfigurationRepository scannerConfigRepo)
         {
+            this.scannerService = scannerService;
+            this.scannerConfigRepo = scannerConfigRepo;
             SaveScannerCommand = new RelayCommand(SaveScanner);
+            WindowLoadedCommand = new RelayCommand(OnWindowLoaded);
+        }
+
+        /// <summary>
+        /// Called when [window loaded].
+        /// </summary>
+        private void OnWindowLoaded()
+        {
+
         }
 
         /// <summary>
@@ -34,6 +49,11 @@ namespace ShipWorks.SingleScan
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string ScanResult { get; set; }
+
+        /// <summary>
+        /// The window loaded command.
+        /// </summary>
+        public ICommand WindowLoadedCommand { get; set; }
 
         /// <summary>
         /// Gets or sets the save scanner command.

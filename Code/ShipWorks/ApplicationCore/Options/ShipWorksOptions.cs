@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Options
         {
             InitializeComponent();
 
-            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data));
+            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this));
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)

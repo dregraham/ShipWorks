@@ -1,11 +1,14 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Users;
 using ShipWorks.Filters;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
 
@@ -17,15 +20,17 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPagePersonal : OptionPageBase
     {
         ShipWorksOptionsData data;
+        private readonly IWin32Window owner;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OptionPagePersonal(ShipWorksOptionsData data)
+        public OptionPagePersonal(ShipWorksOptionsData data, IWin32Window owner)
         {
             InitializeComponent();
 
             this.data = data;
+            this.owner = owner;
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
@@ -142,13 +147,29 @@ namespace ShipWorks.ApplicationCore.Options
         /// Update UI when single scan is enabled
         /// </summary>
         private void OnChangeSingleScanSettings(object sender, EventArgs e) => UpdateSingleScanSettingsUI();
-
+        
         /// <summary>
         /// Changing which method of initial filter selection to use
         /// </summary>
         private void OnChangeInitialFilterSelection(object sender, EventArgs e)
         {
             filterComboBox.Enabled = radioInitialFilterAlways.Checked;
+        }
+
+        /// <summary>
+        /// Called when [click register scanner].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnClickRegisterScanner(object sender, EventArgs e)
+        {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                InteropWindow registerScannerDlg = scope.ResolveNamed<InteropWindow>("RegisterScannerDlg", new TypedParameter(typeof(IWin32Window), owner));
+                registerScannerDlg.DataContext = scope.Resolve<IRegisterScannerDlgViewModel>();
+
+                registerScannerDlg.ShowDialog();
+            }
         }
     }
 }

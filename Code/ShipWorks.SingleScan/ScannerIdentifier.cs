@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan
@@ -8,6 +9,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Manage identification of the current scanner
     /// </summary>
+    [Component]
     public class ScannerIdentifier : IScannerIdentifier
     {
         private readonly IUser32Devices deviceManager;
