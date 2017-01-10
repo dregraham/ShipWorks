@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Common.IO.Hardware.Scanner
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+
+namespace ShipWorks.Common.IO.Hardware.Scanner
 {
     /// <summary>
     /// Save and load scanner configuration
     /// </summary>
+    [Service]
     public interface IScannerConfigurationRepository
     {
         /// <summary>
