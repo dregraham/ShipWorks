@@ -187,6 +187,7 @@ namespace ShipWorks.ApplicationCore
             ServiceAttribute.Register(builder, allAssemblies);
             KeyedComponentAttribute.Register(builder, allAssemblies);
             ResolveWithAttributesAttribute.Register(builder, allAssemblies);
+            NamedComponentAttribute.Register(builder, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()

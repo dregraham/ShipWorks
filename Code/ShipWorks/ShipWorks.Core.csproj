@@ -679,6 +679,7 @@
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\KeyedComponent.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\NamedComponentAttribute.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\RegistrationType.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\ResolveWithAttributes.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\ServiceAttribute.cs" />
