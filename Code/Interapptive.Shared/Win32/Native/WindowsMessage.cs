@@ -7,6 +7,7 @@ namespace Interapptive.Shared.Win32.Native
     /// Defined in winuser.h from Windows SDK v6.1
     /// Documentation pulled from MSDN.
     /// </summary>
+    [CLSCompliant(false)]
     public enum WindowsMessage : uint
     {
         /// <summary>

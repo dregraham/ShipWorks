@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Interapptive.Shared.Win32.Native
 {
@@ -7,6 +8,7 @@ namespace Interapptive.Shared.Win32.Native
     /// </summary>
     /// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms645584%28v=vs.85%29.aspx</remarks>
     [StructLayout(LayoutKind.Sequential)]
+    [CLSCompliant(false)]
     public struct RawInputDeviceHidInfo
     {
         /// <summary>

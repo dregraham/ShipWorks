@@ -6,6 +6,7 @@ namespace Interapptive.Shared.Win32.Native
     /// Enumeration containing flags for raw keyboard input.
     /// </summary>
     [Flags]
+    [CLSCompliant(false)]
     public enum RawKeyboardFlags : ushort
     {
         /// <summary></summary>

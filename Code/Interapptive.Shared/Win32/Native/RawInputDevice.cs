@@ -7,6 +7,7 @@ namespace Interapptive.Shared.Win32.Native
     /// Raw input device that should have its input sent to ShipWorks
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+    [CLSCompliant(false)]
     public struct RawInputDevice
     {
         /// <summary>

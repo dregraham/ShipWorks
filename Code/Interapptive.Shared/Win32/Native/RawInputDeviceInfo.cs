@@ -1,8 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Interapptive.Shared.Win32.Native
 {
     [StructLayout(LayoutKind.Explicit)]
+    [CLSCompliant(false)]
     public struct RawInputDeviceInfo
     {
         /// <summary>
