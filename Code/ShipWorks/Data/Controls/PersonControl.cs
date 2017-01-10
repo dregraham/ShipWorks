@@ -1001,24 +1001,27 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            PersonAdapter person = new PersonAdapter();
-            PopulatePersonFromUI(person);
-
-            lastValidatedAddress = new AddressAdapter();
-            person.CopyTo(lastValidatedAddress);
-            lastValidatedAddress.AddressValidationError = string.Empty;
-            lastValidatedAddress.AddressValidationSuggestionCount = 0;
-
-            if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+            if (EnableValidationControls)
             {
-                lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
+                PersonAdapter person = new PersonAdapter();
+                PopulatePersonFromUI(person);
+
+                lastValidatedAddress = new AddressAdapter();
+                person.CopyTo(lastValidatedAddress);
+                lastValidatedAddress.AddressValidationError = string.Empty;
+                lastValidatedAddress.AddressValidationSuggestionCount = 0;
+
+                if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+                {
+                    lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                    lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
+                }
+
+                validatedAddresses.Clear();
+                shouldSaveAddressSuggestions = true;
+
+                UpdateValidationUI();
             }
-
-            validatedAddresses.Clear();
-            shouldSaveAddressSuggestions = true;
-
-            UpdateValidationUI();
 
             ContentChanged?.Invoke(this, EventArgs.Empty);
         }

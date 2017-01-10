@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -11,13 +12,24 @@ namespace ShipWorks.Messaging.Messages
     /// </summary>
     public struct OrderSelectionChangedMessage : IShipWorksMessage
     {
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection)
+        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection) :
+            this(sender, loadedSelection, Enumerable.Empty<long>())
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection, IEnumerable<long> selectedShipments)
         {
             Sender = sender;
             LoadedOrderSelection = loadedSelection.ToReadOnly();
+            SelectedShipments = selectedShipments.ToReadOnly();
             MessageId = Guid.NewGuid();
         }
 
@@ -35,5 +47,10 @@ namespace ShipWorks.Messaging.Messages
         /// Order IDs that have changed
         /// </summary>
         public IEnumerable<IOrderSelection> LoadedOrderSelection { get; }
+
+        /// <summary>
+        /// Shipments that are selected
+        /// </summary>
+        public IEnumerable<long> SelectedShipments { get; }
     }
 }

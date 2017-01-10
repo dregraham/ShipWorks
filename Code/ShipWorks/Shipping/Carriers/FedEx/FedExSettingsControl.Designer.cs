@@ -174,6 +174,7 @@
             this.fimsPassword.Name = "fimsPassword";
             this.fimsPassword.Size = new System.Drawing.Size(201, 21);
             this.fimsPassword.TabIndex = 12;
+            this.fimsPassword.UseSystemPasswordChar = true;
             // 
             // fimsPasswordLabel
             // 

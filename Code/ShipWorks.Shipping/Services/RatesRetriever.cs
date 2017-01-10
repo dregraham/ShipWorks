@@ -70,12 +70,6 @@ namespace ShipWorks.Shipping.Services
             // shipment is not altered and persisted to the database if the store alters the address
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
 
-            // Determine residential status
-            if (shipmentType.IsResidentialStatusRequired(clonedShipment))
-            {
-                clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
-            }
-
             // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
             StoreType storeType = storeTypeManager.GetType(clonedShipment);
             storeType.OverrideShipmentDetails(clonedShipment);
@@ -84,6 +78,12 @@ namespace ShipWorks.Shipping.Services
 
             try
             {
+                // Determine residential status
+                if (shipmentType.IsResidentialStatusRequired(clonedShipment))
+                {
+                    clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
+                }
+
                 // Check to see if the rate is cached, if not call the rating service
                 RateGroup rateResults = cachedRateService.GetCachedRates<ShippingException>(clonedShipment, ratingService.GetRates);
 

@@ -2888,14 +2888,14 @@ namespace ShipWorks
             DockControl dockControl = (DockControl) item.Tag;
 
             dockControl.Open(WindowOpenMethod.OnScreenActivate);
+
+            Messenger.Current.Send(new PanelShownMessage(this, dockControl));
         }
 
         // A dock control that didn't used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdateSelectionDependentUI();
-
-            Messenger.Current.Send(new PanelShownMessage(this, e.DockControl));
         }
 
         /// <summary>

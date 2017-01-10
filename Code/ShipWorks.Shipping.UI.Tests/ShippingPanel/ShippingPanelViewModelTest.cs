@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
@@ -442,7 +443,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
-            Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadedShipmentResult);
+            Assert.Equal(ShippingPanelLoadedShipmentResult.Success, testObject.LoadedShipmentResult);
         }
 
         [Fact]
@@ -464,7 +465,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             orderSelectionLoaded = new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable);
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable) }));
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
+                new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable)
+            }));
 
             Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
         }
@@ -688,7 +691,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void SaveToDatabase_DoesNotSave_WhenShipmentAdapterIsNull()
         {
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
+
+            testObject.LoadOrder(new OrderSelectionChangedMessage(this,
+                Enumerable.Range(1, 2).Select(x => new BasicOrderSelection(x)).OfType<IOrderSelection>()));
+
             testObject.AllowEditing = true;
 
             testObject.SaveToDatabase();
@@ -700,7 +707,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void SaveToDatabase_DoesNotSave_WhenShipmentIsProcessed()
         {
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity())).Object);
             testObject.Shipment.Processed = true;
             testObject.AllowEditing = true;
@@ -719,7 +726,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
             var called = false;
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>().Object);
             testObject.CommitBindings = () => called = true;
 
@@ -735,7 +742,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>().Object);
 
             testObject.SaveToDatabase();
@@ -747,7 +754,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void SaveToDatabase_DoesNotDelegateToMessageHelper_WhenShippingManagerReturnsNoErrors()
         {
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>().Object);
 
             testObject.SaveToDatabase();
@@ -759,7 +766,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void SaveToDatabase_DoesNotSendOrderSelectionChangedMessage_WhenShippingManagerReturnsNoErrors()
         {
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>().Object);
 
             testObject.SaveToDatabase();
@@ -771,7 +778,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void SaveToDatabase_DoesNotDelegateToMessageHelper_WhenShippingManagerReturnsErrorsThatDoNotApply()
         {
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>().Object);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<bool>()))
@@ -786,7 +793,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void SaveToDatabase_DoesNotSendOrderSelectionChangedMessage_WhenShippingManagerReturnsErrorsThatDoNotApply()
         {
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>().Object);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<bool>()))
@@ -805,7 +812,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity())).Object);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<bool>()))
@@ -824,7 +831,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
-            var testObject = GetShippingPanelViewModelWithLoadedOrder();
+            var testObject = GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments();
             testObject.LoadShipment(mock.CreateMock<ICarrierShipmentAdapter>(s => s.Setup(x => x.Shipment).Returns(new ShipmentEntity())).Object);
             mock.Mock<IShippingManager>()
                 .Setup(x => x.SaveShipmentToDatabase(It.IsAny<ShipmentEntity>(), It.IsAny<bool>()))
@@ -847,7 +854,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             }, ShippingAddressEditStateType.Editable);
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
 
-            testObject.OpenShippingDialogCommand.Execute(null);
+            testObject.OpenShippingDialogCommand.Execute(OpenShippingDialogType.AllShipments);
 
             mock.Mock<IMessenger>()
                 .Verify(x => x.Send(It.IsAny<OpenShippingDialogMessage>(), It.IsAny<string>()));
@@ -864,10 +871,10 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             }, ShippingAddressEditStateType.Editable);
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
 
-            testObject.OpenShippingDialogCommand.Execute(null);
+            testObject.OpenShippingDialogCommand.Execute(OpenShippingDialogType.AllShipments);
 
             mock.Mock<IMessenger>()
-                .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>(), It.IsAny<string>()));
+                .Verify(x => x.Send(It.IsAny<OpenShippingDialogMessage>(), It.IsAny<string>()));
         }
 
         [Fact]
@@ -879,7 +886,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 mock.Create<IOrderSelection>()
             }));
 
-            testObject.OpenShippingDialogCommand.Execute(null);
+            testObject.OpenShippingDialogCommand.Execute(OpenShippingDialogType.SelectedOrders);
 
             mock.Mock<IMessenger>()
                 .Verify(x => x.Send(It.IsAny<OpenShippingDialogWithOrdersMessage>(), It.IsAny<string>()));
@@ -899,7 +906,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Fact]
-        public void LoadOrder_SetsShipmentStatusToNone_WhenSingleOrderWithMultipleShipmentsLoaded()
+        public void LoadOrder_SetsShipmentStatusToUnprocessed_WhenSingleOrderWithMultipleShipmentsLoaded()
         {
             var testObject = mock.Create<ShippingPanelViewModel>();
 
@@ -910,7 +917,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 }, ShippingAddressEditStateType.Editable)
             }));
 
-            Assert.Equal(ShipmentStatus.None, testObject.ShipmentStatus);
+            Assert.Equal(ShipmentStatus.Unprocessed, testObject.ShipmentStatus);
         }
 
         [Theory]
@@ -931,35 +938,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             }));
 
             Assert.Equal(expected, testObject.ShipmentStatus);
-        }
-        [Fact]
-        public void LoadOrder_SendsRatesNotSupportedMessage_WhenMultipleShipmentAdapters()
-        {
-            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59945));
-            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59946));
-            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipmentEntity);
-
-            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, new[] { shipmentAdapter.Object, shipmentAdapter.Object.Clone() }, ShippingAddressEditStateType.Editable);
-
-            ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
-
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>(), It.IsAny<string>()), Times.Once);
-        }
-
-        [Fact]
-        public void LoadOrder_SendsRatesNotSupportedMessage_WhenOrderHasMultipleShipments()
-        {
-            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59945));
-            shipmentEntity.Order.Shipments.Add(new ShipmentEntity(59946));
-            shipmentAdapter.Setup(sa => sa.Shipment).Returns(shipmentEntity);
-
-            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, new[] { shipmentAdapter.Object }, ShippingAddressEditStateType.Editable);
-
-            ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
-
-            mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<RatesNotSupportedMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         [Theory]
@@ -1029,7 +1007,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             return shippingPanelViewModel;
         }
-        private ShippingPanelViewModel GetShippingPanelViewModelWithLoadedOrder()
+
+        private ShippingPanelViewModel GetShippingPanelViewModelWithLoadedOrderWithMultipleShipments()
         {
             List<ICarrierShipmentAdapter> shipmentAdapters = new List<ICarrierShipmentAdapter>()
             {

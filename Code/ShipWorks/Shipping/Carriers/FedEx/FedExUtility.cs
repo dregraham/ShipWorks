@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Web.Services.Description;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Xml.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -63,6 +59,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>A List of FedExServiceType objects.</returns>
         public static List<FedExServiceType> GetValidServiceTypes(List<ShipmentEntity> shipments)
         {
+            if (shipments.All(s => s.OriginCountryCode == "GB" || s.OriginCountryCode == "UK") &&
+                shipments.All(s => s.ShipCountryCode == "GB" || s.ShipCountryCode == "UK"))
+            {
+                return GetUKServiceTypes();
+            }
+
             FedExShipmentType shipmentType = new FedExShipmentType();
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>();
 
@@ -112,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.FedEx3DayFreight);
 
                 // One Rate is only available for US domestic shipments (according to online ShipManager)
-                serviceTypes.Add(FedExServiceType.OneRateStandardOvernight); 
+                serviceTypes.Add(FedExServiceType.OneRateStandardOvernight);
                 serviceTypes.Add(FedExServiceType.OneRateFirstOvernight);
                 serviceTypes.Add(FedExServiceType.OneRatePriorityOvernight);
                 serviceTypes.Add(FedExServiceType.OneRateExpressSaver);
@@ -143,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.InternationalEconomyFreight
             };
 
-            if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") || 
+            if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") ||
                 (s.AdjustedOriginCountryCode() == "CA" && s.AdjustedShipCountryCode() == "US")))
             {
                 // Ground service is allowed between US and CA
@@ -153,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Add FIMS if enabled
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
-                serviceTypes.Add(FedExServiceType.FedExFims);
+                serviceTypes.AddRange(EnumHelper.GetEnumList<FedExServiceType>().Where(s=>IsFimsService(s.Value)).Select(s=>s.Value));
             }
 
             if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
@@ -163,6 +165,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return serviceTypes;
+        }
+
+        /// <summary>
+        /// FedEx Services types only available in the UK
+        /// </summary>
+        public static List<FedExServiceType> GetUKServiceTypes()
+        {
+            return new List<FedExServiceType>
+            {
+                FedExServiceType.FedExNextDayAfternoon,
+                FedExServiceType.FedExNextDayEarlyMorning,
+                FedExServiceType.FedExNextDayMidMorning,
+                FedExServiceType.FedExNextDayEndOfDay,
+                FedExServiceType.FedExDistanceDeferred,
+                FedExServiceType.FedExNextDayFreight
+            };
         }
 
         /// <summary>
@@ -217,7 +235,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Custom packaging is not available for the OneRate service type
                 types.Add(FedExPackagingType.Custom);
             }
-            
+
             // These are available for all service types
             types.Add(FedExPackagingType.SmallBox);
             types.Add(FedExPackagingType.MediumBox);
@@ -249,6 +267,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.DryIceWeight = 0;
 
             package.ContainsAlcohol = false;
+            package.AlcoholRecipientType = (int) AlcoholRecipientType.CONSUMER;
 
             package.PriorityAlert = false;
             package.PriorityAlertDetailContent = string.Empty;
@@ -261,8 +280,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             package.TrackingNumber = "";
 
+            package.SignatoryContactName = string.Empty;
+            package.SignatoryTitle = string.Empty;
+            package.SignatoryPlace = string.Empty;
+
+            package.ContainerType = string.Empty;
+            package.NumberOfContainers = 0;
+            package.PackingDetailsCargoAircraftOnly = false;
+            package.PackingDetailsPackingInstructions = string.Empty;
+
             package.DangerousGoodsEnabled = false;
-            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;            
+            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
             package.DangerousGoodsCargoAircraftOnly = false;
             package.DangerousGoodsEmergencyContactPhone = string.Empty;
@@ -284,7 +312,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
-            return service == FedExServiceType.FedExFims;
+            List<FedExServiceType> fimsServices = new List<FedExServiceType>
+            {
+                FedExServiceType.FedExFimsMailView,
+                FedExServiceType.FedExFimsMailViewLite,
+                FedExServiceType.FedExFimsPremium,
+                FedExServiceType.FedExFimsStandard
+            };
+
+            return fimsServices.Contains(service);
         }
 
         /// <summary>
@@ -341,7 +377,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return true;
             }
 
-            if ((serviceType == FedExServiceType.FedEx2Day || serviceType == FedExServiceType.FedEx2DayAM || serviceType == FedExServiceType.FedEx2DayFreight) 
+            if ((serviceType == FedExServiceType.FedEx2Day || serviceType == FedExServiceType.FedEx2DayAM || serviceType == FedExServiceType.FedEx2DayFreight)
                 && shipDate.DayOfWeek == DayOfWeek.Thursday)
             {
                 return true;
@@ -353,6 +389,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return true;
             }
 
+            if (serviceType == FedExServiceType.FedExNextDayAfternoon ||
+                serviceType == FedExServiceType.FedExNextDayEarlyMorning ||
+                serviceType == FedExServiceType.FedExNextDayMidMorning ||
+                serviceType == FedExServiceType.FedExNextDayEndOfDay ||
+                serviceType == FedExServiceType.FedExNextDayFreight && shipDate.DayOfWeek == DayOfWeek.Friday)
+            {
+                return true;
+            }
             return false;
         }
 
@@ -461,7 +505,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             string responseFilename = GetCertificationFileName(uniqueId, action, "Response", "xml", false);
             File.AppendAllText(responseFilename, rawSoap.ResponseXml);
-            
+
             // Write the request and response to a file that will be unique for each transaction for debugging purposes
             string debugRequestFilename = GetCertificationFileName(uniqueId, action, "Request", "xml", true);
             File.AppendAllText(debugRequestFilename, rawSoap.RequestXml);
@@ -471,14 +515,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Builds a filename for saving a certification file. If the isForDebugging is true, the unique ID will be 
+        /// Builds a filename for saving a certification file. If the isForDebugging is true, the unique ID will be
         /// used to build the file name for easier troubleshooting purposes
         /// </summary>
         /// <param name="uniqueId">The unique id.</param>
         /// <param name="action">The action.</param>
         /// <param name="postfix">The postfix.</param>
         /// <param name="extension">The extension.</param>
-        /// <param name="isForDebugging">if set to <c>true</c> [is for debugging].</param>        
+        /// <param name="isForDebugging">if set to <c>true</c> [is for debugging].</param>
         public static string GetCertificationFileName(string uniqueId, string action, string postfix, string extension, bool isForDebugging)
         {
             if (string.IsNullOrWhiteSpace(action))
@@ -490,7 +534,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             string outputFolder = string.Format(@"{0}\FedExCertification{1}\", LogSession.LogFolder, isForDebugging ? "Debug\\" : string.Empty);
             Directory.CreateDirectory(outputFolder);
 
-            // return a file name in the format of {output directory}\[uniqueId_]action_postfix.extension; unique ID 
+            // return a file name in the format of {output directory}\[uniqueId_]action_postfix.extension; unique ID
             return string.Format(@"{0}{1}{2}_{3}.{4}", outputFolder, isForDebugging ? uniqueId + "_" : string.Empty, action, postfix, extension);
         }
 
@@ -528,7 +572,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// this will remove the application id from the tracking number first.</remarks>
         public static string GetTrackingNumberForApi(string trackingNumber, FedExShipmentEntity fedexShipment)
         {
-            if (fedexShipment != null && 
+            if (fedexShipment != null &&
                 (FedExServiceType) fedexShipment.Service == FedExServiceType.SmartPost &&
                 trackingNumber.StartsWith(fedexShipment.SmartPostUspsApplicationId, StringComparison.Ordinal))
             {

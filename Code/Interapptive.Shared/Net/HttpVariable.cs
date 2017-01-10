@@ -28,7 +28,10 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Initializer
         /// </summary>
-        public HttpVariable(string name, string value) : this(name, value, false)
+        /// <remarks>
+        /// Default to URL Encoding
+        /// </remarks>
+        public HttpVariable(string name, string value) : this(name, value, true)
         {
 
         }

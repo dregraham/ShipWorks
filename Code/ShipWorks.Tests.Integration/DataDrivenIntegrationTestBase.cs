@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Excel;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Excel;
-using Xunit;
 
 
 namespace ShipWorks.Tests.Integration.MSTest
@@ -183,6 +182,8 @@ namespace ShipWorks.Tests.Integration.MSTest
                         value = value.Replace("Each Package", "");
                         value = value.Replace("each package", "");
                         value = value.Replace("(Each Package)", "");
+                        value = value.Replace(" Each", "");
+                        value = value.Replace("Each", "");
                         value = value.Trim();
 
                         if (!string.IsNullOrWhiteSpace(value))

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Tests.Integration.MSTest;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Ground
 {
     public class FedExCanadaGroundDomesticInternationalMapping
     {

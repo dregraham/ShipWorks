@@ -145,11 +145,19 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static string FormatFriendlyCurrency(this decimal amount)
         {
-            string formattedAmount = amount.ToString("c");
-            decimal truncatedAmount = decimal.Parse(formattedAmount, NumberStyles.Currency);
+            return amount.FormatFriendlyCurrency(CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Formats amount to a currency amount with support for a half penny.
+        /// </summary>
+        public static string FormatFriendlyCurrency(this decimal amount, CultureInfo cultureInfo)
+        {
+            string formattedAmount = amount.ToString("c", cultureInfo);
+            decimal truncatedAmount = decimal.Parse(formattedAmount, NumberStyles.Currency, cultureInfo.NumberFormat);
             if (truncatedAmount - amount == .005M)
             {
-                formattedAmount = string.Format("{0}\u00bd", (amount - .005M).ToString("c"));
+                formattedAmount = $"{(amount - .005M).ToString("c", cultureInfo)}\u00bd";
             }
 
             return formattedAmount;

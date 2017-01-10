@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using System;
 using System.Reflection;
-using System.Text;
 using System.Xml.Serialization;
 using Xunit;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
 {
@@ -19,6 +16,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
         {
             contactType = typeof(Contact);
             addressType = typeof(Address);
+        }
+
+        /// <summary>
+        /// Generated code makes RegulatoryLineItemsField a 2 dimensional array and this needs corrected.
+        /// </summary>
+        [Fact]
+        public void RegulatoryLineItemsField_IsOneDimensionalArray()
+        {
+            KeyValueDetail[] regulatoryLineItemsField = new DangerousGoodsDetail().RegulatoryLineItems;
+            var dangerousGoodsDetailType = typeof(DangerousGoodsDetail);
+            PropertyInfo propertyInfo = dangerousGoodsDetailType.GetProperty("RegulatoryLineItems");
+
+            Assert.Equal(propertyInfo.PropertyType, typeof(KeyValueDetail[]));
         }
 
         [Fact]
