@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
@@ -12,26 +13,30 @@ using ShipWorks.Messaging.Messages;
 namespace ShipWorks.SingleScan
 {
     [Component]
-    public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel
+    public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel, IDisposable
     {
         private readonly IScannerService scannerService;
         private readonly IScannerConfigurationRepository scannerConfigRepo;
+        private readonly IUser32Devices devices;
         private string dots = "...";
-        IDisposable barcodeScannedMessageSubscription;
+        private IntPtr deviceHandle;
+        private IDisposable scanSubcription;
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterScannerDlgViewModel"/> class.
         /// </summary>
-        public RegisterScannerDlgViewModel(IScannerService scannerService, IScannerConfigurationRepository scannerConfigRepo, IMessenger messenger)
+        public RegisterScannerDlgViewModel(IScannerService scannerService, IScannerConfigurationRepository scannerConfigRepo, IMessenger messenger, IUser32Devices devices)
         {
             this.scannerService = scannerService;
             this.scannerConfigRepo = scannerConfigRepo;
+            this.devices = devices;
             SaveScannerCommand = new RelayCommand(SaveScanner);
-            WindowLoadedCommand = new RelayCommand(OnWindowLoaded);
 
-            messenger.OfType<ScanMessage>()
+            scanSubcription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
+
+            scannerService.BeginFindScanner();
         }
 
         private void ScanDetected(ScanMessage scanMessage)
@@ -41,13 +46,13 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Called when [window loaded].
+        /// Detects a scan event and saves the result and device handle
         /// </summary>
-        private void OnWindowLoaded()
+        /// <param name="scanMessage">The scan message.</param>
+        private void ScanDetected(ScanMessage scanMessage)
         {
-            scannerService.BeginFindScanner();
-            // Wire up observable for doing barcode searches
-
+            ScanResult = scanMessage.ScannedText;
+            deviceHandle = scanMessage.DeviceHandle;
         }
 
 
@@ -86,7 +91,16 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SaveScanner()
         {
+            scannerConfigRepo.Save(devices.GetDeviceName(deviceHandle));
+        }
 
+        /// <summary>
+        /// Ends scanner search
+        /// </summary>
+        public void Dispose()
+        {
+            scannerService.EndFindScanner();
+            scanSubcription.Dispose();
         }
     }
 }

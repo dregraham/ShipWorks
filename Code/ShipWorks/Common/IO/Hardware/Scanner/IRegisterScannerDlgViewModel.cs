@@ -18,12 +18,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// The scan result.
         /// </summary>
         string ScanResult { get; set; }
-
-        /// <summary>
-        /// The window loaded command.
-        /// </summary>
-        ICommand WindowLoadedCommand { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the save scanner command.
         /// </summary>
