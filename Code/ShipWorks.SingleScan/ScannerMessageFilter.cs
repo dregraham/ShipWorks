@@ -79,20 +79,20 @@ namespace ShipWorks.SingleScan
                 return false;
             }
 
-            shouldBlock = ProcessRawInputData(result.Value);
+            shouldBlock = ProcessRawInputData(deviceHandle, result.Value);
             return true;
         }
 
         /// <summary>
         /// Process the raw input data from a scanner
         /// </summary>
-        private bool ProcessRawInputData(RawInput input)
+        private bool ProcessRawInputData(IntPtr deviceHandle, RawInput input)
         {
             if (input.Data.Keyboard.Message == WindowsMessage.KEYFIRST)
             {
                 pressedKeys.Add(input.Data.Keyboard.VirtualKey);
                 string text = GetCharacter(input.Data.Keyboard.VirtualKey);
-                scanBuffer.Append(text);
+                scanBuffer.Append(deviceHandle, text);
             }
             else
             {

@@ -19,6 +19,7 @@ namespace ShipWorks.SingleScan.Tests
         readonly AutoMock mock;
         private readonly Mock<IMessenger> messenger;
         private readonly ScanBuffer testObject;
+        private readonly IntPtr deviceHandle = (IntPtr) 42;
 
         public ScanBufferTest()
         {
@@ -32,7 +33,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_DoesNotSendMessage_WhenBlankInput()
         {
-            testObject.Append(string.Empty);
+            testObject.Append(deviceHandle, string.Empty);
 
             // Wait for the delay buffer to complete before checking for sent messages
             WaitForBufferComplete();
@@ -43,7 +44,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_DoesNotSendMessage_WhenNullInput()
         {
-            testObject.Append(null);
+            testObject.Append(deviceHandle, null);
 
             // Wait for the delay buffer to complete before checking for sent messages
             WaitForBufferComplete();
@@ -54,7 +55,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_DoesSendMessage_WhenInputIsSingleCharacter()
         {
-            testObject.Append("1");
+            testObject.Append(deviceHandle, "1");
 
             // Wait for the delay buffer to complete before checking for sent messages
             WaitForBufferComplete();
@@ -67,7 +68,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             messenger.Setup(m => m.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>())).Verifiable();
 
-            testObject.Append("1");
+            testObject.Append(deviceHandle, "1");
 
             // Wait for the delay buffer to complete before checking for sent messages
             WaitForBufferComplete();
@@ -80,7 +81,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             foreach (int i in Enumerable.Range(0, 25))
             {
-                testObject.Append(i.ToString());
+                testObject.Append(deviceHandle, i.ToString());
             }
 
             // Wait for the delay buffer to complete before checking for sent messages
@@ -98,7 +99,7 @@ namespace ShipWorks.SingleScan.Tests
 
             foreach (int i in Enumerable.Range(0, 25))
             {
-                testObject.Append(i.ToString());
+                testObject.Append(deviceHandle, i.ToString());
             }
 
             // Wait for the delay buffer to complete before checking for sent messages

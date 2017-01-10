@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Append input to the current scan
         /// </summary>
-        void Append(string input);
+        void Append(IntPtr handle, string input);
     }
 }

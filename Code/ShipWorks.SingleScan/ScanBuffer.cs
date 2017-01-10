@@ -48,7 +48,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Append input to the current scan
         /// </summary>
-        public void Append(string input)
+        public void Append(IntPtr handle, string input)
         {
             observer.OnNext(input);
         }
