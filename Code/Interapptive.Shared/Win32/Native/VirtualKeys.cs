@@ -1,8 +1,11 @@
-﻿namespace Interapptive.Shared.Win32.Native
+﻿using System;
+
+namespace Interapptive.Shared.Win32.Native
 {
     /// <summary>
     /// Enumeration for virtual keys.
     /// </summary>
+    [CLSCompliant(false)]
     public enum VirtualKeys : ushort
     {
         /// <summary></summary>

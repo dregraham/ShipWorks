@@ -1,10 +1,12 @@
-﻿using Interapptive.Shared.Win32.Native;
+﻿using System;
+using Interapptive.Shared.Win32.Native;
 
 namespace Interapptive.Shared.Win32
 {
     /// <summary>
     /// User32 wrapper for managing devices
     /// </summary>
+    [CLSCompliant(false)]
     public interface IUser32Devices
     {
         /// <summary>

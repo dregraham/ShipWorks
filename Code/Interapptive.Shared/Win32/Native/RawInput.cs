@@ -1,10 +1,12 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Interapptive.Shared.Win32.Native
 {
     /// <summary>
     /// Contains the raw input from a device.
     /// </summary>
+    [CLSCompliant(false)]
     [StructLayout(LayoutKind.Sequential)]
     public struct RawInput
     {

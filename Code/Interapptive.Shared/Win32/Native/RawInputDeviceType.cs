@@ -1,8 +1,11 @@
-﻿namespace Interapptive.Shared.Win32.Native
+﻿using System;
+
+namespace Interapptive.Shared.Win32.Native
 {
     /// <summary>
     /// Types of raw input devices
     /// </summary>
+    [CLSCompliant(false)]
     public enum RawInputDeviceType : uint
     {
         /// <summary>

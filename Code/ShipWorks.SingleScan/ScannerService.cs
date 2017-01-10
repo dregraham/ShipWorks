@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
@@ -140,6 +141,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Finds the IMainForm in the application
         /// </summary>
+        [SuppressMessage("Code Analysis", "S1944")]
         private static IMainForm FindMainForm()
         {
             IMainForm mainForm = null;

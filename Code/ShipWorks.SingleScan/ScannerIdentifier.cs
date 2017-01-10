@@ -15,7 +15,7 @@ namespace ShipWorks.SingleScan
         {
             get
             {
-                throw new NotImplementedException();
+                return ScannerState.NotRegistered;
             }
         }
 
