@@ -56,7 +56,7 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public GenericResult<RawInput> GetRawInputData(IntPtr deviceHandle, RawInputCommand commandType)
         {
-            RawInput input = new RawInput();
+            RawInput input;
             int size = Marshal.SizeOf(typeof(RawInput));
 
             int outSize = GetRawInputData(deviceHandle, commandType, out input, ref size,

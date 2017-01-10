@@ -10,14 +10,9 @@ namespace Interapptive.Shared.Win32
     public interface IUser32Devices
     {
         /// <summary>
-        /// Get a list of all raw devices
-        /// </summary>
-        RawInputDeviceListItem[] GetAllRawDevices();
-
-        /// <summary>
         /// Get information about a device
         /// </summary>
-        RawInputDeviceInfo GetDeviceInfo(RawInputDeviceListItem device);
+        string GetDeviceName(IntPtr device);
 
         /// <summary>
         /// Register raw input device

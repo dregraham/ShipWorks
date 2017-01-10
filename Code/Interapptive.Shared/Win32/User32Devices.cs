@@ -32,8 +32,8 @@ namespace Interapptive.Shared.Win32
             ref uint NumDevices,
             uint Size 
         );
-
-        /// <summary>
+		
+		/// <summary>
         /// Retrieves information about the raw input device.
         /// </summary>
         /// <param name="hDevice">A handle to the raw input device. This comes from the lParam of the WM_INPUT message, 
@@ -97,44 +97,19 @@ namespace Interapptive.Shared.Win32
             return deviceList;
         }
 
+
         /// <summary>
-        /// Get information about a device
+        /// Gets the name of the device.
         /// </summary>
-        public RawInputDeviceInfo GetDeviceInfo(RawInputDeviceListItem device)
+        public string GetDeviceName(IntPtr deviceHandle)
         {
             IntPtr pData = IntPtr.Zero;
             uint strsize = 0;
-            IntPtr deviceHandle = device.DeviceHandle;
 
-            uint result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.RIDI_DEVICENAME, pData, ref strsize);
-
+            GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
             pData = Marshal.AllocHGlobal(((int) strsize) * 2);
-
-            result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.RIDI_DEVICENAME, pData, ref strsize);
-            if (result <= 0)
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-            }
-
-            string name = Marshal.PtrToStringAuto(pData);
-
-            uint structsize = (uint) Marshal.SizeOf(typeof(RawInputDeviceInfo));
-            RawInputDeviceInfo rawInputDeviceInfo = new RawInputDeviceInfo
-            {
-                cbSize = (int) structsize
-            };
-
-            pData = Marshal.AllocHGlobal((int) structsize);
-
-            result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.RIDI_DEVICEINFO, pData, ref structsize);
-            if (result <= 0)
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-            }
-
-            rawInputDeviceInfo = (RawInputDeviceInfo) Marshal.PtrToStructure(pData, typeof(RawInputDeviceInfo));
-
-            return rawInputDeviceInfo;
+            GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
+            return Marshal.PtrToStringAuto(pData);
         }
 
         /// <summary>
