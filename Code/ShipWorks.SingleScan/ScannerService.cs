@@ -114,13 +114,43 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            int singleScanSetting = userSession.User?.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
+            // We need to be on the UI thread for message pumps to work, so check
+            // to see if an Invoke is required, and do so if it is.
+            IMainForm mainForm = FindMainForm();
+
+            if (mainForm == null)
+            {
+                return;
+            }
+
+            if (mainForm.InvokeRequired)
+            {
+                mainForm.Invoke((Action) InitializeForCurrentSession, null);
+                return;
+            }
+
+            int singleScanSetting = userSession.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
 
             if (singleScanSetting != (int) SingleScanSettings.Disabled)
             {
-// TODO: UI thread exception was happening here.  Commenting out until we get to this.
-//                Enable();
+                Enable();
             }
+        }
+
+        /// <summary>
+        /// Finds the IMainForm in the application
+        /// </summary>
+        private static IMainForm FindMainForm()
+        {
+            IMainForm mainForm = null;
+            foreach (Form openForm in Application.OpenForms)
+            {
+                if (openForm is IMainForm)
+                {
+                    mainForm = openForm as IMainForm;
+                }
+            }
+            return mainForm;
         }
 
         /// <summary>
