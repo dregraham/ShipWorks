@@ -9,7 +9,6 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Manage identification of the current scanner
     /// </summary>
-    [Component]
     public class ScannerIdentifier : IScannerIdentifier
     {
         private readonly IUser32Devices deviceManager;
@@ -48,7 +47,6 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void HandleDeviceAdded(IntPtr deviceHandle)
         {
-            // If we already know about a scanner or there is no registered scanner, we don't care
             // that a device was added
             if (scannerHandle.HasValue || configurationRepository.GetName().IsNullOrEmpty())
             {

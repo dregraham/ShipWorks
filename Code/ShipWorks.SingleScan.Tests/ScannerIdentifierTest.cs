@@ -15,10 +15,8 @@ namespace ShipWorks.SingleScan.Tests
         private const string scannerDeviceName = "ScannerName";
         private readonly IntPtr scannerDeviceHandle = (IntPtr) 5;
         private readonly IntPtr anotherScannerDeviceHandle = (IntPtr) 10;
-
         private const string anotherDeviceName = "AnotherDeviceName";
         private readonly IntPtr anotherDeviceHandle = (IntPtr) 42;
-
         public ScannerIdentifierTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -64,7 +62,6 @@ namespace ShipWorks.SingleScan.Tests
         {
             mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetName()).Returns(scannerDeviceName);
             AddDeviceToManager(anotherDeviceHandle, anotherDeviceName);
-
             testObject.HandleDeviceAdded(anotherDeviceHandle);
             Assert.Equal(ScannerState.Detached, testObject.ScannerState);
         }
@@ -77,7 +74,6 @@ namespace ShipWorks.SingleScan.Tests
             AddDeviceToManager(anotherScannerDeviceHandle, scannerDeviceName);
 
             testObject.HandleDeviceAdded(scannerDeviceHandle);
-
             Assert.True(testObject.IsScanner(scannerDeviceHandle));
 
             testObject.HandleDeviceAdded(anotherScannerDeviceHandle);
@@ -89,7 +85,6 @@ namespace ShipWorks.SingleScan.Tests
         {
             mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetName()).Returns(scannerDeviceName);
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
-
             testObject.HandleDeviceAdded(scannerDeviceHandle);
 
             Assert.True(testObject.IsScanner(scannerDeviceHandle));

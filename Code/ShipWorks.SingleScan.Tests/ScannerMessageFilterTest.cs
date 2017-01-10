@@ -116,7 +116,7 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IScanBuffer>().Verify(x => x.Append("X"));
+            mock.Mock<IScanBuffer>().Verify(x => x.Append((IntPtr) 2, "X"));
         }
 
         [Theory]
