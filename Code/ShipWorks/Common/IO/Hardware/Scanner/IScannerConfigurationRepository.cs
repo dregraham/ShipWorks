@@ -16,6 +16,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Get the name of the current scanner
         /// </summary>
-        string Get();
+        string GetName();
     }
 }

@@ -32,7 +32,7 @@ namespace ShipWorks.SingleScan
         {
             get
             {
-                if (configurationRepository.Get().IsNullOrEmpty())
+                if (configurationRepository.GetName().IsNullOrEmpty())
                 {
                     return ScannerState.NotRegistered;
                 }
@@ -46,15 +46,15 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void HandleDeviceAdded(IntPtr deviceHandle)
         {
-            // If we already know about a scanner or there is no registered scanner, we don't care 
+            // If we already know about a scanner or there is no registered scanner, we don't care
             // that a device was added
-            if (scannerHandle.HasValue || configurationRepository.Get().IsNullOrEmpty())
+            if (scannerHandle.HasValue || configurationRepository.GetName().IsNullOrEmpty())
             {
                 return;
             }
 
             string deviceName = deviceManager.GetDeviceName(deviceHandle);
-            if (!deviceName.IsNullOrEmpty() && deviceName == configurationRepository.Get())
+            if (!deviceName.IsNullOrEmpty() && deviceName == configurationRepository.GetName())
             {
                 scannerHandle = deviceHandle;
             }

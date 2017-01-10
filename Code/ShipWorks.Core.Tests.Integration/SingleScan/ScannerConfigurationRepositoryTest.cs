@@ -40,14 +40,21 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
             // Make sure the file does not exist
             File.Delete(Path.Combine(DataPath.InstanceSettings, "scanner.xml"));
 
-            Assert.Equal(string.Empty, testObject.Get());
+            Assert.Equal(string.Empty, testObject.GetName());
         }
+
+        [Fact]
+        public void Save_ThrowsArgumentNullException_WhenNameIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => testObject.Save(null));
+        }
+
 
         [Fact]
         public void Save_SavesScannerName()
         {
             testObject.Save(value);
-            Assert.Equal(value, testObject.Get());
+            Assert.Equal(value, testObject.GetName());
         }
 
         public void Dispose()

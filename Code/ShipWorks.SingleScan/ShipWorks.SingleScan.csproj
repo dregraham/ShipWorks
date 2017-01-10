@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="ScanBuffer.cs" />
     <Compile Include="ScannerConfigurationRepository.cs" />
+    <Compile Include="ScannerConfigurationRepositoryException.cs" />
     <Compile Include="ScannerIdentifier.cs" />
     <Compile Include="FindScannerMessageFilter.cs" />
     <Compile Include="ScannerMessageFilter.cs" />
