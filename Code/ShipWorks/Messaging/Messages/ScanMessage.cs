@@ -4,17 +4,17 @@ using Interapptive.Shared.Messaging;
 namespace ShipWorks.Messaging.Messages
 {
     /// <summary>
-    /// A barcode was scanned
+    /// Text was scanned
     /// </summary>
-    public struct BarcodeScannedMessage : IShipWorksMessage
+    public struct ScanMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public BarcodeScannedMessage(object sender, string barcode)
+        public ScanMessage(object sender, string scannedText)
         {
             Sender = sender;
-            Barcode = barcode;
+            ScannedText = scannedText;
             MessageId = Guid.NewGuid();
         }
 
@@ -29,8 +29,8 @@ namespace ShipWorks.Messaging.Messages
         public object Sender { get; }
 
         /// <summary>
-        /// Barcode that was scanned
+        /// Text that was scanned
         /// </summary>
-        public string Barcode { get; }
+        public string ScannedText { get; }
     }
 }

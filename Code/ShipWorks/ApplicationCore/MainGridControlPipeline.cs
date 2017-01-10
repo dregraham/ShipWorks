@@ -62,11 +62,11 @@ namespace ShipWorks.ApplicationCore
                     .Subscribe(x => mainGridControl.PerformSearch()),
 
                 // Wire up observable for doing barcode searches
-                barcodeScannedMessageSubscription = messenger.OfType<BarcodeScannedMessage>()
+                barcodeScannedMessageSubscription = messenger.OfType<ScanMessage>()
                     .Where(x => AllowBarcodeSearch(mainGridControl))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while performing barcode search search.", ex))
-                    .Subscribe(m => mainGridControl.PerformBarcodeSearch(m.Barcode))
+                    .Subscribe(m => mainGridControl.PerformBarcodeSearch(m.ScannedText))
             );
         }
 
