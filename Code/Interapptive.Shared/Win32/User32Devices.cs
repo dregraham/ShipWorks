@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Interapptive.Shared.Win32.Native;
 
@@ -106,10 +107,22 @@ namespace Interapptive.Shared.Win32
             IntPtr pData = IntPtr.Zero;
             uint strsize = 0;
 
-            GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
+            uint result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
             pData = Marshal.AllocHGlobal(((int) strsize) * 2);
-            GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
-            return Marshal.PtrToStringAuto(pData);
+            result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
+            string hidPath = Marshal.PtrToStringAuto(pData);
+
+            string[] hidParts = hidPath?.Split('#');
+            int length = hidParts?.Length ?? 0;
+
+            if (length>=2)
+            {
+                return hidParts[1];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
