@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Builder;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
@@ -26,12 +27,23 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (Type service in services.Where(ShouldRegister(component)))
                 {
-                    builder.RegisterType(component)
+                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registrationBuilder = builder.RegisterType(component)
                         .As(service)
                         .PreserveExistingDefaults();
+
+                    IEnumerable<ServiceAttribute> serviceAttributes = GetAttributes(service);
+                    if (serviceAttributes.Any(s=>s.SingleInstance))
+                    {
+                        registrationBuilder.SingleInstance();
+                    }
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether it should be registered as a single instance.
+        /// </summary>
+        public bool SingleInstance { get; set; } = false;
 
         /// <summary>
         /// Should the component be registered for the given service
@@ -48,5 +60,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         {
             return GetCustomAttribute(type, typeof(ServiceAttribute)) != null;
         }
+
+        /// <summary>
+        /// Get a component attribute from the type
+        /// </summary>
+        private static IEnumerable<ServiceAttribute> GetAttributes(Type type) =>
+            GetCustomAttributes(type, typeof(ServiceAttribute)).OfType<ServiceAttribute>();
     }
 }
