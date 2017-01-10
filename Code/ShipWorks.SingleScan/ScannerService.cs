@@ -18,26 +18,26 @@ namespace ShipWorks.SingleScan
     {
         private readonly IScannerIdentifier scannerIdentifier;
         private readonly IUser32Devices user32Devices;
-        private readonly Func<IWin32Window> getWindow;
+        private readonly IMainForm mainForm;
         private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private readonly IUserSession userSession;
-
         private IScannerMessageFilter scannerMessageFilter;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ScannerService(IScannerIdentifier scannerIdentifier, IUser32Devices user32Devices,
-            Func<IWin32Window> getWindow, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
+            Func<IMainForm> getMainForm, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession)
         {
             this.userSession = userSession;
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
             this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
-            this.getWindow = getWindow;
             this.user32Devices = user32Devices;
             this.scannerIdentifier = scannerIdentifier;
+
+            mainForm = getMainForm();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace ShipWorks.SingleScan
                 UsagePage = 0x01,
                 Usage = 0x06,
                 Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
-                TargetHandle = getWindow().Handle,
+                TargetHandle = mainForm.Handle,
             });
         }
 
@@ -117,8 +117,6 @@ namespace ShipWorks.SingleScan
         {
             // We need to be on the UI thread for message pumps to work, so check
             // to see if an Invoke is required, and do so if it is.
-            IMainForm mainForm = FindMainForm();
-
             if (mainForm == null)
             {
                 return;
@@ -136,23 +134,6 @@ namespace ShipWorks.SingleScan
             {
                 Enable();
             }
-        }
-
-        /// <summary>
-        /// Finds the IMainForm in the application
-        /// </summary>
-        [SuppressMessage("Code Analysis", "S1944")]
-        private static IMainForm FindMainForm()
-        {
-            IMainForm mainForm = null;
-            foreach (Form openForm in Application.OpenForms)
-            {
-                if (openForm is IMainForm)
-                {
-                    mainForm = openForm as IMainForm;
-                }
-            }
-            return mainForm;
         }
 
         /// <summary>

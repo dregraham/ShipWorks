@@ -116,6 +116,7 @@ namespace ShipWorks.ApplicationCore
             builder.Register(c => Program.MainForm)
                 .As<Control>()
                 .As<IWin32Window>()
+                .As<IMainForm>()
                 .ExternallyOwned();
 
             builder.RegisterType<SchedulerProvider>()
