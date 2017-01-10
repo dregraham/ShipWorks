@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
@@ -16,21 +17,21 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Save the specified handle as the current scanner
         /// </summary>
-        void Save(int deviceHandle);
+        void Save(IntPtr deviceHandle);
 
         /// <summary>
         /// Is the specified handle the current scanner?
         /// </summary>
-        bool IsScanner(int deviceHandle);
+        bool IsScanner(IntPtr deviceHandle);
 
         /// <summary>
         /// Handle a device being added to Windows
         /// </summary>
-        void HandleDeviceAdded(int deviceHandle);
+        void HandleDeviceAdded(IntPtr deviceHandle);
 
         /// <summary>
         /// Handle a device being removed from Windows
         /// </summary>
-        void HandleDeviceRemoved(int deviceHandle);
+        void HandleDeviceRemoved(IntPtr deviceHandle);
     }
 }

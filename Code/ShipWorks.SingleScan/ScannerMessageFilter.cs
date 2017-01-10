@@ -69,7 +69,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private bool HandleInput(IntPtr deviceHandle)
         {
-            if (!scannerIdentifier.IsScanner(deviceHandle.ToInt32()))
+            if (!scannerIdentifier.IsScanner(deviceHandle))
             {
                 return false;
             }
@@ -107,10 +107,8 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handle a device change
         /// </summary>
-        private void HandleDeviceChange(IntPtr deviceHandlePointer, IntPtr changeType)
+        private void HandleDeviceChange(IntPtr deviceHandle, IntPtr changeType)
         {
-            int deviceHandle = deviceHandlePointer.ToInt32();
-
             if (changeType.ToInt32() == 1)
             {
                 scannerIdentifier.HandleDeviceAdded(deviceHandle);
