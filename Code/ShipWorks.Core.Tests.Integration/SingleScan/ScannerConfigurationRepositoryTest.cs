@@ -37,14 +37,10 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
         [Fact]
         public void Get_ReturnsEmptyString_WhenFileDoesNotExist()
         {
-            Assert.Equal(string.Empty, testObject.Get());
-        }
+            // Make sure the file does not exist
+            File.Delete(Path.Combine(DataPath.InstanceSettings, "scanner.xml"));
 
-        [Fact]
-        public void Get_ReturnsScannerName()
-        {
-            testObject.Save(value);
-            Assert.Equal(value, testObject.Get());
+            Assert.Equal(string.Empty, testObject.Get());
         }
 
         [Fact]
@@ -61,6 +57,7 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
             {
                 File.Delete(Path.Combine(DataPath.InstanceSettings, "scanner.xml"));
                 Directory.Delete(DataPath.InstanceSettings);
+                Directory.Delete(DataPath.InstanceRoot);
             }
             catch (Exception)
             {

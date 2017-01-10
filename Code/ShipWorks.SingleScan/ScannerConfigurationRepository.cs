@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -33,7 +34,7 @@ namespace ShipWorks.SingleScan
             MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
 
             string xml = $"<Scanner><Name>{name}</Name></Scanner>";
-            File.WriteAllText(fullPath, xml);
+            File.WriteAllText(fullPath, xml, Encoding.Unicode);
         }
 
         /// <summary>
