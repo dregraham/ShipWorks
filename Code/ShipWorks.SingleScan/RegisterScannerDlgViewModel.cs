@@ -39,12 +39,6 @@ namespace ShipWorks.SingleScan
             scannerService.BeginFindScanner();
         }
 
-        private void ScanDetected(ScanMessage scanMessage)
-        {
-            ScanResult = scanMessage.ScannedText;
-
-        }
-
         /// <summary>
         /// Detects a scan event and saves the result and device handle
         /// </summary>
@@ -54,8 +48,6 @@ namespace ShipWorks.SingleScan
             ScanResult = scanMessage.ScannedText;
             deviceHandle = scanMessage.DeviceHandle;
         }
-
-
 
         /// <summary>
         /// Message to displaying indicating we are waiting for a scan
