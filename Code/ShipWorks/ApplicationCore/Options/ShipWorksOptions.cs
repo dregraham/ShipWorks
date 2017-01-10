@@ -9,9 +9,11 @@ using Divelements.SandRibbon.Rendering;
 using Divelements.SandRibbon;
 using System.Reflection;
 using System.Diagnostics;
+using Autofac;
 using ShipWorks.UI;
 using ShipWorks.Users;
 using Interapptive.Shared.UI;
+using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -26,11 +28,11 @@ namespace ShipWorks.ApplicationCore.Options
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksOptions(ShipWorksOptionsData data)
+        public ShipWorksOptions(ShipWorksOptionsData data, ILifetimeScope scope)
         {
             InitializeComponent();
 
-            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this));
+            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this, scope));
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)

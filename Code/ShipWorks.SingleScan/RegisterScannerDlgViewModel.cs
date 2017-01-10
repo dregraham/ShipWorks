@@ -1,8 +1,13 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reactive.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.SingleScan
 {
@@ -12,16 +17,27 @@ namespace ShipWorks.SingleScan
         private readonly IScannerService scannerService;
         private readonly IScannerConfigurationRepository scannerConfigRepo;
         private string dots = "...";
+        IDisposable barcodeScannedMessageSubscription;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterScannerDlgViewModel"/> class.
         /// </summary>
-        public RegisterScannerDlgViewModel(IScannerService scannerService, IScannerConfigurationRepository scannerConfigRepo)
+        public RegisterScannerDlgViewModel(IScannerService scannerService, IScannerConfigurationRepository scannerConfigRepo, IMessenger messenger)
         {
             this.scannerService = scannerService;
             this.scannerConfigRepo = scannerConfigRepo;
             SaveScannerCommand = new RelayCommand(SaveScanner);
             WindowLoadedCommand = new RelayCommand(OnWindowLoaded);
+
+            messenger.OfType<ScanMessage>()
+                 .Subscribe(ScanDetected);
+        }
+
+        private void ScanDetected(ScanMessage scanMessage)
+        {
+            ScanResult = scanMessage.ScannedText;
+
         }
 
         /// <summary>
@@ -29,8 +45,12 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void OnWindowLoaded()
         {
+            scannerService.BeginFindScanner();
+            // Wire up observable for doing barcode searches
 
         }
+
+
 
         /// <summary>
         /// Message to displaying indicating we are waiting for a scan

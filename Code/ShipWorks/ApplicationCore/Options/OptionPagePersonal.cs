@@ -19,22 +19,28 @@ namespace ShipWorks.ApplicationCore.Options
     /// </summary>
     public partial class OptionPagePersonal : OptionPageBase
     {
-        ShipWorksOptionsData data;
+        private readonly ShipWorksOptionsData data;
         private readonly IWin32Window owner;
+        private readonly IScannerService scannerService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OptionPagePersonal(ShipWorksOptionsData data, IWin32Window owner)
+        public OptionPagePersonal(ShipWorksOptionsData data, IWin32Window owner, ILifetimeScope scope)
         {
             InitializeComponent();
 
             this.data = data;
             this.owner = owner;
 
+            scannerService = scope.Resolve<IScannerService>();
+            scannerState.DataBindings.Add("Text", this, "ScannerState");
+
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
         }
+
+        public string ScannerState => EnumHelper.GetDescription(scannerService.CurrentScannerState);
 
         /// <summary>
         /// Initialization
@@ -147,7 +153,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// Update UI when single scan is enabled
         /// </summary>
         private void OnChangeSingleScanSettings(object sender, EventArgs e) => UpdateSingleScanSettingsUI();
-        
+
         /// <summary>
         /// Changing which method of initial filter selection to use
         /// </summary>

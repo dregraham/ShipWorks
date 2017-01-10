@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
     /// <summary>
     /// Possible states of the scanner device
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ScannerState
     {
         /// <summary>

@@ -1840,7 +1840,8 @@ namespace ShipWorks
             // Create the data structure to send to options
             ShipWorksOptionsData data = new ShipWorksOptionsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
 
-            using (ShipWorksOptions dlg = new ShipWorksOptions(data))
+            using(ILifetimeScope scope = IoC.BeginLifetimeScope())
+            using (ShipWorksOptions dlg = new ShipWorksOptions(data, scope))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
