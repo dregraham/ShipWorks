@@ -7,8 +7,8 @@ namespace Interapptive.Shared.Win32.Native
     /// Defines the raw input data coming from the specified Human Interface Device (HID).
     /// </summary>
     /// <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms645584%28v=vs.85%29.aspx</remarks>
-    [StructLayout(LayoutKind.Sequential)]
     [CLSCompliant(false)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct RawInputDeviceHidInfo
     {
         /// <summary>

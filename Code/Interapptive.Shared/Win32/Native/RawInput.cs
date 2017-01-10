@@ -6,8 +6,8 @@ namespace Interapptive.Shared.Win32.Native
     /// <summary>
     /// Contains the raw input from a device.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
     [CLSCompliant(false)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct RawInput
     {
         /// <summary>

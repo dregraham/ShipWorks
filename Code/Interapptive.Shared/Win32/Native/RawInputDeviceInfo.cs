@@ -3,8 +3,11 @@ using System.Runtime.InteropServices;
 
 namespace Interapptive.Shared.Win32.Native
 {
-    [StructLayout(LayoutKind.Explicit)]
+    /// <summary>
+    /// Struct for raw input device infos
+    /// </summary>
     [CLSCompliant(false)]
+    [StructLayout(LayoutKind.Explicit)]
     public struct RawInputDeviceInfo
     {
         /// <summary>

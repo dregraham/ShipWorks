@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Interapptive.Shared.Win32.Native
+﻿namespace Interapptive.Shared.Win32.Native
 {
     /// <summary>
-    /// Enumeration containing the DeviceInformationCommand type
+    /// Enum for Getting Raw Input Device Info
     /// </summary>
     public enum RawInputDeviceInformationCommand
     {

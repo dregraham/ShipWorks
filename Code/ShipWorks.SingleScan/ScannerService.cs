@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
@@ -17,11 +18,10 @@ namespace ShipWorks.SingleScan
     {
         private readonly IScannerIdentifier scannerIdentifier;
         private readonly IUser32Devices user32Devices;
-        private readonly Func<IWin32Window> getWindow;
+        private readonly IMainForm mainForm;
         private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private readonly IUserSession userSession;
-
         private IScannerMessageFilter scannerMessageFilter;
         private IScannerMessageFilter findScannerMessageFilter;
 
@@ -29,15 +29,16 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public ScannerService(IScannerIdentifier scannerIdentifier, IUser32Devices user32Devices,
-            Func<IWin32Window> getWindow, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
+            Func<IMainForm> getMainForm, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession)
         {
             this.userSession = userSession;
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
             this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
-            this.getWindow = getWindow;
             this.user32Devices = user32Devices;
             this.scannerIdentifier = scannerIdentifier;
+
+            mainForm = getMainForm();
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace ShipWorks.SingleScan
                 UsagePage = 0x01,
                 Usage = 0x06,
                 Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
-                TargetHandle = getWindow().Handle,
+                TargetHandle = mainForm.Handle,
             });
         }
 
@@ -116,12 +117,24 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            int singleScanSetting = userSession.User?.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
+            // We need to be on the UI thread for message pumps to work, so check
+            // to see if an Invoke is required, and do so if it is.
+            if (mainForm == null)
+            {
+                return;
+            }
+
+            if (mainForm.InvokeRequired)
+            {
+                mainForm.Invoke((Action) InitializeForCurrentSession, null);
+                return;
+            }
+
+            int singleScanSetting = userSession.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
 
             if (singleScanSetting != (int) SingleScanSettings.Disabled)
             {
-// TODO: UI thread exception was happening here.  Commenting out until we get to this.
-//                Enable();
+                Enable();
             }
         }
 

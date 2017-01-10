@@ -6,8 +6,8 @@ namespace Interapptive.Shared.Win32.Native
     /// <summary>
     /// Value type for a raw input header.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
     [CLSCompliant(false)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct RawInputHeader
     {
         /// <summary>

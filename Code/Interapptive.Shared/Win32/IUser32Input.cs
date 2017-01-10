@@ -7,6 +7,7 @@ namespace Interapptive.Shared.Win32
     /// <summary>
     /// User32 wrapper for handling raw input
     /// </summary>
+    [CLSCompliant(false)]
     public interface IUser32Input
     {
         /// <summary>

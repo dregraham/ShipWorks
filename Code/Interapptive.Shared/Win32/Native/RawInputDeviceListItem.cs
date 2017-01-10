@@ -6,8 +6,8 @@ namespace Interapptive.Shared.Win32.Native
     /// <summary>
     /// Item in a raw input device list
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
     [CLSCompliant(false)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct RawInputDeviceListItem
     {
         /// <summary>

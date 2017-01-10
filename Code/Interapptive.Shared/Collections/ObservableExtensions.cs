@@ -82,6 +82,16 @@ namespace Interapptive.Shared.Collections
         }
 
         /// <summary>
+        /// Buffer messages until no messages have been received for a specific amount of time
+        /// </summary>
+        public static IObservable<IList<T>> BufferUntilInactive<T>(this IObservable<T> stream, TimeSpan delay)
+        {
+            IObservable<T> closes = stream.Throttle(delay);
+
+            return stream.Buffer(closes);
+        }
+
+        /// <summary>
         /// Gate an input stream using another stream as a signal to open the gate
         /// </summary>
         /// <typeparam name="T">Type of source observable</typeparam>

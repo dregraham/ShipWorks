@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Interapptive.Shared.Win32.Native;
 
@@ -10,16 +11,29 @@ namespace Interapptive.Shared.Win32
     [CLSCompliant(false)]
     public class User32Devices : IUser32Devices
     {
-        /// <summary>
-        /// Get a list of all raw devices
-        /// </summary>
-        public RawInputDeviceListItem[] GetAllRawDevices()
-        {
-            //throw new NotImplementedException();
-            return null;
-        }
+        /// <summary>Function to register a raw input device.</summary>
+        /// <param name="pRawInputDevices">Array of raw input devices.</param>
+        /// <param name="uiNumDevices">Number of devices.</param>
+        /// <param name="cbSize">Size of the RAWINPUTDEVICE structure.</param>
+        /// <returns>TRUE if successful, FALSE if not.</returns>
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool RegisterRawInputDevices(
+            [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] RawInputDevice[] pRawInputDevices,
+            int uiNumDevices,
+            int cbSize);
 
         /// <summary>
+        /// Function to get a raw input device
+        /// </summary>
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern uint GetRawInputDeviceList
+        (
+            [In, Out] RawInputDeviceListItem[] RawInputDeviceList,
+            ref uint NumDevices,
+            uint Size 
+        );
+		
+		/// <summary>
         /// Retrieves information about the raw input device.
         /// </summary>
         /// <param name="hDevice">A handle to the raw input device. This comes from the lParam of the WM_INPUT message, from the hDevice member of RAWINPUTHEADER, or from GetRawInputDeviceList. It can also be NULL if an application inserts input data, for example, by using SendInput.</param>
@@ -34,6 +48,46 @@ namespace Interapptive.Shared.Win32
             [In] RawInputDeviceInformationCommand uiCommand,
             [In, Out] IntPtr pData,
             [In, Out] ref uint pcbSize);
+
+        /// <summary>
+        /// Get a list of all raw devices
+        /// </summary>
+        public RawInputDeviceListItem[] GetAllRawDevices()
+        {
+            uint deviceCount = 0;
+            uint dwSize = (uint) Marshal.SizeOf(typeof(RawInputDeviceListItem));
+
+            // First call the system routine with a null pointer
+            // for the array to get the size needed for the list
+            uint retValue = GetRawInputDeviceList(null, ref deviceCount, dwSize);
+
+            // If anything but zero is returned, the call failed, so return a null list
+            if (0 != retValue)
+            {
+                return null;
+            }
+
+            // Now allocate an array of the specified number of entries
+            RawInputDeviceListItem[] deviceList = new RawInputDeviceListItem[deviceCount];
+
+            // Now make the call again, using the array
+            retValue = GetRawInputDeviceList(deviceList, ref deviceCount, dwSize);
+
+            // If anything but zero is returned, the call failed, so return a null list
+            if (0 != retValue)
+            {
+                return null;
+            }
+
+            // Free up the memory we first got the information into as
+            // it is no longer needed, since the structures have been
+            // copied to the deviceList array.
+            //IntPtr pRawInputDeviceList = Marshal.AllocHGlobal((int)(dwSize * deviceCount));
+            //Marshal.FreeHGlobal(pRawInputDeviceList);
+
+            // Finally, return the filled in list
+            return deviceList;
+        }
 
 
         /// <summary>
@@ -55,8 +109,8 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public bool RegisterRawInputDevice(RawInputDevice device)
         {
-            //throw new NotImplementedException();
-            return false;
+            bool result = RegisterRawInputDevices(new[] { device }, 1, Marshal.SizeOf(typeof(RawInputDevice)));
+            return result;
         }
     }
 }

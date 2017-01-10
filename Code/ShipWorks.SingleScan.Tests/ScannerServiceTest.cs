@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
@@ -26,6 +29,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        [SuppressMessage("Code Analysis", "S1481")]
         public void CurrentScannerState_DelegatesToScannerIdentifier()
         {
             var result = testObject.CurrentScannerState;
@@ -64,7 +68,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Enable_DelegatesToUser32Devices()
         {
-            mock.Mock<IWin32Window>().SetupGet(x => x.Handle).Returns((IntPtr) 123);
+            mock.Mock<IMainForm>().SetupGet(x => x.Handle).Returns((IntPtr) 123);
 
             testObject.Enable();
 
@@ -132,14 +136,14 @@ namespace ShipWorks.SingleScan.Tests
         [InlineData(SingleScanSettings.Scan)]
         public void InitializeForCurrentSession_EnablesScanning_WhenSettingIsNotDisabled(SingleScanSettings setting)
         {
-            var user = mock.MockRepository.Create<UserEntity>((long) 1);
-            user.SetupGet(x => x.Settings)
-                .Returns(new UserSettingsEntity
-                {
-                    SingleScanSettings = (int) setting
-                });
+            var userSettings = mock.Mock<IUserSettingsEntity>();
+            userSettings.SetupGet(x => x.SingleScanSettings)
+                .Returns((int) setting);
 
-            mock.Mock<IUserSession>().SetupGet(x => x.User).Returns(user.Object);
+            mock.Mock<IUserSession>().SetupGet(x => x.Settings).Returns(userSettings.Object);
+
+            mock.Mock<IMainForm>().SetupGet(m => m.InvokeRequired).Returns(false);
+            mock.Mock<IMainForm>().SetupGet(m => m.Handle).Returns(IntPtr.Zero);
 
             testObject.InitializeForCurrentSession();
 
