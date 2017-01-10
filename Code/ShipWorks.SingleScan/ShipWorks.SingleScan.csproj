@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScanBuffer.cs" />
+    <Compile Include="ScannerConfigurationRepository.cs" />
     <Compile Include="ScannerIdentifier.cs" />
     <Compile Include="ScannerMessageFilter.cs" />
     <Compile Include="ScannerMessageFilterFactory.cs" />
