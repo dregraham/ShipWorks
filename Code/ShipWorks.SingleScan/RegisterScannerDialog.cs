@@ -13,10 +13,19 @@ namespace ShipWorks.SingleScan
         public RegisterScannerDialog(IRegisterScannerDlgViewModel viewmodel)
         {
             this.viewmodel = viewmodel;
-            viewmodel.CloseDialog = Close;
+            viewmodel.CloseDialog = CloseDialog;
             InitializeComponent();
             registrationControl.DataContext = this.viewmodel;
             StartPosition = FormStartPosition.CenterParent;
+        }
+
+        /// <summary>
+        /// Closes the dialog.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        private void CloseDialog(DialogResult result)
+        {
+            DialogResult = result;
         }
     }
 }
