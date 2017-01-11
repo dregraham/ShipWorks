@@ -82,7 +82,7 @@ namespace ShipWorks.SingleScan
                 UsagePage = 0x01,
                 Usage = 0x06,
                 Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
-                TargetHandle = (IntPtr) null
+                TargetHandle = mainForm.Handle
             });
         }
 
@@ -139,12 +139,20 @@ namespace ShipWorks.SingleScan
                 return;
             }
 
-            int singleScanSetting = userSession.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
-
-            if (singleScanSetting != (int) SingleScanSettings.Disabled)
+            if (ShouldSingleScanBeEnabled())
             {
                 Enable();
             }
+        }
+
+        /// <summary>
+        /// Based on SingleScan settings, return true if single scan should be enabled
+        /// </summary>
+        /// <returns></returns>
+        public bool ShouldSingleScanBeEnabled()
+        {
+            int singleScanSetting = userSession.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
+            return singleScanSetting != (int) SingleScanSettings.Disabled;
         }
 
         /// <summary>

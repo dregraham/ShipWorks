@@ -6,7 +6,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
     /// <summary>
     /// Manage identification of the current scanner
     /// </summary>
-    [Service(SingleInstance = true)]
+    [Service(SingleInstance = true, ExternallyOwned = true)]
     public interface IScannerIdentifier
     {
         /// <summary>

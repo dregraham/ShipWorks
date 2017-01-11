@@ -24,6 +24,7 @@ namespace ShipWorks.ApplicationCore.Options
     {
         // Maps list item name to the option page that should be displayed for it
         Dictionary<string, UserControl> optionPages = new Dictionary<string, UserControl>();
+        private readonly IScannerService scannerService;
 
         /// <summary>
         /// Constructor
@@ -31,6 +32,9 @@ namespace ShipWorks.ApplicationCore.Options
         public ShipWorksOptions(ShipWorksOptionsData data, ILifetimeScope scope)
         {
             InitializeComponent();
+
+            scannerService = scope.Resolve<IScannerService>();
+            scannerService.Disable();
 
             optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this, scope));
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
@@ -106,6 +110,17 @@ namespace ShipWorks.ApplicationCore.Options
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Start SingleScan if appropriate.
+        /// </summary>
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (scannerService.ShouldSingleScanBeEnabled())
+            {
+                scannerService.Enable();
+            }
         }
     }
 }
