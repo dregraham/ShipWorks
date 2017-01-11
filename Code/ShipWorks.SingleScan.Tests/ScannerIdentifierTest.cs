@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Win32;
+using Moq;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -117,6 +118,22 @@ namespace ShipWorks.SingleScan.Tests
             testObject.HandleDeviceRemoved(scannerDeviceHandle);
             Assert.False(testObject.IsScanner(scannerDeviceHandle));
             Assert.Equal(ScannerState.Detached, testObject.ScannerState);
+        }
+
+        [Fact]
+        public void Save_IsScannerReturnsTrue_WhenSavedDeviceHandleIsPassedIn()
+        {
+            testObject.Save(anotherScannerDeviceHandle);
+            Assert.True(testObject.IsScanner(anotherScannerDeviceHandle));
+        }
+
+        [Fact]
+        public void Save_DeviceNameSentToRepository()
+        {
+            AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
+            testObject.Save(scannerDeviceHandle);
+
+            mock.Mock<IScannerConfigurationRepository>().Verify(r=>r.Save(scannerDeviceName), Times.Once);
         }
 
         private void AddDeviceToManager(IntPtr handle, string deviceName)

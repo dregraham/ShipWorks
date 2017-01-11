@@ -114,6 +114,14 @@ namespace ShipWorks.SingleScan
         public void EndFindScanner()
         {
            windowsMessageFilterRegistrar.RemoveMessageFilter(findScannerMessageFilter);
+
+            user32Devices.RegisterRawInputDevice(new RawInputDevice
+            {
+                UsagePage = 0x01,
+                Usage = 0x06,
+                Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
+                TargetHandle = (IntPtr) null
+            });
         }
 
         /// <summary>
