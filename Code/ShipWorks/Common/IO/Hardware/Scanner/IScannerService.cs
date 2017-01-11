@@ -1,4 +1,5 @@
 ﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Options;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
@@ -21,6 +22,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Begin finding a current scanner
         /// </summary>
+        /// <param name="optionFindScanner"></param>
         void BeginFindScanner();
 
         /// <summary>

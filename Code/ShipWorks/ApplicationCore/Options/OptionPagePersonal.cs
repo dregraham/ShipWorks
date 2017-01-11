@@ -173,10 +173,8 @@ namespace ShipWorks.ApplicationCore.Options
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                InteropWindow registerScannerDlg = scope.ResolveNamed<InteropWindow>("RegisterScannerDlg", new TypedParameter(typeof(IWin32Window), owner));
-                registerScannerDlg.DataContext = scope.Resolve<IRegisterScannerDlgViewModel>();
-
-                registerScannerDlg.ShowDialog();
+                Form findScanner = scope.ResolveNamed<Form>("RegisterScannerDialog");
+                findScanner.ShowDialog(this);
             }
         }
     }
