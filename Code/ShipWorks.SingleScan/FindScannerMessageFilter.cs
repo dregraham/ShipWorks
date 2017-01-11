@@ -61,16 +61,16 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handle raw input message
         /// </summary>
-        private bool HandleInput(IntPtr deviceHandle)
+        private bool HandleInput(IntPtr messageHandle)
         {
-            GenericResult<RawInput> result = user32Input.GetRawInputData(deviceHandle, RawInputCommand.Input);
+            GenericResult<RawInput> result = user32Input.GetRawInputData(messageHandle, RawInputCommand.Input);
             if (!result.Success)
             {
                 log.Error(result.Message);
                 return false;
             }
 
-            shouldBlock = ProcessRawInputData(deviceHandle, result.Value);
+            shouldBlock = ProcessRawInputData(result.Value.Header.DeviceHandle, result.Value);
             return true;
         }
 

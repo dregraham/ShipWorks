@@ -20,8 +20,8 @@ namespace ShipWorks.SingleScan
         private readonly IScannerService scannerService;
         private readonly IScannerIdentifier scannerIdentifier;
         private IntPtr deviceHandle;
-        private readonly IDisposable scanSubcription;
-        private PropertyChangedHandler handler;
+        private readonly IDisposable scanSubscription;
+        private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         private string waitingMessage = "Waiting for scan";
         private string scanResult;
@@ -35,13 +35,19 @@ namespace ShipWorks.SingleScan
             this.scannerService = scannerService;
             this.scannerIdentifier = scannerIdentifier;
             SaveScannerCommand = new RelayCommand(SaveScanner);
+            CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            scanSubcription = messenger.OfType<ScanMessage>()
+            scanSubscription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
 
             scannerService.BeginFindScanner();
         }
+
+        /// <summary>
+        /// Gets or sets the action to close the parent dialog.
+        /// </summary>
+        public Action CloseDialog { get; set; }
 
         /// <summary>
         /// Detects a scan event and saves the result and device handle
@@ -105,12 +111,25 @@ namespace ShipWorks.SingleScan
         public ICommand SaveScannerCommand { get; set; }
 
         /// <summary>
+        /// Gets or sets the save scanner command.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand CancelCommand { get; set; }
+
+        /// <summary>
         /// Saves the scanner.
         /// </summary>
         private void SaveScanner()
         {
             scannerIdentifier.Save(deviceHandle);
+            Close();
         }
+
+        /// <summary>
+        /// Executes the close action
+        /// </summary>
+        private void Close() => CloseDialog?.Invoke();
+        
 
         /// <summary>
         /// Ends scanner search
@@ -118,7 +137,7 @@ namespace ShipWorks.SingleScan
         public void Dispose()
         {
             scannerService.EndFindScanner();
-            scanSubcription.Dispose();
+            scanSubscription.Dispose();
         }
     }
 }

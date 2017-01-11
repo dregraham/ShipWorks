@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
@@ -23,5 +24,10 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// Gets or sets the save scanner command.
         /// </summary>
         ICommand SaveScannerCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets the action to close the parent dialog.
+        /// </summary>
+        Action CloseDialog { get; set; }
     }
 }
