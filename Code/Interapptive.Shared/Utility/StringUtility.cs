@@ -317,7 +317,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
         /// </summary>
-        public static bool IsNullOrEmpty(this string s)
+        public static bool IsNullOrWhiteSpace(this string s)
         {
             return string.IsNullOrWhiteSpace(s);
         }

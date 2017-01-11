@@ -4,7 +4,6 @@ using System.Net;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
-using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;

@@ -7,7 +7,6 @@ using Autofac;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
-using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;

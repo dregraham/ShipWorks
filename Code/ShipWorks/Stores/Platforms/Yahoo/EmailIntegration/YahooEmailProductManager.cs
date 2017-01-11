@@ -7,7 +7,6 @@ using System.Xml.XPath;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Quartz.Util;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;

@@ -732,7 +732,7 @@ namespace ShipWorks.ApplicationCore
         {
             barcode = barcode?.Trim();
 
-            if (barcode.IsNullOrEmpty())
+            if (barcode.IsNullOrWhiteSpace())
             {
                 return;
             }
