@@ -16,8 +16,7 @@ namespace ShipWorks.SingleScan
     public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel, IDisposable
     {
         private readonly IScannerService scannerService;
-        private readonly IScannerConfigurationRepository scannerConfigRepo;
-        private readonly IUser32Devices devices;
+        private readonly IScannerIdentifier scannerIdentifier;
         private string dots = "...";
         private IntPtr deviceHandle;
         private IDisposable scanSubcription;
@@ -26,11 +25,10 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterScannerDlgViewModel"/> class.
         /// </summary>
-        public RegisterScannerDlgViewModel(IScannerService scannerService, IScannerConfigurationRepository scannerConfigRepo, IMessenger messenger, IUser32Devices devices)
+        public RegisterScannerDlgViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
         {
             this.scannerService = scannerService;
-            this.scannerConfigRepo = scannerConfigRepo;
-            this.devices = devices;
+            this.scannerIdentifier = scannerIdentifier;
             SaveScannerCommand = new RelayCommand(SaveScanner);
 
             scanSubcription = messenger.OfType<ScanMessage>()
@@ -83,7 +81,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SaveScanner()
         {
-            scannerConfigRepo.Save(devices.GetDeviceName(deviceHandle));
+            scannerIdentifier.Save(deviceHandle);
         }
 
         /// <summary>

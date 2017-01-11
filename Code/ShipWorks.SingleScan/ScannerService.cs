@@ -53,6 +53,15 @@ namespace ShipWorks.SingleScan
         {
             findScannerMessageFilter = scannerMessageFilterFactory.CreateFindScannerMessageFilter();
             windowsMessageFilterRegistrar.AddMessageFilter(findScannerMessageFilter);
+
+            user32Devices.RegisterRawInputDevice(new RawInputDevice
+            {
+                UsagePage = 0x01,
+                Usage = 0x06,
+                Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
+                TargetHandle = (IntPtr) null
+            });
+
         }
 
         /// <summary>
@@ -73,7 +82,7 @@ namespace ShipWorks.SingleScan
                 UsagePage = 0x01,
                 Usage = 0x06,
                 Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
-                TargetHandle = (IntPtr) null,
+                TargetHandle = (IntPtr) null
             });
         }
 

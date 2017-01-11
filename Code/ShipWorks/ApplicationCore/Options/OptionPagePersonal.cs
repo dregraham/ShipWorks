@@ -47,6 +47,8 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            scannerService.Disable();
+
             if (UserSession.IsLoggedOn)
             {
                 UserSettingsEntity settings = UserSession.User.Settings;
