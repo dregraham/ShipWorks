@@ -174,7 +174,7 @@ namespace ShipWorks.ApplicationCore.Options
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 Form findScanner = scope.ResolveNamed<Form>("RegisterScannerDialog");
-                findScanner.ShowDialog(this);
+                findScanner.ShowDialog(owner);
             }
         }
     }

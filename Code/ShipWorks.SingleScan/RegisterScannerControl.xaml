@@ -1,41 +1,39 @@
 ﻿<UserControl x:Class="ShipWorks.SingleScan.RegisterScannerControl"
-               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-               xmlns:local="clr-namespace:ShipWorks.SingleScan"
-               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-               xmlns:src="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
-               xmlns:ui="http://schemas.shipworks.com/ui"
-               Width="500"
-               Background="{x:Static SystemColors.ControlBrush}"
-               DataContext="RegisterScannerDlgViewModel"
-               FontFamily="Tahoma"
-               FontSize="8.25pt"
-               d:DataContext="{d:DesignInstance local:RegisterScannerDlgViewModel}"
-               d:DesignHeight="200"
-               d:DesignWidth="500"
-               mc:Ignorable="d">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShipWorks.SingleScan"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             Width="500"
+             Height="156"
+             Background="{x:Static SystemColors.ControlBrush}"
+             DataContext="RegisterScannerDlgViewModel"
+             FontFamily="Tahoma"
+             FontSize="8.25pt"
+             d:DataContext="{d:DesignInstance local:RegisterScannerDlgViewModel}"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenFalse" Invert="True" />
     </UserControl.Resources>
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
                    Margin="5"
                    TextWrapping="Wrap">
-            ShipWorks must register a barcode scanner to use with Single Scan mode.
+            ShipWorks must register a bar code scanner to use with Single Scan mode.
             When Single Scan is enabled, ShipWorks will handle scans from this device.
-            All you need to do is scan any barcode using a barcode scanner attached to this
+            All you need to do is scan any bar code using a bar code scanner attached to this
             computer and click &quot;Confirm&quot;. If you register the wrong device, scan
-            a barcode with the correct one; we will register the most recently used device.
+            a bar code with the correct one; we will register the most recently used device.
         </TextBlock>
         <Label Grid.Row="1"
+               Margin="0 10 0 10"
                VerticalAlignment="Center"
                Content="{Binding WaitingMessage,
                                  UpdateSourceTrigger=PropertyChanged}"
@@ -44,6 +42,7 @@
                                     Converter={StaticResource VisibleWhenFalse}}"
                d:IsHidden="false" />
         <StackPanel Grid.Row="1"
+                    Margin="0 10 0 10"
                     VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Visibility="{Binding ResultFound,

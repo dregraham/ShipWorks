@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
@@ -8,19 +9,23 @@ using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.SingleScan
 {
     [Component]
-    public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel, IDisposable
+    public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel, IDisposable, INotifyPropertyChanged
     {
         private readonly IScannerService scannerService;
         private readonly IScannerIdentifier scannerIdentifier;
-        private string dots = "...";
         private IntPtr deviceHandle;
-        private IDisposable scanSubcription;
-
+        private readonly IDisposable scanSubcription;
+        private PropertyChangedHandler handler;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private string waitingMessage = "Waiting for scan";
+        private string scanResult;
+        private bool resultFound;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterScannerDlgViewModel"/> class.
@@ -30,6 +35,7 @@ namespace ShipWorks.SingleScan
             this.scannerService = scannerService;
             this.scannerIdentifier = scannerIdentifier;
             SaveScannerCommand = new RelayCommand(SaveScanner);
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             scanSubcription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
@@ -51,19 +57,41 @@ namespace ShipWorks.SingleScan
         /// Message to displaying indicating we are waiting for a scan
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string WaitingMessage => "Waiting for scan" + dots;
+        public string WaitingMessage
+        {
+            get { return waitingMessage; }
+            set
+            {
+                handler.Set(nameof(WaitingMessage), ref waitingMessage, value);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether a scan result has been found.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ResultFound => !string.IsNullOrWhiteSpace(ScanResult);
+        public bool ResultFound
+        {
+            get { return resultFound; }
+            set
+            {
+                handler.Set(nameof(ResultFound), ref resultFound, value);
+            }
+        }
 
         /// <summary>
         /// The scan result.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ScanResult { get; set; }
+        public string ScanResult
+        {
+            get { return scanResult; }
+            set
+            {
+                handler.Set(nameof(ScanResult), ref scanResult, value);
+                ResultFound = true;
+            }
+        }
 
         /// <summary>
         /// The window loaded command.
