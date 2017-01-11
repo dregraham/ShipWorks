@@ -6,9 +6,9 @@ using Interapptive.Shared.Threading;
 using log4net;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Users;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -77,6 +77,7 @@ namespace ShipWorks.ApplicationCore
         {
             return mainGridControl.Visible && 
                    mainGridControl.CanFocus &&
+                   !ApplicationUtility.AnyModalDialogs() &&
                    userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled;
         }
 
