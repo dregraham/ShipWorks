@@ -38,7 +38,7 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT, LParam = new IntPtr(456) };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IScannerIdentifier>().Verify(x => x.IsScanner((IntPtr) 456));
+            mock.Mock<IScannerIdentifier>().Verify(x => x.IsScanner(It.IsAny<IntPtr>()));
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IScanBuffer>().Verify(x => x.Append((IntPtr) 2, "X"));
+            mock.Mock<IScanBuffer>().Verify(x => x.Append(It.IsAny<IntPtr>(), "X"));
         }
 
         [Theory]
