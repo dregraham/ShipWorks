@@ -70,14 +70,14 @@ namespace ShipWorks.SingleScan
                 return false;
             }
 
-            shouldBlock = ProcessRawInputData(result.Value, deviceHandle);
+            shouldBlock = ProcessRawInputData(deviceHandle, result.Value);
             return true;
         }
 
         /// <summary>
         /// Process the raw input data from a scanner
         /// </summary>
-        private bool ProcessRawInputData(RawInput input, IntPtr deviceHandle)
+        private bool ProcessRawInputData(IntPtr deviceHandle, RawInput input)
         {
             if (input.Data.Keyboard.Message == WindowsMessage.KEYFIRST)
             {
