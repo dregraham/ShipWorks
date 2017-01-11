@@ -60,7 +60,8 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SendScanMessage(IList<string> characters)
         {
-            messenger.Send(new ScanMessage(this, characters.Aggregate((obj, item) => obj += item), lastHandle));
+            string text = characters.Aggregate((obj, item) => obj += item);
+            messenger.Send(new ScanMessage(this, text, lastHandle));
         }
     }
 }

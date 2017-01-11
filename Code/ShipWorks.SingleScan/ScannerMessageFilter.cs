@@ -69,12 +69,13 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private bool HandleInput(IntPtr deviceHandle)
         {
-            if (!scannerIdentifier.IsScanner(deviceHandle))
+            GenericResult<RawInput> result = user32Input.GetRawInputData(deviceHandle, RawInputCommand.Input);
+
+            if (!scannerIdentifier.IsScanner(result.Value.Header.DeviceHandle))
             {
                 return false;
             }
 
-            GenericResult<RawInput> result = user32Input.GetRawInputData(deviceHandle, RawInputCommand.Input);
             if (!result.Success)
             {
                 log.Error(result.Message);
@@ -112,6 +113,7 @@ namespace ShipWorks.SingleScan
             if (changeType.ToInt32() == 1)
             {
                 scannerIdentifier.HandleDeviceAdded(deviceHandle);
+                return;
             }
 
             scannerIdentifier.HandleDeviceRemoved(deviceHandle);
