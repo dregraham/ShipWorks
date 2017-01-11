@@ -5,8 +5,7 @@
              xmlns:local="clr-namespace:ShipWorks.SingleScan"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             Width="500"
-             Height="156"
+             MaxWidth="500"
              Background="{x:Static SystemColors.ControlBrush}"
              DataContext="RegisterScannerDlgViewModel"
              FontFamily="Tahoma"
@@ -26,11 +25,11 @@
         <TextBlock Grid.Row="0"
                    Margin="5"
                    TextWrapping="Wrap">
-            ShipWorks must register a bar code scanner to use with Single Scan mode.
+            ShipWorks must register a barcode scanner to use with Single Scan mode.
             When Single Scan is enabled, ShipWorks will handle scans from this device.
-            All you need to do is scan any bar code using a bar code scanner attached to this
+            All you need to do is scan any barcode using a barcode scanner attached to this
             computer and click &quot;Confirm&quot;. If you register the wrong device, scan
-            a bar code with the correct one; we will register the most recently used device.
+            a barcode with the correct one; we will register the most recently used device.
         </TextBlock>
         <Label Grid.Row="1"
                Margin="0 10 0 10"

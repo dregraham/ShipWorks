@@ -34,6 +34,7 @@
             // 
             // registerScannerHost
             // 
+            this.registerScannerHost.AutoSize = true;
             this.registerScannerHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.registerScannerHost.Location = new System.Drawing.Point(0, 0);
             this.registerScannerHost.Name = "registerScannerHost";
@@ -46,6 +47,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(501, 154);
             this.ControlBox = false;
             this.Controls.Add(this.registerScannerHost);
@@ -55,6 +58,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Register bar code scanner for Single Scan";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

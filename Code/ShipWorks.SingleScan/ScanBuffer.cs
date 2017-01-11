@@ -61,6 +61,10 @@ namespace ShipWorks.SingleScan
         private void SendScanMessage(IList<string> characters)
         {
             string text = characters.Aggregate((obj, item) => obj += item);
+
+            // Strip out any control characters (tab, return, etc...)
+            text = new string(text.Where(c => !char.IsControl(c)).ToArray());
+
             messenger.Send(new ScanMessage(this, text, lastHandle));
         }
     }

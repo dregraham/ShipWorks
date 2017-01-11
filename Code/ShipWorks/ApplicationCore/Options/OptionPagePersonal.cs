@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Options
     {
         private readonly ShipWorksOptionsData data;
         private readonly IWin32Window owner;
-        private readonly IScannerService scannerService;
+        private readonly IScannerConfigurationRepository scannerRepo;
 
         /// <summary>
         /// Constructor
@@ -33,14 +33,14 @@ namespace ShipWorks.ApplicationCore.Options
             this.data = data;
             this.owner = owner;
 
-            scannerService = scope.Resolve<IScannerService>();
-            scannerState.DataBindings.Add("Text", this, "ScannerState");
+            scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
+            string scannerName = scannerRepo.GetName();
+            registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerName);
+            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerName);
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
         }
-
-        public string ScannerState => EnumHelper.GetDescription(scannerService.CurrentScannerState);
 
         /// <summary>
         /// Initialization
@@ -172,8 +172,25 @@ namespace ShipWorks.ApplicationCore.Options
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 Form findScanner = scope.ResolveNamed<Form>("RegisterScannerDialog");
-                findScanner.ShowDialog(owner);
+                DialogResult result = findScanner.ShowDialog(owner);
+                if (result == DialogResult.OK)
+                {
+                    registerScannerLabel.Visible = false;
+                    unregisterScannerButton.Enabled = true;
+                }
             }
+        }
+
+        /// <summary>
+        /// Called when [click unregister scanner].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnClickUnregisterScanner(object sender, EventArgs e)
+        {
+            scannerRepo.Save(string.Empty);
+            registerScannerLabel.Visible = true;
+            unregisterScannerButton.Enabled = false;
         }
     }
 }

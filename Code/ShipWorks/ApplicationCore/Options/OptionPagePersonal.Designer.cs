@@ -51,10 +51,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.sectionTitle1 = new ShipWorks.UI.Controls.SectionTitle();
             this.singleScan = new System.Windows.Forms.CheckBox();
             this.autoPrint = new System.Windows.Forms.CheckBox();
-            this.scannerStateLabel = new System.Windows.Forms.Label();
-            this.scannerState = new System.Windows.Forms.Label();
             this.registerScannerButton = new System.Windows.Forms.Button();
             this.unregisterScannerButton = new System.Windows.Forms.Button();
+            this.registerScannerLabel = new System.Windows.Forms.Label();
             this.panelInitialFilter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -291,43 +290,36 @@ namespace ShipWorks.ApplicationCore.Options
             this.autoPrint.Text = "Automatically print labels on barcode scan";
             this.autoPrint.UseVisualStyleBackColor = true;
             // 
-            // scannerStateLabel
-            // 
-            this.scannerStateLabel.AutoSize = true;
-            this.scannerStateLabel.Location = new System.Drawing.Point(25, 465);
-            this.scannerStateLabel.Name = "scannerStateLabel";
-            this.scannerStateLabel.Size = new System.Drawing.Size(50, 13);
-            this.scannerStateLabel.TabIndex = 24;
-            this.scannerStateLabel.Text = "Scanner:";
-            // 
-            // scannerState
-            // 
-            this.scannerState.AutoSize = true;
-            this.scannerState.Location = new System.Drawing.Point(77, 465);
-            this.scannerState.Name = "scannerState";
-            this.scannerState.Size = new System.Drawing.Size(76, 13);
-            this.scannerState.TabIndex = 25;
-            this.scannerState.Text = "Not regsitered";
-            // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(159, 460);
+            this.registerScannerButton.Location = new System.Drawing.Point(28, 460);
             this.registerScannerButton.Name = "registerScannerButton";
-            this.registerScannerButton.Size = new System.Drawing.Size(75, 23);
+            this.registerScannerButton.Size = new System.Drawing.Size(108, 23);
             this.registerScannerButton.TabIndex = 26;
-            this.registerScannerButton.Text = "Register";
+            this.registerScannerButton.Text = "Register Scanner";
             this.registerScannerButton.UseVisualStyleBackColor = true;
             this.registerScannerButton.Click += new System.EventHandler(this.OnClickRegisterScanner);
             // 
             // unregisterScannerButton
             // 
             this.unregisterScannerButton.Enabled = false;
-            this.unregisterScannerButton.Location = new System.Drawing.Point(240, 460);
+            this.unregisterScannerButton.Location = new System.Drawing.Point(142, 460);
             this.unregisterScannerButton.Name = "unregisterScannerButton";
-            this.unregisterScannerButton.Size = new System.Drawing.Size(75, 23);
+            this.unregisterScannerButton.Size = new System.Drawing.Size(108, 23);
             this.unregisterScannerButton.TabIndex = 27;
-            this.unregisterScannerButton.Text = "Unregister";
+            this.unregisterScannerButton.Text = "Unregister Scanner";
             this.unregisterScannerButton.UseVisualStyleBackColor = true;
+            this.unregisterScannerButton.Click += new System.EventHandler(this.OnClickUnregisterScanner);
+            // 
+            // registerScannerLabel
+            // 
+            this.registerScannerLabel.AutoSize = true;
+            this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
+            this.registerScannerLabel.Location = new System.Drawing.Point(256, 465);
+            this.registerScannerLabel.Name = "registerScannerLabel";
+            this.registerScannerLabel.Size = new System.Drawing.Size(263, 13);
+            this.registerScannerLabel.TabIndex = 28;
+            this.registerScannerLabel.Text = "Register a barcode scanner to start using Single Scan";
             // 
             // OptionPagePersonal
             // 
@@ -336,10 +328,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(0, 15);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.registerScannerLabel);
             this.Controls.Add(this.unregisterScannerButton);
             this.Controls.Add(this.registerScannerButton);
-            this.Controls.Add(this.scannerState);
-            this.Controls.Add(this.scannerStateLabel);
             this.Controls.Add(this.autoPrint);
             this.Controls.Add(this.singleScan);
             this.Controls.Add(this.sectionTitle1);
@@ -396,9 +387,8 @@ namespace ShipWorks.ApplicationCore.Options
         private UI.Controls.SectionTitle sectionTitle1;
         private System.Windows.Forms.CheckBox singleScan;
         private System.Windows.Forms.CheckBox autoPrint;
-        private System.Windows.Forms.Label scannerStateLabel;
-        private System.Windows.Forms.Label scannerState;
         private System.Windows.Forms.Button registerScannerButton;
         private System.Windows.Forms.Button unregisterScannerButton;
+        private System.Windows.Forms.Label registerScannerLabel;
     }
 }
