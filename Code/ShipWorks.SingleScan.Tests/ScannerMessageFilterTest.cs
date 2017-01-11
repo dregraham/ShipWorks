@@ -213,6 +213,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.PreFilterMessage(ref message);
 
             mock.Mock<IScannerIdentifier>().Verify(x => x.HandleDeviceAdded((IntPtr) 1234));
+            mock.Mock<IScannerIdentifier>().Verify(x => x.HandleDeviceRemoved((IntPtr) 1234), Times.Never);
         }
 
         [Fact]
@@ -228,6 +229,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.PreFilterMessage(ref message);
 
             mock.Mock<IScannerIdentifier>().Verify(x => x.HandleDeviceRemoved((IntPtr) 1234));
+            mock.Mock<IScannerIdentifier>().Verify(x => x.HandleDeviceAdded((IntPtr) 1234), Times.Never);
         }
 
         [Theory]
