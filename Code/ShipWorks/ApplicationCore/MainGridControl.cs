@@ -88,6 +88,9 @@ namespace ShipWorks.ApplicationCore
 
         List<long> selectedStoreKeys;
 
+        // Keeps track of the latest search being via barcode or not
+        private bool isBarcodeSearch = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -367,13 +370,20 @@ namespace ShipWorks.ApplicationCore
                 if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search)
                 {
                     IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
-                    if ((rows?.CompareCountTo(1) ?? ComparisonResult.Less) == ComparisonResult.Equal)
+
+                    if (isBarcodeSearch || (rows?.CompareCountTo(1) ?? ComparisonResult.Less) == ComparisonResult.Equal)
                     {
                         GridRow onlyGridRow = rows?.FirstOrDefault();
                         if (onlyGridRow != null)
                         {
                             onlyGridRow.Selected = true;
                         }
+                    }
+
+                    // Set back to not barcode search
+                    if (isBarcodeSearch)
+                    {
+                        isBarcodeSearch = false;
                     }
                 }
             }
@@ -736,6 +746,9 @@ namespace ShipWorks.ApplicationCore
             {
                 return;
             }
+
+            // Mark that the search is coming from a barcode scan
+            isBarcodeSearch = true;
 
             searchBox.Text = barcode;
         }
