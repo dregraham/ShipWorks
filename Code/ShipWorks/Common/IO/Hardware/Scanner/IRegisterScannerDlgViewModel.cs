@@ -29,6 +29,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Gets or sets the action to close the parent dialog.
         /// </summary>
-        Action<DialogResult> CloseDialog { get; set; }
+        Action CloseDialog { get; set; }
     }
 }

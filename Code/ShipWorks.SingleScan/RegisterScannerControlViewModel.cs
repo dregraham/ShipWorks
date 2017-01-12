@@ -38,7 +38,7 @@ namespace ShipWorks.SingleScan
             this.scannerService = scannerService;
             this.scannerIdentifier = scannerIdentifier;
             SaveScannerCommand = new RelayCommand(SaveScanner);
-            CancelCommand = new RelayCommand(Cancel);
+            CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             scanSubscription = messenger.OfType<ScanMessage>()
@@ -50,7 +50,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Gets or sets the action to close the parent dialog.
         /// </summary>
-        public Action<DialogResult> CloseDialog { get; set; }
+        public Action CloseDialog { get; set; }
 
         /// <summary>
         /// Detects a scan event and saves the result and device handle
@@ -125,13 +125,13 @@ namespace ShipWorks.SingleScan
         private void SaveScanner()
         {
             scannerIdentifier.Save(deviceHandle);
-            CloseDialog?.Invoke(DialogResult.OK);
+            Close();
         }
 
         /// <summary>
         /// Executes the close action
         /// </summary>
-        private void Cancel() => CloseDialog?.Invoke(DialogResult.Cancel);
+        private void Close() => CloseDialog?.Invoke();
 
         /// <summary>
         /// Ends scanner search

@@ -148,6 +148,8 @@ namespace ShipWorks.ApplicationCore.Options
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetName());
             }
+
+            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetName());
         }
 
         /// <summary>
@@ -171,12 +173,8 @@ namespace ShipWorks.ApplicationCore.Options
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 Form findScanner = scope.ResolveNamed<Form>("RegisterScannerDialog");
-                DialogResult result = findScanner.ShowDialog(owner);
-                if (result == DialogResult.OK)
-                {
-                    registerScannerLabel.Visible = false;
-                    unregisterScannerButton.Enabled = true;
-                }
+                findScanner.ShowDialog(owner);
+                UpdateSingleScanSettingsUI();
             }
         }
 
@@ -186,7 +184,6 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnClickUnregisterScanner(object sender, EventArgs e)
         {
             scannerRepo.Save(string.Empty);
-            unregisterScannerButton.Enabled = false;
             UpdateSingleScanSettingsUI();
         }
     }
