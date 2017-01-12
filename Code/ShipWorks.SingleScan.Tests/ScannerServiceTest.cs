@@ -27,7 +27,7 @@ namespace ShipWorks.SingleScan.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<ScannerService>();
         }
-
+        
         [Fact]
         public void Enable_DelegatesToMessageFilterFactory()
         {
