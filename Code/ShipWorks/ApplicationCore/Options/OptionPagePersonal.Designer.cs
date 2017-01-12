@@ -103,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionTitleRibbon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleRibbon.Location = new System.Drawing.Point(10, 91);
+            this.sectionTitleRibbon.Location = new System.Drawing.Point(10, 99);
             this.sectionTitleRibbon.Name = "sectionTitleRibbon";
             this.sectionTitleRibbon.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleRibbon.TabIndex = 4;
@@ -112,7 +112,7 @@ namespace ShipWorks.ApplicationCore.Options
             // showQatBelowRibbon
             // 
             this.showQatBelowRibbon.AutoSize = true;
-            this.showQatBelowRibbon.Location = new System.Drawing.Point(28, 124);
+            this.showQatBelowRibbon.Location = new System.Drawing.Point(28, 127);
             this.showQatBelowRibbon.Name = "showQatBelowRibbon";
             this.showQatBelowRibbon.Size = new System.Drawing.Size(242, 17);
             this.showQatBelowRibbon.TabIndex = 5;
@@ -122,7 +122,7 @@ namespace ShipWorks.ApplicationCore.Options
             // minimizeRibbon
             // 
             this.minimizeRibbon.AutoSize = true;
-            this.minimizeRibbon.Location = new System.Drawing.Point(28, 147);
+            this.minimizeRibbon.Location = new System.Drawing.Point(28, 150);
             this.minimizeRibbon.Name = "minimizeRibbon";
             this.minimizeRibbon.Size = new System.Drawing.Size(120, 17);
             this.minimizeRibbon.TabIndex = 6;
@@ -133,7 +133,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionTitleFilters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleFilters.Location = new System.Drawing.Point(10, 170);
+            this.sectionTitleFilters.Location = new System.Drawing.Point(10, 181);
             this.sectionTitleFilters.Name = "sectionTitleFilters";
             this.sectionTitleFilters.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleFilters.TabIndex = 7;
@@ -142,7 +142,7 @@ namespace ShipWorks.ApplicationCore.Options
             // labelInitialFilter
             // 
             this.labelInitialFilter.AutoSize = true;
-            this.labelInitialFilter.Location = new System.Drawing.Point(25, 200);
+            this.labelInitialFilter.Location = new System.Drawing.Point(25, 211);
             this.labelInitialFilter.Name = "labelInitialFilter";
             this.labelInitialFilter.Size = new System.Drawing.Size(234, 13);
             this.labelInitialFilter.TabIndex = 8;
@@ -185,7 +185,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionTitleShipping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleShipping.Location = new System.Drawing.Point(10, 298);
+            this.sectionTitleShipping.Location = new System.Drawing.Point(10, 316);
             this.sectionTitleShipping.Name = "sectionTitleShipping";
             this.sectionTitleShipping.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleShipping.TabIndex = 12;
@@ -194,7 +194,7 @@ namespace ShipWorks.ApplicationCore.Options
             // labelWeightFormat
             // 
             this.labelWeightFormat.AutoSize = true;
-            this.labelWeightFormat.Location = new System.Drawing.Point(25, 331);
+            this.labelWeightFormat.Location = new System.Drawing.Point(25, 349);
             this.labelWeightFormat.Name = "labelWeightFormat";
             this.labelWeightFormat.Size = new System.Drawing.Size(153, 13);
             this.labelWeightFormat.TabIndex = 13;
@@ -204,7 +204,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.comboWeightFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboWeightFormat.FormattingEnabled = true;
-            this.comboWeightFormat.Location = new System.Drawing.Point(184, 328);
+            this.comboWeightFormat.Location = new System.Drawing.Point(184, 346);
             this.comboWeightFormat.Name = "comboWeightFormat";
             this.comboWeightFormat.Size = new System.Drawing.Size(173, 21);
             this.comboWeightFormat.TabIndex = 14;
@@ -212,7 +212,7 @@ namespace ShipWorks.ApplicationCore.Options
             // labelFilterSortOrder
             // 
             this.labelFilterSortOrder.AutoSize = true;
-            this.labelFilterSortOrder.Location = new System.Drawing.Point(25, 273);
+            this.labelFilterSortOrder.Location = new System.Drawing.Point(25, 284);
             this.labelFilterSortOrder.Name = "labelFilterSortOrder";
             this.labelFilterSortOrder.Size = new System.Drawing.Size(212, 13);
             this.labelFilterSortOrder.TabIndex = 10;
@@ -225,7 +225,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelInitialFilter.Controls.Add(this.radioInitialFilterRecent);
             this.panelInitialFilter.Controls.Add(this.filterComboBox);
             this.panelInitialFilter.Controls.Add(this.radioInitialFilterAlways);
-            this.panelInitialFilter.Location = new System.Drawing.Point(47, 216);
+            this.panelInitialFilter.Location = new System.Drawing.Point(47, 227);
             this.panelInitialFilter.Name = "panelInitialFilter";
             this.panelInitialFilter.Size = new System.Drawing.Size(488, 51);
             this.panelInitialFilter.TabIndex = 9;
@@ -234,7 +234,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.filterInitialSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filterInitialSort.FormattingEnabled = true;
-            this.filterInitialSort.Location = new System.Drawing.Point(236, 270);
+            this.filterInitialSort.Location = new System.Drawing.Point(236, 281);
             this.filterInitialSort.Name = "filterInitialSort";
             this.filterInitialSort.Size = new System.Drawing.Size(264, 21);
             this.filterInitialSort.TabIndex = 11;
@@ -243,7 +243,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infotipWeightFormat.Caption = "Regardless of the format the weight is displayed as, you can enter the weight in " +
     "any format.";
-            this.infotipWeightFormat.Location = new System.Drawing.Point(364, 333);
+            this.infotipWeightFormat.Location = new System.Drawing.Point(364, 356);
             this.infotipWeightFormat.Name = "infotipWeightFormat";
             this.infotipWeightFormat.Size = new System.Drawing.Size(12, 12);
             this.infotipWeightFormat.TabIndex = 20;
@@ -253,7 +253,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infotipMinimizeRibbon.Caption = "When the ribbon is minimized it has the appearance of a regular Windows menu.  \r\n" +
     "\r\nThe Ribbon can also be minimized by double-clicking a Ribbon tab. ";
-            this.infotipMinimizeRibbon.Location = new System.Drawing.Point(147, 149);
+            this.infotipMinimizeRibbon.Location = new System.Drawing.Point(147, 152);
             this.infotipMinimizeRibbon.Name = "infotipMinimizeRibbon";
             this.infotipMinimizeRibbon.Size = new System.Drawing.Size(12, 12);
             this.infotipMinimizeRibbon.TabIndex = 21;
@@ -263,7 +263,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionTitleSingleScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleSingleScan.Location = new System.Drawing.Point(10, 355);
+            this.sectionTitleSingleScan.Location = new System.Drawing.Point(10, 381);
             this.sectionTitleSingleScan.Name = "sectionTitleSingleScan";
             this.sectionTitleSingleScan.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleSingleScan.TabIndex = 13;
@@ -272,7 +272,7 @@ namespace ShipWorks.ApplicationCore.Options
             // singleScan
             // 
             this.singleScan.AutoSize = true;
-            this.singleScan.Location = new System.Drawing.Point(28, 383);
+            this.singleScan.Location = new System.Drawing.Point(28, 409);
             this.singleScan.Name = "singleScan";
             this.singleScan.Size = new System.Drawing.Size(175, 17);
             this.singleScan.TabIndex = 22;
@@ -283,7 +283,7 @@ namespace ShipWorks.ApplicationCore.Options
             // autoPrint
             // 
             this.autoPrint.AutoSize = true;
-            this.autoPrint.Location = new System.Drawing.Point(50, 406);
+            this.autoPrint.Location = new System.Drawing.Point(50, 432);
             this.autoPrint.Name = "autoPrint";
             this.autoPrint.Size = new System.Drawing.Size(227, 17);
             this.autoPrint.TabIndex = 23;
@@ -292,7 +292,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(28, 429);
+            this.registerScannerButton.Location = new System.Drawing.Point(28, 455);
             this.registerScannerButton.Name = "registerScannerButton";
             this.registerScannerButton.Size = new System.Drawing.Size(108, 23);
             this.registerScannerButton.TabIndex = 26;
@@ -303,7 +303,7 @@ namespace ShipWorks.ApplicationCore.Options
             // unregisterScannerButton
             // 
             this.unregisterScannerButton.Enabled = false;
-            this.unregisterScannerButton.Location = new System.Drawing.Point(142, 429);
+            this.unregisterScannerButton.Location = new System.Drawing.Point(142, 455);
             this.unregisterScannerButton.Name = "unregisterScannerButton";
             this.unregisterScannerButton.Size = new System.Drawing.Size(108, 23);
             this.unregisterScannerButton.TabIndex = 27;
@@ -315,7 +315,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.registerScannerLabel.AutoSize = true;
             this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
-            this.registerScannerLabel.Location = new System.Drawing.Point(256, 434);
+            this.registerScannerLabel.Location = new System.Drawing.Point(256, 460);
             this.registerScannerLabel.Name = "registerScannerLabel";
             this.registerScannerLabel.Size = new System.Drawing.Size(263, 13);
             this.registerScannerLabel.TabIndex = 28;
