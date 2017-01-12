@@ -14,7 +14,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public RegisterScannerDialog(IRegisterScannerDlgViewModel viewModel)
+        public RegisterScannerDialog(IRegisterScannerControlViewModel viewModel)
         {
             viewModel.CloseDialog = Close;
             InitializeComponent();

@@ -29,25 +29,6 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        [SuppressMessage("Code Analysis", "S1481")]
-        public void CurrentScannerState_DelegatesToScannerIdentifier()
-        {
-            var result = testObject.CurrentScannerState;
-
-            mock.Mock<IScannerIdentifier>().VerifyGet(x => x.ScannerState);
-        }
-
-        [Theory]
-        [InlineData(ScannerState.Attached)]
-        [InlineData(ScannerState.NotRegistered)]
-        public void CurrentScannerState_ReturnsValueFromScannerIdentifier(ScannerState value)
-        {
-            mock.Mock<IScannerIdentifier>().SetupGet(x => x.ScannerState).Returns(value);
-
-            Assert.Equal(value, testObject.CurrentScannerState);
-        }
-
-        [Fact]
         public void Enable_DelegatesToMessageFilterFactory()
         {
             testObject.Enable();

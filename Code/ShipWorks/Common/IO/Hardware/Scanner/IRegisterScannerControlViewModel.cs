@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
-    public interface IRegisterScannerDlgViewModel
+    public interface IRegisterScannerControlViewModel
     {
         /// <summary>
         /// Message to displaying indicating we are waiting for a scan

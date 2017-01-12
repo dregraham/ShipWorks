@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -17,7 +16,7 @@ namespace ShipWorks.SingleScan
     /// ViewModel to support RegisterScannerControl - used to register a scanner
     /// </summary>
     [Component]
-    public class RegisterScannerControlViewModel : IRegisterScannerDlgViewModel, IDisposable, INotifyPropertyChanged
+    public class RegisterScannerControlViewModel : IRegisterScannerControlViewModel, IDisposable, INotifyPropertyChanged
     {
         private readonly IScannerService scannerService;
         private readonly IScannerIdentifier scannerIdentifier;
@@ -101,11 +100,6 @@ namespace ShipWorks.SingleScan
                 ResultFound = true;
             }
         }
-
-        /// <summary>
-        /// The window loaded command.
-        /// </summary>
-        public ICommand WindowLoadedCommand { get; set; }
 
         /// <summary>
         /// Gets or sets the save scanner command.
