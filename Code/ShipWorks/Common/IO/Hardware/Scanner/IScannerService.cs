@@ -37,7 +37,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Based on SingleScan settings, return true if single scan should be enabled
         /// </summary>
-        /// <returns></returns>
         bool ShouldSingleScanBeEnabled();
     }
 }

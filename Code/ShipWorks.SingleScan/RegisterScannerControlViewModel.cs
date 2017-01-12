@@ -5,8 +5,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
@@ -15,23 +13,27 @@ using ShipWorks.Messaging.Messages;
 
 namespace ShipWorks.SingleScan
 {
+    /// <summary>
+    /// ViewModel to support RegisterScannerControl - used to register a scanner 
+    /// </summary>
     [Component]
-    public class RegisterScannerDlgViewModel : IRegisterScannerDlgViewModel, IDisposable, INotifyPropertyChanged
+    public class RegisterScannerControlViewModel : IRegisterScannerDlgViewModel, IDisposable, INotifyPropertyChanged
     {
         private readonly IScannerService scannerService;
         private readonly IScannerIdentifier scannerIdentifier;
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
         private readonly PropertyChangedHandler handler;
-        public event PropertyChangedEventHandler PropertyChanged;
         private string waitingMessage = "Waiting for scan";
         private string scanResult;
         private bool resultFound;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterScannerDlgViewModel"/> class.
+        /// Constructor
         /// </summary>
-        public RegisterScannerDlgViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
+        public RegisterScannerControlViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
         {
             this.scannerService = scannerService;
             this.scannerIdentifier = scannerIdentifier;

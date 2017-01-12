@@ -9,6 +9,9 @@ namespace ShipWorks.SingleScan
     /// </summary>
     public partial class RegisterScannerControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RegisterScannerControl()
         {
             InitializeComponent();

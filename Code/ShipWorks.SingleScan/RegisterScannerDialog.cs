@@ -5,24 +5,26 @@ using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan
 {
+    /// <summary>
+    /// Dialog to prompt user to register scanner.
+    /// </summary>
     [NamedComponent("RegisterScannerDialog", typeof(Form))]
     public partial class RegisterScannerDialog : Form
     {
-        private readonly IRegisterScannerDlgViewModel viewmodel;
-
-        public RegisterScannerDialog(IRegisterScannerDlgViewModel viewmodel)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RegisterScannerDialog(IRegisterScannerDlgViewModel viewModel)
         {
-            this.viewmodel = viewmodel;
-            viewmodel.CloseDialog = CloseDialog;
+            viewModel.CloseDialog = CloseDialog;
             InitializeComponent();
-            registrationControl.DataContext = this.viewmodel;
+            registrationControl.DataContext = viewModel;
             StartPosition = FormStartPosition.CenterParent;
         }
 
         /// <summary>
         /// Closes the dialog.
         /// </summary>
-        /// <param name="result">The result.</param>
         private void CloseDialog(DialogResult result)
         {
             DialogResult = result;

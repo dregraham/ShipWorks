@@ -110,7 +110,7 @@
     <Compile Include="RegisterScannerDialog.Designer.cs">
       <DependentUpon>RegisterScannerDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegisterScannerDlgViewModel.cs" />
+    <Compile Include="RegisterScannerControlViewModel.cs" />
     <Compile Include="RegisterScannerControl.xaml.cs">
       <DependentUpon>RegisterScannerControl.xaml</DependentUpon>
     </Compile>

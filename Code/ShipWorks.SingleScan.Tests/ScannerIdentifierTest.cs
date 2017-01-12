@@ -18,6 +18,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly IntPtr anotherScannerDeviceHandle = (IntPtr) 10;
         private const string anotherDeviceName = "AnotherDeviceName";
         private readonly IntPtr anotherDeviceHandle = (IntPtr) 42;
+
         public ScannerIdentifierTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();

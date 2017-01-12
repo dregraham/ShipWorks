@@ -10,7 +10,7 @@
              DataContext="RegisterScannerDlgViewModel"
              FontFamily="Tahoma"
              FontSize="8.25pt"
-             d:DataContext="{d:DesignInstance local:RegisterScannerDlgViewModel}"
+             d:DataContext="{d:DesignInstance local:RegisterScannerControlViewModel}"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />

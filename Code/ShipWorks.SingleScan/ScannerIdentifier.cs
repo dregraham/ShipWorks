@@ -18,8 +18,6 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="ScannerIdentifier"/> class.
         /// </summary>
-        /// <param name="deviceManager">The device manager.</param>
-        /// <param name="configurationRepository">The configuration repository.</param>
         public ScannerIdentifier(IUser32Devices deviceManager, IScannerConfigurationRepository configurationRepository)
         {
             this.deviceManager = deviceManager;
