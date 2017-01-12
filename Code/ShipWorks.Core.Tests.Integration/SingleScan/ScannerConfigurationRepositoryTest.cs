@@ -57,6 +57,18 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
             Assert.Equal(value, testObject.GetName());
         }
 
+        [Fact]
+        public void Clear_SavesScannerNameWithEmptyString()
+        {
+            // Save some value to ensure its not empty
+            testObject.Save(value);
+            Assert.Equal(value, testObject.GetName());
+
+            // Clear and ensure that the value is empty
+            testObject.Clear();
+            Assert.Equal(string.Empty, testObject.GetName());
+        }
+
         public void Dispose()
         {
             // Clean up after ourselves
