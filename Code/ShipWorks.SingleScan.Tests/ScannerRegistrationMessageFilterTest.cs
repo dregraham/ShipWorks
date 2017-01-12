@@ -12,17 +12,17 @@ using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
 {
-    public class FindScannerMessageFilterTest : IDisposable
+    public class ScannerRegistrationMessageFilterTest : IDisposable
     {
         private readonly IntPtr scanDeviceHandle = (IntPtr) 456;
         private readonly AutoMock mock;
-        private readonly FindScannerMessageFilter testObject;
+        private readonly ScannerRegistrationMessageFilter testObject;
 
-        public FindScannerMessageFilterTest()
+        public ScannerRegistrationMessageFilterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             mock.Mock<IScannerIdentifier>().Setup(x => x.IsScanner(It.IsAny<IntPtr>())).Returns(true);
-            testObject = mock.Create<FindScannerMessageFilter>();
+            testObject = mock.Create<ScannerRegistrationMessageFilter>();
         }
 
         [Fact]

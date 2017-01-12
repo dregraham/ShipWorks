@@ -15,7 +15,7 @@ namespace ShipWorks.SingleScan
     /// Message filter used to identify the scanner
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class FindScannerMessageFilter : IScannerMessageFilter
+    public class ScannerRegistrationMessageFilter : IScannerMessageFilter
     {
         private readonly IUser32Input user32Input;
         private readonly IScanBuffer scanBuffer;
@@ -27,7 +27,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public FindScannerMessageFilter(IUser32Input user32Input, IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
+        public ScannerRegistrationMessageFilter(IUser32Input user32Input, IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
         {
             this.user32Input = user32Input;
             this.scanBuffer = scanBuffer;
@@ -37,6 +37,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Filter messages for the scanner
         /// </summary>
+        /// <returns>true to filter the message and stop it from being dispatched; false to allow the message to continue to the next filter or control.</returns>
         public bool PreFilterMessage(ref Message message)
         {
             switch ((WindowsMessage) message.Msg)
@@ -61,6 +62,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handle raw input message
         /// </summary>
+        /// <returns>true to filter the message and stop it from being dispatched; false to allow the message to continue to the next filter or control.</returns>
         private bool HandleInput(IntPtr messageHandle)
         {
             GenericResult<RawInput> result = user32Input.GetRawInputData(messageHandle, RawInputCommand.Input);

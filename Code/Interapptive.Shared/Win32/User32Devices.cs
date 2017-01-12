@@ -51,68 +51,26 @@ namespace Interapptive.Shared.Win32
             [In, Out] ref uint pcbSize);
 
         /// <summary>
-        /// Get a list of all raw devices
-        /// </summary>
-        public RawInputDeviceListItem[] GetAllRawDevices()
-        {
-            uint deviceCount = 0;
-            uint dwSize = (uint) Marshal.SizeOf(typeof(RawInputDeviceListItem));
-
-            // First call the system routine with a null pointer
-            // for the array to get the size needed for the list
-            uint retValue = GetRawInputDeviceList(null, ref deviceCount, dwSize);
-
-            // If anything but zero is returned, the call failed, so return a null list
-            if (0 != retValue)
-            {
-                return null;
-            }
-
-            // Now allocate an array of the specified number of entries
-            RawInputDeviceListItem[] deviceList = new RawInputDeviceListItem[deviceCount];
-
-            // Now make the call again, using the array
-            retValue = GetRawInputDeviceList(deviceList, ref deviceCount, dwSize);
-
-            // If anything but zero is returned, the call failed, so return a null list
-            if (0 != retValue)
-            {
-                return null;
-            }
-
-            // Free up the memory we first got the information into as
-            // it is no longer needed, since the structures have been
-            // copied to the deviceList array.
-            //IntPtr pRawInputDeviceList = Marshal.AllocHGlobal((int)(dwSize * deviceCount));
-            //Marshal.FreeHGlobal(pRawInputDeviceList);
-
-            // Finally, return the filled in list
-            return deviceList;
-        }
-
-
-        /// <summary>
         /// Gets the name of the device.
         /// </summary>
         public string GetDeviceName(IntPtr deviceHandle)
         {
             IntPtr pData = IntPtr.Zero;
-            uint strsize = 0;
+            uint size = 0;
 
-            uint result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
-            pData = Marshal.AllocHGlobal(((int) strsize) * 2);
-            result = GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref strsize);
+            // These are the pinvoke calls needed to get the hid path.
+            GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref size);
+            pData = Marshal.AllocHGlobal(((int) size) * 2);
+            GetRawInputDeviceInfo(deviceHandle, RawInputDeviceInformationCommand.DeviceName, pData, ref size);
+
+            // hidPAth will be a string like \\?\blahblah#VID_12A0&PID_A73B#lkjasdf#lkjsdlfk
+            // We want to capture VID_12A0&PID_A73B... 
+            // VID represents the vendor ID and PID is the productID.
             string hidPath = Marshal.PtrToStringAuto(pData);
-
             string[] hidParts = hidPath?.Split('#');
             int length = hidParts?.Length ?? 0;
 
-            if (length>=2)
-            {
-                return hidParts[1];
-            }
-            else
-                return null;
+            return length >= 2 ? hidParts[1] : null;
         }
 
         /// <summary>

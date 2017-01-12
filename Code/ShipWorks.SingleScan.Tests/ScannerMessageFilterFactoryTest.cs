@@ -18,11 +18,11 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void CreateFindScannerMessageFilter_DelegatesToFuncFactory()
         {
-            FindScannerMessageFilter findScannerMessageFilter = mock.Create<FindScannerMessageFilter>();
+            ScannerRegistrationMessageFilter scannerRegistrationMessageFilter = mock.Create<ScannerRegistrationMessageFilter>();
 
-            Mock<Func<FindScannerMessageFilter>> repo = mock.MockRepository.Create<Func<FindScannerMessageFilter>>();
+            Mock<Func<ScannerRegistrationMessageFilter>> repo = mock.MockRepository.Create<Func<ScannerRegistrationMessageFilter>>();
             repo.Setup(factory => factory())
-                .Returns(findScannerMessageFilter);
+                .Returns(scannerRegistrationMessageFilter);
             mock.Provide(repo.Object);
 
             ScannerMessageFilterFactory testObject = mock.Create<ScannerMessageFilterFactory>();
