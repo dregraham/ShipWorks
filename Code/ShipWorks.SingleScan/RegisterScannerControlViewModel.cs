@@ -14,7 +14,7 @@ using ShipWorks.Messaging.Messages;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// ViewModel to support RegisterScannerControl - used to register a scanner 
+    /// ViewModel to support RegisterScannerControl - used to register a scanner
     /// </summary>
     [Component]
     public class RegisterScannerControlViewModel : IRegisterScannerDlgViewModel, IDisposable, INotifyPropertyChanged
@@ -29,7 +29,7 @@ namespace ShipWorks.SingleScan
         private bool resultFound;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
