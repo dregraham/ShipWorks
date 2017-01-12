@@ -183,7 +183,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnClickUnregisterScanner(object sender, EventArgs e)
         {
-            scannerRepo.Save(string.Empty);
+            scannerRepo.Clear();
             UpdateSingleScanSettingsUI();
         }
     }

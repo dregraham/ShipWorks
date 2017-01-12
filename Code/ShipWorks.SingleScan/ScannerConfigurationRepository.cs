@@ -54,6 +54,14 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
+        /// Clears out the scanner name from scanner.xml
+        /// </summary>
+        public void Clear()
+        {
+            Save(string.Empty);
+        }
+
+        /// <summary>
         /// Get the scanner name from scanner.xml
         /// </summary>
         public string GetName()
