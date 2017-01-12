@@ -104,15 +104,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegisterScannerDialog.cs">
+    <Compile Include="ScannerRegistrationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegisterScannerDialog.Designer.cs">
-      <DependentUpon>RegisterScannerDialog.cs</DependentUpon>
+    <Compile Include="ScannerRegistrationDialog.Designer.cs">
+      <DependentUpon>ScannerRegistrationDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegisterScannerControlViewModel.cs" />
-    <Compile Include="RegisterScannerControl.xaml.cs">
-      <DependentUpon>RegisterScannerControl.xaml</DependentUpon>
+    <Compile Include="ScannerRegistrationControlViewModel.cs" />
+    <Compile Include="ScannerRegistrationControl.xaml.cs">
+      <DependentUpon>ScannerRegistrationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanBuffer.cs" />
     <Compile Include="ScannerConfigurationRepository.cs" />
@@ -157,14 +157,14 @@
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="RegisterScannerControl.xaml">
+    <Page Include="ScannerRegistrationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RegisterScannerDialog.resx">
-      <DependentUpon>RegisterScannerDialog.cs</DependentUpon>
+    <EmbeddedResource Include="ScannerRegistrationDialog.resx">
+      <DependentUpon>ScannerRegistrationDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.SingleScan
 {
-    partial class RegisterScannerDialog
+    partial class ScannerRegistrationDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
         private void InitializeComponent()
         {
             this.registerScannerHost = new System.Windows.Forms.Integration.ElementHost();
-            this.registrationControl = new ShipWorks.SingleScan.RegisterScannerControl();
+            this.registrationRegistrationControl = new ShipWorks.SingleScan.ScannerRegistrationControl();
             this.SuspendLayout();
             // 
             // registerScannerHost
@@ -43,7 +43,7 @@
             this.registerScannerHost.Size = new System.Drawing.Size(501, 154);
             this.registerScannerHost.TabIndex = 0;
             this.registerScannerHost.Text = "elementHost1";
-            this.registerScannerHost.Child = this.registrationControl;
+            this.registerScannerHost.Child = this.registrationRegistrationControl;
             // 
             // RegisterScannerDialog
             // 
@@ -66,6 +66,6 @@
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost registerScannerHost;
-        private RegisterScannerControl registrationControl;
+        private ScannerRegistrationControl registrationRegistrationControl;
     }
 }

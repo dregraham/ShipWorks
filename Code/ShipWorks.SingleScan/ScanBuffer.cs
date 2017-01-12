@@ -16,9 +16,9 @@ namespace ShipWorks.SingleScan
     /// Buffer characters that make up a scan
     /// </summary>
     [Component]
-    public class ScanBuffer :IScanBuffer
+    public class ScanBuffer : IScanBuffer
     {
-        readonly IMessenger messenger;
+        private readonly IMessenger messenger;
         private IObserver<string> observer;
         private IntPtr lastHandle;
 

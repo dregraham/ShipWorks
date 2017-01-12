@@ -32,7 +32,7 @@ namespace ShipWorks.SingleScan.Tests
             AddDeviceToManager(anotherDeviceHandle, anotherDeviceName);
 
             testObject.HandleDeviceAdded(anotherDeviceHandle);
-            Assert.False(testObject.IsScanner(scannerDeviceHandle));
+            Assert.False(testObject.IsRegisteredScanner(scannerDeviceHandle));
         }
 
         [Fact]
@@ -43,10 +43,10 @@ namespace ShipWorks.SingleScan.Tests
             AddDeviceToManager(anotherScannerDeviceHandle, scannerDeviceName);
 
             testObject.HandleDeviceAdded(scannerDeviceHandle);
-            Assert.True(testObject.IsScanner(scannerDeviceHandle));
+            Assert.True(testObject.IsRegisteredScanner(scannerDeviceHandle));
 
             testObject.HandleDeviceAdded(anotherScannerDeviceHandle);
-            Assert.True(testObject.IsScanner(scannerDeviceHandle));
+            Assert.True(testObject.IsRegisteredScanner(scannerDeviceHandle));
         }
 
         [Fact]
@@ -56,10 +56,10 @@ namespace ShipWorks.SingleScan.Tests
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
             testObject.HandleDeviceAdded(scannerDeviceHandle);
 
-            Assert.True(testObject.IsScanner(scannerDeviceHandle));
+            Assert.True(testObject.IsRegisteredScanner(scannerDeviceHandle));
 
             testObject.HandleDeviceRemoved(scannerDeviceHandle);
-            Assert.False(testObject.IsScanner(scannerDeviceHandle));
+            Assert.False(testObject.IsRegisteredScanner(scannerDeviceHandle));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.HandleDeviceAdded(scannerDeviceHandle);
 
             testObject.HandleDeviceRemoved(anotherScannerDeviceHandle);
-            Assert.True(testObject.IsScanner(scannerDeviceHandle));
+            Assert.True(testObject.IsRegisteredScanner(scannerDeviceHandle));
         }
 
         [Fact]
@@ -81,14 +81,14 @@ namespace ShipWorks.SingleScan.Tests
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
 
             testObject.HandleDeviceRemoved(scannerDeviceHandle);
-            Assert.False(testObject.IsScanner(scannerDeviceHandle));
+            Assert.False(testObject.IsRegisteredScanner(scannerDeviceHandle));
         }
 
         [Fact]
         public void Save_IsScannerReturnsTrue_WhenSavedDeviceHandleIsPassedIn()
         {
             testObject.Save(anotherScannerDeviceHandle);
-            Assert.True(testObject.IsScanner(anotherScannerDeviceHandle));
+            Assert.True(testObject.IsRegisteredScanner(anotherScannerDeviceHandle));
         }
 
         [Fact]

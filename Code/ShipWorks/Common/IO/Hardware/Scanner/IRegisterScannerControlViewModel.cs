@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
+    /// <summary>
+    /// View model handling logic for the RegisterScannerControl
+    /// </summary>
     public interface IRegisterScannerControlViewModel
     {
         /// <summary>
-        /// Message to displaying indicating we are waiting for a scan
+        /// Message indicating we are waiting for a scan
         /// </summary>
         string WaitingMessage { get; }
 

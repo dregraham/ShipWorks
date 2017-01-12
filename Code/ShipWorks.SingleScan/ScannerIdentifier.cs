@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
 namespace ShipWorks.SingleScan
@@ -11,16 +10,16 @@ namespace ShipWorks.SingleScan
     /// </summary>
     public class ScannerIdentifier : IScannerIdentifier
     {
-        private readonly IUser32Devices deviceManager;
+        private readonly IUser32Devices user32Devices;
         private readonly IScannerConfigurationRepository configurationRepository;
         private IntPtr? scannerHandle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScannerIdentifier"/> class.
         /// </summary>
-        public ScannerIdentifier(IUser32Devices deviceManager, IScannerConfigurationRepository configurationRepository)
+        public ScannerIdentifier(IUser32Devices user32Devices, IScannerConfigurationRepository configurationRepository)
         {
-            this.deviceManager = deviceManager;
+            this.user32Devices = user32Devices;
             this.configurationRepository = configurationRepository;
         }
 
@@ -29,14 +28,14 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void HandleDeviceAdded(IntPtr deviceHandle)
         {
-            // If we already know about a scanner or there is no registered scanner, we don't care 
+            // If we already know about a scanner or there is no registered scanner, we don't care
             // that a device was added
             if (scannerHandle.HasValue || configurationRepository.GetName().IsNullOrWhiteSpace())
             {
                 return;
             }
 
-            string deviceName = deviceManager.GetDeviceName(deviceHandle);
+            string deviceName = user32Devices.GetDeviceName(deviceHandle);
             if (!deviceName.IsNullOrWhiteSpace() && deviceName == configurationRepository.GetName())
             {
                 scannerHandle = deviceHandle;
@@ -57,7 +56,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Is the specified handle the current scanner?
         /// </summary>
-        public bool IsScanner(IntPtr deviceHandle) => scannerHandle == deviceHandle;
+        public bool IsRegisteredScanner(IntPtr deviceHandle) => scannerHandle == deviceHandle;
 
         /// <summary>
         /// Save the specified handle as the current scanner
@@ -65,7 +64,7 @@ namespace ShipWorks.SingleScan
         public void Save(IntPtr deviceHandle)
         {
             scannerHandle = deviceHandle;
-            string name = deviceManager.GetDeviceName(deviceHandle);
+            string name = user32Devices.GetDeviceName(deviceHandle);
             configurationRepository.Save(name);
         }
     }

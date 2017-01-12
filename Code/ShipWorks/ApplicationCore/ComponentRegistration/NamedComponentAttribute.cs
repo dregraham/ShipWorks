@@ -7,6 +7,10 @@ using Autofac.Builder;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
+    /// <summary>
+    /// Register a component named for specific service
+    /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class NamedComponentAttribute : Attribute
     {
@@ -15,19 +19,19 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// </summary>
         public NamedComponentAttribute(string name, Type type)
         {
-            ServiceName = name;
-            ServiceType = type;
+            ComponentName = name;
+            ComponentType = type;
         }
 
         /// <summary>
         /// The name of the component
         /// </summary>
-        public string ServiceName { get; set; }
+        public string ComponentName { get; set; }
 
         /// <summary>
         /// The type of the base class or interface
         /// </summary>
-        public Type ServiceType { get; set; }
+        public Type ComponentType { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether [externally owned].
@@ -52,7 +56,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                 foreach (NamedComponentAttribute attribute in item.Attributes)
                 {
                     IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registration =
-                        builder.RegisterType(item.Component).Named(attribute.ServiceName, attribute.ServiceType);
+                        builder.RegisterType(item.Component).Named(attribute.ComponentName, attribute.ComponentType);
 
                     if (attribute.ExternallyOwned)
                     {

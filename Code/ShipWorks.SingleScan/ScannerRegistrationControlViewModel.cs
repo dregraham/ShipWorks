@@ -13,10 +13,10 @@ using ShipWorks.Messaging.Messages;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// ViewModel to support RegisterScannerControl - used to register a scanner
+    /// ViewModel to support ScannerRegistrationControl - used to register a scanner
     /// </summary>
     [Component]
-    public class RegisterScannerControlViewModel : IRegisterScannerControlViewModel, IDisposable, INotifyPropertyChanged
+    public class ScannerRegistrationControlViewModel : IRegisterScannerControlViewModel, IDisposable, INotifyPropertyChanged
     {
         private readonly IScannerService scannerService;
         private readonly IScannerIdentifier scannerIdentifier;
@@ -32,7 +32,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public RegisterScannerControlViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
+        public ScannerRegistrationControlViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
         {
             this.scannerService = scannerService;
             this.scannerIdentifier = scannerIdentifier;

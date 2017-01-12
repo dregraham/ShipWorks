@@ -17,7 +17,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Is the specified handle the current scanner?
         /// </summary>
-        bool IsScanner(IntPtr deviceHandle);
+        bool IsRegisteredScanner(IntPtr deviceHandle);
 
         /// <summary>
         /// Handle a device being added to Windows

@@ -71,7 +71,7 @@ namespace ShipWorks.SingleScan
         {
             GenericResult<RawInput> result = user32Input.GetRawInputData(deviceHandle, RawInputCommand.Input);
 
-            if (!scannerIdentifier.IsScanner(result.Value.Header.DeviceHandle))
+            if (!scannerIdentifier.IsRegisteredScanner(result.Value.Header.DeviceHandle))
             {
                 return false;
             }
