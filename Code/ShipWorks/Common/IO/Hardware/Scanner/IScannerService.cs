@@ -30,11 +30,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         void EndFindScanner();
 
         /// <summary>
-        /// Get the state of the current scanner
-        /// </summary>
-        ScannerState CurrentScannerState { get; }
-
-        /// <summary>
         /// Based on SingleScan settings, return true if single scan should be enabled
         /// </summary>
         bool ShouldSingleScanBeEnabled();

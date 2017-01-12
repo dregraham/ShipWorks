@@ -25,22 +25,6 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Get the state of the current scanner
-        /// </summary>
-        public ScannerState ScannerState
-        {
-            get
-            {
-                if (configurationRepository.GetName().IsNullOrWhiteSpace())
-                {
-                    return ScannerState.NotRegistered;
-                }
-
-                return scannerHandle.HasValue ? ScannerState.Attached : ScannerState.Detached;
-            }
-        }
-
-        /// <summary>
         /// Handle a device being added to Windows
         /// </summary>
         public void HandleDeviceAdded(IntPtr deviceHandle)

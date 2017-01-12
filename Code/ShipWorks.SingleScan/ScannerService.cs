@@ -42,11 +42,6 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Get the state of the current scanner
-        /// </summary>
-        public ScannerState CurrentScannerState => scannerIdentifier.ScannerState;
-
-        /// <summary>
         /// Begin finding a current scanner
         /// </summary>
         public void BeginFindScanner()

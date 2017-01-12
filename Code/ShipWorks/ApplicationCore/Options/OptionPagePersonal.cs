@@ -166,8 +166,6 @@ namespace ShipWorks.ApplicationCore.Options
         /// <summary>
         /// Called when [click register scanner].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnClickRegisterScanner(object sender, EventArgs e)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
@@ -185,8 +183,6 @@ namespace ShipWorks.ApplicationCore.Options
         /// <summary>
         /// Called when [click unregister scanner].
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnClickUnregisterScanner(object sender, EventArgs e)
         {
             scannerRepo.Save(string.Empty);

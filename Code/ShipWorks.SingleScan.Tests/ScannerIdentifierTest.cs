@@ -25,47 +25,15 @@ namespace ShipWorks.SingleScan.Tests
             testObject = mock.Create<ScannerIdentifier>();
         }
 
-        [Fact]
-        public void ScannerState_IsNotRegistered_WhenScannerNotInRepository()
-        {
-            Assert.Equal(ScannerState.NotRegistered, testObject.ScannerState);
-        }
-
-        [Fact]
-        public void ScannerState_Detached_WhenScannerInRepositoryAndScannerNotAdded()
-        {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetName()).Returns(scannerDeviceName);
-            AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
-
-            Assert.Equal(ScannerState.Detached, testObject.ScannerState);
-        }
-
-        [Fact]
-        public void ScannerState_IsAttached_WhenScannerInRepositoryAndScannerHandleAssigned()
-        {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetName()).Returns(scannerDeviceName);
-            AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
-
-            testObject.HandleDeviceAdded(scannerDeviceHandle);
-            Assert.Equal(ScannerState.Attached, testObject.ScannerState);
-        }
-
-        [Fact]
-        public void HandleDeviceAdded_ScannerNotRegistered_WhenDeviceAdded_AndNoScannerInRepository()
-        {
-            AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
-
-            testObject.HandleDeviceAdded(scannerDeviceHandle);
-            Assert.Equal(ScannerState.NotRegistered, testObject.ScannerState);
-        }
-
+      
         [Fact]
         public void HandleDeviceAdded_ScannerNotSet_WhenAddedDeviceNotScanner()
         {
             mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetName()).Returns(scannerDeviceName);
             AddDeviceToManager(anotherDeviceHandle, anotherDeviceName);
+
             testObject.HandleDeviceAdded(anotherDeviceHandle);
-            Assert.Equal(ScannerState.Detached, testObject.ScannerState);
+            Assert.True(testObject.IsScanner(scannerDeviceHandle));
         }
 
         [Fact]
@@ -90,11 +58,9 @@ namespace ShipWorks.SingleScan.Tests
             testObject.HandleDeviceAdded(scannerDeviceHandle);
 
             Assert.True(testObject.IsScanner(scannerDeviceHandle));
-            Assert.Equal(ScannerState.Attached, testObject.ScannerState);
 
             testObject.HandleDeviceRemoved(scannerDeviceHandle);
             Assert.False(testObject.IsScanner(scannerDeviceHandle));
-            Assert.Equal(ScannerState.Detached, testObject.ScannerState);
         }
 
         [Fact]
@@ -107,7 +73,6 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.HandleDeviceRemoved(anotherScannerDeviceHandle);
             Assert.True(testObject.IsScanner(scannerDeviceHandle));
-            Assert.Equal(ScannerState.Attached, testObject.ScannerState);
         }
 
         [Fact]
@@ -118,7 +83,6 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.HandleDeviceRemoved(scannerDeviceHandle);
             Assert.False(testObject.IsScanner(scannerDeviceHandle));
-            Assert.Equal(ScannerState.Detached, testObject.ScannerState);
         }
 
         [Fact]
@@ -146,6 +110,5 @@ namespace ShipWorks.SingleScan.Tests
         {
             mock.Dispose();
         }
-
     }
 }
