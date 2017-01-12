@@ -24,8 +24,7 @@ namespace ShipWorks.SingleScan.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<ScannerIdentifier>();
         }
-
-      
+        
         [Fact]
         public void HandleDeviceAdded_ScannerNotSet_WhenAddedDeviceNotScanner()
         {
@@ -33,7 +32,7 @@ namespace ShipWorks.SingleScan.Tests
             AddDeviceToManager(anotherDeviceHandle, anotherDeviceName);
 
             testObject.HandleDeviceAdded(anotherDeviceHandle);
-            Assert.True(testObject.IsScanner(scannerDeviceHandle));
+            Assert.False(testObject.IsScanner(scannerDeviceHandle));
         }
 
         [Fact]

@@ -14,6 +14,7 @@ namespace ShipWorks.SingleScan.Tests
 {
     public class FindScannerMessageFilterTest : IDisposable
     {
+        private readonly IntPtr scanDeviceHandle = (IntPtr) 456;
         private readonly AutoMock mock;
         private readonly FindScannerMessageFilter testObject;
 
@@ -107,7 +108,7 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IScanBuffer>().Verify(x => x.Append(new IntPtr(), "X"));
+            mock.Mock<IScanBuffer>().Verify(x => x.Append(scanDeviceHandle, "X"));
         }
 
         [Theory]
@@ -214,7 +215,7 @@ namespace ShipWorks.SingleScan.Tests
             {
                 Header = new RawInputHeader
                 {
-                    DeviceHandle = new IntPtr(456),
+                    DeviceHandle = scanDeviceHandle,
                     Type = RawInputDeviceType.Keyboard
                 },
                 Data = new RawInput.Union
