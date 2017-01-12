@@ -20,7 +20,7 @@ namespace ShipWorks.SingleScan.Tests
         public ScannerMessageFilterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            mock.Mock<IScannerIdentifier>().Setup(x => x.IsScanner(It.IsAny<IntPtr>())).Returns(true);
+            mock.Mock<IScannerIdentifier>().Setup(x => x.IsRegisteredScanner(It.IsAny<IntPtr>())).Returns(true);
             testObject = mock.Create<ScannerMessageFilter>();
         }
 
@@ -38,13 +38,13 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT, LParam = new IntPtr(456) };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IScannerIdentifier>().Verify(x => x.IsScanner(It.IsAny<IntPtr>()));
+            mock.Mock<IScannerIdentifier>().Verify(x => x.IsRegisteredScanner(It.IsAny<IntPtr>()));
         }
 
         [Fact]
         public void PreFilterMessage_ReturnsFalse_WhenInputIsNotScanner()
         {
-            mock.Mock<IScannerIdentifier>().Setup(x => x.IsScanner(It.IsAny<IntPtr>())).Returns(false);
+            mock.Mock<IScannerIdentifier>().Setup(x => x.IsRegisteredScanner(It.IsAny<IntPtr>())).Returns(false);
 
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             var result = testObject.PreFilterMessage(ref message);
