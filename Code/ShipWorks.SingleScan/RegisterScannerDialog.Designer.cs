@@ -17,7 +17,9 @@
             {
                 components.Dispose();
             }
+            registerScannerHost?.Dispose();
             base.Dispose(disposing);
+
         }
 
         #region Windows Form Designer generated code
@@ -59,13 +61,11 @@
             this.Text = "Register bar code scanner for Single Scan";
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
 
         private System.Windows.Forms.Integration.ElementHost registerScannerHost;
         private RegisterScannerControl registrationControl;
-
     }
 }
