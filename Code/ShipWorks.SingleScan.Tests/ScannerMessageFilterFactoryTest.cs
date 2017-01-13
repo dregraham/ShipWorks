@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -16,37 +17,23 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void CreateFindScannerMessageFilter_DelegatesToFuncFactory()
+        public void CreateScannerRegistrationMessageFilter_ReturnsScannerRegistrationMessageFilter()
         {
-            ScannerRegistrationMessageFilter scannerRegistrationMessageFilter = mock.Create<ScannerRegistrationMessageFilter>();
-
-            Mock<Func<ScannerRegistrationMessageFilter>> repo = mock.MockRepository.Create<Func<ScannerRegistrationMessageFilter>>();
-            repo.Setup(factory => factory())
-                .Returns(scannerRegistrationMessageFilter);
-            mock.Provide(repo.Object);
-
             ScannerMessageFilterFactory testObject = mock.Create<ScannerMessageFilterFactory>();
 
-            testObject.CreateFindScannerMessageFilter();
+            var scannerRegistrationMessageFilter = testObject.CreateScannerRegistrationMessageFilter();
 
-            repo.Verify(factory => factory());
+            Assert.IsType<ScannerRegistrationMessageFilter>(scannerRegistrationMessageFilter);
         }
 
         [Fact]
-        public void CreateScannerMessageFilter_DelegatesToFuncFactory()
+        public void CreateRegisteredScannerInputHandler_ReturnsRegisteredScannerInputHandler()
         {
-            RegisteredScannerInputHandler registeredScannerInputHandler = mock.Create<RegisteredScannerInputHandler>();
-
-            Mock<Func<RegisteredScannerInputHandler>> repo = mock.MockRepository.Create<Func<RegisteredScannerInputHandler>>();
-            repo.Setup(factory => factory())
-                .Returns(registeredScannerInputHandler);
-            mock.Provide(repo.Object);
-
             ScannerMessageFilterFactory testObject = mock.Create<ScannerMessageFilterFactory>();
 
-            testObject.CreateMessageFilter();
+            var registeredScannerInputHandler = testObject.CreateRegisteredScannerInputHandler();
 
-            repo.Verify(factory => factory());
+            Assert.IsType<RegisteredScannerInputHandler>(registeredScannerInputHandler);
         }
 
         public void Dispose()

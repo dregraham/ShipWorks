@@ -1,4 +1,6 @@
 ﻿using System;
+using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
@@ -10,26 +12,33 @@ namespace ShipWorks.SingleScan
     [Component]
     public class ScannerMessageFilterFactory : IScannerMessageFilterFactory
     {
-        private readonly Func<RegisteredScannerInputHandler> createScannerMessageFilter;
-        private readonly Func<ScannerRegistrationMessageFilter> createFindScannerMessageFilter;
+        private readonly IScannerIdentifier scannerIdentifier;
+        private readonly IUser32Input user32Input;
+        private readonly IScanBuffer scanBuffer;
+        private readonly Func<Type, ILog> getLogger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerMessageFilterFactory(Func<RegisteredScannerInputHandler> createScannerMessageFilter, Func<ScannerRegistrationMessageFilter> createFindScannerMessageFilter)
+        public ScannerMessageFilterFactory(IScannerIdentifier scannerIdentifier, IUser32Input user32Input,
+            IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
         {
-            this.createScannerMessageFilter = createScannerMessageFilter;
-            this.createFindScannerMessageFilter = createFindScannerMessageFilter;
+            this.scannerIdentifier = scannerIdentifier;
+            this.user32Input = user32Input;
+            this.scanBuffer = scanBuffer;
+            this.getLogger = getLogger;
         }
 
         /// <summary>
         /// Create a scanner message filter
         /// </summary>
-        public IScannerMessageFilter CreateMessageFilter() => createScannerMessageFilter();
+        public IScannerMessageFilter CreateRegisteredScannerInputHandler() => 
+            new RegisteredScannerInputHandler(scannerIdentifier, user32Input, scanBuffer, getLogger);
 
         /// <summary>
         /// Create a find scanner message filter
         /// </summary>
-        public IScannerMessageFilter CreateFindScannerMessageFilter() => createFindScannerMessageFilter();
+        public IScannerMessageFilter CreateScannerRegistrationMessageFilter() => 
+            new ScannerRegistrationMessageFilter(user32Input, scanBuffer, getLogger);
     }
 }

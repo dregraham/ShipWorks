@@ -32,14 +32,14 @@ namespace ShipWorks.SingleScan.Tests
         public void Enable_DelegatesToMessageFilterFactory()
         {
             testObject.Enable();
-            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateMessageFilter());
+            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateRegisteredScannerInputHandler());
         }
 
         [Fact]
         public void Enable_DelegatesToMessageFilterRegistrar()
         {
             var messageFilter = mock.Create<IScannerMessageFilter>();
-            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateMessageFilter()).Returns(messageFilter);
+            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
             testObject.Enable();
 
@@ -75,7 +75,7 @@ namespace ShipWorks.SingleScan.Tests
         public void Disable_DelegatesToMessageFilterRegistrar()
         {
             var messageFilter = mock.Create<IScannerMessageFilter>();
-            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateMessageFilter()).Returns(messageFilter);
+            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
             testObject.Enable();
 
@@ -162,7 +162,7 @@ namespace ShipWorks.SingleScan.Tests
         public void BeginFindScanner_DelegatesToMessageFilterFactory()
         {
             testObject.BeginFindScanner();
-            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateFindScannerMessageFilter());
+            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateScannerRegistrationMessageFilter());
         }
 
         [Fact]
