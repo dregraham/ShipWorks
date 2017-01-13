@@ -36,7 +36,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void HandleDeviceAdded_ScannerNotReset_WhenAddedDeviceIsScanner_ButScannerAlreadyAdded()
+        public void HandleDeviceAdded_ScannerNotReset_WhenAddedDeviceIsRegisteredScanner_ButScannerAlreadyAdded()
         {
             mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetName()).Returns(scannerDeviceName);
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
@@ -85,7 +85,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void Save_IsScannerReturnsTrue_WhenSavedDeviceHandleIsPassedIn()
+        public void Save_IsRegisteredScannerReturnsTrue_WhenSavedDeviceHandleIsPassedIn()
         {
             testObject.Save(anotherScannerDeviceHandle);
             Assert.True(testObject.IsRegisteredScanner(anotherScannerDeviceHandle));
