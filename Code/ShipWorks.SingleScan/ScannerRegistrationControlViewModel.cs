@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Timers;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -23,9 +24,11 @@ namespace ShipWorks.SingleScan
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
         private readonly PropertyChangedHandler handler;
-        private string waitingMessage = "Waiting for scan";
+        private const string WaitingForScan = "Waiting for scan";
+        private string waitingMessage;
         private string scanResult;
         private bool resultFound;
+        private Timer timer;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -39,6 +42,11 @@ namespace ShipWorks.SingleScan
             SaveScannerCommand = new RelayCommand(SaveScanner);
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            waitingMessage = WaitingForScan;
+            timer = new Timer(500);
+            timer.Elapsed += UpdateDotCount;
+            timer.Enabled = true;
+
 
             scanSubscription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
@@ -50,16 +58,6 @@ namespace ShipWorks.SingleScan
         /// Gets or sets the action to close the parent dialog.
         /// </summary>
         public Action CloseDialog { get; set; }
-
-        /// <summary>
-        /// Detects a scan event and saves the result and device handle
-        /// </summary>
-        /// <param name="scanMessage">The scan message.</param>
-        private void ScanDetected(ScanMessage scanMessage)
-        {
-            ScanResult = scanMessage.ScannedText;
-            deviceHandle = scanMessage.DeviceHandle;
-        }
 
         /// <summary>
         /// Message to displaying indicating we are waiting for a scan
@@ -98,6 +96,7 @@ namespace ShipWorks.SingleScan
             {
                 handler.Set(nameof(ScanResult), ref scanResult, value);
                 ResultFound = true;
+                timer.Enabled = false;
             }
         }
 
@@ -114,6 +113,25 @@ namespace ShipWorks.SingleScan
         public ICommand CancelCommand { get; set; }
 
         /// <summary>
+        /// Ends scanner search
+        /// </summary>
+        public void Dispose()
+        {
+            scannerRegistrationListener.Stop();
+            scanSubscription.Dispose();
+        }
+
+        /// <summary>
+        /// Detects a scan event and saves the result and device handle
+        /// </summary>
+        /// <param name="scanMessage">The scan message.</param>
+        private void ScanDetected(ScanMessage scanMessage)
+        {
+            ScanResult = scanMessage.ScannedText;
+            deviceHandle = scanMessage.DeviceHandle;
+        }
+
+        /// <summary>
         /// Saves the scanner.
         /// </summary>
         private void SaveScanner()
@@ -128,12 +146,22 @@ namespace ShipWorks.SingleScan
         private void Close() => CloseDialog?.Invoke();
 
         /// <summary>
-        /// Ends scanner search
+        /// Updates the dot count. Acts as a spinner since our built in spinner icons are too small.
         /// </summary>
-        public void Dispose()
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
+        private void UpdateDotCount(object sender, ElapsedEventArgs e)
         {
-            scannerRegistrationListener.Stop();
-            scanSubscription.Dispose();
+            int dots = WaitingMessage.Length - WaitingForScan.Length;
+
+            if (dots < 5)
+            {
+                WaitingMessage += '.';
+            }
+            else
+            {
+                WaitingMessage = WaitingForScan;
+            }
         }
     }
 }
