@@ -26,7 +26,7 @@ namespace ShipWorks.SingleScan.Tests
         public void Start_DelegatesToMessageFilterFactory()
         {
             testObject.Start();
-            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateFindScannerMessageFilter());
+            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateScannerRegistrationMessageFilter());
         }
 
         [Fact]

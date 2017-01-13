@@ -11,21 +11,21 @@ namespace Interapptive.Shared.Win32.Native
         /// <summary>
         /// Default settings
         /// </summary>
-        DEFAULT = 0x00000000,
+        Default = 0x00000000,
 
         /// <summary>
         /// Remove raw input device listener
         /// </summary>
-        REMOVE = 0x00000001,
+        RemoveDevice = 0x00000001,
 
         /// <summary>
         /// Listen to all raw input
         /// </summary>
-        INPUTSINK = 0x00000100,
+        InputSink = 0x00000100,
 
         /// <summary>
         /// Notify when devices have changed
         /// </summary>
-        DEVNOTIFY = 0x00002000,
+        DeviceNotify = 0x00002000,
     }
 }

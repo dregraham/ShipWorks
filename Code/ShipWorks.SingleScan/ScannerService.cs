@@ -55,7 +55,7 @@ namespace ShipWorks.SingleScan
             {
                 UsagePage = UsagePage,
                 Usage = Usage,
-                Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
+                Flags = (int) RawInputDeviceNotificationFlags.RemoveDevice,
                 TargetHandle = mainForm.Handle
             });
         }
@@ -77,7 +77,7 @@ namespace ShipWorks.SingleScan
             {
                 UsagePage = UsagePage,
                 Usage = Usage,
-                Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
+                Flags = (int) (RawInputDeviceNotificationFlags.Default | RawInputDeviceNotificationFlags.DeviceNotify),
                 TargetHandle = mainForm.Handle,
             });
         }

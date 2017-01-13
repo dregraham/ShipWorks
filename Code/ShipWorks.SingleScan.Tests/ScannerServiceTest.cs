@@ -57,7 +57,7 @@ namespace ShipWorks.SingleScan.Tests
             {
                 UsagePage = 0x01,
                 Usage = 0x06,
-                Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
+                Flags = (int) (RawInputDeviceNotificationFlags.Default | RawInputDeviceNotificationFlags.DeviceNotify),
                 TargetHandle = (IntPtr) 123,
             }));
         }
@@ -95,7 +95,7 @@ namespace ShipWorks.SingleScan.Tests
             {
                 UsagePage = 0x01,
                 Usage = 0x06,
-                Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
+                Flags = (int) RawInputDeviceNotificationFlags.RemoveDevice,
                 TargetHandle = (IntPtr) null,
             };
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(expectedDevice));
