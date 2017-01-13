@@ -35,7 +35,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void Start()
         {
-            findScannerMessageFilter = scannerMessageFilterFactory.CreateFindScannerMessageFilter();
+            findScannerMessageFilter = scannerMessageFilterFactory.CreateScannerRegistrationMessageFilter();
             windowsMessageFilterRegistrar.AddMessageFilter(findScannerMessageFilter);
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
