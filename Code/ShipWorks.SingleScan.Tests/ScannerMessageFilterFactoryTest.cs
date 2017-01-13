@@ -35,11 +35,11 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void CreateScannerMessageFilter_DelegatesToFuncFactory()
         {
-            ScannerMessageFilter scannerMessageFilter = mock.Create<ScannerMessageFilter>();
+            RegisteredScannerInputHandler registeredScannerInputHandler = mock.Create<RegisteredScannerInputHandler>();
 
-            Mock<Func<ScannerMessageFilter>> repo = mock.MockRepository.Create<Func<ScannerMessageFilter>>();
+            Mock<Func<RegisteredScannerInputHandler>> repo = mock.MockRepository.Create<Func<RegisteredScannerInputHandler>>();
             repo.Setup(factory => factory())
-                .Returns(scannerMessageFilter);
+                .Returns(registeredScannerInputHandler);
             mock.Provide(repo.Object);
 
             ScannerMessageFilterFactory testObject = mock.Create<ScannerMessageFilterFactory>();

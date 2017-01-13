@@ -15,7 +15,7 @@ namespace ShipWorks.SingleScan
     /// Message filter used by scanner service
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class ScannerMessageFilter : IScannerMessageFilter
+    public class RegisteredScannerInputHandler : IScannerMessageFilter
     {
         private readonly IUser32Input user32Input;
         private readonly IScannerIdentifier scannerIdentifier;
@@ -28,7 +28,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerMessageFilter(IScannerIdentifier scannerIdentifier, IUser32Input user32Input,
+        public RegisteredScannerInputHandler(IScannerIdentifier scannerIdentifier, IUser32Input user32Input,
             IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
         {
             this.scannerIdentifier = scannerIdentifier;

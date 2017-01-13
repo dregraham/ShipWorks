@@ -119,7 +119,7 @@
     <Compile Include="ScannerConfigurationRepositoryException.cs" />
     <Compile Include="ScannerIdentifier.cs" />
     <Compile Include="ScannerRegistrationMessageFilter.cs" />
-    <Compile Include="ScannerMessageFilter.cs" />
+    <Compile Include="RegisteredScannerInputHandler.cs" />
     <Compile Include="ScannerMessageFilterFactory.cs" />
     <Compile Include="ScannerService.cs" />
   </ItemGroup>

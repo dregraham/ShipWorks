@@ -10,13 +10,13 @@ namespace ShipWorks.SingleScan
     [Component]
     public class ScannerMessageFilterFactory : IScannerMessageFilterFactory
     {
-        private readonly Func<ScannerMessageFilter> createScannerMessageFilter;
+        private readonly Func<RegisteredScannerInputHandler> createScannerMessageFilter;
         private readonly Func<ScannerRegistrationMessageFilter> createFindScannerMessageFilter;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerMessageFilterFactory(Func<ScannerMessageFilter> createScannerMessageFilter, Func<ScannerRegistrationMessageFilter> createFindScannerMessageFilter)
+        public ScannerMessageFilterFactory(Func<RegisteredScannerInputHandler> createScannerMessageFilter, Func<ScannerRegistrationMessageFilter> createFindScannerMessageFilter)
         {
             this.createScannerMessageFilter = createScannerMessageFilter;
             this.createFindScannerMessageFilter = createFindScannerMessageFilter;

@@ -15,13 +15,13 @@ namespace ShipWorks.SingleScan.Tests
     public class ScannerMessageFilterTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly ScannerMessageFilter testObject;
+        private readonly RegisteredScannerInputHandler testObject;
 
         public ScannerMessageFilterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             mock.Mock<IScannerIdentifier>().Setup(x => x.IsRegisteredScanner(It.IsAny<IntPtr>())).Returns(true);
-            testObject = mock.Create<ScannerMessageFilter>();
+            testObject = mock.Create<RegisteredScannerInputHandler>();
         }
 
         [Fact]
