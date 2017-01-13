@@ -523,6 +523,7 @@
     <Compile Include="Win32\Native\RawInput.cs" />
     <Compile Include="Win32\Native\RawInputCommand.cs" />
     <Compile Include="Win32\Native\RawInputDevice.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceConstants.cs" />
     <Compile Include="Win32\Native\RawInputDeviceInformationCommand.cs" />
     <Compile Include="Win32\Native\RawInputDeviceNotificationFlags.cs" />
     <Compile Include="Win32\Native\RawInputDeviceType.cs" />

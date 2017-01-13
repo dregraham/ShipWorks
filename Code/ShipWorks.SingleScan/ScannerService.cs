@@ -20,8 +20,6 @@ namespace ShipWorks.SingleScan
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private readonly IUserSession userSession;
         private IScannerMessageFilter scannerMessageFilter;
-        private const ushort UsagePage = 0x01;
-        private const ushort Usage = 0x06;
 
         /// <summary>
         /// Constructor
@@ -53,8 +51,8 @@ namespace ShipWorks.SingleScan
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
-                UsagePage = UsagePage,
-                Usage = Usage,
+                UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
+                Usage = RawInputDeviceConstants.Keyboard.Usage,
                 Flags = (int) RawInputDeviceNotificationFlags.RemoveDevice,
                 TargetHandle = mainForm.Handle
             });
@@ -75,8 +73,8 @@ namespace ShipWorks.SingleScan
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
-                UsagePage = UsagePage,
-                Usage = Usage,
+                UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
+                Usage = RawInputDeviceConstants.Keyboard.Usage,
                 Flags = (int) (RawInputDeviceNotificationFlags.Default | RawInputDeviceNotificationFlags.DeviceNotify),
                 TargetHandle = mainForm.Handle,
             });

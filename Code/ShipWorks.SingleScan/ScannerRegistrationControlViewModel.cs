@@ -28,7 +28,6 @@ namespace ShipWorks.SingleScan
         private string waitingMessage;
         private string scanResult;
         private bool resultFound;
-        private Timer timer;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -43,9 +42,6 @@ namespace ShipWorks.SingleScan
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             waitingMessage = WaitingForScan;
-            timer = new Timer(500);
-            timer.Elapsed += UpdateDotCount;
-            timer.Enabled = true;
 
 
             scanSubscription = messenger.OfType<ScanMessage>()
@@ -96,7 +92,6 @@ namespace ShipWorks.SingleScan
             {
                 handler.Set(nameof(ScanResult), ref scanResult, value);
                 ResultFound = true;
-                timer.Enabled = false;
             }
         }
 
@@ -144,24 +139,5 @@ namespace ShipWorks.SingleScan
         /// Executes the close action
         /// </summary>
         private void Close() => CloseDialog?.Invoke();
-
-        /// <summary>
-        /// Updates the dot count. Acts as a spinner since our built in spinner icons are too small.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="ElapsedEventArgs"/> instance containing the event data.</param>
-        private void UpdateDotCount(object sender, ElapsedEventArgs e)
-        {
-            int dots = WaitingMessage.Length - WaitingForScan.Length;
-
-            if (dots < 5)
-            {
-                WaitingMessage += '.';
-            }
-            else
-            {
-                WaitingMessage = WaitingForScan;
-            }
-        }
     }
 }
