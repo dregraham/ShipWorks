@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
@@ -38,9 +39,15 @@ namespace ShipWorks.SingleScan
                 .Publish()
                 .RefCount();
 
-            scanStream.Where(x => !string.IsNullOrEmpty(x))
+            // Observer.OnNext is called with a letter from the scanner.  We ignore
+            // the letter is null or empty. We wait 100 milliseconds to see
+            // if there is another input. If we do get another input within the 100 
+            // milliseconds, the timer restarts. Once the 100 milliseconds is hit,
+            // we send all the inputs to SendScanMessage.
+            // The ObserveOn makes sure we call the callback method on the
+            // WindowsFormsEventLoop.
+            scanStream.Where(x => !x.IsNullOrWhiteSpace())
                 .BufferUntilInactive(TimeSpan.FromMilliseconds(100))
-                .Where(x => x.Any())
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendScanMessage)
                 .Subscribe();

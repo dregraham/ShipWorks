@@ -52,7 +52,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         }
 
                         viewModel.AllowEditing = false;
-
                         viewModel.UnloadOrder();
                     })
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
