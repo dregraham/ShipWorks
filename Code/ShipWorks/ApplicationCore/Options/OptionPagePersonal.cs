@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.UI;
@@ -173,7 +174,15 @@ namespace ShipWorks.ApplicationCore.Options
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 Form findScanner = scope.ResolveNamed<Form>("ScannerRegistrationDialog");
-                findScanner.ShowDialog(owner);
+                try
+                {
+                    findScanner.ShowDialog(owner);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    MessageHelper.ShowError(owner, ex.InnerException.Message);
+                }
+
                 UpdateSingleScanSettingsUI();
             }
         }

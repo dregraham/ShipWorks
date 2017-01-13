@@ -18,7 +18,7 @@ namespace ShipWorks.SingleScan
     [Component]
     public class ScannerRegistrationControlViewModel : IRegisterScannerControlViewModel, IDisposable, INotifyPropertyChanged
     {
-        private readonly IScannerService scannerService;
+        private readonly IScannerRegistrationListener scannerRegistrationListener;
         private readonly IScannerIdentifier scannerIdentifier;
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
@@ -32,9 +32,9 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerRegistrationControlViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
+        public ScannerRegistrationControlViewModel(IScannerRegistrationListener scannerRegistrationListener, IMessenger messenger, IScannerIdentifier scannerIdentifier)
         {
-            this.scannerService = scannerService;
+            this.scannerRegistrationListener = scannerRegistrationListener;
             this.scannerIdentifier = scannerIdentifier;
             SaveScannerCommand = new RelayCommand(SaveScanner);
             CancelCommand = new RelayCommand(Close);
@@ -43,7 +43,7 @@ namespace ShipWorks.SingleScan
             scanSubscription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
 
-            scannerService.BeginFindScanner();
+            scannerRegistrationListener.Start();
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void Dispose()
         {
-            scannerService.EndFindScanner();
+            scannerRegistrationListener.Stop();
             scanSubscription.Dispose();
         }
     }

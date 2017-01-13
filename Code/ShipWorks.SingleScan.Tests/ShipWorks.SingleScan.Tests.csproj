@@ -143,6 +143,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterScannerControlViewModelTest.cs" />
     <Compile Include="ScannerIdentifierTest.cs" />
+    <Compile Include="ScannerRegistrationListenerTest.cs" />
     <Compile Include="ScannerRegistrationMessageFilterTest.cs" />
     <Compile Include="ScannerMessageFilterFactoryTest.cs" />
     <Compile Include="ScannerMessageFilterTest.cs" />

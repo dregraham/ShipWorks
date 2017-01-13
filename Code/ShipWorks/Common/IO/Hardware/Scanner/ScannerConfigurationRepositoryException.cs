@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.SingleScan
+namespace ShipWorks.Common.IO.Hardware.Scanner
 {
     /// <summary>
     /// Exception thrown by the Scanner Configuration Repository

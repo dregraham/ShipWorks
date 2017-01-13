@@ -32,10 +32,10 @@ namespace ShipWorks.SingleScan
         /// <exception cref="ScannerConfigurationRepositoryException">Throws when fails to write file to disk</exception>
         public void Save(string name)
         {
-            MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
-
             try
             {
+                MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
+
                 using (XmlTextWriter writer = new XmlTextWriter(fullPath, Encoding.Unicode))
                 {
                     writer.WriteStartElement("Scanner");

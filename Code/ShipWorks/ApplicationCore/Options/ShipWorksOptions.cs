@@ -117,7 +117,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
-            if (scannerService.ShouldSingleScanBeEnabled())
+            if (scannerService.IsSingleScanEnabled())
             {
                 scannerService.Enable();
             }
