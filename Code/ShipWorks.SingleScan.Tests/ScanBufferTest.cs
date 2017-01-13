@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
@@ -58,9 +59,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.Append(deviceHandle, "1");
 
             // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
-
-            messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
+            WaitForBufferComplete(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -71,9 +70,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.Append(deviceHandle, "1");
 
             // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
-
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
+            WaitForBufferComplete(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -85,9 +82,7 @@ namespace ShipWorks.SingleScan.Tests
             }
 
             // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
-
-            messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
+            WaitForBufferComplete(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -99,9 +94,7 @@ namespace ShipWorks.SingleScan.Tests
             }
 
             // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
-
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg=>msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
+            WaitForBufferComplete(x => x.Send(It.Is<ScanMessage>(msg => msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -117,17 +110,38 @@ namespace ShipWorks.SingleScan.Tests
             }
 
             // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
-
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>()), Times.Once);
+            WaitForBufferComplete(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>()), Times.Once);
         }
 
         /// <summary>
         /// Wait for the delay buffer to complete before checking for sent messages
         /// </summary>
-        private static void WaitForBufferComplete()
+        private void WaitForBufferComplete(Expression<Action<IMessenger>> expression, Func<Times> times)
         {
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 150; i++)
+            {
+                Thread.Sleep(10);
+                try
+                {
+                    messenger.Verify(expression, times);
+                    continue;
+                }
+                catch (MockException)
+                {
+                    // Suppress while waiting
+                }
+            }
+
+            messenger.Verify(expression, times);
+        }
+
+
+        /// <summary>
+        /// Wait for the delay buffer to complete before checking for sent messages
+        /// </summary>
+        private void WaitForBufferComplete()
+        {
+            for (int i = 0; i < 150; i++)
             {
                 Thread.Sleep(10);
             }
