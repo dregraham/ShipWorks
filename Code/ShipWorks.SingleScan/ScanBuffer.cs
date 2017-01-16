@@ -47,7 +47,7 @@ namespace ShipWorks.SingleScan
             // The ObserveOn makes sure we call the callback method on the
             // WindowsFormsEventLoop.
             scanStream.Where(x => !x.IsNullOrWhiteSpace())
-                .BufferUntilInactive(TimeSpan.FromMilliseconds(100))
+                .BufferUntilInactive(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendScanMessage)
                 .Subscribe();
