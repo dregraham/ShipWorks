@@ -16,7 +16,7 @@ namespace ShipWorks.SingleScan
     /// Buffer characters that make up a scan
     /// </summary>
     [Component]
-    public class ScanBuffer :IScanBuffer
+    public class ScanBuffer : IScanBuffer
     {
         readonly IMessenger messenger;
         private IObserver<string> observer;
@@ -39,7 +39,7 @@ namespace ShipWorks.SingleScan
                 .RefCount();
 
             scanStream.Where(x => !string.IsNullOrEmpty(x))
-                .BufferUntilInactive(TimeSpan.FromMilliseconds(100))
+                .BufferUntilInactive(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
                 .Where(x => x.Any())
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendScanMessage)

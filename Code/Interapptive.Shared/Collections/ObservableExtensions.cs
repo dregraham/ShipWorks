@@ -84,9 +84,9 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Buffer messages until no messages have been received for a specific amount of time
         /// </summary>
-        public static IObservable<IList<T>> BufferUntilInactive<T>(this IObservable<T> stream, TimeSpan delay)
+        public static IObservable<IList<T>> BufferUntilInactive<T>(this IObservable<T> stream, TimeSpan delay, IScheduler scheduler)
         {
-            IObservable<T> closes = stream.Throttle(delay);
+            IObservable<T> closes = stream.Throttle(delay, scheduler);
 
             return stream.Buffer(closes);
         }
