@@ -78,7 +78,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             TestSchedulerProvider testScheduler = new TestSchedulerProvider();
             mock.Provide<ISchedulerProvider>(testScheduler);
-
+            messenger.Setup(m => m.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>())).Verifiable();
             ScanBuffer testObject = mock.Create<ScanBuffer>();
 
             testObject.Append(deviceHandle, "1");
@@ -102,8 +102,10 @@ namespace ShipWorks.SingleScan.Tests
                 testObject.Append(deviceHandle, i.ToString());
             }
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
+
+            messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
