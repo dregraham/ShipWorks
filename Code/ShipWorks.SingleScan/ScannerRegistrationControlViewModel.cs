@@ -17,15 +17,13 @@ namespace ShipWorks.SingleScan
     /// ViewModel to support ScannerRegistrationControl - used to register a scanner
     /// </summary>
     [Component]
-    public class ScannerRegistrationControlViewModel : IRegisterScannerControlViewModel, IDisposable, INotifyPropertyChanged
+    public class ScannerRegistrationControlViewModel : IScannerRegistrationControlViewModel, IDisposable, INotifyPropertyChanged
     {
         private readonly IScannerRegistrationListener scannerRegistrationListener;
         private readonly IScannerIdentifier scannerIdentifier;
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
         private readonly PropertyChangedHandler handler;
-        private const string WaitingForScan = "Waiting for scan";
-        private string waitingMessage;
         private string scanResult;
         private bool resultFound;
 
@@ -41,8 +39,6 @@ namespace ShipWorks.SingleScan
             SaveScannerCommand = new RelayCommand(SaveScanner);
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
-            waitingMessage = WaitingForScan;
-
 
             scanSubscription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
@@ -54,19 +50,6 @@ namespace ShipWorks.SingleScan
         /// Gets or sets the action to close the parent dialog.
         /// </summary>
         public Action CloseDialog { get; set; }
-
-        /// <summary>
-        /// Message to displaying indicating we are waiting for a scan
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string WaitingMessage
-        {
-            get { return waitingMessage; }
-            set
-            {
-                handler.Set(nameof(WaitingMessage), ref waitingMessage, value);
-            }
-        }
 
         /// <summary>
         /// Gets a value indicating whether a scan result has been found.

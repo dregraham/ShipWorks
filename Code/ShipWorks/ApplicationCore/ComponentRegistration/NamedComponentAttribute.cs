@@ -34,11 +34,6 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         public Type ComponentType { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether [externally owned].
-        /// </summary>
-        public bool ExternallyOwned { get; set; }
-
-        /// <summary>
         /// Register all components that use this attribute
         /// </summary>
         internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
@@ -55,13 +50,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (NamedComponentAttribute attribute in item.Attributes)
                 {
-                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registration =
-                        builder.RegisterType(item.Component).Named(attribute.ComponentName, attribute.ComponentType);
-
-                    if (attribute.ExternallyOwned)
-                    {
-                        registration.ExternallyOwned();
-                    }
+                    builder.RegisterType(item.Component).Named(attribute.ComponentName, attribute.ComponentType);
                 }
             }
         }

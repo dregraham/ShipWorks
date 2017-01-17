@@ -6,13 +6,8 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
     /// <summary>
     /// View model handling logic for the RegisterScannerControl
     /// </summary>
-    public interface IRegisterScannerControlViewModel
+    public interface IScannerRegistrationControlViewModel
     {
-        /// <summary>
-        /// Message indicating we are waiting for a scan
-        /// </summary>
-        string WaitingMessage { get; }
-
         /// <summary>
         /// Gets a value indicating whether a scan result has been found.
         /// </summary>

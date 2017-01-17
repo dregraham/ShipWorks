@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.SingleScan
+﻿using System.Windows.Forms;
+
+namespace ShipWorks.SingleScan
 {
     partial class ScannerRegistrationDialog
     {
@@ -32,10 +34,11 @@
         {
             this.registerScannerHost = new System.Windows.Forms.Integration.ElementHost();
             this.registrationRegistrationControl = new ShipWorks.SingleScan.ScannerRegistrationControl();
+            this.StartPosition = FormStartPosition.CenterParent;
             this.SuspendLayout();
-            // 
+            //
             // registerScannerHost
-            // 
+            //
             this.registerScannerHost.AutoSize = true;
             this.registerScannerHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.registerScannerHost.Location = new System.Drawing.Point(0, 0);
@@ -44,9 +47,9 @@
             this.registerScannerHost.TabIndex = 0;
             this.registerScannerHost.Text = "elementHost1";
             this.registerScannerHost.Child = this.registrationRegistrationControl;
-            // 
+            //
             // RegisterScannerDialog
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;

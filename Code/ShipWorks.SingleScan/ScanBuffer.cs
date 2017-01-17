@@ -41,7 +41,7 @@ namespace ShipWorks.SingleScan
 
             // Observer.OnNext is called with a letter from the scanner.  We ignore
             // the letter is null or empty. We wait 100 milliseconds to see
-            // if there is another input. If we do get another input within the 100 
+            // if there is another input. If we do get another input within the 100
             // milliseconds, the timer restarts. Once the 100 milliseconds is hit,
             // we send all the inputs to SendScanMessage.
             // The ObserveOn makes sure we call the callback method on the
@@ -67,10 +67,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SendScanMessage(IList<string> characters)
         {
-            string text = characters.Aggregate((obj, item) => obj + item);
-
-            // Strip out any control characters (tab, return, etc...)
-            text = new string(text.Where(c => !char.IsControl(c)).ToArray());
+            string text = characters.SelectMany(x => x).Where(c => !char.IsControl(c)).ToString();
 
             messenger.Send(new ScanMessage(this, text, lastHandle));
         }

@@ -14,12 +14,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerRegistrationDialog(IRegisterScannerControlViewModel viewModel)
+        public ScannerRegistrationDialog(IScannerRegistrationControlViewModel viewModel)
         {
             viewModel.CloseDialog = Close;
             InitializeComponent();
             registrationRegistrationControl.DataContext = viewModel;
-            StartPosition = FormStartPosition.CenterParent;
         }
     }
 }
