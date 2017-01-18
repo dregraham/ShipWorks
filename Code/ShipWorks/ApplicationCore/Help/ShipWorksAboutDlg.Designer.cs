@@ -194,7 +194,7 @@
             // copyrightInfo
             // 
             this.copyrightInfo.AutoSize = true;
-            this.copyrightInfo.Location = new System.Drawing.Point(12, 210);
+            this.copyrightInfo.Location = new System.Drawing.Point(12, 324);
             this.copyrightInfo.MaximumSize = new System.Drawing.Size(255, 0);
             this.copyrightInfo.Name = "copyrightInfo";
             this.copyrightInfo.Size = new System.Drawing.Size(252, 52);
@@ -206,7 +206,7 @@
             // patentInfo
             // 
             this.patentInfo.AutoSize = true;
-            this.patentInfo.Location = new System.Drawing.Point(12, 272);
+            this.patentInfo.Location = new System.Drawing.Point(12, 210);
             this.patentInfo.MaximumSize = new System.Drawing.Size(255, 0);
             this.patentInfo.Name = "patentInfo";
             this.patentInfo.Size = new System.Drawing.Size(253, 104);
