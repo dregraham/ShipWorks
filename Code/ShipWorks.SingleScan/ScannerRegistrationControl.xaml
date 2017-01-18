@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.shipworks.com/ui"
              MinHeight="181"
-             MaxWidth="500"
+             MaxWidth="477"
              Background="{x:Static SystemColors.ControlBrush}"
              DataContext="RegisterScannerDlgViewModel"
              FontFamily="Tahoma"
@@ -41,19 +41,20 @@
             If you initially register an incorrect device, please scan again using the correct
             scanner and then click ‘Confirm’. ShipWorks will register the most recently used device.
         </TextBlock>
-        <StackPanel Grid.Row="2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Visibility="{Binding ResultFound,
-                                         Converter={StaticResource VisibleWhenTrue}}">
+        <DockPanel Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding ResultFound,
+                                        Converter={StaticResource VisibleWhenTrue}}">
             <TextBlock Margin="40 0 0 0"
                        FontSize="16pt"
                        Text="Scan result:" />
             <TextBlock Margin="10 0 10 0"
                        FontSize="16pt"
-                       Text="{Binding ScanResult}" />
-        </StackPanel>
+                       Text="{Binding ScanResult}"
+                       TextWrapping="Wrap" />
+        </DockPanel>
+
         <ui:WaitSpinner Grid.Row="2"
                         Background="{x:Static SystemColors.ControlBrush}"
                         BorderThickness="0"
