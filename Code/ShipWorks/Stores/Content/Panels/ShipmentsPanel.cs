@@ -33,6 +33,7 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Content.Panels.Selectors;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -65,8 +66,8 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Default shipment selection
         /// </summary>
-        public IEnumerable<long> DefaultShipmentSelection =>
-            EntityKeys.OrderByDescending(x => x).Take(1);
+        public IEntityGridRowSelector DefaultShipmentSelection =>
+            EntityGridRowSelector.SpecificEntities(EntityKeys.OrderByDescending(x => x).Take(1));
 
         /// <summary>
         /// Initialization
@@ -97,7 +98,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
-                .Do(x => SelectShipmentRows(isThisPanelVisible ? x.SelectedShipments : DefaultShipmentSelection))
+                .Do(x => SelectShipmentRows(isThisPanelVisible ? x.ShipmentSelector : DefaultShipmentSelection))
                 .Subscribe();
 
             HandleRatingPanelToggle(messenger);
@@ -146,30 +147,11 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
-        /// Select the first row, which should be the first shipment
+        /// Select the required shipment rows
         /// </summary>
-        private void SelectShipmentRows(IEnumerable<long> shipmentsToSelect)
+        private void SelectShipmentRows(IEntityGridRowSelector shipmentsToSelect)
         {
-            if (shipmentsToSelect.Any())
-            {
-                entityGrid.SelectRows(shipmentsToSelect);
-                return;
-            }
-
-            SelectFirstRow();
-        }
-
-        /// <summary>
-        /// Select the first row in the list
-        /// </summary>
-        private void SelectFirstRow()
-        {
-            long? firstKey = entityGrid.EntityGateway?.GetKeyFromRow(0);
-
-            if (firstKey.HasValue)
-            {
-                entityGrid.SelectRows(new[] { firstKey.Value });
-            }
+            shipmentsToSelect.Select(entityGrid);
         }
 
         /// <summary>
@@ -327,7 +309,6 @@ namespace ShipWorks.Stores.Content.Panels
                 await ValidatedAddressManager.ValidateShipmentAsync(shipment, new AddressValidator());
 
                 Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
-                Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { shipment.OrderID }));
             }
             catch (SqlForeignKeyException)
             {
