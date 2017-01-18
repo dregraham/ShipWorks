@@ -5,7 +5,7 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
     /// <summary>
     /// Main entry point for interacting with scanners
     /// </summary>
-    [Service(SingleInstance = true, ExternallyOwned = true)]
+    [Service(SingleInstance = true)]
     public interface IScannerService
     {
         /// <summary>
