@@ -6,10 +6,12 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Extensions;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
+
 
 namespace ShipWorks.SingleScan
 {
@@ -67,7 +69,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SendScanMessage(IList<string> characters)
         {
-            string text = characters.SelectMany(x => x).Where(c => !char.IsControl(c)).ToString();
+            string text = characters.SelectMany(x => x).Where(c => !char.IsControl(c)).CreateString();
 
             messenger.Send(new ScanMessage(this, text, lastHandle));
         }

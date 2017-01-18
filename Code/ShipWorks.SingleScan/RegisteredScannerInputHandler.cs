@@ -67,9 +67,9 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handle raw input message
         /// </summary>
-        private bool HandleInput(IntPtr deviceHandle)
+        private bool HandleInput(IntPtr messageHandle)
         {
-            GenericResult<RawInput> result = user32Input.GetRawInputData(deviceHandle, RawInputCommand.Input);
+            GenericResult<RawInput> result = user32Input.GetRawInputData(messageHandle, RawInputCommand.Input);
 
             if (!scannerIdentifier.IsRegisteredScanner(result.Value.Header.DeviceHandle))
             {
@@ -82,20 +82,20 @@ namespace ShipWorks.SingleScan
                 return false;
             }
 
-            shouldBlock = ProcessRawInputData(deviceHandle, result.Value);
+            shouldBlock = ProcessRawInputData(result.Value);
             return true;
         }
 
         /// <summary>
         /// Process the raw input data from a scanner
         /// </summary>
-        private bool ProcessRawInputData(IntPtr deviceHandle, RawInput input)
+        private bool ProcessRawInputData(RawInput input)
         {
             if (input.Data.Keyboard.Message == WindowsMessage.KEYFIRST)
             {
                 pressedKeys.Add(input.Data.Keyboard.VirtualKey);
                 string text = GetCharacter(input.Data.Keyboard.VirtualKey);
-                scanBuffer.Append(deviceHandle, text);
+                scanBuffer.Append(input.Header.DeviceHandle, text);
             }
             else
             {

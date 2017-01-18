@@ -11,16 +11,16 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         /// <summary>
         /// Save the name of the scanner
         /// </summary>
-        void Save(string name);
+        void SaveScannerName(string name);
 
         /// <summary>
         /// Clears out the scanner name from scanner.xml
         /// </summary>
-        void Clear();
+        void ClearScannerName();
 
         /// <summary>
         /// Get the name of the current scanner
         /// </summary>
-        string GetName();
+        string GetScannerName();
     }
 }

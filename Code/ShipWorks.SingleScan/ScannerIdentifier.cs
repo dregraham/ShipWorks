@@ -30,13 +30,13 @@ namespace ShipWorks.SingleScan
         {
             // If we already know about a scanner or there is no registered scanner, we don't care
             // that a device was added
-            if (scannerHandle.HasValue || configurationRepository.GetName().IsNullOrWhiteSpace())
+            if (scannerHandle.HasValue || configurationRepository.GetScannerName().IsNullOrWhiteSpace())
             {
                 return;
             }
 
             string deviceName = user32Devices.GetDeviceName(deviceHandle);
-            if (!deviceName.IsNullOrWhiteSpace() && deviceName == configurationRepository.GetName())
+            if (!deviceName.IsNullOrWhiteSpace() && deviceName == configurationRepository.GetScannerName())
             {
                 scannerHandle = deviceHandle;
             }
@@ -65,7 +65,7 @@ namespace ShipWorks.SingleScan
         {
             scannerHandle = deviceHandle;
             string name = user32Devices.GetDeviceName(deviceHandle);
-            configurationRepository.Save(name);
+            configurationRepository.SaveScannerName(name);
         }
     }
 }
