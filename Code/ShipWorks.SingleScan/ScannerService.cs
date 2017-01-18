@@ -25,15 +25,14 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public ScannerService(IUser32Devices user32Devices,
-            Func<IMainForm> getMainForm, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
+            IMainForm mainForm, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession)
         {
             this.userSession = userSession;
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
             this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
             this.user32Devices = user32Devices;
-
-            mainForm = getMainForm();
+            this.mainForm = mainForm;
         }
 
         /// <summary>

@@ -926,7 +926,6 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerService.cs" />
-    <Compile Include="Common\IO\Hardware\Scanner\ScannerConfigurationRepositoryException.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
