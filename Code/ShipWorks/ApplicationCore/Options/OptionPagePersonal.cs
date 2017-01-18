@@ -23,6 +23,7 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly ShipWorksOptionsData data;
         private readonly IWin32Window owner;
         private readonly IScannerConfigurationRepository scannerRepo;
+        private readonly IScannerIdentifier scannerIdentifier;
 
         /// <summary>
         /// Constructor
@@ -35,6 +36,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.owner = owner;
 
             scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
+            scannerIdentifier = scope.Resolve<IScannerIdentifier>();
 
             unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
 
@@ -192,7 +194,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnClickUnregisterScanner(object sender, EventArgs e)
         {
-            scannerRepo.ClearScannerName();
+            scannerIdentifier.RemoveCurrentScanner();
             UpdateSingleScanSettingsUI();
         }
     }

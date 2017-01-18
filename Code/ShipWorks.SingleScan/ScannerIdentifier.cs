@@ -54,6 +54,16 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
+        /// Removes the current scanner
+        /// </summary>
+        /// <returns></returns>
+        public GenericResult<string> RemoveCurrentScanner()
+        {
+            scannerHandle = null;
+            return configurationRepository.ClearScannerName();
+        }
+
+        /// <summary>
         /// Is the specified handle the current scanner?
         /// </summary>
         public bool IsRegisteredScanner(IntPtr deviceHandle) => scannerHandle == deviceHandle;
