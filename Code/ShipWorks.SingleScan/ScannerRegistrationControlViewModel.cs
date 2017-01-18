@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Timers;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
@@ -21,6 +23,7 @@ namespace ShipWorks.SingleScan
     {
         private readonly IScannerRegistrationListener scannerRegistrationListener;
         private readonly IScannerIdentifier scannerIdentifier;
+        private readonly IMessageHelper messageHelper;
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
         private readonly PropertyChangedHandler handler;
@@ -32,10 +35,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerRegistrationControlViewModel(IScannerRegistrationListener scannerRegistrationListener, IMessenger messenger, IScannerIdentifier scannerIdentifier)
+        public ScannerRegistrationControlViewModel(IScannerRegistrationListener scannerRegistrationListener, IMessenger messenger, IScannerIdentifier scannerIdentifier, IMessageHelper messageHelper)
         {
             this.scannerRegistrationListener = scannerRegistrationListener;
             this.scannerIdentifier = scannerIdentifier;
+            this.messageHelper = messageHelper;
             SaveScannerCommand = new RelayCommand(SaveScanner);
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -114,8 +118,16 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SaveScanner()
         {
-            scannerIdentifier.Save(deviceHandle);
-            Close();
+            GenericResult<string> result = scannerIdentifier.Save(deviceHandle);
+
+            if (!result.Success)
+            {
+                messageHelper.ShowError(result.Message);
+            }
+            else
+            {
+                Close();
+            }
         }
 
         /// <summary>

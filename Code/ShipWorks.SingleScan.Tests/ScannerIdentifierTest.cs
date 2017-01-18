@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Scanner;
@@ -28,7 +29,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void HandleDeviceAdded_ScannerNotSet_WhenAddedDeviceNotScanner()
         {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(scannerDeviceName);
+            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(GenericResult.FromSuccess(scannerDeviceName));
             AddDeviceToManager(anotherDeviceHandle, anotherDeviceName);
 
             testObject.HandleDeviceAdded(anotherDeviceHandle);
@@ -38,7 +39,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void HandleDeviceAdded_ScannerNotReset_WhenAddedDeviceIsRegisteredScanner_ButScannerAlreadyAdded()
         {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(scannerDeviceName);
+            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(GenericResult.FromSuccess(scannerDeviceName));
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
             AddDeviceToManager(anotherScannerDeviceHandle, scannerDeviceName);
 
@@ -52,7 +53,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void RemoveScanner_ScannerRemoved_WhenScannerAttached()
         {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(scannerDeviceName);
+            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(GenericResult.FromSuccess(scannerDeviceName));
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
             testObject.HandleDeviceAdded(scannerDeviceHandle);
 
@@ -65,7 +66,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void RemoveScanner_ScannerNotRemoved_WhenAttachedScannerNotRemovedDevice()
         {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(scannerDeviceName);
+            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(GenericResult.FromSuccess(scannerDeviceName));
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
 
             testObject.HandleDeviceAdded(scannerDeviceHandle);
@@ -77,7 +78,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void RemoveScanner_ScannerStaysDetached_WhenScannerNotAttached()
         {
-            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(scannerDeviceName);
+            mock.Mock<IScannerConfigurationRepository>().Setup(repo => repo.GetScannerName()).Returns(GenericResult.FromSuccess(scannerDeviceName));
             AddDeviceToManager(scannerDeviceHandle, scannerDeviceName);
 
             testObject.HandleDeviceRemoved(scannerDeviceHandle);
