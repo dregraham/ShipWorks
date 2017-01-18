@@ -31,7 +31,7 @@ namespace ShipWorks.SingleScan
         /// Save the scanner name from scanner.xml
         /// </summary>
         /// <exception cref="ScannerConfigurationRepositoryException">Throws when fails to write file to disk</exception>
-        public GenericResult<string> Save(string name)
+        public GenericResult<string> SaveScannerName(string name)
         {
             MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
 
@@ -58,9 +58,9 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Clears out the scanner name from scanner.xml
         /// </summary>
-        public GenericResult<string> Clear()
+        public GenericResult<string> ClearScannerName()
         {
-            return Save(string.Empty);
+            return SaveScannerName(string.Empty);
         }
 
         /// <summary>

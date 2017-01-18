@@ -40,33 +40,33 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
             // Make sure the file does not exist
             File.Delete(Path.Combine(DataPath.InstanceSettings, "scanner.xml"));
 
-            Assert.Equal(string.Empty, testObject.GetName().Value);
+            Assert.Equal(string.Empty, testObject.GetScannerName().Value);
         }
 
         [Fact]
         public void Save_ThrowsArgumentNullException_WhenNameIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Save(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.SaveScannerName(null));
         }
 
 
         [Fact]
         public void Save_SavesScannerName()
         {
-            testObject.Save(value);
-            Assert.Equal(value, testObject.GetName().Value);
+            testObject.SaveScannerName(value);
+            Assert.Equal(value, testObject.GetScannerName().Value);
         }
 
         [Fact]
         public void Clear_SavesScannerNameWithEmptyString()
         {
             // Save some value to ensure its not empty
-            testObject.Save(value);
-            Assert.Equal(value, testObject.GetName().Value);
+            testObject.SaveScannerName(value);
+            Assert.Equal(value, testObject.GetScannerName().Value);
 
             // Clear and ensure that the value is empty
-            testObject.Clear();
-            Assert.Equal(string.Empty, testObject.GetName().Value);
+            testObject.ClearScannerName();
+            Assert.Equal(string.Empty, testObject.GetScannerName().Value);
         }
 
         public void Dispose()

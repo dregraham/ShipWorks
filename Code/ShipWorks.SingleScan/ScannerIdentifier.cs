@@ -65,7 +65,7 @@ namespace ShipWorks.SingleScan
         {
             scannerHandle = deviceHandle;
             string name = user32Devices.GetDeviceName(deviceHandle);
-            return configurationRepository.Save(name);
+            return configurationRepository.SaveScannerName(name);
         }
     }
 }
