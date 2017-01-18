@@ -162,6 +162,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
