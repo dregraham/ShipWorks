@@ -1,12 +1,11 @@
 ﻿using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.Options;
 
 namespace ShipWorks.Common.IO.Hardware.Scanner
 {
     /// <summary>
     /// Main entry point for interacting with scanners
     /// </summary>
-    [Service(SingleInstance = true, ExternallyOwned = true)]
+    [Service(SingleInstance = true)]
     public interface IScannerService
     {
         /// <summary>
@@ -20,18 +19,8 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         void Disable();
 
         /// <summary>
-        /// Begin finding a current scanner
+        /// Based on SingleScan settings, return true if single scan is enabled
         /// </summary>
-        void BeginFindScanner();
-
-        /// <summary>
-        /// End finding the current scanner
-        /// </summary>
-        void EndFindScanner();
-
-        /// <summary>
-        /// Based on SingleScan settings, return true if single scan should be enabled
-        /// </summary>
-        bool ShouldSingleScanBeEnabled();
+        bool IsSingleScanEnabled();
     }
 }

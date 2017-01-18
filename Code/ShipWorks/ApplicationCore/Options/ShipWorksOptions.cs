@@ -33,6 +33,8 @@ namespace ShipWorks.ApplicationCore.Options
         {
             InitializeComponent();
 
+            // We disable scanning when opening the options dialog. Once the dialog closes we will start it
+            // again if we need to with any new settings. 
             scannerService = scope.Resolve<IScannerService>();
             scannerService.Disable();
 
@@ -117,7 +119,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
-            if (scannerService.ShouldSingleScanBeEnabled())
+            if (scannerService.IsSingleScanEnabled())
             {
                 scannerService.Enable();
             }

@@ -32,14 +32,14 @@ namespace ShipWorks.SingleScan.Tests
         public void Enable_DelegatesToMessageFilterFactory()
         {
             testObject.Enable();
-            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateMessageFilter());
+            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateRegisteredScannerInputHandler());
         }
 
         [Fact]
         public void Enable_DelegatesToMessageFilterRegistrar()
         {
             var messageFilter = mock.Create<IScannerMessageFilter>();
-            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateMessageFilter()).Returns(messageFilter);
+            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
             testObject.Enable();
 
@@ -57,7 +57,7 @@ namespace ShipWorks.SingleScan.Tests
             {
                 UsagePage = 0x01,
                 Usage = 0x06,
-                Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
+                Flags = (int) (RawInputDeviceNotificationFlags.Default | RawInputDeviceNotificationFlags.DeviceNotify),
                 TargetHandle = (IntPtr) 123,
             }));
         }
@@ -75,7 +75,7 @@ namespace ShipWorks.SingleScan.Tests
         public void Disable_DelegatesToMessageFilterRegistrar()
         {
             var messageFilter = mock.Create<IScannerMessageFilter>();
-            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateMessageFilter()).Returns(messageFilter);
+            mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
             testObject.Enable();
 
@@ -95,7 +95,7 @@ namespace ShipWorks.SingleScan.Tests
             {
                 UsagePage = 0x01,
                 Usage = 0x06,
-                Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
+                Flags = (int) RawInputDeviceNotificationFlags.RemoveDevice,
                 TargetHandle = (IntPtr) null,
             };
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(expectedDevice));
@@ -156,27 +156,6 @@ namespace ShipWorks.SingleScan.Tests
             testObject.InitializeForCurrentSession();
 
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()), Times.Never);
-        }
-
-        [Fact]
-        public void BeginFindScanner_DelegatesToMessageFilterFactory()
-        {
-            testObject.BeginFindScanner();
-            mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateFindScannerMessageFilter());
-        }
-
-        [Fact]
-        public void BeginFindScanner_DelegatesToWindowsMessageFilterRegistrar()
-        {
-            testObject.BeginFindScanner();
-            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.AddMessageFilter(It.IsAny<IMessageFilter>()));
-        }
-
-        [Fact]
-        public void EndFindScanner_DelegatesToWindowsMessageFilterRegistrar()
-        {
-            testObject.BeginFindScanner();
-            mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.AddMessageFilter(It.IsAny<IMessageFilter>()));
         }
 
         public void Dispose()

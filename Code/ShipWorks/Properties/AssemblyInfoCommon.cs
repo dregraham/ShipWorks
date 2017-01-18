@@ -20,4 +20,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // CLS Compliance
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]

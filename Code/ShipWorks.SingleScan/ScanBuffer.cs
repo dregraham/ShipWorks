@@ -5,10 +5,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Extensions;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
+
 
 namespace ShipWorks.SingleScan
 {
@@ -16,9 +19,9 @@ namespace ShipWorks.SingleScan
     /// Buffer characters that make up a scan
     /// </summary>
     [Component]
-    public class ScanBuffer :IScanBuffer
+    public class ScanBuffer : IScanBuffer
     {
-        readonly IMessenger messenger;
+        private readonly IMessenger messenger;
         private IObserver<string> observer;
         private IntPtr lastHandle;
 
@@ -38,9 +41,15 @@ namespace ShipWorks.SingleScan
                 .Publish()
                 .RefCount();
 
-            scanStream.Where(x => !string.IsNullOrEmpty(x))
-                .BufferUntilInactive(TimeSpan.FromMilliseconds(100))
-                .Where(x => x.Any())
+            // Observer.OnNext is called with a letter from the scanner.  We ignore
+            // the letter is null or empty. We wait 100 milliseconds to see
+            // if there is another input. If we do get another input within the 100
+            // milliseconds, the timer restarts. Once the 100 milliseconds is hit,
+            // we send all the inputs to SendScanMessage.
+            // The ObserveOn makes sure we call the callback method on the
+            // WindowsFormsEventLoop.
+            scanStream.Where(x => !x.IsNullOrWhiteSpace())
+                .BufferUntilInactive(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendScanMessage)
                 .Subscribe();
@@ -60,10 +69,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SendScanMessage(IList<string> characters)
         {
-            string text = characters.Aggregate((obj, item) => obj + item);
-
-            // Strip out any control characters (tab, return, etc...)
-            text = new string(text.Where(c => !char.IsControl(c)).ToArray());
+            string text = characters.SelectMany(x => x).Where(c => !char.IsControl(c)).CreateString();
 
             messenger.Send(new ScanMessage(this, text, lastHandle));
         }

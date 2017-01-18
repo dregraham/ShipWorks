@@ -12,17 +12,16 @@ using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
 {
-    public class FindScannerMessageFilterTest : IDisposable
+    public class ScannerRegistrationMessageFilterTest : IDisposable
     {
-        private readonly IntPtr scanDeviceHandle = (IntPtr) 456;
         private readonly AutoMock mock;
-        private readonly FindScannerMessageFilter testObject;
+        private readonly ScannerRegistrationMessageFilter testObject;
 
-        public FindScannerMessageFilterTest()
+        public ScannerRegistrationMessageFilterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            mock.Mock<IScannerIdentifier>().Setup(x => x.IsScanner(It.IsAny<IntPtr>())).Returns(true);
-            testObject = mock.Create<FindScannerMessageFilter>();
+            mock.Mock<IScannerIdentifier>().Setup(x => x.IsRegisteredScanner(It.IsAny<IntPtr>())).Returns(true);
+            testObject = mock.Create<ScannerRegistrationMessageFilter>();
         }
 
         [Fact]
@@ -36,7 +35,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void PreFilterMessage_ReturnsFalse_WhenInputIsNotScanner()
         {
-            mock.Mock<IScannerIdentifier>().Setup(x => x.IsScanner(It.IsAny<IntPtr>())).Returns(false);
+            mock.Mock<IScannerIdentifier>().Setup(x => x.IsRegisteredScanner(It.IsAny<IntPtr>())).Returns(false);
 
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             var result = testObject.PreFilterMessage(ref message);
@@ -108,7 +107,7 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IScanBuffer>().Verify(x => x.Append(scanDeviceHandle, "X"));
+            mock.Mock<IScanBuffer>().Verify(x => x.Append((IntPtr) 1234, "X"));
         }
 
         [Theory]
@@ -215,7 +214,7 @@ namespace ShipWorks.SingleScan.Tests
             {
                 Header = new RawInputHeader
                 {
-                    DeviceHandle = scanDeviceHandle,
+                    DeviceHandle = (IntPtr) 1234,
                     Type = RawInputDeviceType.Keyboard
                 },
                 Data = new RawInput.Union

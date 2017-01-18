@@ -918,13 +918,15 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
-    <Compile Include="Common\IO\Hardware\Scanner\IRegisterScannerControlViewModel.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationControlViewModel.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScanBuffer.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerConfigurationRepository.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerIdentifier.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerService.cs" />
+    <Compile Include="Common\IO\Hardware\Scanner\ScannerConfigurationRepositoryException.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />

@@ -2,8 +2,11 @@
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Timers;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
@@ -13,17 +16,17 @@ using ShipWorks.Messaging.Messages;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// ViewModel to support RegisterScannerControl - used to register a scanner
+    /// ViewModel to support ScannerRegistrationControl - used to register a scanner
     /// </summary>
     [Component]
-    public class RegisterScannerControlViewModel : IRegisterScannerControlViewModel, IDisposable, INotifyPropertyChanged
+    public class ScannerRegistrationControlViewModel : IScannerRegistrationControlViewModel, IDisposable, INotifyPropertyChanged
     {
-        private readonly IScannerService scannerService;
+        private readonly IScannerRegistrationListener scannerRegistrationListener;
         private readonly IScannerIdentifier scannerIdentifier;
+        private readonly IMessageHelper messageHelper;
         private IntPtr deviceHandle;
         private readonly IDisposable scanSubscription;
         private readonly PropertyChangedHandler handler;
-        private string waitingMessage = "Waiting for scan";
         private string scanResult;
         private bool resultFound;
 
@@ -32,10 +35,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public RegisterScannerControlViewModel(IScannerService scannerService, IMessenger messenger, IScannerIdentifier scannerIdentifier)
+        public ScannerRegistrationControlViewModel(IScannerRegistrationListener scannerRegistrationListener, IMessenger messenger, IScannerIdentifier scannerIdentifier, IMessageHelper messageHelper)
         {
-            this.scannerService = scannerService;
+            this.scannerRegistrationListener = scannerRegistrationListener;
             this.scannerIdentifier = scannerIdentifier;
+            this.messageHelper = messageHelper;
             SaveScannerCommand = new RelayCommand(SaveScanner);
             CancelCommand = new RelayCommand(Close);
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
@@ -43,36 +47,13 @@ namespace ShipWorks.SingleScan
             scanSubscription = messenger.OfType<ScanMessage>()
                  .Subscribe(ScanDetected);
 
-            scannerService.BeginFindScanner();
+            scannerRegistrationListener.Start();
         }
 
         /// <summary>
         /// Gets or sets the action to close the parent dialog.
         /// </summary>
         public Action CloseDialog { get; set; }
-
-        /// <summary>
-        /// Detects a scan event and saves the result and device handle
-        /// </summary>
-        /// <param name="scanMessage">The scan message.</param>
-        private void ScanDetected(ScanMessage scanMessage)
-        {
-            ScanResult = scanMessage.ScannedText;
-            deviceHandle = scanMessage.DeviceHandle;
-        }
-
-        /// <summary>
-        /// Message to displaying indicating we are waiting for a scan
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string WaitingMessage
-        {
-            get { return waitingMessage; }
-            set
-            {
-                handler.Set(nameof(WaitingMessage), ref waitingMessage, value);
-            }
-        }
 
         /// <summary>
         /// Gets a value indicating whether a scan result has been found.
@@ -114,26 +95,44 @@ namespace ShipWorks.SingleScan
         public ICommand CancelCommand { get; set; }
 
         /// <summary>
+        /// Ends scanner search
+        /// </summary>
+        public void Dispose()
+        {
+            scannerRegistrationListener.Stop();
+            scanSubscription.Dispose();
+        }
+
+        /// <summary>
+        /// Detects a scan event and saves the result and device handle
+        /// </summary>
+        /// <param name="scanMessage">The scan message.</param>
+        private void ScanDetected(ScanMessage scanMessage)
+        {
+            ScanResult = scanMessage.ScannedText;
+            deviceHandle = scanMessage.DeviceHandle;
+        }
+
+        /// <summary>
         /// Saves the scanner.
         /// </summary>
         private void SaveScanner()
         {
-            scannerIdentifier.Save(deviceHandle);
-            Close();
+            GenericResult<string> result = scannerIdentifier.Save(deviceHandle);
+
+            if (!result.Success)
+            {
+                messageHelper.ShowError(result.Message);
+            }
+            else
+            {
+                Close();
+            }
         }
 
         /// <summary>
         /// Executes the close action
         /// </summary>
         private void Close() => CloseDialog?.Invoke();
-
-        /// <summary>
-        /// Ends scanner search
-        /// </summary>
-        public void Dispose()
-        {
-            scannerService.EndFindScanner();
-            scanSubscription.Dispose();
-        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore;
@@ -16,19 +14,17 @@ namespace ShipWorks.SingleScan
     /// </summary>
     public class ScannerService : IScannerService, IInitializeForCurrentUISession
     {
-        private readonly IScannerIdentifier scannerIdentifier;
         private readonly IUser32Devices user32Devices;
         private readonly IMainForm mainForm;
         private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
         private readonly IScannerMessageFilterFactory scannerMessageFilterFactory;
         private readonly IUserSession userSession;
         private IScannerMessageFilter scannerMessageFilter;
-        private IScannerMessageFilter findScannerMessageFilter;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScannerService(IScannerIdentifier scannerIdentifier, IUser32Devices user32Devices,
+        public ScannerService(IUser32Devices user32Devices,
             Func<IMainForm> getMainForm, IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar,
             IScannerMessageFilterFactory scannerMessageFilterFactory, IUserSession userSession)
         {
@@ -36,27 +32,8 @@ namespace ShipWorks.SingleScan
             this.scannerMessageFilterFactory = scannerMessageFilterFactory;
             this.windowsMessageFilterRegistrar = windowsMessageFilterRegistrar;
             this.user32Devices = user32Devices;
-            this.scannerIdentifier = scannerIdentifier;
 
             mainForm = getMainForm();
-        }
-
-        /// <summary>
-        /// Begin finding a current scanner
-        /// </summary>
-        public void BeginFindScanner()
-        {
-            findScannerMessageFilter = scannerMessageFilterFactory.CreateFindScannerMessageFilter();
-            windowsMessageFilterRegistrar.AddMessageFilter(findScannerMessageFilter);
-
-            user32Devices.RegisterRawInputDevice(new RawInputDevice
-            {
-                UsagePage = 0x01,
-                Usage = 0x06,
-                Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
-                TargetHandle = (IntPtr) null
-            });
-
         }
 
         /// <summary>
@@ -74,9 +51,9 @@ namespace ShipWorks.SingleScan
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
-                UsagePage = 0x01,
-                Usage = 0x06,
-                Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
+                UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
+                Usage = RawInputDeviceConstants.Keyboard.Usage,
+                Flags = (int) RawInputDeviceNotificationFlags.RemoveDevice,
                 TargetHandle = mainForm.Handle
             });
         }
@@ -91,31 +68,15 @@ namespace ShipWorks.SingleScan
                 return;
             }
 
-            scannerMessageFilter = scannerMessageFilterFactory.CreateMessageFilter();
+            scannerMessageFilter = scannerMessageFilterFactory.CreateRegisteredScannerInputHandler();
             windowsMessageFilterRegistrar.AddMessageFilter(scannerMessageFilter);
 
             user32Devices.RegisterRawInputDevice(new RawInputDevice
             {
-                UsagePage = 0x01,
-                Usage = 0x06,
-                Flags = (int) (RawInputDeviceNotificationFlags.DEFAULT | RawInputDeviceNotificationFlags.DEVNOTIFY),
+                UsagePage = RawInputDeviceConstants.Keyboard.UsagePage,
+                Usage = RawInputDeviceConstants.Keyboard.Usage,
+                Flags = (int) (RawInputDeviceNotificationFlags.Default | RawInputDeviceNotificationFlags.DeviceNotify),
                 TargetHandle = mainForm.Handle,
-            });
-        }
-
-        /// <summary>
-        /// End finding the current scanner
-        /// </summary>
-        public void EndFindScanner()
-        {
-           windowsMessageFilterRegistrar.RemoveMessageFilter(findScannerMessageFilter);
-
-            user32Devices.RegisterRawInputDevice(new RawInputDevice
-            {
-                UsagePage = 0x01,
-                Usage = 0x06,
-                Flags = (int) RawInputDeviceNotificationFlags.REMOVE,
-                TargetHandle = (IntPtr) null
             });
         }
 
@@ -142,7 +103,7 @@ namespace ShipWorks.SingleScan
                 return;
             }
 
-            if (ShouldSingleScanBeEnabled())
+            if (IsSingleScanEnabled())
             {
                 Enable();
             }
@@ -151,8 +112,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Based on SingleScan settings, return true if single scan should be enabled
         /// </summary>
-        /// <returns></returns>
-        public bool ShouldSingleScanBeEnabled()
+        public bool IsSingleScanEnabled()
         {
             int singleScanSetting = userSession.Settings?.SingleScanSettings ?? (int) SingleScanSettings.Disabled;
             return singleScanSetting != (int) SingleScanSettings.Disabled;

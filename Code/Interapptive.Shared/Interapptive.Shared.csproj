@@ -162,9 +162,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
+    <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
@@ -523,6 +527,7 @@
     <Compile Include="Win32\Native\RawInput.cs" />
     <Compile Include="Win32\Native\RawInputCommand.cs" />
     <Compile Include="Win32\Native\RawInputDevice.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceConstants.cs" />
     <Compile Include="Win32\Native\RawInputDeviceInformationCommand.cs" />
     <Compile Include="Win32\Native\RawInputDeviceNotificationFlags.cs" />
     <Compile Include="Win32\Native\RawInputDeviceType.cs" />

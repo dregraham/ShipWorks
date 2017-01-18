@@ -3,22 +3,25 @@
                     xmlns:local="clr-namespace:ShipWorks.UI.Controls">
     <Style TargetType="{x:Type local:WaitSpinner}">
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="White" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:WaitSpinner}">
-                    <Border Background="White"
+                    <Border HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                 Path=Background}"
                             BorderBrush="Black"
-                            BorderThickness="1"
-                            Padding="8"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
+                            BorderThickness="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                      Path=BorderThickness}"
+                            Padding="8">
                         <StackPanel>
-                            <Image Grid.Column="2"
-                                   RenderTransformOrigin=".5,.5"
-                                   Width="24"
+                            <Image Width="24"
                                    Height="24"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
+                                   RenderTransformOrigin=".5,.5"
                                    Source="/Shipworks.Core;component/Resources/Progress/circle_ball_blue.gif">
                                 <Image.RenderTransform>
                                     <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
@@ -28,17 +31,17 @@
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <DoubleAnimation By="10"
-                                                 Duration="0:0:1"
-                                                 RepeatBehavior="Forever"
-                                                 Storyboard.TargetName="AnimatedRotateTransform"
-                                                 Storyboard.TargetProperty="Angle"
-                                                 To="360" />
+                                                                 Duration="0:0:1"
+                                                                 RepeatBehavior="Forever"
+                                                                 Storyboard.TargetName="AnimatedRotateTransform"
+                                                                 Storyboard.TargetProperty="Angle"
+                                                                 To="360" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </EventTrigger>
                                 </Image.Triggers>
                             </Image>
-                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </StackPanel>
                     </Border>
                 </ControlTemplate>

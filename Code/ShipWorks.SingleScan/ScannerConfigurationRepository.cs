@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Xml;
+using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -30,7 +31,7 @@ namespace ShipWorks.SingleScan
         /// Save the scanner name from scanner.xml
         /// </summary>
         /// <exception cref="ScannerConfigurationRepositoryException">Throws when fails to write file to disk</exception>
-        public void Save(string name)
+        public GenericResult<string> SaveScannerName(string name)
         {
             MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
 
@@ -44,26 +45,54 @@ namespace ShipWorks.SingleScan
                     writer.WriteEndElement();
                     writer.WriteEndElement();
                 }
+
+                return GenericResult.FromSuccess(string.Empty);
             }
             catch (Exception ex)
             {
                 log.Error(ex);
-                throw new ScannerConfigurationRepositoryException(
-                    "An error occurred while attempting to save scanner name.", ex);
+                return GenericResult.FromError("An error occurred while attempting to save scanner name.", ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Clears out the scanner name from scanner.xml
+        /// </summary>
+        public GenericResult<string> ClearScannerName()
+        {
+            return SaveScannerName(string.Empty);
         }
 
         /// <summary>
         /// Get the scanner name from scanner.xml
         /// </summary>
-        public string GetName()
+        public GenericResult<string> GetScannerName()
         {
             try
             {
                 XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(File.ReadAllText(fullPath));
+                xmlDocument.LoadXml(ReadSettingsFile());
 
-                return xmlDocument.SelectSingleNode("//Scanner/Name")?.InnerText ?? string.Empty;
+                return
+                    GenericResult.FromSuccess(xmlDocument.SelectSingleNode("//Scanner/Name")?.InnerText ?? string.Empty);
+            }
+            catch (Exception ex) when(ex is XPathException || ex is XmlException)
+            {
+                log.Error("An error occurred while trying to read scanner settings.", ex);
+            }
+
+            return GenericResult.FromSuccess(string.Empty);
+        }
+
+        /// <summary>
+        /// Read the scanner.xml file from disk
+        /// </summary>
+        /// <returns>will return an empty string if the file does not exist or cannot be read</returns>
+        private string ReadSettingsFile()
+        {
+            try
+            {
+                return File.ReadAllText(fullPath);
             }
             catch (Exception ex)
             {

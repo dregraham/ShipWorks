@@ -12,12 +12,13 @@ using ShipWorks.Common.IO.Hardware.Scanner;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// Message filter used to identify the scanner
+    /// Message filter used by scanner service
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class FindScannerMessageFilter : IScannerMessageFilter
+    public class RegisteredScannerInputHandler : IScannerMessageFilter
     {
         private readonly IUser32Input user32Input;
+        private readonly IScannerIdentifier scannerIdentifier;
         private readonly IScanBuffer scanBuffer;
         private readonly ILog log;
 
@@ -27,8 +28,10 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public FindScannerMessageFilter(IUser32Input user32Input, IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
+        public RegisteredScannerInputHandler(IScannerIdentifier scannerIdentifier, IUser32Input user32Input,
+            IScanBuffer scanBuffer, Func<Type, ILog> getLogger)
         {
+            this.scannerIdentifier = scannerIdentifier;
             this.user32Input = user32Input;
             this.scanBuffer = scanBuffer;
             log = getLogger(GetType());
@@ -41,6 +44,9 @@ namespace ShipWorks.SingleScan
         {
             switch ((WindowsMessage) message.Msg)
             {
+                case WindowsMessage.INPUT_DEVICE_CHANGE:
+                    HandleDeviceChange(message.LParam, message.WParam);
+                    return false;
                 case WindowsMessage.INPUT:
                     return HandleInput(message.LParam);
                 case WindowsMessage.KEYFIRST:
@@ -64,26 +70,32 @@ namespace ShipWorks.SingleScan
         private bool HandleInput(IntPtr messageHandle)
         {
             GenericResult<RawInput> result = user32Input.GetRawInputData(messageHandle, RawInputCommand.Input);
+
+            if (!scannerIdentifier.IsRegisteredScanner(result.Value.Header.DeviceHandle))
+            {
+                return false;
+            }
+
             if (!result.Success)
             {
                 log.Error(result.Message);
                 return false;
             }
 
-            shouldBlock = ProcessRawInputData(result.Value.Header.DeviceHandle, result.Value);
+            shouldBlock = ProcessRawInputData(result.Value);
             return true;
         }
 
         /// <summary>
         /// Process the raw input data from a scanner
         /// </summary>
-        private bool ProcessRawInputData(IntPtr deviceHandle, RawInput input)
+        private bool ProcessRawInputData(RawInput input)
         {
             if (input.Data.Keyboard.Message == WindowsMessage.KEYFIRST)
             {
                 pressedKeys.Add(input.Data.Keyboard.VirtualKey);
                 string text = GetCharacter(input.Data.Keyboard.VirtualKey);
-                scanBuffer.Append(deviceHandle, text);
+                scanBuffer.Append(input.Header.DeviceHandle, text);
             }
             else
             {
@@ -91,6 +103,20 @@ namespace ShipWorks.SingleScan
             }
 
             return pressedKeys.Any();
+        }
+
+        /// <summary>
+        /// Handle a device change
+        /// </summary>
+        private void HandleDeviceChange(IntPtr deviceHandle, IntPtr changeType)
+        {
+            if (changeType.ToInt32() == 1)
+            {
+                scannerIdentifier.HandleDeviceAdded(deviceHandle);
+                return;
+            }
+
+            scannerIdentifier.HandleDeviceRemoved(deviceHandle);
         }
 
         /// <summary>

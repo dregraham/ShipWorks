@@ -33,15 +33,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                             .As(service)
                             .PreserveExistingDefaults();
 
-                    IEnumerable<ServiceAttribute> serviceAttributes = GetAttributes(service).ToList();
-                    if (serviceAttributes.Any(s=>s.SingleInstance))
+                    if (GetAttributes(service).Any(s=>s.SingleInstance))
                     {
-                        registrationBuilder = registrationBuilder.SingleInstance();
-                    }
-
-                    if (serviceAttributes.Any(s => s.ExternallyOwned))
-                    {
-                        registrationBuilder.ExternallyOwned();
+                        registrationBuilder.SingleInstance();
                     }
                 }
             }
@@ -51,11 +45,6 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// Gets or sets a value indicating whether it should be registered as a single instance.
         /// </summary>
         public bool SingleInstance { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether it should be registered as Externally Owned.
-        /// </summary>
-        public bool ExternallyOwned { get; set; } = false;
 
         /// <summary>
         /// Should the component be registered for the given service

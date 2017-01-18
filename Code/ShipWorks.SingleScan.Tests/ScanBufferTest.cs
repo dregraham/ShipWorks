@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
@@ -13,12 +12,12 @@ using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
 {
-    [SuppressMessage("Code Analysis", "S3236")]
+    [SuppressMessage("Code Analysis", "S3236",
+        Justification = "Moq method matching will not work if we do not explicitly pass caller member info params")]
     public class ScanBufferTest : IDisposable
     {
         readonly AutoMock mock;
         private readonly Mock<IMessenger> messenger;
-        private readonly ScanBuffer testObject;
         private readonly IntPtr deviceHandle = (IntPtr) 42;
 
         public ScanBufferTest()
@@ -26,17 +25,19 @@ namespace ShipWorks.SingleScan.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             messenger = mock.Mock<IMessenger>();
-
-            testObject = mock.Create<ScanBuffer>();
         }
 
         [Fact]
         public void Append_DoesNotSendMessage_WhenBlankInput()
         {
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
+
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
             testObject.Append(deviceHandle, string.Empty);
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Never);
         }
@@ -44,10 +45,14 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_DoesNotSendMessage_WhenNullInput()
         {
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
+
             testObject.Append(deviceHandle, null);
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Never);
         }
@@ -55,10 +60,15 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_DoesSendMessage_WhenInputIsSingleCharacter()
         {
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
+
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
+
             testObject.Append(deviceHandle, "1");
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
         }
@@ -66,12 +76,15 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_MessageBarcodeMatches_WhenInputIsSingleCharacter()
         {
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
             messenger.Setup(m => m.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>())).Verifiable();
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
 
             testObject.Append(deviceHandle, "1");
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
         }
@@ -79,13 +92,18 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_DoesSendMessage_WhenInputIsMultipleCharacters()
         {
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
+
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
+
             foreach (int i in Enumerable.Range(0, 25))
             {
                 testObject.Append(deviceHandle, i.ToString());
             }
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.IsAny<IShipWorksMessage>(), It.IsAny<string>()), Times.Once);
         }
@@ -93,15 +111,20 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Append_SendsDeviceHandle()
         {
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
+
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
+
             foreach (int i in Enumerable.Range(0, 25))
             {
                 testObject.Append(deviceHandle, i.ToString());
             }
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
-            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg=>msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
+            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.DeviceHandle == deviceHandle), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -109,28 +132,19 @@ namespace ShipWorks.SingleScan.Tests
         {
             string barcode = "0123456789101112131415161718192021222324";
 
-            messenger.Setup(m => m.Send(It.Is<ScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>())).Verifiable();
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
 
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
             foreach (int i in Enumerable.Range(0, 25))
             {
                 testObject.Append(deviceHandle, i.ToString());
             }
 
-            // Wait for the delay buffer to complete before checking for sent messages
-            WaitForBufferComplete();
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>()), Times.Once);
-        }
-
-        /// <summary>
-        /// Wait for the delay buffer to complete before checking for sent messages
-        /// </summary>
-        private static void WaitForBufferComplete()
-        {
-            for (int i = 0; i < 15; i++)
-            {
-                Thread.Sleep(10);
-            }
         }
 
         public void Dispose()

@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.UI;
@@ -35,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Options
 
             scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
 
-            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetName());
+            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
@@ -146,10 +147,10 @@ namespace ShipWorks.ApplicationCore.Options
             else
             {
                 autoPrint.Enabled = true;
-                registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetName());
+                registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
             }
 
-            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetName());
+            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
         }
 
         /// <summary>
@@ -172,8 +173,16 @@ namespace ShipWorks.ApplicationCore.Options
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                Form findScanner = scope.ResolveNamed<Form>("RegisterScannerDialog");
-                findScanner.ShowDialog(owner);
+                Form findScanner = scope.ResolveNamed<Form>("ScannerRegistrationDialog");
+                try
+                {
+                    findScanner.ShowDialog(owner);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    MessageHelper.ShowError(owner, ex.InnerException.Message);
+                }
+
                 UpdateSingleScanSettingsUI();
             }
         }
@@ -183,7 +192,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void OnClickUnregisterScanner(object sender, EventArgs e)
         {
-            scannerRepo.Save(string.Empty);
+            scannerRepo.ClearScannerName();
             UpdateSingleScanSettingsUI();
         }
     }

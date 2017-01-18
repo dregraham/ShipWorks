@@ -8,18 +8,17 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Dialog to prompt user to register scanner.
     /// </summary>
-    [NamedComponent("RegisterScannerDialog", typeof(Form))]
-    public partial class RegisterScannerDialog : Form
+    [NamedComponent("ScannerRegistrationDialog", typeof(Form))]
+    public partial class ScannerRegistrationDialog : Form
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public RegisterScannerDialog(IRegisterScannerControlViewModel viewModel)
+        public ScannerRegistrationDialog(IScannerRegistrationControlViewModel viewModel)
         {
             viewModel.CloseDialog = Close;
             InitializeComponent();
-            registrationControl.DataContext = viewModel;
-            StartPosition = FormStartPosition.CenterParent;
+            registrationRegistrationControl.DataContext = viewModel;
         }
     }
 }

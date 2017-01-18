@@ -12,20 +12,26 @@ namespace ShipWorks.SingleScan.Tests
 {
     public class RegisterScannerControlViewModelTest : IDisposable
     {
-        private readonly RegisterScannerControlViewModel testObject;
+        private readonly ScannerRegistrationControlViewModel testObject;
         private readonly AutoMock mock;
         private readonly Mock<IScannerIdentifier> scannerIdentifier;
-        private readonly Mock<IScannerService> scannerService;
+        private readonly Mock<IScannerRegistrationListener> scannerRegistrationListener;
 
         public RegisterScannerControlViewModelTest()
         {
             mock = AutoMock.GetLoose();
             IMessenger messenger = new TestMessenger();
             scannerIdentifier = mock.Mock<IScannerIdentifier>();
-            scannerService = mock.Mock<IScannerService>();
-            testObject = mock.Create<RegisterScannerControlViewModel>(new TypedParameter(typeof(IMessenger), messenger));
+            scannerRegistrationListener = mock.Mock<IScannerRegistrationListener>();
+            testObject = mock.Create<ScannerRegistrationControlViewModel>(new TypedParameter(typeof(IMessenger), messenger));
 
             messenger.Send(new ScanMessage(this, "some text", new IntPtr(123)));
+        }
+
+        [Fact]
+        public void Constructor_StartsScannerRegistrationListener()
+        {
+            scannerRegistrationListener.Verify(s => s.Start());
         }
 
         [Fact]
@@ -48,10 +54,10 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void Dispose_DelegatesToScannerService()
+        public void Dispose_StopsScannerRegistrationListener()
         {
             testObject.Dispose();
-            scannerService.Verify(s => s.EndFindScanner());
+            scannerRegistrationListener.Verify(s => s.Stop());
         }
 
         public void Dispose()
