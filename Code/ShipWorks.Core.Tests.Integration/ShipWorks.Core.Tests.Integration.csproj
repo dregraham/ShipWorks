@@ -145,6 +145,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressValidation\AddressValidationDatabaseUpgradeTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="Common\ApplyValidatorsTest.cs" />
     <Compile Include="Common\ApplyOrderedManipulatorsTest.cs" />
@@ -183,6 +184,10 @@
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+      <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>

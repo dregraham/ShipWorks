@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -27,6 +29,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity()
+                {
+                    RequestedLabelFormat = (int) ThermalLanguage.None
+                }
             };
 
             FedExPackageEntity package = new FedExPackageEntity
@@ -41,7 +46,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Add the package containing dangerous goods to the fedex shipment
             shipmentEntity.FedEx.Packages.Add(package);
-
 
             // Create an "empty" process shipment request to use for our tests
             nativeRequest = new ProcessShipmentRequest
@@ -68,6 +72,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+        }
+
+        [Fact]
+        public void Manipulate_ThrowsFedExException_WhenDangerousGoodsEnabled_AndThermalLabelRequested()
+        {
+            shipmentEntity.FedEx.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
+
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
+
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
+        }
+
+        [Theory]
+        [InlineData(ThermalLanguage.ZPL)]
+        [InlineData(ThermalLanguage.EPL)]
+        public void Manipulate_NoException_WhenDangerousGoodsNotEnabled_AndThermalLabelRequested(ThermalLanguage language)
+        {
+            shipmentEntity.FedEx.RequestedLabelFormat = (int) language;
+
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsEnabled = false;
+
+            testObject.Manipulate(carrierRequest.Object);
         }
 
         [Fact]
@@ -424,160 +450,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.Equal(HazardousCommodityOptionType.HAZARDOUS_MATERIALS, dangerousGoods.Options[0]);
         }
 
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsHome()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsOneDayFreight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDay()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2Day;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDayAM()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2DayAM;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsTwoDayFreight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx2DayFreight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsThreeDayFreight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx3DayFreight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsExpressSaver()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExExpressSaver;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsFirstInternationalPriorityEurope()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExEuropeFirstInternationalPriority;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsOvernight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FirstOvernight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalEconomy()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalEconomy;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalEconomyFreight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalEconomyFreight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalFirst()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalFirst;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalPriority()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalPriority;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsInternationalPriorityFreight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.InternationalPriorityFreight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsPriorityOvernight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsSmartPost()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenOptionIsHazardousMaterialsAndServiceIsStandardOvernight()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.StandardOvernight;
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
-
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
+       [Fact]
         public void Manipulate_ThrowsInvalidOperationException_WhenUnrecognizedOptionTypeIsProvided()
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = 23;

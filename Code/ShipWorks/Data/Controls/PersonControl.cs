@@ -577,6 +577,8 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public void LoadEntities(List<PersonAdapter> list)
         {
+            lastValidatedAddress = null;
+
             // Ensure we are created and initialized
             EnsureCountryInitialized();
 
@@ -646,7 +648,7 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public void SaveToEntities(IEnumerable<PersonAdapter> list)
         {
-            int listCount = list.Count();
+            bool hasOneEntity = list.Count() == 1;
 
             foreach (PersonAdapter person in list)
             {
@@ -669,14 +671,14 @@ namespace ShipWorks.Data.Controls
                     newAddress.AddressValidationError = string.Empty;
                 }
 
-                if (listCount == 1 && lastValidatedAddress != null)
+                if (hasOneEntity && lastValidatedAddress != null)
                 {
                     AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
                     lastValidatedAddress.CopyTo(personAddress);
                     lastValidatedAddress.CopyValidationDataTo(personAddress);
                 }
 
-                if (shouldSaveAddressSuggestions && EnableValidationControls)
+                if (hasOneEntity && shouldSaveAddressSuggestions && EnableValidationControls)
                 {
                     ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);
                 }
@@ -999,24 +1001,27 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            PersonAdapter person = new PersonAdapter();
-            PopulatePersonFromUI(person);
-
-            lastValidatedAddress = new AddressAdapter();
-            person.CopyTo(lastValidatedAddress);
-            lastValidatedAddress.AddressValidationError = string.Empty;
-            lastValidatedAddress.AddressValidationSuggestionCount = 0;
-
-            if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+            if (EnableValidationControls)
             {
-                lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
+                PersonAdapter person = new PersonAdapter();
+                PopulatePersonFromUI(person);
+
+                lastValidatedAddress = new AddressAdapter();
+                person.CopyTo(lastValidatedAddress);
+                lastValidatedAddress.AddressValidationError = string.Empty;
+                lastValidatedAddress.AddressValidationSuggestionCount = 0;
+
+                if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+                {
+                    lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                    lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
+                }
+
+                validatedAddresses.Clear();
+                shouldSaveAddressSuggestions = true;
+
+                UpdateValidationUI();
             }
-
-            validatedAddresses.Clear();
-            shouldSaveAddressSuggestions = true;
-
-            UpdateValidationUI();
 
             ContentChanged?.Invoke(this, EventArgs.Empty);
         }

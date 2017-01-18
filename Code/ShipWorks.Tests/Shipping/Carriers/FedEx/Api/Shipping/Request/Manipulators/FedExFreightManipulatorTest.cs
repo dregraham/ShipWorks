@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             Assert.Equal("fbn123", nativeRequest.RequestedShipment.ExpressFreightDetail.BookingConfirmationNumber);
-            Assert.Null(nativeRequest.RequestedShipment.ExpressFreightDetail.ShippersLoadAndCount);
+            Assert.Equal("23", nativeRequest.RequestedShipment.ExpressFreightDetail.ShippersLoadAndCount);
 
             List<ShipmentSpecialServiceType> specialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
 

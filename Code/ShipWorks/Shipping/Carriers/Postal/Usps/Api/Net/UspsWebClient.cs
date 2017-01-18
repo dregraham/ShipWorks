@@ -259,9 +259,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 account.ContractType = (int) GetUspsAccountContractType(accountInfo.RatesetType);
                 account.CreatedDate = DateTime.UtcNow;
                 account.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+                account.GlobalPostAvailability = (int) GetGlobalPostServiceAvailability(accountInfo);
             }
 
             return account;
+        }
+
+        /// <summary>
+        /// Get GlobalPost service availability from the account info
+        /// </summary>
+        private GlobalPostServiceAvailability GetGlobalPostServiceAvailability(AccountInfo accountInfo)
+        {
+            GlobalPostServiceAvailability gpAvailability = accountInfo.Capabilities.CanPrintGP ?
+                GlobalPostServiceAvailability.GlobalPost :
+                GlobalPostServiceAvailability.None;
+
+            GlobalPostServiceAvailability gpSmartSaverAvailability = accountInfo.Capabilities.CanPrintGPSmartSaver ?
+                GlobalPostServiceAvailability.SmartSaver :
+                GlobalPostServiceAvailability.None;
+
+            return gpAvailability | gpSmartSaverAvailability;
         }
 
         /// <summary>
@@ -1054,8 +1071,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Per stamps - only send state for domestic - send province for international
             if (!toAddress.AsAddressAdapter().IsDomesticCountry())
             {
-                toAddress.Province = toAddress.State;
-                toAddress.State = string.Empty;
+                // Only overwrite the Province if the State is not blank
+                if (!string.IsNullOrWhiteSpace(toAddress.State))
+                {
+                    toAddress.Province = toAddress.State;
+                    toAddress.State = string.Empty;
+                }
             }
         }
 

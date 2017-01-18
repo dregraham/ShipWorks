@@ -144,6 +144,15 @@ namespace ShipWorks.Tests.Shared
         /// Mocks a Function with an input and output.
         /// The Func to create the logger is registered and the passed in functionOutput is the output of the function
         /// </summary>
+        /// <typeparam name="TInput">The type of input.</typeparam>
+        /// <typeparam name="TOutput">The type the funct will return.</typeparam>
+        /// <param name="mock">The mock.</param>
+        /// <param name="functionOutput">The actual output of the fucntion.</param>
+        /// <remarks>
+        /// To use MockFunc, if there is a class with a parameter of Func&lt;string, IBlah&gt;, you can easily mock up this function
+        /// First, create the object you want as the result. (var blah = mock.MockRepository.Create&lt;IBlah&gt;();)
+        /// Then call mock.MockFunc&lt;string, IBlah&gt;(blah);
+        /// </remarks>
         public static void MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
         {
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();

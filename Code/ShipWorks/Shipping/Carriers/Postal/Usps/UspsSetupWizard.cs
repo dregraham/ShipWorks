@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
@@ -853,13 +854,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
 
-                AssociateShipWorksWithItselfResponse response = request.Execute();
-
-                if (response.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
+                e.AwaitTask = request.Execute().ContinueWith(r =>
                 {
-                    registrationComplete = true;
-                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                }
+                    if (r.Result?.ResponseType == AssociateShipWorksWithItselfResponseType.Success)
+                    {
+                        registrationComplete = true;
+                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                    }
+                });
             }
         }
 
@@ -909,34 +911,43 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
 
                 AssociateShipworksWithItselfRequest request = PopulateAssociateWithSelfRequestWithBilling(ioc);
+
                 request.PhysicalAddress = meterAddressAdapter;
 
-                AssociateShipWorksWithItselfResponse response = request.Execute();
+                e.AwaitTask =
+                    request.Execute().ContinueWith(r => ProcessAssociateShipWorksResponse(r.Result, request, e));
+            }
+        }
 
-                switch (response.ResponseType)
-                {
-                    case AssociateShipWorksWithItselfResponseType.Success:
-                        registrationComplete = true;
-                        PopulateAccountFromAssociateShipworksWithItselfRequest(request);
-                        break;
+        /// <summary>
+        /// Process AssociateShipWorksWithItselfResponse
+        /// </summary>
+        private void ProcessAssociateShipWorksResponse(AssociateShipWorksWithItselfResponse response, AssociateShipworksWithItselfRequest request, WizardStepEventArgs e)
+        {
+            switch (response?.ResponseType)
+            {
+                case AssociateShipWorksWithItselfResponseType.Success:
+                    registrationComplete = true;
+                    PopulateAccountFromAssociateShipworksWithItselfRequest(request);
+                    break;
 
-                    case AssociateShipWorksWithItselfResponseType.UnknownError:
-                        UspsAccountManager.DeleteAccount(UspsAccount);
-                        UspsAccount = null;
+                case AssociateShipWorksWithItselfResponseType.UnknownError:
+                    UspsAccountManager.DeleteAccount(UspsAccount);
+                    UspsAccount = null;
 
-                        Pages.Add(wizardPageError);
-                        e.NextPage = wizardPageError;
+                    Pages.Add(wizardPageError);
+                    e.NextPage = wizardPageError;
 
-                        FinishCancels = true;
-                        LastPageCancelable = false;
-                        BackEnabled = false;
-                        break;
+                    FinishCancels = true;
+                    LastPageCancelable = false;
+                    BackEnabled = false;
+                    break;
 
-                    default:
-                        MessageHelper.ShowError(this, response.Message);
-                        e.NextPage = CurrentPage;
-                        break;
-                }
+                default:
+                    string message = string.IsNullOrWhiteSpace(response?.Message) ? "An unknown error occurred." : response.Message;
+                    Invoke((MethodInvoker) delegate { MessageHelper.ShowError(this, message); });
+                    e.NextPage = CurrentPage;
+                    break;
             }
         }
 
@@ -946,7 +957,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private AssociateShipworksWithItselfRequest PopulateAssociateWithSelfRequestWithBilling(ILifetimeScope ioc)
         {
             IUspsWebClient uspsWebClient =
-                ioc.Resolve<IUspsWebClient>(new NamedParameter("uspsResellerType", UspsResellerType.None));
+                ioc.Resolve<IUspsWebClient>(new TypedParameter(typeof(UspsResellerType), UspsResellerType.None));
 
             AssociateShipworksWithItselfRequest request =
                 ioc.Resolve<AssociateShipworksWithItselfRequest>(new TypedParameter(typeof(IUspsWebClient), uspsWebClient));

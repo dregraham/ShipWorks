@@ -14,6 +14,7 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Actions;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 {
@@ -101,13 +102,14 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 
             try
             {
-                MagentoOnlineUpdater updater = new MagentoOnlineUpdater(store);
+                IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) new MagentoStoreType(store).CreateOnlineUpdater();
+
                 foreach (long entityID in inputKeys)
                 {
-                    updater.ExecuteOrderAction(entityID, "complete", comment, magentoSendEmail, context.CommitWork);
+                    updater.UploadShipmentDetails(entityID, MagentoUploadCommand.Complete, comment, magentoSendEmail, context.CommitWork);
                 }
             }
-            catch (GenericStoreException ex)
+            catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }
@@ -118,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
-            return new MagentoShipmentUploadTaskEditor(this); 
+            return new MagentoShipmentUploadTaskEditor(this);
         }
     }
 }

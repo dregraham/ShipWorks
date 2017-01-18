@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
-using System.Text.RegularExpressions;
 using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content.Conditions
@@ -31,18 +30,22 @@ namespace ShipWorks.Filters.Content.Conditions
         /// </summary>
         public static string GenerateSql(string targetValue, StringOperator stringOp, string valueExpression, SqlGenerationContext context)
         {
+            // We're limiting to 3998 since 4k is the largest number of characters we can use without SQL Server
+            // throwing an exception. 3998 allows wildcards to fit in the max while being consistent. If this limit
+            // is a problem, we should find out what the customer's use case is.
+            string truncatedValue = targetValue.Truncate(3998);
+
             if (IsLikeOperator(stringOp))
             {
-                string param = context.RegisterParameter(GetLikeValue(targetValue, stringOp));
+                string param = context.RegisterParameter(GetLikeValue(truncatedValue, stringOp));
                 string not = (stringOp == StringOperator.NotContains) ? "NOT " : "";
 
                 return string.Format("{0} {1}LIKE {2}", valueExpression, not, param);
             }
-
             else
             {
                 // Register the parameter
-                string param = context.RegisterParameter((stringOp == StringOperator.IsEmpty) ? "" : targetValue);
+                string param = context.RegisterParameter((stringOp == StringOperator.IsEmpty) ? "" : truncatedValue);
 
                 if (stringOp == StringOperator.Equals || stringOp == StringOperator.IsEmpty)
                 {
@@ -144,7 +147,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Provide a list of standard values for the user to choose from.  The user can still
         /// type in whatever they want, in addition to selecting a value. Return null to provide
-        /// no standard values.  Returnning a non-null collection will result in the editor
+        /// no standard values.  Returning a non-null collection will result in the editor
         /// displaying a dropdown instead of an edit box.
         /// </summary>
         public virtual ICollection<string> GetStandardValues()

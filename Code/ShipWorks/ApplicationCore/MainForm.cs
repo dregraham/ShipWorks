@@ -814,7 +814,7 @@ namespace ShipWorks
             // refresh the license if it is older than 10 mins
             licenses.ForEach(license => license.Refresh());
 
-            Telemetry.TrackStartShipworks();
+            Telemetry.TrackStartShipworks(SqlServerInfo.Fetch());
 
             // now that we updated license info we can refresh the UI to match
             if (InvokeRequired)
@@ -2887,14 +2887,14 @@ namespace ShipWorks
             DockControl dockControl = (DockControl) item.Tag;
 
             dockControl.Open(WindowOpenMethod.OnScreenActivate);
+
+            Messenger.Current.Send(new PanelShownMessage(this, dockControl));
         }
 
         // A dock control that didn't used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdateSelectionDependentUI();
-
-            Messenger.Current.Send(new PanelShownMessage(this, e.DockControl));
         }
 
         /// <summary>

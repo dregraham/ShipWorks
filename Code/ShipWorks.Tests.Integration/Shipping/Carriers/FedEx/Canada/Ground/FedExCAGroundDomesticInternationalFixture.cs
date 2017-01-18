@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Ground
 {
     public class FedExCAGroundDomesticInternationalFixture : FedExUSExpressInternationalFixture
     {
@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Grou
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
-        public override ShipmentEntity CreateShipment()
+        public override ShipmentEntity CreateShipment(OrderEntity order)
         {
             if (string.IsNullOrWhiteSpace(CustomsClearanceDocumentContent))
             {
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Grou
                 CustomerReferenceValue = string.Empty;
             }
 
-            ShipmentEntity shipment = base.CreateShipment();
+            ShipmentEntity shipment = base.CreateShipment(order);
 
             if (string.IsNullOrWhiteSpace(CodChargeBasis))
             {

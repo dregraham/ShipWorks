@@ -343,7 +343,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Get order date.  The date and time is split between two nodes, so combine them.
             // Then convert to UTC based on the store's time zone.
             DateTime orderDay = DateTime.Parse(XPathUtility.Evaluate(xmlOrderXPath, "./Date", ""));
-            DateTime orderTime = DateTime.Parse(XPathUtility.Evaluate(xmlOrderXPath, "./Time", ""));
+
+            string orderTimeString = XPathUtility.Evaluate(xmlOrderXPath, "./Time", "");
+            DateTime orderTime;
+            if (string.IsNullOrWhiteSpace(orderTimeString) || !DateTime.TryParse(orderTimeString, out orderTime))
+            {
+                orderTime = orderDay;
+            }
+
             TimeSpan orderTimeTimeSpan = new TimeSpan(orderTime.Hour, orderTime.Minute, orderTime.Second);
             DateTime storeDateTimeConversion = orderDay.Add(orderTimeTimeSpan);
             order.OrderDate = DateTimeUtility.ConvertTimeToUtcForTimeZone(storeDateTimeConversion,

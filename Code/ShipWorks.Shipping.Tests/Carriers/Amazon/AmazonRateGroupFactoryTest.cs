@@ -120,24 +120,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             RateGroup filteredRate = null;
 
-            GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService
-            {
-                Rate = new Rate { Amount = 2.34M },
-                ShippingServiceName = "UPS",
-                ShippingServiceId = "Foo",
-                ShippingServiceOfferId = "Bar"
-            });
+            GetEligibleShippingServicesResponse response = ResponseWithServices(() => Enumerable.Range(1, 3)
+                .Select(x => new ShippingService{ Rate = new Rate { Amount = x },
+                    ShippingServiceName = x == 1 ? "UPS" : "FedEx",
+                    ShippingServiceId = "Foo",
+                    ShippingServiceOfferId = "Bar",
+                    CarrierName = x == 1 ? "UPS" : "FedEx"
+                }));
 
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))
-                .Callback<RateGroup>(x => filteredRate = x);
+                .Callback<RateGroup>(x =>
+                {
+                    filteredRate = new RateGroup(x.Rates.Where(r => r.Description != "UPS"));
+                });
 
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
 
             testObject.GetRateGroupFromResponse(response);
 
-            Assert.Equal(1, filteredRate.Rates.Count);
-            Assert.Equal(2.34M, filteredRate.Rates.First().AmountOrDefault);
+            Assert.Equal(2, filteredRate.Rates.Count);
+            Assert.Equal(2M, filteredRate.Rates.First().AmountOrDefault);
         }
 
         public GetEligibleShippingServicesResponse ResponseWithServices(Func<IEnumerable<ShippingService>> serviceCreator)

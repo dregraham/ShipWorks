@@ -72,6 +72,7 @@ namespace ShipWorks.Tests.Shipping.Policies
                 {ShipmentTypeCode.BestRate, LoadElements(bestRateFeatureXml)},
                 {ShipmentTypeCode.Usps, LoadElements(uspsFeatureXml)}
             };
+        private readonly ShippingPoliciesCache cache;
 
         public ShippingPoliciesTest()
         {
@@ -85,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             uspsNonApplicablePolicy = CreatePolicyMock(mockRepository, false);
 
             // Make sure we're starting with a fresh cache each time
-            ShippingPolicies.ClearCache();
+            cache = new ShippingPoliciesCache();
 
             policies = new ShippingPolicies(new List<KeyValuePair<ShipmentTypeCode, IShippingPolicy>>()
             {
@@ -153,15 +154,15 @@ namespace ShipWorks.Tests.Shipping.Policies
         [Fact]
         public void Load_UpdatesCurrent()
         {
-            policies = ShippingPolicies.Current;
-            ShippingPolicies.Load(0, new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
-            Assert.NotSame(policies, ShippingPolicies.Current);
+            policies = cache.Current;
+            cache.Load(0, new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
+            Assert.NotSame(policies, cache.Current);
         }
 
         [Fact]
         public void Load_DelegatesToFactory_ToCreateShippingPolicies()
         {
-            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+            cache.Load(0, features, policyFactoryMock.Object);
 
             policyFactoryMock.Verify(x => x.Create(It.IsAny<ShipmentTypeCode>(), "Foo"), Times.Once);
             policyFactoryMock.Verify(x => x.Create(It.IsAny<ShipmentTypeCode>(), "Bar"), Times.Exactly(2));
@@ -175,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 2);
             List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
 
-            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+            cache.Load(0, features, policyFactoryMock.Object);
 
             fooPolicies[0].Verify(x => x.Configure("1"));
             fooPolicies[0].Verify(x => x.Configure("6"));
@@ -189,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         public void Load_IncludePolicyOfExistingStore_WhenLoadingNewStore()
         {
             features.Remove(ShipmentTypeCode.BestRate);
-            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+            cache.Load(0, features, policyFactoryMock.Object);
 
             List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 2);
             List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 2);
@@ -199,7 +200,7 @@ namespace ShipWorks.Tests.Shipping.Policies
                 {ShipmentTypeCode.Usps, LoadElements(uspsFeature2Xml)}
             };
 
-            ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
+            cache.Load(2, extraFeatures, policyFactoryMock.Object);
 
             barPolicies[0].Verify(x => x.Configure("1"));
             barPolicies[1].Verify(x => x.Configure("2"));
@@ -212,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         public void Load_ReplacePolicyOfExistingStore_WhenLoadingExistingStore()
         {
             features.Remove(ShipmentTypeCode.BestRate);
-            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+            cache.Load(0, features, policyFactoryMock.Object);
 
             List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 1);
             List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
@@ -222,7 +223,7 @@ namespace ShipWorks.Tests.Shipping.Policies
                 {ShipmentTypeCode.Usps, LoadElements(uspsFeature2Xml)}
             };
 
-            ShippingPolicies.Load(0, extraFeatures, policyFactoryMock.Object);
+            cache.Load(0, extraFeatures, policyFactoryMock.Object);
 
             barPolicies[0].Verify(x => x.Configure("2"));
             bazPolicies[0].Verify(x => x.Configure("3"));
@@ -233,19 +234,19 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             // Load multiple stores
             features.Remove(ShipmentTypeCode.BestRate);
-            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+            cache.Load(0, features, policyFactoryMock.Object);
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
                 {ShipmentTypeCode.Usps, LoadElements(uspsFeature2Xml)}
             };
-            ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
+            cache.Load(2, extraFeatures, policyFactoryMock.Object);
 
             // Test unloading a store
             List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 1);
             List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
 
-            ShippingPolicies.Unload(0, policyFactoryMock.Object);
+            cache.Unload(0, policyFactoryMock.Object);
 
             barPolicies[0].Verify(x => x.Configure("2"));
             bazPolicies[0].Verify(x => x.Configure("3"));
@@ -254,11 +255,11 @@ namespace ShipWorks.Tests.Shipping.Policies
         [Fact]
         public void Unload_DoesNotUpdateCurrentPolicies_WhenStoreDoesNotExist()
         {
-            var currentPolicies = ShippingPolicies.Current;
+            var currentPolicies = cache.Current;
 
-            ShippingPolicies.Unload(1);
+            cache.Unload(1);
 
-            Assert.Same(currentPolicies, ShippingPolicies.Current);
+            Assert.Same(currentPolicies, cache.Current);
         }
 
         private List<Mock<IShippingPolicy>> CreateAndRegisterFactoryMocks(string key, int count)

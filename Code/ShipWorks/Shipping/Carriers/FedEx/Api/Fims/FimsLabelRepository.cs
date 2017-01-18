@@ -38,16 +38,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         public void SaveLabel(IFimsShipResponse fimsShipResponse, long ownerID)
         {
-            if (fimsShipResponse.LabelPdfData == null)
+            if (fimsShipResponse.LabelData == null)
             {
                 throw new ArgumentNullException("fimsShipResponse", "The FIMS Label data is required");
             }
 
-            // Create a ShipWorks label from the PDF received from FIMS
-            using (MemoryStream pdfBytes = new MemoryStream(fimsShipResponse.LabelPdfData))
-            {
-                dataResourceManager.CreateFromPdf(pdfBytes, ownerID, "LabelImage");
-            }
+            dataResourceManager.CreateFromBytes(fimsShipResponse.LabelData, ownerID, "LabelImage");
         }
 
         /// <summary>

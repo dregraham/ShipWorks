@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Interapptive.Shared.Messaging.Logging;
+using Newtonsoft.Json;
 using SD.Tools.OrmProfiler.Interceptor;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.JsonConverters;
 
 namespace ShipWorks.Startup
 {
@@ -25,6 +28,12 @@ namespace ShipWorks.Startup
                 InterceptorCore.Initialize("ShipWorks");
             }
 #endif
+
+            MessageLogger.Current.AddConverters(() => new JsonConverter[] {
+                new ShipmentEntityJsonConverter(),
+                new StoreEntityJsonConverter()
+            });
+
             ContainerInitializer.Initialize();
 
             ShipWorks.Program.Main();

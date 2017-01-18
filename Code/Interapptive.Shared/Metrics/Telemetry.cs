@@ -119,7 +119,7 @@ namespace Interapptive.Shared.Metrics
         /// <summary>
         /// Track when ShipWorks as started
         /// </summary>
-        public static void TrackStartShipworks()
+        public static void TrackStartShipworks(IDictionary<string, string> additionalProperties)
         {
             SetCustomerID();
 
@@ -129,7 +129,14 @@ namespace Interapptive.Shared.Metrics
             };
 
             Dictionary<string, string> commonProperties = CommonProperties();
+
             foreach (KeyValuePair<string, string> keyValuePair in commonProperties.Where(kvp => !eventTelemetry.Properties.ContainsKey(kvp.Key)))
+            {
+                eventTelemetry.Properties.Add(keyValuePair.Key, keyValuePair.Value);
+            }
+
+            // Add any additional properties passed
+            foreach (KeyValuePair<string, string> keyValuePair in additionalProperties.Where(kvp => !eventTelemetry.Properties.ContainsKey(kvp.Key)))
             {
                 eventTelemetry.Properties.Add(keyValuePair.Key, keyValuePair.Value);
             }

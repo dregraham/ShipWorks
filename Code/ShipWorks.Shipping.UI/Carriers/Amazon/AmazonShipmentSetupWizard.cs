@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
@@ -10,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.Stores;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -22,6 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly AmazonShipmentType shipmentType;
         private readonly IShippingSettings shippingSettings;
+        private readonly IStoreManager storeManager;
         private ShippingWizardPageFinish shippingWizardPageFinish;
 
         /// <summary>
@@ -36,10 +40,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentSetupWizard(AmazonShipmentType shipmentType, IShippingSettings shippingSettings) : this()
+        public AmazonShipmentSetupWizard(AmazonShipmentType shipmentType, IShippingSettings shippingSettings, IStoreManager storeManager) : this()
         {
             this.shipmentType = shipmentType;
             this.shippingSettings = shippingSettings;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -106,12 +111,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    // if the exception is because the shipper already exists dont do anything
+                    // if the exception is because the shipper already exists don't do anything
                     if (!ex.Message.Contains("IX_ShippingOrigin_Description"))
                     {
                         throw;
                     }
                 }
+            }
+
+            IEnumerable<StoreEntity> stores = storeManager.GetAllStores();
+
+            foreach (StoreEntity store in stores.Where(s =>
+                s.TypeCode == (int) StoreTypeCode.Amazon || s.TypeCode == (int) StoreTypeCode.ChannelAdvisor))
+            {
+                storeManager.CreateStoreStatusFilters(this, store);
             }
         }
 

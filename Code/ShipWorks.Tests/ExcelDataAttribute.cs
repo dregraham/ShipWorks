@@ -76,42 +76,5 @@ namespace ShipWorks.Tests
                 disposable.Dispose();
             }
         }
-
-        static string GetFullFilename(string filename)
-        {
-            string executable = new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
-            return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(executable), filename));
-        }
-
-        static object[] ConvertParameters(object[] values, Type[] parameterTypes)
-        {
-            object[] result = new object[values.Length];
-
-            for (int idx = 0; idx < values.Length; idx++)
-                result[idx] = ConvertParameter(values[idx], idx >= parameterTypes.Length ? null : parameterTypes[idx]);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Converts a parameter to its destination parameter type, if necessary.
-        /// </summary>
-        /// <param name="parameter">The parameter value</param>
-        /// <param name="parameterType">The destination parameter type (null if not known)</param>
-        /// <returns>The converted parameter value</returns>
-        static object ConvertParameter(object parameter, Type parameterType)
-        {
-            if ((parameter is double || parameter is float) &&
-                (parameterType == typeof(int) || parameterType == typeof(int?)))
-            {
-                int intValue;
-                string floatValueAsString = parameter.ToString();
-
-                if (Int32.TryParse(floatValueAsString, out intValue))
-                    return intValue;
-            }
-
-            return parameter;
-        }
     }
 }

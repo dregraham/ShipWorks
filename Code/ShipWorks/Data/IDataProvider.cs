@@ -15,8 +15,8 @@ namespace ShipWorks.Data
         IEnumerable<EntityBase2> GetRelatedEntities(long orderID, EntityType orderItemEntity);
 
         /// <summary>
-        /// Gets the entity with the given ID from cache.  If it does not exist, it is loaded.
+        /// Gets the entity with the given entity ID
         /// </summary>
-        EntityBase2 GetEntity(long orderID);
+        EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true);
     }
 }

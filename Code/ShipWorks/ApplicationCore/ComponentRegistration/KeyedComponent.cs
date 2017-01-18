@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Builder;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
@@ -12,6 +13,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class KeyedComponentAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyedComponentAttribute"/> class.
+        /// </summary>
         public KeyedComponentAttribute(Type service, object key)
         {
             Service = service;
@@ -29,6 +33,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         public object Key { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether [externally owned].
+        /// </summary>
+        public bool ExternallyOwned { get; set; }
+
+        /// <summary>
         /// Register all components that use this attribute
         /// </summary>
         internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
@@ -43,10 +52,15 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
 
             foreach (var item in keyedComponents)
             {
-                foreach (var attribute in item.Attributes)
+                foreach (KeyedComponentAttribute attribute in item.Attributes)
                 {
-                    builder.RegisterType(item.Component)
-                        .Keyed(attribute.Key, attribute.Service);
+                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registration = 
+                        builder.RegisterType(item.Component).Keyed(attribute.Key, attribute.Service);
+
+                    if (attribute.ExternallyOwned)
+                    {
+                        registration.ExternallyOwned();
+                    }
                 }
             }
         }

@@ -87,5 +87,15 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             string result = StringUtility.FormatByteCount(byteSize, format);
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void ToInsecureString_ReturnsOriginalString_WhenReceivesSecureStringFromToSecureString()
+        {
+            string originalString = "The original string";
+            var secureString = originalString.ToSecureString();
+            string result = secureString.ToInsecureString();
+
+            Assert.Equal(originalString, result);
+        }
     }
 }

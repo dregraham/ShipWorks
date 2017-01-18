@@ -10,12 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
@@ -47,10 +45,8 @@ namespace ShipWorks.Stores.Content.Panels
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsPanel));
 
-        // So we don't race condition on fast selection changes to auto-create more than one shipment for an order
-        static HashSet<long> autoCreatingShipments = new HashSet<long>();
-
         private OrderEntity loadedOrder;
+        private bool isThisPanelVisible;
 
         /// <summary>
         /// Constructor
@@ -59,6 +55,18 @@ namespace ShipWorks.Stores.Content.Panels
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Gets all the entity keys from the grid
+        /// </summary>
+        public IEnumerable<long> EntityKeys =>
+            entityGrid.EntityGateway?.GetOrderedKeys() ?? Enumerable.Empty<long>();
+
+        /// <summary>
+        /// Default shipment selection
+        /// </summary>
+        public IEnumerable<long> DefaultShipmentSelection =>
+            EntityKeys.OrderByDescending(x => x).Take(1);
 
         /// <summary>
         /// Initialization
@@ -70,8 +78,9 @@ namespace ShipWorks.Stores.Content.Panels
             // Load the copy menu
             menuCopy.DropDownItems.AddRange(entityGrid.CreateCopyMenuItems(false));
 
-            ILifetimeScope lifetimeScope = IoC.UnsafeGlobalLifetimeScope;
-            IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
+            ILifetimeScope globalLifetimeScope = IoC.UnsafeGlobalLifetimeScope;
+            IMessenger messenger = globalLifetimeScope.Resolve<IMessenger>();
+            ISchedulerProvider schedulerProvider = globalLifetimeScope.Resolve<ISchedulerProvider>();
 
             messenger.Where(x => x.Sender is ShippingDlg)
                 .Subscribe(_ => ReloadContent());
@@ -85,11 +94,55 @@ namespace ShipWorks.Stores.Content.Panels
                 .Subscribe(_ => ReloadContent());
 
             messenger.OfType<OrderSelectionChangedMessage>()
-                .ObserveOn(lifetimeScope.Resolve<ISchedulerProvider>().WindowsFormsEventLoop)
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Do(x => ratesControl.Visible = true)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
+                .Do(x => SelectShipmentRows(isThisPanelVisible ? x.SelectedShipments : DefaultShipmentSelection))
                 .Subscribe();
 
+            // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
+            // (Scenario: Shipments panel could be showing FedEx rates, opening ship dlg, switch to UPS, move ship dlg and see rates
+            //  for both UPS and FedEx at the same time)
+            messenger.OfType<OpenShippingDialogMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(_ =>
+                {
+                    ratesControl.Visible = false;
+                });
+
+            HandleRatingPanelToggle(messenger);
+
+            HandleShipmentsPanelToggle(messenger);
+        }
+
+        /// <summary>
+        /// Listen for when the shipments panel is added or removed
+        /// </summary>
+        private void HandleShipmentsPanelToggle(IMessenger messenger)
+        {
+            messenger.OfType<PanelShownMessage>()
+                .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
+                .Subscribe(_ => isThisPanelVisible = true);
+
+            messenger.OfType<PanelHiddenMessage>()
+                .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
+                .Subscribe(_ =>
+                {
+                    if (entityGrid.Selection.Count > 1)
+                    {
+                        SelectShipmentRows(DefaultShipmentSelection);
+                    }
+
+                    isThisPanelVisible = false;
+                });
+        }
+
+        /// <summary>
+        /// Listen for when the rating panel is added or removed
+        /// </summary>
+        private void HandleRatingPanelToggle(IMessenger messenger)
+        {
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
                 .Subscribe(_ => ratesControl.Visible = false);
@@ -101,6 +154,33 @@ namespace ShipWorks.Stores.Content.Panels
                     ratesControl.Visible = true;
                     RefreshSelectedShipments();
                 });
+        }
+
+        /// <summary>
+        /// Select the first row, which should be the first shipment
+        /// </summary>
+        private void SelectShipmentRows(IEnumerable<long> shipmentsToSelect)
+        {
+            if (shipmentsToSelect.Any())
+            {
+                entityGrid.SelectRows(shipmentsToSelect);
+                return;
+            }
+
+            SelectFirstRow();
+        }
+
+        /// <summary>
+        /// Select the first row in the list
+        /// </summary>
+        private void SelectFirstRow()
+        {
+            long? firstKey = entityGrid.EntityGateway?.GetKeyFromRow(0);
+
+            if (firstKey.HasValue)
+            {
+                entityGrid.SelectRows(new[] { firstKey.Value });
+            }
         }
 
         /// <summary>
@@ -196,7 +276,6 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 RefreshSelectedShipments();
             }
-
         }
 
         /// <summary>
@@ -205,6 +284,11 @@ namespace ShipWorks.Stores.Content.Panels
         private void OnShipmentSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RefreshSelectedShipments();
+
+            if (isThisPanelVisible)
+            {
+                Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
+            }
         }
 
         /// <summary>
@@ -304,7 +388,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         protected override void OnEntityDoubleClicked(long entityID)
         {
-            EditShipments(new[] { entityID } , InitialShippingTabDisplay.Shipping);
+            EditShipments(new[] { entityID }, InitialShippingTabDisplay.Shipping);
         }
 
         /// <summary>
@@ -383,7 +467,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             if (entityGrid.Selection.Count == 1)
             {
-                EditShipments(new [] {entityGrid.Selection.Keys.First()}, initialTab);
+                EditShipments(new[] { entityGrid.Selection.Keys.First() }, initialTab);
             }
         }
 

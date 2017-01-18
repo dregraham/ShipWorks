@@ -19,6 +19,12 @@ namespace ShipWorks.Data
             DataProvider.GetRelatedEntities(orderID, orderItemEntity);
 
         /// <summary>
+        /// Gets the entity with the given entity ID
+        /// </summary>
+        public EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true)
+            => DataProvider.GetEntity(entityID, fetchIfMissing);
+
+        /// <summary>
         /// Initialize service for the current database
         /// </summary>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
