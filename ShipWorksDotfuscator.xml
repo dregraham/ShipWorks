@@ -76,6 +76,7 @@
       </inputassembly>
       <inputassembly refid="9373fb52-962f-4eed-9e17-18022de03d11">
         <option>honoroas</option>
+        <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.SingleScan.dll" />
       </inputassembly>
     </asmlist>
