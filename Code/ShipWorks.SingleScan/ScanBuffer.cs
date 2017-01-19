@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -69,9 +70,20 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void SendScanMessage(IList<string> characters)
         {
-            string text = characters.SelectMany(x => x).Where(c => !char.IsControl(c)).CreateString();
+            string text = characters.SelectMany(x => x).Where(IsAcceptedScanCharacter).CreateString();
 
-            messenger.Send(new ScanMessage(this, text, lastHandle));
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                messenger.Send(new ScanMessage(this, text, lastHandle));
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the given character is an accepted scan character
+        /// </summary>
+        private static bool IsAcceptedScanCharacter(char c)
+        {
+            return !char.IsControl(c) && c != (char) Keys.Back && c != (char) Keys.Escape;
         }
     }
 }

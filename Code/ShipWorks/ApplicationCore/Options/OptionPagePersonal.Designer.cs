@@ -292,7 +292,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(28, 455);
+            this.registerScannerButton.Location = new System.Drawing.Point(27, 455);
             this.registerScannerButton.Name = "registerScannerButton";
             this.registerScannerButton.Size = new System.Drawing.Size(108, 23);
             this.registerScannerButton.TabIndex = 26;
@@ -303,7 +303,7 @@ namespace ShipWorks.ApplicationCore.Options
             // unregisterScannerButton
             // 
             this.unregisterScannerButton.Enabled = false;
-            this.unregisterScannerButton.Location = new System.Drawing.Point(142, 455);
+            this.unregisterScannerButton.Location = new System.Drawing.Point(141, 455);
             this.unregisterScannerButton.Name = "unregisterScannerButton";
             this.unregisterScannerButton.Size = new System.Drawing.Size(108, 23);
             this.unregisterScannerButton.TabIndex = 27;
@@ -315,7 +315,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.registerScannerLabel.AutoSize = true;
             this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
-            this.registerScannerLabel.Location = new System.Drawing.Point(256, 460);
+            this.registerScannerLabel.Location = new System.Drawing.Point(255, 460);
             this.registerScannerLabel.Name = "registerScannerLabel";
             this.registerScannerLabel.Size = new System.Drawing.Size(263, 13);
             this.registerScannerLabel.TabIndex = 28;
