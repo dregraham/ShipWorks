@@ -425,6 +425,20 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Create a new order charge based on the given order, type, description and amount
+        /// </summary>
+        protected OrderChargeEntity InstantiateOrderCharge(OrderEntity order, string type, string description, decimal amount)
+        {
+            OrderChargeEntity charge = new OrderChargeEntity();
+            charge.Order = order;
+            charge.Type = type;
+            charge.Description = description;
+            charge.Amount = amount;
+
+            return charge;
+        }
+
+        /// <summary>
         /// Create a new payment detail based on the given order
         /// </summary>
         protected OrderPaymentDetailEntity InstantiateOrderPaymentDetail(OrderEntity order)

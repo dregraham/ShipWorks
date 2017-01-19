@@ -96,10 +96,21 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Do(x => ratesControl.Visible = true)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
                 .Do(x => SelectShipmentRows(isThisPanelVisible ? x.ShipmentSelector : DefaultShipmentSelection))
                 .Subscribe();
+
+            // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
+            // (Scenario: Shipments panel could be showing FedEx rates, opening ship dlg, switch to UPS, move ship dlg and see rates
+            //  for both UPS and FedEx at the same time)
+            messenger.OfType<OpenShippingDialogMessage>()
+                .ObserveOn(schedulerProvider.Dispatcher)
+                .Subscribe(_ =>
+                {
+                    ratesControl.Visible = false;
+                });
 
             HandleRatingPanelToggle(messenger);
 

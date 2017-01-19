@@ -13,20 +13,15 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
-    using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
-    using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
+{
+
+
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="TrackServiceSoapBinding", Namespace="http://fedex.com/ws/track/v10")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="TrackServiceSoapBinding", Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
         private System.Threading.SendOrPostCallback retrieveSignatureProofOfDeliveryLetterOperationCompleted;
@@ -88,9 +83,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         public event sendNotificationsCompletedEventHandler sendNotificationsCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v10/retrieveSignatureProofOfDeliveryLetter", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("SignatureProofOfDeliveryLetterReply", Namespace="http://fedex.com/ws/track/v10")]
-        public SignatureProofOfDeliveryLetterReply retrieveSignatureProofOfDeliveryLetter([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v10")] SignatureProofOfDeliveryLetterRequest SignatureProofOfDeliveryLetterRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v12/retrieveSignatureProofOfDeliveryLetter", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("SignatureProofOfDeliveryLetterReply", Namespace="http://fedex.com/ws/track/v12")]
+        public SignatureProofOfDeliveryLetterReply retrieveSignatureProofOfDeliveryLetter([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v12")] SignatureProofOfDeliveryLetterRequest SignatureProofOfDeliveryLetterRequest) {
             object[] results = this.Invoke("retrieveSignatureProofOfDeliveryLetter", new object[] {
                         SignatureProofOfDeliveryLetterRequest});
             return ((SignatureProofOfDeliveryLetterReply)(results[0]));
@@ -118,9 +113,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v10/track", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("TrackReply", Namespace="http://fedex.com/ws/track/v10")]
-        public TrackReply track([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v10")] TrackRequest TrackRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v12/track", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("TrackReply", Namespace="http://fedex.com/ws/track/v12")]
+        public TrackReply track([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v12")] TrackRequest TrackRequest) {
             object[] results = this.Invoke("track", new object[] {
                         TrackRequest});
             return ((TrackReply)(results[0]));
@@ -148,9 +143,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v10/sendSignatureProofOfDeliveryFax", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("SignatureProofOfDeliveryFaxReply", Namespace="http://fedex.com/ws/track/v10")]
-        public SignatureProofOfDeliveryFaxReply sendSignatureProofOfDeliveryFax([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v10")] SignatureProofOfDeliveryFaxRequest SignatureProofOfDeliveryFaxRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v12/sendSignatureProofOfDeliveryFax", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("SignatureProofOfDeliveryFaxReply", Namespace="http://fedex.com/ws/track/v12")]
+        public SignatureProofOfDeliveryFaxReply sendSignatureProofOfDeliveryFax([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v12")] SignatureProofOfDeliveryFaxRequest SignatureProofOfDeliveryFaxRequest) {
             object[] results = this.Invoke("sendSignatureProofOfDeliveryFax", new object[] {
                         SignatureProofOfDeliveryFaxRequest});
             return ((SignatureProofOfDeliveryFaxReply)(results[0]));
@@ -178,9 +173,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v10/sendNotifications", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("SendNotificationsReply", Namespace="http://fedex.com/ws/track/v10")]
-        public SendNotificationsReply sendNotifications([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v10")] SendNotificationsRequest SendNotificationsRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/track/v12/sendNotifications", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("SendNotificationsReply", Namespace="http://fedex.com/ws/track/v12")]
+        public SendNotificationsReply sendNotifications([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/track/v12")] SendNotificationsRequest SendNotificationsRequest) {
             object[] results = this.Invoke("sendNotifications", new object[] {
                         SendNotificationsRequest});
             return ((SendNotificationsReply)(results[0]));
@@ -227,11 +222,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SignatureProofOfDeliveryLetterRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -345,11 +340,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class WebAuthenticationDetail {
         
         private WebAuthenticationCredential parentCredentialField;
@@ -378,11 +373,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class WebAuthenticationCredential {
         
         private string keyField;
@@ -411,11 +406,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackNotificationPackage {
         
         private string trackingNumberField;
@@ -432,7 +427,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private Address destinationField;
         
-        private EMailNotificationEventType[] recipientDetailsField;
+        private NotificationEventType[] recipientDetailsField;
         
         /// <remarks/>
         public string TrackingNumber {
@@ -508,8 +503,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("NotificationEventsAvailable", typeof(EMailNotificationEventType), IsNullable=false)]
-        public EMailNotificationEventType[] RecipientDetails {
+        [System.Xml.Serialization.XmlArrayItemAttribute("NotificationEventsAvailable", typeof(NotificationEventType), IsNullable=false)]
+        public NotificationEventType[] RecipientDetails {
             get {
                 return this.recipientDetailsField;
             }
@@ -520,9 +515,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum CarrierCodeType {
         
         /// <remarks/>
@@ -545,11 +540,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Address {
         
         private string[] streetLinesField;
@@ -664,13 +659,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public enum EMailNotificationEventType {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum NotificationEventType {
         
         /// <remarks/>
         ON_DELIVERY,
+        
+        /// <remarks/>
+        ON_ESTIMATED_DELIVERY,
         
         /// <remarks/>
         ON_EXCEPTION,
@@ -683,11 +681,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SendNotificationsReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -816,9 +814,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum NotificationSeverityType {
         
         /// <remarks/>
@@ -838,11 +836,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Notification {
         
         private NotificationSeverityType severityField;
@@ -920,11 +918,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class NotificationParameter {
         
         private string idField;
@@ -953,11 +951,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TransactionDetail {
         
         private string customerTransactionIdField;
@@ -986,11 +984,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Localization {
         
         private string languageCodeField;
@@ -1019,11 +1017,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class VersionId {
         
         private string serviceIdField;
@@ -1036,7 +1034,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         public VersionId() {
             this.serviceIdField = "trck";
-            this.majorField = 10;
+            this.majorField = 12;
             this.intermediateField = 0;
             this.minorField = 0;
         }
@@ -1083,74 +1081,129 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public partial class EMailNotificationRecipient {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class ShipmentNotificationFormatSpecification {
         
-        private EMailNotificationRecipientType eMailNotificationRecipientTypeField;
+        private NotificationFormatType typeField;
         
-        private bool eMailNotificationRecipientTypeFieldSpecified;
-        
-        private string eMailAddressField;
-        
-        private EMailNotificationEventType[] notificationEventsRequestedField;
-        
-        private EMailNotificationFormatType formatField;
-        
-        private Localization localizationField;
+        private bool typeFieldSpecified;
         
         /// <remarks/>
-        public EMailNotificationRecipientType EMailNotificationRecipientType {
+        public NotificationFormatType Type {
             get {
-                return this.eMailNotificationRecipientTypeField;
+                return this.typeField;
             }
             set {
-                this.eMailNotificationRecipientTypeField = value;
+                this.typeField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EMailNotificationRecipientTypeSpecified {
+        public bool TypeSpecified {
             get {
-                return this.eMailNotificationRecipientTypeFieldSpecified;
+                return this.typeFieldSpecified;
             }
             set {
-                this.eMailNotificationRecipientTypeFieldSpecified = value;
+                this.typeFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum NotificationFormatType {
+        
+        /// <remarks/>
+        HTML,
+        
+        /// <remarks/>
+        TEXT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class EMailDetail {
+        
+        private string emailAddressField;
+        
+        private string nameField;
+        
+        /// <remarks/>
+        public string EmailAddress {
+            get {
+                return this.emailAddressField;
+            }
+            set {
+                this.emailAddressField = value;
             }
         }
         
         /// <remarks/>
-        public string EMailAddress {
+        public string Name {
             get {
-                return this.eMailAddressField;
+                return this.nameField;
             }
             set {
-                this.eMailAddressField = value;
+                this.nameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class NotificationDetail {
+        
+        private NotificationType notificationTypeField;
+        
+        private bool notificationTypeFieldSpecified;
+        
+        private EMailDetail emailDetailField;
+        
+        private Localization localizationField;
+        
+        /// <remarks/>
+        public NotificationType NotificationType {
+            get {
+                return this.notificationTypeField;
+            }
+            set {
+                this.notificationTypeField = value;
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("NotificationEventsRequested")]
-        public EMailNotificationEventType[] NotificationEventsRequested {
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool NotificationTypeSpecified {
             get {
-                return this.notificationEventsRequestedField;
+                return this.notificationTypeFieldSpecified;
             }
             set {
-                this.notificationEventsRequestedField = value;
+                this.notificationTypeFieldSpecified = value;
             }
         }
         
         /// <remarks/>
-        public EMailNotificationFormatType Format {
+        public EMailDetail EmailDetail {
             get {
-                return this.formatField;
+                return this.emailDetailField;
             }
             set {
-                this.formatField = value;
+                this.emailDetailField = value;
             }
         }
         
@@ -1166,10 +1219,91 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public enum EMailNotificationRecipientType {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum NotificationType {
+        
+        /// <remarks/>
+        EMAIL,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class ShipmentEventNotificationSpecification {
+        
+        private ShipmentNotificationRoleType roleField;
+        
+        private bool roleFieldSpecified;
+        
+        private NotificationEventType[] eventsField;
+        
+        private NotificationDetail notificationDetailField;
+        
+        private ShipmentNotificationFormatSpecification formatSpecificationField;
+        
+        /// <remarks/>
+        public ShipmentNotificationRoleType Role {
+            get {
+                return this.roleField;
+            }
+            set {
+                this.roleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RoleSpecified {
+            get {
+                return this.roleFieldSpecified;
+            }
+            set {
+                this.roleFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Events")]
+        public NotificationEventType[] Events {
+            get {
+                return this.eventsField;
+            }
+            set {
+                this.eventsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public NotificationDetail NotificationDetail {
+            get {
+                return this.notificationDetailField;
+            }
+            set {
+                this.notificationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentNotificationFormatSpecification FormatSpecification {
+            get {
+                return this.formatSpecificationField;
+            }
+            set {
+                this.formatSpecificationField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum ShipmentNotificationRoleType {
         
         /// <remarks/>
         BROKER,
@@ -1182,35 +1316,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         /// <remarks/>
         SHIPPER,
+        
+        /// <remarks/>
+        THIRD_PARTY,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public enum EMailNotificationFormatType {
-        
-        /// <remarks/>
-        HTML,
-        
-        /// <remarks/>
-        TEXT,
-        
-        /// <remarks/>
-        WIRELESS,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public partial class EMailNotificationDetail {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class ShipmentEventNotificationDetail {
+        
+        private ShipmentNotificationAggregationType aggregationTypeField;
+        
+        private bool aggregationTypeFieldSpecified;
         
         private string personalMessageField;
         
-        private EMailNotificationRecipient[] recipientsField;
+        private ShipmentEventNotificationSpecification[] eventNotificationsField;
+        
+        /// <remarks/>
+        public ShipmentNotificationAggregationType AggregationType {
+            get {
+                return this.aggregationTypeField;
+            }
+            set {
+                this.aggregationTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool AggregationTypeSpecified {
+            get {
+                return this.aggregationTypeFieldSpecified;
+            }
+            set {
+                this.aggregationTypeFieldSpecified = value;
+            }
+        }
         
         /// <remarks/>
         public string PersonalMessage {
@@ -1223,23 +1369,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Recipients")]
-        public EMailNotificationRecipient[] Recipients {
+        [System.Xml.Serialization.XmlElementAttribute("EventNotifications")]
+        public ShipmentEventNotificationSpecification[] EventNotifications {
             get {
-                return this.recipientsField;
+                return this.eventNotificationsField;
             }
             set {
-                this.recipientsField = value;
+                this.eventNotificationsField = value;
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum ShipmentNotificationAggregationType {
+        
+        /// <remarks/>
+        PER_PACKAGE,
+        
+        /// <remarks/>
+        PER_SHIPMENT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SendNotificationsRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -1272,7 +1431,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private string senderContactNameField;
         
-        private EMailNotificationDetail notificationDetailField;
+        private ShipmentEventNotificationDetail eventNotificationDetailField;
         
         /// <remarks/>
         public WebAuthenticationDetail WebAuthenticationDetail {
@@ -1430,22 +1589,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        public EMailNotificationDetail NotificationDetail {
+        public ShipmentEventNotificationDetail EventNotificationDetail {
             get {
-                return this.notificationDetailField;
+                return this.eventNotificationDetailField;
             }
             set {
-                this.notificationDetailField = value;
+                this.eventNotificationDetailField = value;
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class ClientDetail {
         
         private string accountNumberField;
@@ -1498,11 +1657,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SignatureProofOfDeliveryFaxReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -1568,11 +1727,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SignatureProofOfDeliveryFaxRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -1673,11 +1832,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class QualifiedTrackingNumber {
         
         private string trackingNumberField;
@@ -1769,11 +1928,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class ContactAndAddress {
         
         private Contact contactField;
@@ -1802,11 +1961,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Contact {
         
         private string personNameField;
@@ -1919,11 +2078,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackEvent {
         
         private System.DateTime timestampField;
@@ -2050,9 +2209,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum ArrivalLocationType {
         
         /// <remarks/>
@@ -2120,11 +2279,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class DeliveryOptionEligibilityDetail {
         
         private DeliveryOptionType optionField;
@@ -2179,9 +2338,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum DeliveryOptionType {
         
         /// <remarks/>
@@ -2198,9 +2357,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum EligibilityType {
         
         /// <remarks/>
@@ -2214,11 +2373,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackSplitShipmentPart {
         
         private string pieceCountField;
@@ -2285,11 +2444,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SignatureImageDetail {
         
         private byte[] imageField;
@@ -2320,11 +2479,96 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class AvailableImagesDetail {
+        
+        private AvailableImageType typeField;
+        
+        private bool typeFieldSpecified;
+        
+        private ImageSizeType sizeField;
+        
+        private bool sizeFieldSpecified;
+        
+        /// <remarks/>
+        public AvailableImageType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ImageSizeType Size {
+            get {
+                return this.sizeField;
+            }
+            set {
+                this.sizeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool SizeSpecified {
+            get {
+                return this.sizeFieldSpecified;
+            }
+            set {
+                this.sizeFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum AvailableImageType {
+        
+        /// <remarks/>
+        BILL_OF_LADING,
+        
+        /// <remarks/>
+        SIGNATURE_PROOF_OF_DELIVERY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum ImageSizeType {
+        
+        /// <remarks/>
+        LARGE,
+        
+        /// <remarks/>
+        SMALL,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class PieceCountVerificationDetail {
         
         private PieceCountLocationType countLocationTypeField;
@@ -2379,9 +2623,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum PieceCountLocationType {
         
         /// <remarks/>
@@ -2392,11 +2636,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class LocalTimeRange {
         
         private string beginsField;
@@ -2425,11 +2669,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class AppointmentTimeDetail {
         
         private AppointmentWindowType typeField;
@@ -2483,9 +2727,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum AppointmentWindowType {
         
         /// <remarks/>
@@ -2502,11 +2746,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class AppointmentDetail {
         
         private System.DateTime dateField;
@@ -2550,11 +2794,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SpecialInstructionStatusDetail {
         
         private SpecialInstructionsStatusCode statusField;
@@ -2609,9 +2853,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum SpecialInstructionsStatusCode {
         
         /// <remarks/>
@@ -2640,11 +2884,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackSpecialInstruction {
         
         private string descriptionField;
@@ -2760,9 +3004,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackDeliveryOptionType {
         
         /// <remarks/>
@@ -2785,11 +3029,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Distance {
         
         private decimal valueField;
@@ -2844,9 +3088,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum DistanceUnits {
         
         /// <remarks/>
@@ -2857,11 +3101,203 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class TrackingDateOrTimestamp {
+        
+        private TrackingDateOrTimestampType typeField;
+        
+        private bool typeFieldSpecified;
+        
+        private string dateOrTimestampField;
+        
+        /// <remarks/>
+        public TrackingDateOrTimestampType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string DateOrTimestamp {
+            get {
+                return this.dateOrTimestampField;
+            }
+            set {
+                this.dateOrTimestampField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum TrackingDateOrTimestampType {
+        
+        /// <remarks/>
+        ACTUAL_DELIVERY,
+        
+        /// <remarks/>
+        ACTUAL_PICKUP,
+        
+        /// <remarks/>
+        ACTUAL_TENDER,
+        
+        /// <remarks/>
+        ANTICIPATED_TENDER,
+        
+        /// <remarks/>
+        APPOINTMENT_DELIVERY,
+        
+        /// <remarks/>
+        ESTIMATED_DELIVERY,
+        
+        /// <remarks/>
+        ESTIMATED_PICKUP,
+        
+        /// <remarks/>
+        SHIP,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class TrackPayment {
+        
+        private TrackChargesPaymentClassificationType classificationField;
+        
+        private bool classificationFieldSpecified;
+        
+        private TrackPaymentType typeField;
+        
+        private bool typeFieldSpecified;
+        
+        private string descriptionField;
+        
+        /// <remarks/>
+        public TrackChargesPaymentClassificationType Classification {
+            get {
+                return this.classificationField;
+            }
+            set {
+                this.classificationField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ClassificationSpecified {
+            get {
+                return this.classificationFieldSpecified;
+            }
+            set {
+                this.classificationFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TrackPaymentType Type {
+            get {
+                return this.typeField;
+            }
+            set {
+                this.typeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TypeSpecified {
+            get {
+                return this.typeFieldSpecified;
+            }
+            set {
+                this.typeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum TrackChargesPaymentClassificationType {
+        
+        /// <remarks/>
+        DUTIES_AND_TAXES,
+        
+        /// <remarks/>
+        TRANSPORTATION,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum TrackPaymentType {
+        
+        /// <remarks/>
+        CASH_OR_CHECK_AT_DESTINATION,
+        
+        /// <remarks/>
+        CASH_OR_CHECK_AT_ORIGIN,
+        
+        /// <remarks/>
+        CREDIT_CARD_AT_DESTINATION,
+        
+        /// <remarks/>
+        CREDIT_CARD_AT_ORIGIN,
+        
+        /// <remarks/>
+        OTHER,
+        
+        /// <remarks/>
+        RECIPIENT_ACCOUNT,
+        
+        /// <remarks/>
+        SHIPPER_ACCOUNT,
+        
+        /// <remarks/>
+        THIRD_PARTY_ACCOUNT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackSpecialHandling {
         
         private TrackSpecialHandlingType typeField;
@@ -2928,9 +3364,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackSpecialHandlingType {
         
         /// <remarks/>
@@ -3250,42 +3686,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public enum TrackPaymentType {
-        
-        /// <remarks/>
-        CASH_OR_CHECK_AT_DESTINATION,
-        
-        /// <remarks/>
-        CASH_OR_CHECK_AT_ORIGIN,
-        
-        /// <remarks/>
-        CREDIT_CARD_AT_DESTINATION,
-        
-        /// <remarks/>
-        CREDIT_CARD_AT_ORIGIN,
-        
-        /// <remarks/>
-        OTHER,
-        
-        /// <remarks/>
-        RECIPIENT_ACCOUNT,
-        
-        /// <remarks/>
-        SHIPPER_ACCOUNT,
-        
-        /// <remarks/>
-        THIRD_PARTY_ACCOUNT,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackAdvanceNotificationDetail {
         
         private System.DateTime estimatedTimeOfArrivalField;
@@ -3389,9 +3794,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackAdvanceNotificationStatusType {
         
         /// <remarks/>
@@ -3402,11 +3807,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class CustomsOptionDetail {
         
         private CustomsOptionType typeField;
@@ -3448,9 +3853,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum CustomsOptionType {
         
         /// <remarks/>
@@ -3485,11 +3890,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackReturnDetail {
         
         private TrackReturnMovementStatusType movementStatusField;
@@ -3568,9 +3973,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackReturnMovementStatusType {
         
         /// <remarks/>
@@ -3581,9 +3986,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackReturnLabelType {
         
         /// <remarks/>
@@ -3594,11 +3999,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class DateRange {
         
         private System.DateTime beginsField;
@@ -3655,11 +4060,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class NaftaCommodityDetail {
         
         private NaftaPreferenceCriterionCode preferenceCriterionField;
@@ -3763,9 +4168,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum NaftaPreferenceCriterionCode {
         
         /// <remarks/>
@@ -3788,9 +4193,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum NaftaProducerDeterminationCode {
         
         /// <remarks/>
@@ -3807,9 +4212,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum NaftaNetCostMethodCode {
         
         /// <remarks/>
@@ -3820,11 +4225,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class EdtExciseCondition {
         
         private string categoryField;
@@ -3853,11 +4258,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Measure {
         
         private decimal quantityField;
@@ -3899,11 +4304,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Commodity {
         
         private string commodityIdField;
@@ -3913,6 +4318,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         private string numberOfPiecesField;
         
         private string descriptionField;
+        
+        private CommodityPurposeType purposeField;
+        
+        private bool purposeFieldSpecified;
         
         private string countryOfManufactureField;
         
@@ -3984,6 +4393,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
             }
             set {
                 this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CommodityPurposeType Purpose {
+            get {
+                return this.purposeField;
+            }
+            set {
+                this.purposeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PurposeSpecified {
+            get {
+                return this.purposeFieldSpecified;
+            }
+            set {
+                this.purposeFieldSpecified = value;
             }
         }
         
@@ -4154,11 +4584,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum CommodityPurposeType {
+        
+        /// <remarks/>
+        BUSINESS,
+        
+        /// <remarks/>
+        CONSUMER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Weight {
         
         private WeightUnits unitsField;
@@ -4213,9 +4656,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum WeightUnits {
         
         /// <remarks/>
@@ -4226,11 +4669,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Money {
         
         private string currencyField;
@@ -4272,11 +4715,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class ContentRecord {
         
         private string partNumberField;
@@ -4330,11 +4773,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackChargeDetail {
         
         private TrackChargeDetailType typeField;
@@ -4376,9 +4819,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackChargeDetailType {
         
         /// <remarks/>
@@ -4386,11 +4829,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class Dimensions {
         
         private string lengthField;
@@ -4459,9 +4902,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum LinearUnits {
         
         /// <remarks/>
@@ -4472,11 +4915,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackServiceDescriptionDetail {
         
         private ServiceType typeField;
@@ -4530,9 +4973,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum ServiceType {
         
         /// <remarks/>
@@ -4687,11 +5130,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackOtherIdentifierDetail {
         
         private TrackPackageIdentifier packageIdentifierField;
@@ -4745,11 +5188,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackPackageIdentifier {
         
         private TrackIdentifierType typeField;
@@ -4778,9 +5221,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackIdentifierType {
         
         /// <remarks/>
@@ -4860,11 +5303,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackReconciliation {
         
         private string statusField;
@@ -4893,11 +5336,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class CustomerExceptionRequestDetail {
         
         private string idField;
@@ -4963,11 +5406,44 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public partial class TrackInformationNoteDetail {
+        
+        private string codeField;
+        
+        private string descriptionField;
+        
+        /// <remarks/>
+        public string Code {
+            get {
+                return this.codeField;
+            }
+            set {
+                this.codeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackStatusAncillaryDetail {
         
         private string reasonField;
@@ -5020,11 +5496,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackStatusDetail {
         
         private System.DateTime creationTimeField;
@@ -5103,11 +5579,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class StringBarcode {
         
         private StringBarcodeType typeField;
@@ -5149,9 +5625,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum StringBarcodeType {
         
         /// <remarks/>
@@ -5174,11 +5650,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackDetail {
         
         private Notification notificationField;
@@ -5190,6 +5666,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         private string trackingNumberUniqueIdentifierField;
         
         private TrackStatusDetail statusDetailField;
+        
+        private TrackInformationNoteDetail[] informationNotesField;
         
         private CustomerExceptionRequestDetail[] customerExceptionRequestsField;
         
@@ -5235,9 +5713,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private bool packagingTypeFieldSpecified;
         
+        private PhysicalPackagingType physicalPackagingTypeField;
+        
+        private bool physicalPackagingTypeFieldSpecified;
+        
         private string packageSequenceNumberField;
         
         private string packageCountField;
+        
+        private string creatorSoftwareIdField;
         
         private TrackChargeDetail[] chargesField;
         
@@ -5263,6 +5747,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private TrackSpecialHandling[] specialHandlingsField;
         
+        private TrackPayment[] paymentsField;
+        
         private Contact shipperField;
         
         private TrackPossessionStatusType possessionStatusField;
@@ -5275,13 +5761,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private string originStationIdField;
         
-        private System.DateTime estimatedPickupTimestampField;
-        
-        private bool estimatedPickupTimestampFieldSpecified;
-        
-        private System.DateTime shipTimestampField;
-        
-        private bool shipTimestampFieldSpecified;
+        private TrackingDateOrTimestamp[] datesOrTimesField;
         
         private Distance totalTransitDistanceField;
         
@@ -5309,22 +5789,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private string destinationLocationTimeZoneOffsetField;
         
-        private System.DateTime commitmentTimestampField;
-        
-        private bool commitmentTimestampFieldSpecified;
-        
-        private System.DateTime appointmentDeliveryTimestampField;
-        
-        private bool appointmentDeliveryTimestampFieldSpecified;
-        
-        private System.DateTime estimatedDeliveryTimestampField;
-        
-        private bool estimatedDeliveryTimestampFieldSpecified;
-        
-        private System.DateTime actualDeliveryTimestampField;
-        
-        private bool actualDeliveryTimestampFieldSpecified;
-        
         private Address actualDeliveryAddressField;
         
         private OfficeOrderDeliveryMethodType officeOrderDeliveryMethodField;
@@ -5345,11 +5809,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private string totalUniqueAddressCountInConsolidationField;
         
-        private AvailableImageType[] availableImagesField;
+        private AvailableImagesDetail[] availableImagesField;
         
         private SignatureImageDetail signatureField;
         
-        private EMailNotificationEventType[] notificationEventsAvailableField;
+        private NotificationEventType[] notificationEventsAvailableField;
         
         private TrackSplitShipmentPart[] splitShipmentPartsField;
         
@@ -5404,6 +5868,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
             }
             set {
                 this.statusDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("InformationNotes")]
+        public TrackInformationNoteDetail[] InformationNotes {
+            get {
+                return this.informationNotesField;
+            }
+            set {
+                this.informationNotesField = value;
             }
         }
         
@@ -5633,6 +6108,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
+        public PhysicalPackagingType PhysicalPackagingType {
+            get {
+                return this.physicalPackagingTypeField;
+            }
+            set {
+                this.physicalPackagingTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PhysicalPackagingTypeSpecified {
+            get {
+                return this.physicalPackagingTypeFieldSpecified;
+            }
+            set {
+                this.physicalPackagingTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
         public string PackageSequenceNumber {
             get {
@@ -5651,6 +6147,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
             }
             set {
                 this.packageCountField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string CreatorSoftwareId {
+            get {
+                return this.creatorSoftwareIdField;
+            }
+            set {
+                this.creatorSoftwareIdField = value;
             }
         }
         
@@ -5782,6 +6288,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Payments")]
+        public TrackPayment[] Payments {
+            get {
+                return this.paymentsField;
+            }
+            set {
+                this.paymentsField = value;
+            }
+        }
+        
+        /// <remarks/>
         public Contact Shipper {
             get {
                 return this.shipperField;
@@ -5843,44 +6360,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        public System.DateTime EstimatedPickupTimestamp {
+        [System.Xml.Serialization.XmlElementAttribute("DatesOrTimes")]
+        public TrackingDateOrTimestamp[] DatesOrTimes {
             get {
-                return this.estimatedPickupTimestampField;
+                return this.datesOrTimesField;
             }
             set {
-                this.estimatedPickupTimestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EstimatedPickupTimestampSpecified {
-            get {
-                return this.estimatedPickupTimestampFieldSpecified;
-            }
-            set {
-                this.estimatedPickupTimestampFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime ShipTimestamp {
-            get {
-                return this.shipTimestampField;
-            }
-            set {
-                this.shipTimestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShipTimestampSpecified {
-            get {
-                return this.shipTimestampFieldSpecified;
-            }
-            set {
-                this.shipTimestampFieldSpecified = value;
+                this.datesOrTimesField = value;
             }
         }
         
@@ -6017,90 +6503,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         }
         
         /// <remarks/>
-        public System.DateTime CommitmentTimestamp {
-            get {
-                return this.commitmentTimestampField;
-            }
-            set {
-                this.commitmentTimestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CommitmentTimestampSpecified {
-            get {
-                return this.commitmentTimestampFieldSpecified;
-            }
-            set {
-                this.commitmentTimestampFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime AppointmentDeliveryTimestamp {
-            get {
-                return this.appointmentDeliveryTimestampField;
-            }
-            set {
-                this.appointmentDeliveryTimestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AppointmentDeliveryTimestampSpecified {
-            get {
-                return this.appointmentDeliveryTimestampFieldSpecified;
-            }
-            set {
-                this.appointmentDeliveryTimestampFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime EstimatedDeliveryTimestamp {
-            get {
-                return this.estimatedDeliveryTimestampField;
-            }
-            set {
-                this.estimatedDeliveryTimestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EstimatedDeliveryTimestampSpecified {
-            get {
-                return this.estimatedDeliveryTimestampFieldSpecified;
-            }
-            set {
-                this.estimatedDeliveryTimestampFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime ActualDeliveryTimestamp {
-            get {
-                return this.actualDeliveryTimestampField;
-            }
-            set {
-                this.actualDeliveryTimestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualDeliveryTimestampSpecified {
-            get {
-                return this.actualDeliveryTimestampFieldSpecified;
-            }
-            set {
-                this.actualDeliveryTimestampFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         public Address ActualDeliveryAddress {
             get {
                 return this.actualDeliveryAddressField;
@@ -6207,7 +6609,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AvailableImages")]
-        public AvailableImageType[] AvailableImages {
+        public AvailableImagesDetail[] AvailableImages {
             get {
                 return this.availableImagesField;
             }
@@ -6228,7 +6630,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("NotificationEventsAvailable")]
-        public EMailNotificationEventType[] NotificationEventsAvailable {
+        public NotificationEventType[] NotificationEventsAvailable {
             get {
                 return this.notificationEventsAvailableField;
             }
@@ -6272,9 +6674,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum OperatingCompanyType {
         
         /// <remarks/>
@@ -6315,9 +6717,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum PackagingType {
         
         /// <remarks/>
@@ -6355,9 +6757,109 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
+    public enum PhysicalPackagingType {
+        
+        /// <remarks/>
+        BAG,
+        
+        /// <remarks/>
+        BARREL,
+        
+        /// <remarks/>
+        BASKET,
+        
+        /// <remarks/>
+        BOX,
+        
+        /// <remarks/>
+        BUCKET,
+        
+        /// <remarks/>
+        BUNDLE,
+        
+        /// <remarks/>
+        CAGE,
+        
+        /// <remarks/>
+        CARTON,
+        
+        /// <remarks/>
+        CASE,
+        
+        /// <remarks/>
+        CHEST,
+        
+        /// <remarks/>
+        CONTAINER,
+        
+        /// <remarks/>
+        CRATE,
+        
+        /// <remarks/>
+        CYLINDER,
+        
+        /// <remarks/>
+        DRUM,
+        
+        /// <remarks/>
+        ENVELOPE,
+        
+        /// <remarks/>
+        HAMPER,
+        
+        /// <remarks/>
+        OTHER,
+        
+        /// <remarks/>
+        PACKAGE,
+        
+        /// <remarks/>
+        PAIL,
+        
+        /// <remarks/>
+        PALLET,
+        
+        /// <remarks/>
+        PARCEL,
+        
+        /// <remarks/>
+        PIECE,
+        
+        /// <remarks/>
+        REEL,
+        
+        /// <remarks/>
+        ROLL,
+        
+        /// <remarks/>
+        SACK,
+        
+        /// <remarks/>
+        SHRINK_WRAPPED,
+        
+        /// <remarks/>
+        SKID,
+        
+        /// <remarks/>
+        TANK,
+        
+        /// <remarks/>
+        TOTE_BIN,
+        
+        /// <remarks/>
+        TUBE,
+        
+        /// <remarks/>
+        UNIT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackDetailAttributeType {
         
         /// <remarks/>
@@ -6365,9 +6867,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackPossessionStatusType {
         
         /// <remarks/>
@@ -6393,9 +6895,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum FedExLocationType {
         
         /// <remarks/>
@@ -6430,9 +6932,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum OfficeOrderDeliveryMethodType {
         
         /// <remarks/>
@@ -6449,9 +6951,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackDeliveryLocationType {
         
         /// <remarks/>
@@ -6501,24 +7003,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
-    public enum AvailableImageType {
-        
-        /// <remarks/>
-        BILL_OF_LADING,
-        
-        /// <remarks/>
-        SIGNATURE_PROOF_OF_DELIVERY,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class CompletedTrackDetail {
         
         private NotificationSeverityType highestSeverityField;
@@ -6649,11 +7138,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -6720,11 +7209,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class PagingDetail {
         
         private string pagingTokenField;
@@ -6754,11 +7243,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackSelectionDetail {
         
         private CarrierCodeType carrierCodeField;
@@ -6950,11 +7439,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class TrackRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
@@ -7046,9 +7535,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum TrackRequestProcessingOptionType {
         
         /// <remarks/>
@@ -7056,11 +7545,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public partial class SignatureProofOfDeliveryLetterReply {
         
         private NotificationSeverityType highestSeverityField;
@@ -7127,9 +7616,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1586.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v10")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/track/v12")]
     public enum SignatureProofOfDeliveryImageType {
         
         /// <remarks/>
@@ -7140,11 +7629,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void retrieveSignatureProofOfDeliveryLetterCompletedEventHandler(object sender, retrieveSignatureProofOfDeliveryLetterCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class retrieveSignatureProofOfDeliveryLetterCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -7166,11 +7655,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void trackCompletedEventHandler(object sender, trackCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class trackCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -7192,11 +7681,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void sendSignatureProofOfDeliveryFaxCompletedEventHandler(object sender, sendSignatureProofOfDeliveryFaxCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class sendSignatureProofOfDeliveryFaxCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -7218,11 +7707,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     public delegate void sendNotificationsCompletedEventHandler(object sender, sendNotificationsCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1586.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class sendNotificationsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {

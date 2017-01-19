@@ -453,6 +453,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReturnsClearance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ThirdPartyConsignee", fieldHashtable);
 		}
 		#endregion
 
@@ -916,6 +918,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferenceFIMS, true); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReferenceFIMS, value); }
+		}
+
+		/// <summary> The ThirdPartyConsignee property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."ThirdPartyConsignee"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ThirdPartyConsignee
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ThirdPartyConsignee, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.ThirdPartyConsignee, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

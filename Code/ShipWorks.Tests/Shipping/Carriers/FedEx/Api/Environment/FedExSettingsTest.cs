@@ -1,9 +1,9 @@
 using Interapptive.Shared.Security;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
 {
@@ -55,28 +55,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         public void CspCredentialKey()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("HmTIi6ILfEtv3p42", testObject.CspCredentialKey);
+            Assert.Equal("olaPdFVk3aMvbfNA", testObject.CspCredentialKey);
         }
 
         [Fact]
         public void CspCredentialPassword()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("YcLZTdWF7NALqoCD0szKwVnif", testObject.CspCredentialPassword);
+            Assert.Equal("SAISQtME8lAOPurbWNQD2Ft96", testObject.CspCredentialPassword);
         }
 
         [Fact]
         public void ClientProductionId()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("IEOQ", testObject.ClientProductId);
+            Assert.Equal("ITSW", testObject.ClientProductId);
         }
 
         [Fact]
         public void ClientProductionVersion()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("7038", testObject.ClientProductVersion);
+            Assert.Equal("6828", testObject.ClientProductVersion);
         }
 
         [Fact]

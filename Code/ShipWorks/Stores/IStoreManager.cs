@@ -53,5 +53,10 @@ namespace ShipWorks.Stores
         /// Checks whether any stores have automatic validation enabled
         /// </summary>
         bool DoAnyStoresHaveAutomaticValidationEnabled();
+
+        /// <summary>
+        /// Get a collection of each store type in use by the current database. These are just a distinct list of the non-instanced types... with no stores attached.
+        /// </summary>
+        IEnumerable<StoreType> GetUniqueStoreTypes();
     }
 }

@@ -191,7 +191,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         }
 
         /// <summary>
-        /// Register the value as a pararmeter in the sql
+        /// Register the value as a parameter in the sql
         /// </summary>
         public string RegisterParameter(object value)
         {
@@ -205,7 +205,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 SqlParameter parameter;
 
                 // We can't send a 0 length param, so if length is 0, we don't send the size param.
-                // Also, if length is greather than int32's max value less 1, we don't send the size param.
+                // Also, if length is greater than int32's max value less 1, we don't send the size param.
                 // If we sent 0  or max length - 1, SQL Server would yell at us.
                 if (length == 0 || length >= Int32.MaxValue - 1)
                 {
@@ -282,7 +282,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             }
             else
             {
-                // Find the relation betwen the target child and the current scope, whic is the parent
+                // Find the relation between the target child and the current scope, which is the parent
                 relation = FindRelation(entityType, CurrentScope.EntityType);
             }
 

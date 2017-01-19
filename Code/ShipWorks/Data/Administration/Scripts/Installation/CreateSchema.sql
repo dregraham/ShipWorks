@@ -1,7 +1,3 @@
-
-
-
-
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -59,7 +55,15 @@ CREATE TABLE [dbo].[FedExPackage]
 [HazardousMaterialPackingGroup] [int] NOT NULL,
 [HazardousMaterialQuantityValue] [float] NOT NULL,
 [HazardousMaterialQuanityUnits] [int] NOT NULL,
-[HazardousMaterialTechnicalName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[HazardousMaterialTechnicalName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AlcoholRecipientType] [int] NOT NULL,
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[NumberOfContainers] [int] NOT NULL,
+[PackingDetailsCargoAircraftOnly] [bit] NOT NULL,
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
@@ -777,23 +781,9 @@ GO
 PRINT N'Creating primary key [PK_QuickFilterNodeContentDirty] on [dbo].[QuickFilterNodeContentDirty]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'PK_QuickFilterNodeContentDirty' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-ALTER TABLE [dbo].[QuickFilterNodeContentDirty] ADD CONSTRAINT [PK_QuickFilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
+ALTER TABLE [dbo].[QuickFilterNodeContentDirty] ADD CONSTRAINT [PK_QuickFilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_RowVersion] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_RowVersion' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_RowVersion] ON [dbo].[QuickFilterNodeContentDirty] ([RowVersion])
-GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ParentIDObjectType] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_ParentIDObjectType' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ParentIDObjectType] ON [dbo].[QuickFilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
-GO
-PRINT N'Creating index [IX_QuickFilterNodeContentDirty_ColumnsUpdated] on [dbo].[QuickFilterNodeContentDirty]'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_QuickFilterNodeContentDirty_ColumnsUpdated' AND object_id = OBJECT_ID(N'[dbo].[QuickFilterNodeContentDirty]'))
-CREATE NONCLUSTERED INDEX [IX_QuickFilterNodeContentDirty_ColumnsUpdated] ON [dbo].[QuickFilterNodeContentDirty] ([ColumnsUpdated])
-GO
+
 PRINT N'Creating [dbo].[QuickFilterNodeUpdateCheckpoint]'
 GO
 IF OBJECT_ID(N'[dbo].[QuickFilterNodeUpdateCheckpoint]', 'U') IS NULL
@@ -2011,7 +2001,10 @@ CREATE TABLE [dbo].[FedExShipment]
 [FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0)),
 [MaskedData] [int] NULL,
-[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ThirdPartyConsignee] [bit] NOT NULL,
+[Currency] [int] NULL,
+[InternationalTrafficInArmsService] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2065,7 +2058,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReturnSaturdayPickup] [bit] NULL,
 [ReturnsClearance] [bit] NULL,
-[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ThirdPartyConsignee] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
@@ -2102,7 +2096,14 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 [HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [HazardousMaterialPackingGroup] [int] NULL,
 [HazardousMaterialQuantityValue] [float] NULL,
-[HazardousMaterialQuanityUnits] [int] NULL
+[HazardousMaterialQuanityUnits] [int] NULL,
+[SignatoryContactName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SignatoryTitle] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SignatoryPlace] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NumberOfContainers] [int] NULL,
+[PackingDetailsCargoAircraftOnly] [bit] NULL,
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
@@ -4397,20 +4398,9 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
 GO
-ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
+ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_RowVersion] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_RowVersion] ON [dbo].[FilterNodeContentDirty] ([RowVersion])
-GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_ParentIDObjectType] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
-GO
-PRINT N'Creating index [IX_FilterNodeContentDirty_ColumnsUpdated] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ColumnsUpdated] ON [dbo].[FilterNodeContentDirty] ([ColumnsUpdated])
-GO
+
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
 CREATE TABLE [dbo].[FilterNodeRootDirty]

@@ -70,18 +70,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         [Fact]
-        public void FakeFimsShippingClerkReturned_WhenUseTestServerAndFimsShipmentRequested()
+        public void FakeFimsShippingClerkReturned_WhenFimsShipmentRequested()
         {
-            settingsRepository.Setup(s => s.UseTestServer).Returns(true);
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFimsMailView;
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity,
                 settingsRepository.Object, null, LabelRepositoryFactory, CreateFedExRequestFactory);
-
-            Assert.True(shippingClerk is FimsShippingClerk);
-
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object,
-                null, LabelRepositoryFactory, CreateFedExRequestFactory);
 
             Assert.True(shippingClerk is FimsShippingClerk);
         }

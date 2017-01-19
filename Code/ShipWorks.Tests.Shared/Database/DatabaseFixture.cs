@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Windows.Forms;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
 using Moq;
@@ -22,6 +16,12 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using SQL.LocalDB.Test;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shared.Database
 {

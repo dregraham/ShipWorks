@@ -113,6 +113,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -166,10 +167,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderNoteTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoProduct.json" />
+    <Compile Include="Platforms\Magento\MagentoProductCacheTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoAccountSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverterTest.cs" />
+    <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQueryTest.cs" />
@@ -268,6 +276,10 @@
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
+      <Project>{1F6A1DC6-DD72-4279-8747-6789F83711FF}</Project>
+      <Name>ShipWorks.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
       <Name>ShipWorks.Core</Name>
@@ -287,6 +299,12 @@
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMap.json" />
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\UploadMapWithDuplicateEntries.json" />
     <EmbeddedResource Include="Platforms\Odbc\Artifacts\MapSavedToDisk.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrder.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\BadMagentoOrder.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoItemWithOptions.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithItemAttributes.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoItem.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoParentItem.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
@@ -314,6 +332,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Platforms\ThreeDCart\Artifacts\GetOrderResponseWithKitItem.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\WeirdMagentoOrder.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
