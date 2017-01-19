@@ -61,7 +61,7 @@ namespace ShipWorks.SingleScan
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Register bar code scanner for Single Scan";
+            this.Text = "Scan a Barcode";
             this.ResumeLayout(false);
             this.PerformLayout();
         }
