@@ -16,9 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
 {
     public class UpsPromoTest
     {
-        private const string ContinentalUsPromoCode = "BXA4S3YB9";
-        private const string AlaskaPromoCode = "P950029472";
-        private const string HawaiiPromoCode = "P780029996";
+        private const string LivePromoCode = "BXA4S3YB9";
         private const string TestPromoCode = "BVOGIGNA7";
 
         public static AutoMock GetLooseThatReturnsMocks() =>
@@ -287,40 +285,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
         }
 
         [Fact]
-        public void PromoCode_ReturnsAlaskaPromoCode_WhenAccountStateIsAlaska()
-        {
-            using (var mock = GetLooseThatReturnsMocks())
-            {
-                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                UpsAccountEntity upsAccount = new UpsAccountEntity
-                {
-                    PromoStatus = (int)UpsPromoStatus.None,
-                    CountryCode = "US",
-                    StateProvCode = "AK"
-                };
-                var testObject = CreateUpsPromo(mock, client, upsAccount);
-                Assert.Equal(AlaskaPromoCode, testObject.PromoCode);
-            }
-        }
-
-        [Fact]
-        public void PromoCode_ReturnsHawaiiPromoCode_WhenAccountStateIsHawaii()
-        {
-            using (var mock = GetLooseThatReturnsMocks())
-            {
-                Mock<IUpsApiPromoClient> client = mock.Mock<IUpsApiPromoClient>();
-                UpsAccountEntity upsAccount = new UpsAccountEntity
-                {
-                    PromoStatus = (int)UpsPromoStatus.None,
-                    CountryCode = "US",
-                    StateProvCode = "HI"
-                };
-                var testObject = CreateUpsPromo(mock, client, upsAccount);
-                Assert.Equal(HawaiiPromoCode, testObject.PromoCode);
-            }
-        }
-
-        [Fact]
         public void FactMethodName()
         {
             using (var mock = GetLooseThatReturnsMocks())
@@ -353,7 +317,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.Promo
                     StateProvCode = "MO"
                 };
                 var testObject = CreateUpsPromo(mock, client, upsAccount);
-                Assert.Equal(ContinentalUsPromoCode, testObject.PromoCode);
+                Assert.Equal(LivePromoCode, testObject.PromoCode);
             }
         }
 

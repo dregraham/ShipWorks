@@ -22,9 +22,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         private PromoAcceptanceTerms terms;
 
         private const string TestPromoCode = "BVOGIGNA7";
-        private const string ContinentalUsPromoCode = "BXA4S3YB9";
-        private const string AlaskaPromoCode = "P950029472";
-        private const string HawaiiPromoCode = "P780029996";
+        private const string LivePromoCode = "BXA4S3YB9";
 
         /// <summary>
         /// Constructor
@@ -91,24 +89,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
                     return string.Empty;
                 }
 
-                if (upsSettingsRepository.UseTestServer)
-                {
-                    return TestPromoCode;
-                }
-
-                string stateCode = account.StateProvCode;
-
-                if (stateCode.Equals("AK", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return AlaskaPromoCode;
-                }
-
-                if (stateCode.Equals("HI", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return HawaiiPromoCode;
-                }
-
-                return ContinentalUsPromoCode;
+                return upsSettingsRepository.UseTestServer ? TestPromoCode : LivePromoCode;
             }
         }
 
