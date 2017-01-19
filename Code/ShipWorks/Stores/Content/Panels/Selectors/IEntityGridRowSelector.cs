@@ -3,12 +3,12 @@
 namespace ShipWorks.Stores.Content.Panels.Selectors
 {
     /// <summary>
-    /// Select entities in the entities panel
+    /// Select entities in an entity grid
     /// </summary>
     public interface IEntityGridRowSelector
     {
         /// <summary>
-        /// Select entities on an entity grid
+        /// Select entities in an entity grid
         /// </summary>
         void Select(PagedEntityGrid entityGrid);
     }
