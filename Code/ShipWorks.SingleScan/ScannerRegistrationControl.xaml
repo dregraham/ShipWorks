@@ -14,10 +14,6 @@
              d:DataContext="{d:DesignInstance local:ScannerRegistrationControlViewModel}"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <Style TargetType="ui:WaitSpinner">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
-        </Style>
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenFalse" Invert="True" />
     </UserControl.Resources>
