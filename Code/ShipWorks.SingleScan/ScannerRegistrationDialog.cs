@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 
