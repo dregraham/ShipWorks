@@ -340,6 +340,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Website", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PromoStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -616,6 +618,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsAccountFieldIndex.Website, true); }
 			set	{ SetValue((int)UpsAccountFieldIndex.Website, value); }
+		}
+
+		/// <summary> The PromoStatus property of the Entity UpsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsAccount"."PromoStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte PromoStatus
+		{
+			get { return (System.Byte)GetValue((int)UpsAccountFieldIndex.PromoStatus, true); }
+			set	{ SetValue((int)UpsAccountFieldIndex.PromoStatus, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

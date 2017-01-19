@@ -2441,6 +2441,7 @@
           <Field Name="Password" Type="string" MaxLength="25" FieldIndex="5" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="19" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="17" />
+          <Field Name="PromoStatus" Type="byte" Precision="3" FieldIndex="22" />
           <Field Name="RateType" Type="int" FieldIndex="6" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="16" />
@@ -7240,6 +7241,7 @@
                     <Field Name="Phone" Ordinal="20" DbType="12" Length="25" />
                     <Field Name="Email" Ordinal="21" DbType="12" Length="100" />
                     <Field Name="Website" Ordinal="22" DbType="12" Length="50" />
+                    <Field Name="PromoStatus" Ordinal="23" DbType="22" Precision="3" />
                   </Fields>
                 </Table>
                 <Table Name="UpsPackage">
@@ -11109,6 +11111,7 @@
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
+            <FieldMapping FieldName="PromoStatus" TargetFieldName="PromoStatus" />
             <FieldMapping FieldName="RateType" TargetFieldName="RateType" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />

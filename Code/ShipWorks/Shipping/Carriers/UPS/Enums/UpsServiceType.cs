@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Enums
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         [Description("UPS Next Day Air Saver®")]
         UpsNextDayAirSaver = 5,
 
-        [Description("UPS Next Day Air® Early A.M.®")]
+        [Description("UPS Next Day Air® Early")]
         UpsNextDayAirAM = 6,
 
         [Description("UPS Worldwide Express®")]

@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new Express1RateNotQualifiedFootnote();
         }

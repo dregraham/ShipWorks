@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -109,17 +110,27 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
         [Fact]
         public void Get_ReturnsUpsCustomsControl_WhenShipmentTypeIsUpsOnLineTools()
         {
-            CustomsControlBase customsControl = customsControlCache.Get(new UpsOltShipmentType());
+            using (var mock = AutoMock.GetLoose())
+            {
+                UpsOltShipmentType shipmentType = mock.Create<UpsOltShipmentType>();
 
-            Assert.True(customsControl is UpsCustomsControl);
+                CustomsControlBase customsControl = customsControlCache.Get(shipmentType);
+
+                Assert.True(customsControl is UpsCustomsControl);
+            }
         }
 
         [Fact]
         public void Get_ReturnsUpsCustomsControl_WhenShipmentTypeIsUpsWorldShip()
         {
-            CustomsControlBase customsControl = customsControlCache.Get(new WorldShipShipmentType());
+            using (var mock = AutoMock.GetLoose())
+            {
+                WorldShipShipmentType shipmentType = mock.Create<WorldShipShipmentType>();
 
-            Assert.True(customsControl is UpsCustomsControl);
+                CustomsControlBase customsControl = customsControlCache.Get(shipmentType);
+
+                Assert.True(customsControl is UpsCustomsControl);
+            }
         }
 
         [Fact]

@@ -3,7 +3,6 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -17,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void BuildPackageTypeDictionary_DelegatesToShipmentType()
         {
-            List<ShipmentEntity> shipments = GetSingleShipment(UpsServiceType.UpsGround, UpsPackagingType.Custom).ToList();
+            List<ShipmentEntity> shipments = GetSingleShipment(UpsServiceType.UpsGround).ToList();
 
             using (var mock = AutoMock.GetLoose())
             {
@@ -38,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         /// <summary>
         /// Returns an IEnumberable with 1 shipment
         /// </summary>
-        private static IEnumerable<ShipmentEntity> GetSingleShipment(UpsServiceType serviceType, UpsPackagingType packageType)
+        private static IEnumerable<ShipmentEntity> GetSingleShipment(UpsServiceType serviceType)
         {
             return new[] {
                 new ShipmentEntity()

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
-using Interapptive.Shared.Collections;
+﻿using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -11,7 +6,14 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Editing.Rating;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -24,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly UpsApiTransitTimeClient transitTimeClient;
         private readonly UpsApiRateClient upsApiRateClient;
         private readonly UpsShipmentType shipmentType;
+        private readonly IUpsPromoFactory promoFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
@@ -32,12 +35,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
             UpsApiRateClient upsApiRateClient,
-            UpsShipmentType shipmentType)
+            UpsShipmentType shipmentType,
+            IUpsPromoFactory promoFactory
+            )
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
             this.upsApiRateClient = upsApiRateClient;
             this.shipmentType = shipmentType;
+            this.promoFactory = promoFactory;
         }
 
         /// <summary>
@@ -55,6 +61,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             IEnumerable<UpsServiceRate> serviceRates;
             IEnumerable<UpsTransitTime> transitTimes;
 
+            UpsAccountEntity account = null;
+
             try
             {
                 // If there are no UPS Accounts then use the counter rates
@@ -68,12 +76,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else
                 {
+                    account = UpsApiCore.GetUpsAccount(shipment, accountRepository);
+
                     // Get the transit times and services
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
                     serviceRates = upsApiRateClient.GetRates(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
-                    wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, accountRepository).RateType == (int) UpsRateType.Negotiated;
+                    wantedNegotiated = account.RateType == (int) UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
@@ -90,6 +100,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
+
+                if (account != null)
+                {
+                    AddUpsPromoFootnoteFactory(account, finalGroup);
+                }
+
                 return finalGroup;
             }
             catch (CounterRatesOriginAddressException)
@@ -102,6 +118,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             catch (Exception ex) when (ex is UpsException || ex is InvalidPackageDimensionsException)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Adds the footnote factory.
+        /// </summary>
+        private void AddUpsPromoFootnoteFactory(UpsAccountEntity account, RateGroup rateGroup)
+        {
+            UpsPromo upsPromo = promoFactory.Get(account);
+            UpsPromoFootnoteFactory upsPromoFootnoteFactory = upsPromo.GetFootnoteFactory();
+
+            if (upsPromoFootnoteFactory != null)
+            {
+                rateGroup.AddFootnoteFactory(upsPromoFootnoteFactory);
             }
         }
 

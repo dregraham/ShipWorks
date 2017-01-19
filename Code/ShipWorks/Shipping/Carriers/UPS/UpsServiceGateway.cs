@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="settingsRepositoryIndex">The settings repository.</param>
         public UpsServiceGateway(IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepositoryIndex)
         {
-            // Tell the UpsOpenAccount settings which data source to use 
+            // Tell the UpsOpenAccount settings which data source to use
             settings = new UpsSettings(settingsRepositoryIndex[ShipmentTypeCode.UpsOnLineTools]);
         }
 
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                // This is where we actually communicate with UpsOpenAccount, so it's okay to explicitly create the 
+                // This is where we actually communicate with UpsOpenAccount, so it's okay to explicitly create the
                 // OpenAccountService object here (i.e. no more abstractions can be made)
                 using (OpenAccountAPI.OpenAccountService service = new OpenAccountAPI.OpenAccountService(new ApiLogEntry(ApiLogSource.UPS, "OpenAccount")))
                 {
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                // Explicit call to Ups. 
+                // Explicit call to Ups.
                 using (RegistrationAPI.RegisterMgrAcctService service = CreateUpsRequest("RegisterAccount"))
                 {
                     return service.ProcessRegister(request);
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                // Explicit call to Ups. 
+                // Explicit call to Ups.
                 using (RegistrationAPI.RegisterMgrAcctService service = CreateUpsRequest("ManageAccount"))
                 {
                     return service.ProcessManageAccount(request);
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             return new RegistrationAPI.RegisterMgrAcctService(new ApiLogEntry(ApiLogSource.UPS, logName))
             {
-                Url = $"{settings.EndpointUrl}/webservices/Registration",
+                Url = "https://onlinetools.ups.com/webservices/Registration",
                 UPSSecurityValue = new RegistrationAPI.UPSSecurity()
                 {
                     ServiceAccessToken = new RegistrationAPI.UPSSecurityServiceAccessToken()
