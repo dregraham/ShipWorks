@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShipWorksAboutDlg));
             this.close = new System.Windows.Forms.Button();
             this.phone = new System.Windows.Forms.Label();
             this.emailSupport = new System.Windows.Forms.LinkLabel();
@@ -42,13 +43,16 @@
             this.labelShipWorks = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.separator = new System.Windows.Forms.Label();
+            this.copyrightInfo = new System.Windows.Forms.Label();
+            this.patentInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // close
             // 
             this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.close.Location = new System.Drawing.Point(192, 207);
+            this.close.Location = new System.Drawing.Point(195, 386);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(75, 23);
             this.close.TabIndex = 0;
@@ -179,13 +183,46 @@
             this.label1.TabIndex = 67;
             this.label1.Text = "Interapptive®";
             // 
+            // separator
+            // 
+            this.separator.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.separator.Location = new System.Drawing.Point(15, 199);
+            this.separator.Name = "separator";
+            this.separator.Size = new System.Drawing.Size(255, 2);
+            this.separator.TabIndex = 68;
+            // 
+            // copyrightInfo
+            // 
+            this.copyrightInfo.AutoSize = true;
+            this.copyrightInfo.Location = new System.Drawing.Point(12, 324);
+            this.copyrightInfo.MaximumSize = new System.Drawing.Size(255, 0);
+            this.copyrightInfo.Name = "copyrightInfo";
+            this.copyrightInfo.Size = new System.Drawing.Size(252, 52);
+            this.copyrightInfo.TabIndex = 70;
+            this.copyrightInfo.Text = "Copyright © 2003 – 2017 Interapptive, Inc. All rights reserved. Interapptive, Shi" +
+    "pWorks, the ShipWorks logo, and Ship With Joy are trademarks or registered trade" +
+    "marks of Interapptive, Inc.";
+            // 
+            // patentInfo
+            // 
+            this.patentInfo.AutoSize = true;
+            this.patentInfo.Location = new System.Drawing.Point(12, 210);
+            this.patentInfo.MaximumSize = new System.Drawing.Size(255, 0);
+            this.patentInfo.Name = "patentInfo";
+            this.patentInfo.Size = new System.Drawing.Size(253, 104);
+            this.patentInfo.TabIndex = 69;
+            this.patentInfo.Text = resources.GetString("patentInfo.Text");
+            // 
             // ShipWorksAboutDlg
             // 
             this.AcceptButton = this.close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.close;
-            this.ClientSize = new System.Drawing.Size(278, 242);
+            this.ClientSize = new System.Drawing.Size(278, 421);
+            this.Controls.Add(this.copyrightInfo);
+            this.Controls.Add(this.patentInfo);
+            this.Controls.Add(this.separator);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.phone);
@@ -231,5 +268,8 @@
         private System.Windows.Forms.Label labelShipWorks;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label separator;
+        private System.Windows.Forms.Label copyrightInfo;
+        private System.Windows.Forms.Label patentInfo;
     }
 }
