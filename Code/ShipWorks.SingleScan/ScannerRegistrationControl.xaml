@@ -5,8 +5,9 @@
              xmlns:local="clr-namespace:ShipWorks.SingleScan"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             MaxWidth="425"
-             MinHeight="117"
+             MinWidth="440"
+             MaxWidth="440"
+             MinHeight="122"
              Background="{x:Static SystemColors.ControlBrush}"
              DataContext="RegisterScannerDlgViewModel"
              FontFamily="Tahoma"
@@ -17,25 +18,20 @@
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenFalse" Invert="True" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="12 12 13 13">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"
-                   Margin="5"
-                   TextWrapping="Wrap">
-            Please scan any barcode using the barcode scanner you want to use with ShipWorks.
-        </TextBlock>
+        <TextBlock Grid.Row="0">Please scan any barcode using the barcode scanner you want to use with ShipWorks.</TextBlock>
         <DockPanel Grid.Row="1"
-                   Margin="5"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
                    Visibility="{Binding ResultFound,
                                         Converter={StaticResource VisibleWhenTrue}}">
             <TextBlock FontSize="16pt" Text="Scan result:" />
-            <TextBlock Margin="10 0 10 0"
+            <TextBlock Margin="8 0 0 0"
                        FontSize="16pt"
                        Text="{Binding ScanResult}"
                        TextWrapping="Wrap" />
@@ -49,19 +45,17 @@
                         Visibility="{Binding ResultFound,
                                              Converter={StaticResource VisibleWhenFalse}}" />
         <DockPanel Grid.Row="2"
-                   Margin="0 5 0 5"
                    HorizontalAlignment="Right"
                    VerticalAlignment="Center">
             <Button MinWidth="75"
                     MinHeight="25"
-                    Margin="5 0 5 0"
+                    Margin="0 0 8 0"
                     Command="{Binding SaveScannerCommand}"
                     Content="Confirm"
                     IsDefault="True"
                     IsEnabled="{Binding ResultFound}" />
             <Button MinWidth="75"
                     MinHeight="25"
-                    Margin="0 0 5 0"
                     Command="{Binding CancelCommand}"
                     Content="Cancel"
                     IsCancel="True" />
