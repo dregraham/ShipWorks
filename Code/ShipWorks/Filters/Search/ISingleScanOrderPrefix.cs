@@ -11,6 +11,11 @@
         string GetDisplayText(string barcodeText);
 
         /// <summary>
+        /// Get the OrderID from the barcodeText
+        /// </summary>
+        long GetOrderID(string barcodeText);
+
+        /// <summary>
         /// Whether or not the scan result starts with the ShipWorks order prefix
         /// </summary>
         bool Contains(string barcodeText);

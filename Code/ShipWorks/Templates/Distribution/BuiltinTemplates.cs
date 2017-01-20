@@ -71,13 +71,12 @@ namespace ShipWorks.Templates.Distribution
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
 
-                // Get all templates
-                IList<TemplateEntity> templates = TemplateManager.Tree.AllTemplates;
-
-                //Check to see if the NoMoreRack Template exists Add Choxi template for version 4.0.2
-                if (templates.Any(t => t.Name == "NoMoreRack Invoice") && (installed < new Version("4.0.2.7650")))
+                // SingleScan templates
+                if (installed < new Version("5.10.0.0000"))
                 {
-                    ShipWorks.Stores.Platforms.Choxi.ChoxiTemplate.InstallChoxiTemplate();
+                    InstallTemplate(@"Source\System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Source\Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Source\Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
 
                     UpdateDatabaseTemplateVersion(swVersion);
                 }

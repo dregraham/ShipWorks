@@ -1,21 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Autofac.Extras.Moq;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Filters.Search;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Filters.Search
 {
-    public class SingleScanSearchDefinitionProviderTest
+    public class SingleScanSearchDefinitionProviderTest : IDisposable
     {
         private readonly SingleScanSearchDefinitionProvider testObject;
+        readonly AutoMock mock;
         private string numericOrderNumber = "12345";
         private string stringOrderNumber = "X-12345-YYZ";
 
         public SingleScanSearchDefinitionProviderTest()
         {
-            testObject = new SingleScanSearchDefinitionProvider();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testObject = mock.Create<SingleScanSearchDefinitionProvider>();
         }
 
         [Fact]
@@ -80,6 +85,11 @@ namespace ShipWorks.Tests.Filters.Search
             OrderNumberCondition condition = (OrderNumberCondition)definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
 
             Assert.Equal(StringOperator.Equals, condition.StringOperator);
+        }
+
+        public void Dispose()
+        {
+            mock?.Dispose();
         }
     }
 }

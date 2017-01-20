@@ -14,6 +14,7 @@ namespace ShipWorks.Filters.Search
     public class SearchDefinitionProviderFactory
     {
         private readonly IStoreManager storeManager;
+        private readonly ISingleScanOrderPrefix singleScanPrefix;
         private readonly int singleScanSettings;
 
         /// <summary>
@@ -21,9 +22,10 @@ namespace ShipWorks.Filters.Search
         /// </summary>
         /// <param name="storeManager">The store manager.</param>
         /// <param name="userSession">The user session</param>
-        public SearchDefinitionProviderFactory(IStoreManager storeManager, IUserSession userSession)
+        public SearchDefinitionProviderFactory(IStoreManager storeManager, IUserSession userSession, ISingleScanOrderPrefix singleScanPrefix)
         {
             this.storeManager = storeManager;
+            this.singleScanPrefix = singleScanPrefix;
             singleScanSettings = userSession.User.Settings.SingleScanSettings;
         }
 
@@ -50,7 +52,7 @@ namespace ShipWorks.Filters.Search
                 case FilterTarget.Orders:
                     if (singleScanSettings != (int) SingleScanSettings.Disabled)
                     {
-                        quickSearchDefinitionProvider = new SingleScanSearchDefinitionProvider();
+                        quickSearchDefinitionProvider = new SingleScanSearchDefinitionProvider(singleScanPrefix);
                     }
                     else
                     {
