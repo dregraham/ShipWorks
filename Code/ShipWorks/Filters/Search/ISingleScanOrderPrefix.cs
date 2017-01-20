@@ -6,18 +6,13 @@
     public interface ISingleScanOrderPrefix
     {
         /// <summary>
-        /// Scan result that is displayed to user
+        /// Get scan result that is displayed to user
         /// </summary>
-        string DisplayText { get; set; }
-
-        /// <summary>
-        /// Actual scan result
-        /// </summary>
-        string OriginalSearchText { get; set; }
+        string GetDisplayText(string barcodeText);
 
         /// <summary>
         /// Whether or not the scan result starts with the ShipWorks order prefix
         /// </summary>
-        bool Contains();
+        bool Contains(string barcodeText);
     }
 }

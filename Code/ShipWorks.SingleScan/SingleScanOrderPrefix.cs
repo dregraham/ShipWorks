@@ -1,4 +1,6 @@
-﻿using ShipWorks.Filters.Search;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Search;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.SingleScan
 {
@@ -8,24 +10,51 @@ namespace ShipWorks.SingleScan
     /// <seealso cref="ShipWorks.Filters.Search.ISingleScanOrderPrefix" />
     public class SingleScanOrderPrefix : ISingleScanOrderPrefix
     {
-        public const string Prefix = "SW-O-";
+        private readonly IOrderManager orderManager;
 
         /// <summary>
-        /// Scan result that is displayed to user
+        /// Initializes a new instance of the <see cref="SingleScanOrderPrefix"/> class.
         /// </summary>
-        public string DisplayText { get; set; }
+        /// <param name="orderManager">The order manager.</param>
+        public SingleScanOrderPrefix(IOrderManager orderManager)
+        {
+            this.orderManager = orderManager;
+        }
+
+        // ShipWorks order id prefix
+        private const string Prefix = "SW~O~";
 
         /// <summary>
-        /// Actual scan result
+        /// Scan result that is displayed to user. If the barcode is an order id with the ShipWorks order id prefix,
+        /// display the order number, else display what was actually scanned.
         /// </summary>
-        public string OriginalSearchText { get; set; }
+        public string GetDisplayText(string barcodeText)
+        {
+            string displayText = barcodeText;
+
+            if (Contains(displayText))
+            {
+                long orderID;
+                if (long.TryParse(displayText.Remove(0, Prefix.Length), out orderID))
+                {
+                    OrderEntity order = orderManager.FetchOrder(orderID);
+
+                    if (order != null && !order.IsNew)
+                    {
+                        displayText = order.OrderNumberComplete;
+                    }
+                }
+            }
+
+            return displayText;
+        }
 
         /// <summary>
         /// Whether or not the scan result begins with the ShipWorks order prefix
         /// </summary>
-        public bool Contains()
+        public bool Contains(string barcodeText)
         {
-            return OriginalSearchText.StartsWith(Prefix);
+            return barcodeText.StartsWith(Prefix);
         }
     }
 }
