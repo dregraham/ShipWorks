@@ -10856,6 +10856,8 @@
     <Content Include="Templates\Distribution\Source\Invoices\Red\invoiceHeaderRed.jpg" />
     <Content Include="Templates\Distribution\Source\Invoices\Red\settings.xml" />
     <Content Include="Templates\Distribution\Source\Invoices\Red\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Single Scan\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Single Scan\template.xsl" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Blue\packingSlipHeaderBlue.jpg" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Blue\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Blue\template.xsl">
@@ -10876,6 +10878,8 @@
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\packingSlipHeaderRed.jpg" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\settings.xml" />
     <Content Include="Templates\Distribution\Source\Packing Slips\Red\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\settings.xml" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\template.xsl">
       <SubType>Designer</SubType>
@@ -10964,6 +10968,10 @@
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\template.xsl" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderSingleScan\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderSingleScan\template.xsl">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Templates\Distribution\Source\System\Utility\XML Source\settings.xml" />
