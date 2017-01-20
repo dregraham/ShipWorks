@@ -12,6 +12,15 @@ namespace ShipWorks.SingleScan
     {
         private readonly IOrderManager orderManager;
 
+        // ShipWorks order prefix
+        private const string ShipWorksOrderPrefix = "SWO";
+
+        // ShipWorks order postfix - all ShipWorks order IDs end with 006
+        private const string ShipWorksOrderPostFix = "006";
+
+        // OrderID used when we cannot find an OrderID in the barcodeText
+        private const long UnparsedOrderID = -1;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleScanOrderPrefix"/> class.
         /// </summary>
@@ -21,12 +30,6 @@ namespace ShipWorks.SingleScan
             this.orderManager = orderManager;
         }
 
-        // ShipWorks order prefix
-        private const string ShipWorksOrderPrefix = "SWO";
-
-        // ShipWorks order postfix - all ShipWorks order IDs end with 006
-        private const string ShipWorksOrderPostFix = "006";
-
         /// <summary>
         /// Scan result that is displayed to user. If the barcode is an order id with the ShipWorks order id prefix,
         /// display the order number, else display what was actually scanned.
@@ -35,11 +38,16 @@ namespace ShipWorks.SingleScan
         {
             if (Contains(barcodeText))
             {
-                OrderEntity order = orderManager.FetchOrder(GetOrderID(barcodeText));
+                long orderId = GetOrderID(barcodeText);
 
-                if (order != null)
+                if (orderId  != UnparsedOrderID)
                 {
-                    return order.OrderNumberComplete;
+                    OrderEntity order = orderManager.FetchOrder(GetOrderID(barcodeText));
+
+                    if (order != null && !order.IsNew)
+                    {
+                        return order.OrderNumberComplete;
+                    }
                 }
             }
 
@@ -64,7 +72,7 @@ namespace ShipWorks.SingleScan
             {
                 return orderID;
             }
-            return -1;
+            return UnparsedOrderID;
         }
     }
 }
