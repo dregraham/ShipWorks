@@ -5,8 +5,8 @@
              xmlns:local="clr-namespace:ShipWorks.SingleScan"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             MinHeight="181"
-             MaxWidth="477"
+             MaxWidth="425"
+             MinHeight="117"
              Background="{x:Static SystemColors.ControlBrush}"
              DataContext="RegisterScannerDlgViewModel"
              FontFamily="Tahoma"
@@ -14,16 +14,11 @@
              d:DataContext="{d:DesignInstance local:ScannerRegistrationControlViewModel}"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <Style TargetType="ui:WaitSpinner">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="{x:Static SystemColors.ControlBrush}" />
-        </Style>
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
         <ui:BooleanToVisibilityConverter x:Key="VisibleWhenFalse" Invert="True" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -31,42 +26,32 @@
         <TextBlock Grid.Row="0"
                    Margin="5"
                    TextWrapping="Wrap">
-            ShipWorks needs to register the barcode scanner that will be used with Single Scan
-            mode. This ensures ShipWorks handles scans from the correct scanner. Please scan
-            any barcode using a barcode scanner attached to this computer. Then, click ‘Confirm’.
+            Please scan any barcode using the barcode scanner you want to use with ShipWorks.
         </TextBlock>
-        <TextBlock Grid.Row="1"
+        <DockPanel Grid.Row="1"
                    Margin="5"
-                   TextWrapping="Wrap">
-            If you initially register an incorrect device, please scan again using the correct
-            scanner and then click ‘Confirm’. ShipWorks will register the most recently used device.
-        </TextBlock>
-        <DockPanel Grid.Row="2"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
                    Visibility="{Binding ResultFound,
                                         Converter={StaticResource VisibleWhenTrue}}">
-            <TextBlock Margin="40 0 0 0"
-                       FontSize="16pt"
-                       Text="Scan result:" />
+            <TextBlock FontSize="16pt" Text="Scan result:" />
             <TextBlock Margin="10 0 10 0"
                        FontSize="16pt"
                        Text="{Binding ScanResult}"
                        TextWrapping="Wrap" />
         </DockPanel>
 
-        <ui:WaitSpinner Grid.Row="2"
+        <ui:WaitSpinner Grid.Row="1"
                         Background="{x:Static SystemColors.ControlBrush}"
                         BorderThickness="0"
                         Content="Waiting for scan"
                         FontSize="16"
                         Visibility="{Binding ResultFound,
                                              Converter={StaticResource VisibleWhenFalse}}" />
-        <StackPanel Grid.Row="3"
-                    Margin="0 5 0 5"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Orientation="Horizontal">
+        <DockPanel Grid.Row="2"
+                   Margin="0 5 0 5"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center">
             <Button MinWidth="75"
                     MinHeight="25"
                     Margin="5 0 5 0"
@@ -80,6 +65,6 @@
                     Command="{Binding CancelCommand}"
                     Content="Cancel"
                     IsCancel="True" />
-        </StackPanel>
+        </DockPanel>
     </Grid>
 </UserControl>
