@@ -68,6 +68,19 @@ namespace ShipWorks.UI.Controls.Krypton
         }
 
         /// <summary>
+        /// Sets the text without raising TextChangedEvent
+        /// </summary>
+        public void SetTextWithoutTextChangedEvent(string text)
+        {
+            bool originalIgnoreChanges = ignoreChanges;
+            ignoreChanges = false;
+
+            Text = text;
+
+            ignoreChanges = originalIgnoreChanges;
+        }
+
+        /// <summary>
         /// Listen for text changes
         /// </summary>
         protected override void OnTextChanged(EventArgs e)
