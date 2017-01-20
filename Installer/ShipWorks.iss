@@ -160,6 +160,7 @@ Source: {#AppArtifacts}\System.Threading.Tasks.dll; DestDir: {app}; Flags: overw
 Source: {#AppArtifacts}\System.Windows.Interactivity.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
+Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: "{fonts}"; FontInstall: "Free 3 of 9 Extended"; Flags: onlyifdoesntexist uninsneveruninstall
 
 #ifdef IncludeSymbols
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
