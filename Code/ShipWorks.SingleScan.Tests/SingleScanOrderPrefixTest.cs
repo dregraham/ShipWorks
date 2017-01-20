@@ -17,7 +17,7 @@ namespace ShipWorks.SingleScan.Tests
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             var orderManager = mock.Mock<IOrderManager>();
             orderManager.Setup(o => o.FetchOrder(777006)).Returns((OrderEntity) null);
-            orderManager.Setup(o => o.FetchOrder(123006)).Returns(new OrderEntity() {OrderNumber = 123});
+            orderManager.Setup(o => o.FetchOrder(123006)).Returns(new OrderEntity() {OrderNumber = 123, IsNew = false});
 
             testObject = mock.Create<SingleScanOrderPrefix>();
         }
