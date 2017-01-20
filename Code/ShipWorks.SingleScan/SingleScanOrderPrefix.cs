@@ -42,7 +42,7 @@ namespace ShipWorks.SingleScan
 
                 if (orderId  != UnparsedOrderID)
                 {
-                    OrderEntity order = orderManager.FetchOrder(GetOrderID(barcodeText));
+                    OrderEntity order = orderManager.FetchOrder(orderId);
 
                     if (order != null && !order.IsNew)
                     {
