@@ -446,7 +446,7 @@
     <CopyAfterBuild>true</CopyAfterBuild>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="$(CopyAfterBuild) == 'true'">
-    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config">
+    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config; $(OutDir)*.swe">
       <Output TaskParameter="Include" ItemName="BuildOutputs" />
     </CreateItem>
     <Message Text="Copying output to application directory:" Importance="high" />
