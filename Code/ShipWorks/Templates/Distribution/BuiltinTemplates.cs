@@ -74,9 +74,9 @@ namespace ShipWorks.Templates.Distribution
                 // SingleScan templates
                 if (installed < new Version("5.10.0.0000"))
                 {
-                    InstallTemplate(@"Source\System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
-                    InstallTemplate(@"Source\Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
-                    InstallTemplate(@"Source\Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
 
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
