@@ -197,11 +197,11 @@
             this.copyrightInfo.Location = new System.Drawing.Point(12, 324);
             this.copyrightInfo.MaximumSize = new System.Drawing.Size(255, 0);
             this.copyrightInfo.Name = "copyrightInfo";
-            this.copyrightInfo.Size = new System.Drawing.Size(252, 52);
+            this.copyrightInfo.Size = new System.Drawing.Size(243, 52);
             this.copyrightInfo.TabIndex = 70;
             this.copyrightInfo.Text = "Copyright © 2003 – 2017 Interapptive, Inc. All rights reserved. Interapptive, Shi" +
-    "pWorks, the ShipWorks logo, and Ship With Joy are trademarks or registered trade" +
-    "marks of Interapptive, Inc.";
+    "pWorks, and \r\nthe ShipWorks logo are trademarks or registered trademarks of Inte" +
+    "rapptive, Inc.";
             // 
             // patentInfo
             // 
