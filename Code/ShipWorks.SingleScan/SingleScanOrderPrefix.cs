@@ -33,23 +33,17 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public string GetDisplayText(string barcodeText)
         {
-            string displayText = barcodeText;
-
-            if (Contains(displayText))
+            if (Contains(barcodeText))
             {
-                long orderID;
-                if (long.TryParse(displayText.Remove(0, ShipWorksOrderPrefix.Length), out orderID))
-                {
-                    OrderEntity order = orderManager.FetchOrder(orderID);
+                OrderEntity order = orderManager.FetchOrder(GetOrderID(barcodeText));
 
-                    if (order != null)
-                    {
-                        displayText = order.OrderNumberComplete;
-                    }
+                if (order != null)
+                {
+                    return order.OrderNumberComplete;
                 }
             }
 
-            return displayText;
+            return barcodeText;
         }
 
         /// <summary>
@@ -58,6 +52,19 @@ namespace ShipWorks.SingleScan
         public bool Contains(string barcodeText)
         {
             return barcodeText.StartsWith(ShipWorksOrderPrefix) && barcodeText.EndsWith(ShipWorksOrderPostFix);
+        }
+
+        /// <summary>
+        /// Returns the OrderId from the given barcode
+        /// </summary>
+        public long GetOrderID(string barcodeText)
+        {
+            long orderID;
+            if (Contains(barcodeText) && long.TryParse(barcodeText.Remove(0, ShipWorksOrderPrefix.Length), out orderID))
+            {
+                return orderID;
+            }
+            return -1;
         }
     }
 }

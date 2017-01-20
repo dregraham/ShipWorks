@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Filters.Search;
@@ -14,12 +16,15 @@ namespace ShipWorks.Tests.Filters.Search
     {
         private readonly SingleScanSearchDefinitionProvider testObject;
         readonly AutoMock mock;
+        private readonly Mock<ISingleScanOrderPrefix> orderPrefix;
         private string numericOrderNumber = "12345";
         private string stringOrderNumber = "X-12345-YYZ";
+        private string singleScanOrderNumber = "SWO1006";
 
         public SingleScanSearchDefinitionProviderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            orderPrefix = mock.Mock<ISingleScanOrderPrefix>();
             testObject = mock.Create<SingleScanSearchDefinitionProvider>();
         }
 
@@ -85,6 +90,18 @@ namespace ShipWorks.Tests.Filters.Search
             OrderNumberCondition condition = (OrderNumberCondition)definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
 
             Assert.Equal(StringOperator.Equals, condition.StringOperator);
+        }
+
+        [Fact]
+        public void GetDefinition_ReturnsOrderIDCondition_WhenQuickSearchIsSingleScan()
+        {
+            orderPrefix.Setup(o => o.Contains(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
+            orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
+
+            FilterDefinition definition = testObject.GetDefinition(singleScanOrderNumber);
+            Condition condition = definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
+
+            Assert.True(condition is OrderIDCondition);
         }
 
         public void Dispose()
