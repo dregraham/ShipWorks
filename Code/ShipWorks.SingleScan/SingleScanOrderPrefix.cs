@@ -21,8 +21,11 @@ namespace ShipWorks.SingleScan
             this.orderManager = orderManager;
         }
 
-        // ShipWorks order id prefix
-        private const string Prefix = "SW~O~";
+        // ShipWorks order prefix
+        private const string ShipWorksOrderPrefix = "SWO";
+
+        // ShipWorks order postfix - all ShipWorks order IDs end with 006
+        private const string ShipWorksOrderPostFix = "006";
 
         /// <summary>
         /// Scan result that is displayed to user. If the barcode is an order id with the ShipWorks order id prefix,
@@ -35,11 +38,11 @@ namespace ShipWorks.SingleScan
             if (Contains(displayText))
             {
                 long orderID;
-                if (long.TryParse(displayText.Remove(0, Prefix.Length), out orderID))
+                if (long.TryParse(displayText.Remove(0, ShipWorksOrderPrefix.Length), out orderID))
                 {
                     OrderEntity order = orderManager.FetchOrder(orderID);
 
-                    if (order != null && !order.IsNew)
+                    if (order != null)
                     {
                         displayText = order.OrderNumberComplete;
                     }
@@ -54,7 +57,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public bool Contains(string barcodeText)
         {
-            return barcodeText.StartsWith(Prefix);
+            return barcodeText.StartsWith(ShipWorksOrderPrefix) && barcodeText.EndsWith(ShipWorksOrderPostFix);
         }
     }
 }

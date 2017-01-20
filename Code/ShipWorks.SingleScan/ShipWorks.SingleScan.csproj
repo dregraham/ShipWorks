@@ -64,6 +64,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.0.5\lib\net35\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -125,6 +129,7 @@
     <Compile Include="ScannerMessageFilterFactory.cs" />
     <Compile Include="ScannerRegistrationListener.cs" />
     <Compile Include="ScannerService.cs" />
+    <Compile Include="SingleScanOrderPrefix.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

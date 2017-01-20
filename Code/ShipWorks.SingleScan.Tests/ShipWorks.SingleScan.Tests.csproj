@@ -153,6 +153,7 @@
     <Compile Include="ScannerMessageFilterTest.cs" />
     <Compile Include="ScanBufferTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
+    <Compile Include="SingleScanOrderPrefixTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
