@@ -20,7 +20,7 @@ namespace ShipWorks.Filters.Search
         {
             this.advancedFilterDefinition = new FilterDefinition(advancedFilterDefinition.GetXml())
             {
-                FilterDefinitionSource = FilterDefinitionSourceType.QuickSearch
+                FilterDefinitionSource = FilterDefinitionSourceType.Search
             };
             this.quickSearchDefinitionProvider = quickSearchDefinitionProvider;
         }

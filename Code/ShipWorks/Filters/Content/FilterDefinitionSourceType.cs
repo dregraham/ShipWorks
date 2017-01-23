@@ -8,8 +8,8 @@
         // Regular filters
         Filter = 0,
 
-        // Quick searches
-        QuickSearch = 1,
+        // Searches
+        Search = 1,
 
         // Scan based searches
         Scan = 2

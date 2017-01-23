@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Services
                 .Do(m => HandleAutoPrintShipment(m.FilterNodeContent).RunSynchronously())
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))
                 .Gate(messenger.OfType<ShipmentsProcessedMessage>())
-                .Subscribe(x => log.Fatal($"ShipmentsProcessedMessage received."));
+                .Subscribe(x => log.Debug("ShipmentsProcessedMessage received."));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets whether a shipment should be auto printed for an order
         /// </summary>
-        public bool ShouldAutoPrintShipment(IEnumerable<ShipmentEntity> shipments, long orderId)
+        private bool ShouldAutoPrintShipment(IEnumerable<ShipmentEntity> shipments, long orderId)
         {
             return shipments.IsCountEqualTo(1) && 
                    shipments.All(s => !s.Processed) &&

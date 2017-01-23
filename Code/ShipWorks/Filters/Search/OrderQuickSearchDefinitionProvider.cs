@@ -35,7 +35,7 @@ namespace ShipWorks.Filters.Search
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders)
             {
-                FilterDefinitionSource = FilterDefinitionSourceType.QuickSearch
+                FilterDefinitionSource = FilterDefinitionSourceType.Search
             };
 
             // Apply common order conditions
