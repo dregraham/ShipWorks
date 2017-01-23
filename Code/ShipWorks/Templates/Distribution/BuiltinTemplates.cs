@@ -152,7 +152,7 @@ namespace ShipWorks.Templates.Distribution
             Directory.CreateDirectory(sourceDirectory);
 
             string sourceFile = Path.Combine(sourceDirectory, "source.zip");
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Templates.Distribution.Source.Source.zip"))
+            using (Stream stream = Assembly.Load("ShipWorks.Res").GetManifestResourceStream("ShipWorks.Res.Templates.Distribution.Source.Source.zip"))
             {
                 StreamUtility.WriteToFile(stream, sourceFile);
             }

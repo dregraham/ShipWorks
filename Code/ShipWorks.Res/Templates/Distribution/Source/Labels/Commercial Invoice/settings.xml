@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TemplateSettings>
+  <General>
+    <Type>Standard</Type>
+    <Context>Shipment</Context>
+    <OutputFormat>Html</OutputFormat>
+  </General>
+  <Printing>
+    <Copies>3</Copies>
+  </Printing>
+</TemplateSettings>
