@@ -158,7 +158,8 @@ namespace ShipWorks.Shipping.Services
                 .Select(CreateResultFromShipment)
                 .ToList();
 
-            Messenger.Current.Send(new ShipmentsProcessedMessage(this, results));
+            IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
+            messenger.Send(new ShipmentsProcessedMessage(this, results));
 
             return results;
         }
