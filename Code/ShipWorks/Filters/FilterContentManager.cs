@@ -14,13 +14,16 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.SqlServer.General;
 
 namespace ShipWorks.Filters
@@ -642,6 +645,57 @@ namespace ShipWorks.Filters
             content.Fields.State = EntityState.Fetched;
 
             return content;
+        }
+
+        /// <summary>
+        /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
+        /// </summary>
+        public static void SendFilterUpdateCompletedMessageWhenCompleted(FilterNodeEntity filterNode, IMessenger messenger, object sender)
+        {
+            long filterNodeContentID = filterNode.FilterNodeContentID;
+
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                FilterNodeContentEntity fnc = new FilterNodeContentEntity(filterNodeContentID);
+                while (fnc.Status != (int) FilterCountStatus.Ready)
+                {
+                    Thread.Sleep(50);
+                    sqlAdapter.FetchEntity(fnc);
+                }
+
+                messenger.Send(new FilterSearchCompletedMessage(sender, filterNode, fnc));
+            }
+        }
+
+        /// <summary>
+        /// Finds the first order for the specified filter node content
+        /// </summary>
+        public static long FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
+        {
+            long orderID = -1;
+
+            using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
+            {
+                using (DbCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"
+                        select top 1 ObjectID
+                        from FilterNodeContentDetail fnc, [Order] o
+                        where fnc.FilterNodeContentID = @filterNodeContentID
+                          and o.OrderID = fnc.ObjectID";
+
+                    DbParameter filterNodeContentIdParam = cmd.CreateParameter();
+                    filterNodeContentIdParam.ParameterName = "@filterNodeContentID";
+                    filterNodeContentIdParam.Value = filterNodeContentId;
+
+                    cmd.Parameters.Add(filterNodeContentIdParam);
+
+                    orderID = (long) cmd.ExecuteScalar();
+                }
+            }
+
+            return orderID;
         }
     }
 }

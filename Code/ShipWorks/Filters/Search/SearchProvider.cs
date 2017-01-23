@@ -9,6 +9,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -16,7 +17,6 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
-using ShipWorks.SqlServer.Filters;
 using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Search
@@ -286,12 +286,13 @@ namespace ShipWorks.Filters.Search
         {
             log.DebugFormat("Search - Search thread starting.");
 
+            FilterDefinition definition = (FilterDefinition)state;
+            FilterNodeContentEntity nodeContent = null;
+
             try
             {
                 if (!isCancelRequested)
                 {
-                    FilterDefinition definition = (FilterDefinition) state;
-                    FilterNodeContentEntity nodeContent;
 
                     // Create a new filter node content entity
                     nodeContent = CreateSearchFilterNodeContentEntity(definition);
@@ -337,6 +338,16 @@ namespace ShipWorks.Filters.Search
 
                         ApplicationBusyManager.OperationComplete(busyToken);
                         busyToken = null;
+
+                        if (definition.FilterDefinitionSource == FilterDefinitionSourceType.Scan)
+                        {
+                            if (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID)
+                            {
+                                searchNode.FilterNodeContentID = nodeContent.FilterNodeContentID;
+                            }
+
+                            FilterContentManager.SendFilterUpdateCompletedMessageWhenCompleted(searchNode, Messenger.Current, this);
+                        }
                     }
                 }
             }
