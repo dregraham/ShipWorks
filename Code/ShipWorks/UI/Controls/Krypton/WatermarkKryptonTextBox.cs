@@ -73,7 +73,7 @@ namespace ShipWorks.UI.Controls.Krypton
         public void SetTextWithoutTextChangedEvent(string text)
         {
             bool originalIgnoreChanges = ignoreChanges;
-            ignoreChanges = false;
+            ignoreChanges = true;
 
             Text = text;
 
