@@ -79,7 +79,17 @@ namespace ShipWorks.Tests.Filters.Search
 
             OrderNumberCondition condition = (OrderNumberCondition)definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
 
-            Assert.Equal(NumericOperator.Equal , condition.Operator);
+            Assert.Equal(NumericOperator.Equal, condition.Operator);
+        }
+
+        [Fact]
+        public void GetDefinition_ReturnsDefinitionWithNumericSearchValue_WhenQuickSearchIsNumber()
+        {
+            var definition = testObject.GetDefinition(numericOrderNumber);
+
+            OrderNumberCondition condition = (OrderNumberCondition) definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
+
+            Assert.Equal(long.Parse(numericOrderNumber), condition.Value1);
         }
 
         [Fact]
@@ -93,6 +103,16 @@ namespace ShipWorks.Tests.Filters.Search
         }
 
         [Fact]
+        public void GetDefinition_ReturnsDefinitionWithSearchValue_WhenQuickSearchIsNotNumber()
+        {
+            var definition = testObject.GetDefinition(stringOrderNumber);
+
+            OrderNumberCondition condition = (OrderNumberCondition) definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
+
+            Assert.Equal(stringOrderNumber, condition.StringValue);
+        }
+
+        [Fact]
         public void GetDefinition_ReturnsOrderIDCondition_WhenQuickSearchIsSingleScan()
         {
             orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
@@ -102,6 +122,18 @@ namespace ShipWorks.Tests.Filters.Search
             Condition condition = definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
 
             Assert.True(condition is OrderIDCondition);
+        }
+
+        [Fact]
+        public void GetDefinition_ReturnsOrderIdCondition_WithCorrectOrderID_WhenShortcutIsPassedIn()
+        {
+            orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
+            orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
+
+            FilterDefinition definition = testObject.GetDefinition(singleScanOrderNumber);
+            Condition condition = definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
+
+            Assert.Equal(1006, ((OrderIDCondition) condition).Value1);
         }
 
         [Fact]
