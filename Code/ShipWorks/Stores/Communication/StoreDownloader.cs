@@ -571,7 +571,7 @@ namespace ShipWorks.Stores.Communication
             // Now we have to see if it was new
             bool alreadyDownloaded = HasDownloadHistory(orderIdentifier);
 
-            ResetAddressIfRequired(order, transaction);
+            ResetAddressIfRequired(isOrderNew, order, transaction);
 
             // Only audit new orders if new order auditing is turned on.  This also turns off auditing of creating of new customers if the order is not new.
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
@@ -741,9 +741,9 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// If an order's addresses change to the originally validated address, change it back.
         /// </summary>
-        private void ResetAddressIfRequired(OrderEntity order, DbTransaction transaction)
+        private void ResetAddressIfRequired(bool isOrderNew, OrderEntity order, DbTransaction transaction)
         {
-            if (!order.IsNew)
+            if (!isOrderNew)
             {
                 using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
                 {
@@ -763,12 +763,18 @@ namespace ShipWorks.Stores.Communication
         /// <param name="order">The order that now has the downloaded address.</param>
         /// <param name="prefix">The prefix.</param>
         /// <param name="addressBeforeDownload">The address before download.</param>
+        /// <returns>True if address was reset, else false.</returns>
         /// <remarks>
         /// If address changed and the new address matches the address pre-address validation (the AV original address)
         /// from address validation, reset the address back to the original address.
         /// </remarks>
         private static bool ResetAddressIfRequired(OrderEntity order, string prefix, AddressAdapter addressBeforeDownload)
         {
+            if (addressBeforeDownload == null)
+            {
+                return false;
+            }
+
             bool addressReset = false;
             AddressAdapter orderAddress = new AddressAdapter(order, prefix);
 
