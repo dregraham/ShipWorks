@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsOrderIDCondition_WhenQuickSearchIsSingleScan()
         {
-            orderPrefix.Setup(o => o.Contains(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
+            orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
             orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
 
             FilterDefinition definition = testObject.GetDefinition(singleScanOrderNumber);
@@ -107,18 +107,18 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_DelegatesToSingleScanOrderPrefix_ToCheckForPrefix()
         {
-            orderPrefix.Setup(o => o.Contains(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
+            orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
             orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
 
             testObject.GetDefinition(singleScanOrderNumber);
 
-            orderPrefix.Verify(o => o.Contains(It.Is<string>(s => s == singleScanOrderNumber)));
+            orderPrefix.Verify(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber)));
         }
 
         [Fact]
         public void GetDefinition_DelegatesToSingleScanOrderPrefix_ForOrderId()
         {
-            orderPrefix.Setup(o => o.Contains(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
+            orderPrefix.Setup(o => o.AppliesTo(It.Is<string>(s => s == singleScanOrderNumber))).Returns(true);
             orderPrefix.Setup(o => o.GetOrderID(It.Is<string>(s => s == singleScanOrderNumber))).Returns(1006);
 
             testObject.GetDefinition(singleScanOrderNumber);

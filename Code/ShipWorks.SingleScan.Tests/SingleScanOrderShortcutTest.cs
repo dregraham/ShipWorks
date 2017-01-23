@@ -7,12 +7,12 @@ using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
 {
-    public class SingleScanOrderPrefixTest : IDisposable
+    public class SingleScanOrderShortcutTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly SingleScanOrderShortcut testObject;
 
-        public SingleScanOrderPrefixTest()
+        public SingleScanOrderShortcutTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             var orderManager = mock.Mock<IOrderManager>();
