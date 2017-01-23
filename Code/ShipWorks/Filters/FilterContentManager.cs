@@ -650,10 +650,8 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        public static void SendFilterUpdateCompletedMessageWhenCompleted(FilterNodeEntity filterNode, IMessenger messenger, object sender)
+        public static void SendFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
         {
-            long filterNodeContentID = filterNode.FilterNodeContentID;
-
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 FilterNodeContentEntity fnc = new FilterNodeContentEntity(filterNodeContentID);
@@ -663,7 +661,7 @@ namespace ShipWorks.Filters
                     sqlAdapter.FetchEntity(fnc);
                 }
 
-                messenger.Send(new FilterSearchCompletedMessage(sender, filterNode, fnc));
+                messenger.Send(new FilterSearchCompletedMessage(sender, fnc));
             }
         }
 

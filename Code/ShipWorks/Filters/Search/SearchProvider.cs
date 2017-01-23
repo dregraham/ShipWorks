@@ -334,20 +334,20 @@ namespace ShipWorks.Filters.Search
                     // If we are not scheduled for more, then mark the search and operation as done
                     if (!isScheduled)
                     {
+                        // If we originated from a scan, ask for the search completed msg to be sent 
+                        if (definition.FilterDefinitionSource == FilterDefinitionSourceType.Scan)
+                        {
+                            long filterNodeContentID = (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID) ?
+                                nodeContent.FilterNodeContentID :
+                                searchNode.FilterNodeContentID;
+
+                            FilterContentManager.SendFilterUpdateCompletedMessageWhenCompleted(filterNodeContentID, Messenger.Current, this);
+                        }
+
                         isSearching = false;
 
                         ApplicationBusyManager.OperationComplete(busyToken);
                         busyToken = null;
-
-                        if (definition.FilterDefinitionSource == FilterDefinitionSourceType.Scan)
-                        {
-                            if (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID)
-                            {
-                                searchNode.FilterNodeContentID = nodeContent.FilterNodeContentID;
-                            }
-
-                            FilterContentManager.SendFilterUpdateCompletedMessageWhenCompleted(searchNode, Messenger.Current, this);
-                        }
                     }
                 }
             }

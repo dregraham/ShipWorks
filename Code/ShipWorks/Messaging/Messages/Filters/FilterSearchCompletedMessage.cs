@@ -15,11 +15,10 @@ namespace ShipWorks.Messaging.Messages.Filters
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterSearchCompletedMessage(object sender, IFilterNodeEntity filterNode, IFilterNodeContentEntity filterNodeContent)
+        public FilterSearchCompletedMessage(object sender, IFilterNodeContentEntity filterNodeContent)
         {
             Sender = sender;
             FilterNodeContent = filterNodeContent;
-            FilterNode = filterNode;
             MessageId = Guid.NewGuid();
         }
 
@@ -37,10 +36,5 @@ namespace ShipWorks.Messaging.Messages.Filters
         /// The FilterNodeContent that completed
         /// </summary>
         public IFilterNodeContentEntity FilterNodeContent { get; }
-
-        /// <summary>
-        /// The IFilterNodeEntity that completed
-        /// </summary>
-        public IFilterNodeEntity FilterNode { get; }
     }
 }
