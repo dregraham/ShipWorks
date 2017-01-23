@@ -756,8 +756,8 @@ namespace ShipWorks.ApplicationCore
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                ISingleScanOrderPrefix singleScanOrderPrefix = scope.Resolve<ISingleScanOrderPrefix>();
-                searchBox.SetTextWithoutTextChangedEvent(singleScanOrderPrefix.GetDisplayText(barcode));
+                ISingleScanOrderShortcut singleScanOrderShortcut = scope.Resolve<ISingleScanOrderShortcut>();
+                searchBox.SetTextWithoutTextChangedEvent(singleScanOrderShortcut.GetDisplayText(barcode));
                 PerformSearch(barcode);
             }
         }

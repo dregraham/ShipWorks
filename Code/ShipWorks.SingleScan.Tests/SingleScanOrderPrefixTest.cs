@@ -10,7 +10,7 @@ namespace ShipWorks.SingleScan.Tests
     public class SingleScanOrderPrefixTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly SingleScanOrderPrefix testObject;
+        private readonly SingleScanOrderShortcut testObject;
 
         public SingleScanOrderPrefixTest()
         {
@@ -19,7 +19,7 @@ namespace ShipWorks.SingleScan.Tests
             orderManager.Setup(o => o.FetchOrder(777006)).Returns((OrderEntity) null);
             orderManager.Setup(o => o.FetchOrder(123006)).Returns(new OrderEntity() {OrderNumber = 123, IsNew = false});
 
-            testObject = mock.Create<SingleScanOrderPrefix>();
+            testObject = mock.Create<SingleScanOrderShortcut>();
         }
 
         [Fact]
@@ -49,25 +49,25 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Contains_ReturnsFalse_WhenBarcodeTextDoesNotContainPrefixOrPostfix()
         {
-            Assert.False(testObject.Contains("dude"));
+            Assert.False(testObject.AppliesTo("dude"));
         }
 
         [Fact]
         public void Contains_ReturnsFalse_WhenBarcodeTextContainsPrefixButNotPostfix()
         {
-            Assert.False(testObject.Contains("SWOdude"));
+            Assert.False(testObject.AppliesTo("SWOdude"));
         }
 
         [Fact]
         public void Contains_ReturnsFalse_WhenBarcodeTextContainsPostfixButNotPrefix()
         {
-            Assert.False(testObject.Contains("dude006"));
+            Assert.False(testObject.AppliesTo("dude006"));
         }
 
         [Fact]
         public void Contains_ReturnsTrue_WhenBarcodeTextContainsPrefixAndPostfix()
         {
-            Assert.True(testObject.Contains("SWO12345006"));
+            Assert.True(testObject.AppliesTo("SWO12345006"));
         }
 
         public void Dispose()

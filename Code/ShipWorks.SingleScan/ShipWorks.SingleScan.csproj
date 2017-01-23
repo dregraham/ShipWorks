@@ -129,7 +129,7 @@
     <Compile Include="ScannerMessageFilterFactory.cs" />
     <Compile Include="ScannerRegistrationListener.cs" />
     <Compile Include="ScannerService.cs" />
-    <Compile Include="SingleScanOrderPrefix.cs" />
+    <Compile Include="SingleScanOrderShortcut.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

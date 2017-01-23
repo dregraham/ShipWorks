@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Filters.Search
     {
         private readonly SingleScanSearchDefinitionProvider testObject;
         readonly AutoMock mock;
-        private readonly Mock<ISingleScanOrderPrefix> orderPrefix;
+        private readonly Mock<ISingleScanOrderShortcut> orderPrefix;
         private string numericOrderNumber = "12345";
         private string stringOrderNumber = "X-12345-YYZ";
         private string singleScanOrderNumber = "SWO1006";
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Filters.Search
         public SingleScanSearchDefinitionProviderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            orderPrefix = mock.Mock<ISingleScanOrderPrefix>();
+            orderPrefix = mock.Mock<ISingleScanOrderShortcut>();
             testObject = mock.Create<SingleScanSearchDefinitionProvider>();
         }
 

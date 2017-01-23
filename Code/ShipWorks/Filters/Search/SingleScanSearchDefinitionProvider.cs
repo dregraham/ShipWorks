@@ -10,14 +10,14 @@ namespace ShipWorks.Filters.Search
     /// <seealso cref="ShipWorks.Filters.Search.ISearchDefinitionProvider" />
     public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider
     {
-        private readonly ISingleScanOrderPrefix singleScanPrefix;
+        private readonly ISingleScanOrderShortcut singleScanShortcut;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SingleScanSearchDefinitionProvider(ISingleScanOrderPrefix singleScanPrefix)
+        public SingleScanSearchDefinitionProvider(ISingleScanOrderShortcut singleScanShortcut)
         {
-            this.singleScanPrefix = singleScanPrefix;
+            this.singleScanShortcut = singleScanShortcut;
         }
 
         /// <summary>
@@ -26,13 +26,13 @@ namespace ShipWorks.Filters.Search
         public FilterDefinition GetDefinition(string quickSearchString)
         {
             NumericCondition<long> condition;
-            if (singleScanPrefix.Contains(quickSearchString))
+            if (singleScanShortcut.AppliesTo(quickSearchString))
             {
                 // The search string contains the OrderId
                 condition = new OrderIDCondition
                 {
                     Operator = NumericOperator.Equal,
-                    Value1 = singleScanPrefix.GetOrderID(quickSearchString)
+                    Value1 = singleScanShortcut.GetOrderID(quickSearchString)
                 };
             }
             else

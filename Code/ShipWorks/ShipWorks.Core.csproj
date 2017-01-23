@@ -973,7 +973,7 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\CustomerQuickSearchDefinitionProvider.cs" />
-    <Compile Include="Filters\Search\ISingleScanOrderPrefix.cs" />
+    <Compile Include="Filters\Search\ISingleScanOrderShortcut.cs" />
     <Compile Include="Filters\Search\SearchDefinitionProviderFactory.cs" />
     <Compile Include="Filters\Search\ISearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\OrderQuickSearchDefinitionProvider.cs" />
