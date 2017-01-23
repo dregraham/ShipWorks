@@ -78,7 +78,8 @@ namespace ShipWorks.Filters.Search
                     FirstGroup = quickSearchConditionGroup,
                     SecondGroup = advancedFilterDefinition.RootContainer,
                     JoinType = ConditionGroupJoinType.And
-                }
+                },
+                FilterDefinitionSource = FilterDefinitionSourceType.Search
             };
 
             return combinedFilter;
