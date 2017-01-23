@@ -64,6 +64,14 @@ namespace ShipWorks.Filters.Content
         }
 
         /// <summary>
+        /// Creates a new, empty filter definition
+        /// </summary>
+        public FilterDefinition(FilterTarget target, FilterDefinitionSourceType filterDefinitionSource) : this(target)
+        {
+            FilterDefinitionSource = filterDefinitionSource;
+        }
+
+        /// <summary>
         /// Loads a filter condition from the specified XML.
         /// </summary>
         public FilterDefinition(string xml)
@@ -72,9 +80,18 @@ namespace ShipWorks.Filters.Content
         }
 
         /// <summary>
+        /// Loads a filter condition from the specified XML.
+        /// </summary>
+        public FilterDefinition(string xml, FilterDefinitionSourceType filterDefinitionSource)
+        {
+            LoadXml(xml);
+            FilterDefinitionSource = filterDefinitionSource;
+        }
+
+        /// <summary>
         /// The source of the filter definition
         /// </summary>
-        public FilterDefinitionSourceType FilterDefinitionSource { get; set; }
+        public FilterDefinitionSourceType FilterDefinitionSource { get; private set; }
 
         /// <summary>
         /// Load the filter definition object from the given XML

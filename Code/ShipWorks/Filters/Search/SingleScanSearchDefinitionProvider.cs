@@ -15,8 +15,7 @@ namespace ShipWorks.Filters.Search
         /// </summary>
         public FilterDefinition GetDefinition(string quickSearchString)
         {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-            definition.FilterDefinitionSource = FilterDefinitionSourceType.Scan;
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);
 
             OrderNumberCondition condition;
             long orderNumber;

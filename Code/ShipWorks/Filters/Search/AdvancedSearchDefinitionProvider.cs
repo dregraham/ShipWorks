@@ -18,10 +18,7 @@ namespace ShipWorks.Filters.Search
         public AdvancedSearchDefinitionProvider(FilterDefinition advancedFilterDefinition,
             ISearchDefinitionProvider quickSearchDefinitionProvider)
         {
-            this.advancedFilterDefinition = new FilterDefinition(advancedFilterDefinition.GetXml())
-            {
-                FilterDefinitionSource = FilterDefinitionSourceType.Search
-            };
+            this.advancedFilterDefinition = new FilterDefinition(advancedFilterDefinition.GetXml(), FilterDefinitionSourceType.Search);
             this.quickSearchDefinitionProvider = quickSearchDefinitionProvider;
         }
 
@@ -71,15 +68,14 @@ namespace ShipWorks.Filters.Search
             quickSearchConditions.ForEach(quickSearchConditionGroup.Conditions.Add);
             quickSearchConditionGroup.JoinType = ConditionJoinType.Any;
 
-            FilterDefinition combinedFilter = new FilterDefinition(advancedFilterDefinition.FilterTarget)
+            FilterDefinition combinedFilter = new FilterDefinition(advancedFilterDefinition.FilterTarget, FilterDefinitionSourceType.Search)
             {
                 RootContainer =
                 {
                     FirstGroup = quickSearchConditionGroup,
                     SecondGroup = advancedFilterDefinition.RootContainer,
                     JoinType = ConditionGroupJoinType.And
-                },
-                FilterDefinitionSource = FilterDefinitionSourceType.Search
+                }
             };
 
             return combinedFilter;
