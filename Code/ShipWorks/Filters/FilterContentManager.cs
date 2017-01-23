@@ -661,7 +661,7 @@ namespace ShipWorks.Filters
                     sqlAdapter.FetchEntity(fnc);
                 }
 
-                messenger.Send(new FilterSearchCompletedMessage(sender, fnc));
+                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc));
             }
         }
 

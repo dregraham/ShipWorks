@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Services
             // Wire up observable for auto printing 
             filterCompletedMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => AllowAutoPrint())
-                .SelectMany(messenger.OfType<FilterSearchCompletedMessage>().Take(1))
+                .SelectMany(messenger.OfType<FilterCountsUpdatedMessage>().Take(1))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(m => HandleAutoPrintShipment(m.FilterNodeContent).RunSynchronously())
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))

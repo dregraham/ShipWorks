@@ -8,14 +8,14 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Messaging.Messages.Filters
 {
     /// <summary>
-    /// Message to notify that a quick search filter has completed
+    /// Message to notify that a filter counts have bee updated
     /// </summary>
-    public class FilterSearchCompletedMessage : IShipWorksMessage
+    public class FilterCountsUpdatedMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterSearchCompletedMessage(object sender, IFilterNodeContentEntity filterNodeContent)
+        public FilterCountsUpdatedMessage(object sender, IFilterNodeContentEntity filterNodeContent)
         {
             Sender = sender;
             FilterNodeContent = filterNodeContent;
