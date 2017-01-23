@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
+using ShipWorks.Data;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -15,9 +14,9 @@ namespace ShipWorks.SingleScan.Tests
         public SingleScanOrderShortcutTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            var orderManager = mock.Mock<IOrderManager>();
-            orderManager.Setup(o => o.FetchOrder(777006)).Returns((OrderEntity) null);
-            orderManager.Setup(o => o.FetchOrder(123006)).Returns(new OrderEntity() {OrderNumber = 123, IsNew = false});
+            var dataProvider = mock.Mock<IDataProvider>();
+            dataProvider.Setup(o => o.GetOrderNumberComplete(777006)).Returns(string.Empty);
+            dataProvider.Setup(o => o.GetOrderNumberComplete(123006)).Returns("123");
 
             testObject = mock.Create<SingleScanOrderShortcut>();
         }

@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Filters.Search
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+
+namespace ShipWorks.Filters.Search
 {
     /// <summary>
     /// Prefix that identifies a scan result as a ShipWorks order
     /// </summary>
+    [Service]
     public interface ISingleScanOrderShortcut
     {
         /// <summary>

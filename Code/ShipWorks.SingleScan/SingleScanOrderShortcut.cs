@@ -1,6 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data;
 using ShipWorks.Filters.Search;
-using ShipWorks.Stores.Content;
 
 namespace ShipWorks.SingleScan
 {
@@ -10,7 +9,7 @@ namespace ShipWorks.SingleScan
     /// <seealso cref="ISingleScanOrderShortcut" />
     public class SingleScanOrderShortcut : ISingleScanOrderShortcut
     {
-        private readonly IOrderManager orderManager;
+        private readonly IDataProvider dataProvider;
 
         // ShipWorks order prefix
         private const string ShipWorksOrderPrefix = "SWO";
@@ -24,10 +23,10 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleScanOrderShortcut"/> class.
         /// </summary>
-        /// <param name="orderManager">The order manager.</param>
-        public SingleScanOrderShortcut(IOrderManager orderManager)
+        /// <param name="dataProvider"></param>
+        public SingleScanOrderShortcut(IDataProvider dataProvider)
         {
-            this.orderManager = orderManager;
+            this.dataProvider = dataProvider;
         }
 
         /// <summary>
@@ -42,11 +41,11 @@ namespace ShipWorks.SingleScan
 
                 if (orderId != UnparsedOrderID)
                 {
-                    OrderEntity order = orderManager.FetchOrder(orderId);
+                    string orderNumber = dataProvider.GetOrderNumberComplete(orderId);
 
-                    if (order != null)
+                    if (!string.IsNullOrWhiteSpace(orderNumber))
                     {
-                        return order.OrderNumberComplete;
+                        return orderNumber;
                     }
                 }
             }
