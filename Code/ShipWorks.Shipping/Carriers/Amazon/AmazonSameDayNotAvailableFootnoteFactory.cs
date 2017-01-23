@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Create the footnote control
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             IAmazonSameDayNotAvailableFootnoteViewModel viewModel =
                 IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IAmazonSameDayNotAvailableFootnoteViewModel>>().Value;

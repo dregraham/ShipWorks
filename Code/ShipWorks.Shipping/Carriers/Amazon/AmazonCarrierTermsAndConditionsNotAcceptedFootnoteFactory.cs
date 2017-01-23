@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Creates a footnote control.
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new AmazonCarrierTermsAndConditionsNotAcceptedFootnoteControl(CarrierNames);
         }

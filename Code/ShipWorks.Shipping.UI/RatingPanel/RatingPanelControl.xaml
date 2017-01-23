@@ -169,6 +169,8 @@
                                  DataTemplate="{StaticResource InformationFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:ShippingAccountRequiredForRatingFootnoteViewModel}"
                                  DataTemplate="{StaticResource ShippingAccountRequiredForRatingFootnoteViewModelTemplate}" />
+                    <ui:Template Value="{x:Type sw:UpsPromoFootnoteViewModel}"
+                                 DataTemplate="{StaticResource UpsPromoFootnoteViewModelTemplate}"/>
                     <ui:Template Value="{x:Type sw:UspsRateDiscountedFootnoteViewModel}"
                                  DataTemplate="{StaticResource UspsRateDiscountedFootnoteViewModelTemplate}" />
                     <ui:Template Value="{x:Type sw:UspsRateNotQualifiedFootnoteViewModel}"

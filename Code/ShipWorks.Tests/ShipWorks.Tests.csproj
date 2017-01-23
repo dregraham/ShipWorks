@@ -528,6 +528,10 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsApiTrackResponseTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTermsTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\PromoActiviationTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationAddressManipulatorTest.cs" />
@@ -544,6 +548,7 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\Manipulators\UpsOpenAccountAddEndUserInformationTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountCreateUpsAccountEntityManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\UpsOpenAccountRequestFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\UpsServiceManagerFactoryTest.cs" />
@@ -721,7 +726,7 @@
       <Name>ShipWorks.Stores</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
-      <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
+      <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">

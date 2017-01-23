@@ -24,16 +24,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <remarks>
         /// This is designed to be used within ShipWorks
         /// </remarks>
-        public UpsCounterRatesBroker()
-            : this(new UpsOltShipmentType(), new UpsCounterRateAccountRepository(TangoCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance))
+        public UpsCounterRatesBroker(UpsShipmentType shipmentType)
+            : this(shipmentType, new UpsCounterRateAccountRepository(TangoCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance))
         { }
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsCounterRatesBroker"/> class.
         /// </summary>
-        public UpsCounterRatesBroker(UpsShipmentType upsShipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
-            : base(upsShipmentType, accountRepository, settingsRepository)
+        public UpsCounterRatesBroker(UpsShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
+            : base(shipmentType, accountRepository, settingsRepository)
         {
 
         }

@@ -11,11 +11,16 @@ using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
+using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
+using System;
+using System.Collections.Concurrent;
+
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
@@ -31,15 +36,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
         {
             base.Load(builder);
 
-            builder.RegisterType<UpsOltShipmentType>()
-                .AsSelf()
-                .Keyed<ShipmentType>(ShipmentTypeCode.UpsOnLineTools);
-
-            builder.RegisterType<WorldShipShipmentType>()
-                .AsSelf()
-                .Keyed<ShipmentType>(ShipmentTypeCode.UpsWorldShip);
-
-            builder.RegisterType<UpsShipmentServicesBuilder>()
+           builder.RegisterType<UpsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsWorldShip)
                 .SingleInstance();
@@ -58,25 +55,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.UpsWorldShip)
                 .ExternallyOwned();
 
-            builder.RegisterType<UpsOltShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.UpsOnLineTools)
-                .SingleInstance();
-
-            builder.RegisterType<WorldShipShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.UpsWorldShip)
-                .SingleInstance();
-
             builder.RegisterType<UpsAccountRepository>()
                 .Keyed<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>(ShipmentTypeCode.UpsOnLineTools);
-
-            builder.RegisterType<UpsOltLabelService>()
-                .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
-
-            builder.RegisterType<WorldShipLabelService>()
-                .Keyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
-
-            builder.RegisterType<UpsOltShipmentValidator>()
-                .AsImplementedInterfaces();
 
             builder.RegisterType<UpsRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.UpsOnLineTools)
@@ -97,8 +77,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .Keyed<ICarrierResponseFactory>(ShipmentTypeCode.UpsWorldShip);
 
             builder.RegisterType<UpsSettingsRepository>()
-                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools);
+                .AsSelf()
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.UpsWorldShip);
 
+            builder.RegisterType<ConcurrentDictionary<long, DateTime>>()
+                .UsingConstructor()
+                .AsSelf();
+			
             builder.RegisterType<UpsServiceGateway>()
                 .AsImplementedInterfaces();
 
@@ -110,7 +96,69 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsShipmentTypePreProcessor>().AsSelf();
 
+            RegisterOltSpecificTypes(builder);
+            RegisterWorldShipSpecificTypes(builder);
+            RegisterPromoTypes(builder);
+
+        }
+
+        /// <summary>
+        /// Registers the olt specific classes.
+        /// </summary>
+        private void RegisterOltSpecificTypes(ContainerBuilder builder)
+        {
+            builder.RegisterType<UpsOltShipmentType>()
+                .AsSelf()
+                .Keyed<ShipmentType>(ShipmentTypeCode.UpsOnLineTools);
+
+            builder.RegisterType<UpsOltShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.UpsOnLineTools)
+                .SingleInstance();
+
+            builder.RegisterType<UpsOltLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
+
+            builder.RegisterType<UpsOltShipmentValidator>()
+                .AsImplementedInterfaces();
+        }
+
+        /// <summary>
+        /// Registers the world ship specific classes.
+        /// </summary>
+        private void RegisterWorldShipSpecificTypes(ContainerBuilder builder)
+        {
+            builder.RegisterType<WorldShipShipmentType>()
+                .AsSelf()
+                .Keyed<ShipmentType>(ShipmentTypeCode.UpsWorldShip);
+
+            builder.RegisterType<WorldShipShipmentPackageTypesBuilder>()
+                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.UpsWorldShip)
+                .SingleInstance();
+
+            builder.RegisterType<WorldShipLabelService>()
+                .Keyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
+
             builder.RegisterType<WorldShipPackageImporter>().AsSelf();
+        }
+
+        /// <summary>
+        /// Registers the promo types.
+        /// </summary>
+        private void RegisterPromoTypes(ContainerBuilder builder)
+        {
+            builder.RegisterType<UpsPromoWebClientFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<UpsPromoPolicy>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<UpsPromoFactory>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<UpsPromoFootnoteViewModel>()
+                .AsImplementedInterfaces();
         }
 
         /// <summary>

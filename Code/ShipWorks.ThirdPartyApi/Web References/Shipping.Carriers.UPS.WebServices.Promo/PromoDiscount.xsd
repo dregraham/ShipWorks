@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:ups="http://www.ups.com/XMLSchema" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:pd="http://www.ups.com/XMLSchema/XOLTWS/PromoDiscount/v1.0" elementFormDefault="qualified" targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/PromoDiscount/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import schemaLocation="common.xsd" namespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" />
+  <xsd:element name="PromoDiscountAgreementRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="common:Request" />
+        <xsd:element name="PromoCode" type="xsd:string" />
+        <xsd:element name="Locale" type="pd:LocaleType" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PromoDiscountAgreementResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="common:Response" />
+        <xsd:element name="PromoDescription" type="xsd:string" />
+        <xsd:element name="PromoAgreement" type="pd:PromoAgreementType" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PromoDiscountRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="common:Request" />
+        <xsd:element name="AgreementAcceptanceCode" type="xsd:string" />
+        <xsd:element name="PromoCode" type="xsd:string" />
+        <xsd:element name="Locale" type="pd:LocaleType" />
+        <xsd:element name="AccountInfo" type="pd:AccountInfoType" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PromoDiscountResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="common:Response" />
+        <xsd:element minOccurs="0" maxOccurs="unbounded" name="Disclaimer" type="xsd:string" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="LocaleType">
+    <xsd:sequence>
+      <xsd:element name="LanguageCode" type="xsd:string" />
+      <xsd:element name="CountryCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PromoAgreementType">
+    <xsd:sequence>
+      <xsd:element name="AgreementURL" type="xsd:string" />
+      <xsd:element name="AcceptanceCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AccountInfoType">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="AccountNumber" type="xsd:string" />
+      <xsd:element minOccurs="0" name="AccountNotNeededIndicator" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

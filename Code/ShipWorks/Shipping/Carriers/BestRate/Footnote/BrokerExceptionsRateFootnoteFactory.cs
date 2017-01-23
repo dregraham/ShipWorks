@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns>A BrokerExceptionsRateFootnoteControl object.</returns>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new BrokerExceptionsRateFootnoteControl(brokerExceptions, GetSeverityLevel());
         }

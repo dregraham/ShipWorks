@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- UPS PromoDiscount Service WSDL Release Date Jan, 2012 -->
+<wsdl:definitions name="PromoDiscount" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" xmlns:upss="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:pd="http://www.ups.com/XMLSchema/XOLTWS/PromoDiscount/v1.0" xmlns:tns="http://www.ups.com/WSDL/XOLTWS/PromoDiscount/v1.0" targetNamespace="http://www.ups.com/WSDL/XOLTWS/PromoDiscount/v1.0">
+	<wsdl:types>
+		<xsd:schema>
+			<!-- This schema defines the UPS Security header used for authorization purposes -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0" schemaLocation="UPSSecurity.xsd"/>
+			<!--  This schema defines the error detail data types returned within SOAPFaults to provide more specific information pertaining to the problem. -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1" schemaLocation="Error1.1.xsd"/>
+			<!-- ################## Start PromoDiscount Specific schema  ################### -->
+			<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/PromoDiscount/v1.0" schemaLocation="PromoDiscount.xsd"/>
+			<!-- ################## End PromoDiscount specific schema ##################### -->
+		</xsd:schema>
+	</wsdl:types>
+	<!-- ########### Start All set of Messages definition ###########-->
+	<wsdl:message name="PromoDiscountAgreementRequestMessage">
+		<wsdl:part name="Body" element="pd:PromoDiscountAgreementRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="PromoDiscountAgreementResponseMessage">
+		<wsdl:part name="Body" element="pd:PromoDiscountAgreementResponse"/>
+	</wsdl:message>
+	<wsdl:message name="PromoDiscountAgreementErrorMessage">
+		<wsdl:part name="PromoDiscountAgreementError" element="error:Errors"/>
+	</wsdl:message>
+	<wsdl:message name="PromoDiscountRequestMessage">
+		<wsdl:part name="Body" element="pd:PromoDiscountRequest"/>
+		<wsdl:part name="UPSSecurity" element="upss:UPSSecurity"/>
+	</wsdl:message>
+	<wsdl:message name="PromoDiscountResponseMessage">
+		<wsdl:part name="Body" element="pd:PromoDiscountResponse"/>
+	</wsdl:message>
+	<wsdl:message name="PromoDiscountErrorMessage">
+		<wsdl:part name="PromoDiscountError" element="error:Errors"/>
+	</wsdl:message>
+	<!-- ########### End All Set of Messages ###########-->
+	<!-- ########### Start Port Type ###########-->
+	<wsdl:portType name="PromoDiscountPortType">
+		<wsdl:operation name="ProcessPromoDiscountAgreement">
+			<wsdl:input name="PromoDiscountAgreementRequest" message="tns:PromoDiscountAgreementRequestMessage"/>
+			<wsdl:output name="PromoDiscountAgreementResponse" message="tns:PromoDiscountAgreementResponseMessage"/>
+			<wsdl:fault name="PromoDiscountAgreementError" message="tns:PromoDiscountAgreementErrorMessage"/>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessPromoDiscount">
+			<wsdl:input name="PromoDiscountRequest" message="tns:PromoDiscountRequestMessage"/>
+			<wsdl:output name="PromoDiscountResponse" message="tns:PromoDiscountResponseMessage"/>
+			<wsdl:fault name="PromoDiscountError" message="tns:PromoDiscountErrorMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<!-- ########### End Port Type ########### -->
+	<!-- ########### Start Binding  ########### -->
+	<wsdl:binding name="PromoDiscountBinding" type="tns:PromoDiscountPortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ProcessPromoDiscountAgreement">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/PromoDiscountBinding/v1.0" style="document"/>
+			<wsdl:input name="PromoDiscountAgreementRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:PromoDiscountAgreementRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:PromoDiscountAgreementErrorMessage" part="PromoDiscountAgreementError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="PromoDiscountAgreementResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="PromoDiscountAgreementError">
+				<soap:fault name="PromoDiscountAgreementError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ProcessPromoDiscount">
+			<soap:operation soapAction="http://onlinetools.ups.com/webservices/PromoDiscountBinding/v1.0" style="document"/>
+			<wsdl:input name="PromoDiscountRequest">
+				<soap:body parts="Body" use="literal"/>
+				<soap:header message="tns:PromoDiscountRequestMessage" part="UPSSecurity" use="literal">
+					<soap:headerfault message="tns:PromoDiscountErrorMessage" part="PromoDiscountError" use="literal"/>
+				</soap:header>
+			</wsdl:input>
+			<wsdl:output name="PromoDiscountResponse">
+				<soap:body parts="Body" use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="PromoDiscountError">
+				<soap:fault name="PromoDiscountError" use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<!-- ########### End Binding ###########-->
+	<wsdl:service name="PromoDiscountService">
+		<wsdl:port name="PromoDiscountPort" binding="tns:PromoDiscountBinding">
+			<!-- Production URL -->
+			<!--<soap:address location="https://onlinetools.ups.com/webservices/PromoDiscount"/>-->
+			<!-- CIE URL ( Customer Integration Environment )-->
+			<soap:address location="https://wwwcie.ups.com/webservices/PromoDiscount"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

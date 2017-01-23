@@ -14,12 +14,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
     /// </summary>
     public partial class CounterRatesInvalidStoreAddressFootnoteControl : RateFootnoteControl
     {
-        private readonly FootnoteParameters parameters;
+        private readonly IFootnoteParameters parameters;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CounterRatesInvalidStoreAddressFootnoteControl(FootnoteParameters parameters)
+        public CounterRatesInvalidStoreAddressFootnoteControl(IFootnoteParameters parameters)
         {
             this.parameters = parameters;
             InitializeComponent();

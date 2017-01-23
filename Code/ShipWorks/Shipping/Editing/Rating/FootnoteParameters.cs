@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// <summary>
     /// Parameters that can be used by footnotes to interact with the rate grid
     /// </summary>
-    public class FootnoteParameters
+    public class FootnoteParameters : IFootnoteParameters
     {
         /// <summary>
         /// Constructor

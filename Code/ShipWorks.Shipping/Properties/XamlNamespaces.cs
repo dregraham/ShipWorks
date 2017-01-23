@@ -7,6 +7,7 @@
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Carriers.Postal.Express1")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion")]
+[assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Carriers.UPS.Promo")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Loading")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Rating")]
 [assembly: XmlnsDefinition("http://schemas.shipworks.com/sw", "ShipWorks.Shipping.Services")]

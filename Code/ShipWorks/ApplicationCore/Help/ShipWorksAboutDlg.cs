@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared;
 using System.Reflection;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Administration;
-using System.Data.SqlClient;
-using log4net;
 
 namespace ShipWorks.ApplicationCore.Help
 {
