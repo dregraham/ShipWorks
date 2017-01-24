@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
                             .As(service)
                             .PreserveExistingDefaults();
 
-                    if (GetAttributes(service).Any(s=>s.SingleInstance))
+                    if (GetAttributes(service).Any(s => s.SingleInstance))
                     {
                         registrationBuilder.SingleInstance();
                     }

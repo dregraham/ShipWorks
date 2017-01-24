@@ -941,7 +941,6 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilter.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
-    <Compile Include="Common\IO\Hardware\Scanner\IScannerService.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
@@ -994,7 +993,9 @@
     <Compile Include="Filters\Search\OrderQuickSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Messaging\Messages\ScanMessage.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\DisableSingleScanInputFilterMessage.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\EnableSingleScanInputFilterMessage.cs" />
+    <Compile Include="Messaging\Messages\SingleScan\ScanMessage.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
     <Compile Include="Messaging\Messages\IEntityDeleted.cs" />

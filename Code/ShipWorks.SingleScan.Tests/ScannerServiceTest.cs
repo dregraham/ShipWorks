@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
@@ -11,6 +10,7 @@ using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.SingleScan.ScannerServicePipelines;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
@@ -20,17 +20,16 @@ namespace ShipWorks.SingleScan.Tests
     public class ScannerServiceTest : IDisposable
     {
         readonly AutoMock mock;
-        private readonly ScannerService testObject;
 
         public ScannerServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<ScannerService>();
         }
 
         [Fact]
         public void Enable_DelegatesToMessageFilterFactory()
         {
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
             mock.Mock<IScannerMessageFilterFactory>().Verify(x => x.CreateRegisteredScannerInputHandler());
         }
@@ -41,6 +40,7 @@ namespace ShipWorks.SingleScan.Tests
             var messageFilter = mock.Create<IScannerMessageFilter>();
             mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
             mock.Mock<IWindowsMessageFilterRegistrar>().Verify(x => x.AddMessageFilter(messageFilter));
@@ -51,6 +51,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             mock.Mock<IMainForm>().SetupGet(x => x.Handle).Returns((IntPtr) 123);
 
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(new RawInputDevice
@@ -65,6 +66,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Enable_DoesNotEnableTwice_WhenAlreadyEnabled()
         {
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
             testObject.Enable();
 
@@ -77,6 +79,7 @@ namespace ShipWorks.SingleScan.Tests
             var messageFilter = mock.Create<IScannerMessageFilter>();
             mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
             testObject.Disable();
@@ -87,6 +90,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Disable_DelegatesToUser32Devices()
         {
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
             testObject.Disable();
@@ -104,6 +108,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Disable_DoesNotDisableTwice_WhenAlreadyDisabled()
         {
+            var testObject = mock.Create<ScannerService>();
             testObject.Enable();
 
             testObject.Disable();
@@ -126,6 +131,7 @@ namespace ShipWorks.SingleScan.Tests
             mock.Mock<IMainForm>().SetupGet(m => m.InvokeRequired).Returns(false);
             mock.Mock<IMainForm>().SetupGet(m => m.Handle).Returns(IntPtr.Zero);
 
+            var testObject = mock.Create<ScannerService>();
             testObject.InitializeForCurrentSession();
 
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()));
@@ -143,6 +149,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IUserSession>().SetupGet(x => x.User).Returns(user.Object);
 
+            var testObject = mock.Create<ScannerService>();
             testObject.InitializeForCurrentSession();
 
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()), Times.Never);
@@ -153,9 +160,44 @@ namespace ShipWorks.SingleScan.Tests
         {
             mock.Mock<IUserSession>().SetupGet(x => x.User).Returns((UserEntity) null);
 
+            var testObject = mock.Create<ScannerService>();
             testObject.InitializeForCurrentSession();
 
             mock.Mock<IUser32Devices>().Verify(x => x.RegisterRawInputDevice(It.IsAny<RawInputDevice>()), Times.Never);
+        }
+
+        [Fact]
+        public void Constructor_RegistersPipelines()
+        {
+            var pipeline1 = mock.CreateMock<IScannerServicePipeline>();
+            var pipeline2 = mock.CreateMock<IScannerServicePipeline>();
+
+            mock.Provide<IEnumerable<IScannerServicePipeline>>(new[] { pipeline1.Object, pipeline2.Object });
+
+            var testObject = mock.Create<ScannerService>();
+
+            pipeline1.Verify(x => x.Register(testObject));
+            pipeline2.Verify(x => x.Register(testObject));
+        }
+
+        [Fact]
+        public void Dispose_PipelinesAreDisposed()
+        {
+            var disposable1 = mock.CreateMock<IDisposable>();
+            var pipeline1 = mock.CreateMock<IScannerServicePipeline>(m =>
+                m.Setup(x => x.Register(It.IsAny<ScannerService>())).Returns(disposable1.Object));
+
+            var disposable2 = mock.CreateMock<IDisposable>();
+            var pipeline2 = mock.CreateMock<IScannerServicePipeline>(m =>
+                m.Setup(x => x.Register(It.IsAny<ScannerService>())).Returns(disposable2.Object));
+
+            mock.Provide<IEnumerable<IScannerServicePipeline>>(new[] { pipeline1.Object, pipeline2.Object });
+
+            var testObject = mock.Create<ScannerService>();
+            testObject.Dispose();
+
+            disposable1.Verify(x => x.Dispose());
+            disposable2.Verify(x => x.Dispose());
         }
 
         public void Dispose()

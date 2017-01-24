@@ -5,14 +5,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.Extensions;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
-
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {

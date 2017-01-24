@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Timers;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
@@ -11,7 +10,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
-using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {

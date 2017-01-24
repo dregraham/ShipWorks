@@ -3,12 +3,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore
                 barcodeScannedMessageSubscription = messenger.OfType<ScanMessage>()
                     .Where(x => AllowBarcodeSearch(mainGridControl))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while performing barcode search search.", ex))
+                    .CatchAndContinue((Exception ex) => log.Error("Error occurred while performing barcode search.", ex))
                     .Subscribe(m => mainGridControl.PerformBarcodeSearch(m.ScannedText))
             );
         }
@@ -75,7 +75,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private bool AllowBarcodeSearch(MainGridControl mainGridControl)
         {
-            return mainGridControl.Visible && 
+            return mainGridControl.Visible &&
                    mainGridControl.CanFocus &&
                    !ApplicationUtility.AnyModalDialogs() &&
                    userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled;

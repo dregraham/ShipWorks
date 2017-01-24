@@ -6,7 +6,7 @@ using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

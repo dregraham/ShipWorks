@@ -1,7 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
 
-namespace ShipWorks.Messaging.Messages
+namespace ShipWorks.Messaging.Messages.SingleScan
 {
     /// <summary>
     /// Text was scanned

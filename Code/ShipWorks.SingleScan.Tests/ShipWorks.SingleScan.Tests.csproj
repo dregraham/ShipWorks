@@ -152,6 +152,8 @@
     <Compile Include="ScannerMessageFilterFactoryTest.cs" />
     <Compile Include="ScannerMessageFilterTest.cs" />
     <Compile Include="ScanBufferTest.cs" />
+    <Compile Include="ScannerServicePipelines\DisableSingleScanInputFilterPipelineTest.cs" />
+    <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>

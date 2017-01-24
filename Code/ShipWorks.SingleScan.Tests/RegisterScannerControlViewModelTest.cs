@@ -4,7 +4,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
