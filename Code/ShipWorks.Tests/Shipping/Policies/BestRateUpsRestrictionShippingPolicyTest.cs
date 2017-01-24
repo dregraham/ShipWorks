@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 using ShipWorks.Shipping.Policies;
 using Xunit;
@@ -26,8 +27,8 @@ namespace ShipWorks.Tests.Shipping.Policies
             {
                 new EndiciaBestRateBroker(),
                 new Express1EndiciaBestRateBroker(),
-                new WorldShipBestRateBroker(),
-                new UpsBestRateBroker(),
+                new WorldShipBestRateBroker(new UpsOltShipmentType()),
+                new UpsBestRateBroker(new UpsOltShipmentType()),
             };
 
             initialBrokerCount = brokers.Count;

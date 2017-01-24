@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
     /// <summary>
     /// Handle when the shipping dialog opens
     /// </summary>
-    public class OpenShippingDialogPipeline : IRatingPanelGlobalPipeline
+    public class ShippingDialogOpeningPipeline : IRatingPanelGlobalPipeline
     {
         private readonly IObservable<IShipWorksMessage> messages;
         private readonly ISchedulerProvider schedulerProvider;
@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         /// <summary>
         /// Constructor
         /// </summary>
-        public OpenShippingDialogPipeline(IObservable<IShipWorksMessage> messages, ISchedulerProvider schedulerProvider)
+        public ShippingDialogOpeningPipeline(IObservable<IShipWorksMessage> messages, ISchedulerProvider schedulerProvider)
         {
             this.messages = messages;
             this.schedulerProvider = schedulerProvider;
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
         /// </summary>
         public IDisposable Register(RatingPanelViewModel viewModel)
         {
-            return messages.OfType<OpenShippingDialogMessage>()
+            return messages.OfType<ShippingDialogOpeningMessage>()
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(_ =>
                 {

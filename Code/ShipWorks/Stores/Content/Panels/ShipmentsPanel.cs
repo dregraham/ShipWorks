@@ -48,6 +48,7 @@ namespace ShipWorks.Stores.Content.Panels
 
         private OrderEntity loadedOrder;
         private bool isThisPanelVisible;
+        private bool isRatingPanelVisible;
 
         /// <summary>
         /// Constructor
@@ -96,7 +97,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(x => ratesControl.Visible = true)
+                .Do(x => ratesControl.Visible = !isRatingPanelVisible)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
                 .Do(x => SelectShipmentRows(isThisPanelVisible ? x.ShipmentSelector : DefaultShipmentSelection))
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Content.Panels
             // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
             // (Scenario: Shipments panel could be showing FedEx rates, opening ship dlg, switch to UPS, move ship dlg and see rates
             //  for both UPS and FedEx at the same time)
-            messenger.OfType<OpenShippingDialogMessage>()
+            messenger.OfType<ShippingDialogOpeningMessage>()
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(_ =>
                 {
@@ -146,10 +147,12 @@ namespace ShipWorks.Stores.Content.Panels
         {
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
-                .Subscribe(_ => ratesControl.Visible = false);
+                .Do(x => isRatingPanelVisible = true)
+                .Subscribe(_ => ratesControl.Visible = !isRatingPanelVisible);
 
             messenger.OfType<PanelHiddenMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Do(x => isRatingPanelVisible = !isRatingPanelVisible)
                 .Subscribe(_ =>
                 {
                     ratesControl.Visible = true;
