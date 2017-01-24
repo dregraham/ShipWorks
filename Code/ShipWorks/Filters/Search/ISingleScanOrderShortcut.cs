@@ -20,6 +20,7 @@ namespace ShipWorks.Filters.Search
 
         /// <summary>
         /// Whether or not the scan result starts with the ShipWorks order prefix
+        /// and ends with the order entity seed value
         /// </summary>
         bool AppliesTo(string barcodeText);
     }

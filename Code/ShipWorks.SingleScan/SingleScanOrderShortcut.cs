@@ -4,7 +4,7 @@ using ShipWorks.Filters.Search;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// Prefix that identifies a scan result as a ShipWorks order
+    /// identify a scan result as a ShipWorks order
     /// </summary>
     /// <seealso cref="ISingleScanOrderShortcut" />
     public class SingleScanOrderShortcut : ISingleScanOrderShortcut
@@ -35,19 +35,17 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public string GetDisplayText(string barcodeText)
         {
-            if (AppliesTo(barcodeText))
+            long orderId = GetOrderID(barcodeText);
+
+            if (orderId != UnparsedOrderID)
             {
-                long orderId = GetOrderID(barcodeText);
+                string orderNumber = dataProvider.GetOrderNumberComplete(orderId);
 
-                if (orderId != UnparsedOrderID)
+                if (!string.IsNullOrWhiteSpace(orderNumber))
                 {
-                    string orderNumber = dataProvider.GetOrderNumberComplete(orderId);
-
-                    if (!string.IsNullOrWhiteSpace(orderNumber))
-                    {
-                        return orderNumber;
-                    }
+                    return orderNumber;
                 }
+
             }
 
             return barcodeText;
@@ -55,6 +53,7 @@ namespace ShipWorks.SingleScan
 
         /// <summary>
         /// Whether or not the scan result begins with the ShipWorks order prefix
+        /// and ends with the order entity seed value
         /// </summary>
         public bool AppliesTo(string barcodeText)
         {
