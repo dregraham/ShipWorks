@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -71,8 +72,10 @@ namespace ShipWorks.Templates.Distribution
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
 
-                // SingleScan templates
-                if (installed < new Version("5.10.0.0000"))
+                // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
+                // If the same snippet is installed twice it breaks all templates in ShipWorks
+                if (installed < new Version("5.10.0.0000") &&
+                    TemplateManager.Tree.AllTemplates.None(t => t.Name == "OrderSingleScan" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
                 {
                     InstallTemplate(@"System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
