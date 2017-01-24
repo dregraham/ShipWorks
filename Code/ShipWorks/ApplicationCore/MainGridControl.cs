@@ -849,11 +849,11 @@ namespace ShipWorks.ApplicationCore
                 ISearchDefinitionProvider definitionProvider;
                 if (AdvancedSearchResultsActive && filterEditor.SaveDefinition())
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition, isBarcodeSearch);
                 }
                 else
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch);
                 }
 
                 return definitionProvider.GetDefinition(searchText);
