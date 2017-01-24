@@ -4,6 +4,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data
 {
@@ -29,6 +30,16 @@ namespace ShipWorks.Data
         /// </summary>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode) =>
             DataProvider.InitializeForCurrentDatabase(executionMode);
+
+        /// <summary>
+        /// Gets the order number complete relating to the given orderID. Returns empty string if order not found.
+        /// </summary>
+        public string GetOrderNumberComplete(long orderID)
+        {
+            OrderEntity order = (OrderEntity) GetEntity(orderID);
+
+            return order == null ? string.Empty : order.OrderNumberComplete;
+        }
 
         /// <summary>
         /// Dispose

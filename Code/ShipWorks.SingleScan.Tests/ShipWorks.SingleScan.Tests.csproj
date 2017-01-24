@@ -155,6 +155,7 @@
     <Compile Include="ScannerServicePipelines\DisableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
+    <Compile Include="SingleScanOrderShortcutTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

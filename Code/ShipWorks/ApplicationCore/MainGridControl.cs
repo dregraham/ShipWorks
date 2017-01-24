@@ -561,12 +561,16 @@ namespace ShipWorks.ApplicationCore
                 }
                 else
                 {
-                    if (!AdvancedSearchResultsActive && GetBasicSearchText().Length == 0)
+                    // I don't like that we are getting BasicSearchText here because it may not be the text we searched.
+                    // If the user scans an orderid barcode, we put the order number in the search box. That should
+                    // still be ok because we are really only using this text to see if there is something in it.
+                    string basicSearchText = GetBasicSearchText();
+                    if (!AdvancedSearchResultsActive && basicSearchText.Length == 0)
                     {
                         // Has to be space... empty is considered no override at all
                         ActiveGrid.OverrideEmptyText = " ";
                     }
-                    else if (AdvancedSearchResultsActive && GetSearchDefinition() == null)
+                    else if (AdvancedSearchResultsActive && GetSearchDefinition(basicSearchText) == null)
                     {
                         ActiveGrid.OverrideEmptyText = "Some of the values entered in the search condition are not valid.";
                     }
@@ -729,7 +733,7 @@ namespace ShipWorks.ApplicationCore
             // Upate the search with the current definition
             if (IsSearchActive && (wasActive != AdvancedSearchResultsActive))
             {
-                searchProvider.Search(GetSearchDefinition());
+                searchProvider.Search(GetSearchDefinition(GetBasicSearchText()));
 
                 RaiseSearchQueryChanged();
             }
@@ -750,20 +754,33 @@ namespace ShipWorks.ApplicationCore
             // Mark that the search is coming from a barcode scan
             isBarcodeSearch = true;
 
-            searchBox.Text = barcode;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ISingleScanOrderShortcut singleScanOrderShortcut = scope.Resolve<ISingleScanOrderShortcut>();
+                searchBox.SetTextWithoutTextChangedEvent(singleScanOrderShortcut.GetDisplayText(barcode));
+                PerformSearch(barcode);
+            }
         }
 
         /// <summary>
-        /// Perform the search
+        /// Performs the search.
         /// </summary>
         public void PerformSearch()
+        {
+            PerformSearch(GetBasicSearchText());
+        }
+
+        /// <summary>
+        /// Perform the search using the provided text.
+        /// </summary>
+        private void PerformSearch(string searchText)
         {
             if (AdvancedSearchVisible)
             {
                 initiatedAdvanced = true;
             }
 
-            if (GetBasicSearchText().Length > 0 || AdvancedSearchVisible || AdvancedSearchResultsActive)
+            if (searchText.Length > 0 || AdvancedSearchVisible || AdvancedSearchResultsActive)
             {
                 if (!IsSearchActive)
                 {
@@ -771,7 +788,7 @@ namespace ShipWorks.ApplicationCore
                 }
 
                 // Update the search with the current definition
-                searchProvider.Search(GetSearchDefinition());
+                searchProvider.Search(GetSearchDefinition(searchText));
 
                 RaiseSearchQueryChanged();
             }
@@ -783,6 +800,8 @@ namespace ShipWorks.ApplicationCore
                 }
             }
         }
+
+
 
         /// <summary>
         /// Raise the search query changed event
@@ -821,7 +840,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the FilterDefinition that defines what the user is currently searching for
         /// </summary>
-        private FilterDefinition GetSearchDefinition()
+        private FilterDefinition GetSearchDefinition(string searchText)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -837,7 +856,7 @@ namespace ShipWorks.ApplicationCore
                     definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget);
                 }
 
-                return definitionProvider.GetDefinition(GetBasicSearchText());
+                return definitionProvider.GetDefinition(searchText);
             }
         }
 

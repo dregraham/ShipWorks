@@ -279,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\interapptive_public.snk" />
+    <EmbeddedResource Include="Templates\Distribution\Source\Source.zip" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.0\5.0.0.0.sql" />
@@ -391,6 +392,148 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.10\5.10.0.0.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
+    <Content Include="Templates\Distribution\Source\Invoices\Blue\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Blue\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Brushed Metal\invoiceHeaderBrushedMetal.jpg" />
+    <Content Include="Templates\Distribution\Source\Invoices\Brushed Metal\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Brushed Metal\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Elegant\invoiceHeaderElegant.jpg" />
+    <Content Include="Templates\Distribution\Source\Invoices\Elegant\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Elegant\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Flowers\invoiceHeaderFlowers.jpg" />
+    <Content Include="Templates\Distribution\Source\Invoices\Flowers\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Flowers\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Green\invoiceHeaderGreen.jpg" />
+    <Content Include="Templates\Distribution\Source\Invoices\Green\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Green\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Red\invoiceHeaderRed.jpg" />
+    <Content Include="Templates\Distribution\Source\Invoices\Red\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Red\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Single Scan\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Invoices\Standard\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Invoices\Standard\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Commercial Invoice\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Labels\Standard\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Standard\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Labels\Thermal\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Thermal\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Blue\packingSlipHeaderBlue.jpg" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Blue\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Blue\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Packing Slips\Brushed Metal\packingSlipHeaderBrushedMetal.jpg" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Brushed Metal\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Brushed Metal\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Elegant\packingSlipHeaderElegant.jpg" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Elegant\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Elegant\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Flowers\packingSlipHeaderFlowers.jpg" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Flowers\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Flowers\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Green\packingSlipHeaderGreen.jpg" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Green\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Green\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Red\packingSlipHeaderRed.jpg" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Red\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Red\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Single Scan\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Packing Slips\Standard\template.xsl" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Customers\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Customers\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Orders with Items\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Orders with Items\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Tracking Numbers\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Tracking Numbers\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Order Charges Breakdown\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Order Charges Breakdown\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Shipping cost by Carrier\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Shipping cost by Carrier\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Shipping Profit and Loss\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Shipping Profit and Loss\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Order Status\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Order Status\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Order Summary\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Order Summary\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Orders by Time of Day\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Orders by Time of Day\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Amount\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Amount\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Name\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Name\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Quantity\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Quantity\template.xsl">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\template.xsl" />
+    <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\settings.xml" />
+    <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\template.xsl" />
+    <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\settings.xml" />
+    <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Notes\template.xsl" />
+    <Content Include="Templates\Distribution\Source\System\Utility\XML Source\settings.xml" />
+    <Content Include="Templates\Distribution\Source\System\Utility\XML Source\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\template.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\TrackingLink\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\StoreHeading\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\StoreHeading\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderSingleScan\template.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderSingleScan\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderNumber\template.xsl">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderNumber\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderItemCode\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\OrderItemCode\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\InvoiceShipTo\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\InvoiceShipTo\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\InvoiceBillTo\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\InvoiceBillTo\settings.xml" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\template.xsl" />
+    <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\settings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

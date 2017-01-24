@@ -10,34 +10,56 @@ namespace ShipWorks.Filters.Search
     /// <seealso cref="ShipWorks.Filters.Search.ISearchDefinitionProvider" />
     public class SingleScanSearchDefinitionProvider : ISearchDefinitionProvider
     {
+        private readonly ISingleScanOrderShortcut singleScanShortcut;
+
         /// <summary>
-        /// Gets a filter definition that searches for an exact order number
+        /// Constructor
+        /// </summary>
+        public SingleScanSearchDefinitionProvider(ISingleScanOrderShortcut singleScanShortcut)
+        {
+            this.singleScanShortcut = singleScanShortcut;
+        }
+
+        /// <summary>
+        /// Gets a filter definition that searches for an exact order number or OrderId based on the prefix
         /// </summary>
         public FilterDefinition GetDefinition(string quickSearchString)
         {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-
-            OrderNumberCondition condition;
-            long orderNumber;
-            if (long.TryParse(quickSearchString, out orderNumber))
+            NumericCondition<long> condition;
+            if (singleScanShortcut.AppliesTo(quickSearchString))
             {
-                condition = new OrderNumberCondition
+                // The search string contains the OrderId
+                condition = new OrderIDCondition
                 {
-                    IsNumeric = true,
                     Operator = NumericOperator.Equal,
-                    Value1 = orderNumber
+                    Value1 = singleScanShortcut.GetOrderID(quickSearchString)
                 };
             }
             else
             {
-                condition = new OrderNumberCondition
+                // The search string must be an Order Number
+                long value;
+                if (long.TryParse(quickSearchString, out value))
                 {
-                    IsNumeric = false,
-                    StringOperator = StringOperator.Equals,
-                    StringValue = quickSearchString,
-                };
+                    condition = new OrderNumberCondition
+                    {
+                        IsNumeric = true,
+                        Operator = NumericOperator.Equal,
+                        Value1 = value
+                    };
+                }
+                else
+                {
+                    condition = new OrderNumberCondition
+                    {
+                        IsNumeric = false,
+                        StringOperator = StringOperator.Equals,
+                        StringValue = quickSearchString,
+                    };
+                }
             }
-            
+
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
             definition.RootContainer.FirstGroup.Conditions.Add(condition);
 
             return definition;
