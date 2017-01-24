@@ -750,7 +750,13 @@ namespace ShipWorks.ApplicationCore
             // Mark that the search is coming from a barcode scan
             isBarcodeSearch = true;
 
+            // Unwire the observable listening to text changes
+            SearchTextChangedRemove((o, args) => { } );
+
             searchBox.Text = barcode;
+
+            // Rewire the observable listening to text changes
+            SearchTextChangedAdd((o, args) => { });
         }
 
         /// <summary>
@@ -830,11 +836,11 @@ namespace ShipWorks.ApplicationCore
                 ISearchDefinitionProvider definitionProvider;
                 if (AdvancedSearchResultsActive && filterEditor.SaveDefinition())
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition, isBarcodeSearch);
                 }
                 else
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch);
                 }
 
                 return definitionProvider.GetDefinition(GetBasicSearchText());

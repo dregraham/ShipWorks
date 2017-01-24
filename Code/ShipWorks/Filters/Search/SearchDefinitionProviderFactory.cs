@@ -24,13 +24,13 @@ namespace ShipWorks.Filters.Search
         public SearchDefinitionProviderFactory(IStoreManager storeManager, IUserSession userSession)
         {
             this.storeManager = storeManager;
-            singleScanSettings = userSession.User.Settings.SingleScanSettings;
+            singleScanSettings = userSession.Settings.SingleScanSettings;
         }
 
         /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target.
         /// </summary>
-        public ISearchDefinitionProvider Create(FilterTarget target) => Create(target, null);
+        public ISearchDefinitionProvider Create(FilterTarget target, bool isBarcodeSearch) => Create(target, null, isBarcodeSearch);
 
         /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target and FilterDefinition
@@ -38,7 +38,7 @@ namespace ShipWorks.Filters.Search
         /// <remarks>
         /// If advancedSearchDefinition is null, a quick search definition provider is returned. If not, an AdvancedSearch provider is returned.
         /// </remarks>
-        public ISearchDefinitionProvider Create(FilterTarget target, FilterDefinition advancedSearchDefinition)
+        public ISearchDefinitionProvider Create(FilterTarget target, FilterDefinition advancedSearchDefinition, bool isBarcodeSearch)
         {
             ISearchDefinitionProvider quickSearchDefinitionProvider;
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Filters.Search
                     quickSearchDefinitionProvider = new CustomerQuickSearchDefinitionProvider();
                     break;
                 case FilterTarget.Orders:
-                    if (singleScanSettings != (int) SingleScanSettings.Disabled)
+                    if (singleScanSettings != (int) SingleScanSettings.Disabled && isBarcodeSearch)
                     {
                         quickSearchDefinitionProvider = new SingleScanSearchDefinitionProvider();
                     }
