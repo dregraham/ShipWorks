@@ -4,9 +4,7 @@
 
   <xsl:template name="OrderSingleScan">
     <xsl:param name="order" />
-    <font style="font-family:Free 3 of 9 Extended; font-size:48pt;  font-weight:normal;">
-      *SWO<xsl:value-of select="$order/@ID"/>*
-    </font>
+    <font style="font-family:Free 3 of 9 Extended; font-size:48pt;  font-weight:normal;">*SWO<xsl:value-of select="$order/@ID"/>*</font>
   </xsl:template>
 
 </xsl:stylesheet>
