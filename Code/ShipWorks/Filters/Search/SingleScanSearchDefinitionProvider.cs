@@ -59,7 +59,7 @@ namespace ShipWorks.Filters.Search
                 }
             }
 
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Scan);
             definition.RootContainer.FirstGroup.Conditions.Add(condition);
 
             return definition;

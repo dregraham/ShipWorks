@@ -60,6 +60,15 @@ namespace ShipWorks.Filters.Content
             this.target = target;
             root = new ConditionGroupContainerRoot(GetEntityTarget(target));
             root.SecondGroup = new ConditionGroupContainer(new ConditionGroup());
+            FilterDefinitionSource = FilterDefinitionSourceType.Filter;
+        }
+
+        /// <summary>
+        /// Creates a new, empty filter definition
+        /// </summary>
+        public FilterDefinition(FilterTarget target, FilterDefinitionSourceType filterDefinitionSource) : this(target)
+        {
+            FilterDefinitionSource = filterDefinitionSource;
         }
 
         /// <summary>
@@ -69,6 +78,20 @@ namespace ShipWorks.Filters.Content
         {
             LoadXml(xml);
         }
+
+        /// <summary>
+        /// Loads a filter condition from the specified XML.
+        /// </summary>
+        public FilterDefinition(string xml, FilterDefinitionSourceType filterDefinitionSource)
+        {
+            LoadXml(xml);
+            FilterDefinitionSource = filterDefinitionSource;
+        }
+
+        /// <summary>
+        /// The source of the filter definition
+        /// </summary>
+        public FilterDefinitionSourceType FilterDefinitionSource { get; private set; }
 
         /// <summary>
         /// Load the filter definition object from the given XML

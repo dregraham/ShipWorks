@@ -6,8 +6,10 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Startup;
@@ -35,6 +37,7 @@ namespace ShipWorks.Shipping.Tests.Services
             context.Mock.Provide<Func<Control>>(() => new Control());
             context.Mock.Override<ITangoWebClient>();
             context.Mock.Override<IMessageHelper>();
+            context.Mock.Override<IMessenger>();
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -170,6 +173,37 @@ namespace ShipWorks.Shipping.Tests.Services
                 null, null);
 
             Assert.False(shipment.Processed);
+        }
+        
+        [Fact]
+        public async Task Process_SendsShipmentsProcessedMessage_WhenShipmentIsProcessed()
+        {
+            Modify.Entity(shipment.Other)
+                .Set(x => x.Carrier, "Foo")
+                .Set(x => x.Service, "Bar")
+                .Save();
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            await testObject.Process(new[] { shipment },
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
+
+            context.Mock.Mock<IMessenger>().
+                Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
+        }
+
+        [Fact]
+        public async Task Process_SendsShipmentsProcessedMessage_WhenShipmentIsNotProcessed()
+        {
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            var result = await testObject.Process(new[] { shipment },
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
+
+            context.Mock.Mock<IMessenger>().
+                Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
         }
 
         public void Dispose()
