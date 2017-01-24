@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
@@ -261,7 +262,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (Form dlg = shipmentType.CreateSetupWizard(lifetimeScope))
+                using (IForm dlg = shipmentType.CreateSetupWizard(lifetimeScope))
                 {
                     return (dlg.ShowDialog(owner) == DialogResult.OK);
                 }

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Core;
+using Autofac.Extras.Attributed;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
@@ -14,6 +14,7 @@ using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -72,11 +73,26 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        public static IContainer Initialize(IContainer container)
+        {
+            return current = container;
+        }
+
+        /// <summary>
+        /// Build the registrations
+        /// </summary>
+        /// <remarks>
+        /// This should be used for tests since the Initialize method sets the current container, which is not thread safe
+        /// </remarks>
         [NDependIgnoreLongMethod]
-        public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
+        public static IContainer BuildRegistrations(IContainer container, params Assembly[] assemblies)
         {
             Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
+
+            builder.RegisterModule<AttributedMetadataModule>();
+
+            builder.RegisterSource(new OrderedRegistrationSource());
 
             builder.RegisterType<ClipboardHelper>()
                 .AsSelf();
@@ -154,10 +170,6 @@ namespace ShipWorks.ApplicationCore
             RegisterLicenseEnforcers(builder);
             RegisterDialogs(builder);
 
-            builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces()
-                .UsingConstructor();
-
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
@@ -176,6 +188,12 @@ namespace ShipWorks.ApplicationCore
                 .Where(x => x.IsAssignableTo<IInitializeForCurrentUISession>())
                 .AsImplementedInterfaces();
 
+            builder.RegisterGeneric(typeof(OrderedCompositeManipulator<,>))
+                .As(typeof(IOrderedCompositeManipulator<,>));
+
+            builder.RegisterGeneric(typeof(CompositeValidator<,>))
+                .As(typeof(ICompositeValidator<,>));
+
             ComponentAttribute.Register(builder, allAssemblies);
             ServiceAttribute.Register(builder, allAssemblies);
             KeyedComponentAttribute.Register(builder, allAssemblies);
@@ -185,14 +203,9 @@ namespace ShipWorks.ApplicationCore
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
 
-            foreach (IComponentRegistration registration in builder.Build().ComponentRegistry.Registrations)
-            {
-                container.ComponentRegistry.Register(registration);
-            }
+            builder.Update(container);
 
-            current = container;
-
-            return current;
+            return container;
         }
 
         /// <summary>
@@ -201,11 +214,7 @@ namespace ShipWorks.ApplicationCore
         private static void RegisterDialogs(ContainerBuilder builder)
         {
             builder.RegisterType<EndiciaAccountEditorDlg>();
-            builder.RegisterType<EndiciaAccountManagerControl>();
-            builder.RegisterType<EndiciaBuyPostageDlg>();
             builder.RegisterType<UspsAccountInfoControl>();
-            builder.RegisterType<UspsAccountManagerControl>();
-            builder.RegisterType<UspsPurchasePostageDlg>();
 
             builder.RegisterType<ShipWorksOpenFileDialog>().Keyed<IFileDialog>(FileDialogType.Open);
             builder.RegisterType<ShipWorksSaveFileDialog>().Keyed<IFileDialog>(FileDialogType.Save);
@@ -322,10 +331,6 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces()
-                .UsingConstructor();
 
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()

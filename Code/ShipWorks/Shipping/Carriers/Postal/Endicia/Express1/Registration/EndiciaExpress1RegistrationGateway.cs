@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
     /// <summary>
     /// An Express1RegistrationGateway implementation for integrating the Endicia API client into the Express1 registration process.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class EndiciaExpress1RegistrationGateway : Express1RegistrationGateway
     {
         /// <summary>
@@ -29,11 +31,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 
             try
             {
-                // Pull out the info from the registration to bounce a request off of the 
+                // Pull out the info from the registration to bounce a request off of the
                 // Endicia API client to determine if the account credentials are valid
                 EndiciaAccountEntity account = new EndiciaAccountEntity
                 {
-                    EndiciaReseller = (int)EndiciaReseller.Express1,
+                    EndiciaReseller = (int) EndiciaReseller.Express1,
                     AccountNumber = registration.UserName,
                     ApiUserPassword = registration.EncryptedPassword
                 };

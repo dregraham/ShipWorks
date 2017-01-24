@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -7,17 +10,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Basic repository for retrieving USPS accounts
     /// </summary>
+    [Component]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>), ShipmentTypeCode.Usps)]
     public class UspsAccountRepository : CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>
     {
         /// <summary>
         /// Returns a list of USPS accounts.
         /// </summary>
-        public override IEnumerable<UspsAccountEntity> Accounts => UspsAccountManager.UspsAccounts;
+        /// <remarks>
+        /// Usage of the repository in a generic manner assumes fully ready to go accounts since generic usage
+        /// will have no concept of whether an account is pending or not
+        /// </remarks>
+        public override IEnumerable<UspsAccountEntity> Accounts =>
+            UspsAccountManager.UspsAccounts.Where(x => x.PendingInitialAccount == (int) UspsPendingAccountType.None);
 
         /// <summary>
         /// Returns a list of USPS accounts.
         /// </summary>
-        public override IEnumerable<IUspsAccountEntity> AccountsReadOnly => UspsAccountManager.UspsAccountsReadOnly;
+        public override IEnumerable<IUspsAccountEntity> AccountsReadOnly =>
+            UspsAccountManager.UspsAccountsReadOnly.Where(x => x.PendingInitialAccount == (int) UspsPendingAccountType.None);
 
         /// <summary>
         /// Force a check for changes
@@ -62,5 +74,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             UspsAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
+            shipment?.Postal?.Usps?.UspsAccountID;
     }
 }

@@ -1,12 +1,14 @@
-﻿using Autofac.Features.Indexed;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -38,7 +40,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public ShipmentTypeManagerWrapper()
         {
-            allShipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>().Select(x => x.Value);
+            allShipmentTypeCodes = Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>();
 
             noAccountShipmentTypes = new List<ShipmentTypeCode>()
                 {
@@ -97,7 +99,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get the provider for the specified shipment
         /// </summary>
-        public ShipmentType Get(ShipmentEntity shipment)
+        public ShipmentType Get(IShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             return Get(shipment.ShipmentTypeCode);

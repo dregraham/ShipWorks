@@ -26,14 +26,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         bool HasAccounts { get; }
 
         /// <summary>
-        /// Gets a value indicating whether [is counter rate].
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if [is counter rate]; otherwise, <c>false</c>.
-        /// </value>
-        bool IsCounterRate { get; }
-
-        /// <summary>
         /// Gets the rates for each of the accounts of a specific shipping provider based
         /// on the configuration of the best rate shipment data.
         /// </summary>

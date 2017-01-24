@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
-using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <exception cref="UspsException">Only USPS accounts can be converted.</exception>
         public void Initialize(UspsAccountEntity uspsAccount)
         {
-            if (uspsAccount.UspsReseller == (int)UspsResellerType.Express1)
+            if (uspsAccount.UspsReseller == (int) UspsResellerType.Express1)
             {
                 throw new UspsException("Express1 accounts cannot be converted.");
             }
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 // Set the ContractType to Unknown so that we rely on USPS to correctly tell us
                 // the contract type the next time we get rates or process.
-                accountToConvert.ContractType = (int)UspsAccountContractType.Unknown;
+                accountToConvert.ContractType = (int) UspsAccountContractType.Unknown;
 
                 UspsAccountManager.SaveAccount(accountToConvert);
 
@@ -120,7 +120,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 // ShipWorks667 must be used when converting an account, so always use the Express1 promotion when converting an account.
                 IRegistrationPromotion promotion = new Express1RegistrationPromotion();
-                new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode());
+                new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, (UspsResellerType) accountToConvert.UspsReseller)
+                    .ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode());
             }
             catch (UspsApiException exception)
             {
@@ -145,8 +146,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnLearnMore(object sender, LinkLabelLinkClickedEventArgs e)
         {
             MessageHelper.ShowInformation(this,
-                                          "With ShipWorks you get some of the best postal rates available, saving you significant money on each of your domestic and " + 
-                                          "international Priority and Express shipments." + Environment.NewLine + Environment.NewLine + "Simply create a USPS account " + 
+                                          "With ShipWorks you get some of the best postal rates available, saving you significant money on each of your domestic and " +
+                                          "international Priority and Express shipments." + Environment.NewLine + Environment.NewLine + "Simply create a USPS account " +
                                           "in ShipWorks and you will have access to discounted rates when creating postage labels." +
                                           Environment.NewLine + Environment.NewLine + "For more information, please contact us at www.interapptive.com/company/contact.html.");
         }

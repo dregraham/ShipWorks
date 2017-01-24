@@ -249,6 +249,7 @@
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\FileDialogType.cs" />
+    <Compile Include="UI\IForm.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialog.cs" />
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IFileDialog.cs" />
@@ -497,6 +498,7 @@
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
+    <Compile Include="Utility\Result.cs" />
     <Compile Include="Utility\SerializableObject.cs" />
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />

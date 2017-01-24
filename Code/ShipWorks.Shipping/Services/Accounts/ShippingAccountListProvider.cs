@@ -10,12 +10,12 @@ namespace ShipWorks.Shipping.Services.Accounts
     /// </summary>
     public class ShippingAccountListProvider : IShippingAccountListProvider
     {
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever> lookup;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingAccountListProvider(IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup)
+        public ShippingAccountListProvider(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> lookup)
         {
             this.lookup = lookup;
         }
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Services.Accounts
         /// </summary>
         public IEnumerable<ICarrierAccount> GetAvailableAccounts(ShipmentTypeCode shipmentTypeCode)
         {
-            return lookup[shipmentTypeCode].Accounts;
+            return lookup[shipmentTypeCode].AccountsReadOnly;
         }
     }
 }

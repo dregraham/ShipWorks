@@ -21,6 +21,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
@@ -1525,7 +1526,7 @@ namespace ShipWorks.Shipping
             // Add each relevant profile
             if (shipmentTypeCode != null)
             {
-                foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
+                foreach (IShippingProfileEntity profile in ShippingProfileManager.ProfilesReadOnly.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
                 {
                     if (profile.ShipmentTypeCode != ShipmentTypeCode.None &&
                         profile.ShipmentTypeCode == shipmentTypeCode.Value)
@@ -1574,7 +1575,7 @@ namespace ShipWorks.Shipping
         {
             applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
@@ -2062,12 +2063,6 @@ namespace ShipWorks.Shipping
 
             IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher,
                 rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
-
-            if (shipmentProcessor.FilteredRates != null)
-            {
-                // The user canceled out of the dialog, so just show the filtered rates
-                rateControl.LoadRates(shipmentProcessor.FilteredRates);
-            }
 
             // Apply any changes made during processing to the grid
             ApplyShipmentsToGridRows(results.Select(x => x.Shipment));

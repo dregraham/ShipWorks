@@ -1,9 +1,15 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
+    /// <summary>
+    /// Account repository for OnTrac
+    /// </summary>
+    [Component]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.OnTrac)]
     public class OnTracAccountRepository : CarrierAccountRepositoryBase<OnTracAccountEntity, IOnTracAccountEntity>
     {
         /// <summary>
@@ -64,5 +70,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             OnTracAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
+            shipment?.OnTrac?.OnTracAccountID;
     }
 }

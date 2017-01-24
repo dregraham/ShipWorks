@@ -1,6 +1,7 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -8,8 +9,6 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
@@ -44,60 +43,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists_AndPendingStatusIsNone()
+        public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists()
         {
-            accountRepository.Setup(r => r.Accounts)
-                .Returns
-                (
-                    new List<UspsAccountEntity>
-                    {
-                        new UspsAccountEntity() { PendingInitialAccount = (int) UspsPendingAccountType.None }
-                    }
-                );
+            accountRepository.Setup(r => r.AccountsReadOnly).Returns(new[] { new UspsAccountEntity() });
 
             testObject.AccountRepository = accountRepository.Object;
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
             Assert.IsType<UspsBestRateBroker>(broker);
-        }
-
-        [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_WhenUspsAccountExists_AndPendingStatusIsCreate()
-        {
-            accountRepository.Setup(r => r.Accounts)
-                .Returns
-                (
-                    new List<UspsAccountEntity>
-                    {
-                        new UspsAccountEntity() { PendingInitialAccount = (int) UspsPendingAccountType.Create }
-                    }
-                );
-
-            testObject.AccountRepository = accountRepository.Object;
-
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
-
-            Assert.IsType<NullShippingBroker>(broker);
-        }
-
-        [Fact]
-        public void GetShippingBroker_ReturnsNullShippingBroker_WhenUspsAccountExists_AndPendingStatusIsExisting()
-        {
-            accountRepository.Setup(r => r.Accounts)
-                .Returns
-                (
-                    new List<UspsAccountEntity>
-                    {
-                        new UspsAccountEntity() { PendingInitialAccount = (int) UspsPendingAccountType.Existing }
-                    }
-                );
-
-            testObject.AccountRepository = accountRepository.Object;
-
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
-
-            Assert.IsType<NullShippingBroker>(broker);
         }
 
         [Fact]
@@ -145,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         [InlineData(PostalServiceType.FirstClass, "USPS First Class")]
         public void GetServiceDescription_ReturnsExpectedDescription(PostalServiceType serviceType, string expectedServiceDescription)
         {
-            ShipmentEntity shipmentEntity = new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) serviceType} };
+            ShipmentEntity shipmentEntity = new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int) serviceType } };
 
             Assert.Equal(expectedServiceDescription, testObject.GetServiceDescription(shipmentEntity));
         }

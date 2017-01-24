@@ -1,10 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.Core.ApplicationCode;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -41,11 +37,6 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<FedExAccountRepository>()
-                .As<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.FedEx)
-                .SingleInstance();
-
             builder.RegisterType<FedExShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.FedEx)
                 .ExternallyOwned();
@@ -60,12 +51,7 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
             builder.RegisterType<FedExRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx);
 
-            builder.RegisterType<FedExAccountRepository>();
-
             builder.RegisterType<FedExShippingClerkFactory>();
-
-            builder.RegisterType<FedExShipmentProcessingSynchronizer>()
-                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.FedEx);
         }
     }
 }

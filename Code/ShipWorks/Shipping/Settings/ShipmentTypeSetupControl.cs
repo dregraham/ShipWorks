@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.UI;
-using ShipWorks.Users;
-using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Utility;
 using ShipWorks.Editions;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -84,7 +74,7 @@ namespace ShipWorks.Shipping.Settings
                     if (SetupShipmentType(this, shipmentType.ShipmentTypeCode, shipmentType.CreateSetupWizard(lifetimeScope)))
                     {
                         RaiseSetupComplete();
-                    }   
+                    }
                 }
             }
         }
@@ -92,7 +82,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Setup the given shipment type, returns true if it's setup.
         /// </summary>
-        public static bool SetupShipmentType(IWin32Window messageOwner, ShipmentTypeCode shipmentTypeCode, Form setupDlg)
+        public static bool SetupShipmentType(IWin32Window messageOwner, ShipmentTypeCode shipmentTypeCode, IForm setupDlg)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
@@ -100,7 +90,7 @@ namespace ShipWorks.Shipping.Settings
             {
                 using (SqlAppResourceLock setupLock = new SqlAppResourceLock("Setup - " + shipmentType.ShipmentTypeName))
                 {
-                    using (Form dlg = setupDlg)
+                    using (IForm dlg = setupDlg)
                     {
                         if (dlg.ShowDialog(messageOwner) == DialogResult.OK)
                         {

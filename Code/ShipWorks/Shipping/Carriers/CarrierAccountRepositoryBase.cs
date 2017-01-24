@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers
@@ -13,7 +15,8 @@ namespace ShipWorks.Shipping.Carriers
     /// implementations that could be used by other carrier account repositories.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class CarrierAccountRepositoryBase<T, TInterface> : ICarrierAccountRepository<T, TInterface>
+    public abstract class CarrierAccountRepositoryBase<T, TInterface> :
+        ICarrierAccountRepository<T, TInterface>, ICarrierAccountRetriever
         where T : TInterface where TInterface : ICarrierAccount
     {
         /// <summary>
@@ -22,14 +25,27 @@ namespace ShipWorks.Shipping.Carriers
         public abstract void CheckForChangesNeeded();
 
         /// <summary>
-        ///  Returns a list of accounts for the carrier.
-        ///  </summary>
+        /// Returns a list of accounts for the carrier.
+        /// </summary>
         public abstract IEnumerable<T> Accounts { get; }
 
         /// <summary>
-        ///  Returns a carrier account for the provided accountID.
-        ///  </summary><param name="accountID">The account ID for which to return an account.</param><returns>The matching account as IEntity2.</returns>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        /// <param name="accountID">The account ID for which to return an account.</param>
+        /// <returns>The matching account as IEntity2.</returns>
         public abstract T GetAccount(long accountID);
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public T GetAccount(IShipmentEntity shipment) => GetAccount(GetAccountIDFromShipment(shipment) ?? -1);
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public TInterface GetAccountReadOnly(IShipmentEntity shipment) =>
+            GetAccountReadOnly(GetAccountIDFromShipment(shipment) ?? -1);
 
         /// <summary>
         ///  Returns the default account as defined by the primary profile
@@ -87,8 +103,31 @@ namespace ShipWorks.Shipping.Carriers
         }
 
         /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected abstract long? GetAccountIDFromShipment(IShipmentEntity shipment);
+
+        /// <summary>
         /// Get a readonly account with the given id
         /// </summary>
         public abstract TInterface GetAccountReadOnly(long uspsAccountID);
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
+            GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(IShipmentEntity shipment) =>
+            GetAccountReadOnly(shipment);
+
+        /// <summary>
+        /// Returns a list of accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
+            AccountsReadOnly.OfType<ICarrierAccount>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <summary>
         /// Saves the label to the underlying data source.
         /// </summary>
-        public abstract void Save();
+        public abstract void Save(IDataResourceManager dataResourceManager);
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.

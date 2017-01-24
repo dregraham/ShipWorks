@@ -15,6 +15,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -206,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the currency for the country in the account.
         /// </summary>
-        public static string GetCurrency(UpsAccountEntity account)
+        public static string GetCurrency(IUpsAccountEntity account)
         {
             if (account == null)
             {

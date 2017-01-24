@@ -1,11 +1,16 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
+using Moq.Language;
+using Moq.Language.Flow;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
-using System;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -58,6 +63,10 @@ namespace ShipWorks.Tests.Shared
 
             mock.Mock<IShipmentTypeManager>()
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentTypeMock.Object);
+
+            mock.Mock<IFactory<ShipmentTypeCode, ShipmentType>>()
+                .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentTypeMock.Object);
 
             return shipmentTypeMock;
@@ -149,6 +158,42 @@ namespace ShipWorks.Tests.Shared
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
             function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
             mock.Provide(function.Object);
+        }
+
+        /// <summary>
+        /// Simplify returning mocked objects
+        /// </summary>
+        public static IReturnsResult<TIn> Returns<TIn, TOut>(this IReturns<TIn, TOut> returns, Mock<TOut> returnMock)
+            where TIn : class
+            where TOut : class
+        {
+            return returns.Returns(returnMock.Object);
+        }
+
+        /// <summary>
+        /// Simplify returning mocked objects
+        /// </summary>
+        public static IReturnsResult<TIn> Returns<TIn, TOut>(this IReturnsGetter<TIn, TOut> returns, Mock<TOut> returnMock)
+            where TIn : class
+            where TOut : class
+        {
+            return returns.Returns(returnMock.Object);
+        }
+
+        /// <summary>
+        /// Allow setup for default mocks created when resolving an enumerable
+        /// </summary>
+        /// <remarks>Unfortunately, AutoMock seems to create a default mock when creating an enumerable, even
+        /// if concrete types are registered with Autofac. This lets you configure them to not get in the way.</remarks>
+        public static void SetupDefaultMocksForEnumerable<T>(this AutoMock mock, Action<Mock<T>> action) where T : class
+        {
+            foreach (var item in mock.Container
+                .Resolve<IEnumerable<T>>()
+                .Where(x => x.GetType().Namespace.Contains("Castle"))
+                .Select(x => Mock.Get(x)))
+            {
+                action(item);
+            }
         }
     }
 }
