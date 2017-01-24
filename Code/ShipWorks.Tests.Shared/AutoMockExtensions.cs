@@ -6,6 +6,8 @@ using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using System;
+using System.Reactive.Concurrency;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -149,6 +151,26 @@ namespace ShipWorks.Tests.Shared
             Mock<Func<TInput, TOutput>> function = mock.MockRepository.Create<Func<TInput, TOutput>>();
             function.Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
             mock.Provide(function.Object);
+        }
+
+        /// <summary>
+        /// Creates a Mock<ISchedulerProvider> and provides it to the mock.  
+        /// All schedulers are set to use ImmediateScheduler.Instance
+        /// </summary>
+        public static Mock<ISchedulerProvider> WithMockImmediateScheduler(this AutoMock mock)
+        {
+            Mock<ISchedulerProvider> schedulerProvider = mock.Mock<ISchedulerProvider>();
+
+            schedulerProvider.Setup(sp => sp.CurrentThread).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.Default).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.TaskPool).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.Dispatcher).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.Immediate).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.NewThread).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.ThreadPool).Returns(ImmediateScheduler.Instance);
+            schedulerProvider.Setup(sp => sp.WindowsFormsEventLoop).Returns(ImmediateScheduler.Instance);
+
+            return schedulerProvider;
         }
     }
 }
