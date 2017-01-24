@@ -95,6 +95,11 @@ namespace ShipWorks.Stores.Content.Panels
                 .Do(_ => Program.MainForm.ForceHeartbeat())
                 .Subscribe(_ => ReloadContent());
 
+            messenger.OfType<OrderSelectionChangingMessage>()
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Do(_ => entityGrid.SelectRows(Enumerable.Empty<long>()))
+                .Subscribe();
+
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(x => ratesControl.Visible = !isRatingPanelVisible)
