@@ -162,6 +162,7 @@ Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwri
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9 Extended; Flags: onlyifdoesntexist uninsneveruninstall
 Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 
 #ifdef IncludeSymbols
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion

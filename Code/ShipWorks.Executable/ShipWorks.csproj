@@ -340,6 +340,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="SingleScanPanels.swe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="FontLicense.txt">
@@ -449,7 +452,7 @@
     <CopyAfterBuild>true</CopyAfterBuild>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="$(CopyAfterBuild) == 'true'">
-    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config; $(OutDir)*.ttf; $(OutDir)*.txt">
+    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config; $(OutDir)*.swe; $(OutDir)*.ttf; $(OutDir)*.txt">
       <Output TaskParameter="Include" ItemName="BuildOutputs" />
     </CreateItem>
     <Message Text="Copying output to application directory:" Importance="high" />
