@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
@@ -56,7 +57,11 @@ namespace ShipWorks.Shipping.Services
             // Wire up observable for auto printing
             filterCompletedMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => AllowAutoPrint())
-                .Select(x => new MessageContainer {ScanMessage = x ,FilterCountsUpdatedMessage = messenger.OfType<FilterCountsUpdatedMessage>().Take(1).First()})
+                .Select(x => new MessageContainer
+                {
+                    ScanMessage = x,
+                    FilterCountsUpdatedMessage = messenger.OfType<FilterCountsUpdatedMessage>().Take(1).First()
+                })
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(m => HandleAutoPrintShipment(m.FilterCountsUpdatedMessage.FilterNodeContent, m.ScanMessage.ScannedText).RunSynchronously())
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))
@@ -86,11 +91,39 @@ namespace ShipWorks.Shipping.Services
             // Get the order associated with the barcode search
             long autoPrintOrderId = FilterContentManager.FetchFirstOrderIdForFilterNodeContent(filterNodeContent.FilterNodeContentID);
 
-            // Load the order, creating shipments if necessary.
-            IEnumerable<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(autoPrintOrderId, scannedBarcode)).ToArray();
+            // Get shipments to process (assumes GetShipments will not return voided shipments)
+            List<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(autoPrintOrderId, scannedBarcode)).ToList();
 
-            // All good, process the shipment
-            messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
+            Debug.Assert(shipments != null);
+
+            ReprintAlreadyProcessedShipments(shipments);
+            ProcessUnprocessedShipments(shipments);
+        }
+
+        /// <summary>
+        /// Given a collection of shipments, process the unprocessed shipments
+        /// </summary>
+        private void ProcessUnprocessedShipments(List<ShipmentEntity> shipments)
+        {
+            List<ShipmentEntity> unprocessedShipments = shipments.Where(s => s.Processed == false).ToList();
+
+            if (unprocessedShipments.Any())
+            {
+                // All good, process the shipment
+                messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
+            }
+        }
+
+        /// <summary>
+        /// Given a collection of shipments, reprint the processed shipments
+        /// </summary>
+        private void ReprintAlreadyProcessedShipments(List<ShipmentEntity> shipments)
+        {
+            List<ShipmentEntity> shipmentsToReprint = shipments.Where(s => s.Processed).ToList();
+            if (shipmentsToReprint.Any())
+            {
+                messenger.Send(new ReprintLabelsMessage(this, shipmentsToReprint));
+            }
         }
 
         /// <summary>
