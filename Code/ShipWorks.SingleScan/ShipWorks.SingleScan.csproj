@@ -110,6 +110,9 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlg.xaml.cs">
+      <DependentUpon>AutoPrintConfirmationDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannerRegistrationDialog.cs">
       <SubType>Form</SubType>
@@ -168,6 +171,10 @@
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AutoPrintConfirmation\AutoPrintConfirmationDlg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ScannerRegistrationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
