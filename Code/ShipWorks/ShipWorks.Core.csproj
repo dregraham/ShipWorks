@@ -1141,7 +1141,6 @@
     <Compile Include="Messaging\Messenger.cs" />
     <Compile Include="Messaging\SchedulerProvider.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
-    <Compile Include="Shipping\Services\AutoPrintService.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />

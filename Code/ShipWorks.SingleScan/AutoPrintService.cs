@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
@@ -13,14 +12,14 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Users;
 
-namespace ShipWorks.Shipping.Services
+namespace ShipWorks.SingleScan
 {
     /// <summary>
     /// Handles auto printing
@@ -93,7 +92,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task HandleAutoPrintShipment(FilterCountsUpdatedMessage filterCountsUpdateMessage, string scannedBarcode)
+        private async Task HandleAutoPrintShipment(FilterCountsUpdatedMessage filterCountsUpdateMessage, string scannedBarcode)
         {
             // Only auto print if 1 order was found
             if (filterCountsUpdateMessage.FilterNodeContent?.Count != 1)
