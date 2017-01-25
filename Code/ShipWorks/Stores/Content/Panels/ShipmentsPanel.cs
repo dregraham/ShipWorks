@@ -49,6 +49,7 @@ namespace ShipWorks.Stores.Content.Panels
         private OrderEntity loadedOrder;
         private bool isThisPanelVisible;
         private bool isRatingPanelVisible;
+        private IEnumerable<long> selectedShipments;
 
         /// <summary>
         /// Constructor
@@ -105,7 +106,9 @@ namespace ShipWorks.Stores.Content.Panels
                 .Do(x => ratesControl.Visible = !isRatingPanelVisible)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
-                .Do(x => SelectShipmentRows(isThisPanelVisible ? x.ShipmentSelector : DefaultShipmentSelection))
+                .Do(x => SelectShipmentRows(isThisPanelVisible ?
+                    EntityGridRowSelector.SpecificEntities(selectedShipments) :
+                    DefaultShipmentSelection))
                 .Subscribe();
 
             // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
@@ -116,6 +119,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .Subscribe(_ =>
                 {
                     ratesControl.Visible = false;
+                    selectedShipments = entityGrid.Selection.Keys.ToReadOnly();
                 });
 
             HandleRatingPanelToggle(messenger);
@@ -130,6 +134,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
+                .Do(_ => SelectShipmentRows(DefaultShipmentSelection))
                 .Subscribe(_ => isThisPanelVisible = true);
 
             messenger.OfType<PanelHiddenMessage>()
