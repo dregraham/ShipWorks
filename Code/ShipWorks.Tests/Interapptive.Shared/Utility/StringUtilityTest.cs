@@ -97,5 +97,21 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
 
             Assert.Equal(originalString, result);
         }
+
+        [Fact]
+        public void RemoveSymbols_RemovesRegisteredTrademarkSymbol()
+        {
+            string testObject = "FedEx Priority Overnight®";
+
+            Assert.Equal("FedEx Priority Overnight", testObject.RemoveSymbols());
+        }
+
+        [Fact]
+        public void RemoveSymbols_DoesNotRemovePunctuation()
+        {
+            string testObject = ".()-";
+
+            Assert.Equal(testObject, testObject.RemoveSymbols());
+        }
     }
 }
