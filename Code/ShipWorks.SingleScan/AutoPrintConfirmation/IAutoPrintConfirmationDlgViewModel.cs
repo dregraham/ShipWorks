@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 
 namespace ShipWorks.SingleScan.AutoPrintConfirmation
 {
@@ -18,19 +19,20 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         void Load(string barcodeAcceptanceText, string title, string displayText);
 
         /// <summary>
-        /// Sets Dialog Result to true and closes the dialog
+        /// Gets or sets the method to close the window.
+        /// If user cancels, we will pass in false, else pass in true
         /// </summary>
-        void Accept();
+        Action<bool> Close { get; set; }
 
         /// <summary>
-        /// Sets DialogResult to false and closes the dialog
+        /// Gets the continue click command.
         /// </summary>
-        void Cancel();
+        ICommand ContinueClickCommand { get; }
 
         /// <summary>
-        /// Property changed handler
+        /// Gets the cancel click command.
         /// </summary>
-        event PropertyChangedEventHandler PropertyChanged;
+        ICommand CancelClickCommand { get; }
 
         /// <summary>
         /// Gets the title to display to the user

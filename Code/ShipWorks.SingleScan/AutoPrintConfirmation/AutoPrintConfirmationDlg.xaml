@@ -4,11 +4,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:ShipWorks.SingleScan.AutoPrintConfirmation"
+        d:DataContext="{d:DesignInstance local:AutoPrintConfirmationDlgViewModel}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         WindowStyle="ToolWindow"
-        Title="Autoprint Confirmation"
-        FontFamily="Tahoma" 
+        Title="{Binding Title}"
+        FontFamily="Tahoma"
         FontSize="8.25pt"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner">
@@ -16,24 +17,27 @@
         <StackPanel
             Orientation="Vertical"
             Margin="10">
+            
             <TextBlock
                 TextWrapping="Wrap"
                 Margin="0 10 0 10"
-                Text="Message Goes Here"/>
+                Text="{Binding DisplayText}" />
 
-            <StackPanel 
-                Orientation="Horizontal" 
+            <StackPanel
+                Orientation="Horizontal"
                 HorizontalAlignment="Right">
-                <Button 
-                    Width="75" 
-                    Height="25" 
+                <Button
+                    Width="75"
+                    Height="25"
                     Margin="0 0 8 0"
-                    Content="Continue" />
-                <Button 
-                    Width="75" 
-                    Height="25" 
+                    Content="Continue"
+                    Click="{Binding ContinueClickCommand}" />
+                <Button
+                    Width="75"
+                    Height="25"
                     IsDefault="True"
-                    Content="Cancel" />
+                    Content="Cancel"
+                    Click="{Binding CancelClickCommand}" />
             </StackPanel>
         </StackPanel>
     </Grid>
