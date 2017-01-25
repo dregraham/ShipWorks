@@ -31,5 +31,15 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// Property changed handler
         /// </summary>
         event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Gets the title to display to the user
+        /// </summary>
+        string Title { get; }
+
+        /// <summary>
+        /// Gets the text to display to the user.
+        /// </summary>
+        string DisplayText { get; }
     }
 }
