@@ -17,37 +17,33 @@ using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
-using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
-    /// Handles auto printing 
+    /// Handles auto printing
     /// </summary>
     public class AutoPrintService : IInitializeForCurrentUISession
     {
         private readonly ILog log;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly Func<ISecurityContext> securityContextRetriever;
-        private readonly IOrderLoader orderLoader;
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
+        private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AutoPrintService(IMessenger messenger,
             ISchedulerProvider schedulerProvider,
-            Func<ISecurityContext> securityContextRetriever,
-            IOrderLoader orderLoader,
-            IUserSession userSession)
+            IUserSession userSession,
+            ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
-            this.securityContextRetriever = securityContextRetriever;
-            this.orderLoader = orderLoader;
             this.userSession = userSession;
+            this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
 
             log = LogManager.GetLogger(typeof(AutoPrintService));
         }
@@ -57,12 +53,12 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            // Wire up observable for auto printing 
+            // Wire up observable for auto printing
             filterCompletedMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => AllowAutoPrint())
-                .SelectMany(messenger.OfType<FilterCountsUpdatedMessage>().Take(1))
+                .Select(x => new MessageContainer {ScanMessage = x ,FilterCountsUpdatedMessage = messenger.OfType<FilterCountsUpdatedMessage>().Take(1).First()})
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(m => HandleAutoPrintShipment(m.FilterNodeContent).RunSynchronously())
+                .Do(m => HandleAutoPrintShipment(m.FilterCountsUpdatedMessage.FilterNodeContent, m.ScanMessage.ScannedText).RunSynchronously())
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))
                 .Gate(messenger.OfType<ShipmentsProcessedMessage>())
                 .Subscribe(x => log.Debug("ShipmentsProcessedMessage received."));
@@ -73,25 +69,13 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private bool AllowAutoPrint()
         {
-            bool allowed = userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
-
-            return allowed;
-        }
-
-        /// <summary>
-        /// Gets whether a shipment should be auto printed for an order
-        /// </summary>
-        private bool ShouldAutoPrintShipment(IEnumerable<ShipmentEntity> shipments, long orderId)
-        {
-            return shipments.IsCountEqualTo(1) && 
-                   shipments.All(s => !s.Processed) &&
-                   securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId);
+            return userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
         }
 
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task HandleAutoPrintShipment(IFilterNodeContentEntity filterNodeContent)
+        public async Task HandleAutoPrintShipment(IFilterNodeContentEntity filterNodeContent, string scannedBarcode)
         {
             // Only auto print if 1 order was found
             if (filterNodeContent?.Count != 1)
@@ -103,14 +87,7 @@ namespace ShipWorks.Shipping.Services
             long autoPrintOrderId = FilterContentManager.FetchFirstOrderIdForFilterNodeContent(filterNodeContent.FilterNodeContentID);
 
             // Load the order, creating shipments if necessary.
-            ShipmentsLoadedEventArgs shipmentArgs = await orderLoader.LoadAsync(new[] { autoPrintOrderId }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
-            IEnumerable<ShipmentEntity> shipments = shipmentArgs.Shipments;
-
-            // See if we should allow auto print for this order
-            if (!ShouldAutoPrintShipment(shipments, autoPrintOrderId))
-            {
-                throw new ShippingException("Auto printing is not allowed for the scanned order.");
-            }
+            IEnumerable<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(autoPrintOrderId, scannedBarcode)).ToArray();
 
             // All good, process the shipment
             messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
@@ -130,6 +107,12 @@ namespace ShipWorks.Shipping.Services
         public void Dispose()
         {
             EndSession();
+        }
+
+        private struct MessageContainer
+        {
+            public ScanMessage ScanMessage;
+            public FilterCountsUpdatedMessage FilterCountsUpdatedMessage;
         }
     }
 }

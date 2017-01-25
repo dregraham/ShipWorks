@@ -1239,7 +1239,9 @@
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
+    <Compile Include="Shipping\Services\IAutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
+    <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />

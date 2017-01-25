@@ -137,6 +137,7 @@
     <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipeline.cs" />
     <Compile Include="ScannerServicePipelines\IScannerServicePipeline.cs" />
     <Compile Include="SingleScanOrderShortcut.cs" />
+    <Compile Include="SingleScanShipmentConfirmationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
