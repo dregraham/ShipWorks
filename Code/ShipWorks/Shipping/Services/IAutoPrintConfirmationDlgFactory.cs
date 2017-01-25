@@ -11,8 +11,8 @@ namespace ShipWorks.Shipping.Services
         /// Create an AutoPrintConfirmationDlg with the given display text
         /// </summary>
         /// <param name="scanMessageText">The scan message that the dialog is listening for to confirm and close</param>
-        /// <param name="displayText">The text that is displayed to the user</param>
         /// <param name="title">The title of the dialog</param>
-        IDialog Create(string scanMessageText, string displayText, string title);
+        /// <param name="displayText">The text that is displayed to the user</param>
+        IDialog Create(string scanMessageText, string title, string displayText);
     }
 }
