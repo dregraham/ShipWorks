@@ -19,7 +19,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Stores.Content.Panels.Selectors;
 
 namespace ShipWorks.Shipping.Services.Dialogs
 {
@@ -75,7 +74,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
                     .IntervalCountThrottle(TimeSpan.FromSeconds(2), schedulerProvider)
                     .SelectMany(x => Observable.FromAsync(() => LoadOrdersForShippingDialog(x)))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                    .Subscribe(x => OpenShippingDialog(x, true)),
+                    .Subscribe(x => OpenShippingDialog(x)),
                 messenger.OfType<ShipAgainMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
                     .Where(x => x != null)
@@ -136,16 +135,10 @@ namespace ShipWorks.Shipping.Services.Dialogs
 
             return new OpenShippingDialogMessage(this, results.Shipments, message.InitialDisplay);
         }
-
         /// <summary>
         /// Open the shipping dialog
         /// </summary>
-        private void OpenShippingDialog(OpenShippingDialogMessage message) => OpenShippingDialog(message, false);
-
-        /// <summary>
-        /// Open the shipping dialog
-        /// </summary>
-        private void OpenShippingDialog(OpenShippingDialogMessage message, bool selectAllShipments)
+        private void OpenShippingDialog(OpenShippingDialogMessage message)
         {
             messenger.Send(new ShippingDialogOpeningMessage(this));
 
@@ -162,11 +155,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
             // it could be we put out a server message related to it.
             DashboardManager.DownloadLatestServerMessages();
 
-            messenger.Send(new OrderSelectionChangingMessage(this,
-                message.Shipments.Select(x => x.OrderID).Distinct(),
-                selectAllShipments ?
-                    EntityGridRowSelector.All :
-                    EntityGridRowSelector.SpecificEntities(message.Shipments.Select(x => x.ShipmentID))));
+            messenger.Send(new OrderSelectionChangingMessage(this, message.Shipments.Select(x => x.OrderID).Distinct()));
         }
 
         /// <summary>

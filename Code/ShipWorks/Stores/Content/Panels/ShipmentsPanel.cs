@@ -109,6 +109,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .Do(x => SelectShipmentRows(isThisPanelVisible ?
                     EntityGridRowSelector.SpecificEntities(selectedShipments) :
                     DefaultShipmentSelection))
+                .Do(_ => selectedShipments = Enumerable.Empty<long>())
                 .Subscribe();
 
             // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
