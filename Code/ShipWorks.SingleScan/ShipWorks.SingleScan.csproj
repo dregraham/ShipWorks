@@ -113,6 +113,7 @@
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlg.xaml.cs">
       <DependentUpon>AutoPrintConfirmationDlg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

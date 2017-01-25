@@ -54,14 +54,14 @@ namespace ShipWorks.SingleScan
 
             bool shouldPrintAndProcess = ShouldPrintAndProcessShipments(shipments, scannedBarcode);
 
-            return shouldPrintAndProcess ? shipments.Where(s => !s.Voided) : new ShipmentEntity[0];
+            return shouldPrintAndProcess ? shipments : new ShipmentEntity[0];
         }
 
         /// <summary>
         /// Check to see if we should print and process the given shipments
         /// </summary>
         /// <param name="shipments">the list of shipments</param>
-        /// <param name="scannedBarcode">the barcode that will accept and dismess the dialog</param>
+        /// <param name="scannedBarcode">the barcode that will accept and dismiss the dialog</param>
         /// <returns></returns>
         private bool ShouldPrintAndProcessShipments(ShipmentEntity[] shipments, string scannedBarcode)
         {
