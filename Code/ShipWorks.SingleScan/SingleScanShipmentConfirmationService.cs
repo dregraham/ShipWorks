@@ -7,7 +7,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Users.Security;
 
@@ -23,10 +22,9 @@ namespace ShipWorks.SingleScan
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
         private readonly IShipmentFactory shipmentFactory;
 
-        private const string scenarioOneMessage = "The scanned Order # has already been processed. To create and print a new label scan the barcode again or click Continue";
-        private const string scenarioTwoMessage = "The scanned Order # has been partially processed. To create a label for each unprocessed shipment in the order, scan the barcode again or click Continue.";
-        private const string scenarioThreeMessage = "The scanned Order # has multiple unprocessed shipments.  To print labels for each shipment in the order, scan the barcode again or click Continue." ;
-
+        private const string AlreadyProcessedMessage = "The scanned Order # has already been processed. To create and print a new label scan the barcode again or click Continue";
+        private const string PartiallyProcessedMessage = "The scanned Order # has been partially processed. To create a label for each unprocessed shipment in the order, scan the barcode again or click Continue.";
+        private const string MultipleUnprocessedMessage = "The scanned Order # has multiple unprocessed shipments.  To print labels for each shipment in the order, scan the barcode again or click Continue." ;
 
         /// <summary>
         /// Constructor
@@ -99,15 +97,15 @@ namespace ShipWorks.SingleScan
         {
             if (shipments.All(s => s.Processed))
             {
-                return new KeyValuePair<string, string>("Order Already Processed", scenarioOneMessage);
+                return new KeyValuePair<string, string>("Order Already Processed", AlreadyProcessedMessage);
             }
 
             if (shipments.Any(s => !s.Processed) && shipments.Any(s => s.Processed))
             {
-                return new KeyValuePair<string, string>("Order Partially Processed", scenarioTwoMessage);
+                return new KeyValuePair<string, string>("Order Partially Processed", PartiallyProcessedMessage);
             }
 
-            return new KeyValuePair<string, string>("Multiple Unprocessed Shipments", scenarioThreeMessage);
+            return new KeyValuePair<string, string>("Multiple Unprocessed Shipments", MultipleUnprocessedMessage);
         }
     }
 }
