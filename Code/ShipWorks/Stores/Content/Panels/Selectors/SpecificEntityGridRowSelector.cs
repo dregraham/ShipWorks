@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Grid.Paging;
 
@@ -23,6 +24,14 @@ namespace ShipWorks.Stores.Content.Panels.Selectors
         /// <summary>
         /// Select the specific entities in the grid
         /// </summary>
-        public void Select(PagedEntityGrid entityGrid) => entityGrid.SelectRows(keys);
+        public void Select(PagedEntityGrid entityGrid)
+        {
+            entityGrid.SelectRows(keys);
+
+            if (entityGrid.EntityGateway.GetOrderedKeys().Intersect(keys).None())
+            {
+                EntityGridRowSelector.First.Select(entityGrid);
+            }
+        }
     }
 }
