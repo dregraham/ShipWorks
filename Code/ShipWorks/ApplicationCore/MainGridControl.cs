@@ -376,6 +376,7 @@ namespace ShipWorks.ApplicationCore
                         GridRow onlyGridRow = rows?.FirstOrDefault();
                         if (onlyGridRow != null)
                         {
+                            log.Debug($"AutoSelectSingleRow selecting row.  isBarcodeSearch: {isBarcodeSearch}.");
                             onlyGridRow.Selected = true;
                         }
                     }
@@ -383,13 +384,14 @@ namespace ShipWorks.ApplicationCore
                     // Set back to not barcode search
                     if (isBarcodeSearch)
                     {
+                        log.Debug("AutoSelectSingleRow setting isBarcodeSearch to false.");
                         isBarcodeSearch = false;
                     }
                 }
             }
             catch (NullReferenceException ex)
             {
-                log.Error("Exception thrown when attempting to auto-select", ex);
+                log.Error("AutoSelectSingleRow: Exception thrown when attempting to auto-select", ex);
             }
         }
 
