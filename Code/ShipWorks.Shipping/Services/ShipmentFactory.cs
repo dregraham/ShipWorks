@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Create a shipment for the given order
         /// </summary>
-        public void Create(OrderEntity order) => ShippingManager.CreateShipment(order);
+        public ShipmentEntity Create(OrderEntity order) => ShippingManager.CreateShipment(order);
 
         /// <summary>
         /// Create a shipment for a given order, if necessary

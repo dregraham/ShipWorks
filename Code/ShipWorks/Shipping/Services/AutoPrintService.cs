@@ -57,13 +57,9 @@ namespace ShipWorks.Shipping.Services
             // Wire up observable for auto printing
             filterCompletedMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => AllowAutoPrint())
-                .Select(x => new MessageContainer
-                {
-                    ScanMessage = x,
-                    FilterCountsUpdatedMessage = messenger.OfType<FilterCountsUpdatedMessage>().Take(1).First()
-                })
+                .SelectMany(m => messenger.OfType<FilterCountsUpdatedMessage>().Take(1).Select(f => new {FilterCountsUpdateMessage = f, ScanMessage = m}))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(m => HandleAutoPrintShipment(m.FilterCountsUpdatedMessage.FilterNodeContent, m.ScanMessage.ScannedText).RunSynchronously())
+                .Do(m => HandleAutoPrintShipment(m.FilterCountsUpdateMessage.FilterNodeContent, m.ScanMessage.ScannedText).RunSynchronously())
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))
                 .Gate(messenger.OfType<ShipmentsProcessedMessage>())
                 .Subscribe(x => log.Debug("ShipmentsProcessedMessage received."));
@@ -127,12 +123,6 @@ namespace ShipWorks.Shipping.Services
         public void Dispose()
         {
             EndSession();
-        }
-
-        private struct MessageContainer
-        {
-            public ScanMessage ScanMessage;
-            public FilterCountsUpdatedMessage FilterCountsUpdatedMessage;
         }
     }
 }

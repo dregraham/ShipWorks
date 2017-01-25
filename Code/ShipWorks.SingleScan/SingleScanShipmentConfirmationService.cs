@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Users.Security;
 
@@ -19,23 +21,22 @@ namespace ShipWorks.SingleScan
         private readonly IOrderLoader orderLoader;
         private readonly Func<ISecurityContext> securityContextRetriever;
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
+        private readonly IShipmentFactory shipmentFactory;
 
-        private const string scenarioOneMessage =
-            "The scanned Order # has already been processed. To create and print a new label and reprint all existing labels for the selected order, scan the barcode again or click Continue";
-        private const string scenarioTwo =
-                    "The scanned Order # has been partially processed. To reprint existing labels, and create new labels for all unprocessed shipments in the order, scan the barcode again or click Continue.";
-        private const string scenarioThree =
-                    "The scanned Order # has multiple unprocessed shipments.  To print labels for each shipment in the order, scan the barcode again or click Continue." ;
+        private const string scenarioOneMessage = "The scanned Order # has already been processed. To create and print a new label scan the barcode again or click Continue";
+        private const string scenarioTwoMessage = "The scanned Order # has been partially processed. To create a label for each unprocessed shipment in the order, scan the barcode again or click Continue.";
+        private const string scenarioThreeMessage = "The scanned Order # has multiple unprocessed shipments.  To print labels for each shipment in the order, scan the barcode again or click Continue." ;
 
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SingleScanShipmentConfirmationService(IOrderLoader orderLoader, Func<ISecurityContext> securityContextRetriever, IAutoPrintConfirmationDlgFactory dlgFactory)
+        public SingleScanShipmentConfirmationService(IOrderLoader orderLoader, Func<ISecurityContext> securityContextRetriever, IAutoPrintConfirmationDlgFactory dlgFactory, IShipmentFactory shipmentFactory)
         {
             this.orderLoader = orderLoader;
             this.securityContextRetriever = securityContextRetriever;
             this.dlgFactory = dlgFactory;
+            this.shipmentFactory = shipmentFactory;
         }
 
         /// <summary>
@@ -48,13 +49,25 @@ namespace ShipWorks.SingleScan
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
 
+            // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
             ShipmentEntity[] shipments =
                 (await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
                 .Shipments.Where(s => !s.Voided).ToArray();
 
-            bool shouldPrintAndProcess = ShouldPrintAndProcessShipments(shipments, scannedBarcode);
+            // If all of the shipments are processed and the user confirms they want to process again add a shipment
+            if (shipments.All(s => s.Processed) && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+            {
+                return new[] {shipmentFactory.Create(shipments.First().Order)};
+            }
 
-            return shouldPrintAndProcess ? shipments : new ShipmentEntity[0];
+            // If some of the shipments are not process and the user confirms return only the unprocessed shipments
+            if (shipments.Any(s => !s.Processed) && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+            {
+                return shipments.Where(s => !s.Processed);
+            }
+
+            // We should only have a single unprocessed shipment at this point return it
+            return shipments;
         }
 
         /// <summary>
@@ -65,6 +78,12 @@ namespace ShipWorks.SingleScan
         /// <returns></returns>
         private bool ShouldPrintAndProcessShipments(ShipmentEntity[] shipments, string scannedBarcode)
         {
+            // If we have a single unprocessed shipment always return true
+            if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
+            {
+                return true;
+            }
+
             KeyValuePair<string, string> messaging = GetMessaging(shipments);
             IDialog dialog = dlgFactory.Create(scannedBarcode, messaging.Key, messaging.Value);
 
@@ -83,12 +102,12 @@ namespace ShipWorks.SingleScan
                 return new KeyValuePair<string, string>("Order Already Processed", scenarioOneMessage);
             }
 
-            if (shipments.All(s => !s.Processed))
+            if (shipments.Any(s => !s.Processed) && shipments.Any(s => s.Processed))
             {
-                return new KeyValuePair<string, string>("Multiple Unprocessed Shipments", scenarioThree);
+                return new KeyValuePair<string, string>("Order Partially Processed", scenarioTwoMessage);
             }
 
-            return new KeyValuePair<string, string>("Order Partially Processed", scenarioTwo);
+            return new KeyValuePair<string, string>("Multiple Unprocessed Shipments", scenarioThreeMessage);
         }
     }
 }
