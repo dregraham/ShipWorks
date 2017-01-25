@@ -14,9 +14,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Gets the Shipments that SingleScan should auto print/process
         /// </summary>
-        /// <param name="OrderId">the OrderID</param>
+        /// <param name="orderId">the OrderID</param>
         /// <param name="scannedBarcode">the barcode that was scanned, used to dismiss any dialogs that we need to show</param>
         /// <returns></returns>
-        Task<IEnumerable<ShipmentEntity>> GetShipments(long OrderId, string scannedBarcode);
+        Task<IEnumerable<ShipmentEntity>> GetShipments(long orderId, string scannedBarcode);
     }
 }

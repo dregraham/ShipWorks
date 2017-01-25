@@ -42,7 +42,8 @@ namespace ShipWorks.Shipping.Services
         public AutoPrintService(IMessenger messenger,
             ISchedulerProvider schedulerProvider,
             IUserSession userSession,
-            ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService)
+            ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
+            Func<Type, ILog> logFactory)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.Services
             scanMessages = messenger.OfType<ScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
 
-            log = LogManager.GetLogger(typeof(AutoPrintService));
+            log = logFactory(typeof(AutoPrintService));
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.Services
                 .Do(x => scanMessagesConnection.Dispose())
                 .SelectMany(m => messenger.OfType<FilterCountsUpdatedMessage>().Take(1).Select(f => new {FilterCountsUpdateMessage = f, ScanMessage = m}))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .SelectMany(m => Observable.FromAsync(() => HandleAutoPrintShipment(m.FilterCountsUpdateMessage.FilterNodeContent, m.ScanMessage.ScannedText)))
+                .SelectMany(m => Observable.FromAsync(() => HandleAutoPrintShipment(m.FilterCountsUpdateMessage, m.ScanMessage.ScannedText)))
                  .CatchAndContinue((Exception ex) =>
                  {
                      scanMessagesConnection = scanMessages.Connect();
@@ -92,19 +93,18 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task HandleAutoPrintShipment(IFilterNodeContentEntity filterNodeContent, string scannedBarcode)
+        public async Task HandleAutoPrintShipment(FilterCountsUpdatedMessage filterCountsUpdateMessage, string scannedBarcode)
         {
             // Only auto print if 1 order was found
-            if (filterNodeContent?.Count != 1)
+            if (filterCountsUpdateMessage.FilterNodeContent?.Count != 1)
             {
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
 
-            // Get the order associated with the barcode search
-            long autoPrintOrderId = FilterContentManager.FetchFirstOrderIdForFilterNodeContent(filterNodeContent.FilterNodeContentID);
+            long orderId = filterCountsUpdateMessage.OrderIds.First();
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
-            List<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(autoPrintOrderId, scannedBarcode)).ToList();
+            List<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode)).ToList();
 
             Debug.Assert(shipments != null);
 

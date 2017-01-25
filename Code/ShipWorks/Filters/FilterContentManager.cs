@@ -650,7 +650,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        public static void SendFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
+        public static void SendOrderFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
         {
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
@@ -660,17 +660,17 @@ namespace ShipWorks.Filters
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(fnc);
                 }
-
-                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc));
+                List<long> orderIds = FetchFirstOrderIdForFilterNodeContent(fnc.FilterNodeContentID);
+                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc, orderIds));
             }
         }
 
         /// <summary>
         /// Finds the first order for the specified filter node content
         /// </summary>
-        public static long FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
+        public static List<long> FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
         {
-            long orderID = -1;
+            List<long> orderIds = new List<long>();
 
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
@@ -689,11 +689,17 @@ namespace ShipWorks.Filters
 
                     cmd.Parameters.Add(filterNodeContentIdParam);
 
-                    orderID = (long) cmd.ExecuteScalar();
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            orderIds.Add(reader.GetInt64(0));
+                        }
+                    }
                 }
             }
 
-            return orderID;
+            return orderIds;
         }
     }
 }
