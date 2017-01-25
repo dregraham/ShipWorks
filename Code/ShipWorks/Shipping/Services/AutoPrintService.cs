@@ -96,7 +96,6 @@ namespace ShipWorks.Shipping.Services
 
             Debug.Assert(shipments != null);
 
-            ReprintAlreadyProcessedShipments(shipments);
             ProcessUnprocessedShipments(shipments);
         }
 
@@ -105,24 +104,12 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void ProcessUnprocessedShipments(List<ShipmentEntity> shipments)
         {
-            List<ShipmentEntity> unprocessedShipments = shipments.Where(s => s.Processed == false).ToList();
+            Debug.Assert(shipments.TrueForAll(s => s.Processed == false));
 
-            if (unprocessedShipments.Any())
+            if (shipments.Any())
             {
                 // All good, process the shipment
                 messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
-            }
-        }
-
-        /// <summary>
-        /// Given a collection of shipments, reprint the processed shipments
-        /// </summary>
-        private void ReprintAlreadyProcessedShipments(List<ShipmentEntity> shipments)
-        {
-            List<ShipmentEntity> shipmentsToReprint = shipments.Where(s => s.Processed).ToList();
-            if (shipmentsToReprint.Any())
-            {
-                messenger.Send(new ReprintLabelsMessage(this, shipmentsToReprint));
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Services;
 
@@ -8,6 +9,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     /// Creates a AutoPrintConfirmationDlg
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.Services.IAutoPrintConfirmationDlgFactory" />
+    [Component]
     public class AutoPrintConfirmationDlgFactory : IAutoPrintConfirmationDlgFactory
     {
         private readonly IMessenger messenger;
