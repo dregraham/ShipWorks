@@ -335,7 +335,7 @@ namespace ShipWorks.Filters.Search
                     if (!isScheduled)
                     {
                         // If we originated from a scan, ask for the search completed msg to be sent 
-                        if (definition.FilterDefinitionSource == FilterDefinitionSourceType.Scan)
+                        if (definition?.FilterDefinitionSource == FilterDefinitionSourceType.Scan)
                         {
                             long filterNodeContentID = (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID) ?
                                 nodeContent.FilterNodeContentID :
