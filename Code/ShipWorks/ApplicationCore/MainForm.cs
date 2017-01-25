@@ -334,6 +334,10 @@ namespace ShipWorks
         {
             base.OnFormClosing(e);
 
+            // This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
+            // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
+            Focus();
+
             // Make sure we are not in a failure state
             if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
             {
