@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.UPS
                 shipment.Ups = new UpsShipmentEntity();
             }
 
-            UpsOltShipmentType shipmentType = new UpsOltShipmentType();
+            UpsOltShipmentType shipmentType = (UpsOltShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
             shipmentType.ConfigureNewShipment(shipment);
 

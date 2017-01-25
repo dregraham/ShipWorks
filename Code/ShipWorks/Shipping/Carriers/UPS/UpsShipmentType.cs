@@ -42,6 +42,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected UpsShipmentType()
         {
             // Use the "live" versions of the repository by default
@@ -836,8 +840,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-
-
         /// <summary>
         /// Provide UPS tracking results for the given shipment
         /// </summary>
@@ -933,7 +935,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (UpsAccountManager.Accounts.Any())
             {
-                return new UpsBestRateBroker();
+                return new UpsBestRateBroker(this);
             }
 
             return new NullShippingBroker();

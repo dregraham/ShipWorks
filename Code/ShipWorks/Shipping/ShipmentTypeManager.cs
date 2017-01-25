@@ -62,9 +62,6 @@ namespace ShipWorks.Shipping
         {
             switch (typeCode)
             {
-                case ShipmentTypeCode.UpsOnLineTools:
-                    return new UpsOltShipmentType();
-
                 case ShipmentTypeCode.Endicia:
                     return new EndiciaShipmentType();
 

@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted
         /// <summary>
         /// Create an Express1 rate discounted control
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return new UspsRateDiscountedFootnote(originalRates, discountedRates);
         }

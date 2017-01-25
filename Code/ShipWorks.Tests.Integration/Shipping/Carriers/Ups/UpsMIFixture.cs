@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.UPS
                 shipment.Ups = new UpsShipmentEntity();
             }
 
-            WorldShipShipmentType shipmentType = new WorldShipShipmentType();
+            WorldShipShipmentType shipmentType = (WorldShipShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip);
 
             // remove the default package that gets created in the ConfigureNewShipment method
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.UPS
             // Default to the Origin country code
             shipment.Ups.UpsAccountID = GetAccountId(AccountID);
 
-            WorldShipShipmentType upsWorldShipShipmentType = new WorldShipShipmentType();
+            WorldShipShipmentType upsWorldShipShipmentType = (WorldShipShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsWorldShip);
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {

@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Creates a footnote control.
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters)
         {
             return ratingExceptionType == RatingExceptionType.InvalidPackageDimensions ?
                (RateFootnoteControl) new InvalidPackageDimensionsRateFootnoteControl(errorMessage) :

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
@@ -12,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
     public class UpsOpenAccountResponseDTO
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpsOpenAccountResponse"/> class.
+        /// Initializes a new instance of the <see cref="UpsOpenAccountResponseDTO"/> class.
         /// </summary>
         public UpsOpenAccountResponseDTO(string shipperNumber, string notifyTime)
         {
@@ -23,11 +20,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
             AccountNumber = shipperNumber;
             DateTime parsedNotifyTime;
-            NotifyTime = null;
+            UpsSmartPickupNotifyTime = null;
 
             if (DateTime.TryParseExact(notifyTime,"hhmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out parsedNotifyTime))
             {
-                NotifyTime = parsedNotifyTime;
+                UpsSmartPickupNotifyTime = parsedNotifyTime;
             }
         }
 
@@ -37,8 +34,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         public string AccountNumber { get; set; }
 
         /// <summary>
-        /// SmartPost notify time. If not SmartPost, this will be null.
+        /// Smart Pickup notify time. If customer doesn't have Smart Pickup, this will be null.
         /// </summary>
-        public DateTime? NotifyTime { get; set; }
+        public DateTime? UpsSmartPickupNotifyTime { get; set; }
     }
 }
