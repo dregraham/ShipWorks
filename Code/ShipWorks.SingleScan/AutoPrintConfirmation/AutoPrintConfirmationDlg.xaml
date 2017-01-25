@@ -17,7 +17,7 @@
         <StackPanel
             Orientation="Vertical"
             Margin="10">
-            
+
             <TextBlock
                 TextWrapping="Wrap"
                 Margin="0 10 0 10"
@@ -31,13 +31,13 @@
                     Height="25"
                     Margin="0 0 8 0"
                     Content="Continue"
-                    Click="{Binding ContinueClickCommand}" />
+                    Command="{Binding ContinueClickCommand}" />
                 <Button
                     Width="75"
                     Height="25"
                     IsDefault="True"
                     Content="Cancel"
-                    Click="{Binding CancelClickCommand}" />
+                    Command="{Binding CancelClickCommand}" />
             </StackPanel>
         </StackPanel>
     </Grid>

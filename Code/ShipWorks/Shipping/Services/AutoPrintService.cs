@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -32,6 +33,8 @@ namespace ShipWorks.Shipping.Services
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
         private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
+        private IConnectableObservable<ScanMessage> scanMessages;
+        private IDisposable scanMessagesConnection;
 
         /// <summary>
         /// Constructor
@@ -46,6 +49,9 @@ namespace ShipWorks.Shipping.Services
             this.userSession = userSession;
             this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
 
+            scanMessages = messenger.OfType<ScanMessage>().Publish();
+            scanMessagesConnection = scanMessages.Connect();
+
             log = LogManager.GetLogger(typeof(AutoPrintService));
         }
 
@@ -57,12 +63,22 @@ namespace ShipWorks.Shipping.Services
             // Wire up observable for auto printing
             filterCompletedMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => AllowAutoPrint())
+                .Do(x => scanMessagesConnection.Dispose())
                 .SelectMany(m => messenger.OfType<FilterCountsUpdatedMessage>().Take(1).Select(f => new {FilterCountsUpdateMessage = f, ScanMessage = m}))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(m => HandleAutoPrintShipment(m.FilterCountsUpdateMessage.FilterNodeContent, m.ScanMessage.ScannedText).RunSynchronously())
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))
+                .SelectMany(m => Observable.FromAsync(() => HandleAutoPrintShipment(m.FilterCountsUpdateMessage.FilterNodeContent, m.ScanMessage.ScannedText)))
+                 .CatchAndContinue((Exception ex) =>
+                 {
+                     scanMessagesConnection = scanMessages.Connect();
+                     log.Error("Error occurred while attempting to auto print.", ex);
+                 })
                 .Gate(messenger.OfType<ShipmentsProcessedMessage>())
-                .Subscribe(x => log.Debug("ShipmentsProcessedMessage received."));
+                .Do(x =>
+                {
+                    scanMessagesConnection = scanMessages.Connect();
+                    log.Debug("ShipmentsProcessedMessage received.");
+                })
+                .Subscribe();
         }
 
         /// <summary>

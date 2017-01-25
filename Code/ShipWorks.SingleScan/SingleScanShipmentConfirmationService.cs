@@ -52,20 +52,27 @@ namespace ShipWorks.SingleScan
                 (await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
                 .Shipments.Where(s => !s.Voided).ToArray();
 
-            // If all of the shipments are processed and the user confirms they want to process again add a shipment
-            if (shipments.All(s => s.Processed) && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+            if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
             {
-                return new[] {shipmentFactory.Create(shipments.First().Order)};
+                return shipments;
             }
 
-            // If some of the shipments are not process and the user confirms return only the unprocessed shipments
-            if (shipments.Any(s => !s.Processed) && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+            if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
             {
-                return shipments.Where(s => !s.Processed);
+                // If all of the shipments are processed and the user confirms they want to process again add a shipment
+                if (shipments.All(s => s.Processed))
+                {
+                    return new[] { shipmentFactory.Create(shipments.First().Order) };
+                }
+
+                // If some of the shipments are not process and the user confirms return only the unprocessed shipments
+                if (shipments.Any(s => !s.Processed))
+                {
+                    return shipments.Where(s => !s.Processed);
+                }
             }
 
-            // We should only have a single unprocessed shipment at this point return it
-            return shipments;
+            return new ShipmentEntity[0];
         }
 
         /// <summary>

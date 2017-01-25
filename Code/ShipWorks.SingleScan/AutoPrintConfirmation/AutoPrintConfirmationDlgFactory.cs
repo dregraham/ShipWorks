@@ -32,7 +32,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public IDialog Create(string scanMessageText, string title, string displayText)
         {
             AutoPrintConfirmationDlgViewModel viewModel = new AutoPrintConfirmationDlgViewModel(messenger);
-            AutoPrintConfirmationDlg view = new AutoPrintConfirmationDlg();
+            AutoPrintConfirmationDlg view = new AutoPrintConfirmationDlg {DataContext = viewModel};
 
             viewModel.Close = result =>
             {
