@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <DataTemplate x:Key="UpsPromoFootnoteViewModelTemplate">
+        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <Image Source="/Shipworks.Core;component/Resources/check2.png" Style="{StaticResource Image.Icon}" />
+            <TextBlock Margin="6,1,0,0">
+                You qualify for a rate discount.
+                <Hyperlink Command="{Binding ActivatePromo}">More info...</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

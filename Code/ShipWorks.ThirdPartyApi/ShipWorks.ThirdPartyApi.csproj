@@ -216,6 +216,9 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\BillingAddressType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\IAddressType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\PickupAddressType.cs" />
     <Compile Include="Web References\ApplicationCore.Licensing.Activation.WebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -277,6 +280,11 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -827,6 +835,29 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\UPSSecurity.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\common.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\Error1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscount.wsdl" />
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscount.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscountAgreementResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\PromoDiscountResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.UPS.WebServices.Promo\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Admin\AdminService.wsdl" />
@@ -2073,6 +2104,28 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_Ship_ShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\Work\Shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.UPS.WebServices.Promo\</RelPath>
+      <UpdateFromURL>C:\Work\Shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_ThirdPartyApi_Shipping_Carriers_UPS_WebServices_Promo_PromoDiscountService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\</RelPath>
+      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_OnLineTools_WebServices_RegisterMgrAcctService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="C:\work\ShipWorks\Code\ShipWorks\Shipping\Carriers\UPS\OnLineTools\Wsdl\RegistrationWebService.wsdl">
       <UrlBehavior>Static</UrlBehavior>

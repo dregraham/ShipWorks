@@ -13,15 +13,10 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices {
-    using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
-    using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
+{
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.1055.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -35,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices {
         
         /// <remarks/>
         public Activation() {
-            this.Url = global::ShipWorks.Properties.Settings.Default.ShipWorks_ThirdPartyApi_ApplicationCore_Licensing_Activation_WebServices_Activation;
+            this.Url = "http://shpwrk003.qasc.stamps.com/ShipWorksNet/ActivationV1.svc";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;

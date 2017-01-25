@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using ShipWorks.Shipping.Carriers.Amazon;
+﻿using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using System.Diagnostics;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// <summary>
         /// Creates the footnote.
         /// </summary>
-        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters) =>
+        public RateFootnoteControl CreateFootnote(IFootnoteParameters parameters) =>
             new AmazonNotLinkedFootnoteControl(shipmentTypeCode);
 
         /// <summary>

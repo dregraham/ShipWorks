@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public void SetGetServiceUsedReturn(string serviceToReturn)
         {
             mock.Mock<IShippingManager>()
-                .Setup(s => s.GetOverriddenSerivceUsed(It.IsAny<ShipmentEntity>()))
+                .Setup(s => s.GetOverriddenServiceUsed(It.IsAny<ShipmentEntity>()))
                 .Returns(serviceToReturn);
         }
 
