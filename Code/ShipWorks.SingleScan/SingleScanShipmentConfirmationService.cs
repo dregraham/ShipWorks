@@ -24,8 +24,8 @@ namespace ShipWorks.SingleScan
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
 
-        private const string AlreadyProcessedMessage = "The scanned Order # has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
-        private const string MultipleShipmentsMessage = "The scanned Order # has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
+        private const string AlreadyProcessedMessage = "The scanned Order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
+        private const string MultipleShipmentsMessage = "The scanned Order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
 
         /// <summary>
         /// Constructor
