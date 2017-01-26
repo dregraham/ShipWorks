@@ -8,6 +8,52 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// </summary>
     public partial class SwsimV55 : ISwsimV55
     {
+        public CreateIndiciumResult CreateEnvelopeIndicium(CreateEnvelopeIndiciumParameters parameters)
+        {
+            var integratorTxID = parameters.IntegratorTxID;
+            var rate = parameters.Rate;
+
+            Guid stampsTxID;
+            string url;
+            PostageBalance postageBalance;
+            string mac;
+            string postageHash;
+            string trackingNumber;
+
+            string result = CreateEnvelopeIndicium(
+                parameters.Item,
+                ref integratorTxID,
+                ref rate,
+                parameters.From,
+                parameters.To,
+                parameters.CustomerID,
+                parameters.Mode,
+                parameters.ImageType,
+                parameters.CostCodeId,
+                parameters.HideFIM,
+                parameters.RateToken,
+                parameters.OrderId,
+                out trackingNumber,
+                out stampsTxID,
+                out url,
+                out postageBalance,
+                out mac,
+                out postageHash);
+
+            return new CreateIndiciumResult
+            {
+                TrackingNumber = trackingNumber,
+                IntegratorTxID = integratorTxID,
+                Rate = rate,
+                Result = result,
+                StampsTxID = stampsTxID,
+                URL = url,
+                PostageBalance = postageBalance,
+                Mac = mac,
+                PostageHash = postageHash
+            };
+        }
+
         /// <summary>
         /// Create an Indicium
         /// </summary>

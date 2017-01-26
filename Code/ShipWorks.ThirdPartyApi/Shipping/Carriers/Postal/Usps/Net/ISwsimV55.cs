@@ -91,6 +91,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         string CancelIndicium(object Item, object Item1, bool? SendEmail, bool SendEmailSpecified);
 
         /// <summary>
+        /// Create an Indicium
+        /// </summary>
+        CreateIndiciumResult CreateEnvelopeIndicium(CreateEnvelopeIndiciumParameters parameters);
+
+        /// <summary>
         /// Create an envelope Indicium
         /// </summary>
         string CreateEnvelopeIndicium(

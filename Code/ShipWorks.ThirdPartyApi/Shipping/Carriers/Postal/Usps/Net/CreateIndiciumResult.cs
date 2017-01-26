@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -18,5 +19,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public string Mac { get; set; }
         public string PostageHash { get; set; }
         public byte[][] ImageData { get; set; }
+
+        /// <summary>
+        /// Get the shipment cost
+        /// </summary>
+        public decimal ShipmentCost
+        {
+            get
+            {
+                return Rate.Amount +
+                    (Rate.AddOns?.Where(a => a.AddOnType != AddOnTypeV7.SCAINS).Sum(a => a.Amount) ?? 0);
+            }
+        }
     }
 }

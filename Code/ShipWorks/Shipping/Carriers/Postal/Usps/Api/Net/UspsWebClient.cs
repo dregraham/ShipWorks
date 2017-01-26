@@ -906,10 +906,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private UspsLabelResponse ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            Guid uspsGuid;
-            string tracking = string.Empty;
-            string labelUrl;
-
             Address fromAddress;
             Address toAddress;
 
@@ -917,7 +913,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             RateV20 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
-            WebServices.PostageBalance postageBalance;
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
@@ -938,53 +933,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still
             // be in error if you used the same ID again.
             shipment.Postal.Usps.IntegratorTransactionID = Guid.NewGuid();
-            string integratorGuid = shipment.Postal.Usps.IntegratorTransactionID.ToString();
 
-            string mac_Unused;
-            string postageHash;
-            byte[][] imageData = null;
+            CreateIndiciumResult result = null;
 
-            if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope && shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
+            using (ISwsimV55 webService = CreateWebService("Process"))
             {
-                // Envelopes don't support thermal
-                thermalType = null;
-
-                // A separate service call is used for processing envelope according to USPS as of v. 22
-                using (ISwsimV55 webService = CreateWebService("Process"))
+                if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope && shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
                 {
+                    // Envelopes don't support thermal
+                    thermalType = null;
+
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
 
-                    webService.CreateEnvelopeIndicium(GetCredentials(account), ref integratorGuid,
-                        ref rate,
-                        fromAddress,
-                        toAddress,
-                        null,
-                        CreateIndiciumModeV1.Normal,
-                        ImageType.Png,
-                        0, // cost code ID
-                        false, // do not hide the facing identification mark (FIM)
-                        null, // RateToken
-                        null, // OrderID
-                        out tracking,
-                        out uspsGuid,
-                        out labelUrl,
-                        out postageBalance,
-                        out mac_Unused,
-                        out postageHash);
+                    // A separate service call is used for processing envelope according to USPS as of v. 22
+                    result = webService.CreateEnvelopeIndicium(
+                        new CreateEnvelopeIndiciumParameters
+                        {
+                            Item = GetCredentials(account),
+                            IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
+                            Rate = rate,
+                            From = fromAddress,
+                            To = toAddress,
+                            CustomerID = null,
+                            Mode = CreateIndiciumModeV1.Normal,
+                            ImageType = ImageType.Png,
+                            CostCodeId = 0, // cost code ID
+                            HideFIM = false, // do not hide the facing identification mark (FIM)
+                            RateToken = null, // RateToken
+                            OrderId = null
+                        });
                 }
-            }
-            else
-            {
-                // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (ISwsimV55 webService = CreateWebService("Process"))
+                else
                 {
-                    CreateIndiciumResult result = webService.CreateIndicium(
+                    // Labels for all other package types other than envelope get created via the CreateIndicium method
+                    result = webService.CreateIndicium(
                         new CreateIndiciumParameters
                         {
                             Item = GetCredentials(account),
-                            IntegratorTxID = integratorGuid,
-                            TrackingNumber = tracking,
+                            IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
+                            TrackingNumber = string.Empty,
                             Rate = rate,
                             From = fromAddress,
                             To = toAddress,
@@ -1025,33 +1013,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             RateToken = null, // RateToken
                             OrderId = null, // OrderId
                         });
-
-                    rate = result.Rate;
-                    integratorGuid = result.IntegratorTxID;
-                    tracking = result.TrackingNumber;
-                    uspsGuid = result.StampsTxID;
-                    labelUrl = result.URL;
-                    postageBalance = result.PostageBalance;
-                    mac_Unused = result.Mac;
-                    postageHash = result.PostageHash;
-                    imageData = result.ImageData;
                 }
+
+                shipment.TrackingNumber = result.TrackingNumber;
+                shipment.ShipmentCost = result.ShipmentCost;
+                shipment.Postal.Usps.UspsTransactionID = result.StampsTxID;
+                shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
+
+                // Set the thermal type for the shipment
+                shipment.ActualLabelFormat = (int?) thermalType;
+
+                return new UspsLabelResponse
+                {
+                    Shipment = shipment,
+                    ImageData = result.ImageData,
+                    LabelUrl = result.URL
+                };
             }
-
-            shipment.TrackingNumber = tracking;
-            shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Where(a => a.AddOnType != AddOnTypeV7.SCAINS).Sum(a => a.Amount) : 0);
-            shipment.Postal.Usps.UspsTransactionID = uspsGuid;
-            shipment.BilledWeight = rate.EffectiveWeightInOunces / 16D;
-
-            // Set the thermal type for the shipment
-            shipment.ActualLabelFormat = (int?) thermalType;
-
-            return new UspsLabelResponse()
-            {
-                Shipment = shipment,
-                ImageData = imageData,
-                LabelUrl = labelUrl
-            };
         }
 
         /// <summary>
