@@ -387,7 +387,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual IUspsWebClient CreateWebClient()
         {
-            return ((UspsShipmentType) shipmentTypeManager[ShipmentTypeCode.Usps]).CreateWebClient();
+            UspsShipmentType shipmentType = (UspsShipmentType) shipmentTypeManager[ShipmentTypeCode.Usps];
+            shipmentType.AccountRepository = accountRepository;
+            return shipmentType.CreateWebClient();
         }
 
         /// <summary>
