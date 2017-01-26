@@ -9,6 +9,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
@@ -135,6 +136,32 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// </summary>
         private void SelectProvider(ShipmentEntity shipment, ShipmentType type)
         {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                try
+                {
+                    ChangeShipmentProvider(shipment, type);
+                }
+                catch (ORMConcurrencyException ex)
+                {
+                    lifetimeScope.Resolve<IMessageHelper>()
+                        .ShowError("Another user had recently made changes, so the shipment was not saved.");
+                    LogExceptionUtility.LogOrmConcurrencyException(shipment,
+                        "Attempting to change carrier through the shipments panel", ex);
+                    return;
+                }
+
+                Program.MainForm.ForceHeartbeat();
+
+                messenger.Send(new ShipmentChangedMessage(this, lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment)));
+            }
+        }
+
+        /// <summary>
+        /// Actually change the provider of the shipment
+        /// </summary>
+        private static void ChangeShipmentProvider(ShipmentEntity shipment, ShipmentType type)
+        {
             shipment.ShipmentType = (int) type.ShipmentTypeCode;
             shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
 
@@ -146,13 +173,6 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 // international shipments
                 ShippingManager.EnsureShipmentLoaded(shipment);
                 CustomsManager.LoadCustomsItems(shipment, false, sqlAdapter);
-            }
-
-            Program.MainForm.ForceHeartbeat();
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                messenger.Send(new ShipmentChangedMessage(this, lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment)));
             }
         }
     }
