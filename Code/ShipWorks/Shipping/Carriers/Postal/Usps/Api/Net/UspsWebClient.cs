@@ -855,42 +855,50 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (UspsApiException ex)
             {
-                string errorMessageUpper = ex.Message.ToUpperInvariant();
-
-                if (errorMessageUpper.Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
-                {
-                    // Provide a little more context as to which user name/password was incorrect in the case
-                    // where there's multiple accounts or Express1 for USPS is being used to compare rates
-                    string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                        UspsAccountManager.GetResellerName(uspsResellerType),
-                        account.Username,
-                        Environment.NewLine);
-
-                    throw new UspsException(message, ex);
-                }
-
-                if (ex.Code == 5636353 ||
-                    errorMessageUpper.Contains("INSUFFICIENT FUNDS") || errorMessageUpper.Contains("not enough postage".ToUpperInvariant()) ||
-                    errorMessageUpper.Contains("Insufficient Postage".ToUpperInvariant()))
-                {
-                    throw new UspsInsufficientFundsException(account, ex.Message);
-                }
-
-                if (ex.Code == 5636353 || (errorMessageUpper.Contains("globalpost".ToUpperInvariant()) && errorMessageUpper.Contains("terms and conditions".ToUpperInvariant())))
-                {
-                    throw new UspsGlobalPostTermsAndConditionsException(account, ex.Message);
-                }
-
-                if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
-                {
-                    throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");
-                }
+                TranslateProcessShipmentException(account, ex);
 
                 // This isn't an exception we can handle, so just throw the original exception
                 throw;
             }
 
             return uspsLabelParams;
+        }
+
+        /// <summary>
+        /// Translate an exception caught while processing into something more usable if possible
+        /// </summary>
+        private void TranslateProcessShipmentException(UspsAccountEntity account, UspsApiException ex)
+        {
+            string errorMessageUpper = ex.Message.ToUpperInvariant();
+
+            if (errorMessageUpper.Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+            {
+                // Provide a little more context as to which user name/password was incorrect in the case
+                // where there's multiple accounts or Express1 for USPS is being used to compare rates
+                string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
+                    UspsAccountManager.GetResellerName(uspsResellerType),
+                    account.Username,
+                    Environment.NewLine);
+
+                throw new UspsException(message, ex);
+            }
+
+            if (ex.Code == 5636353 ||
+                errorMessageUpper.Contains("INSUFFICIENT FUNDS") || errorMessageUpper.Contains("not enough postage".ToUpperInvariant()) ||
+                errorMessageUpper.Contains("Insufficient Postage".ToUpperInvariant()))
+            {
+                throw new UspsInsufficientFundsException(account, ex.Message);
+            }
+
+            if (ex.Code == 5636353 || (errorMessageUpper.Contains("globalpost".ToUpperInvariant()) && errorMessageUpper.Contains("terms and conditions".ToUpperInvariant())))
+            {
+                throw new UspsGlobalPostTermsAndConditionsException(account, ex.Message);
+            }
+
+            if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
+            {
+                throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");
+            }
         }
 
         /// <summary>
