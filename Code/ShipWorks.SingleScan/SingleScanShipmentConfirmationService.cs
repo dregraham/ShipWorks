@@ -22,7 +22,7 @@ namespace ShipWorks.SingleScan
         private readonly Func<ISecurityContext> securityContextRetriever;
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
         private readonly IShipmentFactory shipmentFactory;
-        private readonly Func<IWin32Window> ownerFactory;
+        private readonly IMessageHelper messageHelper;
 
         private const string AlreadyProcessedMessage = "The scanned Order # has already been processed. To create and print a new label scan the barcode again or click Continue";
         private const string PartiallyProcessedMessage = "The scanned Order # has been partially processed. To create a label for each unprocessed shipment in the order, scan the barcode again or click Continue.";
@@ -31,13 +31,13 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public SingleScanShipmentConfirmationService(IOrderLoader orderLoader, Func<ISecurityContext> securityContextRetriever, IAutoPrintConfirmationDlgFactory dlgFactory, IShipmentFactory shipmentFactory, Func<IWin32Window> ownerFactory)
+        public SingleScanShipmentConfirmationService(IOrderLoader orderLoader, Func<ISecurityContext> securityContextRetriever, IAutoPrintConfirmationDlgFactory dlgFactory, IShipmentFactory shipmentFactory, IMessageHelper messageHelper)
         {
             this.orderLoader = orderLoader;
             this.securityContextRetriever = securityContextRetriever;
             this.dlgFactory = dlgFactory;
             this.shipmentFactory = shipmentFactory;
-            this.ownerFactory = ownerFactory;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -94,10 +94,8 @@ namespace ShipWorks.SingleScan
 
             KeyValuePair<string, string> messaging = GetMessaging(shipments);
 
-            using (IFormsDialog dialog = dlgFactory.Create(scannedBarcode, messaging.Key, messaging.Value))
-            {
-                return dialog.ShowDialog(ownerFactory()) == DialogResult.OK;
-            }
+            return messageHelper.ShowDialog(() => dlgFactory.Create(scannedBarcode, messaging.Key, messaging.Value)) ==
+                   DialogResult.OK;
         }
 
         /// <summary>

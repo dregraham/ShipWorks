@@ -7,7 +7,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     /// WinForms sell for hosting the Confirmation XAML
     /// </summary>
     /// <remarks>This is required for us to receive messages from our message filter</remarks>
-    public partial class AutoPrintConfirmationDialog : Form, IFormsDialog
+    public partial class AutoPrintConfirmationDialog : Form, IForm
     {
         private readonly IAutoPrintConfirmationDlgViewModel viewModel;
 

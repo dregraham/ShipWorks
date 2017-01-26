@@ -32,7 +32,7 @@ namespace ShipWorks.SingleScan
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
         private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
-        private IConnectableObservable<ScanMessage> scanMessages;
+        private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private void ProcessUnprocessedShipments(List<ShipmentEntity> shipments)
         {
-            Debug.Assert(shipments.TrueForAll(s => s.Processed == false));
+            Debug.Assert(shipments.TrueForAll(s => !s.Processed));
 
             if (shipments.Any())
             {

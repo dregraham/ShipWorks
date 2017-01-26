@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Services
         /// <param name="scanMessageText">The scan message that the dialog is listening for to confirm and close</param>
         /// <param name="title">The title of the dialog</param>
         /// <param name="displayText">The text that is displayed to the user</param>
-        IFormsDialog Create(string scanMessageText, string title, string displayText);
+        IForm Create(string scanMessageText, string title, string displayText);
     }
 }

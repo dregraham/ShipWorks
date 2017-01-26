@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Interapptive.Shared.UI
 {
-    public interface IFormsDialog : IDisposable
+    public interface IForm : IDisposable
     {
         /// <summary>
         /// Shows the Winforms Dialog

@@ -33,7 +33,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <param name="title">The title of the dialog</param>
         /// <param name="displayText">The text that is displayed to the user</param>
         /// <returns></returns>
-        public IFormsDialog Create(string scanMessageText, string title, string displayText)
+        public IForm Create(string scanMessageText, string title, string displayText)
         {
             IAutoPrintConfirmationDlgViewModel viewModel = autoPrintConfirmationDlgViewModel(messenger);
             viewModel.Load(scanMessageText, displayText);
