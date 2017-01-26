@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.UI;
+﻿using System;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Services;
@@ -13,13 +15,15 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     public class AutoPrintConfirmationDlgFactory : IAutoPrintConfirmationDlgFactory
     {
         private readonly IMessenger messenger;
+        private readonly Func<IMessenger, IAutoPrintConfirmationDlgViewModel> autoPrintConfirmationDlgViewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPrintConfirmationDlgFactory"/> class.
         /// </summary>
-        public AutoPrintConfirmationDlgFactory(IMessenger messenger)
+        public AutoPrintConfirmationDlgFactory(IMessenger messenger, Func<IMessenger, IAutoPrintConfirmationDlgViewModel> autoPrintConfirmationDlgViewModel)
         {
             this.messenger = messenger;
+            this.autoPrintConfirmationDlgViewModel = autoPrintConfirmationDlgViewModel;
         }
 
         /// <summary>
@@ -29,21 +33,12 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <param name="title">The title of the dialog</param>
         /// <param name="displayText">The text that is displayed to the user</param>
         /// <returns></returns>
-        public IDialog Create(string scanMessageText, string title, string displayText)
+        public IFormsDialog Create(string scanMessageText, string title, string displayText)
         {
-            AutoPrintConfirmationDlgViewModel viewModel = new AutoPrintConfirmationDlgViewModel(messenger);
-            AutoPrintConfirmationDlg view = new AutoPrintConfirmationDlg {DataContext = viewModel};
+            IAutoPrintConfirmationDlgViewModel viewModel = autoPrintConfirmationDlgViewModel(messenger);
+            viewModel.Load(scanMessageText, displayText);
 
-            viewModel.Close = result =>
-            {
-                viewModel.Dispose();
-                view.DialogResult = result;
-                view.Close();
-            };
-
-            viewModel.Load(scanMessageText, title, displayText);
-
-            return view;
+            return new AutoPrintConfirmationDialog(viewModel) { Text = title };
         }
     }
 }

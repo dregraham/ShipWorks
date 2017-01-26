@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.SingleScan.AutoPrintConfirmation
 {
@@ -11,12 +8,13 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     /// ViewModel for the AutoPrintConfirmationDlg
     /// </summary>
     /// <seealso cref="System.IDisposable" />
+    [Service]
     public interface IAutoPrintConfirmationDlgViewModel : IDisposable
     {
         /// <summary>
         /// Initializes the ViewModel with text to display and the barcode that when scan, accepts the dialog.
         /// </summary>
-        void Load(string barcodeAcceptanceText, string title, string displayText);
+        void Load(string barcodeAcceptanceText, string displayText);
 
         /// <summary>
         /// Gets or sets the method to close the window.
@@ -33,11 +31,6 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// Gets the cancel click command.
         /// </summary>
         ICommand CancelClickCommand { get; }
-
-        /// <summary>
-        /// Gets the title to display to the user
-        /// </summary>
-        string Title { get; }
 
         /// <summary>
         /// Gets the text to display to the user.

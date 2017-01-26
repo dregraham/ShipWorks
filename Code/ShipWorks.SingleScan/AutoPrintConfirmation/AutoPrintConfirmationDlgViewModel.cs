@@ -10,7 +10,7 @@ using ShipWorks.Messaging.Messages.SingleScan;
 namespace ShipWorks.SingleScan.AutoPrintConfirmation
 {
     /// <summary>
-    /// ViewModel for <see cref="AutoPrintConfirmationDlg" />
+    /// ViewModel for <see cref="AutoPrintConfirmationDialog" />
     /// </summary>
     /// <seealso cref="T:ShipWorks.SingleScan.AutoPrintConfirmation.IAutoPrintConfirmationDlgViewModel" />
     public class AutoPrintConfirmationDlgViewModel : IAutoPrintConfirmationDlgViewModel
@@ -43,12 +43,6 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public ICommand CancelClickCommand { get; }
 
         /// <summary>
-        /// Gets the title to display to the user
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Title { get; private set; }
-
-        /// <summary>
         /// Gets the text to display to the user.
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -62,11 +56,8 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Initializes the ViewModel with text to display and the barcode that when scan, accepts the dialog.
         /// </summary>
-        public void Load(string barcodeAcceptanceText, string title, string displayText)
+        public void Load(string barcodeAcceptanceText, string displayText)
         {
-            Debug.Assert(Close != null);
-
-            Title = title;
             DisplayText = displayText;
             barcodeAcceptanceMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => x.ScannedText == barcodeAcceptanceText)
