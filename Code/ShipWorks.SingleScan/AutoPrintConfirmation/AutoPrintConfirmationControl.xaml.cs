@@ -27,6 +27,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public AutoPrintConfirmationControl()
         {
             InitializeComponent();
+            cancelButton.Focus();
         }
     }
 }

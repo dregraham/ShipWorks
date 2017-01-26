@@ -14,7 +14,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Initializes the ViewModel with text to display and the barcode that when scan, accepts the dialog.
         /// </summary>
-        void Load(string barcodeAcceptanceText, string displayText);
+        void Load(string barcodeAcceptanceText, string displayText, string continueText);
 
         /// <summary>
         /// Gets or sets the method to close the window.
@@ -36,5 +36,10 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// Gets the text to display to the user.
         /// </summary>
         string DisplayText { get; }
+
+        /// <summary>
+        /// Gets the text to display in the continue button
+        /// </summary>
+        string ContinueText { get; }
     }
 }

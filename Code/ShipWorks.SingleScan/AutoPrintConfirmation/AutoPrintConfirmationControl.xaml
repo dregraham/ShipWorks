@@ -9,7 +9,12 @@
         FontFamily="Tahoma"
         FontSize="8.25pt">
     <Grid Width="500">
-        <StackPanel
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" VerticalAlignment="Top" Width="48" Margin="10 12 0 0" Source="/Shipworks.Core;component/Resources/warning2.png" />
+        <StackPanel Grid.Column="1"
             Orientation="Vertical"
             Margin="10">
 
@@ -22,12 +27,14 @@
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
                 <Button
-                    Width="75"
                     Height="25"
+                    Padding="10 0 10 0"
                     Margin="0 0 8 0"
-                    Content="Continue"
+                    Content="{Binding ContinueText}"
                     Command="{Binding ContinueClickCommand}" />
                 <Button
+                    x:Name="cancelButton"
+                    IsCancel="True"
                     Width="75"
                     Height="25"
                     IsDefault="True"

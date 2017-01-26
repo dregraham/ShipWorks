@@ -24,9 +24,8 @@ namespace ShipWorks.SingleScan
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
 
-        private const string AlreadyProcessedMessage = "The scanned Order # has already been processed. To create and print a new label scan the barcode again or click Continue";
-        private const string PartiallyProcessedMessage = "The scanned Order # has been partially processed. To create a label for each unprocessed shipment in the order, scan the barcode again or click Continue.";
-        private const string MultipleUnprocessedMessage = "The scanned Order # has multiple unprocessed shipments.  To print labels for each shipment in the order, scan the barcode again or click Continue." ;
+        private const string AlreadyProcessedMessage = "The scanned Order # has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
+        private const string MultipleShipmentsMessage = "The scanned Order # has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
 
         /// <summary>
         /// Constructor
@@ -92,28 +91,45 @@ namespace ShipWorks.SingleScan
                 return true;
             }
 
-            KeyValuePair<string, string> messaging = GetMessaging(shipments);
+            MessagingText messaging = GetMessaging(shipments);
 
-            return messageHelper.ShowDialog(() => dlgFactory.Create(scannedBarcode, messaging.Key, messaging.Value)) ==
-                   DialogResult.OK;
+            return
+                messageHelper.ShowDialog(
+                    () => dlgFactory.Create(scannedBarcode, messaging.Title, messaging.Body, messaging.Continue)) ==
+                DialogResult.OK;
         }
 
         /// <summary>
         /// Get the Title/Message text to display to the user based on the Shipments
         /// </summary>
-        private KeyValuePair<string, string> GetMessaging(ShipmentEntity[] shipments)
+        private MessagingText GetMessaging(ShipmentEntity[] shipments)
         {
             if (shipments.All(s => s.Processed))
             {
-                return new KeyValuePair<string, string>("Order Already Processed", AlreadyProcessedMessage);
+                return new MessagingText
+                {
+                    Title = "Order Previously Processed",
+                    Body = AlreadyProcessedMessage,
+                    Continue = "Create New Label"
+                };
             }
 
-            if (shipments.Any(s => !s.Processed) && shipments.Any(s => s.Processed))
+            string labels = shipments.Where(s => !s.Processed).IsCountGreaterThan(1) ? "Labels" : "Label";
+            string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
+
+            return new MessagingText
             {
-                return new KeyValuePair<string, string>("Order Partially Processed", PartiallyProcessedMessage);
-            }
+                Title = "Multiple Shipments",
+                Body = string.Format(MultipleShipmentsMessage, buttonText),
+                Continue = buttonText
+            };
+        }
 
-            return new KeyValuePair<string, string>("Multiple Unprocessed Shipments", MultipleUnprocessedMessage);
+        private struct MessagingText
+        {
+            public string Title;
+            public string Body;
+            public string Continue;
         }
     }
 }

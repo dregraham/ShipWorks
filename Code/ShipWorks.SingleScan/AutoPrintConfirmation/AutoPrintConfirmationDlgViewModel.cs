@@ -49,6 +49,12 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public string DisplayText { get; private set; }
 
         /// <summary>
+        /// Gets the text to display to the user in the continue button.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ContinueText { get; private set; }
+
+        /// <summary>
         /// Gets or sets the method to close the window.
         /// </summary>
         public Action<bool> Close { get; set; }
@@ -56,9 +62,10 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Initializes the ViewModel with text to display and the barcode that when scan, accepts the dialog.
         /// </summary>
-        public void Load(string barcodeAcceptanceText, string displayText)
+        public void Load(string barcodeAcceptanceText, string displayText, string continueText)
         {
             DisplayText = displayText;
+            ContinueText = continueText;
             barcodeAcceptanceMessageSubscription = messenger.OfType<ScanMessage>()
                 .Where(x => x.ScannedText == barcodeAcceptanceText)
                 .Subscribe(x => Accept());

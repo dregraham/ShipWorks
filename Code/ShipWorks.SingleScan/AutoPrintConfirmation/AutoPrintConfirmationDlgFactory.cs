@@ -32,11 +32,12 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <param name="scanMessageText">The scan message that the dialog is listening for to confirm and close</param>
         /// <param name="title">The title of the dialog</param>
         /// <param name="displayText">The text that is displayed to the user</param>
+        /// <param name="continueText">the text displayed in the continue button</param>
         /// <returns></returns>
-        public IForm Create(string scanMessageText, string title, string displayText)
+        public IForm Create(string scanMessageText, string title, string displayText, string continueText)
         {
             IAutoPrintConfirmationDlgViewModel viewModel = autoPrintConfirmationDlgViewModel(messenger);
-            viewModel.Load(scanMessageText, displayText);
+            viewModel.Load(scanMessageText, displayText, continueText);
 
             return new AutoPrintConfirmationDialog(viewModel) { Text = title };
         }
