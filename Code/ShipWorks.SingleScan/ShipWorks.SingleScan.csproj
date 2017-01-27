@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgViewModel.cs" />
+    <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDialog.cs" />
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintService.cs" />
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDialog.cs">

@@ -1,13 +1,12 @@
 ﻿using System.Windows.Forms;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.SingleScan.AutoPrintConfirmation
 {
     /// <summary>
-    /// WinForms sell for hosting the Confirmation XAML
+    /// WinForms shell for hosting the Confirmation XAML
     /// </summary>
     /// <remarks>This is required for us to receive messages from our message filter</remarks>
-    public partial class AutoPrintConfirmationDialog : Form, IForm
+    public partial class AutoPrintConfirmationDialog : Form, IAutoPrintConfirmationDialog
     {
         private readonly IAutoPrintConfirmationDlgViewModel viewModel;
 
@@ -26,7 +25,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Wire up close and return dialog result
         /// </summary>
-        public void SetDlgResultAndClose(bool confirm)
+        private void SetDlgResultAndClose(bool confirm)
         {
             DialogResult = confirm ? DialogResult.OK : DialogResult.Cancel;
             viewModel.Dispose();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.Messaging;
@@ -16,14 +15,16 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     {
         private readonly IMessenger messenger;
         private readonly Func<IMessenger, IAutoPrintConfirmationDlgViewModel> autoPrintConfirmationDlgViewModel;
+        private readonly Func<IAutoPrintConfirmationDlgViewModel, IAutoPrintConfirmationDialog> autoPrintConfirmationDialog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPrintConfirmationDlgFactory"/> class.
         /// </summary>
-        public AutoPrintConfirmationDlgFactory(IMessenger messenger, Func<IMessenger, IAutoPrintConfirmationDlgViewModel> autoPrintConfirmationDlgViewModel)
+        public AutoPrintConfirmationDlgFactory(IMessenger messenger, Func<IMessenger, IAutoPrintConfirmationDlgViewModel> autoPrintConfirmationDlgViewModel, Func<IAutoPrintConfirmationDlgViewModel, IAutoPrintConfirmationDialog> autoPrintConfirmationDialog)
         {
             this.messenger = messenger;
             this.autoPrintConfirmationDlgViewModel = autoPrintConfirmationDlgViewModel;
+            this.autoPrintConfirmationDialog = autoPrintConfirmationDialog;
         }
 
         /// <summary>
@@ -39,7 +40,9 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
             IAutoPrintConfirmationDlgViewModel viewModel = autoPrintConfirmationDlgViewModel(messenger);
             viewModel.Load(scanMessageText, displayText, continueText);
 
-            return new AutoPrintConfirmationDialog(viewModel) { Text = title };
+            IAutoPrintConfirmationDialog dialog = autoPrintConfirmationDialog(viewModel);
+            dialog.Text = title;
+            return dialog;
         }
     }
 }
