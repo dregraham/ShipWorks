@@ -59,7 +59,7 @@ namespace ShipWorks.SingleScan
                 return shipments;
             }
 
-            if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+            if (shipments.Any() && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
             {
                 // If all of the shipments are processed and the user confirms they want to process again add a shipment
                 if (shipments.All(s => s.Processed))
