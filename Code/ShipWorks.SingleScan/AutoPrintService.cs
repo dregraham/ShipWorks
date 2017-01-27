@@ -63,6 +63,10 @@ namespace ShipWorks.SingleScan
         public void InitializeForCurrentSession()
         {
             // Wire up observable for auto printing
+            // note: One of the first things we do is dispose of scanMessagesConnection.
+            // This turns off the pipeline to ensure that another order isn't  
+            // picked up before we are finished with possessing the current order.
+            // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
                 .Where(AllowAutoPrint)
                 .Do(x => scanMessagesConnection.Dispose())
@@ -117,10 +121,7 @@ namespace ShipWorks.SingleScan
             long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
-            List<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode)).ToList();
-
-            Debug.Assert(shipments != null);
-            Debug.Assert(shipments.TrueForAll(s => !s.Processed));
+            IEnumerable<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode));
 
             if (shipments.Any())
             {

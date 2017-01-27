@@ -654,14 +654,14 @@ namespace ShipWorks.Filters
         {
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
-                FilterNodeContentEntity fnc = new FilterNodeContentEntity(filterNodeContentID);
-                while (fnc.Status != (int) FilterCountStatus.Ready)
+                FilterNodeContentEntity filterNodeContentEntity = new FilterNodeContentEntity(filterNodeContentID);
+                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready)
                 {
                     Thread.Sleep(50);
-                    sqlAdapter.FetchEntity(fnc);
+                    sqlAdapter.FetchEntity(filterNodeContentEntity);
                 }
-                long? orderId = FetchFirstOrderIdForFilterNodeContent(fnc.FilterNodeContentID);
-                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc, orderId));
+                long? orderId = FetchFirstOrderIdForFilterNodeContent(filterNodeContentEntity.FilterNodeContentID);
+                messenger.Send(new FilterCountsUpdatedMessage(sender, filterNodeContentEntity, orderId));
             }
         }
 
