@@ -163,10 +163,10 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<PanelHiddenMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
-                .Do(x => isRatingPanelVisible = !isRatingPanelVisible)
+                .Do(x => isRatingPanelVisible = false)
                 .Subscribe(_ =>
                 {
-                    ratesControl.Visible = true;
+                    ratesControl.Visible = !isRatingPanelVisible;
                     RefreshSelectedShipments();
                 });
         }
