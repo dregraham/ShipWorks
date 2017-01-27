@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -14,9 +15,20 @@ namespace ShipWorks.Tests.Shared
         Justification = "Subject *does* get disposed, so this feels like a false positive")]
     public class TestMessenger : IMessenger, IDisposable
     {
+        public List<IShipWorksMessage> SentMessages { get; }
+
         readonly Subject<IShipWorksMessage> subject = new Subject<IShipWorksMessage>();
 
-        public void Send<T>(T message, string caller = "") where T : IShipWorksMessage => subject.OnNext(message);
+        public TestMessenger()
+        {
+            SentMessages = new List<IShipWorksMessage>();
+        }
+
+        public void Send<T>(T message, string caller = "") where T : IShipWorksMessage
+        {
+            subject.OnNext(message);
+            SentMessages.Add(message);
+        }
 
         public IObservable<T> AsObservable<T>() where T : IShipWorksMessage => subject.OfType<T>();
 
