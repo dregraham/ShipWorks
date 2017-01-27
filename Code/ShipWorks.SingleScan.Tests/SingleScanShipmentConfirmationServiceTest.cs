@@ -181,50 +181,44 @@ namespace ShipWorks.SingleScan.Tests
 
             await Assert.ThrowsAsync<ShippingException>(() => testObject.GetShipments(123, "foobar"));
 
-            securityContext.Verify(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>()));
+            securityContext.Verify(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123));
         }
 
         [Fact]
         public async void GetShipments_DelegatesToOrderLoader()
         {
             Mock<IOrderLoader> orderLoader = mock.Mock<IOrderLoader>();
-            orderLoader.Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
-                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = true } }));
 
             await testObject.GetShipments(123, "foobar");
 
             orderLoader.Verify(
                 o =>
-                    o.LoadAsync(It.IsAny<IEnumerable<long>>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite));
+                    o.LoadAsync(new[] {123L}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite));
         }
 
         [Fact]
         public async void GetShipments_DelegatesToShipmentFactory()
         {
-            Mock<IShipmentFactory> shipmentFactory = mock.Mock<IShipmentFactory>();
-
+            OrderEntity order = new OrderEntity();
             Mock<IOrderLoader> orderLoader = mock.Mock<IOrderLoader>();
             orderLoader.Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
-                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = true } }));
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = true, Order = order } }));
 
             await testObject.GetShipments(123, "foobar");
 
-            shipmentFactory.Verify(s => s.Create(It.IsAny<OrderEntity>()));
+            mock.Mock<IShipmentFactory>().Verify(s => s.Create(order));
         }
 
         [Fact]
         public async void GetShipments_DelegatesToMessageHelper()
         {
-            Mock<IMessageHelper> messageHelper = mock.Mock<IMessageHelper>();
-            messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns(DialogResult.OK);
-
             Mock<IOrderLoader> orderLoader = mock.Mock<IOrderLoader>();
             orderLoader.Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
                 .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = true } }));
 
             await testObject.GetShipments(123, "foobar");
 
-            messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IForm>>()));
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowDialog(It.IsAny<Func<IForm>>()));
         }
 
         [Fact]
@@ -250,11 +244,17 @@ namespace ShipWorks.SingleScan.Tests
 
             await testObject.GetShipments(123, "foobar");
 
+            MessagingText continueText = new MessagingText()
+            {
+                Body =
+                    "The scanned Order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
+                Continue = "Create New Label",
+                Title = "Order Previously Processed"
+            };
+
             dlgFactory.Verify(
                 f =>
-                    f.Create("foobar", "Order Previously Processed",
-                        "The scanned Order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
-                        "Create New Label"));
+                    f.Create("foobar", continueText));
         }
 
         [Fact]
@@ -287,11 +287,17 @@ namespace ShipWorks.SingleScan.Tests
 
             await testObject.GetShipments(123, "foobar");
 
+            MessagingText continueText = new MessagingText()
+            {
+                Body =
+                    "The scanned Order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'.",
+                Continue = "Create 3 Labels",
+                Title = "Multiple Shipments"
+            };
+
             dlgFactory.Verify(
                 f =>
-                    f.Create("foobar", "Multiple Shipments",
-                        "The scanned Order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'.",
-                        "Create 3 Labels"));
+                    f.Create("foobar", continueText));
         }
 
         public void Dispose()

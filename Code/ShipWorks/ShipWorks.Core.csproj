@@ -1241,6 +1241,7 @@
     <Compile Include="Shipping\Services\IAutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
+    <Compile Include="Shipping\Services\MessagingText.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />

@@ -3,11 +3,14 @@ using System.Windows.Forms;
 
 namespace Interapptive.Shared.UI
 {
+    /// <summary>
+    /// Interface for a basic UI form
+    /// </summary>
     public interface IForm : IDisposable
     {
         /// <summary>
-        /// Shows the Winforms Dialog
+        /// Show the dialog
         /// </summary>
-        DialogResult ShowDialog(IWin32Window owner);
+        DialogResult ShowDialog(IWin32Window control);
     }
 }

@@ -50,37 +50,39 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public async Task<IEnumerable<ShipmentEntity>> GetShipments(long orderId, string scannedBarcode)
         {
-            if(!securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
+            if (!securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
             {
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
 
             // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
-            ShipmentEntity[] shipments =
-                (await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
-                .Shipments.Where(s => !s.Voided).ToArray();
+            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
+            ShipmentEntity[] shipments = loadedOrders?.Shipments.Where(s => !s.Voided).ToArray();
 
-            if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
+            if (shipments != null)
             {
-                return shipments;
-            }
-
-            if (shipments.Any() && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
-            {
-                // If all of the shipments are processed and the user confirms they want to process again add a shipment
-                if (shipments.All(s => s.Processed))
+                if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
                 {
-                    return new[] { shipmentFactory.Create(shipments.First().Order) };
+                    return shipments;
                 }
 
-                // If some of the shipments are not process and the user confirms return only the unprocessed shipments
-                if (shipments.Any(s => !s.Processed))
+                if (shipments.Any() && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
                 {
-                    return shipments.Where(s => !s.Processed);
+                    // If all of the shipments are processed and the user confirms they want to process again add a shipment
+                    if (shipments.All(s => s.Processed))
+                    {
+                        return new[] { shipmentFactory.Create(shipments.First().Order) };
+                    }
+
+                    // If some of the shipments are not process and the user confirms return only the unprocessed shipments
+                    if (shipments.Any(s => !s.Processed))
+                    {
+                        return shipments.Where(s => !s.Processed);
+                    }
                 }
             }
 
-            return new ShipmentEntity[0];
+            return Enumerable.Empty<ShipmentEntity>();
         }
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace ShipWorks.SingleScan
 
             return
                 messageHelper.ShowDialog(
-                    () => dlgFactory.Create(scannedBarcode, messaging.Title, messaging.Body, messaging.Continue)) ==
+                    () => dlgFactory.Create(scannedBarcode, messaging)) ==
                 DialogResult.OK;
         }
 
@@ -129,13 +131,6 @@ namespace ShipWorks.SingleScan
                 Body = string.Format(MultipleShipmentsMessage, buttonText),
                 Continue = buttonText
             };
-        }
-
-        private struct MessagingText
-        {
-            public string Title;
-            public string Body;
-            public string Continue;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Shipping.Services;
 using ShipWorks.SingleScan.AutoPrintConfirmation;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -22,7 +23,14 @@ namespace ShipWorks.SingleScan.Tests
         public void Create_LoadsMessageTextOnViewModel()
         {
             Mock<IAutoPrintConfirmationDlgViewModel> viewModel = mock.Mock<IAutoPrintConfirmationDlgViewModel>();
-            testObject.Create("scanmessagetext", "title", "displaytext", "continuetext");
+            MessagingText continueText = new MessagingText()
+            {
+                Body = "displaytext",
+                Continue = "continuetext",
+                Title = "title"
+            };
+
+            testObject.Create("scanmessagetext", continueText);
 
             viewModel.Verify(v => v.Load("scanmessagetext", "displaytext", "continuetext"));
         }
@@ -31,7 +39,14 @@ namespace ShipWorks.SingleScan.Tests
         public void Create_SetsTextOnDialog()
         {
             Mock<IAutoPrintConfirmationDialog> dialog = mock.Mock<IAutoPrintConfirmationDialog>();
-            testObject.Create("scanmessagetext", "title", "displaytext", "continuetext");
+            MessagingText continueText = new MessagingText()
+            {
+                Body = "displaytext",
+                Continue = "continuetext",
+                Title = "title"
+            };
+
+            testObject.Create("scanmessagetext", continueText);
 
             dialog.VerifySet(d => d.Text = "title");
         }
