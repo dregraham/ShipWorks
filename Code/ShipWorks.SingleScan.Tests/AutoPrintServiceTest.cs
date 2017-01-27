@@ -58,32 +58,32 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
 
-            Assert.NotNull(GetProcessShipmentsMessage());
+            Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
 
         [Fact]
         public void OrderScanned_ShipmentsProcessedMessageReceived_WhenAutoPrinting()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
 
-            mockLog.Verify(l=>l.Debug("ShipmentsProcessedMessage received from scan A"));
+            mockLog.Verify(l => l.Debug("ShipmentsProcessedMessage received from scan A"));
         }
 
         [Fact]
         public void OrderScanned_ErrorWrittenToLog_WhenMultipleOrdersMatch()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(2, 2);
@@ -96,13 +96,13 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_ShipmentNotProcessed_WhenMultipleOrdersMatch()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(2, 2);
             SendShipmentsProcessedMessage();
 
-            Assert.Null(GetProcessShipmentsMessage());
+            Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
 
         [Fact]
@@ -117,8 +117,8 @@ namespace ShipWorks.SingleScan.Tests
             SendFilterCountsUpdatedMessage(1, 5);
 
             windowsScheduler.Start();
-
-            AddShipment(false);
+                    
+            AddShipmentsToReturnByShipmentConfirmationService(1);
             SendScanMessage("SecondScan");
             SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
@@ -131,30 +131,30 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_AllUnprocessedShipmentsProcessed_WhenShipmentConfirmationServiceReturnsMultipleShipments()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
-            AddShipment(false);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(3);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
 
-            var shipmentsMessage = GetProcessShipmentsMessage();
+            Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+            var shipmentsMessage = messenger.SentMessages.OfType<ProcessShipmentsMessage>().Single();
             Assert.NotNull(shipmentsMessage);
 
-            Assert.Equal(shipments, shipmentsMessage.Value.Shipments);
-            Assert.Equal(shipments, shipmentsMessage.Value.ShipmentsInContext);
+            Assert.Equal(3, shipmentsMessage.Shipments.Count());
+            Assert.Equal(shipments, shipmentsMessage.Shipments);
+            Assert.Equal(shipments, shipmentsMessage.ShipmentsInContext);
         }
 
         [Fact]
         public void OrderScanned_DoesNotSendProcessMessage_WhenAllowAutoPrintIsOff()
         {
             SetAutoPrintSetting(SingleScanSettings.Scan);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
 
-            Assert.Null(GetProcessShipmentsMessage());
+            Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
 
         [Fact]
@@ -164,7 +164,7 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -186,7 +186,7 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage("FirstScan");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -198,14 +198,14 @@ namespace ShipWorks.SingleScan.Tests
             SendShipmentsProcessedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
-            mockLog.Verify(l=>l.Debug(It.Is<string>(s=>s.EndsWith("FirstScan"))));
+            mockLog.Verify(l => l.Debug(It.Is<string>(s => s.EndsWith("FirstScan"))));
         }
 
         [Fact]
         public void OrderScanned_AfterBlankBarcodeScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipment(false);
+            AddShipmentsToReturnByShipmentConfirmationService(1);
 
             SendScanMessage(string.Empty);
 
@@ -214,20 +214,6 @@ namespace ShipWorks.SingleScan.Tests
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
             mockLog.Verify(l => l.Debug(It.Is<string>(s => s.EndsWith("SecondScan"))));
-        }
-
-        private ProcessShipmentsMessage? GetProcessShipmentsMessage()
-        {
-            IEnumerable<ProcessShipmentsMessage> processShipmentsMessages =
-                messenger.SentMessages.OfType<ProcessShipmentsMessage>().ToList();
-            Assert.True(processShipmentsMessages.Count() <= 1);
-
-            if (processShipmentsMessages.Count() == 1)
-            {
-                return processShipmentsMessages.Single();
-            }
-
-            return null;
         }
 
         private void SendFilterCountsUpdatedMessage(int numberOfOrders, long? orderId)
@@ -249,10 +235,12 @@ namespace ShipWorks.SingleScan.Tests
             messenger.Send(new ShipmentsProcessedMessage());
         }
 
-        private void AddShipment(bool processed)
+        private void AddShipmentsToReturnByShipmentConfirmationService(int numberOfShipments)
         {
-            ShipmentEntity newShipment = new ShipmentEntity {Processed = processed};
-            shipments.Add(newShipment);
+            for (int newShipmentId = 1; newShipmentId <= numberOfShipments; newShipmentId++)
+            {
+                shipments.Add(new ShipmentEntity(newShipmentId));
+            }
         }
 
         private void SetAutoPrintSetting(SingleScanSettings autoPrint)
