@@ -660,18 +660,16 @@ namespace ShipWorks.Filters
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(fnc);
                 }
-                List<long> orderIds = FetchFirstOrderIdForFilterNodeContent(fnc.FilterNodeContentID);
-                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc, orderIds));
+                long? orderId = FetchFirstOrderIdForFilterNodeContent(fnc.FilterNodeContentID);
+                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc, orderId));
             }
         }
 
         /// <summary>
         /// Finds the first order for the specified filter node content
         /// </summary>
-        public static List<long> FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
+        private static long? FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
         {
-            List<long> orderIds = new List<long>();
-
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
                 using (DbCommand cmd = sqlConnection.CreateCommand())
@@ -689,17 +687,9 @@ namespace ShipWorks.Filters
 
                     cmd.Parameters.Add(filterNodeContentIdParam);
 
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            orderIds.Add(reader.GetInt64(0));
-                        }
-                    }
+                    return (long?) cmd.ExecuteScalar();
                 }
             }
-
-            return orderIds;
         }
     }
 }

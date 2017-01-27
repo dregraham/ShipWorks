@@ -61,7 +61,7 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
 
             Assert.NotNull(GetProcessShipmentsMessage());
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
 
             mockLog.Verify(l=>l.Debug("ShipmentsProcessedMessage received from scan A"));
@@ -86,7 +86,7 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(1, 2);
+            SendFilterCountsUpdatedMessage(2, 2);
             SendShipmentsProcessedMessage();
 
             mockLog.Verify(l => l.Error("Error occurred while attempting to auto print.", It.IsAny<ShippingException>()), Times.Once);
@@ -99,7 +99,7 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(1, 2);
+            SendFilterCountsUpdatedMessage(2, 2);
             SendShipmentsProcessedMessage();
 
             Assert.Null(GetProcessShipmentsMessage());
@@ -114,13 +114,13 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
 
             SendScanMessage("FirstScan");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
 
             windowsScheduler.Start();
 
             AddShipment(false);
             SendScanMessage("SecondScan");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
@@ -136,7 +136,7 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
 
             var shipmentsMessage = GetProcessShipmentsMessage();
             Assert.NotNull(shipmentsMessage);
@@ -152,7 +152,7 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
 
             Assert.Null(GetProcessShipmentsMessage());
         }
@@ -167,13 +167,13 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
 
             windowsScheduler.Start();
 
             SendScanMessage("A");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
 
             Assert.Equal(2, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
@@ -189,12 +189,12 @@ namespace ShipWorks.SingleScan.Tests
             AddShipment(false);
 
             SendScanMessage("FirstScan");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
 
             windowsScheduler.Start();
 
             SendScanMessage("SecondScan");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
@@ -210,7 +210,7 @@ namespace ShipWorks.SingleScan.Tests
             SendScanMessage(string.Empty);
 
             SendScanMessage("SecondScan");
-            SendFilterCountsUpdatedMessage(5);
+            SendFilterCountsUpdatedMessage(1, 5);
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
             mockLog.Verify(l => l.Debug(It.Is<string>(s => s.EndsWith("SecondScan"))));
@@ -230,13 +230,13 @@ namespace ShipWorks.SingleScan.Tests
             return null;
         }
 
-        private void SendFilterCountsUpdatedMessage(params long[] orderIds)
+        private void SendFilterCountsUpdatedMessage(int numberOfOrders, long? orderId)
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
-                .Returns(orderIds.Length);
+                .Returns(numberOfOrders);
 
-            messenger.Send(new FilterCountsUpdatedMessage(this, mock.Mock<IFilterNodeContentEntity>().Object, orderIds.ToList()));
+            messenger.Send(new FilterCountsUpdatedMessage(this, mock.Mock<IFilterNodeContentEntity>().Object, orderId));
         }
 
         private void SendScanMessage(string scannedText)

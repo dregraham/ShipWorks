@@ -30,7 +30,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public SingleScanShipmentConfirmationService(IOrderLoader orderLoader, Func<ISecurityContext> securityContextRetriever, IAutoPrintConfirmationDlgFactory dlgFactory, IShipmentFactory shipmentFactory, IMessageHelper messageHelper)
+        public SingleScanShipmentConfirmationService(IOrderLoader orderLoader,
+            Func<ISecurityContext> securityContextRetriever,
+            IAutoPrintConfirmationDlgFactory dlgFactory,
+            IShipmentFactory shipmentFactory,
+            IMessageHelper messageHelper)
         {
             this.orderLoader = orderLoader;
             this.securityContextRetriever = securityContextRetriever;

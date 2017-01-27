@@ -15,12 +15,12 @@ namespace ShipWorks.Messaging.Messages.Filters
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterCountsUpdatedMessage(object sender, IFilterNodeContentEntity filterNodeContent, List<long> orderIds)
+        public FilterCountsUpdatedMessage(object sender, IFilterNodeContentEntity filterNodeContent, long? orderId)
         {
             Sender = sender;
             FilterNodeContent = filterNodeContent;
             MessageId = Guid.NewGuid();
-            OrderIds = orderIds;
+            OrderId = orderId;
         }
 
         /// <summary>
@@ -41,6 +41,6 @@ namespace ShipWorks.Messaging.Messages.Filters
         /// <summary>
         /// ObjectIds associated with filter
         /// </summary>
-        public List<long> OrderIds { get; }
+        public long? OrderId { get; }
     }
 }

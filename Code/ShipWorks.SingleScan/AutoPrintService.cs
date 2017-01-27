@@ -108,8 +108,13 @@ namespace ShipWorks.SingleScan
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
 
+            if (messages.FilterCountsUpdatedMessage.OrderId == null)
+            {
+                throw new ShippingException("Order not found for scanned order.");
+            }
+
             string scannedBarcode = messages.ScanMessage.ScannedText;
-            long orderId = messages.FilterCountsUpdatedMessage.OrderIds.First();
+            long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
             List<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode)).ToList();

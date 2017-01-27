@@ -361,7 +361,7 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-            // Auto select the row when doing a filter searach and there is only 1 result
+            // Auto select the row when doing a filter search and there is only 1 result
         /// </summary>
         private void AutoSelectSingleRow()
         {
