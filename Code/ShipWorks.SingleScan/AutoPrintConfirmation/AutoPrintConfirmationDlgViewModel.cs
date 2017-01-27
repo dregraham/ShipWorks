@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
 
@@ -12,7 +13,8 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     /// <summary>
     /// ViewModel for <see cref="AutoPrintConfirmationDialog" />
     /// </summary>
-    /// <seealso cref="T:ShipWorks.SingleScan.AutoPrintConfirmation.IAutoPrintConfirmationDlgViewModel" />
+    /// <seealso cref="T:ShipWorks.SingleScan.AutoPrintConfirmation.IAutoPrintConfirmationDlgViewModel" />\
+    [Component]
     public class AutoPrintConfirmationDlgViewModel : IAutoPrintConfirmationDlgViewModel
     {
         private readonly IMessenger messenger;
@@ -76,7 +78,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// </summary>
         public void Dispose()
         {
-            barcodeAcceptanceMessageSubscription.Dispose();
+            barcodeAcceptanceMessageSubscription?.Dispose();
         }
 
         /// <summary>

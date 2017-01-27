@@ -109,7 +109,7 @@ namespace ShipWorks.UI.Services
             Control owner = ownerFactory();
             if (owner.InvokeRequired)
             {
-                return (DialogResult)owner.Invoke((Func<Func<IForm>, DialogResult>)(ShowDialog), createDialog);
+                return (DialogResult) owner.Invoke((Func<Func<IForm>, DialogResult>)(ShowDialog), createDialog);
             }
 
             using (IForm dlg = createDialog())

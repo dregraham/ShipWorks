@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.SingleScan.AutoPrintConfirmation
 {
@@ -8,7 +7,6 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     /// ViewModel for the AutoPrintConfirmationDlg
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    [Service]
     public interface IAutoPrintConfirmationDlgViewModel : IDisposable
     {
         /// <summary>

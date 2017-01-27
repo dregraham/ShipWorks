@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
@@ -16,6 +17,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Confirm with the user what they want to do when auto printing shipments
     /// </summary>
+    [Component]
     public class SingleScanShipmentConfirmationService : ISingleScanShipmentConfirmationService
     {
         private readonly IOrderLoader orderLoader;
