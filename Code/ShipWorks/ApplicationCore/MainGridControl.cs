@@ -371,20 +371,15 @@ namespace ShipWorks.ApplicationCore
                 {
                     IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
 
-                    if (isBarcodeSearch || (rows?.CompareCountTo(1) ?? ComparisonResult.Less) == ComparisonResult.Equal)
+                    GridRow onlyGridRow = rows?.FirstOrDefault();
+                    if (onlyGridRow != null)
                     {
-                        GridRow onlyGridRow = rows?.FirstOrDefault();
-                        if (onlyGridRow != null)
-                        {
-                            log.Debug($"AutoSelectSingleRow selecting row.  isBarcodeSearch: {isBarcodeSearch}.");
-                            onlyGridRow.Selected = true;
-                        }
+                        onlyGridRow.Selected = true;
                     }
 
                     // Set back to not barcode search
                     if (isBarcodeSearch)
                     {
-                        log.Debug("AutoSelectSingleRow setting isBarcodeSearch to false.");
                         isBarcodeSearch = false;
                     }
                 }
