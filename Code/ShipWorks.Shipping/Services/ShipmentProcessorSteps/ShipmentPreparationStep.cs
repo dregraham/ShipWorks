@@ -101,9 +101,19 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private ShipmentPreparationResult RunPreProcessor(IDisposable entityLock, ProcessShipmentState state,
             ShipmentEntity shipment, StoreEntity store)
         {
+            IEnumerable<ShipmentEntity> shipmentsToTryToProcess;
+
             IShipmentPreProcessor preprocessor = shipmentPreProcessorFactory.Create(shipment.ShipmentTypeCode);
-            IEnumerable<ShipmentEntity> shipmentsToTryToProcess =
+
+            try
+            {
+                shipmentsToTryToProcess =
                 preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing);
+            }
+            catch (ShippingException ex)
+            {
+                return new ShipmentPreparationResult(entityLock, state, ex);
+            }
 
             // A null value returned from the preprocess method means the user has opted to not continue
             // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
