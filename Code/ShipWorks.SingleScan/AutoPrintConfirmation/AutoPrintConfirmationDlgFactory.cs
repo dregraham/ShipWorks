@@ -30,7 +30,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Create an AutoPrintConfirmationDlg with the given display text
         /// </summary>
-        /// <param name="scanMessageText">The scan message that the dialog is listening for to confirm and close</param>
+        /// <param name="scanMessageText">The scan message text that the dialog is listening for to confirm and close</param>
         /// <param name="messaging">The messaging text to display on the IForm</param>
         /// <returns></returns>
         public IForm Create(string scanMessageText, MessagingText messaging)

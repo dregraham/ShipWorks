@@ -10,7 +10,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
     public interface IAutoPrintConfirmationDlgViewModel : IDisposable
     {
         /// <summary>
-        /// Initializes the ViewModel with text to display and the barcode that when scan, accepts the dialog.
+        /// Initializes the ViewModel with text to display and the barcode that when scanned, accepts the dialog.
         /// </summary>
         void Load(string barcodeAcceptanceText, string displayText, string continueText);
 
