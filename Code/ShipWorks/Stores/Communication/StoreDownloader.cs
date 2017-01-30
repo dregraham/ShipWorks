@@ -939,7 +939,8 @@ namespace ShipWorks.Stores.Communication
             {
                 decimal total = OrderUtility.CalculateTotal(order);
 
-                Debug.Assert(total == order.OrderTotal);
+                Debug.Assert(total == order.OrderTotal,
+                    "Order total does not match", "{0} should equal {1}", total, order.OrderTotal);
             }
             else if (order.IsNew)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -270,33 +271,33 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Add all of the custom options for the order item
         /// </summary>
-        private void AddCustomOptions(OrderItemEntity item, IEnumerable<CustomOption> customOptions)
+        private void AddCustomOptions(OrderItemEntity item, IEnumerable<CustomOption> options)
         {
-            CustomOption[] options = customOptions as CustomOption[] ?? customOptions.ToArray();
-
-            if (options.Any())
+            if (options == null || options.None())
             {
-                try
-                {
-                    // We have to get the option from magento to get the option title
-                    Product product = webClient.GetProduct(item.SKU);
+                return;
+            }
 
-                    foreach (CustomOption option in options)
-                    {
-                        ProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+            try
+            {
+                // We have to get the option from magento to get the option title
+                Product product = webClient.GetProduct(item.SKU);
 
-                        OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
-                        orderItemAttribute.Description = option.OptionValue;
-                        orderItemAttribute.Name = optionDetail?.Title ?? "Option";
-                        orderItemAttribute.UnitPrice = 0;
-                    }
-                }
-                catch (MagentoException ex)
+                foreach (CustomOption option in options)
                 {
-                    // if there is an issue getting product options keep going
-                    // we dont want options to keep the download from succeeding
-                    log.Error($"Error getting Item Options {ex.Message}", ex);
+                    ProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+
+                    OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
+                    orderItemAttribute.Description = option.OptionValue;
+                    orderItemAttribute.Name = optionDetail?.Title ?? "Option";
+                    orderItemAttribute.UnitPrice = 0;
                 }
+            }
+            catch (MagentoException ex)
+            {
+                // if there is an issue getting product options keep going
+                // we don't want options to keep the download from succeeding
+                log.Error($"Error getting Item Options {ex.Message}", ex);
             }
         }
 
