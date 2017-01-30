@@ -43,6 +43,10 @@ namespace ShipWorks.SingleScan.Tests
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
 
+            mock.Mock<ISingleScanOrderConfirmationService>()
+                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(true);
+
             mock.Mock<ISingleScanShipmentConfirmationService>()
                 .Setup(service => service.GetShipments(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(shipments);
@@ -72,6 +76,19 @@ namespace ShipWorks.SingleScan.Tests
             SendFilterCountsUpdatedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+        }
+
+        [Fact]
+        public void OrderScanned_OrderDoesntPrint_WhenOrderServiceReturnsFalse()
+        {
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            SendShipmentsProcessedMessage();
+
+            Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
 
         [Fact]

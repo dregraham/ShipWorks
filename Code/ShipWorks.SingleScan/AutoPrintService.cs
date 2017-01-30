@@ -33,6 +33,7 @@ namespace ShipWorks.SingleScan
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
         private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
+        private readonly ISingleScanOrderConfirmationService singleScanOrderConfirmationService;
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
 
@@ -43,12 +44,14 @@ namespace ShipWorks.SingleScan
             ISchedulerProvider schedulerProvider,
             IUserSession userSession,
             ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
+            ISingleScanOrderConfirmationService singleScanOrderConfirmationService,
             Func<Type, ILog> logFactory)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.userSession = userSession;
             this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
+            this.singleScanOrderConfirmationService = singleScanOrderConfirmationService;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
@@ -104,19 +107,23 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private async Task<GenericResult<string>> HandleAutoPrintShipment(FilterCountsUpdatedAndScanMessages messages)
         {
-            // Only auto print if 1 order was found
-            if (messages.FilterCountsUpdatedMessage.FilterNodeContent?.Count != 1)
-            {
-                throw new ShippingException("Auto printing is not allowed for the scanned order.");
-            }
-
-            if (messages.FilterCountsUpdatedMessage.OrderId == null)
-            {
-                throw new ShippingException("Order not found for scanned order.");
-            }
-
             string scannedBarcode = messages.ScanMessage.ScannedText;
+
+            // Only auto print if 1 order was found
+            if (messages.FilterCountsUpdatedMessage.FilterNodeContent == null ||
+                messages.FilterCountsUpdatedMessage.FilterNodeContent.Count < 1 || 
+                messages.FilterCountsUpdatedMessage.OrderId == null)
+            {
+                return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
+            }
+
             long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
+            int matchedOrderCount = messages.FilterCountsUpdatedMessage.FilterNodeContent.Count;
+
+            if (singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
+            {
+                return GenericResult.FromError("Multiple orders selected, user chose not to process", scannedBarcode);
+            }
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
             IEnumerable<ShipmentEntity> shipments = await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
