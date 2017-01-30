@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -73,9 +72,8 @@ namespace ShipWorks.SingleScan
                 .SelectMany(WaitForFilterCountsUpdatedMessage)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .SelectMany(m => HandleAutoPrintShipment(m).ToObservable())
-                .CatchAndContinue((Exception ex) => LogException(ex))
-                .Where(NoShipmentsExitPipeline)
                 .SelectMany(WaitForShipmentsProcessedMessage)
+                .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(x => ReconnectPipeline());
         }
 
@@ -121,7 +119,7 @@ namespace ShipWorks.SingleScan
             long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
-            IEnumerable<ShipmentEntity> shipments = (await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode));
+            IEnumerable<ShipmentEntity> shipments = await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
 
             if (shipments.Any())
             {
@@ -137,24 +135,10 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Logs the exception and reconnect pipeline.
         /// </summary>
-        private void LogException(Exception ex)
+        private void HandleException(Exception ex)
         {
             log.Error("Error occurred while attempting to auto print.", ex);
             ReconnectPipeline();
-        }
-
-        /// <summary>
-        /// If no shipments to process, reconnect pipeline and return false
-        /// </summary>
-        private bool NoShipmentsExitPipeline(GenericResult<string> genericResult)
-        {
-            if (!genericResult.Success)
-            {
-                ReconnectPipeline();
-                log.Info(genericResult.Message);
-            }
-
-            return genericResult.Success;
         }
 
         /// <summary>
@@ -162,9 +146,21 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
         {
-            IObservable<GenericResult<string>> observableResult = messenger.OfType<ShipmentsProcessedMessage>().Take(1).Select(f => genericResult);
-            log.Debug($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
-            return observableResult;
+            IObservable<GenericResult<string>> returnResult;
+
+            if (genericResult.Success)
+            {
+                log.Info("Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
+                returnResult = messenger.OfType<ShipmentsProcessedMessage>().Take(1).Select(f => genericResult);
+                log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
+            }
+            else
+            {
+                log.Info("No Shipments, not waiting for ShipmentsProcessMessageScan");
+                returnResult = Observable.Return(genericResult);
+            }
+
+            return returnResult;
         }
 
         /// <summary>
@@ -199,6 +195,9 @@ namespace ShipWorks.SingleScan
         /// </summary>
         struct FilterCountsUpdatedAndScanMessages
         {
+            /// <summary>
+            /// Constructor
+            /// </summary>
             public FilterCountsUpdatedAndScanMessages(FilterCountsUpdatedMessage filterCountsUpdatedMessage, ScanMessage scanMessage)
             {
                 FilterCountsUpdatedMessage = filterCountsUpdatedMessage;

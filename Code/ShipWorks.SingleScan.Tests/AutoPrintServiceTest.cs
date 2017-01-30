@@ -84,7 +84,7 @@ namespace ShipWorks.SingleScan.Tests
             SendFilterCountsUpdatedMessage();
             SendShipmentsProcessedMessage();
 
-            mockLog.Verify(l => l.Debug("ShipmentsProcessedMessage received from scan A"));
+            mockLog.Verify(l => l.Info("ShipmentsProcessedMessage received from scan A"));
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace ShipWorks.SingleScan.Tests
             SendShipmentsProcessedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
-            mockLog.Verify(l => l.Debug(It.Is<string>(s => s.EndsWith("SecondScan"))));
+            mockLog.Verify(l => l.Info(It.Is<string>(s => s.EndsWith("SecondScan"))));
         }
 
         [Fact]
@@ -214,7 +214,7 @@ namespace ShipWorks.SingleScan.Tests
             SendShipmentsProcessedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
-            mockLog.Verify(l => l.Debug(It.Is<string>(s => s.EndsWith("FirstScan"))));
+            mockLog.Verify(l => l.Info(It.Is<string>(s => s.EndsWith("FirstScan"))));
         }
 
         [Fact]
@@ -229,7 +229,7 @@ namespace ShipWorks.SingleScan.Tests
             SendFilterCountsUpdatedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
-            mockLog.Verify(l => l.Debug(It.Is<string>(s => s.EndsWith("SecondScan"))));
+            mockLog.Verify(l => l.Info(It.Is<string>(s => s.EndsWith("SecondScan"))));
         }
 
         private void SendScanMessage(string scannedText)
