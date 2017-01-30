@@ -650,19 +650,33 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        public static void SendFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
+        public static void SendFilterUpdateCompletedMessageWhenCompletedAsync(long filterNodeContentID, IMessenger messenger, object sender)
         {
+            TaskEx.Run(() => 
+            {
+                FilterNodeContentEntity fnc = FetchFilterNodeContentWhenReady(filterNodeContentID);
+
+                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc));
+            });
+        }
+
+        /// <summary>
+        /// Continually queries the db until the FilterNodeContent falls into the Ready status
+        /// </summary>
+        private static FilterNodeContentEntity FetchFilterNodeContentWhenReady(long filterNodeContentID)
+        {
+            FilterNodeContentEntity fnc = null;
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
-                FilterNodeContentEntity fnc = new FilterNodeContentEntity(filterNodeContentID);
+                fnc = new FilterNodeContentEntity(filterNodeContentID);
                 while (fnc.Status != (int) FilterCountStatus.Ready)
                 {
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(fnc);
                 }
-
-                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc));
             }
+
+            return fnc;
         }
 
         /// <summary>

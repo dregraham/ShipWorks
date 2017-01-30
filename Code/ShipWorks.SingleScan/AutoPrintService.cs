@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -27,12 +28,15 @@ namespace ShipWorks.Shipping.Services
     public class AutoPrintService : IInitializeForCurrentUISession
     {
         private readonly ILog log;
+        private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly Func<ISecurityContext> securityContextRetriever;
         private readonly IOrderLoader orderLoader;
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
+        private readonly IConnectableObservable<ScanMessage> scanMessages;
+        private IDisposable scanMessagesConnection;
 
         /// <summary>
         /// Constructor
@@ -41,13 +45,18 @@ namespace ShipWorks.Shipping.Services
             ISchedulerProvider schedulerProvider,
             Func<ISecurityContext> securityContextRetriever,
             IOrderLoader orderLoader,
-            IUserSession userSession)
+            IUserSession userSession,
+            IMainForm mainForm)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
             this.securityContextRetriever = securityContextRetriever;
             this.orderLoader = orderLoader;
             this.userSession = userSession;
+            this.mainForm = mainForm;
+
+            scanMessages = messenger.OfType<ScanMessage>().Publish();
+            scanMessagesConnection = scanMessages.Connect();
 
             log = LogManager.GetLogger(typeof(AutoPrintService));
         }
@@ -58,14 +67,23 @@ namespace ShipWorks.Shipping.Services
         public void InitializeForCurrentSession()
         {
             // Wire up observable for auto printing 
-            filterCompletedMessageSubscription = messenger.OfType<ScanMessage>()
+            filterCompletedMessageSubscription = scanMessages
                 .Where(x => AllowAutoPrint())
+                .Do(x => scanMessagesConnection.Dispose())
                 .SelectMany(messenger.OfType<FilterCountsUpdatedMessage>().Take(1))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(m => HandleAutoPrintShipment(m.FilterNodeContent).RunSynchronously())
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while attempting to auto print.", ex))
+                .CatchAndContinue((Exception ex) =>
+                {
+                    log.Error("Error occurred while attempting to auto print.", ex);
+                    scanMessagesConnection = scanMessages.Connect();
+                })
                 .Gate(messenger.OfType<ShipmentsProcessedMessage>())
-                .Subscribe(x => log.Debug("ShipmentsProcessedMessage received."));
+                .Subscribe(x =>
+                {
+                    log.Debug("ShipmentsProcessedMessage received.");
+                    scanMessagesConnection = scanMessages.Connect();
+                });
         }
 
         /// <summary>
@@ -73,7 +91,8 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private bool AllowAutoPrint()
         {
-            bool allowed = userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
+            bool allowed = userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
+                           !mainForm.AdditionalFormsOpen();
 
             return allowed;
         }

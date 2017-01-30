@@ -260,7 +260,6 @@
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
-    <Compile Include="Utility\ApplicationUtility.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />

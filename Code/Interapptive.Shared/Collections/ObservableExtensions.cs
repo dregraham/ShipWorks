@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 
@@ -89,6 +91,27 @@ namespace Interapptive.Shared.Collections
             IObservable<T> closes = stream.Throttle(delay, scheduler);
 
             return stream.Buffer(closes);
+        }
+
+        /// <summary>
+        /// Waits for dependentObservable to receive a new message or for timeout time to pass, then returns.
+        /// </summary>
+        /// <param name="source">IObservable<TSource> for which ContinueAfter will be subscribed.</TSource></param>
+        /// <param name="dependentObservable">The IObservable for which messages will be waited.</param>
+        /// <param name="timeout">If no dependentObservable messages are received withint this timeout, ContinueAfter will return.</param>
+        /// <param name="scheduler">IScheduler to use.</param>
+        public static IObservable<TSource> ContinueAfter<TSource, TDependent>(this IObservable<TSource> source, IObservable<TDependent> dependentObservable, TimeSpan timeout, IScheduler scheduler)
+        {
+            // Merge the timer observable with the debendent observable.
+            // Timer returns a long, so to merge we need the same type, so just select some long.
+            IObservable<long> merged = Observable.Merge(
+                                dependentObservable.Select(x => long.MinValue),
+                                Observable.Timer(timeout, scheduler), 
+                                scheduler)
+                            .Take(1, scheduler);
+
+            // Convert from the long that Timer required to the source observables that came in
+            return source.SelectMany(s => merged.Select(_ => s));
         }
 
         /// <summary>

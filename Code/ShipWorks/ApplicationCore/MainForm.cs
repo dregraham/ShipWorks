@@ -4178,6 +4178,19 @@ namespace ShipWorks
 
         #endregion
 
+        #region Utility
+
+        /// <summary>
+        /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
+        /// </summary>
+        public bool AdditionalFormsOpen()
+        {
+            bool openForms = Program.MainForm.Panels.Count(p => p.DockSituation == DockSituation.Floating) + 1 != Application.OpenForms.Count;
+            return openForms;
+        }
+
+        #endregion
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
