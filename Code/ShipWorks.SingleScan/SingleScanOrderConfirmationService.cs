@@ -37,7 +37,8 @@ namespace ShipWorks.SingleScan
 
             if (numberOfMatchedOrders > 1)
             {
-                return messageHelper.ShowDialog(() => dlgFactory.Create(scanText, GetMessageingText(orderId, numberOfMatchedOrders))) == DialogResult.OK;
+                MessagingText messaging = GetMessageingText(orderId, numberOfMatchedOrders);
+                return messageHelper.ShowDialog(() => dlgFactory.Create(scanText, messaging)) == DialogResult.OK;
             }
 
             return true;
@@ -53,7 +54,7 @@ namespace ShipWorks.SingleScan
             return new MessagingText
             {
                 Title = "Multiple Matches Found",
-                Body = $"Your order number matches {numberOfMatchedOrders} orders. The most recent order is from store '{store}'. Scan the barcode again or click 'Use Most Recent Order'",
+                Body = $"ShipWorks found {numberOfMatchedOrders} orders matching this order number. The most recent order is from your '{store}' store. Scan the bar code again or click 'Use Most Recent Order' to print the label(s) for this order.",
                 Continue = "Use Most Recent Order"
             };
 
