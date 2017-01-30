@@ -31,7 +31,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly List<ShipmentEntity> shipments;
         private readonly Mock<ILog> mockLog;
         private readonly Mock<ISchedulerProvider> scheduleProvider;
-        private FilterCountsUpdatedMessage filterCountsUpdatedMessage;
+        private readonly FilterCountsUpdatedMessage filterCountsUpdatedMessage;
 
         public AutoPrintServiceTest()
         {

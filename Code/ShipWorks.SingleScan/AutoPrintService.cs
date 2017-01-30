@@ -189,30 +189,5 @@ namespace ShipWorks.SingleScan
         {
             EndSession();
         }
-
-        /// <summary>
-        /// A holder for the FilterCountsUpdateMessage and ScanMessage
-        /// </summary>
-        struct FilterCountsUpdatedAndScanMessages
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            public FilterCountsUpdatedAndScanMessages(FilterCountsUpdatedMessage filterCountsUpdatedMessage, ScanMessage scanMessage)
-            {
-                FilterCountsUpdatedMessage = filterCountsUpdatedMessage;
-                ScanMessage = scanMessage;
-            }
-
-            /// <summary>
-            /// Gets the filter counts updated message.
-            /// </summary>
-            public FilterCountsUpdatedMessage FilterCountsUpdatedMessage { get; }
-
-            /// <summary>
-            /// Gets the scan message.
-            /// </summary>
-            public ScanMessage ScanMessage { get; }
-        }
     }
 }
