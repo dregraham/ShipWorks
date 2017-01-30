@@ -31,7 +31,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly List<ShipmentEntity> shipments;
         private readonly Mock<ILog> mockLog;
         private readonly Mock<ISchedulerProvider> scheduleProvider;
-        private readonly FilterCountsUpdatedMessage filterCountsUpdatedMessage;
+        private FilterCountsUpdatedMessage filterCountsUpdatedMessage;
 
         public AutoPrintServiceTest()
         {
@@ -79,16 +79,92 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void OrderScanned_OrderDoesntPrint_WhenOrderServiceReturnsFalse()
+        public void OrderScanned_OrderDoesNotPrint_WhenOrderServiceReturnsFalse()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
+
+            mock.Mock<ISingleScanOrderConfirmationService>()
+                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(false);
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
             SendShipmentsProcessedMessage();
 
             Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
+        }
+
+        [Fact]
+        public void OrderScanned_ErrorWrittenToLog_WhenErrorThrownInPipeline()
+        {
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            var thrownException = new ShippingException();
+            mock.Mock<ISingleScanOrderConfirmationService>()
+                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+                .Throws(thrownException);
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+
+            mockLog.Verify(log => log.Error("Error occurred while attempting to auto print.", thrownException));
+        }
+
+        [Fact]
+        public void MultipleOrdersScanned_SecondOrderProcessed_WhenErrorThrownProcessingFirstOrder()
+        {
+            TestScheduler windowsScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            var thrownException = new ShippingException();
+            mock.Mock<ISingleScanOrderConfirmationService>()
+                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+                .Throws(thrownException);
+
+            SendScanMessage("FirstScan");
+            SendFilterCountsUpdatedMessage();
+
+            windowsScheduler.Start();
+
+            mock.Mock<ISingleScanOrderConfirmationService>()
+                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(true);
+
+            SendScanMessage("SecondScan");
+            SendFilterCountsUpdatedMessage();
+            SendShipmentsProcessedMessage();
+
+            windowsScheduler.Start();
+
+            Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+            mockLog.Verify(l => l.Info(It.Is<string>(s => s != "Waiting for ShipmentsProcessedMessage from scan FirstScan")));
+            mockLog.Verify(l => l.Info(It.Is<string>(s => s == "Waiting for ShipmentsProcessedMessage from scan SecondScan")));
+        }
+
+        [Fact]
+        public void OrderScanned_DelegatesScanInformationToOrderConfirmationService()
+        {
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(44));
+
+            mock.Mock<IFilterNodeContentEntity>()
+                .SetupGet(node => node.Count)
+                .Returns(72);
+
+            filterCountsUpdatedMessage = new FilterCountsUpdatedMessage(this,
+                mock.Mock<IFilterNodeContentEntity>().Object, 101);
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            SendShipmentsProcessedMessage();
+
+            mock.Mock<ISingleScanOrderConfirmationService>()
+                .Verify(service => service.Confirm(101L, 72, "A"));
         }
 
         [Fact]
@@ -105,11 +181,11 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void OrderScanned_ErrorWrittenToLog_WhenMultipleOrdersMatch()
+        public void OrderScanned_ErrorWrittenToLog_WhenNoOrdersMatch()
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
-                .Returns(2);
+                .Returns(0);
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
@@ -118,7 +194,7 @@ namespace ShipWorks.SingleScan.Tests
             SendFilterCountsUpdatedMessage();
             SendShipmentsProcessedMessage();
 
-            mockLog.Verify(l => l.Error("Error occurred while attempting to auto print.", It.IsAny<ShippingException>()), Times.Once);
+            mockLog.Verify(l => l.Error("Order not found for scanned order."), Times.Once);
         }
 
         [Fact]
@@ -126,7 +202,7 @@ namespace ShipWorks.SingleScan.Tests
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
-                .Returns(2);
+                .Returns(0);
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));

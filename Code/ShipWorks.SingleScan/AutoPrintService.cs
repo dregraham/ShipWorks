@@ -114,6 +114,7 @@ namespace ShipWorks.SingleScan
                 messages.FilterCountsUpdatedMessage.FilterNodeContent.Count < 1 ||
                 messages.FilterCountsUpdatedMessage.OrderId == null)
             {
+                log.Error("Order not found for scanned order.");
                 return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
             }
 
@@ -157,7 +158,7 @@ namespace ShipWorks.SingleScan
 
             if (genericResult.Success)
             {
-                log.Info("Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
+                log.Info($"Waiting for ShipmentsProcessedMessage from scan {genericResult.Value}");
                 returnResult = messenger.OfType<ShipmentsProcessedMessage>().Take(1).Select(f => genericResult);
                 log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
             }
