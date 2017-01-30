@@ -341,7 +341,7 @@ namespace ShipWorks.Filters.Search
                                 nodeContent.FilterNodeContentID :
                                 searchNode.FilterNodeContentID;
                             
-                            FilterContentManager.SendOrderFilterUpdateCompletedMessageWhenCompleted(filterNodeContentID, Messenger.Current, this);
+                            FilterContentManager.SendOrderFilterUpdateCompletedMessageWhenCompletedAsync(filterNodeContentID, Messenger.Current, this);
                         }
 
                         isSearching = false;

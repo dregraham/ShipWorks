@@ -8,5 +8,9 @@ namespace ShipWorks.ApplicationCore
     /// </summary>
     public interface IMainForm : ISynchronizeInvoke, IWin32Window
     {
+        /// <summary>
+        /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
+        /// </summary>
+        bool AdditionalFormsOpen();
     }
 }
