@@ -66,7 +66,7 @@ namespace ShipWorks.SingleScan
         {
             // Wire up observable for auto printing
             // note: One of the first things we do is dispose of scanMessagesConnection.
-            // This turns off the pipeline to ensure that another order isn't  
+            // This turns off the pipeline to ensure that another order isn't
             // picked up before we are finished with possessing the current order.
             // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
@@ -85,7 +85,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private bool AllowAutoPrint(ScanMessage scanMessage)
         {
-            // they scanned a barcode 
+            // they scanned a barcode
             return !scanMessage.ScannedText.IsNullOrWhiteSpace() &&
                 userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
         }
@@ -97,7 +97,7 @@ namespace ShipWorks.SingleScan
         private IObservable<FilterCountsUpdatedAndScanMessages> WaitForFilterCountsUpdatedMessage(ScanMessage scanMessage)
         {
             return messenger.OfType<FilterCountsUpdatedMessage>().Take(1)
-                    .Select(filterCountsUpdatedMessage => 
+                    .Select(filterCountsUpdatedMessage =>
                         new FilterCountsUpdatedAndScanMessages(filterCountsUpdatedMessage, scanMessage));
         }
 
@@ -111,7 +111,7 @@ namespace ShipWorks.SingleScan
 
             // Only auto print if 1 order was found
             if (messages.FilterCountsUpdatedMessage.FilterNodeContent == null ||
-                messages.FilterCountsUpdatedMessage.FilterNodeContent.Count < 1 || 
+                messages.FilterCountsUpdatedMessage.FilterNodeContent.Count < 1 ||
                 messages.FilterCountsUpdatedMessage.OrderId == null)
             {
                 return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
@@ -120,7 +120,7 @@ namespace ShipWorks.SingleScan
             long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
             int matchedOrderCount = messages.FilterCountsUpdatedMessage.FilterNodeContent.Count;
 
-            if (singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
+            if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
             {
                 return GenericResult.FromError("Multiple orders selected, user chose not to process", scannedBarcode);
             }
