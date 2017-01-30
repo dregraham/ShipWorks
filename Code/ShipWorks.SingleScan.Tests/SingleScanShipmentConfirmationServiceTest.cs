@@ -252,9 +252,7 @@ namespace ShipWorks.SingleScan.Tests
                 Title = "Order Previously Processed"
             };
 
-            dlgFactory.Verify(
-                f =>
-                    f.Create("foobar", continueText));
+            dlgFactory.Verify(f => f.Create("foobar", continueText));
         }
 
         [Fact]
@@ -295,9 +293,7 @@ namespace ShipWorks.SingleScan.Tests
                 Title = "Multiple Shipments"
             };
 
-            dlgFactory.Verify(
-                f =>
-                    f.Create("foobar", continueText));
+            dlgFactory.Verify(f => f.Create("foobar", continueText));
         }
 
         public void Dispose()
