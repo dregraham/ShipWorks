@@ -247,7 +247,7 @@ namespace ShipWorks.SingleScan.Tests
             MessagingText continueText = new MessagingText()
             {
                 Body =
-                    "The scanned Order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
+                    "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
                 Continue = "Create New Label",
                 Title = "Order Previously Processed"
             };
@@ -288,7 +288,7 @@ namespace ShipWorks.SingleScan.Tests
             MessagingText continueText = new MessagingText()
             {
                 Body =
-                    "The scanned Order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'.",
+                    "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'.",
                 Continue = "Create 3 Labels",
                 Title = "Multiple Shipments"
             };
