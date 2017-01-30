@@ -679,7 +679,8 @@ namespace ShipWorks.Filters
                         select top 1 ObjectID
                         from FilterNodeContentDetail fnc, [Order] o
                         where fnc.FilterNodeContentID = @filterNodeContentID
-                          and o.OrderID = fnc.ObjectID";
+                          and o.OrderID = fnc.ObjectID
+                        order by o.OrderDate desc";
 
                     DbParameter filterNodeContentIdParam = cmd.CreateParameter();
                     filterNodeContentIdParam.ParameterName = "@filterNodeContentID";
