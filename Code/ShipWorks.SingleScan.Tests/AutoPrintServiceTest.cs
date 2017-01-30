@@ -12,8 +12,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
-using System.Threading.Tasks;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using log4net;
 using Microsoft.Reactive.Testing;
@@ -44,7 +42,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<ISingleScanShipmentConfirmationService>()
                 .Setup(service => service.GetShipments(It.IsAny<long>(), It.IsAny<string>()))
-                .Returns(Task.FromResult((IEnumerable<ShipmentEntity>) shipments));
+                .ReturnsAsync(shipments);
 
             mockLog = mock.MockRepository.Create<ILog>();
             mock.MockFunc<Type, ILog>(mockLog);
@@ -58,7 +56,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -70,7 +68,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_ShipmentsProcessedMessageReceived_WhenAutoPrinting()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -83,7 +81,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_ErrorWrittenToLog_WhenMultipleOrdersMatch()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(2, 2);
@@ -96,7 +94,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_ShipmentNotProcessed_WhenMultipleOrdersMatch()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(2, 2);
@@ -118,7 +116,7 @@ namespace ShipWorks.SingleScan.Tests
 
             windowsScheduler.Start();
                     
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
             SendScanMessage("SecondScan");
             SendFilterCountsUpdatedMessage(1, 5);
             SendShipmentsProcessedMessage();
@@ -131,7 +129,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_AllUnprocessedShipmentsProcessed_WhenShipmentConfirmationServiceReturnsMultipleShipments()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(3);
+            shipments.AddRange(Enumerable.Range(1, 3).Select(o => new ShipmentEntity(o)));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -149,7 +147,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_DoesNotSendProcessMessage_WhenAllowAutoPrintIsOff()
         {
             SetAutoPrintSetting(SingleScanSettings.Scan);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -164,7 +162,7 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -186,7 +184,7 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+            shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("FirstScan");
             SendFilterCountsUpdatedMessage(1, 5);
@@ -205,7 +203,7 @@ namespace ShipWorks.SingleScan.Tests
         public void OrderScanned_AfterBlankBarcodeScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
-            AddShipmentsToReturnByShipmentConfirmationService(1);
+shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage(string.Empty);
 
@@ -233,14 +231,6 @@ namespace ShipWorks.SingleScan.Tests
         private void SendShipmentsProcessedMessage()
         {
             messenger.Send(new ShipmentsProcessedMessage());
-        }
-
-        private void AddShipmentsToReturnByShipmentConfirmationService(int numberOfShipments)
-        {
-            for (int newShipmentId = 1; newShipmentId <= numberOfShipments; newShipmentId++)
-            {
-                shipments.Add(new ShipmentEntity(newShipmentId));
-            }
         }
 
         private void SetAutoPrintSetting(SingleScanSettings autoPrint)
