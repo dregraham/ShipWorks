@@ -66,6 +66,12 @@ namespace ShipWorks.SingleScan
                     return shipments;
                 }
 
+                // If the order has no non Voided Shipments add one and return it
+                if (shipments.None())
+                {
+                    return new[] { shipmentFactory.Create(orderId) };
+                }
+
                 if (shipments.Any() && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
                 {
                     // If all of the shipments are processed and the user confirms they want to process again add a shipment
