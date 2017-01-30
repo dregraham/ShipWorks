@@ -1141,7 +1141,6 @@
     <Compile Include="Messaging\Messenger.cs" />
     <Compile Include="Messaging\SchedulerProvider.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
-    <Compile Include="Shipping\Services\AutoPrintService.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
@@ -1239,7 +1238,10 @@
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
     <Compile Include="Shipping\Services\CarrierShipmentAdapterBase.cs" />
     <Compile Include="Shipping\IShippingOriginManager.cs" />
+    <Compile Include="Shipping\Services\IAutoPrintConfirmationDlgFactory.cs" />
     <Compile Include="Shipping\Services\IShipmentCustomsItemAdapter.cs" />
+    <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
+    <Compile Include="Shipping\Services\MessagingText.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
     <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
@@ -10867,6 +10869,8 @@
     <EmbeddedResource Include="Stores\Platforms\Groupon\Template\GrouponPackingSlip.xsl" />
     <None Include="Resources\viewofstreet.png" />
     <Resource Include="Resources\table_dollar_sign_16_16.png" />
+    <Resource Include="Resources\warning3.png" />
+    <Resource Include="Resources\warning2.png" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />

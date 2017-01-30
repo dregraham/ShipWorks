@@ -654,38 +654,33 @@ namespace ShipWorks.Filters
         {
             TaskEx.Run(() => 
             {
-                FilterNodeContentEntity fnc = FetchFilterNodeContentWhenReady(filterNodeContentID);
-
-                messenger.Send(new FilterCountsUpdatedMessage(sender, fnc));
+				SendOrderFilterUpdateCompletedMessageWhenCompleted(filterNodeContentID, messenger, sender)
             });
         }
 
         /// <summary>
-        /// Continually queries the db until the FilterNodeContent falls into the Ready status
+        /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        private static FilterNodeContentEntity FetchFilterNodeContentWhenReady(long filterNodeContentID)
+        private static void SendOrderFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
         {
-            FilterNodeContentEntity fnc = null;
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
-                fnc = new FilterNodeContentEntity(filterNodeContentID);
-                while (fnc.Status != (int) FilterCountStatus.Ready)
+                FilterNodeContentEntity filterNodeContentEntity = new FilterNodeContentEntity(filterNodeContentID);
+                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready)
                 {
                     Thread.Sleep(50);
-                    sqlAdapter.FetchEntity(fnc);
+                    sqlAdapter.FetchEntity(filterNodeContentEntity);
                 }
+                long? orderId = FetchFirstOrderIdForFilterNodeContent(filterNodeContentEntity.FilterNodeContentID);
+                messenger.Send(new FilterCountsUpdatedMessage(sender, filterNodeContentEntity, orderId));
             }
-
-            return fnc;
         }
 
         /// <summary>
         /// Finds the first order for the specified filter node content
         /// </summary>
-        public static long FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
+        private static long? FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
         {
-            long orderID = -1;
-
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
                 using (DbCommand cmd = sqlConnection.CreateCommand())
@@ -703,11 +698,9 @@ namespace ShipWorks.Filters
 
                     cmd.Parameters.Add(filterNodeContentIdParam);
 
-                    orderID = (long) cmd.ExecuteScalar();
+                    return (long?) cmd.ExecuteScalar();
                 }
             }
-
-            return orderID;
         }
     }
 }

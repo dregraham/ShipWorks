@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="ShipWorks.SingleScan.AutoPrintConfirmation.AutoPrintConfirmationControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ShipWorks.SingleScan.AutoPrintConfirmation"
+        d:DataContext="{d:DesignInstance local:AutoPrintConfirmationDlgViewModel}"
+        mc:Ignorable="d"
+        FontFamily="Tahoma"
+        FontSize="8.25pt">
+    <Grid Width="500">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" VerticalAlignment="Top" Width="48" Margin="10 12 0 0" Source="/Shipworks.Core;component/Resources/warning2.png" />
+        <StackPanel Grid.Column="1"
+            Orientation="Vertical"
+            Margin="10">
+
+            <TextBlock
+                TextWrapping="Wrap"
+                Margin="0 10 0 10"
+                Text="{Binding DisplayText}" />
+
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <Button
+                    Height="25"
+                    Padding="10 0 10 0"
+                    Margin="0 0 8 0"
+                    Content="{Binding ContinueText}"
+                    Command="{Binding ContinueClickCommand}" />
+                <Button
+                    x:Name="cancelButton"
+                    IsCancel="True"
+                    Width="75"
+                    Height="25"
+                    IsDefault="True"
+                    Content="Cancel"
+                    Command="{Binding CancelClickCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

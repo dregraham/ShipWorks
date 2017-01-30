@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
@@ -17,10 +19,12 @@ using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Shipping.Services
+namespace ShipWorks.SingleScan
 {
     /// <summary>
     /// Handles auto printing 
@@ -31,10 +35,9 @@ namespace ShipWorks.Shipping.Services
         private readonly IMainForm mainForm;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly Func<ISecurityContext> securityContextRetriever;
-        private readonly IOrderLoader orderLoader;
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
+        private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
 
@@ -43,22 +46,21 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public AutoPrintService(IMessenger messenger,
             ISchedulerProvider schedulerProvider,
-            Func<ISecurityContext> securityContextRetriever,
-            IOrderLoader orderLoader,
             IUserSession userSession,
+            ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
+            Func<Type, ILog> logFactory,
             IMainForm mainForm)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
-            this.securityContextRetriever = securityContextRetriever;
-            this.orderLoader = orderLoader;
             this.userSession = userSession;
             this.mainForm = mainForm;
+            this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
 
-            log = LogManager.GetLogger(typeof(AutoPrintService));
+            log = logFactory(typeof(AutoPrintService));
         }
 
         /// <summary>
@@ -66,73 +68,117 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            // Wire up observable for auto printing 
+            // Wire up observable for auto printing
+            // note: One of the first things we do is dispose of scanMessagesConnection.
+            // This turns off the pipeline to ensure that another order isn't  
+            // picked up before we are finished with possessing the current order.
+            // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
-                .Where(x => AllowAutoPrint())
+                .Where(AllowAutoPrint)
                 .Do(x => scanMessagesConnection.Dispose())
-                .SelectMany(messenger.OfType<FilterCountsUpdatedMessage>().Take(1))
+                .SelectMany(WaitForFilterCountsUpdatedMessage)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(m => HandleAutoPrintShipment(m.FilterNodeContent).RunSynchronously())
-                .CatchAndContinue((Exception ex) =>
-                {
-                    log.Error("Error occurred while attempting to auto print.", ex);
-                    scanMessagesConnection = scanMessages.Connect();
-                })
-                .Gate(messenger.OfType<ShipmentsProcessedMessage>())
-                .Subscribe(x =>
-                {
-                    log.Debug("ShipmentsProcessedMessage received.");
-                    scanMessagesConnection = scanMessages.Connect();
-                });
+                .SelectMany(m => HandleAutoPrintShipment(m).ToObservable())
+                .SelectMany(WaitForShipmentsProcessedMessage)
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(x => ReconnectPipeline());
         }
 
         /// <summary>
         /// Determines if the auto print message should be sent
         /// </summary>
-        private bool AllowAutoPrint()
+        private bool AllowAutoPrint(ScanMessage scanMessage)
         {
-            bool allowed = userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
+            // they scanned a barcode 
+            return !scanMessage.ScannedText.IsNullOrWhiteSpace() &&
+                userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
                            !mainForm.AdditionalFormsOpen();
-
-            return allowed;
         }
 
         /// <summary>
-        /// Gets whether a shipment should be auto printed for an order
+        /// Waits for filter counts updated message.
         /// </summary>
-        private bool ShouldAutoPrintShipment(IEnumerable<ShipmentEntity> shipments, long orderId)
+        private IObservable<FilterCountsUpdatedAndScanMessages> WaitForFilterCountsUpdatedMessage(ScanMessage scanMessage)
         {
-            return shipments.IsCountEqualTo(1) && 
-                   shipments.All(s => !s.Processed) &&
-                   securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId);
+            return messenger.OfType<FilterCountsUpdatedMessage>().Take(1)
+                    .Select(filterCountsUpdatedMessage => 
+                        new FilterCountsUpdatedAndScanMessages(filterCountsUpdatedMessage, scanMessage));
         }
+
 
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task HandleAutoPrintShipment(IFilterNodeContentEntity filterNodeContent)
+        private async Task<GenericResult<string>> HandleAutoPrintShipment(FilterCountsUpdatedAndScanMessages messages)
         {
             // Only auto print if 1 order was found
-            if (filterNodeContent?.Count != 1)
+            if (messages.FilterCountsUpdatedMessage.FilterNodeContent?.Count != 1)
             {
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
 
-            // Get the order associated with the barcode search
-            long autoPrintOrderId = FilterContentManager.FetchFirstOrderIdForFilterNodeContent(filterNodeContent.FilterNodeContentID);
-
-            // Load the order, creating shipments if necessary.
-            ShipmentsLoadedEventArgs shipmentArgs = await orderLoader.LoadAsync(new[] { autoPrintOrderId }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
-            IEnumerable<ShipmentEntity> shipments = shipmentArgs.Shipments;
-
-            // See if we should allow auto print for this order
-            if (!ShouldAutoPrintShipment(shipments, autoPrintOrderId))
+            if (messages.FilterCountsUpdatedMessage.OrderId == null)
             {
-                throw new ShippingException("Auto printing is not allowed for the scanned order.");
+                throw new ShippingException("Order not found for scanned order.");
             }
 
-            // All good, process the shipment
-            messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
+            string scannedBarcode = messages.ScanMessage.ScannedText;
+            long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
+
+            // Get shipments to process (assumes GetShipments will not return voided shipments)
+            IEnumerable<ShipmentEntity> shipments = await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
+
+            if (shipments.Any())
+            {
+                // All good, process the shipment
+                messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
+
+                return GenericResult.FromSuccess(scannedBarcode);
+            }
+
+            return GenericResult.FromError("No shipments processed", scannedBarcode);
+        }
+
+        /// <summary>
+        /// Logs the exception and reconnect pipeline.
+        /// </summary>
+        private void HandleException(Exception ex)
+        {
+            log.Error("Error occurred while attempting to auto print.", ex);
+            ReconnectPipeline();
+        }
+
+        /// <summary>
+        /// Waits for shipments processed message.
+        /// </summary>
+        private IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
+        {
+            IObservable<GenericResult<string>> returnResult;
+
+            if (genericResult.Success)
+            {
+                log.Info("Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
+                returnResult = messenger.OfType<ShipmentsProcessedMessage>().Take(1).Select(f => genericResult);
+                log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
+            }
+            else
+            {
+                log.Info("No Shipments, not waiting for ShipmentsProcessMessageScan");
+                returnResult = Observable.Return(genericResult);
+            }
+
+            return returnResult;
+        }
+
+        /// <summary>
+        /// Reconnects the pipeline.
+        /// </summary>
+        private void ReconnectPipeline()
+        {
+            if (scanMessagesConnection != null)
+            {
+                scanMessagesConnection = scanMessages.Connect();
+            }
         }
 
         /// <summary>

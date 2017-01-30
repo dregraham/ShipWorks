@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Loading
 
             List<long> entityIDsOriginalSort = entityIDs.ToList();
 
-            if (entityIDs.Count() > ShipmentsLoaderConstants.MaxAllowedOrders)
+            if (entityIDsOriginalSort.Count > ShipmentsLoaderConstants.MaxAllowedOrders)
             {
                 throw new InvalidOperationException("Too many orders trying to load at once.");
             }
