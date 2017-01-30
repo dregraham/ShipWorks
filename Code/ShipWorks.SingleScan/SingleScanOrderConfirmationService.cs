@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
 
@@ -28,6 +29,12 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public bool Confirm(long orderId, int numberOfMatchedOrders, string scanText)
         {
+            // We should never get here with 0 matched orders
+            if (numberOfMatchedOrders == 0)
+            {
+                throw new ShippingException("Unable to locate order for processing.");
+            }
+
             if (numberOfMatchedOrders > 1)
             {
                 return messageHelper.ShowDialog(() => dlgFactory.Create(scanText, GetMessageingText(orderId, numberOfMatchedOrders))) == DialogResult.OK;
