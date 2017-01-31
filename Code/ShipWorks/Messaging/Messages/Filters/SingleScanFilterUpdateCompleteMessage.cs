@@ -10,12 +10,12 @@ namespace ShipWorks.Messaging.Messages.Filters
     /// <summary>
     /// Message to notify that a filter counts have bee updated
     /// </summary>
-    public class FilterCountsUpdatedMessage : IShipWorksMessage
+    public class SingleScanFilterUpdateCompleteMessage : IShipWorksMessage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterCountsUpdatedMessage(object sender, IFilterNodeContentEntity filterNodeContent, long? orderId)
+        public SingleScanFilterUpdateCompleteMessage(object sender, IFilterNodeContentEntity filterNodeContent, long? orderId)
         {
             Sender = sender;
             FilterNodeContent = filterNodeContent;

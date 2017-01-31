@@ -96,7 +96,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private IObservable<FilterCountsUpdatedAndScanMessages> WaitForFilterCountsUpdatedMessage(ScanMessage scanMessage)
         {
-            return messenger.OfType<FilterCountsUpdatedMessage>().Take(1)
+            return messenger.OfType<SingleScanFilterUpdateCompleteMessage>().Take(1)
                     .Select(filterCountsUpdatedMessage =>
                         new FilterCountsUpdatedAndScanMessages(filterCountsUpdatedMessage, scanMessage));
         }
@@ -110,16 +110,16 @@ namespace ShipWorks.SingleScan
             string scannedBarcode = messages.ScanMessage.ScannedText;
 
             // Only auto print if 1 order was found
-            if (messages.FilterCountsUpdatedMessage.FilterNodeContent == null ||
-                messages.FilterCountsUpdatedMessage.FilterNodeContent.Count < 1 ||
-                messages.FilterCountsUpdatedMessage.OrderId == null)
+            if (messages.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
+                messages.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
+                messages.SingleScanFilterUpdateCompleteMessage.OrderId == null)
             {
                 log.Error("Order not found for scanned order.");
                 return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
             }
 
-            long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
-            int matchedOrderCount = messages.FilterCountsUpdatedMessage.FilterNodeContent.Count;
+            long orderId = messages.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
+            int matchedOrderCount = messages.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
 
             if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
             {

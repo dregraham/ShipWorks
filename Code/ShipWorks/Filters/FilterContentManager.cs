@@ -661,7 +661,7 @@ namespace ShipWorks.Filters
                     sqlAdapter.FetchEntity(filterNodeContentEntity);
                 }
                 long? orderId = GetIdOfMostRecentOrder(filterNodeContentEntity.FilterNodeContentID);
-                messenger.Send(new FilterCountsUpdatedMessage(sender, filterNodeContentEntity, orderId));
+                messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
             }
         }
 

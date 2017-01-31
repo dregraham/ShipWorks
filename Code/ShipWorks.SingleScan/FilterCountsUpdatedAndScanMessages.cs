@@ -11,17 +11,17 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterCountsUpdatedAndScanMessages(FilterCountsUpdatedMessage filterCountsUpdatedMessage,
+        public FilterCountsUpdatedAndScanMessages(SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage,
             ScanMessage scanMessage)
         {
-            FilterCountsUpdatedMessage = filterCountsUpdatedMessage;
+            SingleScanFilterUpdateCompleteMessage = singleScanFilterUpdateCompleteMessage;
             ScanMessage = scanMessage;
         }
 
         /// <summary>
         /// Gets the filter counts updated message.
         /// </summary>
-        public FilterCountsUpdatedMessage FilterCountsUpdatedMessage { get; }
+        public SingleScanFilterUpdateCompleteMessage SingleScanFilterUpdateCompleteMessage { get; }
 
         /// <summary>
         /// Gets the scan message.

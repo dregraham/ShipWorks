@@ -31,7 +31,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly List<ShipmentEntity> shipments;
         private readonly Mock<ILog> mockLog;
         private readonly Mock<ISchedulerProvider> scheduleProvider;
-        private FilterCountsUpdatedMessage filterCountsUpdatedMessage;
+        private SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage;
 
         public AutoPrintServiceTest()
         {
@@ -58,7 +58,7 @@ namespace ShipWorks.SingleScan.Tests
                 .SetupGet(node => node.Count)
                 .Returns(1);
 
-            filterCountsUpdatedMessage = new FilterCountsUpdatedMessage(this,
+            singleScanFilterUpdateCompleteMessage = new SingleScanFilterUpdateCompleteMessage(this,
                 mock.Mock<IFilterNodeContentEntity>().Object, 5);
 
             testObject = mock.Create<AutoPrintService>();
@@ -156,7 +156,7 @@ namespace ShipWorks.SingleScan.Tests
                 .SetupGet(node => node.Count)
                 .Returns(72);
 
-            filterCountsUpdatedMessage = new FilterCountsUpdatedMessage(this,
+            singleScanFilterUpdateCompleteMessage = new SingleScanFilterUpdateCompleteMessage(this,
                 mock.Mock<IFilterNodeContentEntity>().Object, 101);
 
             SendScanMessage("A");
@@ -332,7 +332,7 @@ namespace ShipWorks.SingleScan.Tests
 
         private void SendFilterCountsUpdatedMessage()
         {
-            messenger.Send(filterCountsUpdatedMessage);
+            messenger.Send(singleScanFilterUpdateCompleteMessage);
         }
 
         private void SendShipmentsProcessedMessage()
