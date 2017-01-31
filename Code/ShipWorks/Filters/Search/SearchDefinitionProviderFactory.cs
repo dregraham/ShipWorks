@@ -63,9 +63,10 @@ namespace ShipWorks.Filters.Search
                     throw new IndexOutOfRangeException($"Unknown target {target} in FilterDefinitionProviderFactory.Create");
             }
 
-            return advancedSearchDefinition == null ?
-                quickSearchDefinitionProvider :
-                new AdvancedSearchDefinitionProvider(advancedSearchDefinition, quickSearchDefinitionProvider);
+            return advancedSearchDefinition == null
+                ? quickSearchDefinitionProvider
+                : new AdvancedSearchDefinitionProvider(advancedSearchDefinition, quickSearchDefinitionProvider,
+                    isBarcodeSearch ? FilterDefinitionSourceType.Scan : FilterDefinitionSourceType.Search);
         }
     }
 }
