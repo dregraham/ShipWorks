@@ -650,7 +650,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        public static void SendOrderFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
+        public static void QueueSingleScanFilterUpdateCompleteMessage(long filterNodeContentID, IMessenger messenger, object sender)
         {
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
@@ -660,7 +660,7 @@ namespace ShipWorks.Filters
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(filterNodeContentEntity);
                 }
-                long? orderId = FetchFirstOrderIdForFilterNodeContent(filterNodeContentEntity.FilterNodeContentID);
+                long? orderId = GetIdOfMostRecentOrder(filterNodeContentEntity.FilterNodeContentID);
                 messenger.Send(new FilterCountsUpdatedMessage(sender, filterNodeContentEntity, orderId));
             }
         }
@@ -668,7 +668,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Finds the first order for the specified filter node content
         /// </summary>
-        private static long? FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
+        public static long? GetIdOfMostRecentOrder(long filterNodeContentId)
         {
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
