@@ -27,14 +27,16 @@ namespace ShipWorks.Stores.Content.Panels.Selectors
         public void Select(PagedEntityGrid entityGrid)
         {
             entityGrid.SelectRows(Enumerable.Empty<long>());
+            IEnumerable<long> keysToSelect = entityGrid.EntityGateway?.GetOrderedKeys().Intersect(keys) ??
+                Enumerable.Empty<long>();
 
-            if (entityGrid.EntityGateway?.GetOrderedKeys().Intersect(keys).None() ?? false)
+            if (keysToSelect.None())
             {
                 EntityGridRowSelector.First.Select(entityGrid);
             }
             else
             {
-                entityGrid.SelectRows(keys);
+                entityGrid.SelectRows(keysToSelect);
             }
         }
     }
