@@ -41,6 +41,7 @@ namespace ShipWorks.SingleScan
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
         private const int FilterCountsUpdatedMessageTimeoutInSeconds = 25;
+        private const int ShipmentsProcessedMessageTimeoutInMinutes = 5;
 
         /// <summary>
         /// Constructor
@@ -176,9 +177,13 @@ namespace ShipWorks.SingleScan
             {
                 log.Info("Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
 
+                // Listen for ShipmentsProcessedMessages, but timeout if processing takes 
+                // longer than ShipmentsProcessedMessageTimeoutInMinutes.
+                // We don't get an observable to start from, but we need one to use ContinueAfter, so using 
+                // Observable.Range to get an observable to work with.
                 returnResult = Observable.Range(0, 1)
                                          .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
-                                                        TimeSpan.FromMinutes(5),
+                                                        TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
                                                         schedulerProvider.Default)
                                          .Select(f => genericResult);
 
