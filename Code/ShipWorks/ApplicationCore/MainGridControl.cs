@@ -13,6 +13,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.DetailView;
@@ -24,6 +25,7 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -367,20 +369,33 @@ namespace ShipWorks.ApplicationCore
         {
             try
             {
-                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search)
+                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid?.Selection.Count == 0)
                 {
                     IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
 
-                    GridRow onlyGridRow = rows?.FirstOrDefault();
-                    if (onlyGridRow != null)
-                    {
-                        onlyGridRow.Selected = true;
-                    }
+                    bool autoPrintOn = UserSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
+                    long? activeFilterNodeContentId = ActiveFilterNode?.FilterNodeContentID;
 
-                    // Set back to not barcode search
-                    if (isBarcodeSearch)
+                    if (autoPrintOn && isBarcodeSearch && activeFilterNodeContentId.HasValue)
                     {
-                        isBarcodeSearch = false;
+                        long? orderId = FilterContentManager.GetIdOfMostRecentOrder(activeFilterNodeContentId.Value);
+                        if (orderId.HasValue)
+                        {
+                            bool entityInGrid = ActiveGrid?.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()
+                                                    .Any(row => ActiveGrid.GetRowEntityID(row) == orderId) ?? false;
+                            if (entityInGrid)
+                            {
+                                ActiveGrid?.SelectRows(new[] {orderId.Value});
+                            }
+                        }
+                    }
+                    else
+                    {
+                        GridRow firstRow = rows?.FirstOrDefault();
+                        if (firstRow != null)
+                        {
+                            firstRow.Selected = true;
+                        }
                     }
                 }
             }
