@@ -16,9 +16,10 @@ namespace ShipWorks.Filters.Search
         /// Constructor
         /// </summary>
         public AdvancedSearchDefinitionProvider(FilterDefinition advancedFilterDefinition,
-            ISearchDefinitionProvider quickSearchDefinitionProvider)
+            ISearchDefinitionProvider quickSearchDefinitionProvider,
+            FilterDefinitionSourceType filterDefinitionSourceType)
         {
-            this.advancedFilterDefinition = new FilterDefinition(advancedFilterDefinition.GetXml(), FilterDefinitionSourceType.Search);
+            this.advancedFilterDefinition = new FilterDefinition(advancedFilterDefinition.GetXml(), filterDefinitionSourceType);
             this.quickSearchDefinitionProvider = quickSearchDefinitionProvider;
         }
 

@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsNull_WhenAdvancedFilterDefinitionIsEmpty()
         {
-            AdvancedSearchDefinitionProvider testObject = new AdvancedSearchDefinitionProvider(new FilterDefinition(FilterTarget.Orders), null);
+            AdvancedSearchDefinitionProvider testObject = new AdvancedSearchDefinitionProvider(new FilterDefinition(FilterTarget.Orders), null, FilterDefinitionSourceType.Scan);
 
             Assert.Null(testObject.GetDefinition(""));
         }
