@@ -742,12 +742,10 @@ namespace ShipWorks.ApplicationCore
                 filterEditor.Focus();
             }
 
-            // Upate the search with the current definition
+            // Update the search with the current definition
             if (IsSearchActive && (wasActive != AdvancedSearchResultsActive))
             {
-                searchProvider.Search(GetSearchDefinition(GetBasicSearchText()));
-
-                RaiseSearchQueryChanged();
+                PerformManualSearch();
             }
         }
 
@@ -777,8 +775,10 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Performs the search.
         /// </summary>
-        public void PerformSearch()
+        public void PerformManualSearch()
         {
+            // Mark that the search is not coming from a barcode scan
+            isBarcodeSearch = false;
             PerformSearch(GetBasicSearchText());
         }
 

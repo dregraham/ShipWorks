@@ -63,7 +63,7 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
-                    .Subscribe(x => gridControl.PerformSearch()),
+                    .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for debouncing advanced search text box
                 advancedSearchSubscription = Observable
@@ -71,7 +71,7 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                    .Subscribe(x => gridControl.PerformSearch()),
+                    .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for doing barcode searches
                 barcodeScannedMessageSubscription = messenger.OfType<ScanMessage>()
