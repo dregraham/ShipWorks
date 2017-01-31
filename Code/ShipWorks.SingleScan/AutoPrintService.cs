@@ -175,7 +175,13 @@ namespace ShipWorks.SingleScan
             if (genericResult.Success)
             {
                 log.Info("Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
-                returnResult = messenger.OfType<ShipmentsProcessedMessage>().Take(1).Select(f => genericResult);
+
+                returnResult = Observable.Range(0, 1)
+                                         .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
+                                                        TimeSpan.FromMinutes(5),
+                                                        schedulerProvider.Default)
+                                         .Select(f => genericResult);
+
                 log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
             }
             else

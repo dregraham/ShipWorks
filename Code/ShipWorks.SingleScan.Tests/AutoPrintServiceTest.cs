@@ -85,6 +85,32 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public void AutoPrint_Continues_AfterRequestingShipmentToBeProcessedButTimesOut()
+        {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            defaultScheduler.AdvanceBy(TimeSpan.FromMinutes(100).Ticks);
+            windowsScheduler.Start();
+            defaultScheduler.Start();
+
+            Assert.Equal(0, messenger.SentMessages.OfType<ShipmentsProcessedMessage>().Count());
+            mockLog.Verify(l => l.Info("Starting scan message observation."), Times.Once);
+        }
+        
+        [Fact]
         public void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             TestScheduler windowsScheduler = new TestScheduler();
