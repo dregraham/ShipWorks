@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
     {
         private static ILog log = LogManager.GetLogger(typeof (GridAmazonOrderDisplayType));
 
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -37,34 +38,42 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
         /// <summary>
         /// Launches the browser to the amazon order page
         /// </summary>
-        void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
+        private void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
             AmazonOrderEntity order = e.Row.Entity as AmazonOrderEntity;
             if (order != null)
             {
                 string domainName = GetDomainName(order);
-                string orderUrl = string.Format("https://sellercentral.{0}/gp/orders/order-details.html/?orderID={1}", domainName, order.AmazonOrderID);
+                string orderUrl = $"https://sellercentral.{domainName}/gp/orders/order-details.html/?orderID={order.AmazonOrderID}";
+                Uri orderUri = new Uri(orderUrl);
 
-                HttpRequestSubmitter request = new HttpVariableRequestSubmitter();
-                request.Uri = new Uri(orderUrl);
-
-                try
+                if (orderUri.Host != "sellercentral.amazon.com")
                 {
-                    // There have been cases where 502 errors have been received when trying to navigate to 
-                    // the store domain provided by amazon, so we'll try to bounce a request off of the URL
-                    // to see whether it works; if it doesn't work, we'll resort to just hitting sellercentral.amazon.com
-                    IHttpResponseReader response = request.GetResponse();
-                    if (response.HttpWebResponse.StatusCode != HttpStatusCode.OK)
+                    HttpRequestSubmitter request = new HttpVariableRequestSubmitter();
+                    request.Uri = new Uri(orderUrl);
+
+                    try
                     {
-                        log.Warn(string.Format("Unable to view Amazon order info at {0}. A {1} error was received.", orderUrl, response.HttpWebResponse.StatusCode));
+                        // There have been cases where 502 errors have been received when trying to navigate to 
+                        // the store domain provided by amazon, so we'll try to bounce a request off of the URL
+                        // to see whether it works; if it doesn't work, we'll resort to just hitting sellercentral.amazon.com
+                        IHttpResponseReader response = request.GetResponse();
+                        if (response.HttpWebResponse.StatusCode != HttpStatusCode.OK)
+                        {
+                            log.Warn(string.Format(
+                                "Unable to view Amazon order info at {0}. A {1} error was received.", orderUrl,
+                                response.HttpWebResponse.StatusCode));
+                            orderUrl = SwapDomainWithGenericAmazonDomain(orderUrl);
+                        }
+                    }
+                    catch (WebException exception)
+                    {
+                        log.Warn(string.Format("Unable to view Amazon order info at {0}. {1}", orderUrl,
+                            exception.Message));
                         orderUrl = SwapDomainWithGenericAmazonDomain(orderUrl);
                     }
                 }
-                catch (WebException exception)
-                {
-                    log.Warn(string.Format("Unable to view Amazon order info at {0}. {1}", orderUrl, exception.Message));
-                    orderUrl = SwapDomainWithGenericAmazonDomain(orderUrl);
-                }
+
 
                 WebHelper.OpenUrl(orderUrl, e.Row.Grid.SandGrid.TopLevelControl);
             }
