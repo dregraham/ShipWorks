@@ -57,6 +57,8 @@ namespace ShipWorks.Filters
         // Wait forever constant
         private const int WaitForever = -1;
 
+        private const int QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds = 30;
+
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
@@ -655,13 +657,20 @@ namespace ShipWorks.Filters
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 FilterNodeContentEntity filterNodeContentEntity = new FilterNodeContentEntity(filterNodeContentID);
-                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready)
+                TimeSpan maxDuration = TimeSpan.FromSeconds(QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds);
+                Stopwatch stopwatch = Stopwatch.StartNew();
+
+                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready && stopwatch.Elapsed < maxDuration)
                 {
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(filterNodeContentEntity);
                 }
-                long? orderId = GetIdOfMostRecentOrder(filterNodeContentEntity.FilterNodeContentID);
-                messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
+
+                if (filterNodeContentEntity.Status == (int) FilterCountStatus.Ready)
+                {
+                    long? orderId = GetIdOfMostRecentOrder(filterNodeContentEntity.FilterNodeContentID);
+                    messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
+                }
             }
         }
 
