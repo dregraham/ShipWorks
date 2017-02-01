@@ -6,6 +6,7 @@ using log4net;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.Linq;
+using Interapptive.Shared.Extensions;
 
 namespace Interapptive.Shared.Utility
 {
@@ -273,7 +274,7 @@ namespace Interapptive.Shared.Utility
             => source.IndexOf(value, comp) >= 0;
 
         /// <summary>
-        /// Converts a string to a secure string. 
+        /// Converts a string to a secure string.
         /// </summary>
         /// <remarks>
         /// This defeats the purporse of using a secure string...
@@ -301,7 +302,7 @@ namespace Interapptive.Shared.Utility
         public static string ToInsecureString(this SecureString value)
         {
             MethodConditions.EnsureArgumentIsNotNull(value);
-               
+
             IntPtr unmanagedString = IntPtr.Zero;
             try
             {
@@ -312,6 +313,14 @@ namespace Interapptive.Shared.Utility
             {
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
+        }
+
+        /// <summary>
+        /// Removes symbol characters from the string
+        /// </summary>
+        public static string RemoveSymbols(this string value)
+        {
+            return value.Where(c => !char.IsSymbol(c)).CreateString();
         }
     }
 }

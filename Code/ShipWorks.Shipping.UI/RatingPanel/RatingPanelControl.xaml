@@ -108,10 +108,16 @@
                                             Source={StaticResource ProxyElement},
                                             Converter={StaticResource BooleanToVisibility}}"
                                         Binding="{Binding Duties, Converter={StaticResource HalfCentCurrency}}" />
-                    <DataGridTextColumn Header="Rate"
-                                        Width="Auto"
-                                        ElementStyle="{StaticResource DataGrid.Element.Amount}"
-                                        Binding="{Binding FormattedAmount}" />
+                    <DataGridTemplateColumn Header="Rate"
+                                        Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FormattedAmount}"
+                                           Style="{StaticResource DataGrid.Element.Amount}"
+                                           Visibility="{Binding Selectable, Converter={StaticResource BooleanToVisibility}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
