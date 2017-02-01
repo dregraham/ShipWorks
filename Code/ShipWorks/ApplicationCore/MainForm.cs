@@ -4187,7 +4187,7 @@ namespace ShipWorks
         {
             // The floating panels count as open forms, so we see how many are floating, add 1 for MainForm, and compare that to the
             // total open count to see if there are any extras about.
-            return sandDockManager.GetDockContainers().Count != Application.OpenForms.Count;
+            return sandDockManager.GetDockContainers().Length != Application.OpenForms.Count;
         }
 
         #endregion
