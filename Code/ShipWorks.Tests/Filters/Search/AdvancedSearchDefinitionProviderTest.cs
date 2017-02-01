@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Filters.Search
         [Fact]
         public void GetDefinition_ReturnsNull_WhenAdvancedFilterDefinitionIsEmpty()
         {
-            AdvancedSearchDefinitionProvider testObject = new AdvancedSearchDefinitionProvider(new FilterDefinition(FilterTarget.Orders), null);
+            AdvancedSearchDefinitionProvider testObject = new AdvancedSearchDefinitionProvider(new FilterDefinition(FilterTarget.Orders), null, FilterDefinitionSourceType.Search);
 
             Assert.Null(testObject.GetDefinition(""));
         }
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Filters.Search
         }
 
         [Fact]
-        public void GetDefinition_HasSearch_AsItsFilterDefinitionSource()
+        public void GetDefinition_HasSearch_AsItsFilterDefinitionSource_WhenSearchPassedIntoConstructor()
         {
             Mock<ISearchDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<ISearchDefinitionProvider>();
             AdvancedSearchDefinitionProvider testObject = GetDefaultAdvancedSearchProvider(quickFilterDefinitionProvider);
@@ -60,10 +60,19 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.Equal(FilterDefinitionSourceType.Search, testObject.GetDefinition("something").FilterDefinitionSource);
         }
 
+        [Fact]
+        public void GetDefinition_HasScan_AsItsFilterDefinitionSource_WhenScanPassedIntoConstructor()
+        {
+            Mock<ISearchDefinitionProvider> quickFilterDefinitionProvider = mock.Mock<ISearchDefinitionProvider>();
+            AdvancedSearchDefinitionProvider testObject = GetDefaultAdvancedSearchProvider(quickFilterDefinitionProvider, FilterDefinitionSourceType.Scan);
+
+            Assert.Equal(FilterDefinitionSourceType.Scan, testObject.GetDefinition("something").FilterDefinitionSource);
+        }
+
         /// <summary>
         /// Get a default advanced search definition provider to use with testing.
         /// </summary>
-        private AdvancedSearchDefinitionProvider GetDefaultAdvancedSearchProvider(Mock<ISearchDefinitionProvider> quickFilterDefinitionProvider)
+        private AdvancedSearchDefinitionProvider GetDefaultAdvancedSearchProvider(Mock<ISearchDefinitionProvider> quickFilterDefinitionProvider, FilterDefinitionSourceType sourceType = FilterDefinitionSourceType.Search)
         {
             quickFilterDefinitionProvider.Setup(q => q.GetDefinition(It.IsAny<string>()))
                 .Returns(new FilterDefinition(FilterTarget.Orders));
@@ -80,7 +89,7 @@ namespace ShipWorks.Tests.Filters.Search
                 StringValue = "something"
             });
 
-            return mock.Create<AdvancedSearchDefinitionProvider>(new TypedParameter(typeof(FilterDefinition), advancedDefinitions));
+            return mock.Create<AdvancedSearchDefinitionProvider>(new TypedParameter(typeof(FilterDefinition), advancedDefinitions), new TypedParameter(typeof(FilterDefinitionSourceType), sourceType));
         }
 
         public void Dispose()

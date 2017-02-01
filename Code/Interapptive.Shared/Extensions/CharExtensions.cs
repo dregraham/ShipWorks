@@ -11,6 +11,6 @@ namespace Interapptive.Shared.Extensions
         /// <summary>
         /// Returns a string representation of the given chars
         /// </summary>
-        public static string CreateString (this IEnumerable<char> value) => new string(value.ToArray());
+        public static string CreateString(this IEnumerable<char> value) => new string(value.ToArray());
     }
 }
