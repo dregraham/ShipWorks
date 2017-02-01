@@ -183,6 +183,7 @@
     <Compile Include="Services\ShipmentLoaderServiceTest.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapperTest.cs" />
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
+    <Compile Include="Services\ShippingManagerWrapperTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonAllowedCarriersRateGroupFilterTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest.cs" />
