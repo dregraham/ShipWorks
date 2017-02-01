@@ -371,14 +371,12 @@ namespace ShipWorks.ApplicationCore
             {
                 if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid?.Selection.Count == 0)
                 {
-                    IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
-
                     bool autoPrintOn = UserSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
-                    long? activeFilterNodeContentId = ActiveFilterNode?.FilterNodeContentID;
+                    long activeFilterNodeContentId = ActiveFilterNode.FilterNodeContentID;
 
-                    if (autoPrintOn && isBarcodeSearch && activeFilterNodeContentId.HasValue)
+                    if (autoPrintOn && isBarcodeSearch)
                     {
-                        long? orderId = FilterContentManager.GetIdOfMostRecentOrder(activeFilterNodeContentId.Value);
+                        long? orderId = FilterContentManager.GetIdOfMostRecentOrder(activeFilterNodeContentId);
                         if (orderId.HasValue)
                         {
                             bool entityInGrid = ActiveGrid?.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()
@@ -391,7 +389,7 @@ namespace ShipWorks.ApplicationCore
                     }
                     else
                     {
-                        GridRow firstRow = rows?.FirstOrDefault();
+                        GridRow firstRow = ActiveGrid?.Rows?.Cast<GridRow>().FirstOrDefault();
                         if (firstRow != null)
                         {
                             firstRow.Selected = true;
