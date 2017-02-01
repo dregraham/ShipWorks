@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,6 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Messaging.Messages.Filters;
@@ -657,10 +655,10 @@ namespace ShipWorks.Filters
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 FilterNodeContentEntity filterNodeContentEntity = new FilterNodeContentEntity(filterNodeContentID);
-                TimeSpan maxDuration = TimeSpan.FromSeconds(QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds);
-                Stopwatch stopwatch = Stopwatch.StartNew();
 
-                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready && stopwatch.Elapsed < maxDuration)
+                DateTime exipreTime = DateTime.UtcNow.AddSeconds(QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds);
+
+                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready && DateTime.UtcNow < exipreTime)
                 {
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(filterNodeContentEntity);
