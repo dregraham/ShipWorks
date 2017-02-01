@@ -376,7 +376,7 @@ namespace ShipWorks.ApplicationCore
 
                     if (autoPrintOn && isBarcodeSearch)
                     {
-                        long? orderId = FilterContentManager.GetIdOfMostRecentOrder(activeFilterNodeContentId);
+                        long? orderId = FilterContentManager.GetMostRecentOrderID(activeFilterNodeContentId);
                         if (orderId.HasValue)
                         {
                             bool entityInGrid = ActiveGrid.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()

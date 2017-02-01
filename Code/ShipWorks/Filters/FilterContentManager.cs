@@ -668,7 +668,7 @@ namespace ShipWorks.Filters
 
                 if (filterNodeContentEntity.Status == (int) FilterCountStatus.Ready)
                 {
-                    long? orderId = GetIdOfMostRecentOrder(filterNodeContentEntity.FilterNodeContentID);
+                    long? orderId = GetMostRecentOrderID(filterNodeContentEntity.FilterNodeContentID);
                     messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
                 }
             }
@@ -677,7 +677,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Finds the id of the most recent order based on order date
         /// </summary>
-        public static long? GetIdOfMostRecentOrder(long filterNodeContentId)
+        public static long? GetMostRecentOrderID(long filterNodeContentId)
         {
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
