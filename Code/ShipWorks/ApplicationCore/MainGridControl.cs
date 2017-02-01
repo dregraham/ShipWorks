@@ -379,17 +379,17 @@ namespace ShipWorks.ApplicationCore
                         long? orderId = FilterContentManager.GetIdOfMostRecentOrder(activeFilterNodeContentId);
                         if (orderId.HasValue)
                         {
-                            bool entityInGrid = ActiveGrid?.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()
+                            bool entityInGrid = ActiveGrid.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()
                                                     .Any(row => ActiveGrid.GetRowEntityID(row) == orderId) ?? false;
                             if (entityInGrid)
                             {
-                                ActiveGrid?.SelectRows(new[] {orderId.Value});
+                                ActiveGrid.SelectRows(new[] {orderId.Value});
                             }
                         }
                     }
                     else
                     {
-                        GridRow firstRow = ActiveGrid?.Rows?.Cast<GridRow>().FirstOrDefault();
+                        GridRow firstRow = ActiveGrid.Rows?.Cast<GridRow>().FirstOrDefault();
                         if (firstRow != null)
                         {
                             firstRow.Selected = true;

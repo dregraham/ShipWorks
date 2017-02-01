@@ -6,12 +6,12 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// A holder for the FilterCountsUpdateMessage and ScanMessage
     /// </summary>
-    public struct FilterCountsUpdatedAndScanMessages
+    public struct AutoPrintServiceDto
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterCountsUpdatedAndScanMessages(SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage,
+        public AutoPrintServiceDto(SingleScanFilterUpdateCompleteMessage singleScanFilterUpdateCompleteMessage,
             ScanMessage scanMessage)
         {
             SingleScanFilterUpdateCompleteMessage = singleScanFilterUpdateCompleteMessage;

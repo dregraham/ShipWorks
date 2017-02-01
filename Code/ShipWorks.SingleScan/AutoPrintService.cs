@@ -90,36 +90,34 @@ namespace ShipWorks.SingleScan
                 userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
         }
 
-
         /// <summary>
         /// Waits for filter counts updated message.
         /// </summary>
-        private IObservable<FilterCountsUpdatedAndScanMessages> WaitForFilterCountsUpdatedMessage(ScanMessage scanMessage)
+        private IObservable<AutoPrintServiceDto> WaitForFilterCountsUpdatedMessage(ScanMessage scanMessage)
         {
             return messenger.OfType<SingleScanFilterUpdateCompleteMessage>().Take(1)
                     .Select(filterCountsUpdatedMessage =>
-                        new FilterCountsUpdatedAndScanMessages(filterCountsUpdatedMessage, scanMessage));
+                        new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMessage));
         }
-
 
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        private async Task<GenericResult<string>> HandleAutoPrintShipment(FilterCountsUpdatedAndScanMessages messages)
+        private async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
         {
-            string scannedBarcode = messages.ScanMessage.ScannedText;
+            string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
 
             // Only auto print if 1 order was found
-            if (messages.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
-                messages.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
-                messages.SingleScanFilterUpdateCompleteMessage.OrderId == null)
+            if (autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
+                autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
+                autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId == null)
             {
                 log.Error("Order not found for scanned order.");
                 return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
             }
 
-            long orderId = messages.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
-            int matchedOrderCount = messages.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
+            long orderId = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
+            int matchedOrderCount = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
 
             if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
             {

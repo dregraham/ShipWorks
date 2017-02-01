@@ -648,7 +648,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
+        /// Queues a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
         public static void QueueSingleScanFilterUpdateCompleteMessage(long filterNodeContentID, IMessenger messenger, object sender)
         {
@@ -666,7 +666,7 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
-        /// Finds the first order for the specified filter node content
+        /// Finds the id of the most recent order based on order date
         /// </summary>
         public static long? GetIdOfMostRecentOrder(long filterNodeContentId)
         {
