@@ -745,7 +745,9 @@ namespace ShipWorks.ApplicationCore
             // Update the search with the current definition
             if (IsSearchActive && (wasActive != AdvancedSearchResultsActive))
             {
-                PerformManualSearch();
+                isBarcodeSearch = false;
+                searchProvider.Search(GetSearchDefinition(GetBasicSearchText()));
+                RaiseSearchQueryChanged();
             }
         }
 
