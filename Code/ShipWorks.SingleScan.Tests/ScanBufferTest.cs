@@ -4,6 +4,8 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Win32;
+using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
@@ -145,6 +147,28 @@ namespace ShipWorks.SingleScan.Tests
             testScheduler.WindowsFormsEventLoop.Start();
 
             messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == barcode), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public void Append_MessageBarcodeMatches_WhenInputHasControlChars()
+        {
+            User32Input user32Input = new User32Input();
+
+            string controlToIgnore = user32Input.GetCharactersFromKeys(VirtualKeys.B, false, true, false);
+
+            TestSchedulerProvider testScheduler = new TestSchedulerProvider();
+            mock.Provide<ISchedulerProvider>(testScheduler);
+
+            ScanBuffer testObject = mock.Create<ScanBuffer>();
+
+            testObject.Append(deviceHandle, controlToIgnore);
+            testObject.Append(deviceHandle, "1");
+            testObject.Append(deviceHandle, controlToIgnore);
+
+            testScheduler.Default.AdvanceBy(TimeSpan.FromMilliseconds(101).Ticks);
+            testScheduler.WindowsFormsEventLoop.Start();
+
+            messenger.Verify(x => x.Send(It.Is<ScanMessage>(msg => msg.ScannedText == "1"), It.IsAny<string>()), Times.Once);
         }
 
         public void Dispose()

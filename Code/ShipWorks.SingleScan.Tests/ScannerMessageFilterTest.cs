@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -85,7 +87,7 @@ namespace ShipWorks.SingleScan.Tests
             var message = new Message { Msg = (int) WindowsMessage.INPUT };
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IUser32Input>().Verify(x => x.GetCharactersFromKeys(VirtualKeys.X, false, false));
+            mock.Mock<IUser32Input>().Verify(x => x.GetCharactersFromKeys(VirtualKeys.X, false, false, false));
         }
 
         [Fact]
@@ -96,11 +98,26 @@ namespace ShipWorks.SingleScan.Tests
                 .Returns(CreateRawInputData(WindowsMessage.KEYFIRST, VirtualKeys.Shift))
                 .Returns(CreateRawInputData(WindowsMessage.KEYFIRST, VirtualKeys.X));
 
-            var message = new Message { Msg = (int) WindowsMessage.INPUT };
+            var message = new Message { Msg = (int)WindowsMessage.INPUT };
             testObject.PreFilterMessage(ref message);
             testObject.PreFilterMessage(ref message);
 
-            mock.Mock<IUser32Input>().Verify(x => x.GetCharactersFromKeys(VirtualKeys.X, true, false));
+            mock.Mock<IUser32Input>().Verify(x => x.GetCharactersFromKeys(VirtualKeys.X, true, false, false));
+        }
+
+        [Fact]
+        public void PreFilterMessage_DelegatesToUser32Input_ToGetCharactersWhenControlIsHeld()
+        {
+            mock.Mock<IUser32Input>()
+                .SetupSequence(x => x.GetRawInputData(It.IsAny<IntPtr>(), It.IsAny<RawInputCommand>()))
+                .Returns(CreateRawInputData(WindowsMessage.KEYFIRST, VirtualKeys.Control))
+                .Returns(CreateRawInputData(WindowsMessage.KEYFIRST, VirtualKeys.X));
+
+            var message = new Message { Msg = (int)WindowsMessage.INPUT };
+            testObject.PreFilterMessage(ref message);
+            testObject.PreFilterMessage(ref message);
+
+            mock.Mock<IUser32Input>().Verify(x => x.GetCharactersFromKeys(VirtualKeys.X, false, true, false));
         }
 
         [Fact]
@@ -110,7 +127,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(x => x.GetRawInputData(It.IsAny<IntPtr>(), It.IsAny<RawInputCommand>()))
                 .Returns(CreateRawInputData(WindowsMessage.KEYFIRST, VirtualKeys.X));
             mock.Mock<IUser32Input>()
-                .Setup(x => x.GetCharactersFromKeys(It.IsAny<VirtualKeys>(), It.IsAny<bool>(), false))
+                .Setup(x => x.GetCharactersFromKeys(It.IsAny<VirtualKeys>(), It.IsAny<bool>(), It.IsAny<bool>(), false))
                 .Returns("X");
 
             var message = new Message { Msg = (int) WindowsMessage.INPUT };

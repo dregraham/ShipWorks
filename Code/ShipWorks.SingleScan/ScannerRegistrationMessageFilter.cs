@@ -100,7 +100,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private string GetCharacter(VirtualKeys virtualKey)
         {
-            return user32Input.GetCharactersFromKeys(virtualKey, pressedKeys.Contains(VirtualKeys.Shift), false);
+            return user32Input.GetCharactersFromKeys(virtualKey, pressedKeys.Contains(VirtualKeys.Shift), pressedKeys.Contains(VirtualKeys.Control), false);
         }
     }
 }
