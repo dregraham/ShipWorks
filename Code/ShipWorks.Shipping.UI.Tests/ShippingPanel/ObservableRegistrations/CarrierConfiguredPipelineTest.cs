@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
+using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
@@ -68,6 +69,21 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             schedulerProvider.TaskPool.Start();
 
             mock.Mock<IShippingManager>().Verify(x => x.GetShipment(123));
+        }
+
+        [Fact]
+        public void Register_DoesNotDelegateToShippingManager_WhenViewModelHasNullShipment()
+        {
+            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
+            viewModel.Setup(x => x.Shipment).Returns((ShipmentEntity) null);
+
+            var testObject = mock.Create<CarrierConfiguredPipeline>();
+            testObject.Register(viewModel.Object);
+
+            messages.OnNext(new CarrierConfiguredMessage(this, viewModel.Object.ShipmentType));
+
+            mock.Mock<ILog>().Verify(x => x.Error(It.IsAny<object>(), It.IsAny<Exception>()), Times.Never);
+            mock.Mock<IShippingManager>().Verify(x => x.GetShipment(It.IsAny<long>()), Times.Never);
         }
 
         [Fact]

@@ -2,6 +2,7 @@
 using System.Linq;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ShipSense.Hashing
@@ -9,6 +10,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
     /// <summary>
     /// A factory for creating ShipSenseOrderItemKey objects.
     /// </summary>
+    [Component]
     public class ShipSenseOrderItemKeyFactory : IShipSenseOrderItemKeyFactory
     {
         /// <summary>
@@ -19,7 +21,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         public IEnumerable<ShipSenseOrderItemKey> GetKeys(IEnumerable<OrderItemEntity> orderItems, List<string> propertyNames, List<string> attributeNames)
         {
             List<ShipSenseOrderItemKey> keys = new List<ShipSenseOrderItemKey>();
-            
+
             // Sort the order items, so the same keys are generated regardless of the sequence the order items are in
             IEnumerable<OrderItemEntity> sortedItems = GetSortedOrderItems(orderItems);
 
@@ -36,7 +38,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
                     }
                     else
                     {
-                        if (field.DataType == typeof (decimal))
+                        if (field.DataType == typeof(decimal))
                         {
                             decimal currentValue = (decimal) item.Fields[property].CurrentValue;
                             key.Add(property, currentValue.ToString("N4"));
@@ -48,7 +50,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
                         }
                     }
                 }
-                
+
                 // Find the item attributes that match the list of attribute names provided.
                 List<OrderItemAttributeEntity> matchingOrderItemAttributes = (item.OrderItemAttributes
                                                                                   .Join(attributeNames, oia => oia.Name.ToUpperInvariant(), name => name.ToUpperInvariant(), (oia, name) => oia))
@@ -87,7 +89,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
             List<IGrouping<string, ShipSenseOrderItemKey>> groupedKeys = keys.GroupBy(k => k.KeyValue).ToList();
             foreach (IGrouping<string, ShipSenseOrderItemKey> keyGroup in groupedKeys)
             {
-                // Copy the first item in the key group to grab the identifier data and update 
+                // Copy the first item in the key group to grab the identifier data and update
                 // the quantity to reflect the total quantity for this key
                 ShipSenseOrderItemKey key = new ShipSenseOrderItemKey(keyGroup.FirstOrDefault());
                 key.Quantity = (keyGroup.Sum(g => g.Quantity));
@@ -100,7 +102,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         }
 
         /// <summary>
-        /// Gets the sorted order items. The actual sequence the criteria is applied is not really important 
+        /// Gets the sorted order items. The actual sequence the criteria is applied is not really important
         /// here; we just need the items being ordered in a consistent manner.
         /// </summary>
         private static IEnumerable<OrderItemEntity> GetSortedOrderItems(IEnumerable<OrderItemEntity> orderItems)

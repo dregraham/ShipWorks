@@ -144,6 +144,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgViewModelTest.cs" />
+    <Compile Include="AutoPrintConfirmationDlgFactoryTest.cs" />
+    <Compile Include="AutoPrintServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterScannerControlViewModelTest.cs" />
     <Compile Include="ScannerIdentifierTest.cs" />
@@ -156,6 +159,7 @@
     <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
     <Compile Include="SingleScanOrderShortcutTest.cs" />
+    <Compile Include="SingleScanShipmentConfirmationServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

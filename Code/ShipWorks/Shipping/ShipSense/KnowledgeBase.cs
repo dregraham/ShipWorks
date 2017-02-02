@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,11 +7,13 @@ using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Threading;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Users.Audit;
@@ -20,6 +23,7 @@ namespace ShipWorks.Shipping.ShipSense
     /// <summary>
     /// Acts as the data source for ShipSense: knowledge base entries can be saved and fetched.
     /// </summary>
+    [Component]
     public class Knowledgebase : IKnowledgebase
     {
         private readonly ILog log;
@@ -31,9 +35,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
         /// </summary>
         public Knowledgebase()
-            : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(), LogManager.GetLogger(typeof(Knowledgebase)))
+            : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(), LogManager.GetLogger)
         {
-            shipSenseUniquenessXmlParser = new ShipSenseUniquenessXmlParser();
+
         }
 
         /// <summary>
@@ -41,13 +45,13 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         /// <param name="hashingStrategy">The hashing strategy that will be used to identify knowledge base entries.</param>
         /// <param name="keyFactory">The key factory used to generate the ShipsenseOrderItemKey objects.</param>
-        /// <param name="log">The log.</param>
-        public Knowledgebase(IKnowledgebaseHash hashingStrategy, IShipSenseOrderItemKeyFactory keyFactory, ILog log)
+        /// <param name="createLog">Function to create the logger.</param>
+        public Knowledgebase(IKnowledgebaseHash hashingStrategy, IShipSenseOrderItemKeyFactory keyFactory, Func<Type, ILog> createLog)
         {
             shipSenseUniquenessXmlParser = new ShipSenseUniquenessXmlParser();
             this.hashingStrategy = hashingStrategy;
             this.keyFactory = keyFactory;
-            this.log = log;
+            this.log = createLog(GetType());
         }
 
         /// <summary>
@@ -269,6 +273,44 @@ namespace ShipWorks.Shipping.ShipSense
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 ActionProcedures.ShipmentShipSenseProcedure(hashKey, shipmentXml.ToString(), adapter);
+            }
+        }
+
+        /// <summary>
+        /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught
+        /// and logged and wrapped in a ShippingException.
+        /// </summary>
+        public void LogShipment(ShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            try
+            {
+                if (shipment.ShipSenseStatus == (int) ShipSenseStatus.Applied && IsOverwritten(shipment))
+                {
+                    shipment.ShipSenseStatus = (int) ShipSenseStatus.Overwritten;
+                }
+
+                IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
+
+                // Make sure we have all of the order information
+                OrderEntity order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                }
+
+                // Apply the data from the package adapters and the customs items to the knowledge base
+                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
+                // is smart enough to know when to save the customs items associated with an entry.
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+
+                Save(entry, order);
+            }
+            catch (Exception ex)
+            {
+                // We may want to eat this exception entirely, so the user isn't impacted
+                log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
+                throw new ShippingException("The shipment was processed successfully, but the data was not logged to ShipSense.", ex);
             }
         }
 

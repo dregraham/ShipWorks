@@ -60,6 +60,17 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             SetShipmentType(builderConfiguration, ShipmentTypeCode.UpsOnLineTools, x => x.Ups);
 
         /// <summary>
+        /// Make the shipment a UPS WorldShip shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsUpsWorldShip() => AsUpsWorldShip(null);
+
+        /// <summary>
+        /// Make the shipment a UPS WorldShip shipment
+        /// </summary>
+        public ShipmentEntityBuilder AsUpsWorldShip(Action<UpsShipmentEntityBuilder> builderConfiguration) =>
+            SetShipmentType(builderConfiguration, ShipmentTypeCode.UpsWorldShip, x => x.Ups);
+
+        /// <summary>
         /// Make the shipment a Postal shipment
         /// </summary>
         public ShipmentEntityBuilder AsPostal() => AsPostal(null);

@@ -292,7 +292,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Activation
             using (var mock = AutoMock.GetLoose())
             {
                 var repo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
-                repo.Setup(r => r.Accounts)
+                repo.Setup(r => r.AccountsReadOnly)
                     .Returns(new[] { new UspsAccountEntity() });
 
                 Mock<ICustomerLicense> license = mock.Mock<ICustomerLicense>();

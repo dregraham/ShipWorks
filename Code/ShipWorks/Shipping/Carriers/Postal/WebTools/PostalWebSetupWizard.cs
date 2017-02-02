@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     /// <summary>
     /// Setup wizard for USPS w/o Postage shipping
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.PostalWebTools)]
     public partial class PostalWebSetupWizard : ShipmentTypeSetupWizardForm
     {
         /// <summary>

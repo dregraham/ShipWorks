@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
+    [Component]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.UpsOnLineTools)]
     public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity, IUpsAccountEntity>, IUpsOpenAccountRepository
     {
         /// <summary>
@@ -66,5 +69,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpsAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
+            shipment?.Ups?.UpsAccountID;
     }
 }

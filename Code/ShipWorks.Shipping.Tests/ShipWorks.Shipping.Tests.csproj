@@ -120,6 +120,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -147,9 +148,11 @@
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\DefaultShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\FedEx\Fims\FimsCarrierResponseTest.cs" />
     <Compile Include="Carriers\FedEx\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
@@ -181,6 +184,18 @@
     <Compile Include="Services\RatesRetrieverTests.cs" />
     <Compile Include="Services\ShipmentFactoryTest.cs" />
     <Compile Include="Services\ShipmentLoaderServiceTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogStepTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalStepTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\AllowedShipmentTypeValidatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\POBoxLicenseValidatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\EditionLicenseValidatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\EnsureLoadedManipulatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\InsuranceValidatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ResidentialStatusManipulatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ShipmentPhoneManipulatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\SupportsReturnsManipulatorTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ShipmentPreparationStepTest.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelPersistenceStepTest.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapperTest.cs" />
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />
@@ -234,6 +249,10 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

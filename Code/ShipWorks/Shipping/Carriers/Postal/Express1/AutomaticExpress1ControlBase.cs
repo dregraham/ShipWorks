@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Microsoft.Web.Services3.Security;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -26,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// Load the settings
         /// </summary>
@@ -58,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             express1Accounts.Visible = (accounts.Count > 0);
             express1Signup.Visible = (accounts.Count == 0);
             express1LearnMore.Visible = (accounts.Count == 0);
-            
+
             express1Accounts.DataSource = null;
             express1Accounts.DisplayMember = "Display";
             express1Accounts.ValueMember = "Value";
@@ -88,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (Form setupDlg = shipmentType.CreateSetupWizard(lifetimeScope))
+                using (IForm setupDlg = shipmentType.CreateSetupWizard(lifetimeScope))
                 {
                     // Ensure that the setup dialog is actually an Express1 setup wizard
                     var setupWizard = setupDlg as Express1SetupWizard;
@@ -136,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         private void OnExpress1AccountsSelectedIndexChanged(object sender, EventArgs e)
         {
             express1Settings.Express1Account =
-                (express1Accounts.SelectedIndex >= 0) ? (long)express1Accounts.SelectedValue : 0;
+                (express1Accounts.SelectedIndex >= 0) ? (long) express1Accounts.SelectedValue : 0;
         }
 
         /// <summary>

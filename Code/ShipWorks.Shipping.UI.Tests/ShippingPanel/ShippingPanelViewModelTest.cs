@@ -164,9 +164,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void Save_DelegatesToDestination_Test(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Save_DelegatesToDestination_Test(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -185,9 +185,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void Save_DelegatesToOrigin_Test(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Save_DelegatesToOrigin_Test(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -253,9 +253,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(ShippingPanelLoadedShipmentResult.Success, true, true)]
-        [InlineData(ShippingPanelLoadedShipmentResult.Success, false, false)]
-        public void Save_DoesDelegate_WhenLoadedShipmentResult_IsSuccess_Test(ShippingPanelLoadedShipmentResult shippingPanelLoadedShipmentResult, bool expected, bool hasPermission)
+        [InlineData(ShippingPanelLoadedShipmentResult.Success, true)]
+        [InlineData(ShippingPanelLoadedShipmentResult.Success, false)]
+        public void Save_DoesDelegate_WhenLoadedShipmentResult_IsSuccess_Test(ShippingPanelLoadedShipmentResult shippingPanelLoadedShipmentResult, bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -566,9 +566,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Save_CallsSaveToDatabase_WhenShipmentIsNotProcessed(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -646,9 +646,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void Save_DelegatesToShipmentViewModelFactory_Test(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Save_DelegatesToShipmentViewModelFactory_Test(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -736,9 +736,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void SaveToDatabase_DelegatesToShippingManager_WhenViewModelCanSave(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void SaveToDatabase_DelegatesToShippingManager_WhenViewModelCanSave(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -806,9 +806,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void SaveToDatabase_DelegatesToMessageHelper_WhenShippingManagerReturnsErrors(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void SaveToDatabase_DelegatesToMessageHelper_WhenShippingManagerReturnsErrors(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 
@@ -825,9 +825,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public void SaveToDatabase_SendOrderSelectionChangedMessage_WhenShippingManagerReturnsErrors(bool expected, bool hasPermission)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void SaveToDatabase_SendOrderSelectionChangedMessage_WhenShippingManagerReturnsErrors(bool hasPermission)
         {
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
 

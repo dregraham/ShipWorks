@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data;
-using System.Drawing.Imaging;
-using System.Drawing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -23,11 +23,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// The ShipmentTypeCode enumeration value
         /// </summary>
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.PostalWebTools;
-
-        /// <summary>
-        /// Create the wizard used to do the initial setup
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard() => new PostalWebSetupWizard();
 
         /// <summary>
         /// Create the UserControl used to handle USPS WebTools shipments
@@ -55,11 +50,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// Supports getting counter rates.
         /// </summary>
         public override bool SupportsCounterRates => true;
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() => new WebToolsShipmentProcessingSynchronizer();
 
         /// <summary>
         /// Generate the carrier specific template xml

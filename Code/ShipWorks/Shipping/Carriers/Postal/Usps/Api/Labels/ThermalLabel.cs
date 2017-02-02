@@ -29,9 +29,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <summary>
         /// Saves the label to the underlying data source.
         /// </summary>
-        public override void Save()
+        public override void Save(IDataResourceManager dataResourceManager)
         {
-            DataResourceManager.CreateFromBytes(ThermalData, ShipmentEntity.ShipmentID, Name);
+            dataResourceManager.CreateFromBytes(ThermalData, ShipmentEntity.ShipmentID, Name);
         }
 
         /// <summary>

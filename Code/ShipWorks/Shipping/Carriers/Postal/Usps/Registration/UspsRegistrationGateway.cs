@@ -1,10 +1,11 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+﻿using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// An IUspsRegistrationGateway implementation that calls into the USPS API to register
-    /// a new account. 
+    /// a new account.
     /// </summary>
     public class UspsRegistrationGateway : IUspsRegistrationGateway
     {
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <returns>A UspsRegistrationResult object.</returns>
         public UspsRegistrationResult Register(UspsRegistration registration)
         {
-            UspsRegistrationResult result = new UspsWebClient(resellerType).RegisterAccount(registration);
+            UspsRegistrationResult result = new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, resellerType).RegisterAccount(registration);
 
             if (!result.IsSuccessful)
             {
@@ -35,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
                 {
                     // USPS will suggest a username if the reason for failure is because
                     // the username that was provided already being used.
-                    message = string.Format("The username {0} is unavailable within Stamps.com, but {1} is available. Please enter a different username and try again.", 
+                    message = string.Format("The username {0} is unavailable within Stamps.com, but {1} is available. Please enter a different username and try again.",
                         registration.UserName, result.SuggestedUsername);
                 }
 

@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Editing;
@@ -25,17 +24,9 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<NoneServiceControl>()
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.None);
 
-            builder.RegisterType<NoneShipmentProcessingSynchronizer>()
-                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.None)
-                .SingleInstance();
-
             builder.RegisterType<NoneShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.None)
                 .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.None)
                 .SingleInstance();
 
             builder.RegisterType<NoneShipmentAdapter>()
@@ -45,7 +36,7 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.None)
                 .SingleInstance();
-				
+
             builder.RegisterType<NoneLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.None);
 

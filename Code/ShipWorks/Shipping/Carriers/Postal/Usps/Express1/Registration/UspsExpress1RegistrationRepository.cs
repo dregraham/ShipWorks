@@ -1,19 +1,21 @@
-﻿using Interapptive.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Profiles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
     /// <summary>
-    /// An implementation of the IExpress1RegistrationRepository interface. This will use the UspsAccountManager 
+    /// An implementation of the IExpress1RegistrationRepository interface. This will use the UspsAccountManager
     /// to save an Express1 registration to the USPS account table.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class UspsExpress1RegistrationRepository : IExpress1RegistrationRepository
     {
         /// <summary>
@@ -30,15 +32,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
             }
 
             // Create a new USPS account entity that will get saved to the database
-            UspsAccountEntity uspsAccount = registration.AccountId.HasValue ? 
-                UspsAccountManager.GetAccount(registration.AccountId.Value) : 
+            UspsAccountEntity uspsAccount = registration.AccountId.HasValue ?
+                UspsAccountManager.GetAccount(registration.AccountId.Value) :
                 new UspsAccountEntity();
 
             // Initialize the nulls to default values and denote that the account is for Express1
             uspsAccount.InitializeNullsToDefault();
-            uspsAccount.UspsReseller = (int)UspsResellerType.Express1;
+            uspsAccount.UspsReseller = (int) UspsResellerType.Express1;
 
-            uspsAccount.ContractType = (int)UspsAccountContractType.NotApplicable;
+            uspsAccount.ContractType = (int) UspsAccountContractType.NotApplicable;
 
             // Translate the registration data into a USPS account entity
             uspsAccount.Username = registration.UserName;
@@ -81,8 +83,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
                 // Update any profiles to use this account if this is the only account
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
-                // been deleted. 
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Usps))
+                // been deleted.
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.Express1Usps))
                 {
                     if (shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue)
                     {
@@ -93,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
             }
 
             // Update the account contract type
-            Express1UspsShipmentType uspsShipmentType = (Express1UspsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps);
+            Express1UspsShipmentType uspsShipmentType = (Express1UspsShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps);
             uspsShipmentType.UpdateContractType(uspsAccount);
 
             return uspsAccount.UspsAccountID;
@@ -101,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 
 
         /// <summary>
-        /// Uses the UspsAccountManager to Delete the carrier account (if it exists) associated with the 
+        /// Uses the UspsAccountManager to Delete the carrier account (if it exists) associated with the
         /// given registration from the uspsAccount table.
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being deleted.</param>
@@ -109,8 +111,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
         {
             if (registration != null && registration.AccountId.HasValue)
             {
-                // The registration has an account ID associated with it, implying there is an account 
-                // entity associated with it. 
+                // The registration has an account ID associated with it, implying there is an account
+                // entity associated with it.
                 UspsAccountEntity uspsAccountEntity = UspsAccountManager.GetAccount(registration.AccountId.Value);
                 if (uspsAccountEntity != null)
                 {

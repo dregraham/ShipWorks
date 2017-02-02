@@ -10,7 +10,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create a shipment for the given order
         /// </summary>
-        void Create(OrderEntity order);
+        ShipmentEntity Create(OrderEntity order);
+
+        /// <summary>
+        /// Create a shipment for the given OrderID
+        /// </summary>
+        ShipmentEntity Create(long orderId);
 
         /// <summary>
         /// Auto create a shipment if necessary

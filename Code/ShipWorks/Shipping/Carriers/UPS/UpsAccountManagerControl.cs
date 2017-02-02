@@ -12,6 +12,8 @@ using Divelements.SandGrid;
 using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using ShipWorks.Editions;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -146,11 +148,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-            using (UpsSetupWizard dlg = new UpsSetupWizard(shipmentTypeCode, true))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                using (UpsSetupWizard dlg = new UpsSetupWizard(shipmentTypeCode, true, lifetimeScope.Resolve<IShipmentTypeManager>()))
                 {
-                    LoadShippers();
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        LoadShippers();
+                    }
                 }
             }
         }

@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 {
     /// <summary>
-    /// An implementation of the IExpress1RegistrationRepository interface. This will use the EndiciaAccountManager 
+    /// An implementation of the IExpress1RegistrationRepository interface. This will use the EndiciaAccountManager
     /// to save an Express1 registration to the Endicia account table.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class EndiciaExpress1RegistrationRepository : IExpress1RegistrationRepository
     {
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
                 throw new ArgumentNullException("registration");
             }
 
-            
+
             // Create a new usps account entity that will get saved to the database
             EndiciaAccountEntity endiciaAccount = registration.AccountId.HasValue ?
                 EndiciaAccountManager.GetAccount(registration.AccountId.Value) :
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 
             // Initialize the nulls to default values and denote that the account is for Express1
             endiciaAccount.InitializeNullsToDefault();
-            endiciaAccount.EndiciaReseller = (int)EndiciaReseller.Express1;
+            endiciaAccount.EndiciaReseller = (int) EndiciaReseller.Express1;
 
             // Translate the registration data into an Endicia account entity
             endiciaAccount.AccountNumber = registration.UserName;
@@ -62,19 +62,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
             endiciaAccount.Phone = registration.Phone10Digits;
             endiciaAccount.Email = registration.Email;
             endiciaAccount.Fax = registration.MailingAddress.Fax;
-            
+
             endiciaAccount.CreatedByShipWorks = !registration.AccountId.HasValue;
-            endiciaAccount.AccountType = (int)EndiciaAccountType.Standard;
-            endiciaAccount.ScanFormAddressSource = (int)EndiciaScanFormAddressSource.Provider;
+            endiciaAccount.AccountType = (int) EndiciaAccountType.Standard;
+            endiciaAccount.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
             endiciaAccount.TestAccount = Express1EndiciaUtility.UseTestServer;
-            
+
             endiciaAccount.Description = EndiciaAccountManager.GetDefaultDescription(endiciaAccount);
 
             // Persist the account entity to the database
             EndiciaAccountManager.SaveAccount(endiciaAccount);
 
             // If this is the only account, update this shipment type profiles with this account
-            List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts((EndiciaReseller)endiciaAccount.EndiciaReseller, false);
+            List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts((EndiciaReseller) endiciaAccount.EndiciaReseller, false);
             if (accounts.Count == 1)
             {
                 EndiciaAccountEntity accountEntity = accounts.First();
@@ -82,13 +82,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
                 // Update any profiles to use this account if this is the only account
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
-                // been deleted. 
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Endicia && p.Postal.Endicia.EndiciaAccountID != null))
+                // been deleted.
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.Express1Endicia && p.Postal.Endicia.EndiciaAccountID != null))
                 {
                     if (shippingProfileEntity.Postal.Endicia.EndiciaAccountID.HasValue)
                     {
                         shippingProfileEntity.Postal.Endicia.EndiciaAccountID = accountEntity.EndiciaAccountID;
-                        ShippingProfileManager.SaveProfile(shippingProfileEntity); 
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
                     }
                 }
             }
@@ -105,8 +105,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
         {
             if (registration != null && registration.AccountId.HasValue)
             {
-                // The registration has an account ID associated with it, implying there is an account 
-                // entity associated with it. 
+                // The registration has an account ID associated with it, implying there is an account
+                // entity associated with it.
                 EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(registration.AccountId.Value);
                 if (endiciaAccountEntity != null)
                 {

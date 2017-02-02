@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using log4net;
-using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,6 +7,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.ScanForms;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 {
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             logger = new Mock<ILog>();
             logger
                 .Setup(l => l.Error(It.IsAny<string>()))
-                .Callback((object errorMessage) => errorMessageFromLogger = (string)errorMessage);
+                .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
 
             Mock<IScanFormShipmentTypeName> scanFormShipmentTypeName = new Mock<IScanFormShipmentTypeName>();
             scanFormShipmentTypeName
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         [Fact]
         public void GetGateway_ReturnsExpress1ScanFormGateway()
         {
-            Assert.IsAssignableFrom<Express1EndiciaScanFormGateway>(testObject.GetGateway());
+            Assert.IsAssignableFrom<Express1EndiciaScanFormGateway>(testObject.GetGateway(null));
         }
 
         [Fact]
@@ -93,8 +93,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
                 (
                     r => r.GetShipmentIDs(It.Is<RelationPredicateBucket>
                     (
-                        // Would be nice to test the actual predicate expressions, but I was unable 
-                        // to determine how to access the predicate expressions that line up with 
+                        // Would be nice to test the actual predicate expressions, but I was unable
+                        // to determine how to access the predicate expressions that line up with
                         // those built in the method being tested
                         b => b.Relations.Count == 2
                     )

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.Custom;
+﻿using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -7,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers
     /// Generic implementation of ICarrierAccountRepository
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICarrierAccountRepository<T, TInterface> : ICarrierAccountRetriever<T>
+    public interface ICarrierAccountRepository<T, TInterface> : ICarrierAccountRetriever<T, TInterface>
         where T : TInterface where TInterface : ICarrierAccount
     {
         /// <summary>
@@ -25,15 +24,5 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         /// <param name="account">The account.</param>
         void Save(T account);
-
-        /// <summary>
-        /// Get a readonly version of the specified account
-        /// </summary>
-        TInterface GetAccountReadOnly(long accountID);
-
-        /// <summary>
-        /// Get a collection of readonly accounts
-        /// </summary>
-        IEnumerable<TInterface> AccountsReadOnly { get; }
     }
 }

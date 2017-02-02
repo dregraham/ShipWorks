@@ -69,6 +69,6 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// Get a component attribute from the type
         /// </summary>
         private static IEnumerable<KeyedComponentAttribute> GetAttributes(Type type) =>
-            GetCustomAttributes(type, typeof(KeyedComponentAttribute)).OfType<KeyedComponentAttribute>();
+            type.GetCustomAttributes(false).OfType<KeyedComponentAttribute>();
     }
 }

@@ -42,6 +42,11 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a dialog and get the results
         /// </summary>
+        DialogResult ShowDialog(Func<IForm> createDialog);
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
         DialogResult ShowDialog(Func<Form> createDialog);
 
         /// <summary>
@@ -58,5 +63,10 @@ namespace Interapptive.Shared.UI
         /// Show a warning message
         /// </summary>
         void ShowWarning(string message);
+
+        /// <summary>
+        /// Show a message
+        /// </summary>
+        void ShowMessage(string message);
     }
 }

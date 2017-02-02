@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Stores.Content.Panels
+﻿namespace ShipWorks.Stores.Content.Panels
 {
     /// <summary>
     /// Controls how and where a panel gets and saves its data
@@ -16,8 +11,8 @@ namespace ShipWorks.Stores.Content.Panels
         LiveDatabase,
 
         /// <summary>
-        /// Mode used for adding orders, so that all data is stored locally and not persisted 
-        /// to the datbase.
+        /// Mode used for adding orders, so that all data is stored locally and not persisted
+        /// to the database.
         /// </summary>
         LocalPending
     }

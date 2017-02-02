@@ -340,8 +340,8 @@ namespace ShipWorks.Filters.Search
                             long filterNodeContentID = (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID) ?
                                 nodeContent.FilterNodeContentID :
                                 searchNode.FilterNodeContentID;
-
-                            FilterContentManager.SendFilterUpdateCompletedMessageWhenCompleted(filterNodeContentID, Messenger.Current, this);
+                            
+                            FilterContentManager.SendOrderFilterUpdateCompletedMessageWhenCompletedAsync(filterNodeContentID, Messenger.Current, this);
                         }
 
                         isSearching = false;

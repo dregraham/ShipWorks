@@ -16,11 +16,12 @@ namespace ShipWorks.SingleScan.Tests
         private readonly AutoMock mock;
         private readonly Mock<IScannerIdentifier> scannerIdentifier;
         private readonly Mock<IScannerRegistrationListener> scannerRegistrationListener;
+        private readonly TestMessenger messenger;
 
         public RegisterScannerControlViewModelTest()
         {
             mock = AutoMock.GetLoose();
-            IMessenger messenger = new TestMessenger();
+            messenger = new TestMessenger();
             scannerIdentifier = mock.Mock<IScannerIdentifier>();
             scannerRegistrationListener = mock.Mock<IScannerRegistrationListener>();
             testObject = mock.Create<ScannerRegistrationControlViewModel>(new TypedParameter(typeof(IMessenger), messenger));
@@ -62,6 +63,7 @@ namespace ShipWorks.SingleScan.Tests
 
         public void Dispose()
         {
+            messenger.Dispose();
             mock.Dispose();
         }
     }

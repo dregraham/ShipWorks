@@ -1,24 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Autofac;
-using Autofac.Features.OwnedInstances;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -106,23 +100,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Creates the Express1/USPS setup wizard.
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                Express1Registration registration = new Express1Registration(ShipmentTypeCode, new UspsExpress1RegistrationGateway(), new UspsExpress1RegistrationRepository(), new UspsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
-
-                UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { UspsResellerType = UspsResellerType.Express1 };
-                UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Usps };
-                UspsPurchasePostageDlg postageDialog = lifetimeScope.Resolve<Owned<UspsPurchasePostageDlg>>().Value;
-
-                return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, UspsAccountManager.Express1Accounts);
-            }
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle USPS w/ Express1 profiles
         /// </summary>
         protected override ShippingProfileControlBase CreateProfileControl()
@@ -131,21 +108,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Update the dyamic data of the shipment
+        /// Update the dynamic data of the shipment
         /// </summary>
         /// <param name="shipment"></param>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
-            shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new Express1UspsShipmentProcessingSynchronizer();
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
 
         /// <summary>
@@ -166,9 +135,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             // If the ContractType is unknown, we must not have tried to check this account yet.
             // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts
-            if (account != null && account.ContractType == (int)UspsAccountContractType.Unknown)
+            if (account != null && account.ContractType == (int) UspsAccountContractType.Unknown)
             {
-                account.ContractType = (int)UspsAccountContractType.NotApplicable;
+                account.ContractType = (int) UspsAccountContractType.NotApplicable;
                 AccountRepository.Save(account);
             }
         }

@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 .Where(x => x.ShipmentTypeCode == viewModel.ShipmentType)
                 .Do(_ => viewModel.AllowEditing = false)
                 .ObserveOn(schedulerProvider.TaskPool)
+                .Where(_ => viewModel.Shipment != null)
                 .Select(_ => shippingManager.GetShipment(viewModel.Shipment.ShipmentID))
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(x => viewModel.Shipment.ShipmentID == x.Shipment.ShipmentID)

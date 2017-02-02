@@ -48,5 +48,15 @@ namespace ShipWorks.Shipping.Settings
         /// Save the current shipping settings
         /// </summary>
         void Save(ShippingSettingsEntity shippingSettings);
+
+        /// <summary>
+        /// Notify the shipping settings class that it should check for changes
+        /// </summary>
+        void CheckForChangesNeeded();
+
+        /// <summary>
+        /// Is the given shipment type configured
+        /// </summary>
+        bool IsConfigured(ShipmentTypeCode shipmentType);
     }
 }

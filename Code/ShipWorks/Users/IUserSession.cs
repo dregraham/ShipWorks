@@ -15,6 +15,11 @@ namespace ShipWorks.Users
         UserEntity User { get; }
 
         /// <summary>
+        /// Currently logged in computer
+        /// </summary>
+        ComputerEntity Computer { get; }
+
+        /// <summary>
         /// Currently logged in user's settings
         /// </summary>
         IUserSettingsEntity Settings { get; }

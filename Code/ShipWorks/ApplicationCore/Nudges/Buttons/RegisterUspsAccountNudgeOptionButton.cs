@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.ApplicationCore.Nudges.Buttons
@@ -27,18 +27,17 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    UspsShipmentType shipmentType = new UspsShipmentType();
-                    using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
-                    {
-                        DialogResult result = setupWizard.ShowDialog(HostForm);
-                        HostForm.DialogResult = result;
+                    IShipmentTypeSetupWizardFactory wizardFactory = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>();
+                    IShipmentTypeSetupWizard wizard = wizardFactory.Create(ShipmentTypeCode.Usps);
 
-                        Option.Result = result == DialogResult.OK ? "Created USPS account" : "Declined to create a USPS account";
-                    }
+                    DialogResult result = wizard.ShowDialog(HostForm);
+                    HostForm.DialogResult = result;
+
+                    Option.Result = result == DialogResult.OK ? "Created USPS account" : "Declined to create a USPS account";
                 }
             }
 
-            // Call the base acknowledge button to close the form. May want to change this in 
+            // Call the base acknowledge button to close the form. May want to change this in
             // the future to only close the form if the account registration was successful.
             base.HandleClick();
         }
