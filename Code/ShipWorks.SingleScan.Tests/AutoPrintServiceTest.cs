@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Options;
@@ -27,7 +28,7 @@ namespace ShipWorks.SingleScan.Tests
     {
         private readonly AutoMock mock;
         private readonly TestMessenger messenger;
-        private readonly AutoPrintService testObject;
+        private AutoPrintService testObject;
         private readonly List<ShipmentEntity> shipments;
         private readonly Mock<ILog> mockLog;
         private readonly Mock<ISchedulerProvider> scheduleProvider;
@@ -60,20 +61,77 @@ namespace ShipWorks.SingleScan.Tests
 
             singleScanFilterUpdateCompleteMessage = new SingleScanFilterUpdateCompleteMessage(this,
                 mock.Mock<IFilterNodeContentEntity>().Object, 5);
-
-            testObject = mock.Create<AutoPrintService>();
-
-            testObject.InitializeForCurrentSession();
         }
 
         [Fact]
-        public void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
+        public void OrderScanned_SendsNoMessage_WhenOrderHasOneUnprocessedShipmentAndTimesOut()
         {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            windowsScheduler.Start();
+
+            defaultScheduler.AdvanceBy(TimeSpan.FromSeconds(100).Ticks);
+            windowsScheduler.Start();
+
+            Assert.Equal(0, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+            mockLog.Verify(l => l.Error("Error occurred while attempting to auto print.", It.IsAny<Exception>()), Times.Once);
+            mockLog.Verify(l => l.Info("Starting scan message observation."), Times.Once);
+        }
+
+        [Fact]
+        public void AutoPrint_Continues_AfterRequestingShipmentToBeProcessedButTimesOut()
+        {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            defaultScheduler.AdvanceBy(TimeSpan.FromMinutes(100).Ticks);
+            windowsScheduler.Start();
+            defaultScheduler.Start();
+
+            Assert.Equal(0, messenger.SentMessages.OfType<ShipmentsProcessedMessage>().Count());
+            mockLog.Verify(l => l.Info("Starting scan message observation."), Times.Once);
+        }
+        
+        [Fact]
+        public void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
+        {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
@@ -170,12 +228,22 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void OrderScanned_ShipmentsProcessedMessageReceived_WhenAutoPrinting()
         {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
             SendShipmentsProcessedMessage();
+            windowsScheduler.Start();
 
             mockLog.Verify(l => l.Info("ShipmentsProcessedMessage received from scan A"));
         }
@@ -187,12 +255,22 @@ namespace ShipWorks.SingleScan.Tests
                 .SetupGet(node => node.Count)
                 .Returns(0);
 
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
             SendShipmentsProcessedMessage();
+            windowsScheduler.Start();
 
             mockLog.Verify(l => l.Error("Order not found for scanned order."), Times.Once);
         }
@@ -204,12 +282,22 @@ namespace ShipWorks.SingleScan.Tests
                 .SetupGet(node => node.Count)
                 .Returns(0);
 
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
             SendShipmentsProcessedMessage();
+            windowsScheduler.Start();
 
             Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
@@ -218,18 +306,25 @@ namespace ShipWorks.SingleScan.Tests
         public void MultipleOrdersScanned_SecondScanProcesses_WhenShipmentConfirmationServiceReturnsNoShipmentsTheFirstTime()
         {
             TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
 
             SendScanMessage("FirstScan");
             SendFilterCountsUpdatedMessage();
-
             windowsScheduler.Start();
                     
             shipments.Add(new ShipmentEntity(1));
             SendScanMessage("SecondScan");
             SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
             SendShipmentsProcessedMessage();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
@@ -239,11 +334,21 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void OrderScanned_AllUnprocessedShipmentsProcessed_WhenShipmentConfirmationServiceReturnsMultipleShipments()
         {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.AddRange(Enumerable.Range(1, 3).Select(o => new ShipmentEntity(o)));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
             var shipmentsMessage = messenger.SentMessages.OfType<ProcessShipmentsMessage>().Single();
@@ -257,11 +362,22 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void OrderScanned_DoesNotSendProcessMessage_WhenAllowAutoPrintIsOff()
         {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.Scan);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
 
             Assert.False(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
         }
@@ -270,19 +386,28 @@ namespace ShipWorks.SingleScan.Tests
         public void MultipleOrdersScanned_SendsMultipleProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
             TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+
+            testObject.InitializeForCurrentSession();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
-            SendShipmentsProcessedMessage();
-
             windowsScheduler.Start();
+
+            SendShipmentsProcessedMessage();
 
             SendScanMessage("A");
             SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
             SendShipmentsProcessedMessage();
 
             Assert.Equal(2, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
@@ -292,7 +417,14 @@ namespace ShipWorks.SingleScan.Tests
         public void MultipleOrdersScanned_ProcessesFirstMessage_WhenSecondScanOccursBeforeShipmentsProcessedMessage()
         {
             TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+
+            testObject.InitializeForCurrentSession();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
@@ -313,13 +445,24 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void OrderScanned_AfterBlankBarcodeScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
             SendScanMessage(string.Empty);
+            windowsScheduler.Start();
 
             SendScanMessage("SecondScan");
             SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
             mockLog.Verify(l => l.Info(It.Is<string>(s => s.EndsWith("SecondScan"))));

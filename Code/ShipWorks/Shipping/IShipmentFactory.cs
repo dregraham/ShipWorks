@@ -13,6 +13,11 @@ namespace ShipWorks.Shipping
         ShipmentEntity Create(OrderEntity order);
 
         /// <summary>
+        /// Create a shipment for the given OrderID
+        /// </summary>
+        ShipmentEntity Create(long orderId);
+
+        /// <summary>
         /// Auto create a shipment if necessary
         /// </summary>
         bool AutoCreateIfNecessary(OrderEntity order, bool createIfNoShipments);

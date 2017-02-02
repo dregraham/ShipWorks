@@ -648,9 +648,20 @@ namespace ShipWorks.Filters
         }
 
         /// <summary>
+        /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
+        /// </summary>
+        public static void QueueSingleScanFilterUpdateCompleteMessageAsync(long filterNodeContentID, IMessenger messenger, object sender)
+        {
+            TaskEx.Run(() =>
+            {
+                QueueSingleScanFilterUpdateCompleteMessage(filterNodeContentID, messenger, sender);
+            });
+        }
+
+        /// <summary>
         /// Queues a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        public static void QueueSingleScanFilterUpdateCompleteMessage(long filterNodeContentID, IMessenger messenger, object sender)
+        private static void QueueSingleScanFilterUpdateCompleteMessage(long filterNodeContentID, IMessenger messenger, object sender)
         {
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
