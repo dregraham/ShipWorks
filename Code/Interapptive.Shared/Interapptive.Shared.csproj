@@ -258,10 +258,12 @@
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
+    <Compile Include="Utility\ClrHelper.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\EnumResultExtensions.cs" />
+    <Compile Include="Utility\EnvironmentWrapper.cs" />
     <Compile Include="Utility\ExceptionExtensions.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
@@ -492,7 +494,9 @@
     <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
+    <Compile Include="Utility\IClrHelper.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
+    <Compile Include="Utility\IEnvironmentWrapper.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />
