@@ -4111,7 +4111,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The save & open popup is opening
+        /// The save and open popup is opening
         /// </summary>
         private void OnSaveOpenRibbonPopup(object sender, BeforePopupEventArgs e)
         {

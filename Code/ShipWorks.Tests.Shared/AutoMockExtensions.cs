@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
 using Moq;
 using Moq.Language;
 using Moq.Language.Flow;
@@ -11,9 +13,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
-using System;
-using System.Reactive.Concurrency;
-using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Tests.Shared
 {
@@ -184,7 +183,7 @@ namespace ShipWorks.Tests.Shared
         }
 
         /// <summary>
-        /// Creates a Mock<ISchedulerProvider> and provides it to the mock.  
+        /// Creates a Mock of ISchedulerProvider and provides it to the mock.
         /// All schedulers are set to use ImmediateScheduler.Instance
         /// </summary>
         public static Mock<ISchedulerProvider> WithMockImmediateScheduler(this AutoMock mock)
@@ -202,7 +201,7 @@ namespace ShipWorks.Tests.Shared
 
             return schedulerProvider;
         }
-		
+
         /// <summary>
         /// Allow setup for default mocks created when resolving an enumerable
         /// </summary>
