@@ -46,7 +46,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void GetShipments_ReturnsEmptyShipments_WhenOrderLoaderReturnsNoShipments()
+        public async void GetShipments_ReturnsOneShipment_WhenOrderLoaderReturnsNoShipments()
         {
             mock.Mock<ISecurityContext>()
                 .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
@@ -58,7 +58,7 @@ namespace ShipWorks.SingleScan.Tests
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
-            Assert.Empty(result);
+            Assert.Equal(1, result.Count());
         }
 
         [Fact]
