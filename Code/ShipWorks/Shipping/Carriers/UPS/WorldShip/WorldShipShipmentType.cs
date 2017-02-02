@@ -29,12 +29,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         /// <summary>
         /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed 
-        /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hardcoding WorldShip if statements
-        /// to use this instead so its easier to track down all the usgages by doing Find References on this property.
-        /// </summary>
-        public override bool ProcessingCompletesExternally => true;
-
-        /// <summary>
         /// Create settings control for WorldShip
         /// </summary>
         protected override SettingsControlBase CreateSettingsControl()
@@ -53,9 +47,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the service types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
@@ -63,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             List<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
             return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
         }
-        
+
         /// <summary>
         /// Get the tracking numbers for the shipment
         /// </summary>
@@ -115,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <returns>An instance of a WorldShipBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new WorldShipBestRateBroker();
+            return new WorldShipBestRateBroker(this);
         }
     }
 }

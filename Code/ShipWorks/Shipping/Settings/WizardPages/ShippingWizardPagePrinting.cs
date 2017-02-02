@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Settings.WizardPages
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                ShipmentPrintHelper.InstallDefaultRules(shipmentType.ShipmentTypeCode, false, this);
+                ShipmentPrintHelper.InstallDefaultRules(shipmentType.ShipmentTypeCode, true, this);
 
                 printOutputControl.LoadSettings(shipmentType);
             }

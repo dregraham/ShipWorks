@@ -46,7 +46,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         viewModel.IsLoading = true;
 
                         // If the view model sent the message, it's to reload the order. So don't try saving first
-                        if (message.Sender != viewModel && message.OrderIdList?.First() != viewModel?.Shipment?.OrderID)
+                        if (message.Sender != viewModel &&
+                            message.OrderIdList?.FirstOrDefault() != viewModel?.Shipment?.OrderID)
                         {
                             viewModel.SaveToDatabase();
                         }

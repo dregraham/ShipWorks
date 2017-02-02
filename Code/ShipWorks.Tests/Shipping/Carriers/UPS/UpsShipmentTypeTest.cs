@@ -6,18 +6,20 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
     public class UpsShipmentTypeTest
     {
-        UpsShipmentType testObject = new UpsOltShipmentType();
-
-
         [Fact]
         public void SupportsMultiplePackages_ReturnsTrue()
         {
-            Assert.True(testObject.SupportsMultiplePackages);
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                UpsOltShipmentType testObject = mock.Create<UpsOltShipmentType>();
+                Assert.True(testObject.SupportsMultiplePackages);
+            }
         }
     }
 }

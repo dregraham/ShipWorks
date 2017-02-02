@@ -64,8 +64,8 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.66.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.91.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.91.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -165,6 +165,7 @@
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
+    <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Messaging\Logging\DumpOperation.cs" />
     <Compile Include="Messaging\Logging\SelectManyOperation.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\FileDialogType.cs" />
+    <Compile Include="UI\IForm.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialog.cs" />
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IFileDialog.cs" />
@@ -501,6 +503,7 @@
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
+    <Compile Include="Utility\Result.cs" />
     <Compile Include="Utility\SerializableObject.cs" />
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />

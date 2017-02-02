@@ -44,8 +44,8 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.66.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.66.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.91.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.91.0\lib\net40\Apitron.PDF.Rasterizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -181,7 +181,7 @@
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
-    <Compile Include="RatingPanel\ObservableRegistrations\OpenShippingDialogPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
@@ -224,6 +224,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\SaveAfterAddressValidationPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentSelectionChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsPanelVisibleChangedPipeline.cs" />
@@ -497,6 +498,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="RatingPanel\FootnoteTemplates\ShippingAccountRequiredForRatingFootnoteViewModelTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RatingPanel\FootnoteTemplates\UpsPromoFootnoteViewModelTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

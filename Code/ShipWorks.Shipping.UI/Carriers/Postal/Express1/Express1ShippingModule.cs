@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -42,14 +41,6 @@ namespace ShipWorks.Shipping.Carriers.Express1
 
             builder.RegisterType<Express1EndiciaShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Express1Endicia)
-                .SingleInstance();
-
-            builder.RegisterType<Express1EndiciaAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Express1Endicia)
-                .SingleInstance();
-
-            builder.RegisterType<Express1UspsAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Express1Usps)
                 .SingleInstance();
 
             builder.RegisterType<UspsShipmentAdapter>()

@@ -1,11 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Autofac.Extras.Attributed;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
 namespace ShipWorks.Shipping.Carriers.Postal
@@ -13,35 +12,31 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// <summary>
     /// Factory that creates registration promotion classes based on which types of accounts a user has
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class RegistrationPromotionFactory
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
-        private readonly bool uspsAccountsExist;
-        private readonly bool endiciaAccountsExist;
-        private readonly bool express1AccountsExist;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RegistrationPromotionFactory"/> class.
-        /// </summary>
-        public RegistrationPromotionFactory() :
-            this(new UspsAccountRepository(), new Express1UspsAccountRepository(),
-                new EndiciaAccountRepository(), new Express1EndiciaAccountRepository())
-        {
-        }
+        private readonly Lazy<bool> uspsAccountsExist;
+        private readonly Lazy<bool> endiciaAccountsExist;
+        private readonly Lazy<bool> express1AccountsExist;
 
         /// <summary>
         /// Constructor that allows easier testing of the factory
         /// </summary>
-        public RegistrationPromotionFactory(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsExpress1AccountRepository,
-            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository,
-            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaExpress1AccountRepository)
+        public RegistrationPromotionFactory(
+            [WithKey(ShipmentTypeCode.Usps)] ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            [WithKey(ShipmentTypeCode.Express1Usps)] ICarrierAccountRetriever uspsExpress1AccountRepository,
+            [WithKey(ShipmentTypeCode.Endicia)] ICarrierAccountRetriever endiciaAccountRepository,
+            [WithKey(ShipmentTypeCode.Express1Endicia)] ICarrierAccountRetriever endiciaExpress1AccountRepository)
         {
             this.uspsAccountRepository = uspsAccountRepository;
 
-            uspsAccountsExist = uspsAccountRepository.Accounts.Any();
-            endiciaAccountsExist = endiciaAccountRepository.Accounts.Any();
-            express1AccountsExist = uspsExpress1AccountRepository.Accounts.Any() || endiciaExpress1AccountRepository.Accounts.Any();
+            // Use lazy values so that the constructor does not throw in tests that don't have the entire account system set up
+            uspsAccountsExist = new Lazy<bool>(() => uspsAccountRepository.AccountsReadOnly.Any());
+            endiciaAccountsExist = new Lazy<bool>(() => endiciaAccountRepository.AccountsReadOnly.Any());
+            express1AccountsExist = new Lazy<bool>(() =>
+                uspsExpress1AccountRepository.AccountsReadOnly.Any() ||
+                endiciaExpress1AccountRepository.AccountsReadOnly.Any());
         }
 
         /// <summary>
@@ -55,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return new Express1RegistrationPromotion();
             }
 
-            if (endiciaAccountsExist)
+            if (endiciaAccountsExist.Value)
             {
                 return AnyUspsResellerAccountsExist() ?
                     (IRegistrationPromotion) new EndiciaCbpRegistrationPromotion() :
@@ -72,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool PostalAccountsExist()
         {
-            return (endiciaAccountsExist || uspsAccountsExist || express1AccountsExist);
+            return (endiciaAccountsExist.Value || uspsAccountsExist.Value || express1AccountsExist.Value);
         }
 
         /// <summary>
@@ -80,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool OnlyExpress1AccountsExist()
         {
-            return express1AccountsExist && !uspsAccountsExist && !endiciaAccountsExist;
+            return express1AccountsExist.Value && !uspsAccountsExist.Value && !endiciaAccountsExist.Value;
         }
 
         /// <summary>
@@ -89,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns></returns>
         private bool AnyUspsResellerAccountsExist()
         {
-            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int) UspsAccountContractType.Reseller);
+            return uspsAccountRepository.AccountsReadOnly.Any(x => x.ContractType == (int) UspsAccountContractType.Reseller);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿
 
 
-	
 
 using System.Xml;
 using System.Web.Services.Protocols;
@@ -17,7 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -28,30 +27,30 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -74,16 +73,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -104,9 +103,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -116,7 +115,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -143,7 +142,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 {
@@ -154,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -165,30 +164,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -211,16 +210,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -241,9 +240,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -253,7 +252,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -280,7 +279,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
 {
@@ -291,7 +290,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -302,30 +301,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -348,16 +347,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -378,9 +377,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -390,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -417,7 +416,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
 {
@@ -428,7 +427,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -439,30 +438,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -485,16 +484,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -515,9 +514,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -527,7 +526,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -554,7 +553,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
 {
@@ -565,7 +564,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -576,30 +575,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -622,16 +621,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -652,9 +651,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -664,7 +663,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -691,7 +690,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService
 {
@@ -702,7 +701,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -713,30 +712,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -759,16 +758,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -789,9 +788,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -801,7 +800,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -828,7 +827,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
 {
@@ -839,7 +838,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -850,30 +849,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -896,16 +895,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -926,9 +925,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -938,7 +937,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -965,7 +964,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
 {
@@ -976,12 +975,149 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public RegisterMgrAcctService(IApiLogEntry logEntry)
+            : this()
+        {
+            this.logEntry = logEntry;
+        }
+
+        /// <summary>
+        /// Only log error result.
+        /// </summary>
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
+
+        /// <summary>
+        /// Provides access to the raw soap XML sent and received
+        /// </summary>
+        public WebServiceRawSoap RawSoap
+        {
+            get { return rawSoap; }
+        }
+
+        /// <summary>
+        /// The log entry being used to log the request and response
+        /// </summary>
+        public IApiLogEntry ApiLogEntry
+        {
+            get { return logEntry; }
+        }
+
+        /// <summary>
+        /// Get the writer for the message
+        /// </summary>
+        protected override XmlWriter GetWriterForMessage(SoapClientMessage message, int bufferSize)
+        {
+            rawSoap.ReadOutgoingMessage(message);
+
+            return base.GetWriterForMessage(message, bufferSize);
+        }
+
+        /// <summary>
+        /// Get the response to the message that has been generated
+        /// </summary>
+        protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
+        {
+            // At this point the message has been completely serialized and ready to be logged
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
+            {
+                logEntry.LogRequest(rawSoap.RequestXml);
+            }
+
+            // get the response
+            System.Net.WebResponse baseResponse = base.GetWebResponse(request);
+
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
+
+            return baseResponse;
+        }
+
+        /// <summary>
+        /// Get the XmlReader used to read the response message
+        /// </summary>
+        protected override XmlReader GetReaderForMessage(SoapClientMessage message, int bufferSize)
+        {
+            rawSoap.ReadIncomingMessage(message);
+
+            // Response is now ready to be logged
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
+            {
+                logEntry.LogResponse(rawSoap.ResponseXml);
+            }
+
+            return base.GetReaderForMessage(message, bufferSize);
+        }
+
+        /// <summary>
+        /// Checks the contentType to see if it is one that would indicate a SOAP response.
+        /// This was pulled out of a .NET Framework internal class.
+        /// </summary>
+        private bool IsSoap(string contentType)
+        {
+            if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                return (contentType.StartsWith("application/soap+xml", System.StringComparison.OrdinalIgnoreCase));
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Extract the response and raise an exception
+        /// </summary>
+        private void RaiseInvalidSoapException(System.Net.WebResponse response)
+        {
+            using (System.IO.Stream responseStream = response.GetResponseStream())
+            {
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(responseStream))
+                {
+                    string responseContent = reader.ReadToEnd();
+
+                    // http-specific properties
+                    System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK;
+                    string statusDescription = "";
+
+                    System.Net.HttpWebResponse httpWebResponse = response as System.Net.HttpWebResponse;
+                    if (httpWebResponse != null)
+                    {
+                        statusCode = httpWebResponse.StatusCode;
+                        statusDescription = httpWebResponse.StatusDescription;
+                    }
+
+                    throw new Interapptive.Shared.Net.InvalidSoapException(statusCode, statusDescription, responseContent);
+                }
+            }
+        }
+    }
+}
+
+namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
+{
+    /// <summary>
+    /// Partial class for the webservices generated class, to help with logging
+    /// </summary>
+    partial class PromoDiscountService
+    {
+        WebServiceRawSoap rawSoap = new WebServiceRawSoap();
+        IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PromoDiscountService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1113,7 +1249,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1124,30 +1260,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1170,16 +1306,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1200,9 +1336,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1212,7 +1348,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1239,7 +1375,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
 {
@@ -1250,7 +1386,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1261,30 +1397,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1307,16 +1443,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1337,9 +1473,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1349,7 +1485,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1376,7 +1512,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
 {
@@ -1387,7 +1523,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1398,30 +1534,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1444,16 +1580,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1474,9 +1610,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1486,7 +1622,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1513,7 +1649,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
 {
@@ -1524,7 +1660,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1535,30 +1671,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1581,16 +1717,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1611,9 +1747,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1623,7 +1759,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1650,7 +1786,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
 {
@@ -1661,7 +1797,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1672,30 +1808,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1718,16 +1854,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1748,9 +1884,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1760,7 +1896,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1787,7 +1923,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
 {
@@ -1798,7 +1934,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1809,30 +1945,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1855,16 +1991,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1885,9 +2021,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1897,7 +2033,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1924,7 +2060,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
 {
@@ -1935,7 +2071,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1946,30 +2082,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1992,16 +2128,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2022,9 +2158,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2034,7 +2170,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2061,7 +2197,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
 {
@@ -2072,7 +2208,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2083,30 +2219,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2129,16 +2265,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2159,9 +2295,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2171,7 +2307,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2198,7 +2334,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
 {
@@ -2209,7 +2345,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2220,30 +2356,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2266,16 +2402,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2296,9 +2432,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2308,7 +2444,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2335,7 +2471,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
 {
@@ -2346,7 +2482,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2357,30 +2493,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2403,16 +2539,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2433,9 +2569,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2445,7 +2581,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2472,7 +2608,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
 {
@@ -2483,7 +2619,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2494,30 +2630,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2540,16 +2676,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2570,9 +2706,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2582,7 +2718,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2609,7 +2745,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
 {
@@ -2620,7 +2756,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2631,30 +2767,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2677,16 +2813,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2707,9 +2843,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2719,7 +2855,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2746,7 +2882,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.Infopia.WebServices
 {
@@ -2757,7 +2893,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2768,30 +2904,30 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2814,16 +2950,16 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2844,9 +2980,9 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2856,7 +2992,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -2883,7 +3019,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.PayPal.WebServices
 {
@@ -2894,7 +3030,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2905,30 +3041,30 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -2951,16 +3087,16 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -2981,9 +3117,9 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -2993,7 +3129,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3020,7 +3156,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
 {
@@ -3031,7 +3167,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3042,30 +3178,30 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3088,16 +3224,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3118,9 +3254,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3130,7 +3266,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3157,7 +3293,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.Ebay.WebServices
 {
@@ -3168,7 +3304,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3179,30 +3315,30 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3225,16 +3361,16 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3255,9 +3391,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3267,7 +3403,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3294,7 +3430,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
 {
@@ -3305,7 +3441,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3316,30 +3452,30 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3362,16 +3498,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3392,9 +3528,9 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3404,7 +3540,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3431,7 +3567,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
 {
@@ -3442,7 +3578,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3453,30 +3589,30 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3499,16 +3635,16 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3529,9 +3665,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3541,7 +3677,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3568,7 +3704,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
 {
@@ -3579,7 +3715,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3590,30 +3726,30 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3636,16 +3772,16 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3666,9 +3802,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3678,7 +3814,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3705,7 +3841,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.Magento.WebServices
 {
@@ -3716,7 +3852,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3727,30 +3863,30 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3773,16 +3909,16 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3803,9 +3939,9 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3815,7 +3951,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3842,7 +3978,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
 {
@@ -3853,7 +3989,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3864,30 +4000,30 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -3910,16 +4046,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -3940,9 +4076,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -3952,7 +4088,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -3979,7 +4115,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
 {
@@ -3990,7 +4126,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -4001,30 +4137,30 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -4047,16 +4183,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -4077,9 +4213,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -4089,7 +4225,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -4116,7 +4252,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
 {
@@ -4127,7 +4263,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -4138,30 +4274,30 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -4184,16 +4320,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -4214,9 +4350,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -4226,7 +4362,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -4253,7 +4389,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
 {
@@ -4264,7 +4400,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -4275,30 +4411,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -4321,16 +4457,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -4351,9 +4487,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -4363,7 +4499,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -4390,5 +4526,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
             }
         }
     }
-}		
+}
 

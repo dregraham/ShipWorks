@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
         /// had been deleted.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Amazon", typeof(AmazonShipmentEntity), refreshIfPresent);
         }
@@ -297,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             string trackingLink = string.Empty;
 
-            string serviceUsed = shippingManager.GetOverriddenSerivceUsed(shipment);
+            string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
             if (serviceUsed.IndexOf("ups", StringComparison.OrdinalIgnoreCase) >= 0)
             {
                 trackingLink = $"http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&" +

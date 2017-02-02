@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
@@ -72,7 +69,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void ShowInsuranceBenefitsDlg(ShipmentEntity shipment, InsuranceCost insuranceCost)
         {
-            using (InsuranceBenefitsDlg dlg = new InsuranceBenefitsDlg(insuranceCost, shipment.InsuranceProvider != (int)InsuranceProvider.ShipWorks))
+            using (InsuranceBenefitsDlg dlg = new InsuranceBenefitsDlg(insuranceCost, shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks))
             {
                 dlg.ShowDialog();
 
@@ -80,28 +77,28 @@ namespace ShipWorks.Shipping.Insurance
                 {
                     ShippingSettingsEntity settings = shippingSettings.Fetch();
 
-                    ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
+                    ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
                     if (shipmentTypeCode == ShipmentTypeCode.FedEx)
                     {
-                        settings.FedExInsuranceProvider = (int)InsuranceProvider.ShipWorks;
+                        settings.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks;
                     }
                     else if (shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools ||
                              shipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
                     {
-                        settings.UpsInsuranceProvider = (int)InsuranceProvider.ShipWorks;
+                        settings.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
                     }
                     else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
                     {
-                        settings.OnTracInsuranceProvider = (int)InsuranceProvider.ShipWorks;
+                        settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
                     }
                     else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
                     {
-                        settings.IParcelInsuranceProvider = (int)InsuranceProvider.ShipWorks;
+                        settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
                     }
-                    else if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
+                    else if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
                     {
-                        settings.EndiciaInsuranceProvider = (int)InsuranceProvider.ShipWorks;
+                        settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
                     }
                     else
                     {
@@ -112,5 +109,10 @@ namespace ShipWorks.Shipping.Insurance
                 }
             }
         }
+
+        /// <summary>
+        /// Validate the given shipment
+        /// </summary>
+        public void ValidateShipment(ShipmentEntity shipment) => InsuranceUtility.ValidateShipment(shipment);
     }
 }

@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
     public class BestRateUpsRestrictionShippingPolicyTest
     {
-        private IShippingPolicy testObject;
+        private BestRateUpsRestrictionShippingPolicy testObject;
         private List<IBestRateShippingBroker> brokers;
         private int initialBrokerCount;
         private List<ShipmentTypeCode> shipmentTypeCodes;
-        
+
         public BestRateUpsRestrictionShippingPolicyTest()
         {
             testObject = new BestRateUpsRestrictionShippingPolicy();
@@ -29,11 +27,10 @@ namespace ShipWorks.Tests.Shipping.Policies
             {
                 new EndiciaBestRateBroker(),
                 new Express1EndiciaBestRateBroker(),
-                new WorldShipBestRateBroker(),
-                new UpsBestRateBroker(),
-                new UpsCounterRatesBroker()
+                new WorldShipBestRateBroker(new UpsOltShipmentType()),
+                new UpsBestRateBroker(new UpsOltShipmentType()),
             };
-            
+
             initialBrokerCount = brokers.Count;
 
             shipmentTypeCodes = new List<ShipmentTypeCode>();
@@ -100,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             testObject.Apply(brokers);
 
-            Assert.Equal(initialBrokerCount - 3, brokers.Count);
+            Assert.Equal(initialBrokerCount - 2, brokers.Count);
         }
 
         [Fact]

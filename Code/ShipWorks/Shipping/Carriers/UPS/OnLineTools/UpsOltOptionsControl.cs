@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void LoadSettings()
         {
-            requestedLabelFormat.LoadDefaultProfile(new UpsOltShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools));
         }
 
         /// <summary>

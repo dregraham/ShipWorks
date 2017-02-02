@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -10,6 +11,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
@@ -102,26 +104,42 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         public void IsMailInnovationsAvailable_ReturnsTrue_OltEnabled()
         {
             settings.UpsMailInnovationsEnabled = true;
-            Assert.Equal(true, testObject.IsMailInnovationsAvailable(new UpsOltShipmentType()));
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                Assert.Equal(true, testObject.IsMailInnovationsAvailable(mock.Create<UpsOltShipmentType>()));
+            }
         }
 
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsFalse_OltDisabled()
         {
-            Assert.Equal(false, testObject.IsMailInnovationsAvailable(new UpsOltShipmentType()));
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                Assert.Equal(false, testObject.IsMailInnovationsAvailable(mock.Create<UpsOltShipmentType>()));
+            }
         }
 
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsTrue_WorldShipEnabled()
         {
-            settings.WorldShipMailInnovationsEnabled = true;
-            Assert.Equal(true, testObject.IsMailInnovationsAvailable(new WorldShipShipmentType()));
+            using (var mock = AutoMock.GetLoose())
+            {
+                WorldShipShipmentType shipmentType = mock.Create<WorldShipShipmentType>();
+
+                settings.WorldShipMailInnovationsEnabled = true;
+                Assert.Equal(true, testObject.IsMailInnovationsAvailable(shipmentType));
+            }
         }
 
         [Fact]
         public void IsMailInnovationsAvailable_ReturnsFalse_WorldShipDisabled()
         {
-            Assert.Equal(false, testObject.IsMailInnovationsAvailable(new WorldShipShipmentType()));
+            using (var mock = AutoMock.GetLoose())
+            {
+                WorldShipShipmentType shipmentType = mock.Create<WorldShipShipmentType>();
+
+                Assert.Equal(false, testObject.IsMailInnovationsAvailable(shipmentType));
+            }
         }
 
     }

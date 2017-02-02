@@ -1,9 +1,16 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Xml;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
@@ -13,6 +20,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
+using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
@@ -20,24 +28,20 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Xml;
-using Interapptive.Shared.Security;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.UpsOnLineTools)]
     [NDependIgnoreLongTypes]
     public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
-        private DateTime? notifyTime;
+        private DateTime? smartPickupNotifyTime;
+        private UpsPromo promo;
 
         private string upsLicense;
 
@@ -46,11 +50,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         private OpenAccountRequest openAccountRequest;
 
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode)
-            : this(shipmentTypeCode, false)
+        public UpsSetupWizard(IShipmentTypeManager shipmentTypeManager) :
+            this(ShipmentTypeCode.UpsOnLineTools, false, shipmentTypeManager)
         {
 
         }
@@ -58,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode, bool forceAccountOnly)
+        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode, bool forceAccountOnly, IShipmentTypeManager shipmentTypeManager)
         {
             InitializeComponent();
 
@@ -67,14 +72,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new InvalidOperationException("ShipmentTypeCode must be UPS");
             }
 
-            shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            shipmentType = shipmentTypeManager.Get(shipmentTypeCode);
             this.forceAccountOnly = forceAccountOnly;
 
             upsBusinessInfoControl.IndustryChanged = IndustryChanged;
         }
 
         /// <summary>
-        /// Hide/show pharmacutical control based on industry selected.
+        /// Hide/show pharmaceutical control based on industry selected.
         /// </summary>
         private void IndustryChanged(UpsBusinessIndustry upsBusinessIndustry)
         {
@@ -123,6 +128,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageRates,
                 wizardPageOptionsOlt,
                 wizardPageOptionsWorldShip,
+                wizardPagePromo,
                 wizardPageFinishOlt,
                 wizardPageFinishAddAccount});
 
@@ -144,8 +150,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             upsAccount.CountryCode = "US";
             upsAccount.InvoiceAuth = false;
-            upsAccount.RateType = (int)UpsRateType.DailyPickup;
+            upsAccount.RateType = (int) UpsRateType.DailyPickup;
             upsAccount.InitializeNullsToDefault();
+            upsAccount.PromoStatus = (int) UpsPromoStatus.None;
 
             personControl.LoadEntity(new PersonAdapter(upsAccount, ""));
 
@@ -582,8 +589,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         [NDependIgnoreLongMethod]
         private void GetUpsAccessKey()
         {
-            if (ShippingSettings.Fetch().UpsAccessKey != null)
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            if (!string.IsNullOrEmpty(settings.UpsAccessKey))
             {
+                // Already been set
                 return;
             }
 
@@ -635,7 +644,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Now we can get the Access License number
             string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            // Refetch in case it changed...
+            settings = ShippingSettings.Fetch();
             settings.UpsAccessKey = SecureText.Encrypt(accessKey, "UPS");
 
             ShippingSettings.Save(settings);
@@ -689,7 +699,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     UpsAccountEntity upsAccountEntity = UpsAccountManager.Accounts.First();
 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentType.ShipmentTypeCode))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) shipmentType.ShipmentTypeCode))
                     {
                         shippingProfileEntity.Ups.UpsAccountID = upsAccountEntity.UpsAccountID;
                         ShippingProfileManager.SaveProfile(shippingProfileEntity);
@@ -702,9 +712,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     labelSetupComplete1.Text = "Congratulations, you successfully created a UPS account within ShipWorks!";
                     labelSetupComplete2.Text = $"Your new UPS account number: {upsAccount.AccountNumber}";
                     labelSetupComplete3.Text = "Please watch your email for a confirmation from UPS and more information on how to use your account.";
-                    if (notifyTime.HasValue)
+                    if (smartPickupNotifyTime.HasValue)
                     {
-                        labelSetupCompleteNotifyTime.Text = $"UPS Smart Pickup Notify Time: {notifyTime.Value.ToString("t")}";
+                        labelSetupCompleteNotifyTime.Text = $"UPS Smart Pickup Notify Time: {smartPickupNotifyTime.Value.ToString("t")}";
                     }
                 }
             }
@@ -739,7 +749,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (upsBillingContactInfoControl.SameAsPickup)
                 {
                     CreateAccount();
-                    e.NextPage = Pages[Pages.Count - 1]; // Go to last page.
+
+                    // Go to wizardpage if in wizard, else go to the last page.
+                    e.NextPage = Pages.Contains(wizardPagePromo) ? wizardPagePromo : Pages[Pages.Count - 1];
                 }
             }
             catch (UpsOpenAccountException ex)
@@ -894,7 +906,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 upsOpenAccountResponse = OpenUpsAccount(clerk);
             }
 
-            notifyTime = upsOpenAccountResponse.NotifyTime;
+            if (upsOpenAccountResponse == null)
+            {
+                throw new UpsOpenAccountException("Couldn't open an account.", UpsOpenAccountErrorCode.UnknownError);
+            }
+
+            smartPickupNotifyTime = upsOpenAccountResponse.UpsSmartPickupNotifyTime;
         }
 
         /// <summary>
@@ -908,8 +925,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IUpsClerk clerk =
-                        lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
+                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
                     registrationStatus = clerk.RegisterAccount(upsAccount);
                 }
 
@@ -953,10 +969,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Creates the ups account. Note the recursive call to correct the address.
         /// </summary>
         /// <param name="clerk">The clerk.</param>
-        /// <param name="retrySmartPost">if set to <c>true</c> [retry smart post].</param>
+        /// <param name="retryingDueToSmartPickupError">if set to <c>true</c> [retry smart post].</param>
         /// <returns></returns>
         /// <exception cref="UpsOpenAccountException">Ups didn't return a new account number.</exception>
-        private UpsOpenAccountResponseDTO OpenUpsAccount(IUpsClerk clerk, bool retrySmartPost)
+        private UpsOpenAccountResponseDTO OpenUpsAccount(IUpsClerk clerk, bool retryingDueToSmartPickupError)
         {
             UpsOpenAccountResponseDTO upsOpenAccountResponse = null;
 
@@ -964,12 +980,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 OpenAccountResponse response = clerk.OpenAccount(openAccountRequest);
                 upsOpenAccountResponse = new UpsOpenAccountResponseDTO(response.ShipperNumber, response.NotifyTime);
-
             }
-            catch (UpsOpenAccountPickupAddressException ex)
+            catch (UpsOpenAccountBusinessAddressException ex)
             {
-                if (CorrectPickupAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
+                // Fix the BillingAddress
+                if (CorrectAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
                 {
+                    // If billing and pickup are the same copy from billing to pickup
+                    if (upsBillingContactInfoControl.SameAsPickup)
+                    {
+                        CopyAddress(openAccountRequest.BillingAddress, openAccountRequest.PickupAddress);
+                    }
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
                 else
@@ -977,10 +998,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     throw new UpsOpenAccountException("Please enter a valid pickup address.");
                 }
             }
-            catch (UpsOpenAccountBusinessAddressException ex)
+            catch (UpsOpenAccountPickupAddressException ex)
             {
-                if (CorrectBillingAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
+                // Fix the PickupAddress
+                if (CorrectAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
                 {
+                    // If billing and pickup are the same copy from pickup to billing
+                    if (upsBillingContactInfoControl.SameAsPickup)
+                    {
+                        CopyAddress(openAccountRequest.PickupAddress, openAccountRequest.BillingAddress);
+                    }
                     upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
                 else
@@ -990,11 +1017,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountSoapException ex)
             {
-                throw new UpsOpenAccountException($"Ups returned the following error: {ex.Message}", ex);
+                throw new UpsOpenAccountException($"UPS returned the following error: {ex.Message}", ex);
             }
             catch (UpsOpenAccountException ex)
             {
-                if (ex.ErrorCode == UpsOpenAccountErrorCode.SmartPickupError && !retrySmartPost)
+                if (ex.ErrorCode == UpsOpenAccountErrorCode.SmartPickupError && !retryingDueToSmartPickupError)
                 {
                     string correctedAddress = UpsUtility.CorrectSmartPickupError(openAccountRequest.PickupAddress.City);
 
@@ -1018,28 +1045,50 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Validates the pickup address.
+        /// Validates the address.
         /// </summary>
         /// <param name="addressCandidate">The address candidate.</param>
-        /// <param name="pickupAddressType">Type of the pickup address.</param>
+        /// <param name="originalAddress">The original address</param>
         /// <returns></returns>
         /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException"></exception>
-        private static bool CorrectPickupAddress(AddressKeyCandidateType addressCandidate, PickupAddressType pickupAddressType)
+        private static bool CorrectAddress(AddressKeyCandidateType addressCandidate, IAddressType originalAddress)
         {
             bool isAddressCorrected = false;
 
             using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
             {
-                invalidAddressDlg.SetAddress(addressCandidate, "Pickup");
+                string type = originalAddress.GetType() == typeof(BillingAddressType) ? "Billing" : "Pickup";
+
+                invalidAddressDlg.SetAddress(addressCandidate, type);
                 DialogResult result = invalidAddressDlg.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
-                    pickupAddressType.StreetAddress = addressCandidate.StreetAddress ?? pickupAddressType.StreetAddress;
-                    pickupAddressType.City = addressCandidate.City;
-                    pickupAddressType.StateProvinceCode = addressCandidate.State;
-                    pickupAddressType.PostalCode = addressCandidate.PostalCode;
-                    pickupAddressType.CountryCode = addressCandidate.CountryCode;
+                    // Only use the suggestion if its not blank
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.StreetAddress ?? originalAddress.StreetAddress))
+                    {
+                        originalAddress.StreetAddress = addressCandidate.StreetAddress ?? originalAddress.StreetAddress;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.City))
+                    {
+                        originalAddress.City = addressCandidate.City;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.State))
+                    {
+                        originalAddress.StateProvinceCode = addressCandidate.State;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.PostalCode))
+                    {
+                        originalAddress.PostalCode = addressCandidate.PostalCode;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(addressCandidate.CountryCode))
+                    {
+                        originalAddress.CountryCode = addressCandidate.CountryCode;
+                    }
 
                     isAddressCorrected = true;
                 }
@@ -1049,35 +1098,77 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Validates the address.
+        /// Copies the pickup address to the billing address
         /// </summary>
-        /// <param name="addressCandidate">The address candidate.</param>
-        /// <param name="billingAddressType">Type of the billing address.</param>
-        /// <returns></returns>
-        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException">If address suggested and user cancels, throw</exception>
-        private static bool CorrectBillingAddress(AddressKeyCandidateType addressCandidate,
-            BillingAddressType billingAddressType)
+        private static void CopyAddress(IAddressType copyFrom, IAddressType copyTo)
         {
-            bool isAddressCorrected = false;
+            copyTo.StreetAddress = copyFrom.StreetAddress;
+            copyTo.City = copyFrom.City;
+            copyTo.StateProvinceCode = copyFrom.StateProvinceCode;
+            copyTo.PostalCode = copyFrom.PostalCode;
+            copyTo.CountryCode = copyFrom.CountryCode;
+        }
 
-            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
+        /// <summary>
+        /// Called when [promo terms link clicked].
+        /// </summary>
+        private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(promo?.Terms?.URL))
             {
-                invalidAddressDlg.SetAddress(addressCandidate, "Billing");
-                DialogResult result = invalidAddressDlg.ShowDialog();
+                MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
+            }
+            else
+            {
+                WebHelper.OpenUrl(new Uri(promo.Terms.URL), this);
+            }
+        }
 
-                if (result == DialogResult.OK)
+        /// <summary>
+        /// Called when Stepping Into wizardPagePromo
+        /// </summary>
+        private void OnWizardPagePromoSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            try
+            {
+                IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
+                promo = upsPromoFactory.Get(upsAccount);
+
+                promoDescription.Text = promo.Terms.Description;
+                promoControls.Top = promoDescription.Bottom + 5;
+
+                BackEnabled = false;
+            }
+            catch (UpsPromoException)
+            {
+                e.Skip = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when Stepping out of wizardPagePromo
+        /// </summary>
+        private void OnWizardPagePromoStepNext(object sender, WizardStepEventArgs e)
+        {
+            try
+            {
+                if (promoYes.Checked)
                 {
-                    billingAddressType.StreetAddress = addressCandidate.StreetAddress ?? billingAddressType.StreetAddress;
-                    billingAddressType.City = addressCandidate.City;
-                    billingAddressType.StateProvinceCode = addressCandidate.State;
-                    billingAddressType.PostalCode = addressCandidate.PostalCode;
-                    billingAddressType.CountryCode = addressCandidate.CountryCode;
-
-                    isAddressCorrected = true;
+                    promo.Terms.AcceptTerms();
+                    promo.Apply();
+                }
+                else
+                {
+                    if (existingAccount.Checked || shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
+                    {
+                        promo.Decline();
+                    }
                 }
             }
-
-            return isAddressCorrected;
+            catch (UpsPromoException)
+            {
+                upsPromoFailed.Text = @"An error occurred when trying to apply promotion. Standard UPS account created.";
+            }
         }
     }
 }

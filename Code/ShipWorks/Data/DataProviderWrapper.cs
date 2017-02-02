@@ -31,6 +31,12 @@ namespace ShipWorks.Data
             DataProvider.InitializeForCurrentDatabase(executionMode);
 
         /// <summary>
+        /// Gets an entity
+        /// </summary>
+        public EntityBase2 GetEntity(long entityID) =>
+            DataProvider.GetEntity(entityID);
+
+        /// <summary>
         /// Dispose
         /// </summary>
         public void Dispose()

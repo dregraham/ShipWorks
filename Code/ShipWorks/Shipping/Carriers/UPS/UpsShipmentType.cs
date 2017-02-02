@@ -1,4 +1,9 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -29,11 +34,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.UI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -42,6 +42,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected UpsShipmentType()
         {
             // Use the "live" versions of the repository by default
@@ -73,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
-        public override bool HasAccounts => AccountRepository.Accounts.Any();
+        public override bool HasAccounts => AccountRepository.AccountsReadOnly.Any();
 
         /// <summary>
         /// Gets or sets the settings repository that the shipment type should use
@@ -92,14 +96,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
         {
             return true;
-        }
-
-        /// <summary>
-        /// Create the wizard used to do the one-time initial service setup
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new UpsSetupWizard(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -131,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the UPS specific table rows
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Ups", typeof(UpsShipmentEntity), refreshIfPresent);
 
@@ -836,8 +832,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-
-
         /// <summary>
         /// Provide UPS tracking results for the given shipment
         /// </summary>
@@ -867,45 +861,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
-        /// actually processing the shipment. In most cases this is checking to see if an account exists
-        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
-        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
-        /// </summary>
-        /// <returns>
-        /// The updates shipment (or shipments) that is ready to be processed. A null value may
-        /// be returned to indicate that processing should be halted completely. 
-        /// </returns>
-        /// <remarks>
-        /// Uses a UpsShipmentTypeProcessor instead of the default processor.
-        /// </remarks>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment,
-            Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing,
-            RateResult selectedRate,
-            ILifetimeScope lifetimeScope)
-        {
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer(lifetimeScope);
-            ShipmentTypePreProcessor preProcessor = lifetimeScope
-                .Resolve<Func<ShipmentTypeCode, UpsShipmentTypePreProcessor>>()(ShipmentTypeCode);
-            
-            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new UpsShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
         /// Determines whether [is mail innovations enabled] for OLT.
         /// </summary>
         /// <returns></returns>
         public virtual bool IsMailInnovationsEnabled()
         {
-            return ShippingSettings.Fetch().UpsMailInnovationsEnabled;
+            return ShippingSettings.FetchReadOnly().UpsMailInnovationsEnabled;
         }
 
         /// <summary>
@@ -933,7 +894,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (UpsAccountManager.Accounts.Any())
             {
-                return new UpsBestRateBroker();
+                return new UpsBestRateBroker(this);
             }
 
             return new NullShippingBroker();

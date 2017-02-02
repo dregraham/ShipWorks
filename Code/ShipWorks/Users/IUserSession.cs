@@ -14,6 +14,11 @@ namespace ShipWorks.Users
         UserEntity User { get; }
 
         /// <summary>
+        /// Currently logged in computer
+        /// </summary>
+        ComputerEntity Computer { get; }
+
+        /// <summary>
         /// Logs the user in with the given credentials
         /// </summary>
         bool Logon(LogonCredentials credentials);

@@ -60,6 +60,10 @@
       <HintPath>..\..\packages\Autofac.Mef.3.0.3\lib\net40\Autofac.Integration.Mef.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Divelements.SandRibbon.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19038, Culture=neutral, PublicKeyToken=0e453835af4ee6ce, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\GalaSoft.MvvmLight.dll</HintPath>
       <Private>True</Private>
@@ -138,6 +142,7 @@
       <HintPath>..\..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
@@ -160,6 +165,7 @@
     <Compile Include="Carriers\Amazon\IAmazonCancelShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
@@ -173,8 +179,8 @@
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelData.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapter.cs" />
+    <Compile Include="Carriers\LabelServiceFactory.cs" />
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
-    <Compile Include="Carriers\None\NoneShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\None\NoneShipmentType.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapter.cs" />
     <Compile Include="Carriers\NullShipmentPackageTypesBuilder.cs" />
@@ -185,18 +191,31 @@
     <Compile Include="Carriers\NullDownloadedLabelData.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
-    <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapter.cs" />
+    <Compile Include="Carriers\Postal\Express1\Endicia\Express1EndiciaOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Postal\Express1\Endicia\Express1EndiciaRegistration.cs" />
+    <Compile Include="Carriers\Postal\Express1\Endicia\Express1EndiciaSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Carriers\Postal\Express1\Express1DiscountedRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1RatePromotionFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Express1\Usps\Express1UspsOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Postal\Express1\Usps\Express1UspsSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Postal\Express1\Usps\Express1UspsRegistration.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
@@ -208,6 +227,12 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
+    <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
+    <Compile Include="Carriers\ShipmentPreProcessorFactory.cs" />
+    <Compile Include="Carriers\Ups\WorldShip\WorldShipSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Carriers\Ups\WorldShip\WorldShipShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsOltShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapter.cs" />
@@ -235,19 +260,48 @@
     <Compile Include="Rating\IRateSelectionFactory.cs" />
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowResult.cs" />
     <Compile Include="Services\LabelPrintingService.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflowFactory.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\RatesRetriever.cs" />
     <Compile Include="Services\RatesRetrieverService.cs" />
     <Compile Include="Services\ShipmentFactory.cs" />
     <Compile Include="Services\OrderLoaderService.cs" />
     <Compile Include="Services\ShipmentProcessor.cs" />
     <Compile Include="Services\ShipmentProcessorExecutionState.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelResultLogStep.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalStep.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrievalResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\EditionLicenseValidator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\POBoxLicenseValidator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\InsuranceValidator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\AllowedShipmentTypeValidator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\EnsureLoadedManipulator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ILabelRetrievalShipmentManipulator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ILabelRetrievalShipmentValidator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ResidentialStatusManipulator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\ShipmentPhoneManipulator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelRetrieval\SupportsReturnsManipulator.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ILabelResultLogResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ILabelRetrievalResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\IShipmentPreparationResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ILabelPersistenceResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ShipmentPreparationStep.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ShipmentPreparationResult.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\ProcessShipmentState.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelPersistenceStep.cs" />
+    <Compile Include="Services\ShipmentProcessorSteps\LabelPersistenceResult.cs" />
     <Compile Include="Services\ShipmentProcessorService.cs" />
     <Compile Include="Services\ShipmentTypeManagerWrapper.cs" />
     <Compile Include="Services\ShipmentTypeProvider.cs" />
     <Compile Include="Services\Dialogs\ShippingDialogService.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
@@ -264,7 +318,6 @@
     <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
     <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
-    <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
@@ -273,6 +326,7 @@
     <Compile Include="Carriers\Amazon\AmazonUpsRateFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsLabelEnforcer.cs" />
     <Compile Include="Carriers\Amazon\AmazonUspsRateFilter.cs" />
+    <Compile Include="Carriers\UPS\Promo\UpsPromoFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRatingService.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShipmentRequestDetailsFactory.cs" />
@@ -324,6 +378,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsRatingService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsLabelService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsRatingService.cs" />
+    <Compile Include="Carriers\UPS\Promo\UpsPromoPolicy.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingService.cs" />

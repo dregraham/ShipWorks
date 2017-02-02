@@ -1,6 +1,5 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Services;
@@ -19,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Services
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 var testObject = mock.Create<ShippingOriginManagerWrapper>();
-                var result = testObject.GetOriginAddress((long)ShipmentOriginSource.Other, 0, 0, ShipmentTypeCode.Usps);
+                var result = testObject.GetOriginAddress((long) ShipmentOriginSource.Other, 0, 0, ShipmentTypeCode.Usps);
                 Assert.Null(result);
             }
         }
@@ -35,7 +34,7 @@ namespace ShipWorks.Shipping.Tests.Services
                     .Verifiable();
 
                 var testObject = mock.Create<ShippingOriginManagerWrapper>();
-                testObject.GetOriginAddress((long)ShipmentOriginSource.Store, 12, 0, ShipmentTypeCode.Usps);
+                testObject.GetOriginAddress((long) ShipmentOriginSource.Store, 12, 0, ShipmentTypeCode.Usps);
 
                 mock.VerifyAll = true;
             }
@@ -51,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Services
                     .Returns(new StoreEntity { City = "Bar" });
 
                 var testObject = mock.Create<ShippingOriginManagerWrapper>();
-                var result = testObject.GetOriginAddress((long)ShipmentOriginSource.Store, 12, 0, ShipmentTypeCode.Usps);
+                var result = testObject.GetOriginAddress((long) ShipmentOriginSource.Store, 12, 0, ShipmentTypeCode.Usps);
 
                 Assert.Equal("Bar", result.City);
             }
@@ -63,10 +62,10 @@ namespace ShipWorks.Shipping.Tests.Services
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 var testObject = mock.Create<ShippingOriginManagerWrapper>();
-                testObject.GetOriginAddress((long)ShipmentOriginSource.Account, 12, 0, ShipmentTypeCode.Usps);
+                testObject.GetOriginAddress((long) ShipmentOriginSource.Account, 12, 0, ShipmentTypeCode.Usps);
 
                 mock.Mock<ICarrierAccountRetrieverFactory>()
-                    .Verify(x => x.Get(ShipmentTypeCode.Usps));
+                    .Verify(x => x.Create(ShipmentTypeCode.Usps));
             }
         }
 
@@ -75,16 +74,16 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                var retriever = mock.Mock<ICarrierAccountRetriever<ICarrierAccount>>();
+                var retriever = mock.Mock<ICarrierAccountRetriever>();
 
                 mock.Mock<ICarrierAccountRetrieverFactory>()
-                    .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                    .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>()))
                     .Returns(retriever.Object);
 
                 var testObject = mock.Create<ShippingOriginManagerWrapper>();
-                testObject.GetOriginAddress((long)ShipmentOriginSource.Account, 0, 13, ShipmentTypeCode.Usps);
+                testObject.GetOriginAddress((long) ShipmentOriginSource.Account, 0, 13, ShipmentTypeCode.Usps);
 
-                retriever.Verify(x => x.GetAccount(13));
+                retriever.Verify(x => x.GetAccountReadOnly(13));
             }
         }
 
@@ -93,16 +92,16 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                var retriever = mock.Mock<ICarrierAccountRetriever<ICarrierAccount>>();
-                retriever.Setup(x => x.GetAccount(It.IsAny<long>()))
+                var retriever = mock.Mock<ICarrierAccountRetriever>();
+                retriever.Setup(x => x.GetAccountReadOnly(It.IsAny<long>()))
                     .Returns(new UspsAccountEntity { City = "Foo" });
 
                 mock.Mock<ICarrierAccountRetrieverFactory>()
-                    .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                    .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>()))
                     .Returns(retriever.Object);
 
                 var testObject = mock.Create<ShippingOriginManagerWrapper>();
-                var result = testObject.GetOriginAddress((long)ShipmentOriginSource.Account, 0, 13, ShipmentTypeCode.Usps);
+                var result = testObject.GetOriginAddress((long) ShipmentOriginSource.Account, 0, 13, ShipmentTypeCode.Usps);
 
                 Assert.Equal("Foo", result.City);
             }

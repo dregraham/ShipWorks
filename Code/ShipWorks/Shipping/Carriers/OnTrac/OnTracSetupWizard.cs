@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication;
 using ShipWorks.Shipping.Editing.Rating;
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// Setup wizard for processing shipments with OnTrac
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.OnTrac)]
     public partial class OnTracSetupWizard : ShipmentTypeSetupWizardForm
     {
         OnTracAccountEntity account;
@@ -153,8 +155,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // Update any profiles to use this account if this is the only account
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
-                // been deleted. 
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.OnTrac))
+                // been deleted.
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.OnTrac))
                 {
                     if (shippingProfileEntity.OnTrac.OnTracAccountID.HasValue)
                     {

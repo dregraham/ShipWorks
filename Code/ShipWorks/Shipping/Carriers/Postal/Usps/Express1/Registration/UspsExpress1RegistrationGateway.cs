@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
@@ -8,6 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
     /// <summary>
     /// Gateway class for integrating with Express1 and USPS
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class UspsExpress1RegistrationGateway : Express1RegistrationGateway
     {
         /// <summary>
@@ -39,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,
-                    UspsReseller = (int)UspsResellerType.Express1
+                    UspsReseller = (int) UspsResellerType.Express1
                 });
             }
             catch (UspsException ex)

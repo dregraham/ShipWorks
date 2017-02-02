@@ -2,6 +2,7 @@
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
@@ -21,7 +22,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.OnTrac
 
         public OnTracShipmentTypeTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
+                mock => mock.Provide(mock.Create<ISqlAdapter>()));
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks);
         }
@@ -45,15 +47,15 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.OnTrac
 
             var testObject = context.Mock.Create<OnTracShipmentType>();
 
-            // Check both values so that we catch incorrect carrier setting 
+            // Check both values so that we catch incorrect carrier setting
             //(i.e. the shipment type is using UPSInsuranceProvider instead of iParcel.  Yes, this happened.)
-            context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int)InsuranceProvider.Carrier);
+            context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int) InsuranceProvider.Carrier);
             testObject.UpdateDynamicShipmentData(shipment);
-            Assert.Equal((int)InsuranceProvider.Carrier, shipment.InsuranceProvider);
+            Assert.Equal((int) InsuranceProvider.Carrier, shipment.InsuranceProvider);
 
-            context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int)InsuranceProvider.ShipWorks);
+            context.UpdateShippingSetting(x => x.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks);
             testObject.UpdateDynamicShipmentData(shipment);
-            Assert.Equal((int)InsuranceProvider.ShipWorks, shipment.InsuranceProvider);
+            Assert.Equal((int) InsuranceProvider.ShipWorks, shipment.InsuranceProvider);
         }
 
         [Fact]

@@ -4,22 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Stores;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
     /// <summary>
     /// Setup wizard for Amazon shipment type
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Amazon)]
     public partial class AmazonShipmentSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly AmazonShipmentType shipmentType;
@@ -110,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 }
                 catch (ORMQueryExecutionException ex)
                 {
-                    // if the exception is because the shipper already exists dont do anything
+                    // if the exception is because the shipper already exists don't do anything
                     if (!ex.Message.Contains("IX_ShippingOrigin_Description"))
                     {
                         throw;

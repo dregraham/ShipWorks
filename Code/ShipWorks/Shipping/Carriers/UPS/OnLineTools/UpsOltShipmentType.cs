@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using System.Drawing.Imaging;
-using ShipWorks.Data;
-using System.Drawing;
-using ShipWorks.Data.Model;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -46,9 +46,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         }
 
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// Gets the service types that have been available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)

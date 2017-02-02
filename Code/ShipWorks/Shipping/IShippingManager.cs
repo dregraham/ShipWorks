@@ -93,11 +93,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the service used.
         /// </summary>
-        string GetOverriddenSerivceUsed(ShipmentEntity shipment);
+        string GetOverriddenServiceUsed(ShipmentEntity shipment);
 
         /// <summary>
         /// Gets the shipment type carrier name.
         /// </summary>
         string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        ShipmentEntity EnsureShipmentIsLoadedWithOrder(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Validate that the given store is licensed to ship.
+        /// </summary>
+        Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache);
     }
 }

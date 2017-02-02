@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -11,7 +12,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
     /// <summary>
     /// A repository for FedEx counter rate accounts
     /// </summary>
-    public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
+    public class FedExCounterRateAccountRepository : FedExSettingsRepository,
+        ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>,
+        ICarrierAccountRetriever
     {
         private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<FedExAccountEntity>> lazyAccounts;
@@ -77,31 +80,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
-        public FedExAccountEntity GetAccount(long accountID)
-        {
-            return Accounts.First();
-        }
+        public FedExAccountEntity GetAccount(long accountID) => Accounts.First();
 
         /// <summary>
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
-        public IFedExAccountEntity GetAccountReadOnly(long accountID)
-        {
-            return Accounts.First();
-        }
+        public IFedExAccountEntity GetAccountReadOnly(long accountID) => Accounts.First();
 
         /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public FedExAccountEntity GetAccount(IShipmentEntity shipment) => Accounts.First();
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public IFedExAccountEntity GetAccountReadOnly(IShipmentEntity shipment) => Accounts.First();
+
         /// Gets the default profile account. This will always return the same account that is
         /// used to get counter rates.
         /// </summary>
-        public FedExAccountEntity DefaultProfileAccount
-        {
-            get
-            {
-                return Accounts.First();
-            }
-        }
+        public FedExAccountEntity DefaultProfileAccount => Accounts.First();
 
         /// <summary>
         /// Gets shipping settings with the counter version of the FedEx credentials
@@ -141,5 +141,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             // Nothing to save. This is a counter rate account.
         }
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
+            GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(IShipmentEntity shipment) =>
+            GetAccountReadOnly(shipment);
+
+        /// <summary>
+        /// Returns a list of accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
+            AccountsReadOnly.OfType<ICarrierAccount>();
     }
 }
