@@ -37,7 +37,7 @@ namespace Interapptive.Shared.Win32
         /// <summary>
         /// Get characters given pressed keys and keyboard state
         /// </summary>
-        public string GetCharactersFromKeys(VirtualKeys keys, bool shift, bool altGr)
+        public string GetCharactersFromKeys(VirtualKeys keys, bool shift, bool control, bool altGr)
         {
             StringBuilder buf = new StringBuilder(256);
             byte[] keyboardState = new byte[256];
@@ -45,6 +45,11 @@ namespace Interapptive.Shared.Win32
             if (shift)
             {
                 keyboardState[(int)Keys.ShiftKey] = 0xff;
+            }
+
+            if (control)
+            {
+                keyboardState[(int)Keys.ControlKey] = 0xff;
             }
 
             ToUnicode((uint) keys, 0, keyboardState, buf, 256, 0);
