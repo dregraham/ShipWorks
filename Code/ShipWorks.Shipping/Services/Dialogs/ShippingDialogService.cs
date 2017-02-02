@@ -72,18 +72,18 @@ namespace ShipWorks.Shipping.Services.Dialogs
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<OpenShippingDialogWithOrdersMessage>()
                     .IntervalCountThrottle(TimeSpan.FromSeconds(2), schedulerProvider)
-                    .Subscribe(async x => await LoadOrdersForShippingDialog(x).ConfigureAwait(false)),
+                    .SelectMany(x => Observable.FromAsync(() => LoadOrdersForShippingDialog(x)))
+                    .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    .Subscribe(x => OpenShippingDialog(x)),
                 messenger.OfType<ShipAgainMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, ShipAgain)
                     .Where(x => x != null)
                     .Select(x => new OpenShippingDialogMessage(this, new[] { x }))
-                    .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog),
                 messenger.OfType<CreateReturnShipmentMessage>()
                     .SelectInBackgroundWithDialog(schedulerProvider, CreateProgressDialog, CreateReturnShipment)
                     .Where(x => x != null)
                     .Select(x => new OpenShippingDialogMessage(this, new[] { x }))
-                    .Do(x => messenger.Send(new OrderSelectionChangingMessage(this, x.Shipments.Select(s => s.OrderID))))
                     .Subscribe(OpenShippingDialog)
             );
         }
@@ -115,13 +115,13 @@ namespace ShipWorks.Shipping.Services.Dialogs
         /// <summary>
         /// Load orders that will be opened by the shipping dialog
         /// </summary>
-        private async Task LoadOrdersForShippingDialog(OpenShippingDialogWithOrdersMessage message)
+        private async Task<OpenShippingDialogMessage> LoadOrdersForShippingDialog(OpenShippingDialogWithOrdersMessage message)
         {
             if (message.OrderIDs.Count() > ShipmentsLoaderConstants.MaxAllowedOrders)
             {
                 string actionName = shippingPanelTabNames[message.InitialDisplay];
                 messageHelper.ShowInformation($"You can only {actionName} up to {ShipmentsLoaderConstants.MaxAllowedOrders} orders at a time.");
-                return;
+                return default(OpenShippingDialogMessage);
             }
 
             IOrderLoader shipmentsLoader = shipmentsLoaderFactory().Value;
@@ -130,28 +130,32 @@ namespace ShipWorks.Shipping.Services.Dialogs
 
             if (results.Cancelled)
             {
-                return;
+                return default(OpenShippingDialogMessage);
             }
 
-            messenger.Send(new OpenShippingDialogMessage(this, results.Shipments, message.InitialDisplay));
+            return new OpenShippingDialogMessage(this, results.Shipments, message.InitialDisplay);
         }
-
         /// <summary>
         /// Open the shipping dialog
         /// </summary>
         private void OpenShippingDialog(OpenShippingDialogMessage message)
         {
+            messenger.Send(new ShippingDialogOpeningMessage(this));
+
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
             {
                 messageHelper.ShowDialog(() => lifetimeScope.Resolve<ShippingDlg>(TypedParameter.From(message)));
             }
 
+            // We don't hear about deleted shipments until the heart beats, so we need to force this here to avoid
+            // a pause reloading the shipping panel
+            Program.MainForm.ForceHeartbeat(ApplicationCore.Enums.HeartbeatOptions.ChangesExpected);
+
             // We always check for new server messages after shipping, since if there was a shipping problem
             // it could be we put out a server message related to it.
             DashboardManager.DownloadLatestServerMessages();
 
-            messenger.Send(new OrderSelectionChangingMessage(this,
-                message.Shipments.Select(x => x.OrderID).Distinct(), message.Shipments.Select(x => x.ShipmentID)));
+            messenger.Send(new OrderSelectionChangingMessage(this, message.Shipments.Select(x => x.OrderID).Distinct()));
         }
 
         /// <summary>

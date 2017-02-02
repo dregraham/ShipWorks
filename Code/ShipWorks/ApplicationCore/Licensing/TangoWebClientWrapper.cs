@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -294,5 +295,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             return TangoWebClient.GetTangoCustomerId();
         }
+
+        /// <summary>
+        /// Returns an InsureShipAffiliate for the specified store.
+        /// If one cannot be found, an InsureShipException is thrown.
+        /// </summary>
+        public InsureShipAffiliate GetInsureShipAffiliate(StoreEntity store) =>
+            TangoWebClient.GetInsureShipAffiliate(store);
     }
 }

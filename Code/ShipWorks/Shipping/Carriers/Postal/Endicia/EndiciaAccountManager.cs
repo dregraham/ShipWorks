@@ -14,7 +14,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -267,14 +267,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ShipmentType shipmentType = endiciaReseller == EndiciaReseller.Express1 ?
-                    new Express1EndiciaShipmentType() :
-                    new EndiciaShipmentType();
+                ShipmentTypeCode shipmentTypeCode = endiciaReseller == EndiciaReseller.Express1 ?
+                    ShipmentTypeCode.Express1Endicia : ShipmentTypeCode.Endicia;
+                IShipmentTypeSetupWizardFactory wizardFactory = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>();
+                IShipmentTypeSetupWizard wizard = wizardFactory.Create(shipmentTypeCode);
 
-                using (Form dlg = shipmentType.CreateSetupWizard(lifetimeScope))
-                {
-                    return (dlg.ShowDialog(owner) == DialogResult.OK);
-                }
+                return wizard.ShowDialog(owner) == DialogResult.OK;
             }
         }
 

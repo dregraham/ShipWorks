@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Thrown when a known error occurrs during shipping
+    /// Thrown when a known error occurs during shipping
     /// </summary>
     [Description("ShippingException")]
     public class ShippingException : Exception

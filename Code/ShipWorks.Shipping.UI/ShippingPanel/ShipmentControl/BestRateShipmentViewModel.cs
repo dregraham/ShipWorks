@@ -68,6 +68,9 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                .Where(rateRetrivedMsg => rateRetrievingMsg.RatingHash == rateRetrivedMsg.RatingHash);
         }
 
+        public override IObservable<string> PropertyChangeStream =>
+            base.PropertyChangeStream.Where(x => x != nameof(RatesLoaded));
+
         /// <summary>
         /// Load the shipment
         /// </summary>

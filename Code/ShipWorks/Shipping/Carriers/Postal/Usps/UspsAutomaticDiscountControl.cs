@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     public partial class UspsAutomaticDiscountControl : UserControl
     {
-        private IRegistrationPromotion promotion;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAutomaticDiscountControl"/> class.
         /// </summary>
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // Adjust the location of the checkbox and account panel based on the size of the
                     // text otherwise the description text may appear truncated
                     SizeF size = g.MeasureString(labelDiscountInfo1.Text, labelDiscountInfo1.Font, labelDiscountInfo1.Size);
-                    
+
                     checkBoxUseExpedited.Top = labelDiscountInfo1.Top + (int) size.Height + 5;
                     panelDiscountAccount.Top = checkBoxUseExpedited.Bottom + 5;
                 }
@@ -97,8 +97,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void LoadSettings()
         {
-            promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-            
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
 
             LoadResellerAccounts();
@@ -109,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void LoadResellerAccounts()
         {
-            LoadAccounts(UspsAccountManager.UspsAccounts.Where(account => account.ContractType == (int)UspsAccountContractType.Reseller).ToList());
+            LoadAccounts(UspsAccountManager.UspsAccounts.Where(account => account.ContractType == (int) UspsAccountContractType.Reseller).ToList());
         }
 
         /// <summary>
@@ -143,20 +141,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             ShippingSettings.CheckForChangesNeeded();
 
-            using (UspsSetupWizard setupWizard = new UspsSetupWizard(promotion, false))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                UspsSetupWizard setupWizard = lifetimeScope.Resolve<UspsSetupWizard>();
+
                 // Pre-load the account address details
                 setupWizard.InitialAccountAddress = GetDefaultAccountPerson();
 
-                UspsShipmentType shipmentType = new UspsShipmentType();
-                if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
+                if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
                 {
-                    added = (setupWizard.ShowDialog(this) == DialogResult.OK);
+                    added = (setupWizard.ShowDialog(this, false, false) == DialogResult.OK);
                 }
                 else
                 {
                     // The shipping type still needs to be set up, so hand off to the shipment setup control
-                    added = ShipmentTypeSetupControl.SetupShipmentType(this, shipmentType.ShipmentTypeCode, setupWizard);
+                    added = ShipmentTypeSetupControl.SetupShipmentType(this, ShipmentTypeCode.Usps, setupWizard);
                 }
             }
 

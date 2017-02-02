@@ -108,7 +108,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             if (SqlSession.Current == null || !getUserSession().Value.IsLoggedOn)
             {
-                return EditionRestrictionLevel.Forbidden.AsEnumResult();
+                return EditionRestrictionLevel.Forbidden.AsEnumResult("You must be logged in");
             }
 
             return IsLegacy ?

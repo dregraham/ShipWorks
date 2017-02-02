@@ -32,6 +32,12 @@ namespace ShipWorks.Data
             DataProvider.InitializeForCurrentDatabase(executionMode);
 
         /// <summary>
+        /// Gets an entity
+        /// </summary>
+        public EntityBase2 GetEntity(long entityID) =>
+            DataProvider.GetEntity(entityID);
+
+        /// <summary>
         /// Gets the order number complete relating to the given orderID. Returns empty string if order not found.
         /// </summary>
         public string GetOrderNumberComplete(long orderID)

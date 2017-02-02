@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.ScanForms
         public ScanFormBatch(IScanFormCarrierAccount carrierAccount, IScanFormBatchPrinter printer, IScanFormBatchShipmentRepository shipmentRepository)
             : this(carrierAccount, printer, new List<ScanForm>(), shipmentRepository)
         { }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanFormBatch" /> class.
         /// </summary>
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         /// <value>The create date.</value>
         public DateTime CreatedDate { get; set; }
-        
+
         /// <summary>
         /// Gets the batch ID.
         /// </summary>
@@ -71,13 +72,13 @@ namespace ShipWorks.Shipping.ScanForms
         /// Gets the total number of shipments across all the scan forms in this batch.
         /// </summary>
         /// <value>The shipment count.</value>
-        public int ShipmentCount 
+        public int ShipmentCount
         {
             get
             {
                 if (shipmentCount == 0)
                 {
-                    // Double check with the repository to make sure the shipment count is 
+                    // Double check with the repository to make sure the shipment count is
                     // actually zero. Having zero shipments should never occur in practice.
                     // The only way the shipment count could be zero is if this batch was
                     // populated from a previously persisted state where the scan form objects
@@ -108,7 +109,7 @@ namespace ShipWorks.Shipping.ScanForms
         }
 
         /// <summary>
-        /// Prints the the scan forms in the batch. Since a printer dialog will be displayed, the window
+        /// Prints the scan forms in the batch. Since a printer dialog will be displayed, the window
         /// that will "own" the dialog needs to be provided.
         /// </summary>
         /// <param name="owner">The owner.</param>
@@ -136,23 +137,23 @@ namespace ShipWorks.Shipping.ScanForms
         /// that are created are added to the ScanForms list.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        public void Create(List<ShipmentEntity> shipments)
+        public void Create(ILifetimeScope lifetimeScope, List<ShipmentEntity> shipments)
         {
             if (shipments != null && shipments.Any())
             {
                 // Create batch record
                 CreatedDate = DateTime.UtcNow;
-                ShipmentType = (ShipmentTypeCode)shipments.First().ShipmentType;
+                ShipmentType = (ShipmentTypeCode) shipments.First().ShipmentType;
                 ShipmentCount = shipments.Count;
 
                 // Process SCAN forms in batches to try and avoid connection timeouts.
                 IEnumerable<IEntity2> scanFormEntities = shipments
-                    .GroupBy(s => string.Format("{0},{1}", s.OriginPostalCode, ShipmentTypeManager.IsDhl((PostalServiceType)s.Postal.Service)))
+                    .GroupBy(s => string.Format("{0},{1}", s.OriginPostalCode, ShipmentTypeManager.IsDhl((PostalServiceType) s.Postal.Service)))
                     .SelectMany(shipmentsByZip =>
                         shipmentsByZip
                             .SplitIntoChunksOf(1000)
                             .SelectMany(shipmentChunk =>
-                                carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk)))
+                                carrierAccount.GetGateway(lifetimeScope).CreateScanForms(this, shipmentChunk)))
                     .ToList();
 
                 if (!scanFormEntities.Any())
@@ -160,7 +161,7 @@ namespace ShipWorks.Shipping.ScanForms
                     throw new ShippingException(string.Format("ShipWorks was unable to create a SCAN form through {0} at this time. Please try again later.", carrierAccount.ShippingCarrierName));
                 }
 
-                // We need to set the batch ID which comes from the batch entity (which this 
+                // We need to set the batch ID which comes from the batch entity (which this
                 // class has no concept of), so we'll defer to  the carrier account to carry
                 // out the saving and returning the scan form ID value.
                 BatchId = carrierAccount.Save(this);
@@ -178,10 +179,10 @@ namespace ShipWorks.Shipping.ScanForms
         public ScanForm CreateScanForm(string description, IEnumerable<ShipmentEntity> shipments, IEntity2 entity, List<byte[]> images)
         {
             ScanForm scanForm = new ScanForm(carrierAccount, BatchId, description, shipments, entity)
-                {
-                    CreatedDate = CreatedDate,
-                    Images = images
-                };
+            {
+                CreatedDate = CreatedDate,
+                Images = images
+            };
 
             scanForms.Add(scanForm);
             return scanForm;

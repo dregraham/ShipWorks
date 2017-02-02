@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -7,6 +8,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Account repository for Express1 Endicia accounts
     /// </summary>
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Express1Endicia)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>), ShipmentTypeCode.Express1Endicia)]
     public class Express1EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity, IEndiciaAccountEntity>
     {
         /// <summary>
@@ -70,5 +74,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             EndiciaAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
+            shipment?.Postal?.Endicia?.EndiciaAccountID;
     }
 }

@@ -168,7 +168,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             if (restrictionLevel.Value != EditionRestrictionLevel.None)
             {
                 // A UPS account has been added since this shipment was configured for Best Rate. Best rate is not allowed.
-                throw new BestRateException(restrictionLevel.Message);
+                string message = string.IsNullOrWhiteSpace(restrictionLevel.Message) ?
+                    "Best rate is not allowed" :
+                    restrictionLevel.Message;
+                throw new BestRateException(message);
             }
         }
     }

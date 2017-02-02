@@ -1,13 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers
 {
     /// <summary>
     /// Basic repository for retrieving postal (w/o postage) accounts
     /// </summary>
-    public class NullAccountRepository : ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.BestRate)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.None)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Other)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.PostalWebTools)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.Amazon)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.BestRate)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.None)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.Other)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>), ShipmentTypeCode.PostalWebTools)]
+    public class NullAccountRepository :
+        ICarrierAccountRepository<NullCarrierAccount, ICarrierAccount>, ICarrierAccountRetriever
     {
         /// <summary>
         /// Returns a list of postal (w/o postage) accounts.
@@ -35,6 +49,16 @@ namespace ShipWorks.Shipping.Carriers
         public NullCarrierAccount GetAccount(long accountID) => new NullCarrierAccount();
 
         /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public NullCarrierAccount GetAccount(IShipmentEntity shipment) => new NullCarrierAccount();
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public ICarrierAccount GetAccountReadOnly(IShipmentEntity shipment) => new NullCarrierAccount();
+
+        /// <summary>
         /// Returns a postal (w/o postage) account for the provided accountID.
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
@@ -54,5 +78,17 @@ namespace ShipWorks.Shipping.Carriers
         {
             // Nothing to save
         }
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
+            GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Returns a list of accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
+            AccountsReadOnly.OfType<ICarrierAccount>();
     }
 }

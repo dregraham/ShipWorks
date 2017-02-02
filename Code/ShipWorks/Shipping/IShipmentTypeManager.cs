@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping
 {
@@ -46,6 +47,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the provider for the specified shipment
         /// </summary>
-        ShipmentType Get(ShipmentEntity shipment);
+        ShipmentType Get(IShipmentEntity shipment);
     }
 }

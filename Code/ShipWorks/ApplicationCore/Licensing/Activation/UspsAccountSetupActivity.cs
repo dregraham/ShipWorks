@@ -49,7 +49,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         /// </summary>
         public void Execute(ICustomerLicense license, string password)
         {
-            if (!uspsAccountRepository.Accounts.Any())
+            if (!uspsAccountRepository.AccountsReadOnly.Any())
             {
                 shippingProfileManager.InitializeForCurrentSession();
 

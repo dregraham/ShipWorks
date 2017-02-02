@@ -9,6 +9,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// UserControl for managing\editing USPS accounts
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class UspsAccountManagerControl : PostalAccountManagerControlBase
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UspsAccountManagerControl));
@@ -69,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             foreach (UspsAccountEntity account in UspsAccountManager.GetAccounts(UspsResellerType))
             {
-                string contractType = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
+                string contractType = EnumHelper.GetDescription((UspsAccountContractType) account.ContractType);
                 GridRow row = new GridRow(new[] { account.Description, contractType, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
@@ -109,11 +111,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             string result = "";
 
-            GridRow row = (GridRow)state;
+            GridRow row = (GridRow) state;
 
             // Grab the account from the row and make a note of username for
             // exception handling purposes
-            UspsAccountEntity account = (UspsAccountEntity)row.Tag;
+            UspsAccountEntity account = (UspsAccountEntity) row.Tag;
             string username = account.Username;
 
             if (account.Fields.State == EntityState.Fetched)
@@ -129,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 catch (UspsException ex)
                 {
-                    string logMessage = string.Format("Error updating grid with {0} account balance.", UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller));
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", UspsAccountManager.GetResellerName((UspsResellerType) account.UspsReseller));
                     log.Error(logMessage, ex);
                 }
                 catch (ORMEntityIsDeletedException ex)
@@ -145,26 +147,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
             }
 
-            Program.MainForm.BeginInvoke((MethodInvoker)delegate
-               {
-                   if (IsDisposed || !IsHandleCreated)
-                   {
-                       return;
-                   }
+            Program.MainForm.BeginInvoke((MethodInvoker) delegate
+                {
+                    if (IsDisposed || !IsHandleCreated)
+                    {
+                        return;
+                    }
 
-                   InnerGrid innerGrid = row.Grid;
-                   if (innerGrid != null)
-                   {
-                       SandGridBase sandGridInnerGrid = innerGrid.SandGrid;
-                       if (sandGridInnerGrid != null)
-                       {
-                           if (row.Cells.Count > 1)
-                           {
-                               row.Cells[2].Text = result;
-                           }
-                       }
-                   }
-               });
+                    InnerGrid innerGrid = row.Grid;
+                    if (innerGrid != null)
+                    {
+                        SandGridBase sandGridInnerGrid = innerGrid.SandGrid;
+                        if (sandGridInnerGrid != null)
+                        {
+                            if (row.Cells.Count > 1)
+                            {
+                                row.Cells[2].Text = result;
+                            }
+                        }
+                    }
+                });
         }
 
         /// <summary>
@@ -218,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnEdit(object sender, EventArgs e)
         {
-            UspsAccountEntity account = (UspsAccountEntity)sandGrid.SelectedElements[0].Tag;
+            UspsAccountEntity account = (UspsAccountEntity) sandGrid.SelectedElements[0].Tag;
 
             using (UspsAccountEditorDlg dlg = new UspsAccountEditorDlg(account))
             {
@@ -237,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {
-            UspsAccountEntity account = (UspsAccountEntity)sandGrid.SelectedElements[0].Tag;
+            UspsAccountEntity account = (UspsAccountEntity) sandGrid.SelectedElements[0].Tag;
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +

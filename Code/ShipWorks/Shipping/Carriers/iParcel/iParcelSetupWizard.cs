@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Reflection.Emit;
+using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
-using System.Linq;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.WizardPages;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     /// <summary>
     /// The setup wizard used for adding a new i-parcel account to ShipWorks.
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.iParcel)]
     public partial class iParcelSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly IParcelAccountEntity iParcelAccount;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelSetupWizard" /> class.
         /// </summary>
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Called when the form is loaded to add additional shipping wizard pages and load up the 
+        /// Called when the form is loaded to add additional shipping wizard pages and load up the
         /// settings into the options control.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -147,8 +147,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     // Update any profiles to use this iparcel account if this is the only account
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous iparcel account that has since
-                    // been deleted. 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.iParcel))
+                    // been deleted.
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) ShipmentTypeCode.iParcel))
                     {
                         if (shippingProfileEntity.IParcel.IParcelAccountID.HasValue)
                         {

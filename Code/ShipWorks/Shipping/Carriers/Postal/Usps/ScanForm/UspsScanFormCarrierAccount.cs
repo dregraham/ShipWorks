@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -60,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public override IScanFormGateway GetGateway()
+        public override IScanFormGateway GetGateway(ILifetimeScope lifetimeScope)
         {
-            return new UspsScanFormGateway(new UspsWebClient((UspsResellerType)accountEntity.UspsReseller));
+            return new UspsScanFormGateway(new UspsWebClient(lifetimeScope, (UspsResellerType) accountEntity.UspsReseller));
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         protected override void AddPredicateFilters(RelationPredicateBucket bucket)
         {
             int[] dhlServiceTypes = EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsStampsDhl)
-                .Select(entry => (int)entry.Value)
+                .Select(entry => (int) entry.Value)
                 .ToArray();
 
             bucket.PredicateExpression.Add(
@@ -95,9 +96,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
                 UspsShipmentFields.UspsAccountID == accountEntity.UspsAccountID &
 
                 // Exclude first class envelopes
-                !(PostalShipmentFields.Service == (int)PostalServiceType.FirstClass &
-                    (PostalShipmentFields.PackagingType == (int)PostalPackagingType.Envelope | 
-                        PostalShipmentFields.PackagingType == (int)PostalPackagingType.LargeEnvelope)));
+                !(PostalShipmentFields.Service == (int) PostalServiceType.FirstClass &
+                    (PostalShipmentFields.PackagingType == (int) PostalPackagingType.Envelope |
+                        PostalShipmentFields.PackagingType == (int) PostalPackagingType.LargeEnvelope)));
 
 
             bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);

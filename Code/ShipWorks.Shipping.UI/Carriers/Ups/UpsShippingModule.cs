@@ -1,10 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
@@ -44,19 +40,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsServiceManagerFactory>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<UpsAccountRepository>()
-                .AsImplementedInterfaces()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsOnLineTools)
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.UpsWorldShip)
-                .SingleInstance();
-
             builder.RegisterType<UpsShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.UpsOnLineTools)
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.UpsWorldShip)
                 .ExternallyOwned();
-
-            builder.RegisterType<UpsAccountRepository>()
-                .Keyed<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>(ShipmentTypeCode.UpsOnLineTools);
 
             builder.RegisterType<UpsRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.UpsOnLineTools)
@@ -94,12 +81,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsInvoiceRegistrationRequestFactory>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<UpsShipmentTypePreProcessor>().AsSelf();
-
             RegisterOltSpecificTypes(builder);
             RegisterWorldShipSpecificTypes(builder);
             RegisterPromoTypes(builder);
-
         }
 
         /// <summary>

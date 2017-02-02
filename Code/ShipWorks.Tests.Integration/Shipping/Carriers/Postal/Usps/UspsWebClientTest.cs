@@ -47,9 +47,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             };
 
             logEntryFactory = new Mock<ILogEntryFactory>();
+            IUspsWebServiceFactory webServiceFactory = new UspsWebServiceFactory(logEntryFactory.Object);
             logEntryFactory.Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(new Mock<IApiLogEntry>().Object);
 
-            testObject = new UspsWebClient(accountRepository.Object, logEntryFactory.Object, new TrustingCertificateInspector(), UspsResellerType.None);
+            testObject = new UspsWebClient(accountRepository.Object, webServiceFactory, new TrustingCertificateInspector(), UspsResellerType.None);
             UspsWebClient.UseTestServer = true;
         }
 

@@ -319,6 +319,7 @@
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -408,6 +409,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionConcurrencyException.cs" />
+    <Compile Include="Actions\ActionDispatcherWrapper.cs" />
     <Compile Include="Actions\ActionEditorDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -437,6 +439,7 @@
     <Compile Include="Actions\ActionStepPostponementActivity.cs" />
     <Compile Include="Actions\ComputerLimitedType.cs" />
     <Compile Include="Actions\ComputerActionPolicy.cs" />
+    <Compile Include="Actions\IActionDispatcher.cs" />
     <Compile Include="Actions\IActionManager.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
@@ -696,6 +699,11 @@
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\KeyedComponent.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\NamedComponentAttribute.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedRegistrationExtensions.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedRegistrationSource.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderedResolutionExtensions.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\OrderAttribute.cs" />
+    <Compile Include="ApplicationCore\ComponentRegistration\Ordering\TypeExtensions.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\RegistrationType.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\ResolveWithAttributes.cs" />
     <Compile Include="ApplicationCore\ComponentRegistration\ServiceAttribute.cs" />
@@ -717,9 +725,11 @@
     <Compile Include="ApplicationCore\ExecutionModeScope.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\CommandLineExecutionMode.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
+    <Compile Include="ApplicationCore\Factory.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
+    <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
@@ -942,6 +952,14 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerMessageFilterFactory.cs" />
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Common\OrderedCompositeManipulator.cs" />
+    <Compile Include="Common\CompositeValidator.cs" />
+    <Compile Include="Common\CompositeValidatorResult.cs" />
+    <Compile Include="Common\IOrderedCompositeManipulator.cs" />
+    <Compile Include="Common\ICompositeValidator.cs" />
+    <Compile Include="Common\IManipulator.cs" />
+    <Compile Include="Common\ICompositeValidatorResult.cs" />
+    <Compile Include="Common\IValidator.cs" />
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
@@ -958,9 +976,12 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_12_00_00.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_03_09_03_00.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
+    <Compile Include="Data\Connection\ISqlAdapter.cs" />
+    <Compile Include="Data\Connection\ISqlAdapterFactory.cs" />
     <Compile Include="Data\Connection\ISqlDateTimeProvider.cs" />
     <Compile Include="Data\Administration\SqlSchemaVersion.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
+    <Compile Include="Data\Connection\SqlAdapterFactory.cs" />
     <Compile Include="Data\Connection\SqlDateTimeProvider.cs" />
     <Compile Include="Data\Connection\SqlServerInfo.cs" />
     <Compile Include="Data\DataProviderWrapper.cs" />
@@ -976,6 +997,8 @@
     <Compile Include="Data\JsonConverters\ShipmentEntityJsonConverter.cs" />
     <Compile Include="Data\JsonConverters\StoreEntityJsonConverter.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
+    <Compile Include="Data\Utility\IResourceLockFactory.cs" />
+    <Compile Include="Data\Utility\ResourceLockFactory.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Editions\Brown\IBrownEditionUtility.cs" />
     <Compile Include="Editions\EditionManagerWrapper.cs" />
@@ -1001,6 +1024,7 @@
     <Compile Include="Messaging\Messages\Filters\FilterCountsUpdatedMessage.cs" />
     <Compile Include="Messaging\Messages\CustomerDeletedMessage.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenProfileManagerDialogMessage.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\ShippingDialogOpeningMessage.cs" />
     <Compile Include="Messaging\Messages\IEntityDeleted.cs" />
     <Compile Include="Messaging\Messages\Dialogs\OpenShippingDialogWithOrdersMessage.cs" />
     <Compile Include="Messaging\Messages\Panels\PanelHiddenMessage.cs" />
@@ -1158,7 +1182,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingToken.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShippingTokenExtensions.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\BestRateConsolidatePostalRates.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
@@ -1174,11 +1197,14 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1RatePromotionFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebServiceFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsWebServiceFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\GlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\GlobalPostServiceAvailability.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostAvailabilityService.cs" />
@@ -1215,7 +1241,6 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
-    <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypePreProcessor.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipDownloadedLabelData.cs" />
@@ -1227,12 +1252,19 @@
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
     <Compile Include="Shipping\ILabelService.cs" />
+    <Compile Include="Shipping\ILabelServiceFactory.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceChoice.cs" />
     <Compile Include="Shipping\Insurance\IInsuranceUtility.cs" />
     <Compile Include="Shipping\Insurance\InsuranceUtilityWrapper.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipService.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipService.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
+    <Compile Include="Shipping\IResidentialDeterminationService.cs" />
+    <Compile Include="Shipping\IShipmentEntityExtensions.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
+    <Compile Include="Shipping\IShipmentPreProcessor.cs" />
     <Compile Include="Shipping\Policies\ShippingPoliciesCache.cs" />
+    <Compile Include="Shipping\IShipmentPreProcessorFactory.cs" />
     <Compile Include="Shipping\ProgressDisplayOptions.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilder.cs" />
     <Compile Include="Shipping\Services\Builders\IShipmentPackageTypesBuilderFactory.cs" />
@@ -1243,10 +1275,17 @@
     <Compile Include="Shipping\Services\ISingleScanShipmentConfirmationService.cs" />
     <Compile Include="Shipping\Services\MessagingText.cs" />
     <Compile Include="Shipping\Services\ShipmentCustomsItemAdapter.cs" />
+    <Compile Include="Shipping\Settings\IShipmentTypeSetupWizard.cs" />
+    <Compile Include="Shipping\Settings\IShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="Shipping\Settings\IShippingProviderRuleManager.cs" />
     <Compile Include="Shipping\IRatingService.cs" />
     <Compile Include="Shipping\ISupportExpress1Rates.cs" />
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
+    <Compile Include="Stores\Content\Panels\Selectors\AllEntityGridRowSelector.cs" />
+    <Compile Include="Stores\Content\Panels\Selectors\EntityGridRowSelector.cs" />
+    <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />
+    <Compile Include="Stores\Content\Panels\Selectors\IEntityGridRowSelector.cs" />
+    <Compile Include="Stores\Content\Panels\Selectors\SpecificEntityGridRowSelector.cs" />
     <Compile Include="Stores\IStoreSettingsTrackedDurationEvent.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
       <SubType>UserControl</SubType>
@@ -1266,12 +1305,6 @@
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRatePackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.Designer.cs">
-      <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressException.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesProcessingArgs.cs" />
@@ -1320,7 +1353,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlReader.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExShipServiceWrapper.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlWriter.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExMaskedDataType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
@@ -1330,7 +1362,6 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRetriever.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.cs">
@@ -1346,7 +1377,6 @@
     <Compile Include="Shipping\Carriers\iParcel\iParcelServiceTypeServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\NullAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
@@ -1356,7 +1386,6 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1379,8 +1408,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
-    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
       <SubType>UserControl</SubType>
@@ -1388,8 +1415,6 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.Designer.cs">
       <DependentUpon>EndiciaReturnsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />
@@ -1407,14 +1432,12 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsContractTypeCache.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsAccountContractType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\ScanForm\BaseScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAddressValidationResults.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnote.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1467,7 +1490,6 @@
       <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountConvertedEventArgs.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsExpress1RateConsolidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsPostalRateSelection.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.cs">
@@ -1486,12 +1508,9 @@
       <DependentUpon>UspsServiceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
@@ -1531,7 +1550,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
-    <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1839,7 +1857,6 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\InvalidPackageDimensionsException.cs" />
-    <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\IShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\IShippingPolicyFactory.cs" />
@@ -3059,7 +3076,6 @@
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
     <Compile Include="Shipping\InitialShippingTabDisplay.cs" />
-    <Compile Include="Shipping\ShipmentTypePreProcessor.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\IShipSenseOrderItemKeyFactory.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashResult.cs" />
@@ -7858,9 +7874,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
-      <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteControl.resx">
       <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>

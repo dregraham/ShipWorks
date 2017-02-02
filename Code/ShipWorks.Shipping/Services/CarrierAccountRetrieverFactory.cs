@@ -1,27 +1,20 @@
-﻿using ShipWorks.Shipping.Carriers;
-using ShipWorks.Data.Model.Custom;
-using Autofac.Features.Indexed;
+﻿using Autofac.Features.Indexed;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// Factory for getting carrier account retrievers
     /// </summary>
-    public class CarrierAccountRetrieverFactory : ICarrierAccountRetrieverFactory
+    public class CarrierAccountRetrieverFactory :
+        Factory<ShipmentTypeCode, ICarrierAccountRetriever>, ICarrierAccountRetrieverFactory
     {
-        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public CarrierAccountRetrieverFactory(IIndex<ShipmentTypeCode, ICarrierAccountRetriever<ICarrierAccount>> lookup)
+        public CarrierAccountRetrieverFactory(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> lookup) : base(lookup)
         {
-            this.lookup = lookup;
         }
-
-        /// <summary>
-        /// Get a carrier account retriever
-        /// </summary>
-        public ICarrierAccountRetriever<ICarrierAccount> Get(ShipmentTypeCode shipmentType) => lookup[shipmentType];
     }
 }

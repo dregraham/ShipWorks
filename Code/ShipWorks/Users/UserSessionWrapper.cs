@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Logon;
 
@@ -7,25 +8,18 @@ namespace ShipWorks.Users
     /// <summary>
     /// Wrapper for static UserSession class
     /// </summary>
+    [Component]
     public class UserSessionWrapper : IUserSession
     {
-        public UserSessionWrapper() : this(UserSession.User)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public UserSessionWrapper(UserEntity user)
-        {
-            User = user;
-        }
-
         /// <summary>
         /// Currently logged in user
         /// </summary>
-        public UserEntity User { get; }
+        public UserEntity User => UserSession.User;
+
+        /// <summary>
+        /// Currently logged in computer
+        /// </summary>
+        public ComputerEntity Computer => UserSession.Computer;
 
         /// <summary>
         /// Currently logged in user's settings

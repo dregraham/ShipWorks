@@ -1,10 +1,16 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Xml;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
@@ -22,17 +28,13 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.UpsOnLineTools)]
     [NDependIgnoreLongTypes]
     public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
@@ -52,8 +54,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode)
-            : this(shipmentTypeCode, false)
+        public UpsSetupWizard(IShipmentTypeManager shipmentTypeManager) :
+            this(ShipmentTypeCode.UpsOnLineTools, false, shipmentTypeManager)
         {
 
         }
@@ -61,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode, bool forceAccountOnly)
+        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode, bool forceAccountOnly, IShipmentTypeManager shipmentTypeManager)
         {
             InitializeComponent();
 
@@ -70,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new InvalidOperationException("ShipmentTypeCode must be UPS");
             }
 
-            shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            shipmentType = shipmentTypeManager.Get(shipmentTypeCode);
             this.forceAccountOnly = forceAccountOnly;
 
             upsBusinessInfoControl.IndustryChanged = IndustryChanged;
@@ -148,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             upsAccount.CountryCode = "US";
             upsAccount.InvoiceAuth = false;
-            upsAccount.RateType = (int)UpsRateType.DailyPickup;
+            upsAccount.RateType = (int) UpsRateType.DailyPickup;
             upsAccount.InitializeNullsToDefault();
             upsAccount.PromoStatus = (int) UpsPromoStatus.None;
 
@@ -697,7 +699,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     UpsAccountEntity upsAccountEntity = UpsAccountManager.Accounts.First();
 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentType.ShipmentTypeCode))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int) shipmentType.ShipmentTypeCode))
                     {
                         shippingProfileEntity.Ups.UpsAccountID = upsAccountEntity.UpsAccountID;
                         ShippingProfileManager.SaveProfile(shippingProfileEntity);

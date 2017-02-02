@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -9,7 +10,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
     /// <summary>
     /// A repository for USPS counter rate accounts
     /// </summary>
-    public class UspsCounterRateAccountRepository : ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>
+    public class UspsCounterRateAccountRepository :
+        ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>, ICarrierAccountRetriever
     {
         private readonly ICredentialStore credentialStore;
 
@@ -69,16 +71,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
-        public UspsAccountEntity GetAccount(long accountID)
-        {
-            return Accounts.First();
-        }
+        public UspsAccountEntity GetAccount(long accountID) => Accounts.First();
+
+        /// <summary>
+        /// Returns a carrier counter rate account.
+        /// </summary>
+        public UspsAccountEntity GetAccount(IShipmentEntity shipment) => Accounts.First();
 
         /// <summary>
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
         public IUspsAccountEntity GetAccountReadOnly(long accountID) => AccountsReadOnly.First();
+
+        /// <summary>
+        /// Returns a carrier account associated with the specified shipment
+        /// </summary>
+        public IUspsAccountEntity GetAccountReadOnly(IShipmentEntity shipment) => AccountsReadOnly.First();
 
         /// <summary>
         /// Gets the default profile account.
@@ -96,5 +105,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         {
             // Nothing to save. This is a counter rate account.
         }
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
+            GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(IShipmentEntity shipment) =>
+            GetAccountReadOnly(shipment);
+
+        /// <summary>
+        /// Returns a list of accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
+            AccountsReadOnly.OfType<ICarrierAccount>();
     }
 }

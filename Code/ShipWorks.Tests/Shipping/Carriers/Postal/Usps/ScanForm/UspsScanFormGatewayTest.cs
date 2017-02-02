@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using Xunit;
+using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.ScanForms;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 {
@@ -16,22 +17,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         private Mock<IScanFormCarrierAccount> carrierAccount;
 
         private UspsScanFormGateway testObject;
+        private AutoMock mock;
 
         public UspsScanFormGatewayTest()
         {
-            carrierAccount = new Mock<IScanFormCarrierAccount>();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            carrierAccount = mock.Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new UspsAccountEntity());
 
             scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
-            testObject = new UspsScanFormGateway(new UspsWebClient(UspsResellerType.None));
+            testObject = mock.Create<UspsScanFormGateway>(); // new UspsScanFormGateway(new UspsWebClient(UspsResellerType.None));
         }
 
         [Fact]
         public void CreateScanForms_ThrowsUspsException_WhenAccountEntityIsNull()
         {
             // Setup the GetAccountEntity method to return a null value
-            carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
+            carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2) null);
 
             Assert.Throws<UspsException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
@@ -63,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             Assert.Throws<UspsException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
-        // Can't effectively unit test the rest of this class since it is calling into 
+        // Can't effectively unit test the rest of this class since it is calling into
         // an external dependency that cannot be abstracted
     }
 }

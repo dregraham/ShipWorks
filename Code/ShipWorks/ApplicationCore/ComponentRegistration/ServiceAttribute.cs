@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Builder;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
 {
@@ -18,7 +19,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Register all components that use this attribute
         /// </summary>
-        internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
+        public static void Register(ContainerBuilder builder, params Assembly[] assemblies)
         {
             List<Type> services = assemblies.SelectMany(x => x.GetTypes())
                 .Where(IsService)
@@ -28,10 +29,10 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (Type service in services.Where(ShouldRegister(component)))
                 {
-                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registrationBuilder =
-                        builder.RegisterType(component)
-                            .As(service)
-                            .PreserveExistingDefaults();
+                    var registrationBuilder = builder.RegisterType(component)
+                        .As(service)
+                        .OrderByMetadata()
+                        .PreserveExistingDefaults();
 
                     if (GetAttributes(service).Any(s => s.SingleInstance))
                     {

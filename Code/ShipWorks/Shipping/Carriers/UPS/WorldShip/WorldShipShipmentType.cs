@@ -28,13 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.UpsWorldShip;
 
         /// <summary>
-        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
-        /// in ShipWorks, then once its processed in WorldShip its completed.  Opted instead of hardcoding WorldShip if statements
-        /// to use this instead so its easier to track down all the usgages by doing Find References on this property.
-        /// </summary>
-        public override bool ProcessingCompletesExternally => true;
-
-        /// <summary>
+        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed 
         /// Create settings control for WorldShip
         /// </summary>
         protected override SettingsControlBase CreateSettingsControl()
