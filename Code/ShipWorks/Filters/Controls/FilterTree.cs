@@ -2,35 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Properties;
 using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using ShipWorks.Filters;
-using Divelements.SandGrid.Rendering;
-using System.Reflection;
-using System.Diagnostics;
 using Interapptive.Shared.Utility;
 using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.UI.Utility;
 using ShipWorks.Filters.Management;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.UI;
 using System.Linq;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
-using ShipWorks.Data;
 using ShipWorks.Editions;
-using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
 using System.Reactive.Linq;
 
@@ -42,28 +29,19 @@ namespace ShipWorks.Filters.Controls
     [NDependIgnoreLongTypes]
     public partial class FilterTree : UserControl
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(FilterTree));
-
         // Keeps track of which row a node belongs to
-        Dictionary<FilterNodeEntity, FilterTreeGridRow> nodeOwnerMap = new Dictionary<FilterNodeEntity, FilterTreeGridRow>();
+        private readonly Dictionary<FilterNodeEntity, FilterTreeGridRow> nodeOwnerMap = new Dictionary<FilterNodeEntity, FilterTreeGridRow>();
 
         // Used to make sure something is always selected. WhitespaceClickBehavior is set to None, but there is a bug (feature?) of the current grid that if you
         // collapse a parent folder when a child is selected, that child selection get's cleared.  If that gets fixed, we can remove
-        FilterTreeGridRow lastSelectedRow;
+        private FilterTreeGridRow lastSelectedRow;
 
-        // Indiciates if the "My Filters" is always shown, or only shown if it has contents
-        bool alwaysShowMyFilters = false;
-
-        // Indiciates if the tree will automatically try to retrieve count values for counts that
+        // Indicates if the tree will automatically try to retrieve count values for counts that
         // are in the calculating state.
-        bool autoRefreshCalculatingCounts = false;
+        private bool autoRefreshCalculatingCounts = false;
 
         // Indicates the search node to be displayed.
-        FilterNodeEntity activeSearchNode = null;
-
-        // Scope to show
-        FilterScope filterScope = FilterScope.Any;
+        private FilterNodeEntity activeSearchNode = null;
 
         // Raised when the selected node changes
         public event EventHandler SelectedFilterNodeChanged;
@@ -72,16 +50,15 @@ namespace ShipWorks.Filters.Controls
         public event FilterNodeRenameEventHandler FilterRenaming;
         public event FilterNodeRenameEventHandler FilterRenamed;
 
-        // Raised to indiciate the delete key is pressed
+        // Raised to indicate the delete key is pressed
         public event EventHandler DeleteKeyPressed;
 
         // The state of the layout
-        FilterLayoutContext layoutContext;
-        public FilterTarget[] Targets { get; private set; }
+        private FilterLayoutContext layoutContext;
 
         // The quick filter node, if any
-        FilterNodeEntity quickFilterNode = null;
-        bool quickFilterSelected = false;
+        private FilterNodeEntity quickFilterNode = null;
+        private bool quickFilterSelected = false;
         private readonly IDisposable filterEditedToken;
         private readonly FilterControlDisplayManager quickFilterDisplayManager;
 
@@ -121,194 +98,10 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
-        /// Initialize the filter tree's context menu
+        /// Gets the filter targets
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private void InitializeContextMenu()
-        {
-            editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);
-            contextMenuFilterTree = new System.Windows.Forms.ContextMenuStrip(components);
-            menuItemEditFilter = new System.Windows.Forms.ToolStripMenuItem();
-            menuItemEditFilterSep = new System.Windows.Forms.ToolStripSeparator();
-            menuItemNewFilter = new System.Windows.Forms.ToolStripMenuItem();
-            menuItemNewFolder = new System.Windows.Forms.ToolStripMenuItem();
-            toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            menuItemOrganizeFilters = new System.Windows.Forms.ToolStripMenuItem();
-
-            ContextMenuStrip = contextMenuFilterTree;
-
-            contextMenuFilterTree.Font = new System.Drawing.Font("Segoe UI", 9F);
-            contextMenuFilterTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-                menuItemEditFilter,
-                menuItemEditFilterSep,
-                menuItemNewFilter,
-                menuItemNewFolder,
-                toolStripSeparator,
-                menuItemOrganizeFilters});
-            contextMenuFilterTree.Name = "contextMenuCustomerFilterTree";
-            contextMenuFilterTree.Size = new System.Drawing.Size(152, 104);
-            contextMenuFilterTree.Opening += new System.ComponentModel.CancelEventHandler(OnFilterTreeContextMenuOpening);
-
-            // menuItemEditFilter
-            menuItemEditFilter.Image = global::ShipWorks.Properties.Resources.edit16;
-            menuItemEditFilter.Name = "menuItemEditFilter";
-            menuItemEditFilter.Size = new System.Drawing.Size(151, 22);
-            menuItemEditFilter.Text = "Edit";
-            menuItemEditFilter.Click += new System.EventHandler(OnEditFilter);
-
-            // menuItemEditFilterSep
-            menuItemEditFilterSep.Name = "menuItemEditFilterSep";
-            menuItemEditFilterSep.Size = new System.Drawing.Size(148, 6);
-
-            // meuItemNewFilter
-            menuItemNewFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
-            menuItemNewFilter.Name = "meuItemNewFilter";
-            menuItemNewFilter.Size = new System.Drawing.Size(151, 22);
-            menuItemNewFilter.Text = "New Filter";
-            menuItemNewFilter.Click += new System.EventHandler(OnNewFilter);
-
-            // menuItemNewFolder
-            menuItemNewFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
-            menuItemNewFolder.Name = "menuItemNewFolder";
-            menuItemNewFolder.Size = new System.Drawing.Size(151, 22);
-            menuItemNewFolder.Text = "New Folder";
-            menuItemNewFolder.Click += new System.EventHandler(OnNewFolder);
-
-            // toolStripSeparator1
-            toolStripSeparator.Name = "toolStripSeparator1";
-            toolStripSeparator.Size = new System.Drawing.Size(148, 6);
-
-            // menuItemOrganizeFilters
-            menuItemOrganizeFilters.Image = global::ShipWorks.Properties.Resources.funnel_properties_16;
-            menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
-            menuItemOrganizeFilters.Size = new System.Drawing.Size(151, 22);
-            menuItemOrganizeFilters.Text = "Manage Filters";
-            menuItemOrganizeFilters.Click += new System.EventHandler(OnManageFilters);
-
-            editionGuiHelper.RegisterElement(menuItemNewFilter, EditionFeature.FilterLimit, () => FilterLayoutContext.Current == null ? 0 : FilterLayoutContext.Current.GetTopLevelFilterCount());
-        }
-
-        /// <summary>
-        /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
-        /// or if only one target and Customers is not it.
-        /// </summary>
-        private long FilterLastActive(UserSettingsEntity settings)
-        {
-            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
-            {
-                return settings.CustomerFilterLastActive;
-            }
-
-            return settings.OrderFilterLastActive;
-        }
-
-        /// <summary>
-        /// Select the initial filter based on the given user settings
-        /// </summary>
-        public void SelectInitialFilter(UserSettingsEntity settings, FilterTarget target)
-        {
-            // Get last used or initial specified filter based on user settings
-            long initialID = settings.FilterInitialUseLastActive ?
-                FilterLastActive(settings) :
-                settings.FilterInitialSpecified;
-
-            // Select it
-            SelectedFilterNodeID = initialID;
-
-            // If there is nothing selected or the filter initial specified is not for this target,
-            // select the top level filter for this target
-            if (SelectedFilterNode?.Filter.FilterTarget != (int)target || SelectedFilterNode == null)
-            {
-                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(target);
-            }
-        }
-
-        /// <summary>
-        /// Context menu for the filter tree is opening
-        /// </summary>
-        private void OnFilterTreeContextMenuOpening(object sender, CancelEventArgs e)
-        {
-            bool filtersPermission = UserSession.Security.HasPermission(PermissionType.ManageFilters);
-            bool filterSelected = SelectedFilterNode != null;
-            bool myFilter = filterSelected ? FilterHelper.IsMyFilter(SelectedFilterNode) : false;
-
-            menuItemEditFilter.Enabled = filterSelected;
-            menuItemEditFilter.Available = filtersPermission || myFilter;
-
-            if (filterSelected && BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID))
-            {
-                menuItemEditFilter.Available = false;
-            }
-
-            menuItemEditFilterSep.Available = menuItemEditFilter.Available;
-        }
-
-        /// <summary>
-        /// Edit the selected filter or folder, if any
-        /// </summary>
-        private void OnEditFilter(object sender, EventArgs e)
-        {
-            FilterEditingResult result = FilterEditingService.EditFilter(SelectedFilterNode, this);
-
-            if (result == FilterEditingResult.OK)
-            {
-                UpdateFilter(SelectedFilterNode.Filter);
-            }
-        }
-
-        /// <summary>
-        /// Create a new filter, based on the current selection
-        /// </summary>
-        private void OnNewFilter(object sender, EventArgs e)
-        {
-            CreateFilter(false, (SelectedLocation != null) ? SelectedLocation.ParentNode : null);
-        }
-
-        /// <summary>
-        /// Create a new filter folder, based on the current selection
-        /// </summary>
-        private void OnNewFolder(object sender, EventArgs e)
-        {
-            CreateFilter(true, (SelectedLocation != null) ? SelectedLocation.ParentNode : null);
-        }
-
-        /// <summary>
-        /// Initiate the creation of a new filter or folder
-        /// </summary>
-        private void CreateFilter(bool isFolder, FilterNodeEntity parent)
-        {
-            // Creating a filter can create more than one node (if the parent is linked), but
-            // this one will be the one that should be selected
-            FilterNodeEntity primaryNode;
-
-            FilterEditingResult result = FilterEditingService.NewFilter(
-                isFolder,
-                parent,
-                GetFolderState(),
-                this,
-                out primaryNode);
-
-            if (result == FilterEditingResult.OK)
-            {
-                ReloadLayouts();
-                SelectedFilterNode = primaryNode;
-
-                // # of filters present can effect edition issues
-                editionGuiHelper.UpdateUI();
-            }
-        }
-
-        /// <summary>
-        /// Open the filter organizer
-        /// </summary>
-        private void OnManageFilters(object sender, EventArgs e)
-        {
-            using (FilterOrganizerDlg dlg = new FilterOrganizerDlg(SelectedFilterNode, GetFolderState()))
-            {
-                dlg.ShowDialog(this);
-            }
-        }
-
+        public FilterTarget[] Targets { get; private set; }
+        
         /// <summary>
         /// Controls whether the filter tree is editable.  Items can be renamed, and dragged around.
         /// </summary>
@@ -329,7 +122,7 @@ namespace ShipWorks.Filters.Controls
 
         /// <summary>
         /// Indicates if the row under the mouse is always drawn hot.  It also changes how selection works, in that clicking the mouse and
-        /// dragging it does not raise the selction change event until the mouse is released.
+        /// dragging it does not raise the selection change event until the mouse is released.
         /// </summary>
         [DefaultValue(false)]
         [Category("Behavior")]
@@ -382,36 +175,14 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Controls the scope of filters that are displayed.  Does not take effect until the next time LoadLayouts is called.
         /// </summary>
-        [DefaultValue(FilterScope.Any)]
         [Category("Behavior")]
-        public FilterScope FilterScope
-        {
-            get
-            {
-                return filterScope;
-            }
-            set
-            {
-                filterScope = value;
-            }
-        }
+        public FilterScope FilterScope { get; set; } = FilterScope.Any;
 
         /// <summary>
-        /// Indiciates if the "My Filters" is always shown, or only shown if it has contents
+        /// Indicates if the "My Filters" is always shown, or only shown if it has contents
         /// </summary>
-        [DefaultValue(false)]
         [Category("Behavior")]
-        public bool AlwaysShowMyFilters
-        {
-            get
-            {
-                return alwaysShowMyFilters;
-            }
-            set
-            {
-                alwaysShowMyFilters = value;
-            }
-        }
+        public bool AlwaysShowMyFilters { get; set; } = false;
 
         /// <summary>
         /// Should disabled filters be hidden
@@ -433,7 +204,7 @@ namespace ShipWorks.Filters.Controls
             }
             set
             {
-                if (value != null && value.Purpose != (int) FilterNodePurpose.Search)
+                if (value != null && value.Purpose != (int)FilterNodePurpose.Search)
                 {
                     throw new InvalidOperationException("Only search nodes can be set as ActiveSearchNode");
                 }
@@ -445,7 +216,7 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
-        /// Indiciates if the tree will automatically try to retrieve count values for counts that
+        /// Indicates if the tree will automatically try to retrieve count values for counts that
         /// are in the calculating state.  This will only look for updates as long as some counts
         /// are calculating.
         /// </summary>
@@ -482,14 +253,11 @@ namespace ShipWorks.Filters.Controls
         {
             get
             {
-                // Seen cases where for some reason we arent' created yet, and row heights arent set
-                IntPtr ensureCreated = Handle;
-
                 List<SandGridTreeRow> rows = sandGrid.GetAllRows();
 
                 int height = 50;
 
-                foreach (GridRow row in rows)
+                foreach (SandGridTreeRow row in rows)
                 {
                     if (row.IsExpansionVisible())
                     {
@@ -517,6 +285,203 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 return new Size(width, height);
+            }
+        }
+
+        /// <summary>
+        /// Gets \ sets the ID of the selected filter node
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DefaultValue(0)]
+        public long SelectedFilterNodeID
+        {
+            get
+            {
+                FilterNodeEntity node = SelectedFilterNode;
+                if (node == null)
+                {
+                    return 0;
+                }
+
+                return node.FilterNodeID;
+            }
+            set
+            {
+                foreach (KeyValuePair<FilterNodeEntity, FilterTreeGridRow> pair in nodeOwnerMap)
+                {
+                    if (pair.Key.FilterNodeID == value)
+                    {
+                        pair.Value.Selected = true;
+                        EnsureNodeVisible(pair.Value.FilterNode);
+                        return;
+                    }
+                }
+
+                // See if we already have it as a loaded local node
+                if (quickFilterNode != null && quickFilterNode.FilterNodeID == value)
+                {
+                    SelectedFilterNode = quickFilterNode;
+                    return;
+                }
+
+                FilterNodeEntity potential = layoutContext.FindNode(value);
+                if (potential != null && potential.Purpose == (int)FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget)potential.Filter.FilterTarget) >= 0)
+                {
+                    SelectedFilterNode = potential;
+                    return;
+                }
+
+                SelectedFilterNode = null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the currently selected FilterNode
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DefaultValue(null)]
+        public FilterNodeEntity SelectedFilterNode
+        {
+            get
+            {
+                if (quickFilterSelected)
+                {
+                    return quickFilterNode;
+                }
+
+                if (sandGrid.Rows.Count == 0)
+                {
+                    return null;
+                }
+
+                if (sandGrid.SelectedElements.Count == 1)
+                {
+                    FilterTreeGridRow row = sandGrid.SelectedElements[0] as FilterTreeGridRow;
+                    return row.FilterNode;
+                }
+
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    lastSelectedRow = null;
+
+                    if (quickFilterSelected)
+                    {
+                        quickFilterSelected = false;
+                        OnSelectedFilterNodeChanged();
+                    }
+                    else
+                    {
+                        sandGrid.SelectedElements.Clear();
+                    }
+
+                    return;
+                }
+
+                FilterTreeGridRow rowToSelect;
+                if (nodeOwnerMap.TryGetValue(value, out rowToSelect))
+                {
+                    rowToSelect.Selected = true;
+                    EnsureNodeVisible(rowToSelect.FilterNode);
+                }
+                else
+                {
+                    lastSelectedRow = null;
+
+                    if (value.Purpose == (int)FilterNodePurpose.Quick)
+                    {
+                        // This quick filter is already selected
+                        if (quickFilterSelected && quickFilterNode.FilterNodeID == value.FilterNodeID)
+                        {
+                            return;
+                        }
+
+                        quickFilterNode = value;
+                        quickFilterSelected = true;
+
+                        if (sandGrid.SelectedElements.Count > 0)
+                        {
+                            sandGrid.SelectedElements.Clear();
+                        }
+                        else
+                        {
+                            OnSelectedFilterNodeChanged();
+                        }
+                    }
+                    else
+                    {
+                        sandGrid.SelectedElements.Clear();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the node that is currently being displayed as hot-tracked
+        /// </summary>
+        public FilterNodeEntity HotTrackNode
+        {
+            get
+            {
+                FilterTreeGridRow hotTrackRow = sandGrid.HotTrackRow as FilterTreeGridRow;
+
+                return hotTrackRow?.FilterNode;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    sandGrid.HotTrackRow = null;
+                }
+                else
+                {
+                    FilterTreeGridRow row;
+                    sandGrid.HotTrackRow = nodeOwnerMap.TryGetValue(value, out row) ? row : null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the location of the current selection
+        /// </summary>
+        [Browsable(false)]
+        public FilterLocation SelectedLocation
+        {
+            get
+            {
+                if (SelectedFilterNode == null)
+                {
+                    return null;
+                }
+
+                FilterLocation location = new FilterLocation(GetSelectedParent(), GetSelectedPosition());
+                return location;
+            }
+        }
+
+        /// <summary>
+        /// Select the initial filter based on the given user settings
+        /// </summary>
+        public void SelectInitialFilter(UserSettingsEntity settings, FilterTarget target)
+        {
+            // Get last used or initial specified filter based on user settings
+            long initialID = settings.FilterInitialUseLastActive ?
+                FilterLastActive(settings) :
+                settings.FilterInitialSpecified;
+
+            // Select it
+            SelectedFilterNodeID = initialID;
+
+            // If there is nothing selected or the filter initial specified is not for this target,
+            // select the top level filter for this target
+            if (SelectedFilterNode?.Filter.FilterTarget != (int)target || SelectedFilterNode == null)
+            {
+                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(target);
             }
         }
 
@@ -554,7 +519,7 @@ namespace ShipWorks.Filters.Controls
             FolderExpansionState state = GetFolderState();
 
             // Don't listen to layout changes while we reload
-            sandGrid.SelectionChanged -= new SelectionChangedEventHandler(OnGridSelectionChanged);
+            sandGrid.SelectionChanged -= OnGridSelectionChanged;
 
             // We have to reload the context
             layoutContext.Reload();
@@ -569,9 +534,9 @@ namespace ShipWorks.Filters.Controls
             SelectedFilterNodeID = selectedNodeID;
 
             // Start listening for selection changes again
-            sandGrid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
+            sandGrid.SelectionChanged += OnGridSelectionChanged;
 
-            // If its not available anymore, we wont have succesfully selected it
+            // If its not available anymore, we wont have successfully selected it
             if (SelectedFilterNodeID != selectedNodeID)
             {
                 OnSelectedFilterNodeChanged();
@@ -593,7 +558,7 @@ namespace ShipWorks.Filters.Controls
 
             // We will need this
             layoutContext = FilterLayoutContext.Current;
-            this.Targets = targets;
+            Targets = targets;
 
             // Load the layout for each target
             foreach (FilterTarget target in targets)
@@ -604,7 +569,7 @@ namespace ShipWorks.Filters.Controls
                     continue;
                 }
 
-                if (filterScope == FilterScope.Any || filterScope == FilterScope.Everyone)
+                if (FilterScope == FilterScope.Any || FilterScope == FilterScope.Everyone)
                 {
                     FilterLayoutEntity sharedLayout = layoutContext.GetSharedLayout(target);
                     FilterNodeEntity filterNode = sharedLayout.FilterNode;
@@ -626,15 +591,307 @@ namespace ShipWorks.Filters.Controls
             }
 
             // If there was local node, it has to match the new targets
-            if (quickFilterNode != null && Array.IndexOf(targets, (FilterTarget) quickFilterNode.Filter.FilterTarget) < 0)
+            if (quickFilterNode != null && Array.IndexOf(targets, (FilterTarget)quickFilterNode.Filter.FilterTarget) < 0)
             {
                 quickFilterNode = null;
             }
 
-            // If auto refrshing, kick off the timer to check for calculating counts to complete.
+            // If auto refreshing, kick off the timer to check for calculating counts to complete.
             if (autoRefreshCalculatingCounts)
             {
                 CheckForCalculatingCounts();
+            }
+        }
+
+        /// <summary>
+        /// Gets \ sets the expand \ collapse state of all of the folders.
+        /// </summary>
+        public FolderExpansionState GetFolderState()
+        {
+            FolderExpansionState state = new FolderExpansionState();
+
+            // Save the state of each node
+            foreach (FilterTreeGridRow row in sandGrid.GetAllRows())
+            {
+                FilterNodeEntity node = row.FilterNode;
+
+                // If its a folder that actually has children, save its state
+                if (node.Filter.IsFolder && row.NestedRows.Count > 0)
+                {
+                    state.SetExpanded(node, row.Expanded);
+                }
+            }
+
+            return state;
+        }
+
+        /// <summary>
+        /// Apply the state to the folders currently in the tree
+        /// </summary>
+        public void ApplyFolderState(FolderExpansionState folderState)
+        {
+            // Update the state of each row
+            foreach (FilterTreeGridRow row in sandGrid.GetAllRows())
+            {
+                row.Expanded = folderState.IsExpanded(row.FilterNode);
+            }
+        }
+
+        /// <summary>
+        /// Update the display text for all nodes that use the given filter
+        /// </summary>
+        public void UpdateFilterNames()
+        {
+            foreach (var pair in nodeOwnerMap)
+            {
+                GridCell gridCell = pair.Value.Cells[0];
+
+                gridCell.Text = pair.Key.Filter.Name;
+                gridCell.Image = FilterHelper.GetFilterImage(pair.Key);
+            }
+
+            if (autoRefreshCalculatingCounts)
+            {
+                CheckForCalculatingCounts();
+            }
+        }
+
+        /// <summary>
+        /// Update the display text for all nodes that use the given filter
+        /// </summary>
+        public void UpdateFilter(FilterEntity filter)
+        {
+            foreach (FilterNodeEntity node in FilterHelper.GetNodesUsingFilter(filter))
+            {
+                // They may be asking us to refresh node's we aren't displaying (like someone else's My Filters) in which case we'll just
+                // skip it as there's nothing to update.
+                if (nodeOwnerMap.ContainsKey(node))
+                {
+                    FilterTreeGridRow gridRow = GetGridRow(node);
+
+                    if (filter.State != (int)FilterState.Enabled && HideDisabledFilters)
+                    {
+                        if (gridRow.Selected)
+                        {
+                            SelectFirstNode();
+                        }
+
+                        gridRow.Remove();
+                    }
+                    else
+                    {
+                        GridCell gridCell = gridRow.Cells[0];
+                        gridCell.Text = filter.Name;
+                        gridCell.Image = FilterHelper.GetFilterImage(node);
+                    }
+                }
+            }
+
+            if (autoRefreshCalculatingCounts)
+            {
+                CheckForCalculatingCounts();
+            }
+        }
+
+        /// <summary>
+        /// Begin a rename operation on the given filter
+        /// </summary>
+        public void BeginRename(FilterNodeEntity filterNode)
+        {
+            if (!Editable)
+            {
+                throw new InvalidOperationException("Cannot rename a filter.  The view is not editable.");
+            }
+
+            if (!sandGrid.EditorActive)
+            {
+                GetGridRow(filterNode).BeginEdit();
+            }
+        }
+
+        /// <summary>
+        /// Select the first (root) filter node in the tree
+        /// </summary>
+        public void SelectFirstNode()
+        {
+            if (sandGrid.Rows.Count > 0)
+            {
+                SelectedFilterNode = ((FilterTreeGridRow)sandGrid.Rows[0]).FilterNode;
+            }
+        }
+
+        /// <summary>
+        /// Initialize the filter tree's context menu
+        /// </summary>
+        private void InitializeContextMenu()
+        {
+            editionGuiHelper = new EditionGuiHelper(components);
+            contextMenuFilterTree = new ContextMenuStrip(components);
+            menuItemEditFilter = new ToolStripMenuItem();
+            menuItemEditFilterSep = new ToolStripSeparator();
+            menuItemNewFilter = new ToolStripMenuItem();
+            menuItemNewFolder = new ToolStripMenuItem();
+            toolStripSeparator = new ToolStripSeparator();
+            menuItemOrganizeFilters = new ToolStripMenuItem();
+
+            ContextMenuStrip = contextMenuFilterTree;
+
+            contextMenuFilterTree.Font = new Font("Segoe UI", 9F);
+            contextMenuFilterTree.Items.AddRange(new ToolStripItem[] {
+                menuItemEditFilter,
+                menuItemEditFilterSep,
+                menuItemNewFilter,
+                menuItemNewFolder,
+                toolStripSeparator,
+                menuItemOrganizeFilters});
+            contextMenuFilterTree.Name = "contextMenuCustomerFilterTree";
+            contextMenuFilterTree.Size = new Size(152, 104);
+            contextMenuFilterTree.Opening += OnFilterTreeContextMenuOpening;
+
+            InitializeMenuItems();
+
+            // toolStripSeparator1
+            toolStripSeparator.Name = "toolStripSeparator1";
+            toolStripSeparator.Size = new Size(148, 6);
+
+            editionGuiHelper.RegisterElement(menuItemNewFilter, EditionFeature.FilterLimit, () => FilterLayoutContext.Current == null ? 0 : FilterLayoutContext.Current.GetTopLevelFilterCount());
+        }
+
+        /// <summary>
+        /// Initializes the menu items.
+        /// </summary>
+        private void InitializeMenuItems()
+        {
+            // menuItemEditFilter
+            menuItemEditFilter.Image = Resources.edit16;
+            menuItemEditFilter.Name = "menuItemEditFilter";
+            menuItemEditFilter.Size = new Size(151, 22);
+            menuItemEditFilter.Text = "Edit";
+            menuItemEditFilter.Click += OnEditFilter;
+
+            // menuItemEditFilterSep
+            menuItemEditFilterSep.Name = "menuItemEditFilterSep";
+            menuItemEditFilterSep.Size = new Size(148, 6);
+
+            // meuItemNewFilter
+            menuItemNewFilter.Image = Resources.filter_add;
+            menuItemNewFilter.Name = "meuItemNewFilter";
+            menuItemNewFilter.Size = new Size(151, 22);
+            menuItemNewFilter.Text = "New Filter";
+            menuItemNewFilter.Click += OnNewFilter;
+
+            // menuItemNewFolder
+            menuItemNewFolder.Image = Resources.folderclosed_add;
+            menuItemNewFolder.Name = "menuItemNewFolder";
+            menuItemNewFolder.Size = new Size(151, 22);
+            menuItemNewFolder.Text = "New Folder";
+            menuItemNewFolder.Click += OnNewFolder;
+
+            // menuItemOrganizeFilters
+            menuItemOrganizeFilters.Image = Resources.funnel_properties_16;
+            menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
+            menuItemOrganizeFilters.Size = new Size(151, 22);
+            menuItemOrganizeFilters.Text = "Manage Filters";
+            menuItemOrganizeFilters.Click += OnManageFilters;
+        }
+
+        /// <summary>
+        /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
+        /// or if only one target and Customers is not it.
+        /// </summary>
+        private long FilterLastActive(UserSettingsEntity settings)
+        {
+            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
+            {
+                return settings.CustomerFilterLastActive;
+            }
+
+            return settings.OrderFilterLastActive;
+        }
+
+        /// <summary>
+        /// Context menu for the filter tree is opening
+        /// </summary>
+        private void OnFilterTreeContextMenuOpening(object sender, CancelEventArgs e)
+        {
+            bool filtersPermission = UserSession.Security.HasPermission(PermissionType.ManageFilters);
+            bool filterSelected = SelectedFilterNode != null;
+            bool myFilter = filterSelected && FilterHelper.IsMyFilter(SelectedFilterNode);
+
+            menuItemEditFilter.Enabled = filterSelected;
+            menuItemEditFilter.Available = filtersPermission || myFilter;
+
+            if (filterSelected && BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID))
+            {
+                menuItemEditFilter.Available = false;
+            }
+
+            menuItemEditFilterSep.Available = menuItemEditFilter.Available;
+        }
+
+        /// <summary>
+        /// Edit the selected filter or folder, if any
+        /// </summary>
+        private void OnEditFilter(object sender, EventArgs e)
+        {
+            FilterEditingResult result = FilterEditingService.EditFilter(SelectedFilterNode, this);
+
+            if (result == FilterEditingResult.OK)
+            {
+                UpdateFilter(SelectedFilterNode.Filter);
+            }
+        }
+
+        /// <summary>
+        /// Create a new filter, based on the current selection
+        /// </summary>
+        private void OnNewFilter(object sender, EventArgs e)
+        {
+            CreateFilter(false, SelectedLocation?.ParentNode);
+        }
+
+        /// <summary>
+        /// Create a new filter folder, based on the current selection
+        /// </summary>
+        private void OnNewFolder(object sender, EventArgs e)
+        {
+            CreateFilter(true, SelectedLocation?.ParentNode);
+        }
+
+        /// <summary>
+        /// Initiate the creation of a new filter or folder
+        /// </summary>
+        private void CreateFilter(bool isFolder, FilterNodeEntity parent)
+        {
+            // Creating a filter can create more than one node (if the parent is linked), but
+            // this one will be the one that should be selected
+            FilterNodeEntity primaryNode;
+
+            FilterEditingResult result = FilterEditingService.NewFilter(
+                isFolder,
+                parent,
+                GetFolderState(),
+                this,
+                out primaryNode);
+
+            if (result == FilterEditingResult.OK)
+            {
+                ReloadLayouts();
+                SelectedFilterNode = primaryNode;
+
+                // # of filters present can effect edition issues
+                editionGuiHelper.UpdateUI();
+            }
+        }
+
+        /// <summary>
+        /// Open the filter organizer
+        /// </summary>
+        private void OnManageFilters(object sender, EventArgs e)
+        {
+            using (FilterOrganizerDlg dlg = new FilterOrganizerDlg(SelectedFilterNode, GetFolderState()))
+            {
+                dlg.ShowDialog(this);
             }
         }
 
@@ -709,7 +966,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void UpdateMyLayoutAvailability(FilterTarget target)
         {
-            if (filterScope != FilterScope.Any && filterScope != FilterScope.MyFilters)
+            if (FilterScope != FilterScope.Any && FilterScope != FilterScope.MyFilters)
             {
                 return;
             }
@@ -718,7 +975,7 @@ namespace ShipWorks.Filters.Controls
             FilterNodeEntity filterNode = myLayout.FilterNode;
 
             // Only show "My Filters" if there are any
-            if (filterNode.ChildNodes.Count > 0 || filterScope == FilterScope.MyFilters || alwaysShowMyFilters)
+            if (filterNode.ChildNodes.Count > 0 || FilterScope == FilterScope.MyFilters || AlwaysShowMyFilters)
             {
                 // We are not already showing it
                 if (!nodeOwnerMap.ContainsKey(filterNode))
@@ -781,181 +1038,11 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
-        /// Gets \ sets the ID of the selected filter node
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [DefaultValue(0)]
-        public long SelectedFilterNodeID
-        {
-            get
-            {
-                FilterNodeEntity node = SelectedFilterNode;
-                if (node == null)
-                {
-                    return 0;
-                }
-
-                return node.FilterNodeID;
-            }
-            set
-            {
-                foreach (KeyValuePair<FilterNodeEntity, FilterTreeGridRow> pair in nodeOwnerMap)
-                {
-                    if (pair.Key.FilterNodeID == value)
-                    {
-                        pair.Value.Selected = true;
-                        EnsureNodeVisible(pair.Value.FilterNode);
-                        return;
-                    }
-                }
-
-                // See if we already have it as a loaded local node
-                if (quickFilterNode != null && quickFilterNode.FilterNodeID == value)
-                {
-                    SelectedFilterNode = quickFilterNode;
-                    return;
-                }
-
-                FilterNodeEntity potential = layoutContext.FindNode(value);
-                if (potential != null && potential.Purpose == (int) FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget) potential.Filter.FilterTarget) >= 0)
-                {
-                    SelectedFilterNode = potential;
-                    return;
-                }
-
-                SelectedFilterNode = null;
-            }
-        }
-
-        /// <summary>
-        /// Returns the currently selected FilterNode
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [DefaultValue(null)]
-        public FilterNodeEntity SelectedFilterNode
-        {
-            get
-            {
-                if (quickFilterSelected)
-                {
-                    return quickFilterNode;
-                }
-
-                if (sandGrid.Rows.Count == 0)
-                {
-                    return null;
-                }
-
-                if (sandGrid.SelectedElements.Count == 1)
-                {
-                    FilterTreeGridRow row = sandGrid.SelectedElements[0] as FilterTreeGridRow;
-                    return row.FilterNode;
-                }
-
-                return null;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    lastSelectedRow = null;
-
-                    if (quickFilterSelected)
-                    {
-                        quickFilterSelected = false;
-                        OnSelectedFilterNodeChanged();
-                    }
-                    else
-                    {
-                        sandGrid.SelectedElements.Clear();
-                    }
-
-                    return;
-                }
-
-                FilterTreeGridRow rowToSelect;
-                if (nodeOwnerMap.TryGetValue(value, out rowToSelect))
-                {
-                    rowToSelect.Selected = true;
-                    EnsureNodeVisible(rowToSelect.FilterNode);
-                }
-                else
-                {
-                    lastSelectedRow = null;
-
-                    if (value.Purpose == (int) FilterNodePurpose.Quick)
-                    {
-                        // This quick filter is already selected
-                        if (quickFilterSelected && quickFilterNode.FilterNodeID == value.FilterNodeID)
-                        {
-                            return;
-                        }
-
-                        quickFilterNode = value;
-                        quickFilterSelected = true;
-
-                        if (sandGrid.SelectedElements.Count > 0)
-                        {
-                            sandGrid.SelectedElements.Clear();
-                        }
-                        else
-                        {
-                            OnSelectedFilterNodeChanged();
-                        }
-                    }
-                    else
-                    {
-                        sandGrid.SelectedElements.Clear();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Select the first (root) filter node in the tree
-        /// </summary>
-        public void SelectFirstNode()
-        {
-            if (sandGrid.Rows.Count > 0)
-            {
-                SelectedFilterNode = ((FilterTreeGridRow) sandGrid.Rows[0]).FilterNode;
-            }
-        }
-
-        /// <summary>
-        /// Get the location of the current selection
-        /// </summary>
-        [Browsable(false)]
-        public FilterLocation SelectedLocation
-        {
-            get
-            {
-                if (SelectedFilterNode == null)
-                {
-                    return null;
-                }
-
-                FilterLocation location = new FilterLocation(GetSelectedParent(), GetSelectedPosition());
-                return location;
-            }
-        }
-
-        /// <summary>
         /// Get what is to be the parent of items that are moved \ inserted
         /// </summary>
         private FilterNodeEntity GetSelectedParent()
         {
-            FilterNodeEntity filterNode = SelectedFilterNode;
-            if (filterNode.Filter.IsFolder)
-            {
-                return filterNode;
-            }
-            else
-            {
-                return filterNode.ParentNode;
-            }
+            return SelectedFilterNode.Filter.IsFolder ? SelectedFilterNode : SelectedFilterNode.ParentNode;
         }
 
         /// <summary>
@@ -971,112 +1058,6 @@ namespace ShipWorks.Filters.Controls
             else
             {
                 return filterNode.FilterSequence.Position + 1;
-            }
-        }
-
-        /// <summary>
-        /// Gets \ sets the expand \ collapse state of all of the folders.
-        /// </summary>
-        public FolderExpansionState GetFolderState()
-        {
-            FolderExpansionState state = new FolderExpansionState();
-
-            // Save the state of each node
-            foreach (FilterTreeGridRow row in sandGrid.GetAllRows())
-            {
-                FilterNodeEntity node = row.FilterNode;
-
-                // If its a folder that actually has children, save its state
-                if (node.Filter.IsFolder && row.NestedRows.Count > 0)
-                {
-                    state.SetExpanded(node, row.Expanded);
-                }
-            }
-
-            return state;
-        }
-
-        /// <summary>
-        /// Apply the state to the folders currently in the treee
-        /// </summary>
-        public void ApplyFolderState(FolderExpansionState folderState)
-        {
-            // Update the state of each row
-            foreach (FilterTreeGridRow row in sandGrid.GetAllRows())
-            {
-                row.Expanded = folderState.IsExpanded(row.FilterNode);
-            }
-        }
-
-        /// <summary>
-        /// Update the display text for all nodes that use the given filter
-        /// </summary>
-        public void UpdateFilterNames()
-        {
-            foreach (var pair in nodeOwnerMap)
-            {
-                GridCell gridCell = pair.Value.Cells[0];
-
-                gridCell.Text = pair.Key.Filter.Name;
-                gridCell.Image = FilterHelper.GetFilterImage(pair.Key);
-            }
-
-            if (autoRefreshCalculatingCounts)
-            {
-                CheckForCalculatingCounts();
-            }
-        }
-
-        /// <summary>
-        /// Update the display text for all nodes that use the given filter
-        /// </summary>
-        public void UpdateFilter(FilterEntity filter)
-        {
-            foreach (FilterNodeEntity node in FilterHelper.GetNodesUsingFilter(filter))
-            {
-                // They may be asking us to refresh node's we arent displaying (like someone else's My Filters) in which case we'll just
-                // skip it as there's nothing to update.
-                if (nodeOwnerMap.ContainsKey(node))
-                {
-                    FilterTreeGridRow gridRow = GetGridRow(node);
-
-                    if (filter.State != (int) FilterState.Enabled && HideDisabledFilters)
-                    {
-                        if (gridRow.Selected)
-                        {
-                            SelectFirstNode();
-                        }
-
-                        gridRow.Remove();
-                    }
-                    else
-                    {
-                        GridCell gridCell = gridRow.Cells[0];
-                        gridCell.Text = filter.Name;
-                        gridCell.Image = FilterHelper.GetFilterImage(node);
-                    }
-                }
-            }
-
-            if (autoRefreshCalculatingCounts)
-            {
-                CheckForCalculatingCounts();
-            }
-        }
-
-        /// <summary>
-        /// Begin a rename operation on the given filter
-        /// </summary>
-        public void BeginRename(FilterNodeEntity filterNode)
-        {
-            if (!Editable)
-            {
-                throw new InvalidOperationException("Cannot rename a filter.  The view is not editable.");
-            }
-
-            if (!sandGrid.EditorActive)
-            {
-                GetGridRow(filterNode).BeginEdit();
             }
         }
 
@@ -1146,11 +1127,7 @@ namespace ShipWorks.Filters.Controls
 
             UpdateQuickFilterDisplay();
 
-            EventHandler handler = SelectedFilterNodeChanged;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            SelectedFilterNodeChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1170,7 +1147,7 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
-        /// A user is commiting there changes to an edited node (rename)
+        /// A user is committing there changes to an edited node (rename)
         /// </summary>
         private void OnAfterEdit(object sender, GridAfterEditEventArgs e)
         {
@@ -1284,83 +1261,9 @@ namespace ShipWorks.Filters.Controls
         {
             if (e.KeyCode == Keys.Delete)
             {
-                if (Editable && DeleteKeyPressed != null)
+                if (Editable)
                 {
-                    DeleteKeyPressed(this, EventArgs.Empty);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Ensure that the given node is visible in the tree
-        /// </summary>
-        public void EnsureNodeVisible(FilterNodeEntity node)
-        {
-            FilterTreeGridRow row;
-            if (!nodeOwnerMap.TryGetValue(node, out row))
-            {
-                return;
-            }
-
-            FilterTreeGridRow originalRow = row;
-
-            // Try to give it a little room if we can, by making a row a few below it visible
-            for (int i = 0; i < 3; i++)
-            {
-                if (row.NextVisibleRow != null)
-                {
-                    row = (FilterTreeGridRow) row.NextVisibleRow;
-                }
-            }
-
-            // First try to get the one a few below it visible, to make sure we are scrolled a little past it
-            row.EnsureVisible();
-
-            // But we don't want to scroll too far down, so now really ensure its visible.  IF it already is, it won't undo the
-            // one we just did
-            GridRow parent = originalRow.ParentRow;
-            while (parent != null)
-            {
-                parent.Expanded = true;
-                parent = parent.ParentRow;
-            }
-
-            originalRow.EnsureVisible();
-        }
-
-        /// <summary>
-        /// Gets or sets the node that is currently being displayed as hot-tracked
-        /// </summary>
-        public FilterNodeEntity HotTrackNode
-        {
-            get
-            {
-                FilterTreeGridRow hotTrackRow = sandGrid.HotTrackRow as FilterTreeGridRow;
-
-                if (hotTrackRow != null)
-                {
-                    return hotTrackRow.FilterNode;
-                }
-
-                return null;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    sandGrid.HotTrackRow = null;
-                }
-                else
-                {
-                    FilterTreeGridRow row;
-                    if (nodeOwnerMap.TryGetValue(value, out row))
-                    {
-                        sandGrid.HotTrackRow = row;
-                    }
-                    else
-                    {
-                        sandGrid.HotTrackRow = null;
-                    }
+                    DeleteKeyPressed?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -1383,6 +1286,43 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Ensure that the given node is visible in the tree
+        /// </summary>
+        public void EnsureNodeVisible(FilterNodeEntity node)
+        {
+            FilterTreeGridRow row;
+            if (!nodeOwnerMap.TryGetValue(node, out row))
+            {
+                return;
+            }
+
+            FilterTreeGridRow originalRow = row;
+
+            // Try to give it a little room if we can, by making a row a few below it visible
+            for (int i = 0; i < 3; i++)
+            {
+                if (row.NextVisibleRow != null)
+                {
+                    row = (FilterTreeGridRow)row.NextVisibleRow;
+                }
+            }
+
+            // First try to get the one a few below it visible, to make sure we are scrolled a little past it
+            row.EnsureVisible();
+
+            // But we don't want to scroll too far down, so now really ensure its visible.  IF it already is, it won't undo the
+            // one we just did
+            GridRow parent = originalRow.ParentRow;
+            while (parent != null)
+            {
+                parent.Expanded = true;
+                parent = parent.ParentRow;
+            }
+
+            originalRow.EnsureVisible();
+        }
+
+        /// <summary>
         /// Indicates if the tree is showing any nodes in the calculating state.
         /// </summary>
         public bool HasCalculatingNodes()
@@ -1396,6 +1336,35 @@ namespace ShipWorks.Filters.Controls
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// If a Quick Filter had been created and is present, selected or not, clear it.
+        /// </summary>
+        public void ClearQuickFilter()
+        {
+            if (quickFilterSelected)
+            {
+                SelectedFilterNode = null;
+            }
+
+            quickFilterNode = null;
+
+            UpdateQuickFilterDisplay();
+        }
+
+        /// <summary>
+        /// Indicates if the given node is currently available for selection in the tree.  This checks
+        /// the currently displayed quick filter node, if any, and the entire filter tree content.
+        /// </summary>
+        public bool IsFilterNodeAvailable(long filterNodeID)
+        {
+            if (quickFilterNode != null && quickFilterNode.FilterNodeID == filterNodeID)
+            {
+                return true;
+            }
+
+            return nodeOwnerMap.Keys.Any(n => n.FilterNodeID == filterNodeID);
         }
 
         /// <summary>
@@ -1430,7 +1399,7 @@ namespace ShipWorks.Filters.Controls
                     if (count.Status == FilterCountStatus.Ready)
                     {
                         quickFilterCount.Visible = true;
-                        quickFilterCount.Text = string.Format("({0:#,##0})", count.Count);
+                        quickFilterCount.Text = $"({count.Count:#,##0})";
                         quickFilterEdit.Left = quickFilterCount.Right;
 
                         quickFilterCalculating.Visible = false;
@@ -1449,7 +1418,6 @@ namespace ShipWorks.Filters.Controls
                     quickFilterCalculating.Visible = false;
                     quickFilterEdit.Left = quickFilterName.Right;
                 }
-
             }
             // Not a quick filter
             else
@@ -1494,7 +1462,7 @@ namespace ShipWorks.Filters.Controls
                     foreach (FilterTarget target in Targets)
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(EnumHelper.GetDescription(target).TrimEnd('s') + " Filter");
-                        menuItem.Click += new EventHandler(OnQuickFilterCreate);
+                        menuItem.Click += OnQuickFilterCreate;
                         menuItem.Tag = target;
                         targetMenu.Items.Add(menuItem);
                     }
@@ -1513,7 +1481,7 @@ namespace ShipWorks.Filters.Controls
 
                 if (result == FilterEditingResult.OK)
                 {
-                    // When a quick filter is edited, we treat it like the node was changed, so that consumers know they need to update\refresh.
+                    // When a quick filter is edited, we treat it like the node was changed, so that consumers know they need to update \ refresh.
                     SelectedFilterNode = quickFilterNode;
                 }
                 else
@@ -1585,21 +1553,6 @@ namespace ShipWorks.Filters.Controls
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// If a Quick Filter had been created and is present, selected or not, clear it.
-        /// </summary>
-        public void ClearQuickFilter()
-        {
-            if (quickFilterSelected)
-            {
-                SelectedFilterNode = null;
-            }
-
-            quickFilterNode = null;
-
-            UpdateQuickFilterDisplay();
         }
 
         /// <summary>
@@ -1714,25 +1667,6 @@ namespace ShipWorks.Filters.Controls
                 SelectedFilterNode = message.FilterNode;
                 OnSelectedFilterNodeChanged();
             }
-        }
-
-        /// <summary>
-        /// Indiciates if the given node is currently available for selection in the tree.  This checks
-        /// the currently displayed quick filter node, if any, and the the entire filter tree content.
-        /// </summary>
-        public bool IsFilterNodeAvailable(long filterNodeID)
-        {
-            if (quickFilterNode != null && quickFilterNode.FilterNodeID == filterNodeID)
-            {
-                return true;
-            }
-
-            if (nodeOwnerMap.Keys.Any(n => n.FilterNodeID == filterNodeID))
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }
