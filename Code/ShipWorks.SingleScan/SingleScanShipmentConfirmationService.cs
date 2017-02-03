@@ -28,6 +28,7 @@ namespace ShipWorks.SingleScan
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
+        public const string CannotProcessNoneMessage = "Cannot automatically print shipments of type \"None.\" Please check your shipping rules.";
 
         /// <summary>
         /// Constructor
@@ -59,37 +60,55 @@ namespace ShipWorks.SingleScan
             ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
             ShipmentEntity[] shipments = loadedOrders?.Shipments.Where(s => !s.Voided).ToArray();
 
+            IEnumerable<ShipmentEntity> confirmedShipments = new ShipmentEntity[0];
+            bool shipmentsHaveNoneType = false;
+
             if (shipments != null)
             {
-                if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
+                if (HasNoneTypeShipments(shipments))
                 {
-                    return shipments;
-                }
-
-                // If the order has no non Voided Shipments add one and return it
-                if (shipments.None())
+                    shipmentsHaveNoneType = true;
+                } 
+                else if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
                 {
-                    return new[] { shipmentFactory.Create(orderId) };
+                    confirmedShipments = shipments;
                 }
-
-                if (shipments.Any() && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+                else if (shipments.None())
+                {
+                    // If the order has no non Voided Shipments add one and return it
+                    confirmedShipments = new[] { shipmentFactory.Create(orderId) };
+                }
+                else if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
                 {
                     // If all of the shipments are processed and the user confirms they want to process again add a shipment
                     if (shipments.All(s => s.Processed))
                     {
-                        return new[] { shipmentFactory.Create(shipments.First().Order) };
+                        confirmedShipments = new[] { shipmentFactory.Create(orderId) };
                     }
 
                     // If some of the shipments are not process and the user confirms return only the unprocessed shipments
                     if (shipments.Any(s => !s.Processed))
                     {
-                        return shipments.Where(s => !s.Processed);
+                        confirmedShipments = shipments.Where(s => !s.Processed);
                     }
                 }
             }
 
-            return Enumerable.Empty<ShipmentEntity>();
+            if (shipmentsHaveNoneType || HasNoneTypeShipments(confirmedShipments))
+            {
+                messageHelper.ShowError(CannotProcessNoneMessage);
+                confirmedShipments = new ShipmentEntity[0];
+            }
+            
+            return confirmedShipments;
         }
+
+        /// <summary>
+        /// Determines whether any shipment has a ShipmentTypeCode of "None".
+        /// </summary>
+        private static bool HasNoneTypeShipments(IEnumerable<ShipmentEntity> shipments)
+                    => shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
+
 
         /// <summary>
         /// Check to see if we should print and process the given shipments
@@ -99,12 +118,6 @@ namespace ShipWorks.SingleScan
         /// <returns></returns>
         private bool ShouldPrintAndProcessShipments(ShipmentEntity[] shipments, string scannedBarcode)
         {
-            // If we have a single unprocessed shipment always return true
-            if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
-            {
-                return true;
-            }
-
             MessagingText messaging = GetMessaging(shipments);
 
             return
