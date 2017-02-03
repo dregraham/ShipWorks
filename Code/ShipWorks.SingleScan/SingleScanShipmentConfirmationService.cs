@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -28,7 +29,7 @@ namespace ShipWorks.SingleScan
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
-        public const string CannotProcessNoneMessage = "Cannot automatically print shipments of type \"None.\" Please check your shipping rules.";
+        public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
 
         /// <summary>
         /// Constructor
@@ -57,19 +58,29 @@ namespace ShipWorks.SingleScan
             }
 
             // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
-            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
+            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] { orderId }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
+
             ShipmentEntity[] shipments = loadedOrders?.Shipments.Where(s => !s.Voided).ToArray();
+            ShipmentEntity[] confirmedShipments = GetConfirmedShipments(orderId, scannedBarcode, shipments);
 
-            IEnumerable<ShipmentEntity> confirmedShipments = new ShipmentEntity[0];
-            bool shipmentsHaveNoneType = false;
+            if (HasDisqualifyingShipmentTypes(confirmedShipments))
+            {
+                messageHelper.ShowError(CannotProcessNoneMessage);
+                confirmedShipments = new ShipmentEntity[0];
+            }
 
+            return confirmedShipments;
+        }
+
+        /// <summary>
+        /// Gets the confirmed shipments.
+        /// </summary>
+        private ShipmentEntity[] GetConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
+        {
+            ShipmentEntity[] confirmedShipments = new ShipmentEntity[0];
             if (shipments != null)
             {
-                if (HasNoneTypeShipments(shipments))
-                {
-                    shipmentsHaveNoneType = true;
-                } 
-                else if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
+                if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
                 {
                     confirmedShipments = shipments;
                 }
@@ -89,26 +100,19 @@ namespace ShipWorks.SingleScan
                     // If some of the shipments are not process and the user confirms return only the unprocessed shipments
                     if (shipments.Any(s => !s.Processed))
                     {
-                        confirmedShipments = shipments.Where(s => !s.Processed);
+                        confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
                     }
                 }
             }
 
-            if (shipmentsHaveNoneType || HasNoneTypeShipments(confirmedShipments))
-            {
-                messageHelper.ShowError(CannotProcessNoneMessage);
-                confirmedShipments = new ShipmentEntity[0];
-            }
-            
             return confirmedShipments;
         }
 
         /// <summary>
         /// Determines whether any shipment has a ShipmentTypeCode of "None".
         /// </summary>
-        private static bool HasNoneTypeShipments(IEnumerable<ShipmentEntity> shipments)
-                    => shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
-
+        private static bool HasDisqualifyingShipmentTypes(IEnumerable<ShipmentEntity> shipments) => 
+            shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
 
         /// <summary>
         /// Check to see if we should print and process the given shipments
