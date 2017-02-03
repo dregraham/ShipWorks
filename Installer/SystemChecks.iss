@@ -27,27 +27,13 @@ var
 begin
     GetWindowsVersionEx(version);
 
-	if (((not UsingWinNT) or (version.Major < 5)) or
-		((version.Major = 5) and (version.Minor = 0)) ) then
+	if (((not UsingWinNT) or (version.Major < 6)) or
+		((version.Major = 6) and (version.Minor = 0)) ) then
 		ShowErrorPage(
 		    CurPage,
 		    'Setup Error',
 		    'Unsupported Windows Version.',
-		    'ShipWorks can only be installed on a computer running Windows XP SP2, Windows Vista, or later.',
-            '')
-	else if ((version.Major = 5) and (version.Minor = 1) and (version.ServicePackMajor < 2)) then
-		ShowErrorPage(
-		    CurPage,
-		    'Setup Error',
-		    'Windows XP SP2.',
-		    'ShipWorks requires at least Service Pack 2 to be installed when running on Windows XP.',
-            '')
-	else if ((version.Major = 5) and (version.Minor = 2) and (version.ServicePackMajor < 1)) then
-		ShowErrorPage(
-		    CurPage,
-		    'Setup Error',
-		    'Windows Server 2003 SP1.',
-		    'ShipWorks requires at least Service Pack 1 to be installed when running on Windows Server 2003.',
+		    'ShipWorks can only be installed on a computer running Windows 7 or later.',
             '');
 
 end;
