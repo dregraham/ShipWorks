@@ -49,7 +49,7 @@ namespace ShipWorks.Filters.Controls
         Dictionary<FilterNodeEntity, FilterTreeGridRow> nodeOwnerMap = new Dictionary<FilterNodeEntity, FilterTreeGridRow>();
 
         // Used to make sure something is always selected. WhitespaceClickBehavior is set to None, but there is a bug (feature?) of the current grid that if you
-        // collapse a parent folder when a child is selected, that child selection get's cleared.  If that gets fixed, we can remove 
+        // collapse a parent folder when a child is selected, that child selection get's cleared.  If that gets fixed, we can remove
         FilterTreeGridRow lastSelectedRow;
 
         // Indiciates if the "My Filters" is always shown, or only shown if it has contents
@@ -159,25 +159,25 @@ namespace ShipWorks.Filters.Controls
             // menuItemEditFilterSep
             menuItemEditFilterSep.Name = "menuItemEditFilterSep";
             menuItemEditFilterSep.Size = new System.Drawing.Size(148, 6);
-            
+
             // meuItemNewFilter
             menuItemNewFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
             menuItemNewFilter.Name = "meuItemNewFilter";
             menuItemNewFilter.Size = new System.Drawing.Size(151, 22);
             menuItemNewFilter.Text = "New Filter";
             menuItemNewFilter.Click += new System.EventHandler(OnNewFilter);
-             
+
             // menuItemNewFolder
             menuItemNewFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
             menuItemNewFolder.Name = "menuItemNewFolder";
             menuItemNewFolder.Size = new System.Drawing.Size(151, 22);
             menuItemNewFolder.Text = "New Folder";
             menuItemNewFolder.Click += new System.EventHandler(OnNewFolder);
-            
+
             // toolStripSeparator1
             toolStripSeparator.Name = "toolStripSeparator1";
             toolStripSeparator.Size = new System.Drawing.Size(148, 6);
-            
+
             // menuItemOrganizeFilters
             menuItemOrganizeFilters.Image = global::ShipWorks.Properties.Resources.funnel_properties_16;
             menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
@@ -201,30 +201,25 @@ namespace ShipWorks.Filters.Controls
 
             return settings.OrderFilterLastActive;
         }
-        
+
         /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
-        public void SelectInitialFilter(UserSettingsEntity settings)
+        public void SelectInitialFilter(UserSettingsEntity settings, FilterTarget target)
         {
-            long initialID = 0;
-
-            if (settings.FilterInitialUseLastActive)
-            {
-                initialID = FilterLastActive(settings);
-            }
-            else
-            {
-                initialID = settings.FilterInitialSpecified;
-            }
+            // Get last used or initial specified filter based on user settings
+            long initialID = settings.FilterInitialUseLastActive ?
+                FilterLastActive(settings) :
+                settings.FilterInitialSpecified;
 
             // Select it
             SelectedFilterNodeID = initialID;
 
-            // If there is nothing selected, that doesn't exist anymore
-            if (SelectedFilterNode == null)
+            // If there is nothing selected or the filter initial specified is not for this target,
+            // select the top level filter for this target
+            if (SelectedFilterNode?.Filter.FilterTarget != (int)target || SelectedFilterNode == null)
             {
-                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(this.Targets.FirstOrDefault());
+                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(target);
             }
         }
 
@@ -282,7 +277,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void CreateFilter(bool isFolder, FilterNodeEntity parent)
         {
-            // Creating a filter can create more than one node (if the parent is linked), but 
+            // Creating a filter can create more than one node (if the parent is linked), but
             // this one will be the one that should be selected
             FilterNodeEntity primaryNode;
 
@@ -366,7 +361,7 @@ namespace ShipWorks.Filters.Controls
                 sandGrid.SelectFoldersOnly = value;
             }
         }
-        
+
         /// <summary>
         /// Controls if the user can choose a Quick Filter, or just the default standard filters
         /// </summary>
@@ -1000,7 +995,7 @@ namespace ShipWorks.Filters.Controls
 
             return state;
         }
-       
+
         /// <summary>
         /// Apply the state to the folders currently in the treee
         /// </summary>
@@ -1058,7 +1053,7 @@ namespace ShipWorks.Filters.Controls
                     {
                         GridCell gridCell = gridRow.Cells[0];
                         gridCell.Text = filter.Name;
-                        gridCell.Image = FilterHelper.GetFilterImage(node);   
+                        gridCell.Image = FilterHelper.GetFilterImage(node);
                     }
                 }
             }
@@ -1263,7 +1258,7 @@ namespace ShipWorks.Filters.Controls
                         {
                             moveLocation.Position--;
                         }
-                    }                
+                    }
                 }
             }
 
@@ -1431,7 +1426,7 @@ namespace ShipWorks.Filters.Controls
                 if (count != null)
                 {
                     quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int)FilterState.Enabled);
-                    
+
                     if (count.Status == FilterCountStatus.Ready)
                     {
                         quickFilterCount.Visible = true;

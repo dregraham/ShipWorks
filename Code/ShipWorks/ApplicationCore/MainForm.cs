@@ -2330,6 +2330,9 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
+            customerFilterTree.SelectInitialFilter(settings, FilterTarget.Customers);
+            orderFilterTree.SelectInitialFilter(settings, FilterTarget.Orders);
+
             if (!settings.FilterInitialUseLastActive)
             {
                 long initialID = settings.FilterInitialSpecified;
@@ -2340,13 +2343,11 @@ namespace ShipWorks
                 {
                     if (filterNode.Filter.FilterTarget == (int) FilterTarget.Customers)
                     {
-                        customerFilterTree.SelectInitialFilter(settings);
                         dockableWindowCustomerFilters.Open();
                         customerFilterTree.Focus();
                     }
                     else
                     {
-                        orderFilterTree.SelectInitialFilter(settings);
                         dockableWindowOrderFilters.Open();
                         orderFilterTree.Focus();
                     }
@@ -2354,8 +2355,6 @@ namespace ShipWorks
             }
             else
             {
-                customerFilterTree.SelectInitialFilter(settings);
-                orderFilterTree.SelectInitialFilter(settings);
                 orderFilterTree.Focus();
             }
         }
