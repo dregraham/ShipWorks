@@ -2330,8 +2330,7 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
-            customerFilterTree.SelectInitialFilter(settings, FilterTarget.Customers);
-            orderFilterTree.SelectInitialFilter(settings, FilterTarget.Orders);
+            FilterTarget target = FilterTarget.Orders;
 
             if (!settings.FilterInitialUseLastActive)
             {
@@ -2339,23 +2338,21 @@ namespace ShipWorks
 
                 FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
 
-                if (filterNode != null)
+                if (filterNode?.Filter.FilterTarget != null)
                 {
-                    if (filterNode.Filter.FilterTarget == (int) FilterTarget.Customers)
-                    {
-                        dockableWindowCustomerFilters.Open();
-                        customerFilterTree.Focus();
-                    }
-                    else
-                    {
-                        dockableWindowOrderFilters.Open();
-                        orderFilterTree.Focus();
-                    }
+                    target = (FilterTarget)filterNode.Filter.FilterTarget;
                 }
+            }
+
+            if (target == FilterTarget.Customers)
+            {
+                customerFilterTree.Focus();
+                customerFilterTree.SelectInitialFilter(settings, FilterTarget.Customers);
             }
             else
             {
                 orderFilterTree.Focus();
+                orderFilterTree.SelectInitialFilter(settings, FilterTarget.Orders);
             }
         }
 
@@ -2895,7 +2892,9 @@ namespace ShipWorks
             Messenger.Current.Send(new PanelShownMessage(this, dockControl));
         }
 
-        // A dock control that didn't used to be open now is
+        /// <summary>
+        /// Called when a dock control that didn't used to be open now is
+        /// </summary>
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdateSelectionDependentUI();
@@ -2910,10 +2909,12 @@ namespace ShipWorks
             {
                 if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
                 {
+                    customerFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Customers);
                     gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
                 }
                 else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
                 {
+                    orderFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Orders);
                     gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
                 }
             }
