@@ -38,6 +38,7 @@ namespace ShipWorks.SingleScan
         private IDisposable filterCompletedMessageSubscription;
         private readonly IUserSession userSession;
         private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
+        private readonly ISingleScanOrderConfirmationService singleScanOrderConfirmationService;
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
         private const int FilterCountsUpdatedMessageTimeoutInSeconds = 25;
@@ -50,6 +51,7 @@ namespace ShipWorks.SingleScan
             ISchedulerProvider schedulerProvider,
             IUserSession userSession,
             ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
+            ISingleScanOrderConfirmationService singleScanOrderConfirmationService,
             Func<Type, ILog> logFactory,
             IMainForm mainForm)
         {
@@ -58,6 +60,7 @@ namespace ShipWorks.SingleScan
             this.userSession = userSession;
             this.mainForm = mainForm;
             this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
+            this.singleScanOrderConfirmationService = singleScanOrderConfirmationService;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
@@ -78,10 +81,10 @@ namespace ShipWorks.SingleScan
             filterCompletedMessageSubscription = scanMessages
                 .Where(AllowAutoPrint)
                 .Do(x => EndScanMessagesObservation())
-                .ContinueAfter(messenger.OfType<FilterCountsUpdatedMessage>(), 
+                .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), 
                                TimeSpan.FromSeconds(FilterCountsUpdatedMessageTimeoutInSeconds), 
                                schedulerProvider.Default,
-                               (scanMsg, filterCountsUpdatedMessage) => new FilterCountsUpdatedAndScanMessages(filterCountsUpdatedMessage, scanMsg))
+                               (scanMsg, filterCountsUpdatedMessage) => new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMsg))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .SelectMany(m => HandleAutoPrintShipment(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
@@ -127,21 +130,26 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        private async Task<GenericResult<string>> HandleAutoPrintShipment(FilterCountsUpdatedAndScanMessages messages)
+        private async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
         {
+            string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
+
             // Only auto print if 1 order was found
-            if (messages.FilterCountsUpdatedMessage.FilterNodeContent?.Count != 1)
+            if (autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
+                autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
+                autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId == null)
             {
-                throw new ShippingException("Auto printing is not allowed for the scanned order.");
+                log.Error("Order not found for scanned order.");
+                return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
             }
 
-            if (messages.FilterCountsUpdatedMessage.OrderId == null)
-            {
-                throw new ShippingException("Order not found for scanned order.");
-            }
+            long orderId = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
+            int matchedOrderCount = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
 
-            string scannedBarcode = messages.ScanMessage.ScannedText;
-            long orderId = messages.FilterCountsUpdatedMessage.OrderId.Value;
+            if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
+            {
+                return GenericResult.FromError("Multiple orders selected, user chose not to process", scannedBarcode);
+            }
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
             IEnumerable<ShipmentEntity> shipments = await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
@@ -175,7 +183,7 @@ namespace ShipWorks.SingleScan
 
             if (genericResult.Success)
             {
-                log.Info("Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
+                log.Info($"Waiting for ShipmentsProcessedMessage from scan  {genericResult.Value}");
 
                 // Listen for ShipmentsProcessedMessages, but timeout if processing takes 
                 // longer than ShipmentsProcessedMessageTimeoutInMinutes.

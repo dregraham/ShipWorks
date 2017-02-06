@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -28,6 +29,7 @@ namespace ShipWorks.SingleScan
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
+        public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
 
         /// <summary>
         /// Constructor
@@ -56,40 +58,61 @@ namespace ShipWorks.SingleScan
             }
 
             // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
-            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] {orderId}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
-            ShipmentEntity[] shipments = loadedOrders?.Shipments.Where(s => !s.Voided).ToArray();
+            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] { orderId }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
 
+            ShipmentEntity[] shipments = loadedOrders?.Shipments.Where(s => !s.Voided).ToArray();
+            ShipmentEntity[] confirmedShipments = GetConfirmedShipments(orderId, scannedBarcode, shipments);
+
+            if (HasDisqualifyingShipmentTypes(confirmedShipments))
+            {
+                messageHelper.ShowError(CannotProcessNoneMessage);
+                confirmedShipments = new ShipmentEntity[0];
+            }
+
+            return confirmedShipments;
+        }
+
+        /// <summary>
+        /// Gets the confirmed shipments.
+        /// </summary>
+        private ShipmentEntity[] GetConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
+        {
+            ShipmentEntity[] confirmedShipments = new ShipmentEntity[0];
             if (shipments != null)
             {
                 if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
                 {
-                    return shipments;
+                    confirmedShipments = shipments;
                 }
-
-                // If the order has no non Voided Shipments add one and return it
-                if (shipments.None())
+                else if (shipments.None())
                 {
-                    return new[] { shipmentFactory.Create(orderId) };
+                    // If the order has no non Voided Shipments add one and return it
+                    confirmedShipments = new[] { shipmentFactory.Create(orderId) };
                 }
-
-                if (shipments.Any() && ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+                else if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
                 {
                     // If all of the shipments are processed and the user confirms they want to process again add a shipment
                     if (shipments.All(s => s.Processed))
                     {
-                        return new[] { shipmentFactory.Create(shipments.First().Order) };
+                        confirmedShipments = new[] { shipmentFactory.Create(orderId) };
                     }
 
                     // If some of the shipments are not process and the user confirms return only the unprocessed shipments
                     if (shipments.Any(s => !s.Processed))
                     {
-                        return shipments.Where(s => !s.Processed);
+                        confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
                     }
                 }
             }
 
-            return Enumerable.Empty<ShipmentEntity>();
+            return confirmedShipments;
         }
+
+        /// <summary>
+        /// Determines whether any shipment has a ShipmentTypeCode of "None".
+        /// </summary>
+        private static bool HasDisqualifyingShipmentTypes(IEnumerable<ShipmentEntity> shipments) => 
+            shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
 
         /// <summary>
         /// Check to see if we should print and process the given shipments
@@ -99,12 +122,6 @@ namespace ShipWorks.SingleScan
         /// <returns></returns>
         private bool ShouldPrintAndProcessShipments(ShipmentEntity[] shipments, string scannedBarcode)
         {
-            // If we have a single unprocessed shipment always return true
-            if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
-            {
-                return true;
-            }
-
             MessagingText messaging = GetMessaging(shipments);
 
             return

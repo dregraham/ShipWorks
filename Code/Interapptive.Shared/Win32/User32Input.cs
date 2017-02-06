@@ -13,6 +13,8 @@ namespace Interapptive.Shared.Win32
     [CLSCompliant(false)]
     public class User32Input : IUser32Input
     {
+        private const byte KeyboardStateOn = 0xff;
+
         /// <summary>
         /// Function to retrieve raw input data.
         /// </summary>
@@ -44,7 +46,12 @@ namespace Interapptive.Shared.Win32
 
             if (shift)
             {
-                keyboardState[(int)Keys.ShiftKey] = 0xff;
+                keyboardState[(int)Keys.ShiftKey] = KeyboardStateOn;
+            }
+
+            if (control)
+            {
+                keyboardState[(int)Keys.ControlKey] = KeyboardStateOn;
             }
 
             if (control)
