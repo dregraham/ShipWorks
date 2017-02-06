@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Users;
@@ -138,9 +139,11 @@ namespace ShipWorks.ApplicationCore.Options
 
                 if (settings.SingleScanSettings != (int) singleScanSettingsOnLoad)
                 {
-                    EventTelemetry telemetry = new EventTelemetry("SingleScan.Settings.Changed");
+                    EventTelemetry telemetryEvent = new EventTelemetry("SingleScan.Settings.Changed");
                     string telemetryValue = EnumHelper.GetApiValue((SingleScanSettings) settings.SingleScanSettings);
-                    telemetry.Properties.Add("SingleScan.Settings.Value", telemetryValue);
+                    telemetryEvent.Properties.Add("SingleScan.Settings.Value", telemetryValue);
+
+                    Telemetry.TrackEvent(telemetryEvent);
                 }
             }
         }
