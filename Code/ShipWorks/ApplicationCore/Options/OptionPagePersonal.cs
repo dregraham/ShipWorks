@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Data.Connection;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
 
@@ -137,14 +138,28 @@ namespace ShipWorks.ApplicationCore.Options
                     settings.SingleScanSettings = (int) SingleScanSettings.Disabled;
                 }
 
-                if (settings.SingleScanSettings != (int) singleScanSettingsOnLoad)
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    EventTelemetry telemetryEvent = new EventTelemetry("SingleScan.Settings.Changed");
-                    string telemetryValue = EnumHelper.GetApiValue((SingleScanSettings) settings.SingleScanSettings);
-                    telemetryEvent.Properties.Add("SingleScan.Settings.Value", telemetryValue);
-
-                    Telemetry.TrackEvent(telemetryEvent);
+                    adapter.SaveAndRefetch(settings);
                 }
+
+                UpdateSingleScanTelemetry(settings);
+            }
+        }
+
+        /// <summary>
+        /// Log the Single Scan Settings to Telemetry
+        /// </summary>
+        /// <param name="settings"></param>
+        private void UpdateSingleScanTelemetry(UserSettingsEntity settings)
+        {
+            if (settings.SingleScanSettings != (int) singleScanSettingsOnLoad)
+            {
+                EventTelemetry telemetryEvent = new EventTelemetry("SingleScan.Settings.Changed");
+                string telemetryValue = EnumHelper.GetApiValue((SingleScanSettings) settings.SingleScanSettings);
+                telemetryEvent.Properties.Add("SingleScan.Settings.Value", telemetryValue);
+
+                Telemetry.TrackEvent(telemetryEvent);
             }
         }
 
