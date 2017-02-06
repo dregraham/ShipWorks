@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -294,6 +295,86 @@ namespace ShipWorks.SingleScan.Tests
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        [Fact]
+        public async void GetShipments_AddsTotalShipmentsTelemetry_WhenAutoPrintEnabledAndMultipleShipmentsReturned()
+        {
+            var trackedDurationEvent = await SetupTelemetryTests();
+
+            trackedDurationEvent.Verify(
+                e => e.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", 4), Times.Once);
+        }
+
+        [Fact]
+        public async void GetShipments_AddsUnprocessedShipmentsTelemetry_WhenAutoPrintEnabledAndMultipleShipmentsReturned()
+        {
+            var trackedDurationEvent = await SetupTelemetryTests();
+
+            trackedDurationEvent.Verify(
+                e => e.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Unprocessed", 3), Times.Once);
+        }
+
+        [Fact]
+        public async void GetShipments_AddsProcessedShipmentsTelemetry_WhenAutoPrintEnabledAndMultipleShipmentsReturned()
+        {
+            var trackedDurationEvent = await SetupTelemetryTests();
+
+            trackedDurationEvent.Verify(
+                e => e.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Processed", 1), Times.Once);
+        }
+
+        [Fact]
+        public async void GetShipments_AddsShipmentConfirmationActionTelemetry_WhenAutoPrintEnabledAndMultipleShipmentsReturned()
+        {
+            var trackedDurationEvent = await SetupTelemetryTests();
+
+            trackedDurationEvent.Verify(
+                e => e.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", "Cancel"), Times.Once);
+        }
+
+        private async Task<Mock<ITrackedDurationEvent>> SetupTelemetryTests()
+        {
+            // Mock up the order loader to return one processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = true}
+                    }));
+
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity() {Processed = false});
+
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            await testObject.GetShipments(123, "barcode");
+            return trackedDurationEvent;
+        }
+
+        [Fact]
+        public async void GetShipments_DoesNotAddTelemetry_WhenAutoPrintEnabledAndOnlyOneShipmentReturned()
+        {
+
+        }
+
+        [Fact]
+        public async void GetShipments_DoesNotAddTelemetry_WhenAutoPrintDisabled()
+        {
+
         }
 
         public void Dispose()
