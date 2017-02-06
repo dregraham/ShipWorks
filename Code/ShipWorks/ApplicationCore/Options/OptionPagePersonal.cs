@@ -9,6 +9,7 @@ using ShipWorks.Users;
 using ShipWorks.Filters;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
@@ -24,6 +25,7 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly IWin32Window owner;
         private readonly IScannerConfigurationRepository scannerRepo;
         private readonly IScannerIdentifier scannerIdentifier;
+        private SingleScanSettings singleScanSettingsOnLoad;
 
         /// <summary>
         /// Constructor
@@ -83,6 +85,8 @@ namespace ShipWorks.ApplicationCore.Options
                 singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 UpdateSingleScanSettingsUI();
+
+                singleScanSettingsOnLoad = (SingleScanSettings)settings.SingleScanSettings;
             }
             else
             {
@@ -130,6 +134,13 @@ namespace ShipWorks.ApplicationCore.Options
                 else
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.Disabled;
+                }
+
+                if (settings.SingleScanSettings != (int) singleScanSettingsOnLoad)
+                {
+                    EventTelemetry telemetry = new EventTelemetry("SingleScan.Settings.Changed");
+                    string telemetryValue = EnumHelper.GetApiValue((SingleScanSettings) settings.SingleScanSettings);
+                    telemetry.Properties.Add("SingleScan.Settings.Value", telemetryValue);
                 }
             }
         }
