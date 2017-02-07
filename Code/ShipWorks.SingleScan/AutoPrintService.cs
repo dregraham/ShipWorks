@@ -137,23 +137,22 @@ namespace ShipWorks.SingleScan
             // Only auto print if 1 order was found
             if (autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
                 autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
-                autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderIds?.FirstOrDefault() == null)
+                autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId == null)
             {
                 log.Error("Order not found for scanned order.");
                 return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
             }
 
-            IEnumerable<long?> orderIds = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderIds;
-            
+            long orderId = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
             int matchedOrderCount = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
 
-            if (!singleScanOrderConfirmationService.Confirm(orderIds, matchedOrderCount, scannedBarcode))
+            if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
             {
                 return GenericResult.FromError("Multiple orders selected, user chose not to process", scannedBarcode);
             }
 
             // Get shipments to process (assumes GetShipments will not return voided shipments)
-            IEnumerable<ShipmentEntity> shipments = await singleScanShipmentConfirmationService.GetShipments(orderIds.FirstOrDefault().Value, scannedBarcode);
+            IEnumerable<ShipmentEntity> shipments = await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
 
             if (shipments.Any())
             {
