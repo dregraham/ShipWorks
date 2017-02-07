@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
-                    .Subscribe(x => gridControl.PerformSearch()),
+                    .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for debouncing advanced search text box
                 advancedSearchSubscription = Observable
@@ -73,7 +73,7 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                    .Subscribe(x => gridControl.PerformSearch()),
+                    .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for doing barcode searches
                 barcodeScannedMessageSubscription = scanMessages
@@ -84,7 +84,7 @@ namespace ShipWorks.ApplicationCore
                     // miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout
                     .Do(scanMsg => PerformBarcodeSearchAsync(scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
-                    .ContinueAfter(messenger.OfType<FilterCountsUpdatedMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
+                    .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) =>
                     {
                         log.Error("Error occurred while performing barcode search.", ex);

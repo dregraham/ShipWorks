@@ -62,6 +62,97 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public async void GetShipments_ReturnsNewShipment_WhenOrderLoaderReturnsOnlyVoidedShipment()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
+                .Returns(true);
+
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity> {new ShipmentEntity(10) {Voided = true} }));
+
+            IEnumerable<ShipmentEntity> result = (await testObject.GetShipments(123, "foobar")).ToList();
+
+            Assert.Equal(1, result.Count());
+            Assert.Equal(0, result.Single().ShipmentID);
+        }
+
+        [Fact]
+        public async void GetShipments_ReturnsNoShipments_WhenOrderLoaderReturnsNoShipments_AndShipmentFactoryCreatesNoneShipment()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
+                .Returns(true);
+
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>()));
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(f => f.Create(It.IsAny<long>()))
+                .Returns(new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.None});
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            Assert.Empty(result);
+            mock.Mock<IMessageHelper>()
+                .Verify(m=>m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+        }
+
+        [Fact]
+        public async void GetShipments_ReturnsNoShipments_WhenOrderLoaderReturnsMultipleShipments_AndOneShipmentIsNone()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
+                .Returns(true);
+
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>
+                    {
+                        new ShipmentEntity(),
+                        new ShipmentEntity(),
+                        new ShipmentEntity(),
+                        new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.None}
+                    }));
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            mock.Mock<IShipmentFactory>().Verify(f => f.Create(It.IsAny<long>()), Times.Never);
+            Assert.Empty(result);
+            mock.Mock<IMessageHelper>()
+                .Verify(m => m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+        }
+
+        [Fact]
+        public async void GetShipments_ReturnsNoShipments_WhenShipmentHasOneProcessedShipment_AndUserConfirmsTheyWantToShip_AndShipmentFactoryReturnsNoneShipment()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
+                .Returns(true);
+
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>
+                    {
+                        new ShipmentEntity() {Processed = true}
+                    }));
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(f => f.Create(It.IsAny<long>()))
+                .Returns(new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.None });
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            Assert.Empty(result);
+            mock.Mock<IMessageHelper>()
+                .Verify(m => m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+        }
+
+        [Fact]
         public async void GetShipments_ReturnsOneShipment_WhenOrderLoaderReturnsOneUnprocessedShipment()
         {
             mock.Mock<ISecurityContext>()
@@ -77,9 +168,40 @@ namespace ShipWorks.SingleScan.Tests
             Assert.False(result.First().Processed);
         }
 
+        [Fact]
+        public async void GetShipments_ReturnsNoShipments_WhenOrderLoaderReturnsOneNoneUnprocessedShipment()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
+                .Returns(true);
+
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity> { new ShipmentEntity() { Processed = false, ShipmentTypeCode = ShipmentTypeCode.None} }));
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            Assert.Empty(result);
+        }
 
         [Fact]
-        public async void GetShipments_ReturnsOneNewShipment_WhenOrderLoaderReturnsOneprocessedShipmentAndUserConfirmsAddingANewShipment()
+        public async void GetShipments_DisplaysCannotProcessNoneMessage_WhenOrderLoaderReturnsOneNoneUnprocessedShipment()
+        {
+            mock.Mock<ISecurityContext>()
+                .Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, 123))
+                .Returns(true);
+
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity> { new ShipmentEntity() { Processed = false, ShipmentTypeCode = ShipmentTypeCode.None } }));
+
+            await testObject.GetShipments(123, "foobar");
+
+            mock.Mock<IMessageHelper>().Verify(h=>h.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+        }
+
+        [Fact]
+        public async void GetShipments_ReturnsOneNewShipment_WhenOrderLoaderReturnsOneProcessedShipmentAndUserConfirmsAddingANewShipment()
         {
             // Mock up the order loader to return one processed shipment
             mock.Mock<IOrderLoader>()
@@ -91,7 +213,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(s => s.Create(It.IsAny<OrderEntity>()))
-                .Returns(new ShipmentEntity() { Processed = false });
+                .Returns(new ShipmentEntity {Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx});
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
@@ -99,7 +221,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void GetShipments_ReturnsNoShipment_WhenOrderLoaderReturnsOneprocessedShipmentAndUserDeclinesAddingANewShipment()
+        public async void GetShipments_ReturnsNoShipment_WhenOrderLoaderReturnsOneProcessedShipmentAndUserDeclinesAddingANewShipment()
         {
             // Mock up the order loader to return one processed shipment
             mock.Mock<IOrderLoader>()
@@ -111,7 +233,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(s => s.Create(It.IsAny<OrderEntity>()))
-                .Returns(new ShipmentEntity() { Processed = false });
+                .Returns(new ShipmentEntity {Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx});
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
@@ -138,7 +260,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(s => s.Create(It.IsAny<OrderEntity>()))
-                .Returns(new ShipmentEntity() { Processed = false });
+                .Returns(new ShipmentEntity {Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx});
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
@@ -165,7 +287,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(s => s.Create(It.IsAny<OrderEntity>()))
-                .Returns(new ShipmentEntity() { Processed = false });
+                .Returns(new ShipmentEntity {Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx});
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
@@ -202,11 +324,11 @@ namespace ShipWorks.SingleScan.Tests
             OrderEntity order = new OrderEntity();
             Mock<IOrderLoader> orderLoader = mock.Mock<IOrderLoader>();
             orderLoader.Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
-                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = true, Order = order } }));
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = true, Order = order, ShipmentTypeCode = ShipmentTypeCode.FedEx} }));
 
             await testObject.GetShipments(123, "foobar");
 
-            mock.Mock<IShipmentFactory>().Verify(s => s.Create(order));
+            mock.Mock<IShipmentFactory>().Verify(s => s.Create(123));
         }
 
         [Fact]
@@ -240,7 +362,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(s => s.Create(It.IsAny<OrderEntity>()))
-                .Returns(new ShipmentEntity() { Processed = false });
+                .Returns(new ShipmentEntity {Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx});
 
             await testObject.GetShipments(123, "foobar");
 
@@ -281,7 +403,7 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(s => s.Create(It.IsAny<OrderEntity>()))
-                .Returns(new ShipmentEntity() { Processed = false });
+                .Returns(new ShipmentEntity {Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx});
 
             await testObject.GetShipments(123, "foobar");
 

@@ -126,6 +126,7 @@
     <Compile Include="Utility\DoubleExtensionsTest.cs" />
     <Compile Include="Utility\ExceptionExtensionsTest.cs" />
     <Compile Include="Utility\StreamUtilityTest.cs" />
+    <Compile Include="Win32\User32InputTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

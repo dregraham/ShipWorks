@@ -64,7 +64,7 @@ namespace ShipWorks.Filters.Search
             }
 
             return advancedSearchDefinition == null ?
-                quickSearchDefinitionProvider : 
+                quickSearchDefinitionProvider :
                 new AdvancedSearchDefinitionProvider(advancedSearchDefinition, quickSearchDefinitionProvider,
                     isBarcodeSearch ? FilterDefinitionSourceType.Scan : FilterDefinitionSourceType.Search);
         }

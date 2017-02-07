@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,6 @@ using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Messaging.Messages.Filters;
@@ -56,6 +54,8 @@ namespace ShipWorks.Filters
 
         // Wait forever constant
         private const int WaitForever = -1;
+
+        private const int QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds = 30;
 
         /// <summary>
         /// Completely reload the count cache
@@ -650,36 +650,43 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        public static void SendOrderFilterUpdateCompletedMessageWhenCompletedAsync(long filterNodeContentID, IMessenger messenger, object sender)
+        public static void QueueSingleScanFilterUpdateCompleteMessageAsync(long filterNodeContentID, IMessenger messenger, object sender)
         {
             TaskEx.Run(() =>
             {
-                SendOrderFilterUpdateCompletedMessageWhenCompleted(filterNodeContentID, messenger, sender);
+                QueueSingleScanFilterUpdateCompleteMessage(filterNodeContentID, messenger, sender);
             });
         }
 
         /// <summary>
-        /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
+        /// Queues a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
         /// </summary>
-        private static void SendOrderFilterUpdateCompletedMessageWhenCompleted(long filterNodeContentID, IMessenger messenger, object sender)
+        private static void QueueSingleScanFilterUpdateCompleteMessage(long filterNodeContentID, IMessenger messenger, object sender)
         {
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 FilterNodeContentEntity filterNodeContentEntity = new FilterNodeContentEntity(filterNodeContentID);
-                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready)
+
+                DateTime exipreTime = DateTime.UtcNow.AddSeconds(QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds);
+
+                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready && DateTime.UtcNow < exipreTime)
                 {
                     Thread.Sleep(50);
                     sqlAdapter.FetchEntity(filterNodeContentEntity);
                 }
-                long? orderId = FetchFirstOrderIdForFilterNodeContent(filterNodeContentEntity.FilterNodeContentID);
-                messenger.Send(new FilterCountsUpdatedMessage(sender, filterNodeContentEntity, orderId));
+
+                if (filterNodeContentEntity.Status == (int) FilterCountStatus.Ready)
+                {
+                    long? orderId = GetMostRecentOrderID(filterNodeContentEntity.FilterNodeContentID);
+                    messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
+                }
             }
         }
 
         /// <summary>
-        /// Finds the first order for the specified filter node content
+        /// Finds the id of the most recent order based on order date
         /// </summary>
-        private static long? FetchFirstOrderIdForFilterNodeContent(long filterNodeContentId)
+        public static long? GetMostRecentOrderID(long filterNodeContentId)
         {
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
@@ -690,7 +697,8 @@ namespace ShipWorks.Filters
                         select top 1 ObjectID
                         from FilterNodeContentDetail fnc, [Order] o
                         where fnc.FilterNodeContentID = @filterNodeContentID
-                          and o.OrderID = fnc.ObjectID";
+                          and o.OrderID = fnc.ObjectID
+                        order by o.OrderDate desc";
 
                     DbParameter filterNodeContentIdParam = cmd.CreateParameter();
                     filterNodeContentIdParam.ParameterName = "@filterNodeContentID";

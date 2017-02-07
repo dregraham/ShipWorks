@@ -13,6 +13,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.DetailView;
@@ -24,6 +25,7 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -367,20 +369,31 @@ namespace ShipWorks.ApplicationCore
         {
             try
             {
-                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search)
+                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid?.Selection.Count == 0)
                 {
-                    IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
+                    bool autoPrintOn = UserSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
+                    long activeFilterNodeContentId = ActiveFilterNode.FilterNodeContentID;
 
-                    GridRow onlyGridRow = rows?.FirstOrDefault();
-                    if (onlyGridRow != null)
+                    if (autoPrintOn && isBarcodeSearch)
                     {
-                        onlyGridRow.Selected = true;
+                        long? orderId = FilterContentManager.GetMostRecentOrderID(activeFilterNodeContentId);
+                        if (orderId.HasValue)
+                        {
+                            bool entityInGrid = ActiveGrid.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()
+                                                    .Any(row => ActiveGrid.GetRowEntityID(row) == orderId) ?? false;
+                            if (entityInGrid)
+                            {
+                                ActiveGrid.SelectRows(new[] {orderId.Value});
+                            }
+                        }
                     }
-
-                    // Set back to not barcode search
-                    if (isBarcodeSearch)
+                    else
                     {
-                        isBarcodeSearch = false;
+                        GridRow firstRow = ActiveGrid.Rows?.Cast<GridRow>().FirstOrDefault();
+                        if (firstRow != null)
+                        {
+                            firstRow.Selected = true;
+                        }
                     }
                 }
             }
@@ -727,11 +740,11 @@ namespace ShipWorks.ApplicationCore
                 filterEditor.Focus();
             }
 
-            // Upate the search with the current definition
+            // Update the search with the current definition
             if (IsSearchActive && (wasActive != AdvancedSearchResultsActive))
             {
+                isBarcodeSearch = false;
                 searchProvider.Search(GetSearchDefinition(GetBasicSearchText()));
-
                 RaiseSearchQueryChanged();
             }
         }
@@ -762,8 +775,10 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Performs the search.
         /// </summary>
-        public void PerformSearch()
+        public void PerformManualSearch()
         {
+            // Mark that the search is not coming from a barcode scan
+            isBarcodeSearch = false;
             PerformSearch(GetBasicSearchText());
         }
 
