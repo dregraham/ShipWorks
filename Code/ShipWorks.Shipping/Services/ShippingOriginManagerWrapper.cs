@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Services
 
             // Try looking it up as ShippingOriginID
             ShippingOriginEntity origin = ShippingOriginManager.GetOrigin(originId);
-            return origin != null ? origin.AsPersonAdapter() : null;
+            return origin?.AsPersonAdapter();
         }
     }
 }

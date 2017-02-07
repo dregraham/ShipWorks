@@ -14,11 +14,6 @@ namespace ShipWorks.Data.Modal.Tests
                 ShipFirstName = "John",
                 ShipMiddleName = "Mid",
                 ShipLastName = "Doe",
-                BillFirstName = "asdfasdf",
-                BillMiddleName = "asdf",
-                BillLastName = "asdf",
-                GspFirstName = "xxx",
-                GspLastName = "yyy"
             };
 
             PersonAdapter personAdapter = new PersonAdapter(order, "Ship");
@@ -34,14 +29,9 @@ namespace ShipWorks.Data.Modal.Tests
         {
             EbayOrderEntity order = new EbayOrderEntity()
             {
-                ShipFirstName = "asdfasdf",
-                ShipMiddleName = "asdf",
-                ShipLastName = "asdf",
                 BillFirstName = "John",
                 BillMiddleName = "Mid",
                 BillLastName = "Doe",
-                GspFirstName = "xxx",
-                GspLastName = "yyy"
             };
 
             PersonAdapter personAdapter = new PersonAdapter(order, "Bill");
@@ -57,12 +47,6 @@ namespace ShipWorks.Data.Modal.Tests
         {
             EbayOrderEntity order = new EbayOrderEntity()
             {
-                ShipFirstName = "asdfasdf",
-                ShipMiddleName = "asdf",
-                ShipLastName = "asdf",
-                BillFirstName = "bbb",
-                BillMiddleName = "ccc",
-                BillLastName = "ddd",
                 GspFirstName = "John",
                 GspLastName = "Doe"
             };

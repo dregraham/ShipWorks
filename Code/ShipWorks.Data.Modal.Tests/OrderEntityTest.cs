@@ -14,9 +14,6 @@ namespace ShipWorks.Data.Modal.Tests
                 ShipFirstName = "John",
                 ShipMiddleName = "Mid",
                 ShipLastName = "Doe",
-                BillFirstName = "asdfasdf",
-                BillMiddleName = "asdf",
-                BillLastName = "asdf"
             };
 
             PersonAdapter personAdapter = new PersonAdapter(order, "Ship");
@@ -32,9 +29,6 @@ namespace ShipWorks.Data.Modal.Tests
         {
             OrderEntity order = new OrderEntity()
             {
-                ShipFirstName = "asdfasdf",
-                ShipMiddleName = "asdf",
-                ShipLastName = "asdf",
                 BillFirstName = "John",
                 BillMiddleName = "Mid",
                 BillLastName = "Doe"

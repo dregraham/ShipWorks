@@ -280,7 +280,6 @@ namespace Interapptive.Shared.Business
             }
             set
             {
-
                 if (HasField("NameParseStatus"))
                 {
                     SetField("NameParseStatus", (int) value);
@@ -294,10 +293,11 @@ namespace Interapptive.Shared.Business
 
         /// <summary>
         /// Original, unparsed name
-        /// 
-        /// Not all entities implement UnparsedName, however we need to keep track of the it in 
-        /// memory so that when copying or comparing with other person adapters we have a true copy/comparison.
         /// </summary>
+        /// <remarks>
+        /// Not all entities implement UnparsedName, however we need to keep track of it in 
+        /// memory so that when copying or comparing with other person adapters we have a true copy/comparison.
+        /// </remarks>
         public string UnparsedName
         {
             get
@@ -313,7 +313,6 @@ namespace Interapptive.Shared.Business
             }
             set
             {
-
                 if (HasField("UnparsedName"))
                 {
                     SetField("UnparsedName", value);
