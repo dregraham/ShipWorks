@@ -10,7 +10,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Confirm what the user wants to do when auto printing and multiple matching orders are found
     /// </summary>
-    [Component]
+    [NamedComponent(nameof(SingleScanOrderConfirmationService), typeof(ISingleScanOrderConfirmationService))]
     public class SingleScanOrderConfirmationService : ISingleScanOrderConfirmationService
     {
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
