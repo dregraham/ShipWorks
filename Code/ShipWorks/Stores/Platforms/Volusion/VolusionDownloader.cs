@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
-using Interapptive.Shared.Business;
-using System.Text.RegularExpressions;
-using log4net;
 using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Xml.XPath;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -25,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// </summary>
     public class VolusionDownloader : StoreDownloader
     {
-        // total number of orders to be imported 
+        // total number of orders to be imported
         // shipping method map
         VolusionShippingMethods shippingMethods;
 
@@ -48,35 +46,35 @@ namespace ShipWorks.Stores.Platforms.Volusion
         {
             get
             {
-                return (VolusionStoreEntity)Store;
+                return (VolusionStoreEntity) Store;
             }
         }
 
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        /// <param name="trackedDurationEvent">The telemetry event that can be used to 
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
         /// associate any store-specific download properties/metrics.</param>
         [NDependIgnoreLongMethod]
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             try
-            { 
+            {
                 // get the collection of currently chosen codes to be downloaded
                 List<string> selectedStatuses = VolusionStoreEntity.DownloadOrderStatuses.Split(',').ToList();
 
                 // Volusion requires an explicit value when querying for orders, cannot pass a range or list of statuses
                 // download for each status
-                foreach(string status in selectedStatuses)
+                foreach (string status in selectedStatuses)
                 {
                     int quantitySaved = 0;
                     Progress.Detail = "Preparing to download orders...";
-                    shippingMethods = new VolusionShippingMethods((VolusionStoreEntity)Store);
-                    paymentMethods = new VolusionPaymentMethods((VolusionStoreEntity)Store);
+                    shippingMethods = new VolusionShippingMethods((VolusionStoreEntity) Store);
+                    paymentMethods = new VolusionPaymentMethods((VolusionStoreEntity) Store);
 
                     Progress.Detail = string.Format("Downloading {0} Orders...", status);
 
-                    VolusionWebClient client = new VolusionWebClient((VolusionStoreEntity)Store);
+                    VolusionWebClient client = new VolusionWebClient((VolusionStoreEntity) Store);
 
                     // get all the orders - volusion just gives them all. At once.
                     IXPathNavigable ordersResponse = client.GetOrders(status);
@@ -182,7 +180,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 // Load all of the charges
                 LoadOrderCharges(order, xpath);
 
-                // load the payment details 
+                // load the payment details
                 LoadPaymentDetails(order, xpath);
 
                 order.OrderTotal = OrderUtility.CalculateTotal(order);
@@ -241,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
-        /// Load order charges 
+        /// Load order charges
         /// </summary>
         private void LoadOrderCharges(OrderEntity order, XPathNavigator xpath)
         {
@@ -284,7 +282,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             item.Code = XPathUtility.Evaluate(xpath, "ProductCode", "");
             item.Name = XPathUtility.Evaluate(xpath, "ProductName", "");
             item.Quantity = XPathUtility.Evaluate(xpath, "Quantity", 0);
-            item.Weight = XPathUtility.Evaluate(xpath, "ProductWeight", (double)0.0);
+            item.Weight = XPathUtility.Evaluate(xpath, "ProductWeight", (double) 0.0);
 
             // make sure we're getting a quantity back before dividing for unit price
             item.UnitPrice = XPathUtility.Evaluate(xpath, "ProductPrice", 0.0M);
@@ -330,7 +328,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 string optionName = match.Groups["name"].Value;
                 string optionValue = match.Groups["value"].Value;
 
-                OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item) ;
+                OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
 
                 option.Name = optionName;
                 option.Description = optionValue;
@@ -376,7 +374,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             try
             {
-                IXPathNavigable response = client.GetCustomer((long)customerId);
+                IXPathNavigable response = client.GetCustomer((long) customerId);
 
                 return XPathUtility.Evaluate(response.CreateNavigator(), "//EmailAddress", "");
             }
@@ -400,7 +398,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             billAdapter.Email = GetCustomerEmail(client, order.OnlineCustomerID);
 
-            // fix bad/missing shipping information, take from teh customer record
+            // fix bad/missing shipping information, take from the customer record
             if (shipAdapter.FirstName.Length == 0 && shipAdapter.LastName.Length == 0 && shipAdapter.City.Length == 0)
             {
                 PersonAdapter.Copy(billAdapter, shipAdapter);
@@ -442,12 +440,11 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         private DateTime GetDate(XPathNavigator xpath, string node)
         {
-            VolusionStoreEntity volusionStore = (VolusionStoreEntity)Store;
+            VolusionStoreEntity volusionStore = (VolusionStoreEntity) Store;
 
             string date = XPathUtility.Evaluate(xpath, node, "");
 
             DateTime serverTime = DateTime.Parse(date);
-            //serverTime = DateTime.SpecifyKind(serverTime, DateTimeKind.un);
 
             try
             {
@@ -456,7 +453,12 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
             catch (InvalidTimeZoneException)
             {
-                // just convert directly to utc
+                // just convert directly to UTC
+                return serverTime.ToUniversalTime();
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                // just convert directly to UTC
                 return serverTime.ToUniversalTime();
             }
         }
