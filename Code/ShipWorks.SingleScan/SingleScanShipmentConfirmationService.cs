@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -26,6 +27,7 @@ namespace ShipWorks.SingleScan
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
@@ -38,13 +40,15 @@ namespace ShipWorks.SingleScan
             Func<ISecurityContext> securityContextRetriever,
             IAutoPrintConfirmationDlgFactory dlgFactory,
             IShipmentFactory shipmentFactory,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
         {
             this.orderLoader = orderLoader;
             this.securityContextRetriever = securityContextRetriever;
             this.dlgFactory = dlgFactory;
             this.shipmentFactory = shipmentFactory;
             this.messageHelper = messageHelper;
+            this.trackedDurationEventFactory = trackedDurationEventFactory;
         }
 
         /// <summary>
@@ -124,10 +128,21 @@ namespace ShipWorks.SingleScan
         {
             MessagingText messaging = GetMessaging(shipments);
 
-            return
-                messageHelper.ShowDialog(
-                    () => dlgFactory.Create(scannedBarcode, messaging)) ==
-                DialogResult.OK;
+            using (ITrackedDurationEvent telemetryEvent =
+                trackedDurationEventFactory("SingleScan.AutoPrint.Confirmation.MultipleShipments"))
+            {
+                DialogResult result = messageHelper.ShowDialog(
+                    () => dlgFactory.Create(scannedBarcode, messaging));
+
+                bool shouldPrint = result == DialogResult.OK;
+
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", shipments.Length);
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Unprocessed", shipments.Count(s => !s.Processed));
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Processed", shipments.Count(s => s.Processed));
+                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", shouldPrint ? "Continue" : "Cancel");
+
+                return shouldPrint;
+            }
         }
 
         /// <summary>
