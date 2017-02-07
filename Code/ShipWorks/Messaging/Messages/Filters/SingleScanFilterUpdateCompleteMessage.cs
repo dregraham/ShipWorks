@@ -15,12 +15,12 @@ namespace ShipWorks.Messaging.Messages.Filters
         /// <summary>
         /// Constructor
         /// </summary>
-        public SingleScanFilterUpdateCompleteMessage(object sender, IFilterNodeContentEntity filterNodeContent, long? orderId)
+        public SingleScanFilterUpdateCompleteMessage(object sender, IFilterNodeContentEntity filterNodeContent, IEnumerable<long?> orderIds)
         {
             Sender = sender;
             FilterNodeContent = filterNodeContent;
             MessageId = Guid.NewGuid();
-            OrderId = orderId;
+            OrderIds = orderIds;
         }
 
         /// <summary>
@@ -41,6 +41,6 @@ namespace ShipWorks.Messaging.Messages.Filters
         /// <summary>
         /// ObjectIds associated with filter
         /// </summary>
-        public long? OrderId { get; }
+        public IEnumerable<long?> OrderIds { get; }
     }
 }

@@ -677,8 +677,8 @@ namespace ShipWorks.Filters
 
                 if (filterNodeContentEntity.Status == (int) FilterCountStatus.Ready)
                 {
-                    long? orderId = GetMostRecentOrderID(filterNodeContentEntity.FilterNodeContentID);
-                    messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
+                    IEnumerable<long?> orderIds = GetOrderIDs(filterNodeContentEntity.FilterNodeContentID);
+                    messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderIds));
                 }
             }
         }
@@ -686,7 +686,15 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Finds the id of the most recent order based on order date
         /// </summary>
-        public static long? GetMostRecentOrderID(long filterNodeContentId)
+        public static long? GetMostRecentOrderID(long filterNodeContentID)
+        {
+            return GetOrderIDs(filterNodeContentID).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the order IDs contained in the filter node with the given filter node content ID
+        /// </summary>
+        public static IEnumerable<long?> GetOrderIDs(long filterNodeContentID)
         {
             using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
@@ -694,7 +702,7 @@ namespace ShipWorks.Filters
                 {
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = @"
-                        select top 1 ObjectID
+                        select ObjectID
                         from FilterNodeContentDetail fnc, [Order] o
                         where fnc.FilterNodeContentID = @filterNodeContentID
                           and o.OrderID = fnc.ObjectID
@@ -702,11 +710,21 @@ namespace ShipWorks.Filters
 
                     DbParameter filterNodeContentIdParam = cmd.CreateParameter();
                     filterNodeContentIdParam.ParameterName = "@filterNodeContentID";
-                    filterNodeContentIdParam.Value = filterNodeContentId;
+                    filterNodeContentIdParam.Value = filterNodeContentID;
 
                     cmd.Parameters.Add(filterNodeContentIdParam);
 
-                    return (long?) cmd.ExecuteScalar();
+                    List<long?> orderIDs = new List<long?>();
+
+                    using (DbDataReader dataReader = cmd.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            orderIDs.Add(dataReader.GetInt64(0));
+                        }
+                    }
+
+                    return orderIDs;
                 }
             }
         }
