@@ -316,6 +316,15 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Returns a space, if value is NOT null or whitespace.
+        /// Otherwise, returns string.Empty.
+        /// </summary>
+        public static string SpaceIfNotNullOrWhiteSpace(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : " ";
+        }
+
+        /// <summary>
         /// Removes symbol characters from the string
         /// </summary>
         public static string RemoveSymbols(this string value)

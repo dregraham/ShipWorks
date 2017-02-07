@@ -10,6 +10,9 @@ namespace Interapptive.Shared.Business
     /// </summary>
     public class PersonAdapter : EntityAdapter, IAddressAdapter
     {
+        private PersonNameParseStatus missingFieldNameParseStatusValue = PersonNameParseStatus.Unknown;
+        private string missingFieldUnparsedNameValue = string.Empty;
+
         /// <summary>
         /// Creates a new instance of the adapter that maintains its own values, and has no backing entity.
         /// </summary>
@@ -25,7 +28,9 @@ namespace Interapptive.Shared.Business
         public PersonAdapter(IEntity2 entity, string fieldPrefix)
             : base(entity, fieldPrefix)
         {
-
+            PersonName personName = new PersonName(this);
+            NameParseStatus = personName.ParseStatus;
+            UnparsedName = personName.UnparsedName;
         }
 
         /// <summary>
@@ -256,6 +261,9 @@ namespace Interapptive.Shared.Business
 
         /// <summary>
         /// Status indicating how well ShipWorks was able to recognize the unparsed name string.
+        /// 
+        /// Not all entities implement NameParseStatus, however we need to keep track of the status in 
+        /// memory so that when copying or comparing with other person adapters we have a true copy/comparison.
         /// </summary>
         public PersonNameParseStatus NameParseStatus
         {
@@ -267,19 +275,54 @@ namespace Interapptive.Shared.Business
                 }
                 else
                 {
-                    return PersonNameParseStatus.Unknown;
+                    return missingFieldNameParseStatusValue;
                 }
             }
-            set { SetField("NameParseStatus", (int) value); }
+            set
+            {
+
+                if (HasField("NameParseStatus"))
+                {
+                    SetField("NameParseStatus", (int) value);
+                }
+                else
+                {
+                    missingFieldNameParseStatusValue = value;
+                }
+            }
         }
 
         /// <summary>
         /// Original, unparsed name
+        /// 
+        /// Not all entities implement UnparsedName, however we need to keep track of the it in 
+        /// memory so that when copying or comparing with other person adapters we have a true copy/comparison.
         /// </summary>
         public string UnparsedName
         {
-            get { return GetField<string>("UnparsedName"); }
-            set { SetField("UnparsedName", value); }
+            get
+            {
+                if (HasField("UnparsedName"))
+                {
+                    return GetField<string>("UnparsedName");
+                }
+                else
+                {
+                    return missingFieldUnparsedNameValue;
+                }
+            }
+            set
+            {
+
+                if (HasField("UnparsedName"))
+                {
+                    SetField("UnparsedName", value);
+                }
+                else
+                {
+                    missingFieldUnparsedNameValue = value;
+                }
+            }
         }
 
         /// <summary>
