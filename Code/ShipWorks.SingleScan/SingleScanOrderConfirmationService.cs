@@ -27,6 +27,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Confirms that the order with the given orderId should be printed.
         /// </summary>
+        /// <returns>Whether or not we should process the order</returns>
         public bool Confirm(long orderId, int numberOfMatchedOrders, string scanText)
         {
             // We should never get here with 0 matched orders
@@ -35,19 +36,20 @@ namespace ShipWorks.SingleScan
                 throw new ShippingException("Unable to locate order for processing.");
             }
 
+            bool shouldPrint = true;
             if (numberOfMatchedOrders > 1)
             {
-                MessagingText messaging = GetMessageingText(orderId, numberOfMatchedOrders);
-                return messageHelper.ShowDialog(() => dlgFactory.Create(scanText, messaging)) == DialogResult.OK;
+                MessagingText messaging = GetMessagingText(orderId, numberOfMatchedOrders);
+                shouldPrint = messageHelper.ShowDialog(() => dlgFactory.Create(scanText, messaging)) == DialogResult.OK;
             }
 
-            return true;
+            return shouldPrint;
         }
 
         /// <summary>
         /// Generate the message displayed to the user
         /// </summary>
-        private MessagingText GetMessageingText(long orderId, int numberOfMatchedOrders)
+        private MessagingText GetMessagingText(long orderId, int numberOfMatchedOrders)
         {
             string store = storeManager.GetRelatedStore(orderId)?.StoreName;
 
