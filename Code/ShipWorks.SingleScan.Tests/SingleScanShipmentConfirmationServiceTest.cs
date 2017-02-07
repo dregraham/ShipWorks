@@ -368,13 +368,33 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_DoesNotAddTelemetry_WhenAutoPrintEnabledAndOnlyOneShipmentReturned()
         {
+            // Mock up the order loader to return one processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = false},
+                    }));
 
-        }
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
 
-        [Fact]
-        public async void GetShipments_DoesNotAddTelemetry_WhenAutoPrintDisabled()
-        {
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity() { Processed = false });
 
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            await testObject.GetShipments(123, "barcode");
+
+            trackedDurationEvent.Verify(e => e.AddMetric(It.IsAny<string>(), It.IsAny<double>()), Times.Never);
+            trackedDurationEvent.Verify(e => e.AddProperty(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
         public void Dispose()
