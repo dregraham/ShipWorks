@@ -316,6 +316,15 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Returns a space, if value is NOT null or whitespace.
+        /// Otherwise, returns string.Empty.
+        /// </summary>
+        public static string SpaceIfNotNullOrWhiteSpace(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : " ";
+        }
+
+        /// <summary>
         /// Indicates whether a specified string is null, empty, or consists only of white-space characters.
         /// </summary>
         public static bool IsNullOrWhiteSpace(this string s)
