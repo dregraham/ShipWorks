@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -111,7 +110,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Determines whether any shipment has a ShipmentTypeCode of "None".
         /// </summary>
-        private static bool HasDisqualifyingShipmentTypes(IEnumerable<ShipmentEntity> shipments) => 
+        private static bool HasDisqualifyingShipmentTypes(IEnumerable<ShipmentEntity> shipments) =>
             shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
 
         /// <summary>

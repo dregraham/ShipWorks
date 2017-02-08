@@ -16,7 +16,7 @@ namespace ShipWorks.SingleScan
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterDecorator<ISingleScanOrderConfirmationService>(
-                (c, inner) => new SingleScanOrderConfirmationServiceTelemetryDecorator(inner),
+                (c, inner) => new TelemetricSingleScanOrderConfirmationService(inner),
                 nameof(SingleScanOrderConfirmationService));
         }
     }

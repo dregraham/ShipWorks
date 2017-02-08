@@ -153,7 +153,7 @@
     <Compile Include="ScannerServicePipelines\IScannerServicePipeline.cs" />
     <Compile Include="SingleScanModule.cs" />
     <Compile Include="SingleScanOrderConfirmationService.cs" />
-    <Compile Include="SingleScanOrderConfirmationServiceTelemetryWrapper.cs" />
+    <Compile Include="TelemetricSingleScanOrderConfirmationService.cs" />
     <Compile Include="SingleScanOrderShortcut.cs" />
     <Compile Include="SingleScanShipmentConfirmationService.cs" />
   </ItemGroup>

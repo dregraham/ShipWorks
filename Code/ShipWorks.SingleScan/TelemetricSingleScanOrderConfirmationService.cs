@@ -4,18 +4,18 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.SingleScan
 {
     /// <summary>
-    /// Collects telemetry data from SingleScanOrderConfirmationService
+    /// Uses decorator pattern to collect telemetry data from SingleScanOrderConfirmationService
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.Services.ISingleScanOrderConfirmationService" />
-    public class SingleScanOrderConfirmationServiceTelemetryDecorator : ISingleScanOrderConfirmationService
+    public class TelemetricSingleScanOrderConfirmationService : ISingleScanOrderConfirmationService
     {
         private readonly ISingleScanOrderConfirmationService singleScanOrderConfirmationService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleScanOrderConfirmationServiceTelemetryDecorator"/> class.
+        /// Initializes a new instance of the <see cref="TelemetricSingleScanOrderConfirmationService"/> class.
         /// </summary>
         /// <param name="singleScanOrderConfirmationService">The single scan order confirmation service.</param>
-        public SingleScanOrderConfirmationServiceTelemetryDecorator(ISingleScanOrderConfirmationService singleScanOrderConfirmationService)
+        public TelemetricSingleScanOrderConfirmationService(ISingleScanOrderConfirmationService singleScanOrderConfirmationService)
         {
             this.singleScanOrderConfirmationService = singleScanOrderConfirmationService;
         }
