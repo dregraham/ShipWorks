@@ -1,4 +1,7 @@
 ﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.Data;
+using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using Xunit;
 
 namespace Interapptive.Shared.Tests.Business
@@ -63,6 +66,42 @@ namespace Interapptive.Shared.Tests.Business
             Assert.Empty(person.LastName);
             Assert.Empty(person.UnparsedName);
             Assert.Equal(PersonNameParseStatus.Unknown, person.NameParseStatus);
+        }
+
+        [Fact]
+        public void SetField_DoesNotDelegateToSetNewFieldValue_WhenValueHasNotChanged()
+        {
+            Mock<IEntity2> entity = new Mock<IEntity2>();
+            Mock<IEntityField2> field = new Mock<IEntityField2>();
+
+            field.Setup(f => f.CurrentValue).Returns("1");
+
+            entity.Setup(e => e.Fields[It.IsAny<string>()]).Returns(field.Object);
+            
+            PersonAdapter personAdapter = new PersonAdapter(entity.Object, "");
+
+            entity.Reset();
+            personAdapter.FirstName = "1";
+
+            entity.Verify(e => e.SetNewFieldValue(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void SetField_DoesDelegateToSetNewFieldValue_WhenValueHasNotChanged()
+        {
+            Mock<IEntity2> entity = new Mock<IEntity2>();
+            Mock<IEntityField2> field = new Mock<IEntityField2>();
+
+            field.Setup(f => f.CurrentValue).Returns("1");
+
+            entity.Setup(e => e.Fields[It.IsAny<string>()]).Returns(field.Object);
+
+            PersonAdapter personAdapter = new PersonAdapter(entity.Object, "");
+
+            entity.Reset();
+            personAdapter.FirstName = "2";
+
+            entity.Verify(e => e.SetNewFieldValue(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 }

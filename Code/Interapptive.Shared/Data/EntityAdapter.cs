@@ -125,7 +125,7 @@ namespace Interapptive.Shared.Data
             {
                 IEntityField2 field = entity.Fields[fieldPrefix + fieldName];
 
-                if (field == null)
+                if (field == null || field.CurrentValue?.Equals(value) == true)
                 {
                     return;
                 }

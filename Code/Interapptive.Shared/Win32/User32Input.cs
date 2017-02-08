@@ -54,6 +54,11 @@ namespace Interapptive.Shared.Win32
                 keyboardState[(int)Keys.ControlKey] = KeyboardStateOn;
             }
 
+            if (control)
+            {
+                keyboardState[(int)Keys.ControlKey] = 0xff;
+            }
+
             ToUnicode((uint) keys, 0, keyboardState, buf, 256, 0);
             return buf.ToString();
         }
