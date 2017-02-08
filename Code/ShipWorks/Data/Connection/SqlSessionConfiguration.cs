@@ -261,7 +261,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public bool IsLocalDb()
         {
-            return string.Compare(serverInstance, SqlInstanceUtility.LocalDbServerInstance, StringComparison.OrdinalIgnoreCase) == 0;
+            return serverInstance.Contains(@"(LocalDB)", StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
