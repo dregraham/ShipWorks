@@ -73,24 +73,6 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
-        /// Set the compatibility level of the database
-        /// </summary>
-        public static void SetSql2008CompatibilityLevel(DbConnection con)
-        {
-            if (con == null)
-            {
-                throw new ArgumentNullException("con");
-            }
-
-            DbCommand cmd = DbCommandProvider.Create(con);
-            cmd.CommandText = string.Format("ALTER DATABASE [{0}] SET COMPATIBILITY_LEVEL = 100", con.Database);
-
-            log.Info(cmd.CommandText);
-
-            DbCommandProvider.ExecuteNonQuery(cmd);
-        }
-
-        /// <summary>
         /// Set the database on the given connection into single-user mode.
         /// </summary>
         public static void SetSingleUser(DbConnection con)

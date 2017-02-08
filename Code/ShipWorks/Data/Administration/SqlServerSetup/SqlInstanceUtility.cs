@@ -43,7 +43,22 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         public static string LocalDbServerInstance
         {
-            get { return @"(LocalDB)\V11.0"; }
+            get
+            {
+                // First, see if 2016 LocalDB exists
+                if (RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, @"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions\13.0"))
+                {
+                    return @"(LocalDB)\MSSQLLocalDB";
+                }
+
+                // Now try 2014
+                if (RegistryHelper.RegistrySubKeyExists(Registry.LocalMachine, @"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions\12.0"))
+                {
+                    return @"(LocalDB)\MSSQLLocalDB";
+                }
+
+                return @"(LocalDB)\V11.0";
+            }
         }
 
         /// <summary>

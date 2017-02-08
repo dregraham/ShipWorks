@@ -6,22 +6,29 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Security.Principal;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
+using Autofac.Core.Lifetime;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using Microsoft.Win32;
 using NDesk.Options;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
@@ -35,10 +42,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
     public class SqlServerInstaller
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlServerInstaller));
-
-        const string sqlx64FileName = "SQLEXPR_x64_ENU.exe";
-        const string sqlx86FileName = "SQLEXPR_x86_ENU.exe";
+        private static readonly ILog log = LogManager.GetLogger(typeof(SqlServerInstaller));
+        private readonly IClrHelper clrHelper;
+        private readonly IEnumerable<ISqlInstallerInfo> sqlInstallerInfos;
 
         // Custom install error codes
         const int msdeUpgrade08Failed = -200;
@@ -56,14 +62,19 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         // The exit code from the last attempt at installation
         int lastExitCode = 0;
 
-        // The names of the files for the install and upgrade packages.
-        string installPackageExe = null;
-        string upgradePackageExe = null;
-
         /// <summary>
         /// Raised when the installation executable has exited
         /// </summary>
         public event EventHandler Exited;
+        
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        public SqlServerInstaller(ISqlInstallerRepository sqlInstallerRepository, IClrHelper clrHelper)
+        {
+            this.clrHelper = clrHelper;
+            sqlInstallerInfos = sqlInstallerRepository.SqlInstallersForThisMachine();
+        }
 
         #region Initialization and Detection
 
@@ -76,19 +87,24 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         }
 
         /// <summary>
-        /// Indicates if SQL Server 2012 is supported on the current computer
+        /// Indicates if SQL Server 2016 is supported on the current computer
         /// </summary>
-        public static bool IsSqlServer2012Supported
+        public bool IsSqlServer2016Supported
         {
             get
             {
-                // This is how to detect for .NET 4.5 - if this key exists, and if "Release" exists within it.  SQL 2012 doesn't necessarily need .NET 4.5,
-                // but it has the same OS requirements.  Our installer installs .NET 4.5 if the OS supports it - so the presense of .NET 4.5 in the
-                // case of ShipWorks is identicial to checking for 2012 compatibility
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
-                {
-                    return (key != null && key.GetValue("Release") != null);
-                }
+                return sqlInstallerInfos.Any(si => si.Edition == SqlServerEditionType.Express2016 || si.Edition == SqlServerEditionType.LocalDb2016);
+            }
+        }
+
+        /// <summary>
+        /// Indicates if SQL Server 2014 is supported on the current computer
+        /// </summary>
+        public bool IsSqlServer2014Supported
+        {
+            get
+            {
+                return sqlInstallerInfos.Any(si => si.Edition == SqlServerEditionType.Express2014 || si.Edition == SqlServerEditionType.LocalDb2014);
             }
         }
 
@@ -118,74 +134,38 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// SQL Server requires .NET 3.5
         /// </summary>
-        public static bool IsDotNet35Required
+        public bool IsDotNet35Sp1Installed
         {
             get
             {
-                // Although documented as needing it, in practice from what I've seen SQL 2012 runs just fine without it
-                if (IsSqlServer2012Supported)
+                // If we will be running SQL Server 2014, we don't need .Net 3.5 SP1 to be installed.
+                if (IsSqlServer2014Supported)
                 {
-                    return false;
+                    return true;
                 }
 
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5"))
-                {
-                    if (key != null)
-                    {
-                        return Convert.ToInt32(key.GetValue("SP", 0)) == 0;
-                    }
-                }
+                clrHelper.Reload();
 
-                return true;
+                Version net4Version = new Version(4, 0, 0, 0);
+                Version net35Sp1Version = new Version(3, 5, 30729, 0);
+
+                return clrHelper.ClrVersions.Any(installedClrVersion => installedClrVersion >= net35Sp1Version && installedClrVersion < net4Version);
             }
-        }
-
-        /// <summary>
-        /// Initialize the install to be used against the current SqlSession.  If there is none, then upgrading is not possible.  If there is one,
-        /// then it doesnt affect a new Install, but it Upgrading can only apply to the current SqlSession.
-        /// </summary>
-        public void InitializeForCurrentSqlSession()
-        {
-            // For fresh installs we just go by the bitness of the OS
-            installPackageExe = MyComputer.Is64BitWindows ? sqlx64FileName : sqlx86FileName;
-            log.InfoFormat("SQL Server intallation package: {0}", installPackageExe);
-
-            // Can only upgrade the current SqlSession - if there is one
-            if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
-            {
-                // For upgrades, if we are on a 32 bit OS, then we know we need the 32bit
-                if (!MyComputer.Is64BitWindows)
-                {
-                    upgradePackageExe = sqlx86FileName;
-                }
-                else
-                {
-                    // We have to determine the bitness of the currently installed SQL server, and use the same one.
-                    upgradePackageExe = SqlSession.Current.Is64Bit() ? sqlx64FileName : sqlx86FileName;
-                }
-            }
-
-            log.InfoFormat("SQL Server upgrade package: {0}", upgradePackageExe);
         }
 
         /// <summary>
         /// Validate that the installer has been initialized for the given purpose, or throw
         /// </summary>
-        private void ValidateInitialized(SqlServerInstallerPurpose purpose)
+        private void ValidateInitialized(ISqlInstallerInfo sqlInstallerInfo)
         {
-            if (purpose == SqlServerInstallerPurpose.LocalDb && !IsSqlServer2012Supported)
-            {
-                throw new InvalidOperationException("Cannot install LocalDB when SQL 2012 is not supported.");
-            }
-
-            if (installPackageExe == null)
+            if (sqlInstallerInfo == null)
             {
                 throw new InvalidOperationException("The SqlServerInstaller has not been initialized.");
             }
 
-            if (purpose == SqlServerInstallerPurpose.Upgrade && upgradePackageExe == null)
+            if (sqlInstallerInfo.IsLocalDB && !(IsSqlServer2016Supported || IsSqlServer2014Supported))
             {
-                throw new InvalidOperationException("The SqlServerInstaller has been initialized, but upgrading is invalid due to no SqlSession.");
+                throw new InvalidOperationException("Cannot install LocalDB when SQL 2016 is not supported.");
             }
         }
 
@@ -196,58 +176,35 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// The path to the location of the SQL installer for new installations on the local disk
         /// </summary>
-        public string GetInstallerLocalFilePath(SqlServerInstallerPurpose purpose)
+        public string GetInstallerLocalFilePath(ISqlInstallerInfo sqlInstallerInfo)
         {
-            ValidateInitialized(purpose);
-
-            string fileName;
-
-            if (purpose == SqlServerInstallerPurpose.LocalDb)
-            {
-                fileName = "SqlLocalDB.MSI";
-            }
-            else
-            {
-                fileName = (purpose == SqlServerInstallerPurpose.Install) ? installPackageExe : upgradePackageExe;
-            }
-
-            return Path.Combine(DataPath.Components, fileName);
+            ValidateInitialized(sqlInstallerInfo);
+            
+            return sqlInstallerInfo.LocalFilePath;
         }
 
         /// <summary>
         /// The full Uri for downloading the SQL Express installer used for new installations
         /// </summary>
-        public Uri GetInstallerDownloadUri(SqlServerInstallerPurpose purpose)
+        public ISqlInstallerInfo GetSqlInstaller(SqlServerInstallerPurpose purpose)
         {
-            ValidateInitialized(purpose);
+            ISqlInstallerInfo sqlInstallerInfo;
 
             if (purpose == SqlServerInstallerPurpose.LocalDb)
             {
-                return new Uri(string.Format("http://www.interapptive.com/download/components/sqlserver2012/localdb/{0}/SqlLocalDB.MSI", MyComputer.Is64BitWindows ? "x64" : "x86"));
+                sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.LocalDb2016 ||
+                                                             si.Edition == SqlServerEditionType.LocalDb2014);
             }
             else
             {
-                string url = IsSqlServer2012Supported ? "http://www.interapptive.com/download/components/sqlserver2012/express/" : "http://www.interapptive.com/download/components/sqlexpress08r2sp2/";
-
-                return new Uri(url + ((purpose == SqlServerInstallerPurpose.Install) ? installPackageExe : upgradePackageExe));
+                sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.Express2016 ||
+                                                             si.Edition == SqlServerEditionType.Express2014 ||
+                                                             si.Edition == SqlServerEditionType.Express2008R2Sp2);
             }
-        }
 
-        /// <summary>
-        /// Get the total file length on disk of the given installer
-        /// </summary>
-        public long GetInstallerFileLength(SqlServerInstallerPurpose purpose)
-        {
-            switch (GetInstallerDownloadUri(purpose).ToString())
-            {
-                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x64_ENU.exe": return 128331696;
-                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x86_ENU.exe": return 115763632;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x64_ENU.exe": return 138757208;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x86_ENU.exe": return 122317400;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x64/SqlLocalDB.MSI": return 34635776;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x86/SqlLocalDB.MSI": return 29097984;
-                default: throw new InvalidOperationException("Unknown SQL Server installer for checksum: " + purpose);
-            }
+            ValidateInitialized(sqlInstallerInfo);
+
+            return sqlInstallerInfo;
         }
 
         /// <summary>
@@ -255,7 +212,9 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         public bool IsInstallerLocalFileValid(SqlServerInstallerPurpose purpose)
         {
-            string localExe = GetInstallerLocalFilePath(purpose);
+            ISqlInstallerInfo sqlInstallerInfo = GetSqlInstaller(purpose);
+
+            string localExe = GetInstallerLocalFilePath(sqlInstallerInfo);
 
             if (!File.Exists(localExe))
             {
@@ -264,25 +223,20 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
 
             Cursor.Current = Cursors.WaitCursor;
 
-            SHA1 sha = SHA1.Create();
-            byte[] computedChecksum = sha.ComputeHash(File.ReadAllBytes(localExe));
+            byte[] computedChecksum;
+
+            using (SHA1 sha = SHA1.Create())
+            {
+                using (FileStream stream = File.OpenRead(localExe))
+                {
+                    stream.Position = 0;
+                    computedChecksum = sha.ComputeHash(stream);
+                }
+            }
 
             Cursor.Current = Cursors.Default;
 
-            string knownChecksum;
-
-            switch (GetInstallerDownloadUri(purpose).ToString())
-            {
-                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x64_ENU.exe": knownChecksum = "52ijtw4/O1lu/6n1fYEvlcCgUGs="; break;
-                case @"http://www.interapptive.com/download/components/sqlexpress08r2sp2/SQLEXPR_x86_ENU.exe": knownChecksum = "bONPV6E+De2VyvRAX60TPoWa3jA="; break;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x64_ENU.exe": knownChecksum = "5FYdXKp2Gl0dqg0wX0/s7cag05w="; break;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/express/SQLEXPR_x86_ENU.exe": knownChecksum = "KHXaFzH7vmGDycwPKMpZBdxnKIo="; break;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x64/SqlLocalDB.MSI": knownChecksum = "JCf2I6gCsTUta7bJR4KYqCroJTk="; break;
-                case @"http://www.interapptive.com/download/components/sqlserver2012/localdb/x86/SqlLocalDB.MSI": knownChecksum = "Fjii+pBm3xmiR6t8vgYXJ5laqT0="; break;
-                default: throw new InvalidOperationException("Unknown SQL Server installer for checksum: " + localExe);
-            }
-
-            return Convert.ToBase64String(computedChecksum) == knownChecksum;
+            return Convert.ToBase64String(computedChecksum) == sqlInstallerInfo.Checksum;
         }
 
         /// <summary>
@@ -290,11 +244,12 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         private string DownloadSqlServer(SqlServerInstallerPurpose purpose)
         {
-            string localFile = GetInstallerLocalFilePath(purpose);
+            ISqlInstallerInfo sqlInstallerInfo = GetSqlInstaller(purpose);
+            string localFile = GetInstallerLocalFilePath(sqlInstallerInfo);
 
             if (!IsInstallerLocalFileValid(purpose))
             {
-                Uri remoteUri = GetInstallerDownloadUri(purpose);
+                Uri remoteUri = sqlInstallerInfo.DownloadUri;
 
                 log.InfoFormat("Using WebClient to download {0}", remoteUri);
 
@@ -778,7 +733,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         {
             string instance = SqlInstanceUtility.ExtractInstanceName(sqlSession.Configuration.ServerInstance);
 
-            string args = GetUpgradeArgs(instance, Path.GetFileName(installerPath) == sqlx86FileName);
+            string args = GetUpgradeArgs(instance, Path.GetFileName(installerPath).Contains("x86", StringComparison.InvariantCultureIgnoreCase));
             log.InfoFormat("Executing: {0}", args);
 
             Process process = new Process();
@@ -1056,108 +1011,146 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                     throw new CommandLineCommandArgumentException(CommandName, "action", "The required 'action' parameter was not specified.");
                 }
 
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ExecuteInternal(action, instance, sapassword, lifetimeScope);
+                }
+            }
+
+            /// <summary>
+            /// Execute the actual work for the command.
+            /// </summary>
+            void ExecuteInternal(string action, string instance, string sapassword, ILifetimeScope lifetimeScope)
+            {
+                ValidateArguments(action, instance, sapassword);
+
                 // Normally this happens as a part of app startup, but not when running command line.
                 SqlSession.Initialize();
+
+                SqlServerInstaller installer = lifetimeScope.Resolve<SqlServerInstaller>();
 
                 try
                 {
                     switch (action)
                     {
                         case "upgrade":
-                            {
-                                // Can't specific instance or password for upgrade - we use SqlSession
-                                if (instance != null || sapassword != null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
-                                }
+                        {
+                            log.InfoFormat("Processing request to upgrade SQL Sever");
 
-                                log.InfoFormat("Processing request to upgrade SQL Sever");
+                            // We need to initialize an installer to get the correct installer package exe's
+                            ISqlInstallerInfo sqlInstallerInfo = installer.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
 
+                            UpgradeSqlServerInternal(
+                                installer.GetInstallerLocalFilePath(sqlInstallerInfo),
+                                SqlSession.Current);
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InitializeForCurrentSqlSession();
-
-                                UpgradeSqlServerInternal(
-                                    installer.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade),
-                                    SqlSession.Current);
-
-                                break;
-                            }
+                            break;
+                        }
 
                         case "install":
-                            {
-                                log.InfoFormat("Processing request to install sql server. {0}", instance);
+                        {
+                            log.InfoFormat("Processing request to install sql server. {0}", instance);
 
-                                if (instance == null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                                }
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.InstallSqlServerInternal(instance, sapassword);
 
-                                if (sapassword == null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
-                                }
-
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InitializeForCurrentSqlSession();
-                                installer.InstallSqlServerInternal(instance, sapassword);
-
-                                break;
-                            }
+                            break;
+                        }
 
                         case "localdb":
-                            {
-                                log.InfoFormat("Processing request to install LocalDB.");
+                        {
+                            log.InfoFormat("Processing request to install LocalDB.");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InitializeForCurrentSqlSession();
-                                installer.InstallLocalDbInternal();
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.InstallLocalDbInternal();
 
-                                break;
-                            }
+                            break;
+                        }
 
                         case "upgradelocaldb":
-                            {
-                                log.InfoFormat("Processing request to upgrade local db. {0}", instance);
+                        {
+                            log.InfoFormat("Processing request to upgrade local db. {0}", instance);
 
-                                if (instance == null)
-                                {
-                                    throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
-                                }
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.UpgradeLocalDbInternal(instance);
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InitializeForCurrentSqlSession();
-                                installer.UpgradeLocalDbInternal(instance);
-
-                                break;
-                            }
+                            break;
+                        }
 
                         case "assignautomaticdbname":
-                            {
-                                log.InfoFormat("Processing request to assign automatic database name.");
+                        {
+                            log.InfoFormat("Processing request to assign automatic database name.");
 
-                                // We need to initialize an installer to get the correct installer package exe's
-                                SqlServerInstaller installer = new SqlServerInstaller();
-                                installer.InitializeForCurrentSqlSession();
-                                installer.AssignAutomaticDatabaseNameInternal();
+                            // We need to initialize an installer to get the correct installer package exe's
+                            installer.AssignAutomaticDatabaseNameInternal();
 
-                                break;
-                            }
+                            break;
+                        }
 
                         default:
-                            {
-                                throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
-                            }
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                        }
                     }
                 }
                 catch (Win32Exception ex)
                 {
                     log.Error("Failed to process firewall request.", ex);
                     Environment.ExitCode = ex.NativeErrorCode;
+                }
+            }
+
+            /// <summary>
+            /// Validate the command arguments
+            /// </summary>
+            private void ValidateArguments(string action, string instance, string sapassword)
+            {
+                switch (action)
+                {
+                    case "upgrade":
+                        {
+                            // Can't specific instance or password for upgrade - we use SqlSession
+                            if (instance != null || sapassword != null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "instance\\password", "Invalid arguments passed to command.");
+                            }
+
+                            break;
+                        }
+
+                    case "install":
+                        {
+                            if (instance == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
+                            }
+
+                            if (sapassword == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "password", "The required 'password' parameter was not specified.");
+                            }
+                                
+                            break;
+                        }
+
+                    case "upgradelocaldb":
+                        {
+                            if (instance == null)
+                            {
+                                throw new CommandLineCommandArgumentException(CommandName, "instance", "The required 'instance' parameter was not specified.");
+                            }
+
+                            break;
+                        }
+                    case "localdb":
+                    case "assignautomaticdbname":
+                        // Nothing to validate here
+                        break;
+
+                    default:
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "action", string.Format("Invalid value passed to 'action' parameter: {0}", action));
+                        }
                 }
             }
         }

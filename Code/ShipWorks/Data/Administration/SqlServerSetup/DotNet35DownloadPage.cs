@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using ShipWorks.ApplicationCore.Interaction;
 using System.Xml.Linq;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Administration.SqlServerSetup
 {
@@ -41,17 +43,23 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 Wizard.Pages.Insert(Wizard.Pages.IndexOf(this) + 1, installPage);
             }
 
-            // If the installer is already available, just skip over the download.
-            if (!SqlServerInstaller.IsDotNet35Required || DotNet35Installer.IsRedistributableAvailable)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                e.Skip = true;
+                SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
 
-                // Has to be set, b\c Wizard didn't know about it at the time this function was entered.
-                if (e.StepReason == WizardStepReason.StepForward)
+                // If the installer is already available, just skip over the download.
+                if (sqlServerInstaller.IsDotNet35Sp1Installed || DotNet35Installer.IsRedistributableAvailable)
                 {
-                    e.SkipToPage = installPage;
+                    e.Skip = true;
+
+                    // Has to be set, b\c Wizard didn't know about it at the time this function was entered.
+                    if (e.StepReason == WizardStepReason.StepForward)
+                    {
+                        e.SkipToPage = installPage;
+                    }
                 }
             }
+
         }
 
         /// <summary>
