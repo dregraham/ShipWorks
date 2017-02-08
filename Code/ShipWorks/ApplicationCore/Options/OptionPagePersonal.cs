@@ -3,13 +3,16 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Users;
 using ShipWorks.Filters;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Common.IO.Hardware.Scanner;
+using ShipWorks.Data.Connection;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
 
@@ -24,6 +27,7 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly IWin32Window owner;
         private readonly IScannerConfigurationRepository scannerRepo;
         private readonly IScannerIdentifier scannerIdentifier;
+        private SingleScanSettings singleScanSettingsOnLoad;
 
         /// <summary>
         /// Constructor
@@ -83,6 +87,8 @@ namespace ShipWorks.ApplicationCore.Options
                 singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 UpdateSingleScanSettingsUI();
+
+                singleScanSettingsOnLoad = (SingleScanSettings)settings.SingleScanSettings;
             }
             else
             {
@@ -131,6 +137,29 @@ namespace ShipWorks.ApplicationCore.Options
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.Disabled;
                 }
+
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.SaveAndRefetch(settings);
+                }
+
+                UpdateSingleScanTelemetry(settings);
+            }
+        }
+
+        /// <summary>
+        /// Log the Single Scan Settings to Telemetry
+        /// </summary>
+        /// <param name="settings"></param>
+        private void UpdateSingleScanTelemetry(UserSettingsEntity settings)
+        {
+            if (settings.SingleScanSettings != (int) singleScanSettingsOnLoad)
+            {
+                EventTelemetry telemetryEvent = new EventTelemetry("SingleScan.Settings.Changed");
+                string telemetryValue = EnumHelper.GetApiValue((SingleScanSettings) settings.SingleScanSettings);
+                telemetryEvent.Properties.Add("SingleScan.Settings.Value", telemetryValue);
+
+                Telemetry.TrackEvent(telemetryEvent);
             }
         }
 

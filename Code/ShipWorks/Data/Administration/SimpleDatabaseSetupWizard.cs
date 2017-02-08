@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
@@ -26,7 +27,7 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(SimpleDatabaseSetupWizard));
 
         // The sql installer
-        SqlServerInstaller sqlInstaller;
+        SqlServerInstaller sqlServerInstaller;
 
         // The current state of the SQL Session data
         SqlSession sqlSession = new SqlSession();
@@ -69,9 +70,8 @@ namespace ShipWorks.Data.Administration
         {
             InitializeComponent();
 
-            sqlInstaller = new SqlServerInstaller();
-            sqlInstaller.InitializeForCurrentSqlSession();
-            sqlInstaller.Exited += OnPrepareAutomaticDatabaseExited;
+            sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
+            sqlServerInstaller.Exited += OnPrepareAutomaticDatabaseExited;
 
             this.lifetimeScope = lifetimeScope;
 
@@ -134,11 +134,11 @@ namespace ShipWorks.Data.Administration
                 {
                     if (preparationType == ElevatedPreparationType.InstallLocalDb)
                     {
-                        sqlInstaller.InstallLocalDb();
+                        sqlServerInstaller.InstallLocalDb();
                     }
                     else
                     {
-                        sqlInstaller.AssignAutomaticDatabaseName();
+                        sqlServerInstaller.AssignAutomaticDatabaseName();
                     }
                 }
                 catch (Win32Exception ex)
@@ -214,8 +214,10 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         void OnLocalDbProgressTimer(object sender, EventArgs e)
         {
-            FileInfo fileInfo = new FileInfo(sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.LocalDb));
-            long expectedFileSize = sqlInstaller.GetInstallerFileLength(SqlServerInstallerPurpose.LocalDb);
+            ISqlInstallerInfo sqlInstallerInfo = sqlServerInstaller.GetSqlInstaller(SqlServerInstallerPurpose.LocalDb);
+            long expectedFileSize = sqlInstallerInfo.FileSize;
+
+            FileInfo fileInfo = new FileInfo(sqlServerInstaller.GetInstallerLocalFilePath(sqlInstallerInfo));
 
             // Not downloaded at all
             if (!fileInfo.Exists)
@@ -249,7 +251,7 @@ namespace ShipWorks.Data.Administration
             localDbProgressTimer.Stop();
 
             // If it was successful, we should now be able to connect.
-            if (sqlInstaller.LastExitCode == 0)
+            if (sqlServerInstaller.LastExitCode == 0)
             {
                 MethodInvoker invoker = new MethodInvoker(CreateDatabase);
                 invoker.BeginInvoke(CreateDatabaseComplete, invoker);
@@ -257,7 +259,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "ShipWorks was unable to prepare your computer.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
+                    "ShipWorks was unable to prepare your computer.\n\n" + SqlServerInstaller.FormatReturnCode(sqlServerInstaller.LastExitCode));
 
                 MoveBack();
             }

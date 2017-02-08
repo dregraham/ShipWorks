@@ -9,6 +9,7 @@ using Autofac;
 using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -125,7 +126,7 @@ namespace ShipWorks.ApplicationCore
                 searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
-            // Register any IMainGridControlPipelines 
+            // Register any IMainGridControlPipelines
             subscriptions = new CompositeDisposable(
                 IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainGridControlPipeline>>().Select(p => p.Register(this)));
         }
@@ -768,7 +769,18 @@ namespace ShipWorks.ApplicationCore
             {
                 ISingleScanOrderShortcut singleScanOrderShortcut = scope.Resolve<ISingleScanOrderShortcut>();
                 searchBox.SetTextWithoutTextChangedEvent(singleScanOrderShortcut.GetDisplayText(barcode));
-                PerformSearch(barcode);
+
+                using (TrackedDurationEvent singleScanSearchTrackedDurationEvent =
+                        new TrackedDurationEvent("SingleScan.Search"))
+                {
+                    singleScanSearchTrackedDurationEvent.AddProperty("SingleScan.Search.IsOrderShorcut",
+                        singleScanOrderShortcut.AppliesTo(barcode) ? "Yes" : "No");
+                    singleScanSearchTrackedDurationEvent.AddProperty("SingleScan.Search.AdvancedSearch",
+                        AdvancedSearchVisible || AdvancedSearchResultsActive ? "Yes" : "No");
+                    singleScanSearchTrackedDurationEvent.AddProperty("SingleScan.Search.Barcode", barcode);
+
+                    PerformSearch(barcode);
+                }
             }
         }
 

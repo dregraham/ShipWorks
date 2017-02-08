@@ -16,9 +16,6 @@ CREATE DATABASE {DBNAME}
     COLLATE SQL_Latin1_General_CP1_CI_AS
 GO
 
-ALTER DATABASE {DBNAME} SET COMPATIBILITY_LEVEL = 100
-GO
-
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
 EXEC [{DBNAME}].[dbo].[sp_fulltext_database] @action = 'disable'
@@ -31,7 +28,7 @@ GO
 ALTER DATABASE {DBNAME} SET RECOVERY simple --trunc. log
 GO
 
-ALTER DATABASE {DBNAME} set Page_verify Torn_Page_Detection
+ALTER DATABASE {DBNAME} set Page_verify CHECKSUM
 GO
 
 ALTER DATABASE {DBNAME} set  Read_Write

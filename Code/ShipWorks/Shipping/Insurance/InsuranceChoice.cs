@@ -94,7 +94,14 @@ namespace ShipWorks.Shipping.Insurance
         public decimal InsuranceValue
         {
             get { return (decimal) valueFieldEntity.Fields[valueFieldPrefix + "InsuranceValue"].CurrentValue; }
-            set { valueFieldEntity.SetNewFieldValue(valueFieldPrefix + "InsuranceValue", value); }
+            set
+            {
+                IEntityField2 field = valueFieldEntity.Fields[valueFieldPrefix + "InsuranceValue"];
+                if (field?.CurrentValue == null || !InsuranceValue.Equals(value))
+                {
+                    valueFieldEntity.SetNewFieldValue(valueFieldPrefix + "InsuranceValue", value);
+                }
+            }
         }
 
         /// <summary>
