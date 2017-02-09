@@ -37,6 +37,7 @@
             <ui:ValueEqualToParameterConverter x:Key="ValueEqualToParameter" />
             <ui:EnumDescriptionConverter x:Key="EnumDescription" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityNegated" Invert="True" />
             <ui:BooleanComparisonConverter x:Key="BooleanAnd" BooleanOperator="{x:Static ui:BooleanOperator.And}" />
             <vc:ShipmentTypeListConverter x:Key="ShipmentTypeList" />
             <vc:ShipmentTypeToOriginAddressesConverter x:Key="ShipmentTypeToOriginAddresses" />
@@ -214,8 +215,10 @@
                                                 Orientation="Horizontal">
                                         <TextBlock Style="{StaticResource Expander.Header.Label}">From</TextBlock>
                                         <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}">Account:</TextBlock>
-                                        <TextBlock Visibility="{Binding Visibility, ElementName=AccountDropDown}"
+                                        <TextBlock Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibilityNegated}}"
                                            Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}" />
+                                        <TextBlock xml:space="preserve" Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibility}}" 
+                                                   Text=" (Rate Shopping), "/>
                                         <TextBlock Text="{Binding Text, ElementName=OriginDropDown}" />
                                     </StackPanel>
                                 </Expander.Header>
@@ -239,6 +242,7 @@
                                                               x:Name="AccountDropDown"
                                                               Style="{StaticResource Grid.ShipWorksComboBox.Default}"
                                                               Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}"
+                                                              IsEnabled="{Binding SupportsRateShopping, Converter={StaticResource InvertBoolean}}"
                                                               SelectedIndexWhenNull="{x:Static ui:RelativeIndex.First}"
                                                               ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingAccountsChangedMessage}"
                                                               SelectedValue="{Binding AccountId}"
