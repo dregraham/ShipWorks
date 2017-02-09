@@ -101,7 +101,7 @@ namespace ShipWorks.Filters.Controls
         /// Gets the filter targets
         /// </summary>
         public FilterTarget[] Targets { get; private set; }
-        
+
         /// <summary>
         /// Controls whether the filter tree is editable.  Items can be renamed, and dragged around.
         /// </summary>
@@ -325,7 +325,7 @@ namespace ShipWorks.Filters.Controls
                     return;
                 }
 
-                FilterNodeEntity potential = layoutContext.FindNode(value);
+                FilterNodeEntity potential = layoutContext?.FindNode(value);
                 if (potential != null && potential.Purpose == (int)FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget)potential.Filter.FilterTarget) >= 0)
                 {
                     SelectedFilterNode = potential;
