@@ -139,47 +139,78 @@ namespace ShipWorks.SingleScan
             using (ITrackedDurationEvent autoPrintTrackedDurationEvent =
                 trackedDurationEventFactory("SingleScan.AutoPrint.ShipmentsProcessed"))
             {
+                GenericResult<string> result;
                 string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
+                long? orderID = GetOrderID(autoPrintServiceDto);
 
-                // Only auto print if 1 order was found
-                if (autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
-                    autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
-                    autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId == null)
+                // Only auto print if an order was found
+                if (!orderID.HasValue)
                 {
                     log.Error("Order not found for scanned order.");
-                    return GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
+                    result = GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
                 }
-
-                long orderId = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
-                int matchedOrderCount =
-                    autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
-
-                if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
+                else
                 {
-                    AddTelemetryData(autoPrintTrackedDurationEvent, Enumerable.Empty<ShipmentEntity>(), matchedOrderCount, true);
+                    int matchedOrderCount = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
 
-                    return GenericResult.FromError("Multiple orders selected, user chose not to process", scannedBarcode);
+                    // Confirm that the order found is the one the user wants to print
+                    bool userCanceledPrint = !singleScanOrderConfirmationService.Confirm(orderID.Value, matchedOrderCount, scannedBarcode);
+
+                    IEnumerable<ShipmentEntity> shipments = Enumerable.Empty<ShipmentEntity>();
+
+                    if (userCanceledPrint)
+                    {
+                        result = GenericResult.FromError("Multiple orders selected, user chose not to process",
+                            scannedBarcode);
+                    }
+                    else
+                    {
+                        // Get shipments to process (assumes GetShipments will not return voided shipments)
+                        shipments = await singleScanShipmentConfirmationService.GetShipments(orderID.Value, scannedBarcode);
+
+                        userCanceledPrint = !shipments.Any();
+
+                        if (!userCanceledPrint)
+                        {
+                            // All good, process the shipment
+                            messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
+
+                            result = GenericResult.FromSuccess(scannedBarcode);
+                        }
+                        else
+                        {
+                            result = GenericResult.FromError("No shipments processed", scannedBarcode);
+                        }
+                    }
+
+                    CollectTelemetryData(autoPrintTrackedDurationEvent, shipments, matchedOrderCount, userCanceledPrint);
                 }
 
-                // Get shipments to process (assumes GetShipments will not return voided shipments)
-                IEnumerable<ShipmentEntity> shipments =
-                    await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
-
-                AddTelemetryData(autoPrintTrackedDurationEvent, shipments, matchedOrderCount, !shipments.Any());
-
-                if (shipments.Any())
-                {
-                    // All good, process the shipment
-                    messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
-
-                    return GenericResult.FromSuccess(scannedBarcode);
-                }
-
-                return GenericResult.FromError("No shipments processed", scannedBarcode);
+                return result;
             }
         }
 
-        private void AddTelemetryData(ITrackedDurationEvent autoPrintTrackedDurationEvent, IEnumerable<ShipmentEntity> shipments, int matchedOrderCount, bool printAborted)
+        /// <summary>
+        /// Get the order ID of the order we intend to process
+        /// </summary>
+        private static long? GetOrderID(AutoPrintServiceDto autoPrintServiceDto)
+        {
+            bool orderNotFound = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
+                   autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
+                   autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId == null;
+
+            if (orderNotFound)
+            {
+                return null;
+            }
+
+            return autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
+        }
+
+        /// <summary>
+        /// Collects telemetry data
+        /// </summary>
+        private void CollectTelemetryData(ITrackedDurationEvent autoPrintTrackedDurationEvent, IEnumerable<ShipmentEntity> shipments, int matchedOrderCount, bool printAborted)
         {
             List<string> carrierList = new List<string>();
             foreach (ShipmentEntity shipment in shipments)
