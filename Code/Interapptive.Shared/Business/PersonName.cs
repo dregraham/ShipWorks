@@ -45,12 +45,22 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
+        private PersonName(string first, string middle, string last, string unparsed, PersonNameParseStatus parseStatus)
+        {
+            this.first = first;
+            this.middle = middle;
+            this.last = last;
+            this.parseStatus = parseStatus;
+            this.unparsed = unparsed;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PersonName(string first, string middle, string last)
+            : this(first, middle, last, "", PersonNameParseStatus.Simple)
         {
             PersonName parsedPersonName = Create(first, middle, last);
-            First = parsedPersonName.First;
-            Middle = parsedPersonName.Middle;
-            Last = parsedPersonName.Last;
             ParseStatus = parsedPersonName.ParseStatus;
             UnparsedName = parsedPersonName.UnparsedName;
         }
@@ -59,8 +69,19 @@ namespace Interapptive.Shared.Business
         /// Constructor
         /// </summary>
         public PersonName(PersonAdapter person)
-            : this(person.FirstName, person.MiddleName, person.LastName)
+            : this(person.FirstName, person.MiddleName, person.LastName, person.UnparsedName, person.NameParseStatus)
         {
+            PersonName parsedPersonName = string.IsNullOrWhiteSpace(person.UnparsedName) ?
+                Create(person.FirstName, person.MiddleName, person.LastName) :
+                Parse(person.UnparsedName);
+
+            First = parsedPersonName.First;
+            Middle = parsedPersonName.Middle;
+            Last = parsedPersonName.Last;
+            Prefix = parsedPersonName.Prefix;
+            Suffix = parsedPersonName.Suffix;
+            ParseStatus = parsedPersonName.ParseStatus;
+            UnparsedName = parsedPersonName.UnparsedName;
         }
 
         /// <summary>

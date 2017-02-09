@@ -23,6 +23,7 @@ namespace ShipWorks.Tests.Core
             Assert.Equal(fullName, name.UnparsedName);
             Assert.Equal(nameParseStatus, name.ParseStatus);
         }
+
         [Theory]
         [InlineData("", "", "", "", PersonNameParseStatus.Unknown)]
         [InlineData("Small Arms Shop", "Small", "Arms", "Shop", PersonNameParseStatus.Simple)]
@@ -37,6 +38,30 @@ namespace ShipWorks.Tests.Core
                 FirstName = first,
                 MiddleName = middle,
                 LastName = last
+            };
+
+            PersonName name = new PersonName(personAdapter);
+
+            Assert.Equal(first, name.First);
+            Assert.Equal(middle, name.Middle);
+            Assert.Equal(last, name.Last);
+            Assert.Equal(fullName, name.FullName);
+            Assert.Equal(fullName, name.UnparsedName);
+            Assert.Equal(nameParseStatus, name.ParseStatus);
+        }
+
+        [Theory]
+        [InlineData("", "", "", "", PersonNameParseStatus.Unknown)]
+        [InlineData("Small Arms Shop", "Small", "Arms", "Shop", PersonNameParseStatus.Simple)]
+        [InlineData("John Randolph D'oe", "John", "Randolph", "D'oe", PersonNameParseStatus.Simple)]
+        [InlineData("Joe Smith", "Joe", "", "Smith", PersonNameParseStatus.Simple)]
+        [InlineData("John D'oe", "John", "", "D'oe", PersonNameParseStatus.Simple)]
+
+        public void Constructor_WithPersonAdapterAndUnparsedValue_ParsedValuesAreCorrect(string fullName, string first, string middle, string last, PersonNameParseStatus nameParseStatus)
+        {
+            PersonAdapter personAdapter = new PersonAdapter()
+            {
+                UnparsedName = fullName
             };
 
             PersonName name = new PersonName(personAdapter);
