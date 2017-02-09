@@ -420,6 +420,19 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             Assert.Equal(supportsAccounts, testObject.SupportsAccounts);
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Populate_SetsSupportsRateShopping_WhenCalled(bool supportsRateShopping)
+        {
+            shipmentAdapter.SetupGet(a => a.SupportsRateShopping).Returns(supportsRateShopping);
+
+            var testObject = GetViewModelWithLoadedShipment(mock);
+            testObject.LoadShipment(shipmentAdapter.Object);
+
+            Assert.Equal(supportsRateShopping, testObject.SupportsRateShopping);
+        }
+
         [Fact]
         public void Load_LoadedShipmentResult_IsSuccess_WhenMultipleShipmentsAreLoaded()
         {

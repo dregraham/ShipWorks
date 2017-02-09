@@ -82,6 +82,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         }
 
         [Fact]
+        public void SupportsRateShopping_IsFalse()
+        {
+            var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.False(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
             var testObject = mock.Create<NoneShipmentAdapter>(TypedParameter.From(shipment));
