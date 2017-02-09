@@ -12,6 +12,7 @@ namespace Interapptive.Shared.Metrics
         public const string DurationMetricKey = "DurationIn(ms)";
         private readonly Stopwatch stopwatch;
         private readonly EventTelemetry eventTelemetry;
+        private bool disposed = false;
 
         /// <summary>
         /// Constructor
@@ -86,7 +87,11 @@ namespace Interapptive.Shared.Metrics
         /// </summary>
         public virtual void Dispose()
         {
-            Stop();
+            if (disposed == false)
+            {
+                Stop();
+                disposed = true;
+            }
         }
     }
 }

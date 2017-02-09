@@ -156,6 +156,8 @@ namespace ShipWorks.SingleScan
 
                 if (!singleScanOrderConfirmationService.Confirm(orderId, matchedOrderCount, scannedBarcode))
                 {
+                    AddTelemetryData(autoPrintTrackedDurationEvent, Enumerable.Empty<ShipmentEntity>(), matchedOrderCount, true);
+
                     return GenericResult.FromError("Multiple orders selected, user chose not to process", scannedBarcode);
                 }
 
@@ -163,7 +165,7 @@ namespace ShipWorks.SingleScan
                 IEnumerable<ShipmentEntity> shipments =
                     await singleScanShipmentConfirmationService.GetShipments(orderId, scannedBarcode);
 
-                AddTelemetryData(autoPrintTrackedDurationEvent, shipments, matchedOrderCount);
+                AddTelemetryData(autoPrintTrackedDurationEvent, shipments, matchedOrderCount, !shipments.Any());
 
                 if (shipments.Any())
                 {
@@ -177,18 +179,18 @@ namespace ShipWorks.SingleScan
             }
         }
 
-        private void AddTelemetryData(ITrackedDurationEvent autoPrintTrackedDurationEvent, IEnumerable<ShipmentEntity> shipments, int matchedOrderCount)
+        private void AddTelemetryData(ITrackedDurationEvent autoPrintTrackedDurationEvent, IEnumerable<ShipmentEntity> shipments, int matchedOrderCount, bool printAborted)
         {
             List<string> carrierList = new List<string>();
             foreach (ShipmentEntity shipment in shipments)
             {
                 carrierList.Add(EnumHelper.GetDescription(shipment.ShipmentTypeCode));
             }
-            string carriers = string.Join(",", carrierList.Distinct());
+            string carriers = string.Join(", ", carrierList.Distinct());
 
             autoPrintTrackedDurationEvent.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", string.IsNullOrWhiteSpace(carriers) ? "N/A" : carriers);
-            autoPrintTrackedDurationEvent.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", shipments.Count() == 1 && matchedOrderCount == 1 ? "No" : "Yes");
-            autoPrintTrackedDurationEvent.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", shipments.Any() ? "No" : "Yes");
+            autoPrintTrackedDurationEvent.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", shipments.Count() != 1 || matchedOrderCount != 1 ? "Yes" : "No");
+            autoPrintTrackedDurationEvent.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", printAborted ? "Yes" : "No");
         }
 
         /// <summary>
