@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Stores.Platforms.InfiPlex
     /// <summary>
     /// InfiPlex store specific integration into ShipWorks
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.InfiPlex, ExternallyOwned=true)]
     public class InfiPlexStoreType : GenericModuleStoreType
     {
         /// <summary>
