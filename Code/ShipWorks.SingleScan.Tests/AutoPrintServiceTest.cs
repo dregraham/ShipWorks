@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Options;
@@ -13,8 +12,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
-using System.Threading.Tasks;
-using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using log4net;
 using Microsoft.Reactive.Testing;
@@ -113,7 +111,7 @@ namespace ShipWorks.SingleScan.Tests
             Assert.Equal(0, messenger.SentMessages.OfType<ShipmentsProcessedMessage>().Count());
             mockLog.Verify(l => l.Info("Starting scan message observation."), Times.Once);
         }
-        
+
         [Fact]
         public void OrderScanned_SendsProcessMessage_WhenOrderHasOneUnprocessedShipment()
         {
@@ -311,11 +309,15 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void OrderScanned_ShipmentNotProcessed_WhenMultipleOrdersMatch()
+        public void OrderScanned_ShipmentNotProcessed_WhenMultipleOrdersMatchAndUserCancels()
         {
             mock.Mock<IFilterNodeContentEntity>()
                 .SetupGet(node => node.Count)
-                .Returns(0);
+                .Returns(2);
+
+            mock.Mock<ISingleScanOrderConfirmationService>().
+                Setup(s => s.Confirm(It.IsAny<long>(), 2, "A")).
+                Returns(false);
 
             TestScheduler windowsScheduler = new TestScheduler();
             TestScheduler defaultScheduler = new TestScheduler();
@@ -338,6 +340,37 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public void OrderScanned_ShipmentProcessed_WhenMultipleOrdersMatchAndUserConfirms()
+        {
+            mock.Mock<IFilterNodeContentEntity>()
+                .SetupGet(node => node.Count)
+                .Returns(2);
+
+            mock.Mock<ISingleScanOrderConfirmationService>().
+                Setup(s => s.Confirm(It.IsAny<long>(), 2, "A")).
+                Returns(true);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            SendShipmentsProcessedMessage();
+            windowsScheduler.Start();
+
+            Assert.True(messenger.SentMessages.OfType<ProcessShipmentsMessage>().Any());
+        }
+
+        [Fact]
         public void MultipleOrdersScanned_SecondScanProcesses_WhenShipmentConfirmationServiceReturnsNoShipmentsTheFirstTime()
         {
             TestScheduler windowsScheduler = new TestScheduler();
@@ -354,7 +387,7 @@ namespace ShipWorks.SingleScan.Tests
             SendScanMessage("FirstScan");
             SendFilterCountsUpdatedMessage();
             windowsScheduler.Start();
-                    
+
             shipments.Add(new ShipmentEntity(1));
             SendScanMessage("SecondScan");
             SendFilterCountsUpdatedMessage();
@@ -501,6 +534,269 @@ namespace ShipWorks.SingleScan.Tests
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
             mockLog.Verify(l => l.Info(It.Is<string>(s => s.EndsWith("SecondScan"))));
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsShippingProvidersToNA_WhenNoShipmentsProcessed()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", "N/A"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsShippingProvidersToCarrier_WhenShipmentProcessed()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1) {ShipmentTypeCode = ShipmentTypeCode.Usps});
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", "USPS"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsShippingProvidersToListOfCarriers_WhenMutlipleShipmentsProcessedWithMutipleCarriers()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1) { ShipmentTypeCode = ShipmentTypeCode.Usps });
+            shipments.Add(new ShipmentEntity(2) { ShipmentTypeCode = ShipmentTypeCode.FedEx });
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.ShippingProviders", "USPS, FedEx"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsRequiredConfirmationToNo_WhenSingleOrderFoundWithSingleShipment()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", "No"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsRequiredConfirmationToYes_WhenSingleOrderFoundWithMultipleShipments()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+            shipments.Add(new ShipmentEntity(2));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", "Yes"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsRequiredConfirmationToYes_WhenMultipleOrdersFound()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            mock.Mock<IFilterNodeContentEntity>()
+                .SetupGet(node => node.Count)
+                .Returns(2);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.RequiredConfirmation", "Yes"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsPrintAbortedToNo_WhenUserConfirmsPrint()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            mock.Mock<ISingleScanOrderConfirmationService>().
+                Setup(s => s.Confirm(It.IsAny<long>(), 1, "A")).
+                Returns(true);
+
+            mock.Mock<ISingleScanShipmentConfirmationService>()
+                .Setup(s => s.GetShipments(1, "A"))
+                .ReturnsAsync(new List<ShipmentEntity>() { new ShipmentEntity(1) });
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", "No"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsPrintAbortedToYes_WhenUserCancelsPrintThroughOrderConfirmationService()
+        {
+            mock.Mock<IFilterNodeContentEntity>()
+                .SetupGet(node => node.Count)
+                .Returns(2);
+
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            mock.Mock<ISingleScanOrderConfirmationService>().
+                Setup(s => s.Confirm(It.IsAny<long>(), 2, "A")).
+                Returns(false);
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", "Yes"), Times.Once);
+        }
+
+        [Fact]
+        public void AddTelemetryData_SetsPrintAbortedToYes_WhenUserCancelsPrintThroughShipmentConfirmationService()
+        {
+            var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
+            mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
+
+            mock.Mock<ISingleScanOrderConfirmationService>().
+                Setup(s => s.Confirm(It.IsAny<long>(), 1, "A")).
+                Returns(true);
+
+            mock.Mock<ISingleScanShipmentConfirmationService>()
+                .Setup(s => s.GetShipments(1, "A"))
+                .ReturnsAsync(new List<ShipmentEntity>());
+
+            TestScheduler windowsScheduler = new TestScheduler();
+            TestScheduler defaultScheduler = new TestScheduler();
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(windowsScheduler);
+            scheduleProvider.Setup(s => s.Default).Returns(defaultScheduler);
+            defaultScheduler.Start();
+
+            testObject = mock.Create<AutoPrintService>();
+            testObject.InitializeForCurrentSession();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            shipments.Add(new ShipmentEntity(1));
+
+            SendScanMessage("A");
+            SendFilterCountsUpdatedMessage();
+            windowsScheduler.Start();
+
+            trackedDurationEvent.Verify(
+                            e => e.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.PrintAborted", "No"), Times.Once);
         }
 
         private void SendScanMessage(string scannedText)
