@@ -136,20 +136,20 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
         {
-            using (ITrackedDurationEvent autoPrintTrackedDurationEvent =
-                trackedDurationEventFactory("SingleScan.AutoPrint.ShipmentsProcessed"))
-            {
-                GenericResult<string> result;
-                string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
-                long? orderID = GetOrderID(autoPrintServiceDto);
+            GenericResult<string> result;
+            string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
+            long? orderID = GetOrderID(autoPrintServiceDto);
 
-                // Only auto print if an order was found
-                if (!orderID.HasValue)
-                {
-                    log.Error("Order not found for scanned order.");
-                    result = GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
-                }
-                else
+            // Only auto print if an order was found
+            if (!orderID.HasValue)
+            {
+                log.Error("Order not found for scanned order.");
+                result = GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
+            }
+            else
+            {
+                using (ITrackedDurationEvent autoPrintTrackedDurationEvent =
+                    trackedDurationEventFactory("SingleScan.AutoPrint.ShipmentsProcessed"))
                 {
                     int matchedOrderCount = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
 
@@ -185,9 +185,9 @@ namespace ShipWorks.SingleScan
 
                     CollectTelemetryData(autoPrintTrackedDurationEvent, shipments, matchedOrderCount, userCanceledPrint);
                 }
-
-                return result;
             }
+
+            return result;
         }
 
         /// <summary>
