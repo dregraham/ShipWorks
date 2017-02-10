@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Stores.Content.Panels.Selectors;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -13,11 +14,20 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList)
+        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList) :
+            this(sender, orderIdList, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList, IEntityGridRowSelector shipmentSelector)
         {
             Sender = sender;
             OrderIdList = orderIdList.ToReadOnly();
             MessageId = Guid.NewGuid();
+            ShipmentSelector = shipmentSelector;
         }
 
         /// <summary>
@@ -34,5 +44,10 @@ namespace ShipWorks.Messaging.Messages
         /// Get the list of order ids
         /// </summary>
         public IEnumerable<long> OrderIdList { get; }
+
+        /// <summary>
+        /// Shipment selector
+        /// </summary>
+        public IEntityGridRowSelector ShipmentSelector { get; }
     }
 }

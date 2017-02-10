@@ -19,6 +19,7 @@ using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Stores.Content.Panels.Selectors;
 using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
@@ -248,8 +249,11 @@ namespace ShipWorks.SingleScan
                     .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
                         TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
                         schedulerProvider.Default,
-                        (i, message) => message)
-                    .Do(message => messenger.Send(new OrderSelectionChangingMessage(this, message.Shipments.Select(s => s.Shipment.OrderID).Distinct())))
+                        ((i, message) => message))
+                    .Do(message => messenger.Send(
+                        new OrderSelectionChangingMessage(this,
+                        message.Shipments.Select(s => s.Shipment.OrderID).Distinct(),
+                        EntityGridRowSelector.SpecificEntities(message.Shipments.Select(s => s.Shipment.ShipmentID).Distinct()))))
                     .Select(f => genericResult);
 
                 log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");

@@ -107,7 +107,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
                 .Do(x => SelectShipmentRows(isThisPanelVisible ?
-                    EntityGridRowSelector.SpecificEntities(selectedShipments) :
+                    x.ShipmentSelector ?? EntityGridRowSelector.SpecificEntities(selectedShipments) :
                     DefaultShipmentSelection))
                 .Do(_ => selectedShipments = Enumerable.Empty<long>())
                 .Subscribe();

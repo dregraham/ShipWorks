@@ -102,10 +102,10 @@ namespace ShipWorks.Shipping.Services
                 .Gate(messenger.OfType<OrderSelectionChangedMessage>(), schedulerProvider.Default)
                 .Select(x => x.Last())
                 .SelectMany(x => Load(x.OrderIdList, shippingSettings.FetchReadOnly().AutoCreateShipments)
-                    .ToObservable())
+                    .ToObservable().Select(result => new { Result = result, x.ShipmentSelector }))
                 .CatchAndContinue((Exception ex) => log.Error(ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x)));
+                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x.Result, x.ShipmentSelector)));
         }
 
         /// <summary>

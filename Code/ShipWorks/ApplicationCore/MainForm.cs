@@ -2346,7 +2346,7 @@ namespace ShipWorks
 
                 if (filterNode?.Filter.FilterTarget != null)
                 {
-                    target = (FilterTarget)filterNode.Filter.FilterTarget;
+                    target = (FilterTarget) filterNode.Filter.FilterTarget;
                 }
             }
 
