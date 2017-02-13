@@ -57,12 +57,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         viewModel.UnloadOrder();
                     })
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
-                    .Subscribe(this, _ => { }),
+                    .Subscribe(this),
                 changeHandler.ShipmentLoadedStream()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(this, _ => viewModel.AllowEditing = true)
+                    .Do(this, viewModel.LoadOrder)
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while loading order selection", ex))
-                    .Subscribe(this, viewModel.LoadOrder)
+                    .Subscribe(this)
             );
         }
     }

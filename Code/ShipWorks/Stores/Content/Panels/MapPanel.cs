@@ -27,11 +27,11 @@ using Image = System.Drawing.Image;
 namespace ShipWorks.Stores.Content.Panels
 {
     /// <summary>
-    /// Map Panel - holds a google map or streetview image
+    /// Map Panel - holds a Google map or streetview image
     /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
-        private readonly static FilterTarget[] supportedTargets = new[] { FilterTarget.Orders, FilterTarget.Customers };
+        private readonly static FilterTarget[] supportedTargets = { FilterTarget.Orders, FilterTarget.Customers };
         private LruCache<string, GoogleResponse> imageCache = new LruCache<string, GoogleResponse>(100);
         private IObserver<PersonAdapter> imageLoadingObserver;
         private bool isPanelShown = false;
@@ -169,6 +169,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .Where(x => x.LoadedOrderSelection.CompareCountTo(1) == ComparisonResult.Equal)
                 .Select(x => x.LoadedOrderSelection.Single())
                 .OfType<LoadedOrderSelection>()
+                .Where(x => x.Order != null)
                 .Select(x => new PersonAdapter(x.Order, "Ship").CopyToNew())
                 .Subscribe(LoadImage);
         }
@@ -201,7 +202,7 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
-        /// Called when [google image click].
+        /// Called when [Google image click].
         /// </summary>
         private void OnGoogleImageClick(object sender, EventArgs e)
         {
@@ -367,11 +368,11 @@ namespace ShipWorks.Stores.Content.Panels
             return MapType == MapPanelType.Satellite ?
                 "http://maps.google.com/maps/api/staticmap?center={0}+{1}+{2}&zoom=18&size={3}x{4}&maptype=hybrid&sensor=false&markers=size:medium%7Ccolor:blue%7C{0}+{1}+{2}" :
                 "http://maps.googleapis.com/maps/api/streetview?size={3}x{4}&location={0}+{1}+{2}&fov=120&heading=235&pitch=10&sensor=false";
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+            /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         }
 
         /// <summary>
-        /// The resposne we get back from Google.
+        /// The response we get back from Google.
         /// </summary>
         private class GoogleResponse
         {
@@ -399,7 +400,7 @@ namespace ShipWorks.Stores.Content.Panels
             /// </summary>
             public bool IsThrottled { get; set; }
         }
-            
+
     }
 }
 
