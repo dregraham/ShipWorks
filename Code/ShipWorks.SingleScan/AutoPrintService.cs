@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
-using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
@@ -15,15 +14,12 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Filters;
+using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Users;
-using ShipWorks.Users.Security;
 
 namespace ShipWorks.SingleScan
 {
@@ -247,12 +243,14 @@ namespace ShipWorks.SingleScan
                 // Listen for ShipmentsProcessedMessages, but timeout if processing takes
                 // longer than ShipmentsProcessedMessageTimeoutInMinutes.
                 // We don't get an observable to start from, but we need one to use ContinueAfter, so using
-                // Observable.Range to get an observable to work with.
-                returnResult = Observable.Range(0, 1)
-                                         .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
-                                                        TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
-                                                        schedulerProvider.Default)
-                                         .Select(f => genericResult);
+                // Observable.Return to get an observable to work with.
+                returnResult = Observable.Return(0)
+                    .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
+                        TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
+                        schedulerProvider.Default,
+                        (i, message) => message)
+                    .Do(message => messenger.Send(new OrderSelectionChangingMessage(this, message.Shipments.Select(s => s.Shipment.OrderID).Distinct())))
+                    .Select(f => genericResult);
 
                 log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
             }
