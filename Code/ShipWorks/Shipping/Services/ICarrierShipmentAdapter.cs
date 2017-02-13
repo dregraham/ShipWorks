@@ -37,6 +37,11 @@ namespace ShipWorks.Shipping.Services
         bool SupportsAccounts { get; }
 
         /// <summary>
+        /// Does this shipment support rate shopping?
+        /// </summary>
+        bool SupportsRateShopping { get; }
+
+        /// <summary>
         /// Does this shipment type support multiple packages?
         /// </summary>
         bool SupportsMultiplePackages { get; }

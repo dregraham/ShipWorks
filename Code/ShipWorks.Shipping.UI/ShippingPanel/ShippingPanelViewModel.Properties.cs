@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool allowEditing;
         private ShippingAddressEditStateType destinationAddressEditableState;
         private bool supportsAccounts;
+        private bool supportsRateShopping;
         private string domesticInternationalText;
         private IShipmentViewModel shipmentViewModel;
         private bool isLoading;
@@ -66,7 +67,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             get { return domesticInternationalText; }
             set { handler.Set(nameof(DomesticInternationalText), ref domesticInternationalText, value); }
         }
-
+        
         /// <summary>
         /// Method of shipping requested by the customer
         /// </summary>
@@ -177,6 +178,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return supportsAccounts; }
             set { handler.Set(nameof(SupportsAccounts), ref supportsAccounts, value); }
+        }
+
+        /// <summary>
+        /// True if the carrier supports rate shopping, false otherwise.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool SupportsRateShopping
+        {
+            get { return supportsRateShopping; }
+            set { handler.Set(nameof(SupportsRateShopping), ref supportsRateShopping, value); }
         }
 
         /// <summary>

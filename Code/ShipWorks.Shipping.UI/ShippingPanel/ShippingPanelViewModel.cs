@@ -556,6 +556,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             SupportsAccounts = fromShipmentAdapter.SupportsAccounts;
+            SupportsRateShopping = fromShipmentAdapter.SupportsRateShopping;
 
             // If the shipment type does not support accounts, and the current origin id is account, default to store origin.
             OriginAddressType = !fromShipmentAdapter.SupportsAccounts && fromShipmentAdapter.Shipment.OriginOriginID == 2 ?
