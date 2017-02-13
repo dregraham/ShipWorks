@@ -19,7 +19,7 @@ namespace ShipWorks.ApplicationCore
     /// <summary>
     /// Class for registering observables in the MainGridControl
     /// </summary>
-    public class MainGridControlPipeline : IMainGridControlPipeline, IDisposable
+    public class MainGridControlPipeline : IMainGridControlPipeline
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainGridControlPipeline));
@@ -28,12 +28,8 @@ namespace ShipWorks.ApplicationCore
         private readonly IMessenger messenger;
         private readonly IUserSession userSession;
         private readonly ISchedulerProvider schedulerProvider;
-        private MainGridControl gridControl;
 
         // Debouncing observables for searching
-        private IDisposable quickSearchSubscription;
-        private IDisposable advancedSearchSubscription;
-        private IDisposable barcodeScannedMessageSubscription;
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
 
@@ -54,37 +50,32 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Register the pipeline with the main grid control
         /// </summary>
-        public IDisposable Register(MainGridControl mainGridControl)
+        public IDisposable Register(MainGridControl gridControl)
         {
-            gridControl = mainGridControl;
-
             return new CompositeDisposable(
                 // Wire up observable for debouncing quick search text box
-                quickSearchSubscription = Observable
-                    .FromEventPattern(gridControl.SearchTextChangedAdd, gridControl.SearchTextChangedRemove)
+                Observable.FromEventPattern(gridControl.SearchTextChangedAdd, gridControl.SearchTextChangedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for debouncing advanced search text box
-                advancedSearchSubscription = Observable
-                    .FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
+                Observable.FromEventPattern(gridControl.FilterEditorDefinitionEditedAdd, gridControl.FilterEditorDefinitionEditedRemove)
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for doing barcode searches
-                barcodeScannedMessageSubscription = scanMessages
-                    .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                scanMessages.ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     // This causes the shipping panel to save if there are unsaved changes
                     .Do(_ => mainForm.Focus())
-                    .Where(scanMsg => AllowBarcodeSearch(scanMsg.ScannedText))
+                    .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
                     // We need to do the barcode search asynchronously so that the ContinueAfter registration starts immediately, otherwise we could
                     // miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout
-                    .Do(scanMsg => PerformBarcodeSearchAsync(scanMsg.ScannedText))
+                    .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) =>
@@ -93,14 +84,23 @@ namespace ShipWorks.ApplicationCore
 
                         StartScanMessagesObservation();
                     })
-                    .Subscribe(_ => StartScanMessagesObservation())
+                    .Subscribe(_ => StartScanMessagesObservation()),
+
+                // This class doesn't actually get disposed, so we need to include our cleanup here
+                Disposable.Create(() =>
+                {
+                    // This dispose is really just disconnecting the observable, so we'll go ahead and
+                    // set it to null as well.
+                    scanMessagesConnection?.Dispose();
+                    scanMessagesConnection = null;
+                })
             );
         }
 
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public void PerformBarcodeSearchAsync(string scannedBarcode)
+        public void PerformBarcodeSearchAsync(MainGridControl gridControl, string scannedBarcode)
         {
             TaskEx.Run(() =>
             {
@@ -146,28 +146,13 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Determines if the barcode search message should be sent
         /// </summary>
-        private bool AllowBarcodeSearch(string barcode)
+        private bool AllowBarcodeSearch(MainGridControl gridControl, string barcode)
         {
             return !barcode.IsNullOrWhiteSpace() &&
                    gridControl.Visible &&
                    gridControl.CanFocus &&
                    userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled &&
                    !mainForm.AdditionalFormsOpen();
-        }
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        public void Dispose()
-        {
-            quickSearchSubscription?.Dispose();
-            advancedSearchSubscription?.Dispose();
-            barcodeScannedMessageSubscription?.Dispose();
-
-            // This dispose is really just disconnecting the observable, so we'll go ahead and
-            // set it to null as well.
-            scanMessagesConnection?.Dispose();
-            scanMessagesConnection = null;
         }
     }
 }
