@@ -57,8 +57,8 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(string first, string middle, string last)
-            : this(first, middle, last, "", PersonNameParseStatus.Simple)
+        public PersonName(string first, string middle, string last) : 
+            this(first, middle, last, "", PersonNameParseStatus.Simple)
         {
             PersonName parsedPersonName = Create(first, middle, last);
             ParseStatus = parsedPersonName.ParseStatus;
@@ -68,8 +68,8 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(PersonAdapter person)
-            : this(person.FirstName, person.MiddleName, person.LastName, person.UnparsedName, person.NameParseStatus)
+        public PersonName(PersonAdapter person) : 
+            this(person.FirstName, person.MiddleName, person.LastName, person.UnparsedName, person.NameParseStatus)
         {
             PersonName parsedPersonName = string.IsNullOrWhiteSpace(person.UnparsedName) ?
                 Create(person.FirstName, person.MiddleName, person.LastName) :

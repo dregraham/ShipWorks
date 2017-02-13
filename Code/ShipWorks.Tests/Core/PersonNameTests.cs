@@ -30,7 +30,6 @@ namespace ShipWorks.Tests.Core
         [InlineData("John Randolph D'oe", "John", "Randolph", "D'oe", PersonNameParseStatus.Simple)]
         [InlineData("Joe Smith", "Joe", "", "Smith", PersonNameParseStatus.Simple)]
         [InlineData("John D'oe", "John", "", "D'oe", PersonNameParseStatus.Simple)]
-
         public void Constructor_WithPersonAdapter_ParsedValuesAreCorrect(string fullName, string first, string middle, string last, PersonNameParseStatus nameParseStatus)
         {
             PersonAdapter personAdapter = new PersonAdapter()
