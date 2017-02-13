@@ -12,5 +12,10 @@ namespace ShipWorks.ApplicationCore
         /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
         /// </summary>
         bool AdditionalFormsOpen();
+
+        /// <summary>
+        /// Focus the control
+        /// </summary>
+        bool Focus();
     }
 }

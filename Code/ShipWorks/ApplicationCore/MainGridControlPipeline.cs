@@ -10,9 +10,9 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
-using ShipWorks.Messaging.Messages.Filters;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -78,9 +78,11 @@ namespace ShipWorks.ApplicationCore
                 // Wire up observable for doing barcode searches
                 barcodeScannedMessageSubscription = scanMessages
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                    // This causes the shipping panel to save if there are unsaved changes
+                    .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
-                    // We need to do the barcode search asyncronously so that the ContinueAfter registration starts immediately, otherwise we could
+                    // We need to do the barcode search asynchronously so that the ContinueAfter registration starts immediately, otherwise we could
                     // miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout
                     .Do(scanMsg => PerformBarcodeSearchAsync(scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
@@ -104,7 +106,7 @@ namespace ShipWorks.ApplicationCore
             {
                 if (gridControl?.InvokeRequired == true)
                 {
-                    gridControl.Invoke(new Action(() =>gridControl?.PerformBarcodeSearch(scannedBarcode)));
+                    gridControl.Invoke(new Action(() => gridControl?.PerformBarcodeSearch(scannedBarcode)));
                 }
                 else
                 {
@@ -152,7 +154,7 @@ namespace ShipWorks.ApplicationCore
                    userSession.Settings?.SingleScanSettings != (int) SingleScanSettings.Disabled &&
                    !mainForm.AdditionalFormsOpen();
         }
-        
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
