@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.Business;
-using Interapptive.Shared.Data;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Xunit;
@@ -76,14 +75,14 @@ namespace Interapptive.Shared.Tests.Business
 
             field.Setup(f => f.CurrentValue).Returns("1");
 
-            entity.Setup(e => e.Fields[It.IsAny<string>()]).Returns(field.Object);
-            
+            entity.Setup(e => e.Fields["FirstName"]).Returns(field.Object);
+
             PersonAdapter personAdapter = new PersonAdapter(entity.Object, "");
 
             entity.Reset();
             personAdapter.FirstName = "1";
 
-            entity.Verify(e => e.SetNewFieldValue(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            entity.Verify(e => e.SetNewFieldValue("FirstName", It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -94,14 +93,14 @@ namespace Interapptive.Shared.Tests.Business
 
             field.Setup(f => f.CurrentValue).Returns("1");
 
-            entity.Setup(e => e.Fields[It.IsAny<string>()]).Returns(field.Object);
+            entity.Setup(e => e.Fields["FirstName"]).Returns(field.Object);
 
             PersonAdapter personAdapter = new PersonAdapter(entity.Object, "");
 
             entity.Reset();
             personAdapter.FirstName = "2";
 
-            entity.Verify(e => e.SetNewFieldValue(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            entity.Verify(e => e.SetNewFieldValue("FirstName", It.IsAny<string>()), Times.Once);
         }
     }
 }
