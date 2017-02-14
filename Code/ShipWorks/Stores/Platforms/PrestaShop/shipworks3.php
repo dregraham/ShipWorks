@@ -154,7 +154,8 @@ function checkAdminLogin()
 		$employeeCore = new EmployeeCore();
 		$employee = $employeeCore->getByEmail($username, $password, true);
 
-		if($employee) {
+		if ($employee)
+		{
 			$loginOK = true;
 		}
 	}
