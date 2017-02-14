@@ -1,13 +1,13 @@
-<?php 
+<?php
 /*
 |
-| This file and the source codes contained herein are the property 
-| of Interapptive, Inc.  Use of this file is restricted to the specific 
-| terms and conditions in the License Agreement associated with this 
+| This file and the source codes contained herein are the property
+| of Interapptive, Inc.  Use of this file is restricted to the specific
+| terms and conditions in the License Agreement associated with this
 | file.     Distribution of this file or portions of this file for uses
-| not covered by the License Agreement is not allowed without a written 
+| not covered by the License Agreement is not allowed without a written
 | agreement signed by an officer of Interapptive, Inc.
-| 
+|
 | The code contained herein may not be reproduced, copied or
 | redistributed in any form, as part of another product or otherwise.
 | Modified versions of this code may not be sold or redistributed.
@@ -17,8 +17,8 @@
 |
  */
 
-define('REQUIRE_SECURE', FALSE);
-$moduleVersion = "3.10.0.1";
+define('REQUIRE_SECURE', TRUE);
+$moduleVersion = "5.10.0.0";
 $schemaVersion = "1.1.0";
 
 require'config/config.inc.php';
@@ -34,7 +34,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 
 // HTTP/1.0
-header("Pragma: no-cache");     
+header("Pragma: no-cache");
 
 // write xml documenta declaration
 function writeXmlDeclaration()
@@ -52,7 +52,7 @@ function writeStartTag($tag, $attributes = null)
 
 		foreach ($attributes as $name => $attribValue)
 		{
-			echo $name. '="'. htmlspecialchars($attribValue). '" ';	
+			echo $name. '="'. htmlspecialchars($attribValue). '" ';
 		}
 	}
 
@@ -80,7 +80,7 @@ function writeFullElement($tag, $value, $attributes)
 
 	foreach ($attributes as $name => $attribValue)
 	{
-		echo $name. '="'. htmlspecialchars($attribValue). '" ';	
+		echo $name. '="'. htmlspecialchars($attribValue). '" ';
 	}
 	echo '>';
 	echo htmlspecialchars($value);
@@ -90,12 +90,12 @@ function writeFullElement($tag, $value, $attributes)
 
 // Function used to output an error and quit.
 function outputError($code, $error)
-{       
+{
 	writeStartTag("Error");
 	writeElement("Code", $code);
 	writeElement("Description", $error);
 	writeCloseTag("Error");
-}       
+}
 
 $secure = false;
 try
@@ -123,7 +123,7 @@ else
 	if (checkAdminLogin())
 	{
 		$action = (isset($_REQUEST['action']) ? $_REQUEST['action'] : '');
-		switch (strtolower($action)) 
+		switch (strtolower($action))
 		{
 			case 'getmodule': Action_GetModule(); break;
 			case 'getstore': Action_GetStore(); break;
@@ -148,26 +148,15 @@ function checkAdminLogin()
 
 	if (isset($_REQUEST['username']) && isset($_REQUEST['password']))
 	{
-
 		$username = $_REQUEST['username'];
 		$password = $_REQUEST['password'];
-		
-		$sql = new DbQuery();
-		$sql->select('id_employee');
-		$sql->from('employee', 'e');
-		$sql->where("e.email = '$username'");
 
-		$employeeId = Db::getInstance()->getRow($sql);
-		
-		if($employeeId)
+		$employeeCore = new EmployeeCore();
+		$employee = $employeeCore->getByEmail($username, $password, true);
+
+		if ($employee)
 		{
-			$employeeId = $employeeId['id_employee'];
-
-			$encryptedPassword = Tools::encrypt($password);
-			if (Employee::checkPassword($employeeId, $encryptedPassword))
-			{
-				$loginOK = true;        
-			}
+			$loginOK = true;
 		}
 	}
 
@@ -198,7 +187,7 @@ function action_GetModule()
 	writeElement("ResponseEncoding", "UTF-8");
 	writeCloseTag("Communications");
 
-	writeCloseTag("Module");			
+	writeCloseTag("Module");
 }
 
 // Write store data
@@ -217,7 +206,7 @@ function Action_GetStore()
 	$country = Configuration::get('PS_SHOP_COUNTRY');
 	$phone = Configuration::get('PS_SHOP_PHONE');
 	$website = '';
-	
+
 	writeStartTag("Store");
 	writeElement("Name", $name);
 	writeElement("CompanyOrOwner", $companyOrOwner);
@@ -236,19 +225,19 @@ function Action_GetStore()
 
 // Get the count of orders greater than the start date
 function Action_GetCount()
-{         
+{
 	global $psTimeZone;
 	$start = '1970-01-01';
-	
+
 	if($_REQUEST['start'])
 	{
 		$start = $_REQUEST['start'];
 	}
-	
+
 	//Date/Time from ShipWorks in UTC
 	$start = new DateTime($start, new DateTimeZone('UTC'));
 	$start = $start->setTimezone($psTimeZone);
-	
+
 	// only get orders through 2 seconds ago
 	$end = new DateTime(date("Y-m-d\TH:i:s", time()-2), $psTimeZone);
 
@@ -260,7 +249,7 @@ function Action_GetCount()
 
 	$startSQL = $start->format("Y-m-d H:i:s");
 	$endSQL = $end->format("Y-m-d H:i:s");
-	
+
 	$sql = new DbQuery();
 	$sql->select('count(*) as count');
 	$sql->from('orders', 'o');
@@ -288,11 +277,11 @@ function Action_GetOrders()
 	{
 		$maxcount = (int)$_REQUEST['maxcount'];
 	}
-	
+
 	//Date/Time from ShipWorks in UTC
 	$start = new DateTime($start, new DateTimeZone('UTC'));
 	$start = $start->setTimezone($psTimeZone);
-	
+
 	// only get orders through 2 seconds ago
 	$end = new DateTime(date("Y-m-d\TH:i:s", time()-2), $psTimeZone);
 
@@ -301,11 +290,11 @@ function Action_GetOrders()
 	writeElement("Start", $start->format("Y-m-d\TH:i:s"));
 	writeElement("End", $end->format("Y-m-d\TH:i:s"));
 	writeElement("MaxCount", $maxcount);
-	writeCloseTag("Parameters");                                    
+	writeCloseTag("Parameters");
 
 	$startSQL = $start->format("Y-m-d H:i:s");
 	$endSQL = $end->format("Y-m-d H:i:s");
-	
+
 	$sql = new DbQuery();
 	$sql->select('id_order');
 	$sql->from('orders', 'o');
@@ -313,26 +302,26 @@ function Action_GetOrders()
 	$sql->where("o.date_upd < '$endSQL'");
 	$sql->orderBy("o.date_upd");
 	$sql->limit($maxcount,0);
-	
+
 	$orderids = Db::getInstance()->executeS($sql);
-	
+
 	writeStartTag("Orders");
 
 	$start = null;
 	$processedIds = '';
-	
+
 	foreach ($orderids as $orderid)
 	{
 		$order = new Order($orderid['id_order']);
 		$start = new DateTime($order->date_upd, $psTimeZone);
 		$startSQL = $start->format("Y-m-d H:i:s");
-		
+
 		// Add the id to the list we have processed
 		if ($processedIds != "")
 		{
 			$processedIds .= ", ";
 		}
-		
+
 		$processedIds .= $orderid['id_order'];
 		WriteOrder($order);
 	}
@@ -345,9 +334,9 @@ function Action_GetOrders()
 		$sql->from('orders', 'o');
 		$sql->where("o.date_upd = '$startSQL'");
 		$sql->where("o.id_order not in ($processedIds)");
-		
+
 		$skippedOrderids = Db::getInstance()->executeS($sql);
-		
+
 		foreach ($skippedOrderids as $orderid)
 		{
 			$order = new Order($orderid['id_order']);
@@ -360,48 +349,48 @@ function Action_GetOrders()
 
 // Output the order as xml
 function WriteOrder($order)
-{                 
+{
 	global $secure;
 	global $psTimeZone;
-	
+
 	$orderDate = new DateTime($order->date_add, $psTimeZone);
 	$orderDate = $orderDate->setTimezone(new DateTimeZone('UTC'));
-	
+
 	$lastModified = new DateTime($order->date_upd, $psTimeZone);
 	$lastModified = $lastModified->setTimezone(new DateTimeZone('UTC'));
-	
+
 	writeStartTag("Order");
 
 	writeElement("OrderNumber", $order->id);
 	writeElement("OrderDate", $orderDate->format("Y-m-d\TH:i:s"));
 	writeElement("LastModified", $lastModified->format("Y-m-d\TH:i:s"));
-	
+
 	$carrier = new Carrier($order->id_carrier);
-	
+
 	writeElement("ShippingMethod", $carrier->name);
 	writeElement("StatusCode", $order->current_state);
 
 	writeStartTag("Notes");
-	
+
 	$sql = new DbQuery();
 	$sql->select('id_message');
 	$sql->from('message', 'm');
 	$sql->where("m.id_order = '$order->id'");
-	
+
 	$messageIds = Db::getInstance()->executeS($sql);
-	
+
 	foreach($messageIds as $messageId)
 	{
 		$message = new Message($messageId['id_message']);
 		writeFullElement("Note", $message->message, array("public" => "true"));
 	}
-	
+
 	writeCloseTag("Notes");
-	
+
 	$customer = new Customer($order->id_customer);
 	$billToAddress = new Address($order->id_address_invoice);
 	$billToState = new State($billToAddress->id_state);
-	
+
 	writeStartTag("BillingAddress");
 	writeElement("FirstName", $billToAddress->firstname);
 	writeElement("LastName", $billToAddress->lastname);
@@ -416,11 +405,11 @@ function WriteOrder($order)
 	writeElement("Phone", $billToAddress->phone);
 	writeElement("Email",$customer->email);
 	writeCloseTag("BillingAddress");
-	
-	
+
+
 	$shipToAddress = new Address($order->id_address_delivery);
 	$shipToState = new State($shipToAddress->id_state);
-	
+
 	writeStartTag("ShippingAddress");
 	writeElement("FirstName", $shipToAddress->firstname);
 	writeElement("LastName", $shipToAddress->lastname);
@@ -435,7 +424,7 @@ function WriteOrder($order)
 	writeElement("Phone", $shipToAddress->phone);
 	writeElement("Email",$customer->email);
 	writeCloseTag("ShippingAddress");
-	
+
 
 	writeStartTag("Payment");
 	writeElement("Method", $order->payment);
@@ -475,7 +464,7 @@ function WriteOrderTotals($order)
 	WriteOrderTotal("Discounts", $order->total_discounts, "discount","subtract");
 
 	WriteOrderTotal("Grand Total", $order->total_paid, "total", "none");
-	
+
 	writeCloseTag("Totals");
 }
 
@@ -516,7 +505,7 @@ function Action_GetStatusCodes()
 		writeCloseTag("StatusCode");
 	}
 	writeCloseTag("StatusCodes");
-	
+
 }
 
 //Update order status
@@ -538,14 +527,14 @@ function action_UpdateStatus()
 
 	// write the params for easier diagnostics
 	writeStartTag("Parameters");
-	writeElement("Order", $orderId);	
+	writeElement("Order", $orderId);
 	writeElement("Status", $statusCode);
 	writeElement("Comments", $comments);
 	writeCloseTag("Parameters");
-	
+
 	$order = new Order($orderId);
 	$order->setCurrentState($statusCode);
-	echo "<UpdateSuccess/>";	
+	echo "<UpdateSuccess/>";
 }
 
 //Upload tracking
@@ -553,7 +542,7 @@ function action_UpdateShipment()
 {
 	$orderId = 0;
 	$trackingNumber = '';
-	
+
 
 	if (!isset($_POST['order']) || !isset($_POST['tracking']))
 	{
@@ -563,10 +552,10 @@ function action_UpdateShipment()
 
 	$orderId = $_POST['order'];
 	$trackingNumber = $_POST['tracking'];
-	
+
 	// write the params for easier diagnostics
 	writeStartTag("Parameters");
-	writeElement("OrderID", $orderId);	
+	writeElement("OrderID", $orderId);
 	writeElement("Tracking", $trackingNumber);
 	writeCloseTag("Parameters");
 
@@ -574,11 +563,11 @@ function action_UpdateShipment()
 
 	$order->shipping_number = $trackingNumber;
 	$order->update();
-	
-	$orderCarrier = new OrderCarrier($orderId);
+
+	$orderCarrier = new OrderCarrier($order->getIdOrderCarrier());
 	$orderCarrier->tracking_number = $trackingNumber;
 	$orderCarrier->update();
-	
-	echo "<UpdateSuccess/>";	
+
+	echo "<UpdateSuccess/>";
 }
 ?>
