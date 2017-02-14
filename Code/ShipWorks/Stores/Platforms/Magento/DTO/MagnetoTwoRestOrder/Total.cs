@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public double ShippingDiscountAmount { get; set; }
 
         [JsonProperty("shipping_discount_tax_compensation_amount")]
-        public double ShippingDiscountTaxCompensationAmount { get; set; }
+        public double? ShippingDiscountTaxCompensationAmount { get; set; }
 
         [JsonProperty("shipping_incl_tax")]
         public double ShippingInclTax { get; set; }

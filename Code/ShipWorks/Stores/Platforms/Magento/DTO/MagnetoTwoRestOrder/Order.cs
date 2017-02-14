@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public double BaseGrandTotal { get; set; }
 
         [JsonProperty("base_discount_tax_compensation_amount")]
-        public double BaseDiscountTaxCompensationAmount { get; set; }
+        public double? BaseDiscountTaxCompensationAmount { get; set; }
 
         [JsonProperty("base_shipping_amount")]
         public double BaseShippingAmount { get; set; }
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public double GrandTotal { get; set; }
 
         [JsonProperty("discount_tax_compensation_amount")]
-        public double DiscountTaxCompensationAmount { get; set; }
+        public double? DiscountTaxCompensationAmount { get; set; }
 
         [JsonProperty("increment_id")]
         public string IncrementId { get; set; }
@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public double ShippingDiscountAmount { get; set; }
 
         [JsonProperty("shipping_discount_tax_compensation_amount")]
-        public double ShippingDiscountTaxCompensationAmount { get; set; }
+        public double? ShippingDiscountTaxCompensationAmount { get; set; }
 
         [JsonProperty("shipping_incl_tax")]
         public double ShippingInclTax { get; set; }

@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public double BaseDiscountInvoiced { get; set; }
 
         [JsonProperty("base_discount_tax_compensation_amount")]
-        public double BaseDiscountTaxCompensationAmount { get; set; }
+        public double? BaseDiscountTaxCompensationAmount { get; set; }
 
         [JsonProperty("base_original_price")]
         public double BaseOriginalPrice { get; set; }
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public int FreeShipping { get; set; }
 
         [JsonProperty("discount_tax_compensation_amount")]
-        public double DiscountTaxCompensationAmount { get; set; }
+        public double? DiscountTaxCompensationAmount { get; set; }
 
         [JsonProperty("is_qty_decimal")]
         public int IsQtyDecimal { get; set; }
