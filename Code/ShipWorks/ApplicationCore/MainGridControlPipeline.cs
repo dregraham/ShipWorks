@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
@@ -73,8 +72,6 @@ namespace ShipWorks.ApplicationCore
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
-                    // We need to do the barcode search asynchronously so that the ContinueAfter registration starts immediately, otherwise we could
-                    // miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
@@ -100,19 +97,13 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
+        /// <remarks>
+        /// We need to do the barcode search asynchronously so that the ContinueAfter registration starts immediately,
+        /// otherwise we could miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout.
+        /// </remarks>
         public void PerformBarcodeSearchAsync(MainGridControl gridControl, string scannedBarcode)
         {
-            TaskEx.Run(() =>
-            {
-                if (gridControl?.InvokeRequired == true)
-                {
-                    gridControl.Invoke(new Action(() => gridControl?.PerformBarcodeSearch(scannedBarcode)));
-                }
-                else
-                {
-                    gridControl?.PerformBarcodeSearch(scannedBarcode);
-                }
-            });
+            gridControl.BeginInvoke((Action<string>) gridControl.PerformBarcodeSearch, scannedBarcode);
         }
 
         /// <summary>
