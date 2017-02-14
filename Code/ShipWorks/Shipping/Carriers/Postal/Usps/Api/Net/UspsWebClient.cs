@@ -489,7 +489,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             using (ISwsimV55 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
-                webService.GetRates(GetCredentials(account), rate, out rateResults);
+                rateResults = webService.GetRates(GetCredentials(account), rate);
             }
 
             List<RateV20> noConfirmationServiceRates = new List<RateV20>();
@@ -1452,22 +1452,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private UspsAccountContractType InternalGetContractType(UspsAccountEntity account)
         {
-            AccountInfo accountInfo;
-
             using (ISwsimV55 webService = CreateWebService("GetContractType"))
             {
                 CheckCertificate(webService.Url);
 
-                // Address and CustomerEmail are not returned by Express1, so do not use them.
-                Address address;
-                string email;
+                AccountInfoResult result = webService.GetAccountInfo(GetCredentials(account));
 
-                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
+                return GetUspsAccountContractType(result.AccountInfo?.RatesetType);
             }
-
-            RatesetType? rateset = accountInfo.RatesetType;
-
-            return GetUspsAccountContractType(rateset);
         }
 
         /// <summary>
