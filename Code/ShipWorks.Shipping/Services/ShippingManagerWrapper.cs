@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
-            if (shipments == null)
+            if (shipments == null || shipments.Any(s => s == null))
             {
                 return new Dictionary<ShipmentEntity, Exception>();
             }

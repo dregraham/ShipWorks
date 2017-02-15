@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Save();
 
-            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter.Shipment, false);
+            IDictionary<ShipmentEntity, Exception> errors = shippingManager.SaveShipmentToDatabase(ShipmentAdapter?.Shipment, false);
             DisplayError(errors);
         }
 
@@ -525,7 +525,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             Exception error = null;
 
-            if (errors.TryGetValue(ShipmentAdapter.Shipment, out error))
+            if (ShipmentAdapter?.Shipment != null && errors.TryGetValue(ShipmentAdapter.Shipment, out error))
             {
                 messageHelper.ShowError("The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
                                         "The shipments will be refreshed to reflect the recent changes.");
