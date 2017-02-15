@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Stores.Content.Panels.Selectors;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -14,11 +15,20 @@ namespace ShipWorks.Messaging.Messages
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection)
+        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection) :
+            this(sender, loadedSelection, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSelectionChangedMessage(object sender, IEnumerable<IOrderSelection> loadedSelection, IEntityGridRowSelector shipmentSelector)
         {
             Sender = sender;
             LoadedOrderSelection = loadedSelection.ToReadOnly();
             MessageId = Guid.NewGuid();
+            ShipmentSelector = shipmentSelector;
         }
 
         /// <summary>
@@ -35,5 +45,10 @@ namespace ShipWorks.Messaging.Messages
         /// Order IDs that have changed
         /// </summary>
         public IEnumerable<IOrderSelection> LoadedOrderSelection { get; }
+
+        /// <summary>
+        /// Shipment selector
+        /// </summary>
+        public IEntityGridRowSelector ShipmentSelector { get; }
     }
 }

@@ -107,6 +107,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         }
 
         [Fact]
+        public void SupportsRateShopping_IsFalse()
+        {
+            var testObject = mock.Create<iParcelShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.False(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_IsTrue()
         {
             mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsMultiplePackages).Returns(true));

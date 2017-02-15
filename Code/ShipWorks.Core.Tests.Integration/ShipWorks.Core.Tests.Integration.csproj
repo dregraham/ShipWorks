@@ -157,6 +157,7 @@
     <Compile Include="Shipping\CustomsControlCacheTest.cs" />
     <Compile Include="Shipping\CustomsManagerWrapperTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
+    <Compile Include="SingleScan\ScannerConfigurationRepositoryTest.cs" />
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
     <Compile Include="Stores\Content\OrderUtilityTest.cs" />
   </ItemGroup>
@@ -184,6 +185,10 @@
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj">
+      <Project>{490753AB-DA9F-4150-AAA4-651ABDBC2B2E}</Project>
+      <Name>ShipWorks.SingleScan</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>

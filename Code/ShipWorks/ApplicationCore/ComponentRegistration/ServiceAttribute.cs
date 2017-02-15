@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Builder;
 using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration
@@ -11,6 +12,7 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
     /// <summary>
     /// Register a component for implemented interfaces
     /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
     public class ServiceAttribute : Attribute
     {
@@ -27,13 +29,23 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (Type service in services.Where(ShouldRegister(component)))
                 {
-                    builder.RegisterType(component)
+                    var registrationBuilder = builder.RegisterType(component)
                         .As(service)
                         .OrderByMetadata()
                         .PreserveExistingDefaults();
+
+                    if (GetAttributes(service).Any(s => s.SingleInstance))
+                    {
+                        registrationBuilder.SingleInstance();
+                    }
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether it should be registered as a single instance.
+        /// </summary>
+        public bool SingleInstance { get; set; } = false;
 
         /// <summary>
         /// Should the component be registered for the given service
@@ -50,5 +62,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         {
             return GetCustomAttribute(type, typeof(ServiceAttribute)) != null;
         }
+
+        /// <summary>
+        /// Get a component attribute from the type
+        /// </summary>
+        private static IEnumerable<ServiceAttribute> GetAttributes(Type type) =>
+            GetCustomAttributes(type, typeof(ServiceAttribute)).OfType<ServiceAttribute>();
     }
 }

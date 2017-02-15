@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -130,9 +131,14 @@ namespace ShipWorks.Shipping.Services
 
             ShowPostProcessingMessage(clonedShipments);
 
-            return clonedShipments
+            IEnumerable<ProcessShipmentResult> results = clonedShipments
                 .Select(CreateResultFromShipment)
                 .ToList();
+
+            IMessenger messenger = lifetimeScope.Resolve<IMessenger>();
+            messenger.Send(new ShipmentsProcessedMessage(this, results));
+
+            return results;
         }
 
         /// <summary>

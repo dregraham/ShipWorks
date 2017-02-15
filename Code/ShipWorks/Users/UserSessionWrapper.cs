@@ -1,5 +1,6 @@
 ﻿using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Users
@@ -19,6 +20,11 @@ namespace ShipWorks.Users
         /// Currently logged in computer
         /// </summary>
         public ComputerEntity Computer => UserSession.Computer;
+
+        /// <summary>
+        /// Currently logged in user's settings
+        /// </summary>
+        public IUserSettingsEntity Settings => UserSession.User?.Settings;
 
         /// <summary>
         /// Logs the user in with the given credentials

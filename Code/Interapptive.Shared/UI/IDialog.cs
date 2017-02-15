@@ -51,7 +51,7 @@ namespace Interapptive.Shared.UI
         double Width { get; set; }
 
         /// <summary>
-        /// Gets or sets the load owner.
+        /// Loads the owner
         /// </summary>
         void LoadOwner(IWin32Window owner);
 

@@ -16,6 +16,7 @@ using Moq;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Core.Messaging;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -78,6 +79,7 @@ namespace ShipWorks.Shipping.Tests.Services
             context.Mock.Provide<Func<Control>>(() => new Control());
             context.Mock.Override<ITangoWebClient>();
             context.Mock.Override<IMessageHelper>();
+            context.Mock.Override<IMessenger>();
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -218,8 +220,38 @@ namespace ShipWorks.Shipping.Tests.Services
 
             Assert.False(shipment.Processed);
         }
+        
+        [Fact]
+        public async Task Process_SendsShipmentsProcessedMessage_WhenShipmentIsProcessed()
+        {
+            Modify.Entity(shipment.Other)
+                .Set(x => x.Carrier, "Foo")
+                .Set(x => x.Service, "Bar")
+                .Save();
 
-        [Theory]
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            await testObject.Process(new[] { shipment },
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
+
+            context.Mock.Mock<IMessenger>().
+                Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
+        }
+
+        [Fact]
+        public async Task Process_SendsShipmentsProcessedMessage_WhenShipmentIsNotProcessed()
+        {
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            var result = await testObject.Process(new[] { shipment },
+                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                null, null);
+
+            context.Mock.Mock<IMessenger>().
+                Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
+        }
+
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]

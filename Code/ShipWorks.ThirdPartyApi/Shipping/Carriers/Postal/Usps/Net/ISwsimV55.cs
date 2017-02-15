@@ -30,6 +30,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         string GetAccountInfo(object Item, out AccountInfo AccountInfo, out Address Address, out string CustomerEmail);
 
         /// <summary>
+        /// Get account info
+        /// </summary>
+        AccountInfoResult GetAccountInfo(Credentials credentials);
+
+        /// <summary>
         /// Get the URL
         /// </summary>
         string GetURL(object Item, UrlType URLType, string ApplicationContext, out string URL);
@@ -45,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get rates
         /// </summary>
-        string GetRates(object Item, RateV20 Rate, out RateV20[] Rates);
+        RateV20[] GetRates(Credentials account, RateV20 rate);
 
         /// <summary>
         /// Cleanse the address
@@ -96,85 +101,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         CreateIndiciumResult CreateEnvelopeIndicium(CreateEnvelopeIndiciumParameters parameters);
 
         /// <summary>
-        /// Create an envelope Indicium
-        /// </summary>
-        string CreateEnvelopeIndicium(
-            object Item,
-            ref string IntegratorTxID,
-            ref RateV20 Rate,
-            Address From,
-            Address To,
-            string CustomerID,
-            CreateIndiciumModeV1 Mode,
-            ImageType ImageType,
-            int CostCodeId,
-            bool HideFIM,
-            string RateToken,
-            string OrderId,
-            out string TrackingNumber,
-            out Guid StampsTxID,
-            out string URL,
-            out PostageBalance PostageBalance,
-            out string Mac,
-            out string PostageHash);
-
-        /// <summary>
         /// Create an Indicium
         /// </summary>
         CreateIndiciumResult CreateIndicium(CreateIndiciumParameters parameters);
-
-        /// <summary>
-        /// Create an Indicium
-        /// </summary>
-        string CreateIndicium(
-            object Item,
-            ref string IntegratorTxID,
-            ref string TrackingNumber,
-            ref RateV20 Rate,
-            Address From,
-            Address To,
-            string CustomerID,
-            CustomsV4 Customs,
-            bool SampleOnly,
-            PostageMode PostageMode,
-            ImageType ImageType,
-            EltronPrinterDPIType EltronPrinterDPIType,
-            string memo,
-            int cost_code_id,
-            bool deliveryNotification,
-            ShipmentNotification ShipmentNotification,
-            int rotationDegrees,
-            int? horizontalOffset,
-            bool horizontalOffsetSpecified,
-            int? verticalOffset,
-            bool verticalOffsetSpecified,
-            int? printDensity,
-            bool printDensitySpecified,
-            bool? printMemo,
-            bool printMemoSpecified,
-            bool? printInstructions,
-            bool printInstructionsSpecified,
-            bool requestPostageHash,
-            NonDeliveryOption nonDeliveryOption,
-            Address RedirectTo,
-            string OriginalPostageHash,
-            bool? ReturnImageData,
-            bool ReturnImageDataSpecified,
-            string InternalTransactionNumber,
-            PaperSizeV1 PaperSize,
-            LabelRecipientInfo EmailLabelTo,
-            bool PayOnPrint,
-            int? ReturnLabelExpirationDays,
-            bool ReturnLabelExpirationDaysSpecified,
-            ImageDpi ImageDpi,
-            string RateToken,
-            string OrderId,
-            out System.Guid StampsTxID,
-            out string URL,
-            out PostageBalance PostageBalance,
-            out string Mac,
-            out string PostageHash,
-            out byte[][] ImageData);
 
         /// <summary>
         /// Change the plan

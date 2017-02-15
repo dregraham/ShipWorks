@@ -3076,7 +3076,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 16, 0);
+			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 17, 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -3093,6 +3093,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "CustomerFilterLastActive", "CustomerFilterLastActive", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 13);
 			this.AddElementFieldMapping("UserSettingsEntity", "CustomerFilterExpandedFolders", "CustomerFilterExpandedFolders", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("UserSettingsEntity", "NextGlobalPostNotificationDate", "NextGlobalPostNotificationDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
+			this.AddElementFieldMapping("UserSettingsEntity", "SingleScanSettings", "SingleScanSettings", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>

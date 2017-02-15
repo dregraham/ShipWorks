@@ -110,7 +110,7 @@ namespace ShipWorks
     /// Main window of the application.
     /// </summary>
     [NDependIgnoreLongTypes]
-    public partial class MainForm : RibbonForm
+    public partial class MainForm : RibbonForm, IMainForm
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
@@ -1845,15 +1845,21 @@ namespace ShipWorks
             // Create the data structure to send to options
             ShipWorksOptionsData data = new ShipWorksOptionsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
 
-            using (ShipWorksOptions dlg = new ShipWorksOptions(data))
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                using (ShipWorksOptions dlg = new ShipWorksOptions(data, scope))
                 {
-                    ApplyDisplaySettings();
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        ApplyDisplaySettings();
 
-                    // Apply ribbon settings
-                    ribbon.ToolBarPosition = data.ShowQatBelowRibbon ? QuickAccessPosition.Below : QuickAccessPosition.Above;
-                    ribbon.Minimized = data.MinimizeRibbon;
+                        // Apply ribbon settings
+                        ribbon.ToolBarPosition = data.ShowQatBelowRibbon ?
+                            QuickAccessPosition.Below :
+                            QuickAccessPosition.Above;
+
+                        ribbon.Minimized = data.MinimizeRibbon;
+                    }
                 }
             }
         }
@@ -2340,7 +2346,7 @@ namespace ShipWorks
 
                 if (filterNode?.Filter.FilterTarget != null)
                 {
-                    target = (FilterTarget)filterNode.Filter.FilterTarget;
+                    target = (FilterTarget) filterNode.Filter.FilterTarget;
                 }
             }
 
@@ -4106,7 +4112,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The save & open popup is opening
+        /// The save and open popup is opening
         /// </summary>
         private void OnSaveOpenRibbonPopup(object sender, BeforePopupEventArgs e)
         {
@@ -4174,6 +4180,15 @@ namespace ShipWorks
         }
 
         #endregion
+
+        #endregion
+
+        #region Utility
+
+        /// <summary>
+        /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
+        /// </summary>
+        public bool AdditionalFormsOpen() => Visible && !CanFocus;
 
         #endregion
 

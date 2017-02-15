@@ -119,6 +119,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         }
 
         [Fact]
+        public void SupportsRateShopping_IsFalse()
+        {
+            var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.False(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
             var testObject = mock.Create<EndiciaShipmentAdapter>(TypedParameter.From(shipment));

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -51,7 +52,7 @@ namespace ShipWorks.Templates.Distribution
             if (swVersion.Major == 0)
             {
                 // Has to be set to the biggest number we check below
-                swVersion = new Version("3.7.0.5018");
+                swVersion = new Version("5.10.0.0000");
             }
 
             // No default templates are installed yet - we are safe to do the initial install
@@ -71,13 +72,14 @@ namespace ShipWorks.Templates.Distribution
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
 
-                // Get all templates
-                IList<TemplateEntity> templates = TemplateManager.Tree.AllTemplates;
-
-                //Check to see if the NoMoreRack Template exists Add Choxi template for version 4.0.2
-                if (templates.Any(t => t.Name == "NoMoreRack Invoice") && (installed < new Version("4.0.2.7650")))
+                // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
+                // If the same snippet is installed twice it breaks all templates in ShipWorks
+                if (installed < new Version("5.10.0.0000") &&
+                    TemplateManager.Tree.AllTemplates.None(t => t.Name == "OrderSingleScan" && t.ParentFolderID == TemplateBuiltinFolders.SnippetsFolderID))
                 {
-                    ShipWorks.Stores.Platforms.Choxi.ChoxiTemplate.InstallChoxiTemplate();
+                    InstallTemplate(@"System\Snippets\OrderSingleScan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
+                    InstallTemplate(@"Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
 
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
@@ -153,7 +155,7 @@ namespace ShipWorks.Templates.Distribution
             Directory.CreateDirectory(sourceDirectory);
 
             string sourceFile = Path.Combine(sourceDirectory, "source.zip");
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Templates.Distribution.Source.Source.zip"))
+            using (Stream stream = Assembly.Load("ShipWorks.Res").GetManifestResourceStream("ShipWorks.Res.Templates.Distribution.Source.Source.zip"))
             {
                 StreamUtility.WriteToFile(stream, sourceFile);
             }

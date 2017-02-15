@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="ShipWorks.SingleScan.ScannerRegistrationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ShipWorks.SingleScan"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             MinWidth="440"
+             MaxWidth="440"
+             MinHeight="122"
+             Background="{x:Static SystemColors.ControlBrush}"
+             DataContext="RegisterScannerDlgViewModel"
+             FontFamily="Tahoma"
+             FontSize="8.25pt"
+             d:DataContext="{d:DesignInstance local:ScannerRegistrationControlViewModel}"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ui:BooleanToVisibilityConverter x:Key="VisibleWhenTrue" />
+        <ui:BooleanToVisibilityConverter x:Key="VisibleWhenFalse" Invert="True" />
+    </UserControl.Resources>
+    <Grid Margin="12 12 13 13">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0">Please scan any barcode using the barcode scanner you want to use with ShipWorks.</TextBlock>
+        <DockPanel Grid.Row="1"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding ResultFound,
+                                        Converter={StaticResource VisibleWhenTrue}}">
+            <TextBlock FontSize="16pt" Text="Scan result:" />
+            <TextBlock Margin="8 0 0 0"
+                       FontSize="16pt"
+                       Text="{Binding ScanResult}"
+                       TextWrapping="Wrap" />
+        </DockPanel>
+
+        <ui:WaitSpinner Grid.Row="1"
+                        Background="{x:Static SystemColors.ControlBrush}"
+                        BorderThickness="0"
+                        Content="Waiting for scan"
+                        FontSize="16"
+                        Visibility="{Binding ResultFound,
+                                             Converter={StaticResource VisibleWhenFalse}}" />
+        <DockPanel Grid.Row="2"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center">
+            <Button MinWidth="75"
+                    MinHeight="25"
+                    Margin="0 0 8 0"
+                    Command="{Binding SaveScannerCommand}"
+                    Content="Confirm"
+                    IsDefault="True"
+                    IsEnabled="{Binding ResultFound}" />
+            <Button MinWidth="75"
+                    MinHeight="25"
+                    Command="{Binding CancelCommand}"
+                    Content="Cancel"
+                    IsCancel="True" />
+        </DockPanel>
+    </Grid>
+</UserControl>

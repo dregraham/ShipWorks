@@ -8,6 +8,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// </summary>
     public partial class SwsimV55 : ISwsimV55
     {
+        /// <summary>
+        /// Get account info
+        /// </summary>
+        public AccountInfoResult GetAccountInfo(Credentials credentials)
+        {
+            AccountInfo accountInfo;
+            Address address;
+            string email;
+
+            GetAccountInfo(credentials, out accountInfo, out address, out email);
+
+            return new AccountInfoResult(accountInfo, address, email);
+        }
+
+        /// <summary>
+        /// Get rates
+        /// </summary>
+        public RateV20[] GetRates(Credentials account, RateV20 rate)
+        {
+            RateV20[] rateResults;
+
+            GetRates(account, rate, out rateResults);
+
+            return rateResults;
+        }
+
+        /// <summary>
+        /// Create an envelope Indicium
+        /// </summary>
         public CreateIndiciumResult CreateEnvelopeIndicium(CreateEnvelopeIndiciumParameters parameters)
         {
             var integratorTxID = parameters.IntegratorTxID;

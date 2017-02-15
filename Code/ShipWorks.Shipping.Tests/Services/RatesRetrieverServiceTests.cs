@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,13 +24,16 @@ namespace ShipWorks.Shipping.Tests.Services
         private readonly AutoMock mock;
         private readonly IMessenger messenger;
         private readonly Mock<IRateHashingService> rateHashingService;
+        private readonly Mock<ISchedulerProvider> schedulerProvider;
 
         public RatesRetrieverServiceTests()
         {
             messenger = new TestMessenger();
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
+
+            schedulerProvider = mock.WithMockImmediateScheduler();
+
             mock.Provide<IMessenger>(messenger);
 
             rateHashingService = mock.CreateMock<IRateHashingService>();
@@ -41,8 +46,8 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public void RatesRetrievingMessageIsNotSent_WhenThrottlePeriodHasNotElapsed()
         {
-            var schedulerProvider = new TestSchedulerProvider();
-            mock.Provide<ISchedulerProvider>(schedulerProvider);
+            TestScheduler testScheduler = new TestScheduler();
+            schedulerProvider.Setup(sp => sp.Default).Returns(testScheduler);
 
             using (var testObject = mock.Create<RatesRetrieverService>())
             {
@@ -51,15 +56,15 @@ namespace ShipWorks.Shipping.Tests.Services
                 messenger.OfType<RatesRetrievedMessage>().Subscribe(x => Assert.True(false, "Message should not have been sent"));
 
                 messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
-                schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(499).Ticks);
+                testScheduler.AdvanceBy(TimeSpan.FromMilliseconds(249).Ticks);
             }
         }
 
         [Fact]
         public void RatesRetrievingMessageIsSent_OnlyAfterThrottlePeriodHasElapsed()
         {
-            var schedulerProvider = new TestSchedulerProvider();
-            mock.Provide<ISchedulerProvider>(schedulerProvider);
+            TestScheduler testScheduler = new TestScheduler();
+            schedulerProvider.Setup(sp => sp.Default).Returns(testScheduler);
 
             using (var testObject = mock.Create<RatesRetrieverService>())
             {
@@ -69,9 +74,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 messenger.OfType<RatesRetrievedMessage>().Subscribe(x => message = x);
 
                 messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
-                schedulerProvider.Default.AdvanceBy(TimeSpan.FromMilliseconds(500).Ticks);
-                schedulerProvider.TaskPool.Start();
-                schedulerProvider.WindowsFormsEventLoop.Start();
+                testScheduler.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
 
                 Assert.NotNull(message);
             }

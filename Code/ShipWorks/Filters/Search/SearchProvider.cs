@@ -9,6 +9,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -16,7 +17,6 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
-using ShipWorks.SqlServer.Filters;
 using ShipWorks.Users;
 
 namespace ShipWorks.Filters.Search
@@ -286,12 +286,13 @@ namespace ShipWorks.Filters.Search
         {
             log.DebugFormat("Search - Search thread starting.");
 
+            FilterDefinition definition = (FilterDefinition)state;
+            FilterNodeContentEntity nodeContent = null;
+
             try
             {
                 if (!isCancelRequested)
                 {
-                    FilterDefinition definition = (FilterDefinition) state;
-                    FilterNodeContentEntity nodeContent;
 
                     // Create a new filter node content entity
                     nodeContent = CreateSearchFilterNodeContentEntity(definition);
@@ -333,6 +334,16 @@ namespace ShipWorks.Filters.Search
                     // If we are not scheduled for more, then mark the search and operation as done
                     if (!isScheduled)
                     {
+                        // If we originated from a scan, ask for the search completed msg to be sent 
+                        if (definition?.FilterDefinitionSource == FilterDefinitionSourceType.Scan)
+                        {
+                            long filterNodeContentID = (nodeContent != null && searchNode.FilterNodeContentID != nodeContent.FilterNodeContentID) ?
+                                nodeContent.FilterNodeContentID :
+                                searchNode.FilterNodeContentID;
+                            
+                            FilterContentManager.QueueSingleScanFilterUpdateCompleteMessageAsync(filterNodeContentID, Messenger.Current, this);
+                        }
+
                         isSearching = false;
 
                         ApplicationBusyManager.OperationComplete(busyToken);

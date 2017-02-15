@@ -1,17 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using Divelements.SandRibbon.Rendering;
-using Divelements.SandRibbon;
-using System.Reflection;
-using System.Diagnostics;
-using ShipWorks.UI;
+using Autofac;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -22,15 +15,21 @@ namespace ShipWorks.ApplicationCore.Options
     {
         // Maps list item name to the option page that should be displayed for it
         Dictionary<string, UserControl> optionPages = new Dictionary<string, UserControl>();
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksOptions(ShipWorksOptionsData data)
+        public ShipWorksOptions(ShipWorksOptionsData data, ILifetimeScope scope)
         {
             InitializeComponent();
 
-            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data));
+            // We disable scanning when opening the options dialog. Once the dialog closes we will start it
+            // again if we need to with any new settings.
+            messenger = scope.Resolve<IMessenger>();
+            messenger.Send(new DisableSingleScanInputFilterMessage(this));
+
+            optionPages["My Settings"] = InitializeOptionPage(new OptionPagePersonal(data, this, scope));
             optionPages["Logging"] = InitializeOptionPage(new OptionPageLogging());
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
@@ -104,6 +103,14 @@ namespace ShipWorks.ApplicationCore.Options
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Start SingleScan if appropriate.
+        /// </summary>
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            messenger.Send(new EnableSingleScanInputFilterMessage(this));
         }
     }
 }

@@ -72,19 +72,18 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
-        public async Task Initialize_SendsMessage_WhenSelectionIsChanging()
+        public void Initialize_SendsMessage_WhenSelectionIsChanging()
         {
-            var waiter = new TaskCompletionSource<bool>();
+            bool result = false;
 
             testObject.InitializeForCurrentSession();
+
             messenger.OfType<OrderSelectionChangedMessage>()
-                .Subscribe(x => waiter.SetResult(true));
+                .Subscribe(x => result = true);
 
             messenger.Send(new OrderSelectionChangingMessage(this, new[] { 3L }));
 
-            bool wasCalled = await Task.WhenAny(waiter.Task, Task.Delay(5000).ContinueWith(x => false)).Result;
-
-            Assert.True(wasCalled);
+            Assert.True(result);
         }
     }
 }

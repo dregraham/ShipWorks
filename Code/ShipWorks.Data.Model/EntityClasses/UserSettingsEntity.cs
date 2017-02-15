@@ -381,6 +381,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomerFilterExpandedFolders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("NextGlobalPostNotificationDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SingleScanSettings", fieldHashtable);
 		}
 		#endregion
 
@@ -637,6 +639,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.DateTime)GetValue((int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, value); }
+		}
+
+		/// <summary> The SingleScanSettings property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."SingleScanSettings"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 SingleScanSettings
+		{
+			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.SingleScanSettings, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.SingleScanSettings, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

@@ -144,6 +144,7 @@ namespace ShipWorks.ApplicationCore
             builder.Register(c => Program.MainForm)
                 .As<Control>()
                 .As<IWin32Window>()
+                .As<IMainForm>()
                 .ExternallyOwned();
 
             builder.RegisterType<SchedulerProvider>()
@@ -182,6 +183,12 @@ namespace ShipWorks.ApplicationCore
             RegisterLicenseEnforcers(builder);
             RegisterDialogs(builder);
 
+            builder.RegisterType<User32Devices>()
+                .As<IUser32Devices>();
+
+            builder.RegisterType<User32Input>()
+                .As<IUser32Input>();
+
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
@@ -210,6 +217,7 @@ namespace ShipWorks.ApplicationCore
             ServiceAttribute.Register(builder, allAssemblies);
             KeyedComponentAttribute.Register(builder, allAssemblies);
             ResolveWithAttributesAttribute.Register(builder, allAssemblies);
+            NamedComponentAttribute.Register(builder, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()

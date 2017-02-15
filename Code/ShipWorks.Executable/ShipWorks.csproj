@@ -326,6 +326,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="fre3of9x.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
@@ -337,8 +340,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="SingleScanPanels.swe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="FontLicense.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="shipworks.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -379,6 +388,10 @@
     <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj">
+      <Project>{490753ab-da9f-4150-aaa4-651abdbc2b2e}</Project>
+      <Name>ShipWorks.SingleScan</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
       <Project>{bbf456b8-8182-4fc1-8e59-3aafae5bfa53}</Project>
@@ -439,7 +452,7 @@
     <CopyAfterBuild>true</CopyAfterBuild>
   </PropertyGroup>
   <Target Name="AfterBuild" Condition="$(CopyAfterBuild) == 'true'">
-    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config">
+    <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config; $(OutDir)*.swe; $(OutDir)*.ttf; $(OutDir)*.txt">
       <Output TaskParameter="Include" ItemName="BuildOutputs" />
     </CreateItem>
     <Message Text="Copying output to application directory:" Importance="high" />

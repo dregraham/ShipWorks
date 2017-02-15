@@ -111,6 +111,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         }
 
         [Fact]
+        public void SupportsRateShopping_IsFalse()
+        {
+            var testObject = mock.Create<UpsShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.False(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_IsTrue()
         {
             mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.SupportsMultiplePackages).Returns(true));
