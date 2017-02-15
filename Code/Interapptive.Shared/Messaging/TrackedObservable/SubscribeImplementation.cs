@@ -12,6 +12,15 @@ namespace Interapptive.Shared.Messaging.TrackedObservable
         /// Subscribe to an observable stream
         /// </summary>
         public static IDisposable Subscribe<T>(this IObservable<IMessageTracker<T>> source, object listener,
+            [CallerMemberName] string callerName = "")
+        {
+            return source.Subscribe(x => x.Subscribe(_ => { }, listener, callerName));
+        }
+
+        /// <summary>
+        /// Subscribe to an observable stream
+        /// </summary>
+        public static IDisposable Subscribe<T>(this IObservable<IMessageTracker<T>> source, object listener,
             Action<T> onNext, [CallerMemberName] string callerName = "")
         {
             return source.Subscribe(x => x.Subscribe(onNext, listener, callerName));
