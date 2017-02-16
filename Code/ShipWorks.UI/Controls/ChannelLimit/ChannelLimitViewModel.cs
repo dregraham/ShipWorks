@@ -348,7 +348,7 @@ namespace ShipWorks.UI.Controls.ChannelLimit
         /// </summary>
         private Task DeleteChannelAsync()
         {
-            return TaskEx.Run(() => license.DeleteChannel(selectedStoreType, securityContext));
+            return Task.Run(() => license.DeleteChannel(selectedStoreType, securityContext));
         }
 
         /// <summary>

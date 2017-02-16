@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Extras.Attributed;
+using Autofac.Core;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
@@ -92,8 +92,6 @@ namespace ShipWorks.ApplicationCore
         {
             Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
-
-            builder.RegisterModule<AttributedMetadataModule>();
 
             builder.RegisterSource(new OrderedRegistrationSource());
 
@@ -216,7 +214,6 @@ namespace ShipWorks.ApplicationCore
             ComponentAttribute.Register(builder, allAssemblies);
             ServiceAttribute.Register(builder, allAssemblies);
             KeyedComponentAttribute.Register(builder, allAssemblies);
-            ResolveWithAttributesAttribute.Register(builder, allAssemblies);
             NamedComponentAttribute.Register(builder, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
@@ -351,6 +348,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<TangoWebClientWrapper>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<UserSessionWrapper>()
+                .AsImplementedInterfaces()
+                .UsingConstructor();
 
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()

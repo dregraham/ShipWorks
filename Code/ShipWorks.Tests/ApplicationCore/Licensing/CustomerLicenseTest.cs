@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsType(typeof(InvalidOperationException), ex.InnerException);
+                    Assert.IsType(typeof(InvalidOperationException), ex.GetBaseException());
                 }
             }
         }

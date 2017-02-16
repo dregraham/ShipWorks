@@ -41,7 +41,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         {
             DeviceListener.DeviceChanged += OnDeviceListenerDeviceChanged;
 
-            TaskEx.Run(() =>
+            Task.Run(() =>
             {
                 SetUsbScale();
                 DeviceListener.Start();
@@ -116,7 +116,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// <summary>
         /// Read from any attached scale that can be found
         /// </summary>
-        public static Task<ScaleReadResult> ReadScale() => TaskEx.Run(() => ReadScale(false));
+        public static Task<ScaleReadResult> ReadScale() => Task.Run(() => ReadScale(false));
 
         /// <summary>
         /// Read from any attached scale that can be found

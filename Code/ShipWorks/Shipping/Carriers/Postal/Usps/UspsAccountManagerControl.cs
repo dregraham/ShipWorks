@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private async void AsyncRefreshGlobalPostStatus()
         {
-            await TaskEx.Run(() =>
+            await Task.Run(() =>
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {

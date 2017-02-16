@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Loading
                 Task<bool> validateTask = shipmentsLoaderValidator
                     .StartTask(progressProvider, globalShipments, shipmentsToValidate);
 
-                return await TaskEx.WhenAll(loadShipmentsTask, validateTask)
+                return await Task.WhenAll(loadShipmentsTask, validateTask)
                     .ContinueWith(task => task.Result.Any(x => x));
             }
         }

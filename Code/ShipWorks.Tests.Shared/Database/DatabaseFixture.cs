@@ -1,4 +1,10 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
 using Moq;
@@ -16,12 +22,6 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using SQL.LocalDB.Test;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -178,7 +178,9 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
                 .As<Control>()
                 .As<IWin32Window>()
                 .ExternallyOwned();
+#pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(mock.Container);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>

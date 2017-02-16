@@ -129,7 +129,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                 }
             }
 
-            return TaskEx.FromResult(true);
+            return Task.FromResult(true);
         }
     }
 }

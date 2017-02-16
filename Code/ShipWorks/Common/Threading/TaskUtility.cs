@@ -10,7 +10,7 @@ namespace ShipWorks.Core.Common.Threading
         /// <summary>
         /// Completed task that can be used wherever asynchrony is not needed
         /// </summary>
-        public static readonly Task CompletedTask = TaskEx.FromResult(false);
+        public static readonly Task CompletedTask = Task.FromResult(false);
 
         /// <summary>
         /// Make an awaitable Task fire-and-forget
