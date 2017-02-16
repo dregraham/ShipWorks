@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using System.IO;
+using HtmlAgilityPack;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Templates.Processing
@@ -47,7 +47,7 @@ namespace ShipWorks.Templates.Processing
         /// </summary>
         public string Process(string html, Action<HtmlAttribute, Uri, string> imageHandler)
         {
-            HtmlAgilityDocument agilityDoc = new HtmlAgilityDocument();
+            HtmlDocument agilityDoc = new HtmlDocument();
             agilityDoc.LoadHtml(html);
 
             // First remove the base tag that references our resource path.  We won't need it anymore since we are localizing the images.
