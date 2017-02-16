@@ -1,59 +1,52 @@
-//----------------------------------------------------------------
-// Header section to make this work in ISTool
-//----------------------------------------------------------------
-#ifdef EXCLUDE
-[Setup]
-
-[_ISTool]
-EnableISX=true
+// File Gaurds
+#ifndef KB2468871DOWNLOAD_ISS
+#define KB2468871DOWNLOAD_ISS
 
 [Code]
-#endif
+#define DwinsHs_Data_Buffer_Length 16384
 
-// File Gaurds
-#ifndef KBDOWNLOAD_ISS
-#define KBDOWNLOAD_ISS
-
-//----------------------------------------------------------------
-// Includes
-//----------------------------------------------------------------
-#include "DotNet.iss"
 #include "KB2468871.iss"
+#include "dwinshs.iss"
 
-//----------------------------------------------------------------
-// Attempts to download KB2468871 from the internet
-//----------------------------------------------------------------
-function DownloadKB2468871(CurPage: Integer): Boolean;
 var
-	hWnd: Integer;
-	Success: Integer;
+  KB_DownloadIndicator: TNewProgressBar;
+  KB_BackClicked: Boolean;
+  KB_SizeLabel: TLabel;
+  KB_Megabyte: extended;
+
+//----------------------------------------------------------------
+// Called when each block of the download is read
+//----------------------------------------------------------------
+function OnKBRead(URL, Agent: String; Method: TReadMethod; Index, TotalSize, ReadSize,
+  CurrentSize: {#BIG_INT}; var ReadStr: String): Boolean;
 begin
-	// They do, so  setup the download
-	isxdl_ClearFiles();
-	isxdl_SetOption('title','Setup - Downloading update for Microsoft .NET Framework ' + GetSupportedDotNetVersion() + '...');
-	isxdl_SetOption('noftpsize','false');
-	isxdl_SetOption('aborttimeout','8');
-	hWnd := StrToInt(ExpandConstant('{wizardhwnd}'));
+  if Index = 0 then KB_DownloadIndicator.Max := TotalSize;
+  KB_DownloadIndicator.Position := ReadSize; // Update the download progress indicator
+  KB_SizeLabel.Caption := Format('%3.1f of %3.1f MB', [ReadSize / KB_Megabyte, TotalSize / KB_Megabyte]);
+  Result := not KB_BackClicked; // Determine whether download was cancelled
+end;
 
-	// Hide this window
-	ShowWindow(hWnd, SW_HIDE);
+//----------------------------------------------------------------
+// Download the .NET installer
+//----------------------------------------------------------------
+function DownloadKB2468871(CurPageID: Integer): Boolean;
+var
+  Response: String;
+  Size: {#BIG_INT};
+begin
+    // Disbale to continue before download completes
+    WizardForm.NextButton.Enabled := False;
 
-	isxdl_AddFileSize(
-		GetKB2468871DownloadURL(),
-		ExpandConstant('{tmp}\' + GetKB2468871FileName()),
-		GetKB2468871FileSize);
+    Result := DwinsHs_ReadRemoteURL(GetKB2468871DownloadURL(), 'ShipWorks_Installer', rmGet,
+      Response, Size, ExpandConstant('{tmp}') + '\' + GetKB2468871FileName(), @OnKBRead) = READ_OK;
 
-	// Try to download
-	Success := isxdl_DownloadFiles(hWnd);
+    if (not Result) then
+    	DeleteFile(ExpandConstant('{tmp}') + '\' + GetKB2468871FileName());
 
-	// Hide this window
-	ShowWindow(hWnd, SW_SHOWNORMAL);
-	BringToFrontAndRestore();
-
-	// If we didnt get it, show an error
-	if (Success = 0) then
-		ShowErrorPage(
-		    CurPage,
+    // If we didnt get it, show an error
+    if (not Result and not KB_BackClicked) then
+        ShowErrorPage(
+            CurPageID,
 		    'Setup Error',
 		    'Could not download the .NET Framework update.',
 			'Setup was unable to download the Microsoft .NET Framework update.  Please check that you have an open ' +
@@ -61,18 +54,18 @@ begin
 			    'You can also download the .NET Framework update directly from the following link.',
 			'http://www.microsoft.com/en-us/download/details.aspx?id=3556');
 
-	Result := True;
-
+    WizardForm.NextButton.Enabled := Result
 end;
 
 //----------------------------------------------------------------
-// Called to see if we should skip downloading .NET
+// Called when the back button is clicked
 //----------------------------------------------------------------
-function OnDownloadKB2468871ShouldSkipPage(Page: TWizardPage): Boolean;
+function OnDownloadKB2468871BackButtonClick(Page: TWizardPage): Boolean;
 begin
-
-  Result := not (IsKB2468871InstallRequired() and not FileExists(ExpandConstant('{tmp}\' + GetKB2468871FileName())));
-
+  // Stop to download
+  KB_BackClicked := True;
+  Result := True;
+  WizardForm.NextButton.Enabled := True;
 end;
 
 //----------------------------------------------------------------
@@ -80,9 +73,27 @@ end;
 //----------------------------------------------------------------
 function OnDownloadKB2468871NextButtonClick(Page: TWizardPage): Boolean;
 begin
-
   Result := DownloadKB2468871(Page.ID);
+end;
 
+//----------------------------------------------------------------
+// Called to see if we should skip downloading .NET
+//----------------------------------------------------------------
+function OnDownloadKB2468871ShouldSkipPage(Page: TWizardPage): Boolean;
+begin
+  Result := not (IsKB2468871InstallRequired() and not FileExists(ExpandConstant('{tmp}\' + GetKB2468871FileName())));
+end;
+
+//----------------------------------------------------------------
+// Called when the wizard page becomes active
+//----------------------------------------------------------------
+procedure OnDownloadKB2468871Activate(Page: TWizardPage);
+begin
+    // Allow to download
+	DwinsHs_CancelDownload := cdNone;
+    KB_BackClicked := False;
+    KB_DownloadIndicator.Position := 0;
+    KB_SizeLabel.Caption := '';
 end;
 
 //----------------------------------------------------------------
@@ -93,6 +104,8 @@ var
   infoLabel: TLabel;
   Page: TWizardPage;
 begin
+  KB_Megabyte := 1024.0 * 1024.0;
+
   Page := CreateCustomPage(
     PreviousPageId,
     ExpandConstant('Install Microsoft .NET Framework ' + GetSupportedDotNetVersion() + ' update'),
@@ -106,7 +119,7 @@ begin
     Caption :=
       'ShipWorks requires an update to the Microsoft .NET Framework ' + GetSupportedDotNetVersion() + ', which is not installed on your computer.' + #13 +
       '' + #13 +
-      'Click Next to download it now (19.1 MB).';
+      'Click Next to download it now (18.7 MB).';
     Left := ScaleX(0);
     Top := ScaleY(0);
     Width := ScaleX(415);
@@ -114,15 +127,36 @@ begin
     WordWrap := True;
   end;
 
+  KB_SizeLabel := TLabel.Create(Page);
+  with KB_SizeLabel do
+  begin
+    Parent := Page.Surface;
+    Caption := '';
+    Left := ScaleX(0);
+    Top := ScaleY(90);
+    Width := Page.SurfaceWidth;
+    Height := ScaleY(52);
+    Alignment := taRightJustify;
+  end;
+
+  // Create the download progress indicator
+  KB_DownloadIndicator := TNewProgressBar.Create(Page);
+  KB_DownloadIndicator.Left := ScaleX(0);
+  KB_DownloadIndicator.Top := ScaleY(67);
+  KB_DownloadIndicator.Width := Page.SurfaceWidth;
+  KB_DownloadIndicator.Height:= ScaleY(20);
+  KB_DownloadIndicator.Min := 0;
+  KB_DownloadIndicator.Parent := Page.Surface;
+
   with Page do
   begin
+    OnActivate := @OnDownloadKB2468871Activate;
     OnShouldSkipPage := @OnDownloadKB2468871ShouldSkipPage;
     OnNextButtonClick := @OnDownloadKB2468871NextButtonClick;
+    OnBackButtonClick := @OnDownloadKB2468871BackButtonClick;
   end;
 
   Result := Page.ID;
 end;
 
-
-// File Gaurds
 #endif

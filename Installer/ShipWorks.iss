@@ -34,7 +34,7 @@ AppMutex={{AX70DA71-2A39-4f8c-8F97-7F5348493F57}
 DefaultDirName={pf}\ShipWorks
 DefaultGroupName=ShipWorks
 LicenseFile=License.rtf
-MinVersion=4.0.950,4.0.1381
+MinVersion=5
 PrivilegesRequired=none
 DisableStartupPrompt=true
 AllowRootDirectory=false
@@ -43,6 +43,7 @@ ShowComponentSizes=false
 WizardImageFile=WizardLarge.bmp
 WizardImageBackColor=clWhite
 UninstallDisplayIcon={app}\ShipWorks.exe
+UsePreviousLanguage=no
 AppID={code:GetAppID}
 UninstallFilesDir={app}\Uninstall
 WizardSmallImageFile=WizardSmall.bmp
@@ -57,7 +58,7 @@ VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2013
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2017
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
 
@@ -82,7 +83,6 @@ Type: files; Name: {app}\Microsoft.Web.Services2.dll
 Type: files; Name: {app}\eBay.SDK.dll
 
 [Files]
-Source: isxdl.dll; DestDir: {tmp}; Flags: dontcopy
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion
@@ -287,10 +287,6 @@ begin
         then begin
             VersionMajor := (VersionMS shr 16) and $ffff;
             VersionMinor := VersionMS and $ffff;
-
-           // MsgBox(IntToStr(VersionMajor) + ' ' + IntToStr(VersionMinor),
-           //				    mbConfirmation,
-           //				    MB_OKCANCEL)
 
             if (
                 (VersionMajor > 3) or
