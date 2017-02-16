@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     /// <summary>
     /// Process shipments one at a time
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     public class SerialProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
         private readonly ShipmentPreparationStep prepareShipmentTask;
