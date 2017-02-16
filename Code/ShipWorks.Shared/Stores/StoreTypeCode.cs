@@ -366,6 +366,11 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("odbc")]
         Odbc = 70,
 
+        [Description("SellerCloud")]
+        [StoreTypeIdentity("SELLERCLOUD", "SCD")]
+        [StoreTypeIcon("sellercloud")]
+        SellerCloud = 73,
+
         [Description("InfiPlex")]
         [StoreTypeIdentity("INFIPLEX", "IPX")]
         [StoreTypeIcon("infiplex")]

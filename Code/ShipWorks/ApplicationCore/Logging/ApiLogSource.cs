@@ -122,6 +122,7 @@ namespace ShipWorks.ApplicationCore.Logging
         [ApiPrivateLogSource]
         FedExFims,
         Odbc,
+        SellerCloud,
         InfiPlex
     }
 }
