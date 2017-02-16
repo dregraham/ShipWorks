@@ -9,8 +9,5 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("option_value")]
         public string OptionValue { get; set; }
-
-        [JsonProperty("extension_attributes")]
-        public ExtensionAttributes ExtensionAttributes { get; set; }
     }
 }

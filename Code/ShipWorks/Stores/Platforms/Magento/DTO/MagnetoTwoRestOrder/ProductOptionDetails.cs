@@ -12,8 +12,5 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("title")]
         public string Title { get; set; }
-
-        [JsonProperty("price")]
-        public decimal Price { get; set; }
     }
 }
