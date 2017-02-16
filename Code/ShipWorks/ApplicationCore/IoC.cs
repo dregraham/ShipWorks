@@ -220,7 +220,9 @@ namespace ShipWorks.ApplicationCore
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return container;
         }
