@@ -61,6 +61,9 @@ VersionInfoTextVersion=ShipWorks® {#= Version}
 VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2017
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
+DisableDirPage=no
+DisableProgramGroupPage=no
+
 
 [InstallDelete]
 Type: files; Name: {app}\ShipWorks.chm
