@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Sql;
 using System.Linq;
-using System.Text;
 using Microsoft.Win32;
-using System.Runtime.InteropServices;
 using Interapptive.Shared.Utility;
 using log4net;
 using Interapptive.Shared;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Win32;
-using System.Text.RegularExpressions;
 using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
 
@@ -314,41 +312,20 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// </summary>
         public static string[] GetRunningSqlServers()
         {
-            // Will get the input through p/invoke
-            StringBuilder servers = new StringBuilder(5000);
+            SqlDataSourceEnumerator sqlDataSourceEnumerator = SqlDataSourceEnumerator.Instance;
+            DataTable table = sqlDataSourceEnumerator.GetDataSources();
 
-            // The final result set
-            string[] serverList = new string[0];
-
-            // P/Invoke
-            if (SqlEnumServers(servers, servers.MaxCapacity))
-            {
-                string[] rawList = servers.ToString().Split('\n');
-
-                // Create the server list
-                serverList = new string[rawList.Length];
-
-                // Copy them all in, extracting only the server and instance name
-                for (int i = 0; i < rawList.Length; i++)
+            IEnumerable<string> servers = table
+                .Rows
+                .Cast<DataRow>()
+                .Where(dr => !string.IsNullOrWhiteSpace(dr["ServerName"]?.ToString()))
+                .Select(dr =>
                 {
-                    string server = rawList[i];
+                    string backSlash = string.IsNullOrWhiteSpace(dr["InstanceName"]?.ToString()) ? string.Empty : @"\";
+                    return $"{dr["ServerName"]}{backSlash}{dr["InstanceName"]}";
+                });
 
-                    if (server.IndexOf(";") != -1)
-                    {
-                        serverList[i] = server.Substring(0, server.IndexOf(";"));
-                    }
-                    else
-                    {
-                        serverList[i] = server;
-                    }
-                }
-            }
-
-            return serverList;
+            return servers.OrderBy(a => a).ToArray();
         }
-
-        [DllImport("ShipWorks.Native.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SqlEnumServers(StringBuilder servers, int maxCount);
     }
 }
