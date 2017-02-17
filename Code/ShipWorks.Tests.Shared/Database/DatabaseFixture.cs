@@ -162,6 +162,8 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
 
+            ShipWorksSession.Initialize(Guid.NewGuid());
+
             return new DataContext(mock, context.Item1, context.Item2);
         }
 

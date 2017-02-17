@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -25,5 +21,10 @@ namespace ShipWorks.Shipping.Insurance
         /// Show the InsuranceBenefitsDlg and save values if necessary
         /// </summary>
         void ShowInsuranceBenefitsDlg(ShipmentEntity shipment, InsuranceCost insuranceCost);
+
+        /// <summary>
+        /// Validate the given shipment
+        /// </summary>
+        void ValidateShipment(ShipmentEntity shipment);
     }
 }

@@ -180,14 +180,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Create the setup wizard used for setting up the shipment type
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new FedExSetupWizard();
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle FedEx shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -252,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Ensures that the FedEx specific data for the shipment is loaded.  If the data already exists, nothing is done.  It is not refreshed.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "FedEx", typeof(FedExShipmentEntity), refreshIfPresent);
 
@@ -819,7 +811,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             RedistributeContentWeight(shipment);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             // Consider the shipment insured of any package is insured
             shipment.Insurance = shipment.FedEx.Packages.Any(p => p.Insurance);
@@ -1048,15 +1040,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override ReturnsControlBase CreateReturnsControl()
         {
             return new FedExReturnsControl();
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new FedExShipmentProcessingSynchronizer();
-            // Okay to "new up" the shipping clerk here, as this class is the root consumer
         }
 
         /// <summary>

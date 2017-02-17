@@ -115,6 +115,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
+        public void SupportsRateShopping_IsTrue()
+        {
+            shipment.Postal.Usps.RateShop = true;
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.True(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
+        public void SupportsRateShopping_IsFalse()
+        {
+            shipment.Postal.Usps.RateShop = false;
+            var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.False(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
             var testObject = mock.Create<UspsShipmentAdapter>(TypedParameter.From(shipment));

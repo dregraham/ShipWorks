@@ -181,7 +181,7 @@
     <Compile Include="MessageHandlers\IOrderSelectionChangedHandler.cs" />
     <Compile Include="MessageHandlers\OrderSelectionChangedHandler.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\IRatingPanelGlobalPipeline.cs" />
-    <Compile Include="RatingPanel\ObservableRegistrations\OpenShippingDialogPipeline.cs" />
+    <Compile Include="RatingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\RatesRetrievedPipeline.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\ShipmentChangedPipeline.cs" />
@@ -224,6 +224,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\SaveAfterAddressValidationPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentSelectionChangedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentsPanelVisibleChangedPipeline.cs" />

@@ -33,6 +33,7 @@ using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
+using ShipWorks.Stores.Content.Panels.Selectors;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -47,6 +48,8 @@ namespace ShipWorks.Stores.Content.Panels
 
         private OrderEntity loadedOrder;
         private bool isThisPanelVisible;
+        private bool isRatingPanelVisible;
+        private IEnumerable<long> selectedShipments;
 
         /// <summary>
         /// Constructor
@@ -65,8 +68,8 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Default shipment selection
         /// </summary>
-        public IEnumerable<long> DefaultShipmentSelection =>
-            EntityKeys.OrderByDescending(x => x).Take(1);
+        public IEntityGridRowSelector DefaultShipmentSelection =>
+            EntityGridRowSelector.SpecificEntities(EntityKeys.OrderByDescending(x => x).Take(1));
 
         /// <summary>
         /// Initialization
@@ -93,22 +96,31 @@ namespace ShipWorks.Stores.Content.Panels
                 .Do(_ => Program.MainForm.ForceHeartbeat())
                 .Subscribe(_ => ReloadContent());
 
+            messenger.OfType<OrderSelectionChangingMessage>()
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Do(_ => entityGrid.SelectRows(Enumerable.Empty<long>()))
+                .Subscribe();
+
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(x => ratesControl.Visible = true)
+                .Do(x => ratesControl.Visible = !isRatingPanelVisible)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
-                .Do(x => SelectShipmentRows(isThisPanelVisible ? x.SelectedShipments : DefaultShipmentSelection))
+                .Do(x => SelectShipmentRows(isThisPanelVisible ?
+                    x.ShipmentSelector ?? EntityGridRowSelector.SpecificEntities(selectedShipments) :
+                    DefaultShipmentSelection))
+                .Do(_ => selectedShipments = Enumerable.Empty<long>())
                 .Subscribe();
 
             // So that we don't show UPS rates with other rates, we hide the rate control when opening the shipping dialog
             // (Scenario: Shipments panel could be showing FedEx rates, opening ship dlg, switch to UPS, move ship dlg and see rates
             //  for both UPS and FedEx at the same time)
-            messenger.OfType<OpenShippingDialogMessage>()
+            messenger.OfType<ShippingDialogOpeningMessage>()
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(_ =>
                 {
                     ratesControl.Visible = false;
+                    selectedShipments = entityGrid.Selection.Keys.ToReadOnly();
                 });
 
             HandleRatingPanelToggle(messenger);
@@ -123,6 +135,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsShipmentsPanel(x.Panel))
+                .Do(_ => SelectShipmentRows(DefaultShipmentSelection))
                 .Subscribe(_ => isThisPanelVisible = true);
 
             messenger.OfType<PanelHiddenMessage>()
@@ -145,42 +158,25 @@ namespace ShipWorks.Stores.Content.Panels
         {
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
-                .Subscribe(_ => ratesControl.Visible = false);
+                .Do(x => isRatingPanelVisible = true)
+                .Subscribe(_ => ratesControl.Visible = !isRatingPanelVisible);
 
             messenger.OfType<PanelHiddenMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
+                .Do(x => isRatingPanelVisible = false)
                 .Subscribe(_ =>
                 {
-                    ratesControl.Visible = true;
+                    ratesControl.Visible = !isRatingPanelVisible;
                     RefreshSelectedShipments();
                 });
         }
 
         /// <summary>
-        /// Select the first row, which should be the first shipment
+        /// Select the required shipment rows
         /// </summary>
-        private void SelectShipmentRows(IEnumerable<long> shipmentsToSelect)
+        private void SelectShipmentRows(IEntityGridRowSelector shipmentsToSelect)
         {
-            if (shipmentsToSelect.Any())
-            {
-                entityGrid.SelectRows(shipmentsToSelect);
-                return;
-            }
-
-            SelectFirstRow();
-        }
-
-        /// <summary>
-        /// Select the first row in the list
-        /// </summary>
-        private void SelectFirstRow()
-        {
-            long? firstKey = entityGrid.EntityGateway?.GetKeyFromRow(0);
-
-            if (firstKey.HasValue)
-            {
-                entityGrid.SelectRows(new[] { firstKey.Value });
-            }
+            shipmentsToSelect.Select(entityGrid);
         }
 
         /// <summary>
@@ -338,7 +334,6 @@ namespace ShipWorks.Stores.Content.Panels
                 await ValidatedAddressManager.ValidateShipmentAsync(shipment, new AddressValidator());
 
                 Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
-                Messenger.Current.Send(new OrderSelectionChangingMessage(this, new[] { shipment.OrderID }));
             }
             catch (SqlForeignKeyException)
             {

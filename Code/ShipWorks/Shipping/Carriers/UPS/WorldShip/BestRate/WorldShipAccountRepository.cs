@@ -1,10 +1,12 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate
 {
     /// <summary>
     /// Implementation of ICarrierAccountRepository for WorldShip.
     /// </summary>
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.UpsWorldShip)]
     public class WorldShipAccountRepository : UpsAccountRepository
     {
         /// <summary>

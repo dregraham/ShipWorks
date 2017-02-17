@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     // Disregard the counter rate brokers
                     IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment);
-                    if (broker.HasAccounts && !broker.IsCounterRate)
+                    if (broker.HasAccounts)
                     {
                         brokers.Add(broker);
                     }

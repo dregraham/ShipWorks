@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal.Other;
@@ -28,19 +27,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
             builder.RegisterType<OtherServiceControl>()
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Other);
 
-            builder.RegisterType<OtherShipmentProcessingSynchronizer>()
-                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Other)
-                .SingleInstance();
-
             builder.RegisterType<OtherSetupWizard>()
                 .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Other);
 
             builder.RegisterType<OtherProfileControl>()
                 .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Other);
-
-            builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Other)
-                .SingleInstance();
 
             builder.RegisterType<OtherShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Other)
@@ -49,7 +40,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
             builder.RegisterType<NullShipmentPackageTypesBuilder>()
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Other)
                 .SingleInstance();
-				
+
             builder.RegisterType<OtherLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.Other);
 

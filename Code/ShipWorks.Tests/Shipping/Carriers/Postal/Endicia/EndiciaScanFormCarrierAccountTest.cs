@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xunit;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.ScanForms;
+﻿using System.Collections.Generic;
+using log4net;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using log4net;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.ScanForms;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 {
@@ -38,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             logger = new Mock<ILog>();
             logger
                 .Setup(l => l.Error(It.IsAny<string>()))
-                .Callback((object errorMessage) => errorMessageFromLogger = (string)errorMessage);
+                .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
 
             Mock<IScanFormShipmentTypeName> scanFormShipmentTypeName = new Mock<IScanFormShipmentTypeName>();
             scanFormShipmentTypeName
@@ -69,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [Fact]
         public void GetGateway_ReturnsEndiciaScanFormGateway()
         {
-            Assert.IsAssignableFrom<EndiciaScanFormGateway>(testObject.GetGateway());
+            Assert.IsAssignableFrom<EndiciaScanFormGateway>(testObject.GetGateway(null));
         }
 
         [Fact]
@@ -104,8 +101,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
                 (
                     r => r.GetShipmentIDs(It.Is<RelationPredicateBucket>
                     (
-                        // Would be nice to test the actual predicate expressions, but I was unable 
-                        // to determine how to access the predicate expressions that line up with 
+                        // Would be nice to test the actual predicate expressions, but I was unable
+                        // to determine how to access the predicate expressions that line up with
                         // those built in the method being tested
                         b => b.Relations.Count == 2
                     )

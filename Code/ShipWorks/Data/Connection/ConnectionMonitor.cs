@@ -466,7 +466,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private static bool IsDbConnectionException(Exception ex)
         {
-            int[] connectionErrors = new int[] {
+            int[] connectionErrors = {
                 232,   // Win32: The pipe is being closed.
                 233,   // Win32: No process is on the other end of the pipe.
                 10054, // Win32: An existing connection was forcibly closed by the remote host.

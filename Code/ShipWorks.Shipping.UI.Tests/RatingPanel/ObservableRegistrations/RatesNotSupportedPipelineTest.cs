@@ -4,7 +4,6 @@ using System.Reactive.Subjects;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.UI.RatingPanel;
@@ -31,10 +30,10 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
         public void Register_CallsSetRateResults_WhenOpenShippingDialogMessageReceived()
         {
             var viewModel = mock.CreateMock<RatingPanelViewModel>();
-            var testObject = mock.Create<OpenShippingDialogPipeline>();
+            var testObject = mock.Create<ShippingDialogOpeningPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.OnNext(new ShippingDialogOpeningMessage(this));
 
             viewModel.Verify(x => x.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>()));
         }

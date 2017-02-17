@@ -5,6 +5,9 @@ using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Shipping.ShipSense
 {
+    /// <summary>
+    /// Acts as the data source for ShipSense: knowledge base entries can be saved and fetched.
+    /// </summary>
     public interface IKnowledgebase
     {
         /// <summary>
@@ -40,12 +43,18 @@ namespace ShipWorks.Shipping.ShipSense
         bool IsOverwritten(ShipmentEntity shipment);
 
         /// <summary>
-        /// Resets/truncates the underlying knowledge base data on a background thread causing 
+        /// Resets/truncates the underlying knowledge base data on a background thread causing
         /// the knowledge base to be reset as if it were new.
         /// </summary>
         /// <param name="initiatedBy">The initiated by.</param>
         /// <param name="progressReporter">The progress reporter.</param>
         /// <returns>The Task that is executing the operation.</returns>
         Task ResetAsync(UserEntity initiatedBy, IProgressReporter progressReporter);
+
+        /// <summary>
+        /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught
+        /// and logged and wrapped in a ShippingException.
+        /// </summary>
+        void LogShipment(ShipmentType shipmentType, ShipmentEntity shipment);
     }
 }

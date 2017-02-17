@@ -18,5 +18,10 @@ namespace ShipWorks.Data
         /// Gets the entity with the given entity ID
         /// </summary>
         EntityBase2 GetEntity(long entityID, bool fetchIfMissing = true);
+
+        /// <summary>
+        /// Gets the order number complete relating to the given orderID. Returns empty string if order not found.
+        /// </summary>
+        string GetOrderNumberComplete(long orderID);
     }
 }

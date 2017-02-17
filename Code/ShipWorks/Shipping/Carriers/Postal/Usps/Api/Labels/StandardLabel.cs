@@ -1,12 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
@@ -33,12 +29,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <summary>
         /// Saves the label to the underlying data source.
         /// </summary>
-        public override void Save()
+        public override void Save(IDataResourceManager dataResourceManager)
         {
             using (MemoryStream imageStream = new MemoryStream())
             {
                 originalImage.Save(imageStream, ImageFormat.Png);
-                DataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name);
+                dataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name);
             }
         }
 

@@ -1,3 +1,4 @@
+using Interapptive.Shared.Utility;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -44,7 +45,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(string first, string middle, string last, string unparsed, PersonNameParseStatus parseStatus)
+        private PersonName(string first, string middle, string last, string unparsed, PersonNameParseStatus parseStatus)
         {
             this.first = first;
             this.middle = middle;
@@ -56,20 +57,41 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(string first, string middle, string last)
-            : this(first, middle, last, "", PersonNameParseStatus.Simple)
+        public PersonName(string first, string middle, string last) : 
+            this(first, middle, last, "", PersonNameParseStatus.Simple)
         {
+            PersonName parsedPersonName = Create(first, middle, last);
+            ParseStatus = parsedPersonName.ParseStatus;
+            UnparsedName = parsedPersonName.UnparsedName;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PersonName(PersonAdapter person)
-            : this(person.FirstName, person.MiddleName, person.LastName, person.UnparsedName, person.NameParseStatus)
+        public PersonName(PersonAdapter person) : 
+            this(person.FirstName, person.MiddleName, person.LastName, person.UnparsedName, person.NameParseStatus)
         {
+            PersonName parsedPersonName = string.IsNullOrWhiteSpace(person.UnparsedName) ?
+                Create(person.FirstName, person.MiddleName, person.LastName) :
+                Parse(person.UnparsedName);
 
+            First = parsedPersonName.First;
+            Middle = parsedPersonName.Middle;
+            Last = parsedPersonName.Last;
+            Prefix = parsedPersonName.Prefix;
+            Suffix = parsedPersonName.Suffix;
+            ParseStatus = parsedPersonName.ParseStatus;
+            UnparsedName = parsedPersonName.UnparsedName;
         }
 
+        /// <summary>
+        /// Creates a PersonName by parsing the combination of first, middle, and last.
+        /// </summary>
+        private static PersonName Create(string first, string middle, string last)
+        {
+            return Parse($"{first.Trim()}{StringUtility.SpaceIfNotNullOrWhiteSpace(middle)}{middle.Trim()}{StringUtility.SpaceIfNotNullOrWhiteSpace(last)}{last.Trim()}");
+        }
+        
         /// <summary>
         /// Returns the number of words in the input string
         /// </summary>

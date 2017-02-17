@@ -9540,6 +9540,8 @@ namespace ShipWorks.Data.Model
 		CustomerFilterExpandedFolders,
 		///<summary>NextGlobalPostNotificationDate. </summary>
 		NextGlobalPostNotificationDate,
+		///<summary>SingleScanSettings. </summary>
+		SingleScanSettings,
 		/// <summary></summary>
 		AmountOfFields
 	}

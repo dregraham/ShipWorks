@@ -6,7 +6,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private readonly IExpress1PurchasePostageDlg postageDialog;
 
         private readonly Express1Registration registration;
-        private readonly IEnumerable<IEntity2> existingExpress1Accounts;
+        private readonly ICarrierAccountRetriever accountRetriever;
         private int initialPersonCreditCardHeight;
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
         /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
-        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts)
+        public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, ICarrierAccountRetriever accountRetriever)
         {
             if (postageDialog == null)
             {
@@ -89,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             cardExpireYear.SelectedIndex = 0;
 
             this.ForceAccountOnly = false;
-            this.existingExpress1Accounts = existingExpress1Accounts ?? new List<IEntity2>();
+            this.accountRetriever = accountRetriever;
         }
 
         /// <summary>
@@ -141,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             else
             {
                 // if there are no shippers yet, then remove the account page
-                if (!existingExpress1Accounts.Any())
+                if (accountRetriever.AccountsReadOnly.None())
                 {
                     Pages.Remove(wizardPageAccountList);
                 }
@@ -311,15 +310,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             personCreditCard.SaveToEntity(billingAddress);
 
             Express1PaymentInfo paymentInfo = new Express1PaymentInfo(Express1PaymentType.CreditCard)
-                {
-                    CreditCardNameOnCard = registration.Name,
-                    CreditCardBillingAddress = billingAddress,
-                    CreditCardType = (Express1CreditCardType)cardType.SelectedValue,
-                    CreditCardAccountNumber = cardNumber.Text.Trim(),
-                    CreditCardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1),
-                    AchAccountNumber = string.Empty,
-                    AchRoutingId = string.Empty
-                };
+            {
+                CreditCardNameOnCard = registration.Name,
+                CreditCardBillingAddress = billingAddress,
+                CreditCardType = (Express1CreditCardType) cardType.SelectedValue,
+                CreditCardAccountNumber = cardNumber.Text.Trim(),
+                CreditCardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1),
+                AchAccountNumber = string.Empty,
+                AchRoutingId = string.Empty
+            };
 
             return paymentInfo;
         }

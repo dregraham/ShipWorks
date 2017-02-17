@@ -14,15 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         private readonly IRegistrationPromotion promotion;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UspsRegistration"/> class.
-        /// </summary>
-        /// <param name="validator">The validator.</param>
-        /// <param name="gateway">The gateway.</param>
-        public UspsRegistration(IUspsRegistrationValidator validator, IUspsRegistrationGateway gateway)
-            : this(validator, gateway, new RegistrationPromotionFactory().CreateRegistrationPromotion())
-        { }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UspsRegistration" /> class.
         /// </summary>
         /// <param name="validator">The validator.</param>
@@ -40,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
             Email = string.Empty;
 
             UsageType = new AccountType();
-            
+
             FirstCodewordType = new CodewordType();
             FirstCodewordValue = string.Empty;
 
@@ -50,20 +41,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
             PhysicalAddress = new Address();
             MailingAddress = new Address();
 
-            // Grab the version 4 IP address of the client machine, so the consumer doesn't 
+            // Grab the version 4 IP address of the client machine, so the consumer doesn't
             // have to explicitly set the IP address if it doesn't have reason to
             MachineInfo = new MachineInfo();
 
             try
             {
                 NetworkUtility networkUtility = new NetworkUtility();
-                MachineInfo.IPAddress = networkUtility.GetIPAddress();                
+                MachineInfo.IPAddress = networkUtility.GetIPAddress();
             }
             catch (NetworkException ex)
             {
                 throw new UspsRegistrationException("USPS requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.", ex);
             }
-            
+
             CreditCard = new CreditCard();
             AchAccount = new AchAccount();
         }
@@ -87,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the intended usage of the the account. 
+        /// Gets or sets the intended usage of the the account.
         /// </summary>
         /// <value>The intended usage of the account.</value>
         public AccountType UsageType { get; set; }
@@ -162,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         public AchAccount AchAccount { get; set; }
 
         /// <summary>
-        /// Submits the registration to USPS 
+        /// Submits the registration to USPS
         /// </summary>
         /// <returns>Any registration validation errors that may have occurred.</returns>
         public UspsRegistrationResult Submit()

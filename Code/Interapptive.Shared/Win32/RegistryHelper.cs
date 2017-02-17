@@ -245,5 +245,16 @@ namespace Interapptive.Shared.Win32
                 key.SetValue(name, value);
             }
         }
+
+        /// <summary>
+        /// Determines if a given sub key exists 
+        /// </summary>
+        public static bool RegistrySubKeyExists(RegistryKey key, string subKeyName)
+        {
+            using (RegistryKey subKey = key.OpenSubKey(subKeyName))
+            {
+                return subKey != null;
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
+using ShipWorks.SingleScan;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.UI.Platforms.LemonStand;
 using ShipWorks.UI.ValueConverters;
@@ -26,12 +27,19 @@ namespace ShipWorks.Startup
         /// Initialize the IoC container
         /// </summary>
         public static IContainer Initialize(IContainer container) =>
-            IoC.Initialize(container,
+            IoC.Initialize(BuildRegistrations(container));
+
+        /// <summary>
+        /// Build the registrations in IoC container
+        /// </summary>
+        public static IContainer BuildRegistrations(IContainer container) =>
+            IoC.BuildRegistrations(container,
                 typeof(ShippingDialogService).Assembly,
                 typeof(ShippingModule).Assembly,
                 typeof(LemonStandStoreModule).Assembly,
                 typeof(EnumImageConverter).Assembly,
                 typeof(MagentoTwoRestClient).Assembly,
-                typeof(NoneLabelService).Assembly);
+                typeof(NoneLabelService).Assembly,
+                typeof(ScannerService).Assembly);
     }
 }

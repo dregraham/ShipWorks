@@ -8,7 +8,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Quartz.Util;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

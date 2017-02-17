@@ -144,6 +144,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             return new List<string>
             {
                 "New",
+                "New - See Order Notes",
                 "Pending",
                 "Processing", 
                 "Payment Declined",

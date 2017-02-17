@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create OnTrac specific information
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(
                 this, shipment, shipment, "OnTrac", typeof(OnTracShipmentEntity), refreshIfPresent);
@@ -222,22 +222,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 TotalWeight = shipment.TotalWeight
             };
-        }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new OnTracShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
-        /// Get new OnTracSetupWizard
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new OnTracSetupWizard();
         }
 
         /// <summary>

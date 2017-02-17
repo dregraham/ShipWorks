@@ -30,13 +30,13 @@ namespace ShipWorks.Shipping.Services
         public PersonAdapter GetOriginAddress(long originId, long orderId, long accountId, ShipmentTypeCode shipmentType)
         {
             // Other - no change.
-            if (originId == (int)ShipmentOriginSource.Other)
+            if (originId == (int) ShipmentOriginSource.Other)
             {
                 return null;
             }
 
             // Copy from the store
-            if (originId == (long)ShipmentOriginSource.Store)
+            if (originId == (long) ShipmentOriginSource.Store)
             {
                 StoreEntity store = storeManager.GetRelatedStore(orderId);
 
@@ -56,16 +56,16 @@ namespace ShipWorks.Shipping.Services
                 return source;
             }
 
-            if (originId == (long)ShipmentOriginSource.Account)
+            if (originId == (long) ShipmentOriginSource.Account)
             {
-                ICarrierAccountRetriever<ICarrierAccount> retriever = accountRetrieverFactory.Get(shipmentType);
-                ICarrierAccount account = retriever.GetAccount(accountId);
+                ICarrierAccountRetriever retriever = accountRetrieverFactory.Create(shipmentType);
+                ICarrierAccount account = retriever.GetAccountReadOnly(accountId);
                 return account?.Address;
             }
 
             // Try looking it up as ShippingOriginID
             ShippingOriginEntity origin = ShippingOriginManager.GetOrigin(originId);
-            return origin != null ? new PersonAdapter(origin, string.Empty) : null;
+            return origin?.AsPersonAdapter();
         }
     }
 }

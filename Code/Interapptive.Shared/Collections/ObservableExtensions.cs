@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Interapptive.Shared.Messaging.TrackedObservable;
 using Interapptive.Shared.Threading;
 
@@ -81,6 +83,60 @@ namespace Interapptive.Shared.Collections
             return messageStream.Window(openWindow, _ => closeStream).Merge();
         }
 
+        /// <summary>
+        /// Buffer messages until no messages have been received for a specific amount of time
+        /// </summary>
+        public static IObservable<IList<T>> BufferUntilInactive<T>(this IObservable<T> stream, TimeSpan delay, IScheduler scheduler)
+        {
+            IObservable<T> closes = stream.Throttle(delay, scheduler);
+
+            return stream.Buffer(closes);
+        }
+
+        /// <summary>
+        /// Waits for dependentObservable to receive a new message or for timeout time to pass, then returns.
+        /// </summary>
+        /// <param name="source">IObservable<TSource> for which ContinueAfter will be subscribed.</TSource></param>
+        /// <param name="dependentObservable">The IObservable for which messages will be waited.</param>
+        /// <param name="timeout">If no dependentObservable messages are received withint this timeout, ContinueAfter will return.</param>
+        /// <param name="scheduler">IScheduler to use.</param>
+        public static IObservable<TSource> ContinueAfter<TSource, TDependent>(this IObservable<TSource> source, IObservable<TDependent> dependentObservable, 
+                                                                              TimeSpan timeout, IScheduler scheduler)
+        {
+            // Merge the timer observable with the debendent observable.
+            // Timer returns a long, so to merge we need the same type, so just select some long.
+            IObservable<long> merged = Observable.Merge(
+                                dependentObservable.Select(x => long.MinValue),
+                                Observable.Timer(timeout, scheduler))
+                            .Take(1);
+
+            // Convert from the long that Timer required to the source observables that came in
+            return source.SelectMany(s => merged.Select(_ => s));
+        }
+
+        /// <summary>
+        /// Waits for dependentObservable to receive a new message or for timeout time to pass, then returns.
+        /// </summary>
+        /// <param name="source">IObservable<TSource> for which ContinueAfter will be subscribed.</TSource></param>
+        /// <param name="dependentObservable">The IObservable for which messages will be waited.</param>
+        /// <param name="timeout">If no dependentObservable messages are received withint this timeout, ContinueAfter will return.</param>
+        /// <param name="scheduler">IScheduler to use.</param>
+        /// <param name="returnFunction">Call with the source and dependent objects as parameters.  If a timeout occurs, default(TDependent) 
+        /// is returned as the dependent object.</param>
+        public static IObservable<TReturn> ContinueAfter<TSource, TDependent, TReturn>(this IObservable<TSource> source, IObservable<TDependent> dependentObservable, 
+                                                         TimeSpan timeout, IScheduler scheduler, 
+                                                         Func<TSource, TDependent, TReturn> returnFunction)
+        {
+            // Merge the timer observable with the debendent observable, returning a default TDependent if a timeout occurrs
+            IObservable<TDependent> merged = Observable.Merge(
+                                dependentObservable.Select(x => x),
+                                Observable.Timer(timeout, scheduler).Select(_ => default(TDependent)))
+                            .Take(1);
+
+            // Call the return function on the source and dependent types
+            return source.SelectMany(s => merged.Select(d => returnFunction(s, d)));
+        }
+        
         /// <summary>
         /// Gate an input stream using another stream as a signal to open the gate
         /// </summary>

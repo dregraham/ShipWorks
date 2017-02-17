@@ -28,9 +28,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.iParcel)
                 .ExternallyOwned();
 
-            builder.RegisterType<iParcelShipmentProcessingSynchronizer>()
-                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.iParcel);
-
             builder.RegisterType<iParcelShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.iParcel)
                 .SingleInstance();

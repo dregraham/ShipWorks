@@ -2,22 +2,25 @@
 
 namespace Interapptive.Shared.Utility
 {
+    /// <summary>
+    /// Create a result of an operation
+    /// </summary>
     public struct GenericResult
     {
         /// <summary>
-        /// Get a successful read result
+        /// Get a successful result
         /// </summary>
         public static GenericResult<T> FromSuccess<T>(T value) =>
             new GenericResult<T>(true, value, null);
 
         /// <summary>
-        /// Get a not found read result
+        /// Get an error result
         /// </summary>
         public static GenericResult<T> FromError<T>(string message) =>
             new GenericResult<T>(false, default(T), message);
 
         /// <summary>
-        /// Get a not found read result
+        /// Get an error result
         /// </summary>
         public static GenericResult<T> FromError<T>(string message, T value) =>
             new GenericResult<T>(false, value, message);
@@ -61,5 +64,11 @@ namespace Interapptive.Shared.Utility
         /// Whether or not the operation was a success
         /// </summary>
         public bool Success { get; }
+
+        /// <summary>
+        /// Whether or not the operation was a failure
+        /// </summary>
+        /// <remarks>This is so that we can test for failure instead of not success</remarks>
+        public bool Failure => !Success;
     }
 }

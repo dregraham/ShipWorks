@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Stores.Content.Panels.Selectors;
 
 namespace ShipWorks.Messaging.Messages
 {
@@ -15,20 +15,19 @@ namespace ShipWorks.Messaging.Messages
         /// Constructor
         /// </summary>
         public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList) :
-            this(sender, orderIdList, Enumerable.Empty<long>())
+            this(sender, orderIdList, null)
         {
-
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList, IEnumerable<long> selectedShipments)
+        public OrderSelectionChangingMessage(object sender, IEnumerable<long> orderIdList, IEntityGridRowSelector shipmentSelector)
         {
             Sender = sender;
             OrderIdList = orderIdList.ToReadOnly();
-            SelectedShipments = selectedShipments.ToReadOnly();
             MessageId = Guid.NewGuid();
+            ShipmentSelector = shipmentSelector;
         }
 
         /// <summary>
@@ -47,8 +46,8 @@ namespace ShipWorks.Messaging.Messages
         public IEnumerable<long> OrderIdList { get; }
 
         /// <summary>
-        /// Get the list of shipments to select when order is loaded
+        /// Shipment selector
         /// </summary>
-        public IEnumerable<long> SelectedShipments { get; }
+        public IEntityGridRowSelector ShipmentSelector { get; }
     }
 }

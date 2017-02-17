@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -8,6 +9,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
     /// <summary>
     /// Account repository for Express1 Usps accounts
     /// </summary>
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Express1Usps)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>), ShipmentTypeCode.Express1Usps)]
     public class Express1UspsAccountRepository : CarrierAccountRepositoryBase<UspsAccountEntity, IUspsAccountEntity>
     {
         /// <summary>
@@ -62,5 +66,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <param name="account">The account.</param>
         public override void Save(UspsAccountEntity account) =>
             UspsAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
+            shipment?.Postal?.Usps?.UspsAccountID;
     }
 }

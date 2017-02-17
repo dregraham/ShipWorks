@@ -1,23 +1,66 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers
 {
     /// <summary>
-    /// Non generic implementation of ICarrierAccountRepository
+    /// Default carrier account retriever interface
     /// </summary>
-    public interface ICarrierAccountRetriever<out T> where T : ICarrierAccount
+    public interface ICarrierAccountRetriever
     {
         /// <summary>
-        /// Returns a carrier account for the provided accountID.
+        /// Get a read only version of the specified account
         /// </summary>
-        /// <param name="accountID">The account ID for which to return an account.</param>
-        /// <returns>The matching account as IEntity2.</returns>
+        ICarrierAccount GetAccountReadOnly(long accountID);
+
+        /// <summary>
+        /// Get a read only version of the account on the given shipment
+        /// </summary>
+        ICarrierAccount GetAccountReadOnly(IShipmentEntity shipment);
+
+        /// <summary>
+        /// Get a collection of read only accounts
+        /// </summary>
+        IEnumerable<ICarrierAccount> AccountsReadOnly { get; }
+    }
+
+    /// <summary>
+    /// Generic carrier account retriever
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface ICarrierAccountRetriever<T, TInterface>
+        where T : TInterface
+        where TInterface : ICarrierAccount
+    {
+        /// <summary>
+        /// Get the specified account
+        /// </summary>
         T GetAccount(long accountID);
 
         /// <summary>
-        /// Gets the accounts as ICarrierAccounts.
+        /// Get the account on the given shipment
+        /// </summary>
+        T GetAccount(IShipmentEntity shipment);
+
+        /// <summary>
+        /// Get a collection of accounts
         /// </summary>
         IEnumerable<T> Accounts { get; }
+
+        /// <summary>
+        /// Get a read only version of the specified account
+        /// </summary>
+        TInterface GetAccountReadOnly(long accountID);
+
+        /// <summary>
+        /// Get a read only version of the account on the given shipment
+        /// </summary>
+        TInterface GetAccountReadOnly(IShipmentEntity shipment);
+
+        /// <summary>
+        /// Get a collection of read only accounts
+        /// </summary>
+        IEnumerable<TInterface> AccountsReadOnly { get; }
     }
 }

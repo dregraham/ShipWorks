@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 
@@ -43,13 +45,13 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// </summary>
         private static Func<Type, bool> IsComponent(RegistrationType registerAs)
         {
-            return type => GetAttribute(type)?.RegisterAs.HasFlag(registerAs) ?? false;
+            return type => GetAttribute(type)?.Any(x => x.RegisterAs.HasFlag(registerAs)) ?? false;
         }
 
         /// <summary>
         /// Get a component attribute from the type
         /// </summary>
-        private static ComponentAttribute GetAttribute(Type type) =>
-            GetCustomAttribute(type, typeof(ComponentAttribute)) as ComponentAttribute;
+        private static IEnumerable<ComponentAttribute> GetAttribute(Type type) =>
+            type.GetCustomAttributes(false).OfType<ComponentAttribute>();
     }
 }

@@ -13,7 +13,7 @@ namespace ShipWorks.Tests
     public sealed class ExcelDataAttribute : OdbcDataAttribute
     {
         public ExcelDataAttribute(string path, string worksheet) :
-            base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}; Extended Properties='Excel 12.0;HDR=YES;IMEX=1;';", 
+            base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}; Extended Properties='Excel 12.0;HDR=YES;IMEX=1;';",
                 $"select * from [{worksheet}$]")
         {
             Filepath = path;
@@ -24,18 +24,18 @@ namespace ShipWorks.Tests
 
         public string Worksheet { get; }
     }
-    
+
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class CsvDataAttribute : OdbcDataAttribute
     {
         public CsvDataAttribute(string path, string fileName) :
-            base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}; Extended Properties='Text;HDR=YES;FORMAT=Delimited;IMEX=1;';", 
+            base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)}; Extended Properties='Text;HDR=YES;FORMAT=Delimited;IMEX=1;';",
                 $"select * from [{fileName}#csv]")
         {
 
         }
     }
-    
+
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class OdbcDataAttribute : DataAttribute
     {

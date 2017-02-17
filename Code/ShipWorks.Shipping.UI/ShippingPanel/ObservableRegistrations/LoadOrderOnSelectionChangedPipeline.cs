@@ -46,22 +46,23 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                         viewModel.IsLoading = true;
 
                         // If the view model sent the message, it's to reload the order. So don't try saving first
-                        if (message.Sender != viewModel && message.OrderIdList?.First() != viewModel?.Shipment?.OrderID)
+                        if (message.Sender != viewModel &&
+                            message.OrderIdList?.FirstOrDefault() != viewModel?.Shipment?.OrderID)
                         {
                             viewModel.SaveToDatabase();
                         }
 
                         viewModel.AllowEditing = false;
-
                         viewModel.UnloadOrder();
                     })
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while selecting an order", ex))
-                    .Subscribe(this, _ => { }),
+                    .Subscribe(this),
                 changeHandler.ShipmentLoadedStream()
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Do(this, _ => viewModel.AllowEditing = true)
+                    .Do(this, viewModel.LoadOrder)
                     .CatchAndContinue((Exception ex) => log.Error("An error occurred while loading order selection", ex))
-                    .Subscribe(this, viewModel.LoadOrder)
+                    .Subscribe(this)
             );
         }
     }

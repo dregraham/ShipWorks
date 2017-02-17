@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     [Component]
-    [KeyedComponent(typeof(CarrierAccountRepositoryBase<IParcelAccountEntity, IIParcelAccountEntity>), ShipmentTypeCode.iParcel)]
-    [KeyedComponent(typeof(ICarrierAccountRetriever<ICarrierAccount>), ShipmentTypeCode.iParcel)]
+    [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.iParcel)]
     public class iParcelAccountRepository : CarrierAccountRepositoryBase<IParcelAccountEntity, IIParcelAccountEntity>
     {
         /// <summary>
@@ -70,5 +68,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             iParcelAccountManager.SaveAccount(account);
         }
+
+        /// <summary>
+        /// Get the account id from a given shipment
+        /// </summary>
+        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
+            shipment?.IParcel?.IParcelAccountID;
     }
 }

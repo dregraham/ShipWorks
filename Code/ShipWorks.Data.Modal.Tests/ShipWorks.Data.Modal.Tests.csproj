@@ -103,7 +103,19 @@
     <Compile Include="Custom\OrderItemEntityTest.cs" />
     <Compile Include="Custom\UpsAccountEntityTest.cs" />
     <Compile Include="Custom\UspsAccountEntityTest.cs" />
+    <Compile Include="EbayOrderEntityTest.cs" />
+    <Compile Include="FedExShipmentEntityTest.cs" />
+    <Compile Include="UspsAccountEntityTest.cs" />
+    <Compile Include="UpsAccountEntityTest.cs" />
+    <Compile Include="ShippingOriginAccountEntityTest.cs" />
+    <Compile Include="OnTracAccountEntityTest.cs" />
+    <Compile Include="IParcelAccountEntityTest.cs" />
+    <Compile Include="FedExAccountEntityTest.cs" />
+    <Compile Include="EndiciaAccountEntityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomerEntityTest.cs" />
+    <Compile Include="OrderEntityTest.cs" />
+    <Compile Include="ShipmentEntityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

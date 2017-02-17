@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,25 +14,29 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 {
     public class RegistrationPromotionFactoryTest
     {
-        MockRepository mockRepository;
+        MockRepository mock;
         Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> uspsRepository;
-        Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> uspsExpress1Repository;
-        Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> endiciaRepository;
-        Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> endiciaExpress1Repository;
+        Mock<ICarrierAccountRetriever> uspsExpress1Repository;
+        Mock<ICarrierAccountRetriever> endiciaRepository;
+        Mock<ICarrierAccountRetriever> endiciaExpress1Repository;
+        RegistrationPromotionFactory factory;
 
         public RegistrationPromotionFactoryTest()
         {
-            mockRepository = new MockRepository(MockBehavior.Loose);
-            uspsRepository = CreateEmptyRepository<UspsAccountEntity, IUspsAccountEntity>();
-            uspsExpress1Repository = CreateEmptyRepository<UspsAccountEntity, IUspsAccountEntity>();
-            endiciaRepository = CreateEmptyRepository<EndiciaAccountEntity, IEndiciaAccountEntity>();
-            endiciaExpress1Repository = CreateEmptyRepository<EndiciaAccountEntity, IEndiciaAccountEntity>();
+            mock = new MockRepository(MockBehavior.Loose);
+
+            uspsRepository = mock.Create<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
+            uspsExpress1Repository = mock.Create<ICarrierAccountRetriever>();
+            endiciaRepository = mock.Create<ICarrierAccountRetriever>();
+            endiciaExpress1Repository = mock.Create<ICarrierAccountRetriever>();
+
+            factory = new RegistrationPromotionFactory(uspsRepository.Object, uspsExpress1Repository.Object,
+                endiciaRepository.Object, endiciaExpress1Repository.Object);
         }
 
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenNoPostalAccountsExist()
         {
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -39,9 +44,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenOnlyUspsExpress1Exists()
         {
-            uspsExpress1Repository = CreateRepositoryWithAccounts<UspsAccountEntity, IUspsAccountEntity>(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            ReturnAccounts(uspsExpress1Repository, 1);
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -49,9 +53,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenOnlyEndiciaExpress1Exists()
         {
-            endiciaExpress1Repository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
+            ReturnAccounts(endiciaExpress1Repository, 1);
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -59,10 +62,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenBothUspsAndEndiciaExpress1Exists()
         {
-            uspsExpress1Repository = CreateRepositoryWithAccounts<UspsAccountEntity, IUspsAccountEntity>(new List<UspsAccountEntity> { new UspsAccountEntity() });
-            endiciaExpress1Repository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
+            ReturnAccounts(uspsExpress1Repository, 1);
+            ReturnAccounts(endiciaExpress1Repository, 1);
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -70,9 +72,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenOnlyEndiciaAccountsExist()
         {
-            endiciaRepository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
+            ReturnAccounts(endiciaRepository, 1);
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -80,10 +81,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenEndiciaAndEndiciaExpress1AccountsExist()
         {
-            endiciaRepository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
-            endiciaExpress1Repository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
+            ReturnAccounts(endiciaRepository, 1);
+            ReturnAccounts(endiciaExpress1Repository, 1);
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -91,10 +91,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenEndiciaAndUspsExpress1AccountsExist()
         {
-            endiciaRepository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
-            uspsExpress1Repository = CreateRepositoryWithAccounts<UspsAccountEntity, IUspsAccountEntity>(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            ReturnAccounts(endiciaRepository, 1);
+            ReturnAccounts(uspsExpress1Repository, 1);
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -102,16 +101,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsEndiciaCbpRegistrationPromotion_WhenEndiciaAccountAndUspsResellerAccountsExist()
         {
-            uspsRepository = CreateRepositoryWithAccounts<UspsAccountEntity, IUspsAccountEntity>(new List<UspsAccountEntity>
+            ReturnAccounts(uspsRepository, new[]
             {
                 new UspsAccountEntity
                 {
                     ContractType = (int) UspsAccountContractType.Reseller
                 }
             });
-            endiciaRepository = CreateRepositoryWithAccounts<EndiciaAccountEntity, IEndiciaAccountEntity>(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
+            ReturnAccounts(endiciaRepository, 1);
+
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<EndiciaCbpRegistrationPromotion>(promotion);
         }
@@ -119,9 +118,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1RegistrationPromotion_WhenOnlyNonResellerUspsAccountsExist()
         {
-            uspsRepository = CreateRepositoryWithAccounts<UspsAccountEntity, IUspsAccountEntity>(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            ReturnAccounts(uspsRepository, new[] { new UspsAccountEntity() });
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<Express1RegistrationPromotion>(promotion);
         }
@@ -129,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void CreateRegistrationPromotion_ReturnsUspsCbpRegistrationPromotion_WhenOnlyUspsAccountsExistAndIncludesReseller()
         {
-            uspsRepository = CreateRepositoryWithAccounts<UspsAccountEntity, IUspsAccountEntity>(new List<UspsAccountEntity>
+            ReturnAccounts(uspsRepository, new[]
             {
                 new UspsAccountEntity
                 {
@@ -141,40 +139,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
                 }
             });
 
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
             Assert.IsAssignableFrom<UspsCbpRegistrationPromotion>(promotion);
         }
 
-        /// <summary>
-        /// Create the registration promotion factory using the currently created repositories
-        /// </summary>
-        private RegistrationPromotionFactory CreateRegistrationPromotionFactory()
+        private void ReturnAccounts(Mock<ICarrierAccountRetriever> repo, int count)
         {
-            return new RegistrationPromotionFactory(uspsRepository.Object, uspsExpress1Repository.Object,
-                endiciaRepository.Object, endiciaExpress1Repository.Object);
+            repo.Setup(x => x.AccountsReadOnly)
+                .Returns(Enumerable.Repeat(mock.Create<ICarrierAccount>().Object, count));
         }
 
-        /// <summary>
-        /// Create a repository with no accounts
-        /// </summary>
-        private Mock<ICarrierAccountRepository<T, TInterface>> CreateEmptyRepository<T, TInterface>()
-            where T : TInterface
-            where TInterface : ICarrierAccount
+        private void ReturnAccounts(Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> repo, IEnumerable<IUspsAccountEntity> accountList)
         {
-            return CreateRepositoryWithAccounts<T, TInterface>(new List<T>());
-        }
-
-        /// <summary>
-        /// Create a repository that has the accounts in the given list
-        /// </summary>
-        private Mock<ICarrierAccountRepository<T, TInterface>> CreateRepositoryWithAccounts<T, TInterface>(IEnumerable<T> accountList)
-            where T : TInterface
-            where TInterface : ICarrierAccount
-        {
-            Mock<ICarrierAccountRepository<T, TInterface>> repo = mockRepository.Create<ICarrierAccountRepository<T, TInterface>>();
-            repo.Setup(x => x.Accounts).Returns(accountList);
-            return repo;
+            repo.Setup(x => x.AccountsReadOnly).Returns(accountList.OfType<IUspsAccountEntity>());
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
@@ -18,7 +19,8 @@ namespace ShipWorks.Shipping.Services
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IValidatedAddressScope validatedAddressScope;
-        private readonly IValidatedAddressManager validatedAddressManager;
+        private readonly IDataProvider dataProvider;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -26,11 +28,13 @@ namespace ShipWorks.Shipping.Services
         public ShippingManagerWrapper(
             ICarrierShipmentAdapterFactory shipmentAdapterFactor,
             IValidatedAddressScope validatedAddressScope,
-            IValidatedAddressManager validatedAddressManager)
+            IDataProvider dataProvider,
+            Func<Type, ILog> getLogger)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactor;
             this.validatedAddressScope = validatedAddressScope;
-            this.validatedAddressManager = validatedAddressManager;
+            this.dataProvider = dataProvider;
+            log = getLogger(GetType());
         }
 
         /// <summary>
@@ -222,5 +226,33 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.GetCarrierName(shipmentTypeCode);
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        public ShipmentEntity EnsureShipmentIsLoadedWithOrder(ShipmentEntity shipment)
+        {
+            EnsureShipmentLoaded(shipment);
+
+            OrderEntity order = dataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+            if (order == null)
+            {
+                log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
+            }
+
+            shipment.Order = order;
+
+            return shipment;
+        }
+
+        /// <summary>
+        /// Validate that the given store is licensed to ship.
+        /// </summary>
+        /// <remarks>
+        /// If there is an error its stored in licenseCheckCache.  If there is already
+        /// an error for the store in licenseCheckCache, then its reused and no trip to tango is taken.
+        /// </remarks>
+        public Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache) =>
+            ShippingManager.ValidateLicense(store, licenseCheckCache);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public abstract IScanFormGateway GetGateway();
+        public abstract IScanFormGateway GetGateway(ILifetimeScope lifetimeScope);
 
         /// <summary>
         /// Gets the printer to use for printing a carrier's SCAN form.
@@ -93,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
                 // Delegate to  the  IScanFormRepository to carry out the saving and return the scan form batch ID value.
                 return repository.Save(scanFormBatch);
             }
-            
+
             string message = string.Format("ShipWorks was unable to create a SCAN form through {0} at this time. Please try again later.", ShippingCarrierName);
 
             log.Error(message + " (A null scan form batch tried to be saved.)");
@@ -112,12 +113,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
                 ShipmentFields.Processed == true &
                 ShipmentFields.Voided == false &
                 ShipmentFields.ReturnShipment == false &
-                ShipmentFields.ShipmentType == (int)ShipmentTypeCode
+                ShipmentFields.ShipmentType == (int) ShipmentTypeCode
                 );
 
             bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
 
-            // Add carrier specific 
+            // Add carrier specific
             AddPredicateFilters(bucket);
 
             // Defer to the repository to perform the actual lookup

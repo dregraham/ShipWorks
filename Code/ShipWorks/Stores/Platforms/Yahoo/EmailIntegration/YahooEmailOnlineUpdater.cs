@@ -5,7 +5,6 @@ using Interapptive.Shared;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;

@@ -110,6 +110,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         }
 
         [Fact]
+        public void SupportsRateShopping_IsFalse()
+        {
+            var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));
+
+            Assert.False(testObject.SupportsRateShopping);
+        }
+
+        [Fact]
         public void SupportsMultiplePackages_IsFalse()
         {
             var testObject = mock.Create<OnTracShipmentAdapter>(TypedParameter.From(shipment));

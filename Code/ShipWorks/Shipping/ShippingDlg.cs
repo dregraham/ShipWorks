@@ -1,4 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -13,6 +21,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
@@ -28,14 +37,6 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
 namespace ShipWorks.Shipping
@@ -1525,7 +1526,7 @@ namespace ShipWorks.Shipping
             // Add each relevant profile
             if (shipmentTypeCode != null)
             {
-                foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
+                foreach (IShippingProfileEntity profile in ShippingProfileManager.ProfilesReadOnly.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
                 {
                     if (profile.ShipmentTypeCode != ShipmentTypeCode.None &&
                         profile.ShipmentTypeCode == shipmentTypeCode.Value)
@@ -1574,7 +1575,7 @@ namespace ShipWorks.Shipping
         {
             applyingProfile = true;
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
-            ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
+            IShippingProfileEntity profile = (IShippingProfileEntity) menuItem.Tag;
 
             // Save any changes that have been made thus far, so the profile changes can be made on top of that
             SaveChangesToUIDisplayedShipments();
@@ -2063,12 +2064,6 @@ namespace ShipWorks.Shipping
             IEnumerable<ProcessShipmentResult> results = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher,
                 rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
 
-            if (shipmentProcessor.FilteredRates != null)
-            {
-                // The user canceled out of the dialog, so just show the filtered rates
-                rateControl.LoadRates(shipmentProcessor.FilteredRates);
-            }
-
             // Apply any changes made during processing to the grid
             ApplyShipmentsToGridRows(results.Select(x => x.Shipment));
 
@@ -2201,11 +2196,6 @@ namespace ShipWorks.Shipping
                 MessageHelper.ShowWarning(this,
                                           "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
                                           "Your changes to those shipments were not saved.");
-            }
-
-            foreach (ShipmentEntity shipment in shipments.Where(s => !s.Processed))
-            {
-                messenger.Send(new ShipmentChangedMessage(this, carrierShipmentAdapterFactory.Get(shipment)));
             }
 
             ErrorManager.Clear();
