@@ -40,6 +40,7 @@
             this.contractType = new System.Windows.Forms.Label();
             this.purchase = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.shipmentHistoryLink = new System.Windows.Forms.Label();
             this.panelInfo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,6 +120,7 @@
             // 
             // panelInfo
             // 
+            this.panelInfo.Controls.Add(this.shipmentHistoryLink);
             this.panelInfo.Controls.Add(this.labelContractType);
             this.panelInfo.Controls.Add(this.contractType);
             this.panelInfo.Controls.Add(this.purchase);
@@ -129,7 +131,7 @@
             this.panelInfo.Controls.Add(this.accountSettingsLink);
             this.panelInfo.Location = new System.Drawing.Point(3, 37);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(273, 101);
+            this.panelInfo.Size = new System.Drawing.Size(273, 123);
             this.panelInfo.TabIndex = 3;
             // 
             // labelContractType
@@ -170,6 +172,19 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Account:";
             // 
+            // shipmentHistoryLink
+            // 
+            this.shipmentHistoryLink.AutoSize = true;
+            this.shipmentHistoryLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.shipmentHistoryLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shipmentHistoryLink.ForeColor = System.Drawing.Color.Blue;
+            this.shipmentHistoryLink.Location = new System.Drawing.Point(19, 99);
+            this.shipmentHistoryLink.Name = "shipmentHistoryLink";
+            this.shipmentHistoryLink.Size = new System.Drawing.Size(88, 13);
+            this.shipmentHistoryLink.TabIndex = 8;
+            this.shipmentHistoryLink.Text = "Shipment History";
+            this.shipmentHistoryLink.Click += new System.EventHandler(this.OnLinkShipmentHistory);
+            // 
             // UspsAccountInfoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -180,7 +195,7 @@
             this.Controls.Add(this.labelAccount);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UspsAccountInfoControl";
-            this.Size = new System.Drawing.Size(284, 144);
+            this.Size = new System.Drawing.Size(284, 162);
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
             this.ResumeLayout(false);
@@ -202,5 +217,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelContractType;
         private System.Windows.Forms.Label contractType;
+        private System.Windows.Forms.Label shipmentHistoryLink;
     }
 }
