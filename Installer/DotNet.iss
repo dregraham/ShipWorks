@@ -28,23 +28,28 @@ var
 	DotNetNeedsReboot: Boolean;
 
 //----------------------------------------------------------------
+// Returns "4.0" or "4.5" depending on the OS
+//----------------------------------------------------------------
+function GetSupportedDotNetVersion(): String;
+begin
+	Result := '4.6';
+end;
+
+//----------------------------------------------------------------
+// Returns filename of the .NET installer
+//----------------------------------------------------------------
+function GetDotNetFileName(): String;
+begin
+    Result := 'NDP46-KB3045557-x86-x64-AllOS-ENU.exe';
+end;
+
+
+//----------------------------------------------------------------
 // Returns the URL to the .NET installer
 //----------------------------------------------------------------
 function GetDotNetDownloadURL(): String;
 begin
-
-	Result := 'https://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/NDP46-KB3045557-x86-x64-AllOS-ENU.exe';
-
-end;
-
-//----------------------------------------------------------------
-// Returns the filesize of the .net installer (in Bytes)
-//----------------------------------------------------------------
-function GetDotNetFileSize(): Integer;
-begin
-
-	Result := (63910) * 1024;
-
+	Result := 'https://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/' + GetDotNetFileName();
 end;
 
 //----------------------------------------------------------------
@@ -67,7 +72,7 @@ begin
 
 		// Test version of .NET installed
 		// https://msdn.microsoft.com/en-us/library/hh925568(v=vs.110).aspx
-		if (DotNetRegValue > 393294) 
+		if (DotNetRegValue > 393294)
         then begin
 
         	Result := False;
