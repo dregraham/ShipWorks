@@ -8,7 +8,7 @@
     <SnExe>C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\sn.exe</SnExe>
     <SignToolExe>C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe</SignToolExe>
     <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.globalsign.com/scripts/timstamp.dll"</SignCommand>
-    <InnoSetupExe>C:\Program Files (x86)\Inno Setup 59\ISCC.EXE</InnoSetupExe>
+    <InnoSetupExe>C:\Program Files (x86)\Inno Setup 5\ISCC.EXE</InnoSetupExe>
     <SourceMonitorExe>C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe</SourceMonitorExe>
     <VaultExe>C:\Program Files (x86)\SourceGear\Vault Client\vault.exe</VaultExe>
     <MsTestExe>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\MSTest.exe</MsTestExe>
