@@ -17,7 +17,6 @@ EnableISX=true
 //----------------------------------------------------------------
 // Includes
 //----------------------------------------------------------------
-#include "Download.iss"
 #include "Win32.iss"
 #include "ErrorPage.iss"
 

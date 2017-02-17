@@ -437,7 +437,7 @@
     <Exec Command='"$(InnoSetupExe)" ..\Installer\ShipWorks.iss /O"$(InstallerPath)" /F"$(InstallerExeBaseName)%(InstallerTypes.ExeAppend)" /DEditionType=%(InstallerTypes.Identity) /DVersion=$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision) /DAppArtifacts="$(AppPath)" /DRequiredSchemaID=$(SchemaID) ' />
 
     <!-- Copy the log to the right place.  Due to the way the Inno preprocessor works, we can't pass it in -->
-    <Copy SourceFiles='InnoSetup.iss' DestinationFolder='$(LogDirectory)' />
+    <Copy SourceFiles='..\Installer\InnoSetup.iss' DestinationFolder='$(LogDirectory)' />
     <Delete Files='InnoSetup.iss' />
 
     <!-- Make a list of all the installers we just created-->
@@ -483,7 +483,7 @@
 
     <Zip Files="@(FilesToZip)"
 				WorkingDirectory="$(AppDirectory)\"
-				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" /> 
+				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" />
 
     --><!-- Delete all the files that went into the zip --><!--
     <Delete Files="@(FilesToZip)" />-->
