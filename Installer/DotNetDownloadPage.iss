@@ -33,15 +33,24 @@ function DownloadDotNet(CurPageID: Integer): Boolean;
 var
   Response: String;
   Size: {#BIG_INT};
+  DownloadResult: Integer;
+  DownloadSuccessful: Boolean;
+  DownloadCanceled: Boolean;
 begin
     // Disbale to continue before download completes
     WizardForm.NextButton.Enabled := False;
 
-    Result := DwinsHs_ReadRemoteURL(GetDotNetDownloadURL(), 'ShipWorks_Installer', rmGet,
-      Response, Size, ExpandConstant('{tmp}') + '\' + GetDotNetFileName(), @OnRead) = READ_OK;
+    DownloadResult := DwinsHs_ReadRemoteURL(GetDotNetDownloadURL(), 'ShipWorks_Installer', rmGet,
+      Response, Size, ExpandConstant('{tmp}') + '\' + GetDotNetFileName(), @OnRead);
+
+    DownloadSuccessful := DownloadResult = READ_OK;
+    DownloadCanceled := DownloadResult = READ_ERROR_CANCELED;
+
+    if (not DownloadSuccessful) then
+    	DeleteFile(ExpandConstant('{tmp}') + '\' + GetDotNetFileName());
 
     // If we didnt get it, show an error
-    if (not Result) then
+    if (not (DownloadSuccessful or DownloadCanceled)) then
         ShowErrorPage(
             CurPageID,
             'Setup Error',
@@ -49,9 +58,10 @@ begin
             'Setup was unable to download the Microsoft .NET Framework.  Please check that you have an open ' +
                 'connection to the internet, and run Setup again.' + #13 + #13 +
                 'You can also download the .NET Framework directly from the following link.',
-            GetDotNetDownloadURL());
+            'http://www.microsoft.com/downloads/details.aspx?FamilyID=9cfb2d51-5ff4-4491-b0e5-b386f32c0992');
 
-    WizardForm.NextButton.Enabled := Result
+    WizardForm.NextButton.Enabled := True;
+    Result := not DownloadCanceled;
 end;
 
 //----------------------------------------------------------------
@@ -87,7 +97,7 @@ end;
 procedure OnDownloadDotNetActivate(Page: TWizardPage);
 begin
     // Allow to download
-	DwinsHs_CancelDownload := cdNone;
+    DwinsHs_CancelDownload := cdNone;
     BackClicked := False;
     DownloadIndicator.Position := 0;
     SizeLabel.Caption := '';

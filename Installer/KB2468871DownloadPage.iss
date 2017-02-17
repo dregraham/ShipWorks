@@ -33,18 +33,24 @@ function DownloadKB2468871(CurPageID: Integer): Boolean;
 var
   Response: String;
   Size: {#BIG_INT};
+  DownloadResult: Integer;
+  DownloadSuccessful: Boolean;
+  DownloadCanceled: Boolean;
 begin
     // Disbale to continue before download completes
     WizardForm.NextButton.Enabled := False;
 
-    Result := DwinsHs_ReadRemoteURL(GetKB2468871DownloadURL(), 'ShipWorks_Installer', rmGet,
-      Response, Size, ExpandConstant('{tmp}') + '\' + GetKB2468871FileName(), @OnKBRead) = READ_OK;
+    DownloadResult := DwinsHs_ReadRemoteURL(GetKB2468871DownloadURL(), 'ShipWorks_Installer', rmGet,
+      Response, Size, ExpandConstant('{tmp}') + '\' + GetKB2468871FileName(), @OnKBRead);
 
-    if (not Result) then
+    DownloadSuccessful := DownloadResult = READ_OK;
+    DownloadCanceled := DownloadResult = READ_ERROR_CANCELED;
+
+    if (not DownloadSuccessful) then
     	DeleteFile(ExpandConstant('{tmp}') + '\' + GetKB2468871FileName());
 
     // If we didnt get it, show an error
-    if (not Result and not KB_BackClicked) then
+    if (not (DownloadSuccessful or DownloadCanceled)) then
         ShowErrorPage(
             CurPageID,
 		    'Setup Error',
@@ -54,7 +60,8 @@ begin
 			    'You can also download the .NET Framework update directly from the following link.',
 			'http://www.microsoft.com/en-us/download/details.aspx?id=3556');
 
-    WizardForm.NextButton.Enabled := Result
+    WizardForm.NextButton.Enabled := True;
+    Result := not DownloadCanceled;
 end;
 
 //----------------------------------------------------------------
@@ -90,7 +97,7 @@ end;
 procedure OnDownloadKB2468871Activate(Page: TWizardPage);
 begin
     // Allow to download
-	DwinsHs_CancelDownload := cdNone;
+    DwinsHs_CancelDownload := cdNone;
     KB_BackClicked := False;
     KB_DownloadIndicator.Position := 0;
     KB_SizeLabel.Caption := '';
