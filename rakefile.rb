@@ -21,7 +21,7 @@ end
 DATABASE_NAME = "ShipWorks_SeedData"
 HOST_AND_INSTANCE_NAME = "#{ENV["COMPUTERNAME"]}\\Development"
 
-@innoPath = "C:/Program Files (x86)/Inno Setup 59/ISCC.EXE"
+@innoPath = "C:/Program Files (x86)/Inno Setup 5/ISCC.EXE"
 
 # The path to the file containing the next revision number to use in the version (i.e. 4567 would result in a version of x.x.x.4567)
 @revisionFilePath = "\\\\INTFS01\\Development\\CruiseControl\\Configuration\\Versioning\\ShipWorks\\NextRevision.txt"
