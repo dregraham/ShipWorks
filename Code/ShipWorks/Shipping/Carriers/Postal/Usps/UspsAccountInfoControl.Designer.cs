@@ -103,7 +103,7 @@
             this.accountSettingsLink.Size = new System.Drawing.Size(88, 13);
             this.accountSettingsLink.TabIndex = 4;
             this.accountSettingsLink.Text = "Account Settings";
-            this.accountSettingsLink.Click += new System.EventHandler(this.OnLinkAccountSettings);
+            this.accountSettingsLink.Click += new System.EventHandler(this.OnAccountSettingsLinkClicked);
             // 
             // onlineReportsLink
             // 
@@ -116,7 +116,7 @@
             this.onlineReportsLink.Size = new System.Drawing.Size(78, 13);
             this.onlineReportsLink.TabIndex = 5;
             this.onlineReportsLink.Text = "Online Reports";
-            this.onlineReportsLink.Click += new System.EventHandler(this.OnLinkOnlineReports);
+            this.onlineReportsLink.Click += new System.EventHandler(this.OnOnlineReportsLinkClicked);
             // 
             // panelInfo
             // 
@@ -183,7 +183,7 @@
             this.shipmentHistoryLink.Size = new System.Drawing.Size(88, 13);
             this.shipmentHistoryLink.TabIndex = 8;
             this.shipmentHistoryLink.Text = "Shipment History";
-            this.shipmentHistoryLink.Click += new System.EventHandler(this.OnLinkShipmentHistory);
+            this.shipmentHistoryLink.Click += new System.EventHandler(this.OnShipmentHistoryLinkClicked);
             // 
             // UspsAccountInfoControl
             // 
