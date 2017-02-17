@@ -204,7 +204,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -216,9 +218,15 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\AccountInfoResult.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateEnvelopeIndiciumParameters.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\BillingAddressType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\IAddressType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Api\WebServices\OpenAccount\PickupAddressType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateIndiciumParameters.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\CreateIndiciumResult.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV55.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Net\ISwsimV55.Implementation.cs" />
     <Compile Include="Web References\ApplicationCore.Licensing.Activation.WebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,21 +1,25 @@
 ﻿using System;
-using Interapptive.Shared.Business;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx;
 using log4net;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Provides functionality to determine residential address information for a shipment
     /// </summary>
-    public static class ResidentialDeterminationService
+    [Component]
+    public class ResidentialDeterminationService : IResidentialDeterminationService
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ResidentialDeterminationService));
+
+        /// <summary>
+        /// Uses the address and shipment config to determine what the residential status flag should be set to.
+        /// </summary>
+        public bool IsResidentialAddress(ShipmentEntity shipment) => DetermineResidentialAddress(shipment);
 
         /// <summary>
         /// Uses the address and shipment config to determine what the residential status flag should be set to.

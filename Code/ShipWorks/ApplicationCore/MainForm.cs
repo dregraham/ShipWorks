@@ -110,7 +110,7 @@ namespace ShipWorks
     /// Main window of the application.
     /// </summary>
     [NDependIgnoreLongTypes]
-    public partial class MainForm : RibbonForm
+    public partial class MainForm : RibbonForm, IMainForm
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainForm));
@@ -295,9 +295,10 @@ namespace ShipWorks
                 // If we aren't configured at all
                 if (!SqlSession.IsConfigured)
                 {
+                    SqlServerInstaller sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
 
                     // If we aren't configured and 2012 is supported, open the fast track setup wizard
-                    if (SqlServerInstaller.IsSqlServer2012Supported)
+                    if (sqlServerInstaller.IsSqlServer2016Supported || sqlServerInstaller.IsSqlServer2014Supported)
                     {
                         using (SimpleDatabaseSetupWizard wizard = new SimpleDatabaseSetupWizard(lifetimeScope))
                         {
@@ -333,6 +334,10 @@ namespace ShipWorks
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
+
+            // This causes the shipping panel to lose focus, which causes it to save. If we don't do this, it will try
+            // to save later, after the user has logged out. This caused an exception because we couldn't audit the save.
+            Focus();
 
             // Make sure we are not in a failure state
             if (ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
@@ -1840,15 +1845,21 @@ namespace ShipWorks
             // Create the data structure to send to options
             ShipWorksOptionsData data = new ShipWorksOptionsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
 
-            using (ShipWorksOptions dlg = new ShipWorksOptions(data))
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                using (ShipWorksOptions dlg = new ShipWorksOptions(data, scope))
                 {
-                    ApplyDisplaySettings();
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        ApplyDisplaySettings();
 
-                    // Apply ribbon settings
-                    ribbon.ToolBarPosition = data.ShowQatBelowRibbon ? QuickAccessPosition.Below : QuickAccessPosition.Above;
-                    ribbon.Minimized = data.MinimizeRibbon;
+                        // Apply ribbon settings
+                        ribbon.ToolBarPosition = data.ShowQatBelowRibbon ?
+                            QuickAccessPosition.Below :
+                            QuickAccessPosition.Above;
+
+                        ribbon.Minimized = data.MinimizeRibbon;
+                    }
                 }
             }
         }
@@ -2009,7 +2020,7 @@ namespace ShipWorks
         /// this method will increase the heart rate until changes are found, or until the forced heart rate
         /// time period expires.  This is allowed to be called from any thread.
         /// </summary>
-        private void ForceHeartbeat(HeartbeatOptions options)
+        public void ForceHeartbeat(HeartbeatOptions options)
         {
             if (InvokeRequired)
             {
@@ -2325,33 +2336,29 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
+            FilterTarget target = FilterTarget.Orders;
+
             if (!settings.FilterInitialUseLastActive)
             {
                 long initialID = settings.FilterInitialSpecified;
 
                 FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
 
-                if (filterNode != null)
+                if (filterNode?.Filter.FilterTarget != null)
                 {
-                    if (filterNode.Filter.FilterTarget == (int) FilterTarget.Customers)
-                    {
-                        customerFilterTree.SelectInitialFilter(settings);
-                        dockableWindowCustomerFilters.Open();
-                        customerFilterTree.Focus();
-                    }
-                    else
-                    {
-                        orderFilterTree.SelectInitialFilter(settings);
-                        dockableWindowOrderFilters.Open();
-                        orderFilterTree.Focus();
-                    }
+                    target = (FilterTarget) filterNode.Filter.FilterTarget;
                 }
+            }
+
+            if (target == FilterTarget.Customers)
+            {
+                customerFilterTree.Focus();
+                customerFilterTree.SelectInitialFilter(settings, FilterTarget.Customers);
             }
             else
             {
-                customerFilterTree.SelectInitialFilter(settings);
-                orderFilterTree.SelectInitialFilter(settings);
                 orderFilterTree.Focus();
+                orderFilterTree.SelectInitialFilter(settings, FilterTarget.Orders);
             }
         }
 
@@ -2891,7 +2898,9 @@ namespace ShipWorks
             Messenger.Current.Send(new PanelShownMessage(this, dockControl));
         }
 
-        // A dock control that didn't used to be open now is
+        /// <summary>
+        /// Called when a dock control that didn't used to be open now is
+        /// </summary>
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdateSelectionDependentUI();
@@ -2906,10 +2915,12 @@ namespace ShipWorks
             {
                 if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
                 {
+                    customerFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Customers);
                     gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
                 }
                 else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
                 {
+                    orderFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Orders);
                     gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
                 }
             }
@@ -4101,7 +4112,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// The save & open popup is opening
+        /// The save and open popup is opening
         /// </summary>
         private void OnSaveOpenRibbonPopup(object sender, BeforePopupEventArgs e)
         {
@@ -4169,6 +4180,15 @@ namespace ShipWorks
         }
 
         #endregion
+
+        #endregion
+
+        #region Utility
+
+        /// <summary>
+        /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
+        /// </summary>
+        public bool AdditionalFormsOpen() => Visible && !CanFocus;
 
         #endregion
 

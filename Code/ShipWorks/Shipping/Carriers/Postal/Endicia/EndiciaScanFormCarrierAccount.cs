@@ -1,11 +1,12 @@
 ﻿using System;
-using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
-using ShipWorks.Shipping.ScanForms;
+using Autofac;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
+using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="log">The log.</param>
         /// <param name="scanFormShipmentTypeName"></param>
         public EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log, IScanFormShipmentTypeName scanFormShipmentTypeName) :
-            this (repository, accountEntity, log, scanFormShipmentTypeName, ShipmentTypeCode.Endicia)
+            this(repository, accountEntity, log, scanFormShipmentTypeName, ShipmentTypeCode.Endicia)
         {
 
         }
@@ -71,13 +72,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override string ShippingCarrierName
         {
             get { return scanFormShipmentTypeName.GetShipmentTypeName(ShipmentTypeCode); }
-        }     
-        
+        }
+
         /// <summary>
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public override IScanFormGateway GetGateway()
+        public override IScanFormGateway GetGateway(ILifetimeScope lifetimeScope)
         {
             return new EndiciaScanFormGateway();
         }

@@ -13,11 +13,13 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -35,51 +37,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Setup wizard for processing shipments with USPS
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Usps)]
     [NDependIgnoreLongTypes]
     public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
     {
-        private readonly UspsRegistration uspsRegistration;
+        private UspsRegistration uspsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode = ShipmentTypeCode.Usps;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
         private bool registrationComplete;
-        private readonly bool allowRegisteringExistingAccount;
+        private bool allowRegisteringExistingAccount;
+        private bool tryExistingAccount;
+        private readonly UspsShipmentType shipmentType;
         private readonly int initialPersonControlHeight;
+        private readonly RegistrationPromotionFactory promotionFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
-        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount) :
-            this(promotion, allowRegisteringExistingAccount, null)
+        public UspsSetupWizard(UspsShipmentType shipmentType, RegistrationPromotionFactory promotionFactory)
         {
-        }
+            this.shipmentType = shipmentType;
+            this.promotionFactory = promotionFactory;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
-        /// </summary>
-        public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, UspsAccountEntity uspsAccount)
-        {
-            UspsAccount = uspsAccount;
+            tryExistingAccount = true;
+            allowRegisteringExistingAccount = true;
 
             InitializeComponent();
 
             initialPersonControlHeight = personControl.Height;
 
-            UspsResellerType resellerType = UspsResellerType.None;
-
-            // Load up a registration object using the USPS validator and the gateway to
-            // the USPS API
-            uspsRegistration = new UspsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
-            this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
-
-            if (promotion.IsMonthlyFeeWaived)
-            {
-                RemoveMonthlyFeeText();
-            }
-
             // Set the shipment type is set correctly (could be USPS), so the
             // label type gets persisted to the correct profile
-            optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
+            optionsControl.ShipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -105,23 +95,54 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual void OnLoad(object sender, EventArgs e)
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            // Load up a registration object using the USPS validator and the gateway to the USPS API
+            IRegistrationPromotion promotion = promotionFactory.CreateRegistrationPromotion();
+            uspsRegistration = new UspsRegistration(new UspsRegistrationValidator(),
+                new UspsRegistrationGateway(UspsResellerType.None), promotion);
+
+            if (promotion.IsMonthlyFeeWaived)
+            {
+                RemoveMonthlyFeeText();
+            }
+
+            if (tryExistingAccount)
+            {
+                shipmentType.EnsureAccountsHaveCurrentContractData();
+                UspsAccount = UspsAccountManager.GetPendingUspsAccount();
+            }
 
             optionsControl.LoadSettings();
 
-            if (!allowRegisteringExistingAccount)
+            SetupAllowNewAccountUI();
+
+            SetupWizardPages();
+
+            if (UspsAccount == null)
             {
-                // Registering an existing account is not allowed, so choose new account (since the options have
-                // been hidden from the user)
-                radioNewAccount.Checked = true;
-                radioExistingAccount.Checked = false;
-            }
-            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
-            {
-                radioNewAccount.Checked = false;
-                radioExistingAccount.Checked = true;
+                SetupDefaultAccount();
             }
 
+            // Hide the panel that lets the customer select to register a new account or use an existing account
+            // until USPS has enabled ShipWorks to register new accounts
+            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
+
+            SetupUsageTypes();
+
+            CopyPostalRules();
+
+            if (InitialAccountAddress != null)
+            {
+                // Pre-load the person control with our initial account address (in the event an account is being
+                // created via the Activate Postage Discount dialog
+                PersonControl.LoadEntity(InitialAccountAddress);
+            }
+        }
+
+        /// <summary>
+        /// Setup the wizard pages used by this registration
+        /// </summary>
+        private void SetupWizardPages()
+        {
             Pages.Add(new ShippingWizardPageOrigin(shipmentType));
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
@@ -138,41 +159,67 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 wizardPageOptions.StepNext += OnStepNextPageOptions;
             }
+        }
 
-            if (UspsAccount == null)
+        /// <summary>
+        /// Setup the UI for whether account creation is allowed
+        /// </summary>
+        private void SetupAllowNewAccountUI()
+        {
+            if (!allowRegisteringExistingAccount)
             {
-                // Set default values on the USPS account and load the person control. Now the stampsAccount will
-                // can be referred to throughout the wizard via the personControl
-                UspsAccount = new UspsAccountEntity
-                {
-                    CountryCode = "US",
-                    ContractType = (int) UspsAccountContractType.Unknown,
-                    CreatedDate = DateTime.UtcNow
-                };
-
-                UspsAccount.InitializeNullsToDefault();
-
-                personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
+                // Registering an existing account is not allowed, so choose new account (since the options have
+                // been hidden from the user)
+                radioNewAccount.Checked = true;
+                radioExistingAccount.Checked = false;
             }
+            else if (UspsAccount != null && UspsAccount.PendingInitialAccount == (int) UspsPendingAccountType.Existing)
+            {
+                radioNewAccount.Checked = false;
+                radioExistingAccount.Checked = true;
+            }
+        }
 
-            // Hide the panel that lets the customer select to register a new account or use an existing account
-            // until USPS has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = allowRegisteringExistingAccount && UspsAccount.PendingInitialAccount != (int) UspsPendingAccountType.Existing;
-
+        /// <summary>
+        /// Setup usage types drop down
+        /// </summary>
+        private void SetupUsageTypes()
+        {
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
             uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
             uspsUsageType.SelectedIndex = 0;
+        }
 
-            CopyPostalRules();
-
-            if (InitialAccountAddress != null)
+        /// <summary>
+        /// Setup a default account
+        /// </summary>
+        private void SetupDefaultAccount()
+        {
+            // Set default values on the USPS account and load the person control. Now the stampsAccount will
+            // can be referred to throughout the wizard via the personControl
+            UspsAccount = new UspsAccountEntity
             {
-                // Pre-load the person control with our initial account address (in the event an account is being
-                // created via the Activate Postage Discount dialog
-                PersonControl.LoadEntity(InitialAccountAddress);
-            }
+                CountryCode = "US",
+                ContractType = (int) UspsAccountContractType.Unknown,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            UspsAccount.InitializeNullsToDefault();
+
+            personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
+        }
+
+        /// <summary>
+        /// show the dialog with the given parameters
+        /// </summary>
+        internal DialogResult ShowDialog(IWin32Window owner, bool allowRegisteringExistingAccount, bool tryExistingAccount)
+        {
+            this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
+            this.tryExistingAccount = tryExistingAccount;
+
+            return ShowDialog(owner);
         }
 
         /// <summary>
@@ -448,7 +495,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new UspsWebClient(UspsResellerType.None).AuthenticateUser(userID, password.Text);
+                new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, UspsResellerType.None).AuthenticateUser(userID, password.Text);
 
                 SaveUspsAccount(userID, SecureText.Encrypt(password.Text, userID));
                 registrationComplete = true;
@@ -470,7 +517,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Saves the usps accountand initializes the stamps info control.
+        /// Saves the usps account and initializes the stamps info control.
         /// </summary>
         /// <param name="accountUserName">The username.</param>
         /// <param name="encryptedPassword">The encrypted password.</param>
@@ -543,13 +590,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
-                UspsShipmentType shipmentType = (UspsShipmentType) ShipmentTypeManager.GetType(shipmentTypeCode);
-
                 // If this is the only account, update this shipment type profiles with this account
-                List<UspsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();
-                if (accounts.Count == 1)
+                IEnumerable<IUspsAccountEntity> accounts = shipmentType.AccountRepository.AccountsReadOnly;
+                if (accounts.Count() == 1)
                 {
-                    UspsAccountEntity accountEntity = accounts.First();
+                    IUspsAccountEntity accountEntity = accounts.First();
 
                     // Update any profiles to use this account if this is the only account
                     // in the system. This is to account for the situation where there a multiple

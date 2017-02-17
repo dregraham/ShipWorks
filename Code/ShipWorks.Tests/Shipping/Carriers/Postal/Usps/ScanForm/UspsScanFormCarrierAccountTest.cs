@@ -1,25 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using log4net;
-using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.ScanForms;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 {
     public class UspsScanFormCarrierAccountTest
     {
         private UspsScanFormCarrierAccount testObject;
-        private Mock<IScanFormRepository> repository;
-        private Mock<ILog> logger;
-
-        string errorMessageFromLogger;
+        private AutoMock mock;
 
         public UspsScanFormCarrierAccountTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             UspsAccountEntity accountEntity = new UspsAccountEntity()
             {
                 UspsAccountID = 123456,
@@ -30,16 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
                 Description = "testUsername"
             };
 
-            repository = new Mock<IScanFormRepository>();
-            repository
-                .Setup(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>()))
-                .Returns(new List<long>());
-
-            logger = new Mock<ILog>();
-            logger.Setup(l => l.Error(It.IsAny<string>()))
-                  .Callback((object errorMessage) => errorMessageFromLogger = (string)errorMessage);
-
-            testObject = new UspsScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
+            testObject = mock.Create<UspsScanFormCarrierAccount>(TypedParameter.From(accountEntity));
         }
 
         [Fact]
@@ -63,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         [Fact]
         public void GetGateway_ReturnsUspsScanFormGateway()
         {
-            Assert.IsAssignableFrom<UspsScanFormGateway>(testObject.GetGateway());
+            Assert.IsAssignableFrom<UspsScanFormGateway>(testObject.GetGateway(mock.Container));
         }
 
         [Fact]
@@ -77,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         {
             testObject.GetExistingScanFormBatches();
 
-            repository.Verify(r => r.GetExistingScanFormBatches(testObject), Times.Once());
+            mock.Mock<IScanFormRepository>().Verify(r => r.GetExistingScanFormBatches(testObject), Times.Once());
         }
 
         [Fact]
@@ -85,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         {
             testObject.GetEligibleShipmentIDs();
 
-            repository.Verify(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>()), Times.Once());
+            mock.Mock<IScanFormRepository>().Verify(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>()), Times.Once());
         }
 
         [Fact]
@@ -94,12 +86,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             testObject.GetEligibleShipmentIDs();
 
             // Verify the predicate bucket passed to the repository is configured correctly
-            repository.Verify
+            mock.Mock<IScanFormRepository>().Verify
                 (
                     r => r.GetShipmentIDs(It.Is<RelationPredicateBucket>
                     (
-                        // Would be nice to test the actual predicate expressions, but I was unable 
-                        // to determine how to access the predicate expressions that line up with 
+                        // Would be nice to test the actual predicate expressions, but I was unable
+                        // to determine how to access the predicate expressions that line up with
                         // those built in the method being tested
                         b => b.Relations.Count == 2
                     )
@@ -113,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             ScanFormBatch batch = new ScanFormBatch(null, null, null);
             testObject.Save(batch);
 
-            repository.Verify(r => r.Save(batch), Times.Once());
+            mock.Mock<IScanFormRepository>().Verify(r => r.Save(batch), Times.Once());
         }
 
         [Fact]
@@ -135,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
             // Verify the correct message was logged
             string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS at this time. Please try again later. (A null scan form batch tried to be saved.)";
-            Assert.Equal(expectedMessage, errorMessageFromLogger);
+            mock.Mock<ILog>().Verify(x => x.Error(expectedMessage));
         }
     }
 }

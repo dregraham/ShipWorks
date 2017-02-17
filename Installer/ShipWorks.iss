@@ -34,15 +34,15 @@ AppMutex={{AX70DA71-2A39-4f8c-8F97-7F5348493F57}
 DefaultDirName={pf}\ShipWorks
 DefaultGroupName=ShipWorks
 LicenseFile=License.rtf
-MinVersion=4.0.950,4.0.1381
+MinVersion=6.1
 PrivilegesRequired=none
 DisableStartupPrompt=true
 AllowRootDirectory=false
 UserInfoPage=false
 ShowComponentSizes=false
 WizardImageFile=WizardLarge.bmp
-WizardImageBackColor=clWhite
 UninstallDisplayIcon={app}\ShipWorks.exe
+UsePreviousLanguage=no
 AppID={code:GetAppID}
 UninstallFilesDir={app}\Uninstall
 WizardSmallImageFile=WizardSmall.bmp
@@ -57,9 +57,12 @@ VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
-VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2013
+VersionInfoCopyright=Copyright © Interapptive®, Inc. 2003-2017
 ArchitecturesInstallIn64BitMode=x64
 AppendDefaultDirName=false
+DisableDirPage=no
+DisableProgramGroupPage=no
+
 
 [InstallDelete]
 Type: files; Name: {app}\ShipWorks.chm
@@ -82,7 +85,6 @@ Type: files; Name: {app}\Microsoft.Web.Services2.dll
 Type: files; Name: {app}\eBay.SDK.dll
 
 [Files]
-Source: isxdl.dll; DestDir: {tmp}; Flags: dontcopy
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.exe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\{#= EditionAppConfig}; DestDir: {app}; DestName: "ShipWorks.exe.config"; Flags: overwritereadonly ignoreversion
@@ -140,6 +142,7 @@ Source: {#AppArtifacts}\ShipWorks.Res.dll; DestDir: {app}; Flags: overwritereado
 Source: {#AppArtifacts}\ShipWorks.Shared.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shipping.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Shipping.UI.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\ShipWorks.SingleScan.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.SqlServer.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Stores.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ShipWorks.Stores.UI.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -159,6 +162,9 @@ Source: {#AppArtifacts}\System.Threading.Tasks.dll; DestDir: {app}; Flags: overw
 Source: {#AppArtifacts}\System.Windows.Interactivity.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
+Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9 Extended; Flags: onlyifdoesntexist uninsneveruninstall
+Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritereadonly ignoreversion
 
 #ifdef IncludeSymbols
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -181,19 +187,19 @@ EnableISX=true
 [Registry]
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: ComputerID; ValueData: {code:GetGuid}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: Software\Interapptive\ShipWorks\Instances; ValueType: string; ValueName: {app}; ValueData: {code:GetAppID}; Flags: createvalueifdoesntexist
-Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID};
-Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler;
+Root: HKLM; Subkey: Software\Interapptive\ShipWorks; ValueType: string; ValueName: LastInstalledInstanceID; ValueData: {code:GetAppID}
+Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: {code:GetBackgroundProcessName}; ValueData: {app}\ShipWorks.exe /s=Scheduler
 
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait; Check: not NeedRestart
 
 [UninstallRun]
-Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall";
+Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"
 
 [Dirs]
 Name: {app}
-Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not CommonAppDataExists;
+Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not CommonAppDataExists
 
 [Code]
 //----------------------------------------------------------------
@@ -287,10 +293,6 @@ begin
         then begin
             VersionMajor := (VersionMS shr 16) and $ffff;
             VersionMinor := VersionMS and $ffff;
-
-           // MsgBox(IntToStr(VersionMajor) + ' ' + IntToStr(VersionMinor),
-           //				    mbConfirmation,
-           //				    MB_OKCANCEL)
 
             if (
                 (VersionMajor > 3) or

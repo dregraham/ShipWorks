@@ -1,7 +1,8 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.ScanForms;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Autofac;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -28,16 +29,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log, IScanFormShipmentTypeName scanFormShipmentTypeName)
             : base(repository, accountEntity, log, scanFormShipmentTypeName, ShipmentTypeCode.Express1Endicia)
         {
-            // Just need to set the shipment type code for express 1 that 
+            // Just need to set the shipment type code for express 1 that
             // gets used in the GetEligibleShipmentIDs method
-           // ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
+            // ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
         }
 
         /// <summary>
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public override IScanFormGateway GetGateway()
+        public override IScanFormGateway GetGateway(ILifetimeScope lifetimeScope)
         {
             // The Express1 gateway is very similar to that of Endicia, but need to override this method
             // since we need to call into the Express1 API rather than Endicia

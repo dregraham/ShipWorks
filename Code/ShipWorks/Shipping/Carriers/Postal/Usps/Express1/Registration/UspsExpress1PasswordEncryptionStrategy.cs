@@ -1,13 +1,15 @@
 ﻿using System;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
     /// <summary>
-    /// An implementation of the IExpress1PasswordEncryptionStrategy interface that is specific to the 
+    /// An implementation of the IExpress1PasswordEncryptionStrategy interface that is specific to the
     /// registration of an Express1 for USPS account.
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class UspsExpress1PasswordEncryptionStrategy : IExpress1PasswordEncryptionStrategy
     {
         /// <summary>

@@ -1,7 +1,4 @@
 ﻿using Autofac;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -25,10 +22,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.OnTrac)
                 .SingleInstance();
 
-            builder.RegisterType<OnTracAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.OnTrac)
-                .SingleInstance();
-
             builder.RegisterType<OnTracShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.OnTrac)
                 .ExternallyOwned();
@@ -37,17 +30,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.OnTrac)
                 .SingleInstance();
 
-            builder.RegisterType<OnTracAccountRepository>()
-                .As<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
-
             builder.RegisterType<OnTracRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.OnTrac);
 
             builder.RegisterType<OnTracRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.OnTrac);
-
-            builder.RegisterType<OnTracShipmentProcessingSynchronizer>()
-                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.OnTrac);
         }
     }
 }

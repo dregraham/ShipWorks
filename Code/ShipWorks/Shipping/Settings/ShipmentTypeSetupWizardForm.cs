@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.UI.Wizard;
 
@@ -8,7 +9,7 @@ namespace ShipWorks.Shipping.Settings
     /// <summary>
     /// Wizard for setting up a shipment type
     /// </summary>
-    public class ShipmentTypeSetupWizardForm : WizardForm
+    public class ShipmentTypeSetupWizardForm : WizardForm, IShipmentTypeSetupWizard
     {
         /// <summary>
         /// Run the setup wizard.  Will return false if the user canceled.
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Settings
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (ShipmentTypeSetupWizardForm wizard = shipmentType.CreateSetupWizard(lifetimeScope))
+                using (IForm wizard = shipmentType.CreateSetupWizard(lifetimeScope))
                 {
                     return wizard.ShowDialog(owner);
                 }

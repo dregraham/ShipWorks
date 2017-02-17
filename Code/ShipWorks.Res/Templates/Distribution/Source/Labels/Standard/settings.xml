@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TemplateSettings>
+  <General>
+    <Type>Label</Type>
+    <Context>Shipment</Context>
+    <OutputFormat>Html</OutputFormat>
+  </General>
+  <LabelSheet>
+    <LabelSheetID>-97</LabelSheetID>
+  </LabelSheet>
+</TemplateSettings>

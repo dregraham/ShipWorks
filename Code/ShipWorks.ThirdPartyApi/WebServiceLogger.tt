@@ -6,43 +6,43 @@
 
 
 <#
-	var services = new object[]
+    var services = new object[]
     {
         "ShipWorks.ApplicationCore.Licensing.Activation.WebServices", "Activation",
-		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV55",
-		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
-		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
-		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
-		"ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService", "CustomerService",
-		"ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService", "EwsLabelService",
-		"ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration", "RegisterMgrAcctService",
+        "ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV55",
+        "ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
+        "ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
+        "ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
+        "ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService", "CustomerService",
+        "ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService", "EwsLabelService",
+        "ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration", "RegisterMgrAcctService",
 		"ShipWorks.Shipping.Carriers.UPS.WebServices.Promo", "PromoDiscountService",
-		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping", "ShippingService",
-		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order", "OrderService",
-		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory", "InventoryService",
-		"ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin", "AdminService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration", "RegistrationService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate", "RateService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship", "ShipService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.Track", "TrackService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement", "PackageMovementInformationService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation", "AddressValidationService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.Close", "CloseService",
-		"ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress", "GlobalShipAddressService",
-		"ShipWorks.Stores.Platforms.Infopia.WebServices", "InfopiaWebService",
-		"ShipWorks.Stores.Platforms.PayPal.WebServices", "PayPalAPISoapBinding",
-		"ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral", "merchantinterfacedime",
-		"ShipWorks.Stores.Platforms.Ebay.WebServices", "eBayAPIInterfaceService",
-		"ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms", "OMService",
-		"ShipWorks.Stores.Platforms.AmeriCommerce.WebServices", "AmeriCommerceDatabaseIO",
-		"ShipWorks.Stores.Platforms.NetworkSolutions.WebServices", "NetSolEcomService",
-		"ShipWorks.Stores.Platforms.Magento.WebServices", "MagentoService",		
-		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
-		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
-		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",
-		"ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount", "OpenAccountService"
-	};
-#>	
+        "ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping", "ShippingService",
+        "ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order", "OrderService",
+        "ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory", "InventoryService",
+        "ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin", "AdminService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration", "RegistrationService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate", "RateService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship", "ShipService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.Track", "TrackService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement", "PackageMovementInformationService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation", "AddressValidationService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.Close", "CloseService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress", "GlobalShipAddressService",
+        "ShipWorks.Stores.Platforms.Infopia.WebServices", "InfopiaWebService",
+        "ShipWorks.Stores.Platforms.PayPal.WebServices", "PayPalAPISoapBinding",
+        "ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral", "merchantinterfacedime",
+        "ShipWorks.Stores.Platforms.Ebay.WebServices", "eBayAPIInterfaceService",
+        "ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms", "OMService",
+        "ShipWorks.Stores.Platforms.AmeriCommerce.WebServices", "AmeriCommerceDatabaseIO",
+        "ShipWorks.Stores.Platforms.NetworkSolutions.WebServices", "NetSolEcomService",
+        "ShipWorks.Stores.Platforms.Magento.WebServices", "MagentoService",
+        "ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
+        "ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
+        "ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",
+        "ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount", "OpenAccountService"
+    };
+#>
 
 using System.Xml;
 using System.Web.Services.Protocols;
@@ -50,9 +50,9 @@ using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Net;
 
 <#
-	for (int i = 0; i < services.Length; i += 2)
-	{
-		#>
+    for (int i = 0; i < services.Length; i += 2)
+    {
+        #>
 namespace <#= services[i] #>
 {
     /// <summary>
@@ -62,7 +62,7 @@ namespace <#= services[i] #>
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -73,30 +73,30 @@ namespace <#= services[i] #>
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -119,16 +119,16 @@ namespace <#= services[i] #>
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -149,9 +149,9 @@ namespace <#= services[i] #>
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -161,7 +161,7 @@ namespace <#= services[i] #>
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -188,8 +188,8 @@ namespace <#= services[i] #>
             }
         }
     }
-}		
+}
 
 <#
-	}
+    }
 #>

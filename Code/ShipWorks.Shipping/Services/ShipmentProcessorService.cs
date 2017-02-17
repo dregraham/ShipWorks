@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Services
                 .Select(this, x => Observable.FromAsync(() => ProcessShipments(x)).Trackable())
                 .Concat(this)
                 .CatchAndContinue((Exception ex) => log.Error("An error occurred while creating label", ex))
-                .Subscribe(this, x => messenger.Send(x));
+                .Subscribe();
         }
 
         /// <summary>

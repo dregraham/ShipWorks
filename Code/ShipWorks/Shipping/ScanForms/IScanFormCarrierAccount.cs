@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ScanForms
 {
@@ -32,7 +29,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// <summary>
         /// Gets the existing scan form batches.
         /// </summary>
-        /// <returns>A collection fo ScanFormBatch objects.</returns>
+        /// <returns>A collection for ScanFormBatch objects.</returns>
         IEnumerable<ScanFormBatch> GetExistingScanFormBatches();
 
         /// <summary>
@@ -40,7 +37,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// </summary>
         /// <returns>A string describing the account</returns>
         string GetDescription();
-        
+
         /// <summary>
         /// Saves the specified scan form batch.
         /// </summary>
@@ -52,8 +49,8 @@ namespace ShipWorks.Shipping.ScanForms
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        IScanFormGateway GetGateway();
-        
+        IScanFormGateway GetGateway(ILifetimeScope lifetimeScope);
+
         /// <summary>
         /// Gets the printer to use for printing a carrier's SCAN form.
         /// </summary>

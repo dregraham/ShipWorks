@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Ensures that the Other specific data for the shipment is loaded.  If the data already exists nothing is done, it is not refreshed.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent) =>
+        protected override void LoadShipmentDataInternal(ShipmentEntity shipment, bool refreshIfPresent) =>
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Other", typeof(OtherShipmentEntity), refreshIfPresent);
 
         /// <summary>
@@ -140,12 +140,6 @@ namespace ShipWorks.Shipping.Carriers.Other
                 TotalWeight = shipment.TotalWeight
             };
         }
-
-        /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer() =>
-            new OtherShipmentProcessingSynchronizer();
 
         /// <summary>
         /// Create the XML input to the XSL engine

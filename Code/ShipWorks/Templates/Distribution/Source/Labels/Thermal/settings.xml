@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<TemplateSettings>
-  <General>
-    <Type>Thermal</Type>
-    <Context>Shipment</Context>
-    <OutputFormat>XML</OutputFormat>
-  </General>
-</TemplateSettings>

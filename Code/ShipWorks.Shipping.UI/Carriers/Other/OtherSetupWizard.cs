@@ -1,4 +1,5 @@
 ﻿using System;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// <summary>
     /// Setup wizard for the "Other" service
     /// </summary>
+    [KeyedComponent(typeof(ShipmentTypeSetupWizardForm), ShipmentTypeCode.Other)]
     public partial class OtherSetupWizard : ShipmentTypeSetupWizardForm
     {
         /// <summary>

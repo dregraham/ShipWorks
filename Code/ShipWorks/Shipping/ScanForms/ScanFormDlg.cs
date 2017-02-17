@@ -4,12 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ScanForms
 {
@@ -134,17 +135,20 @@ namespace ShipWorks.Shipping.ScanForms
 
             try
             {
-                List<ShipmentEntity> selectedShipments = sandGrid.Rows.Cast<GridRow>().Where(r => r.Checked).Select(r => (ShipmentEntity)r.Tag).ToList();
-                if (selectedShipments.Count > 0)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    ScanFormBatch scanFormBatch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), new DefaultScanFormBatchShipmentRepository());
-                    scanFormBatch.Create(selectedShipments);
-
-                    // Allow the user to print all the scan forms at once by passing entire batch to the dialog
-                    using (ScanFormSuccessDlg dlg = new ScanFormSuccessDlg(scanFormBatch))
+                    List<ShipmentEntity> selectedShipments = sandGrid.Rows.Cast<GridRow>().Where(r => r.Checked).Select(r => (ShipmentEntity) r.Tag).ToList();
+                    if (selectedShipments.Count > 0)
                     {
-                        dlg.ShowDialog(this);
-                        DialogResult = DialogResult.OK;
+                        ScanFormBatch scanFormBatch = new ScanFormBatch(carrierAccount, new DefaultScanFormPrinter(), new DefaultScanFormBatchShipmentRepository());
+                        scanFormBatch.Create(lifetimeScope, selectedShipments);
+
+                        // Allow the user to print all the scan forms at once by passing entire batch to the dialog
+                        using (ScanFormSuccessDlg dlg = new ScanFormSuccessDlg(scanFormBatch))
+                        {
+                            dlg.ShowDialog(this);
+                            DialogResult = DialogResult.OK;
+                        }
                     }
                 }
             }

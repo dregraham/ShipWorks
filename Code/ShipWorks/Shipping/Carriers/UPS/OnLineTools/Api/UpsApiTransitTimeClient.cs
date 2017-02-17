@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
         /// <summary>
         /// Get transit times for the given shipment
-        /// Uses counter rates if sepecified
+        /// Uses counter rates if specified
         /// </summary>
         public IEnumerable<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, bool useCounterRates)
         {
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 xmlWriter.WriteStartElement("InvoiceLineTotal");
 
-                UpsAccountEntity account = accountRepository.GetAccount(shipment.Ups.UpsAccountID);
+                IUpsAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
                 xmlWriter.WriteElementString("CurrencyCode", UpsUtility.GetCurrency(account));
                 xmlWriter.WriteElementString("MonetaryValue", shipment.CustomsValue.ToString("0.00"));
                 xmlWriter.WriteEndElement();

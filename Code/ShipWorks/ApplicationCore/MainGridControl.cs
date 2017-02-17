@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Reactive.Linq;
+using System.Reactive.Disposables;
 using System.Windows.Forms;
 using Autofac;
 using ComponentFactory.Krypton.Toolkit;
 using Divelements.SandGrid;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.DetailView;
@@ -24,6 +26,7 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
 using ShipWorks.Properties;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -82,11 +85,14 @@ namespace ShipWorks.ApplicationCore
 
         // Cached list of selected store keys.  So if it's asked for more than once and the selection hasn't changed,
         // we don't have to refigure it out
+
+        // Observable subscriptions
+        private IDisposable subscriptions;
+
         List<long> selectedStoreKeys;
 
-        // Debouncing observables for searching
-        IDisposable quickSearchObservable;
-        IDisposable advancedSearchObservable;
+        // Keeps track of the latest search being via barcode or not
+        private bool isBarcodeSearch = false;
 
         /// <summary>
         /// Constructor
@@ -120,26 +126,42 @@ namespace ShipWorks.ApplicationCore
                 searchBox.LostFocus += OnSearchBoxFocusChange;
             }
 
-            // Wire up observable for debouncing quick search text box
-            quickSearchObservable = Observable
-                .FromEventPattern(
-                    h => searchBox.TextChanged += h,
-                    h => searchBox.TextChanged -= h)
-                .Throttle(TimeSpan.FromMilliseconds(450))
-                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
-                .Subscribe(x => PerformSearch());
-
-            // Wire up observable for debouncing advanced search text box
-            advancedSearchObservable = Observable
-                .FromEventPattern(
-                    h => filterEditor.DefinitionEdited += h,
-                    h => filterEditor.DefinitionEdited -= h)
-                .Throttle(TimeSpan.FromMilliseconds(450))
-                .ObserveOn(new SchedulerProvider(() => Program.MainForm).WindowsFormsEventLoop)
-                .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing advanced search.", ex))
-                .Subscribe(x => PerformSearch());
+            // Register any IMainGridControlPipelines
+            subscriptions = new CompositeDisposable(
+                IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IMainGridControlPipeline>>().Select(p => p.Register(this)));
         }
+
+        /// <summary>
+        /// Action for adding Search box Text change event
+        /// </summary>
+        public Action<EventHandler> SearchTextChangedAdd => h =>
+        {
+            searchBox.TextChanged += h;
+        };
+
+        /// <summary>
+        /// Action for removing Search box Text change event
+        /// </summary>
+        public Action<EventHandler> SearchTextChangedRemove => h =>
+        {
+            searchBox.TextChanged -= h;
+        };
+
+        /// <summary>
+        /// Action for adding filter editor definition edited event
+        /// </summary>
+        public Action<EventHandler> FilterEditorDefinitionEditedAdd => h =>
+        {
+            filterEditor.DefinitionEdited += h;
+        };
+
+        /// <summary>
+        /// Action for removing filter editor definition edited event
+        /// </summary>
+        public Action<EventHandler> FilterEditorDefinitionEditedRemove => h =>
+        {
+            filterEditor.DefinitionEdited -= h;
+        };
 
         /// <summary>
         /// Initialization
@@ -177,12 +199,11 @@ namespace ShipWorks.ApplicationCore
         {
             if (disposing)
             {
+                subscriptions?.Dispose();
+
                 Reset();
 
                 components?.Dispose();
-
-                advancedSearchObservable?.Dispose();
-                quickSearchObservable?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -343,28 +364,43 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-            // Auto select the row when doing a filter searach and there is only 1 result
+            // Auto select the row when doing a filter search and there is only 1 result
         /// </summary>
         private void AutoSelectSingleRow()
         {
             try
             {
-                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search)
+                if (ActiveFilterNode?.Purpose == (int) FilterNodePurpose.Search && ActiveGrid?.Selection.Count == 0)
                 {
-                    IEnumerable<GridRow> rows = ActiveGrid?.Rows?.Cast<GridRow>();
-                    if ((rows?.CompareCountTo(1) ?? ComparisonResult.Less) == ComparisonResult.Equal)
+                    bool autoPrintOn = UserSession.User.Settings.SingleScanSettings == (int) SingleScanSettings.AutoPrint;
+                    long activeFilterNodeContentId = ActiveFilterNode.FilterNodeContentID;
+
+                    if (autoPrintOn && isBarcodeSearch)
                     {
-                        GridRow onlyGridRow = rows?.FirstOrDefault();
-                        if (onlyGridRow != null)
+                        long? orderId = FilterContentManager.GetMostRecentOrderID(activeFilterNodeContentId);
+                        if (orderId.HasValue)
                         {
-                            onlyGridRow.Selected = true;
+                            bool entityInGrid = ActiveGrid.Rows?.Cast<PagedEntityGrid.PagedEntityGridRow>()
+                                                    .Any(row => ActiveGrid.GetRowEntityID(row) == orderId) ?? false;
+                            if (entityInGrid)
+                            {
+                                ActiveGrid.SelectRows(new[] {orderId.Value});
+                            }
+                        }
+                    }
+                    else
+                    {
+                        GridRow firstRow = ActiveGrid.Rows?.Cast<GridRow>().FirstOrDefault();
+                        if (firstRow != null)
+                        {
+                            firstRow.Selected = true;
                         }
                     }
                 }
             }
             catch (NullReferenceException ex)
             {
-                log.Error("Exception thrown when attempting to auto-select", ex);
+                log.Error("AutoSelectSingleRow: Exception thrown when attempting to auto-select", ex);
             }
         }
 
@@ -536,12 +572,16 @@ namespace ShipWorks.ApplicationCore
                 }
                 else
                 {
-                    if (!AdvancedSearchResultsActive && GetBasicSearchText().Length == 0)
+                    // I don't like that we are getting BasicSearchText here because it may not be the text we searched.
+                    // If the user scans an orderid barcode, we put the order number in the search box. That should
+                    // still be ok because we are really only using this text to see if there is something in it.
+                    string basicSearchText = GetBasicSearchText();
+                    if (!AdvancedSearchResultsActive && basicSearchText.Length == 0)
                     {
                         // Has to be space... empty is considered no override at all
                         ActiveGrid.OverrideEmptyText = " ";
                     }
-                    else if (AdvancedSearchResultsActive && GetSearchDefinition() == null)
+                    else if (AdvancedSearchResultsActive && GetSearchDefinition(basicSearchText) == null)
                     {
                         ActiveGrid.OverrideEmptyText = "Some of the values entered in the search condition are not valid.";
                     }
@@ -701,26 +741,70 @@ namespace ShipWorks.ApplicationCore
                 filterEditor.Focus();
             }
 
-            // Upate the search with the current definition
+            // Update the search with the current definition
             if (IsSearchActive && (wasActive != AdvancedSearchResultsActive))
             {
-                searchProvider.Search(GetSearchDefinition());
-
+                isBarcodeSearch = false;
+                searchProvider.Search(GetSearchDefinition(GetBasicSearchText()));
                 RaiseSearchQueryChanged();
             }
         }
 
         /// <summary>
-        /// Perform the search
+        /// Perform a barcode search
         /// </summary>
-        private void PerformSearch()
+        public void PerformBarcodeSearch(string barcode)
+        {
+            barcode = barcode?.Trim();
+
+            if (barcode.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
+            // Mark that the search is coming from a barcode scan
+            isBarcodeSearch = true;
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ISingleScanOrderShortcut singleScanOrderShortcut = scope.Resolve<ISingleScanOrderShortcut>();
+                searchBox.SetTextWithoutTextChangedEvent(singleScanOrderShortcut.GetDisplayText(barcode));
+
+                using (TrackedDurationEvent singleScanSearchTrackedDurationEvent =
+                        new TrackedDurationEvent("SingleScan.Search"))
+                {
+                    singleScanSearchTrackedDurationEvent.AddProperty("SingleScan.Search.IsOrderShorcut",
+                        singleScanOrderShortcut.AppliesTo(barcode) ? "Yes" : "No");
+                    singleScanSearchTrackedDurationEvent.AddProperty("SingleScan.Search.AdvancedSearch",
+                        AdvancedSearchVisible || AdvancedSearchResultsActive ? "Yes" : "No");
+                    singleScanSearchTrackedDurationEvent.AddProperty("SingleScan.Search.Barcode", barcode);
+
+                    PerformSearch(barcode);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs the search.
+        /// </summary>
+        public void PerformManualSearch()
+        {
+            // Mark that the search is not coming from a barcode scan
+            isBarcodeSearch = false;
+            PerformSearch(GetBasicSearchText());
+        }
+
+        /// <summary>
+        /// Perform the search using the provided text.
+        /// </summary>
+        private void PerformSearch(string searchText)
         {
             if (AdvancedSearchVisible)
             {
                 initiatedAdvanced = true;
             }
 
-            if (GetBasicSearchText().Length > 0 || AdvancedSearchVisible || AdvancedSearchResultsActive)
+            if (searchText.Length > 0 || AdvancedSearchVisible || AdvancedSearchResultsActive)
             {
                 if (!IsSearchActive)
                 {
@@ -728,7 +812,7 @@ namespace ShipWorks.ApplicationCore
                 }
 
                 // Update the search with the current definition
-                searchProvider.Search(GetSearchDefinition());
+                searchProvider.Search(GetSearchDefinition(searchText));
 
                 RaiseSearchQueryChanged();
             }
@@ -740,6 +824,8 @@ namespace ShipWorks.ApplicationCore
                 }
             }
         }
+
+
 
         /// <summary>
         /// Raise the search query changed event
@@ -778,24 +864,23 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the FilterDefinition that defines what the user is currently searching for
         /// </summary>
-        private FilterDefinition GetSearchDefinition()
+        private FilterDefinition GetSearchDefinition(string searchText)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 SearchDefinitionProviderFactory definitionProviderFactory = scope.Resolve<SearchDefinitionProviderFactory>();
 
                 ISearchDefinitionProvider definitionProvider;
-                if (AdvancedSearchResultsActive)
+                if (AdvancedSearchResultsActive && filterEditor.SaveDefinition())
                 {
-                    filterEditor.SaveDefinition();
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition, isBarcodeSearch);
                 }
                 else
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch);
                 }
 
-                return definitionProvider.GetDefinition(GetBasicSearchText());
+                return definitionProvider.GetDefinition(searchText);
             }
         }
 

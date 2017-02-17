@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Window for buying endicia postage
     /// </summary>
+    [Component(RegistrationType.Self)]
     public partial class EndiciaBuyPostageDlg : Form, IExpress1PurchasePostageDlg
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EndiciaBuyPostageDlg));
@@ -56,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>False if account is null or account is not Express1.  True otherwise.</returns>
         private bool IsExpress1()
         {
-            return account != null && (EndiciaReseller)account.EndiciaReseller == EndiciaReseller.Express1;
+            return account != null && (EndiciaReseller) account.EndiciaReseller == EndiciaReseller.Express1;
         }
 
         /// <summary>
@@ -105,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Purchase(postage.Amount);
 
                 MessageHelper.ShowInformation(this,
-                    String.Format("The purchase request has been submitted to {0}.", EndiciaAccountManager.GetResellerName((EndiciaReseller)account.EndiciaReseller)));
+                    String.Format("The purchase request has been submitted to {0}.", EndiciaAccountManager.GetResellerName((EndiciaReseller) account.EndiciaReseller)));
 
                 DialogResult = DialogResult.OK;
             }

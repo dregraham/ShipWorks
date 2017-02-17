@@ -22,10 +22,5 @@ namespace ShipWorks.Shipping
         Task<IEnumerable<ProcessShipmentResult>> Process(IEnumerable<ShipmentEntity> shipments,
             ICarrierConfigurationShipmentRefresher shipmentRefresher,
             RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing);
-
-        /// <summary>
-        /// Filtered rates that should be displayed after shipping
-        /// </summary>
-        RateGroup FilteredRates { get; }
     }
 }

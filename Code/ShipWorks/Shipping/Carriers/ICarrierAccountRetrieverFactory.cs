@@ -1,6 +1,4 @@
-﻿using ShipWorks.Data.Model.Custom;
-
-namespace ShipWorks.Shipping.Carriers
+﻿namespace ShipWorks.Shipping.Carriers
 {
     /// <summary>
     /// Factory for getting carrier account retrievers
@@ -10,6 +8,6 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Get a carrier account retriever
         /// </summary>
-        ICarrierAccountRetriever<ICarrierAccount> Get(ShipmentTypeCode shipmentType);
+        ICarrierAccountRetriever Create(ShipmentTypeCode shipmentType);
     }
 }

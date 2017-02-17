@@ -16,7 +16,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
-{   
+{
     public class UspsPrototypeFixture : PostalPrototypeFixture
     {
         public UspsPrototypeFixture()
@@ -35,8 +35,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             {
                 ShipmentEntity shipment = CreateShipment();
 
-                 //If you want to create the shipments, but NOT process them, press the magic keys
-                 //This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
+                //If you want to create the shipments, but NOT process them, press the magic keys
+                //This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
                     IUspsWebClient webClient = GetWebClient(resellerType);
@@ -100,7 +100,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             switch (resellerType)
             {
                 case UspsResellerType.None:
-                    return new UspsWebClient(GetAccountRepository(resellerType), new LogEntryFactory(), new TrustingCertificateInspector(), resellerType);
+                    IUspsWebServiceFactory webServiceFactory = new UspsWebServiceFactory(new LogEntryFactory());
+                    return new UspsWebClient(GetAccountRepository(resellerType), webServiceFactory, new TrustingCertificateInspector(), resellerType);
 
                 case UspsResellerType.Express1:
                     return new Express1UspsWebClient(GetAccountRepository(resellerType), new LogEntryFactory(), new TrustingCertificateInspector());

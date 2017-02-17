@@ -8,6 +8,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
@@ -87,7 +88,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called each time a shipment has been successfully processed
         /// </summary>
-        public static void DispatchShipmentProcessed(ShipmentEntity shipment, SqlAdapter adapter)
+        public static void DispatchShipmentProcessed(IShipmentEntity shipment, ISqlAdapter adapter)
         {
             List<ActionEntity> actions = GetEligibleActions(ActionTriggerType.ShipmentProcessed, shipment.Order.StoreID);
 
@@ -96,10 +97,8 @@ namespace ShipWorks.Actions
             {
                 ShipmentProcessedTrigger trigger = new ShipmentProcessedTrigger(action.TriggerSettings);
 
-                ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
-
                 // Honor the Shipment Type limitation
-                if (trigger.RestrictType && trigger.ShipmentType != shipmentType)
+                if (trigger.RestrictType && trigger.ShipmentType != shipment.ShipmentTypeCode)
                 {
                     continue;
                 }
@@ -120,7 +119,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Called when a batch of shipments has finished processing
         /// </summary>
-        public static void DispatchProcessingBatchFinished(SqlAdapter adapter, DateTime startDate, int shipmentCount, int shipmentErrorCount)
+        public static void DispatchProcessingBatchFinished(ISqlAdapter adapter, DateTime startDate, int shipmentCount, int shipmentErrorCount)
         {
             ActionEntity action = GetEligibleActions(ActionTriggerType.None, 0).FirstOrDefault(x => x.InternalOwner == "FinishProcessingBatch");
 
@@ -262,13 +261,13 @@ namespace ShipWorks.Actions
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter) =>
+        private static long DispatchAction(ActionEntity action, long? objectID, ISqlAdapter adapter) =>
             DispatchAction(action, objectID, adapter, null);
 
         /// <summary>
         /// A valid trigger has been met and the given action is ready to be dispatched
         /// </summary>
-        private static long DispatchAction(ActionEntity action, long? objectID, SqlAdapter adapter, string extraData)
+        private static long DispatchAction(ActionEntity action, long? objectID, ISqlAdapter adapter, string extraData)
         {
             log.DebugFormat("Dispatching action '{0}' for {1}", action.Name, objectID);
 

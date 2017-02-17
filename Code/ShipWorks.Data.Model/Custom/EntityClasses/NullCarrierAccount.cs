@@ -34,7 +34,9 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            throw new System.NotImplementedException();
+            // Since this is used for carriers that don't have accounts, this method will just do nothing since
+            // throwing a NotImplementedException meant that we couldn't call this method without worrying about
+            // the actual type.
         }
     }
 }

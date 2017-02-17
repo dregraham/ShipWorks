@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +13,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -21,6 +21,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
+using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.SqlServer.General;
 
 namespace ShipWorks.Filters
@@ -53,6 +54,8 @@ namespace ShipWorks.Filters
 
         // Wait forever constant
         private const int WaitForever = -1;
+
+        private const int QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds = 30;
 
         /// <summary>
         /// Completely reload the count cache
@@ -642,6 +645,70 @@ namespace ShipWorks.Filters
             content.Fields.State = EntityState.Fetched;
 
             return content;
+        }
+
+        /// <summary>
+        /// Sends a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
+        /// </summary>
+        public static void QueueSingleScanFilterUpdateCompleteMessageAsync(long filterNodeContentID, IMessenger messenger, object sender)
+        {
+            TaskEx.Run(() =>
+            {
+                QueueSingleScanFilterUpdateCompleteMessage(filterNodeContentID, messenger, sender);
+            });
+        }
+
+        /// <summary>
+        /// Queues a FilterSearchCompletedMessage when the FilterNodeContent status becomes Ready
+        /// </summary>
+        private static void QueueSingleScanFilterUpdateCompleteMessage(long filterNodeContentID, IMessenger messenger, object sender)
+        {
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                FilterNodeContentEntity filterNodeContentEntity = new FilterNodeContentEntity(filterNodeContentID);
+
+                DateTime exipreTime = DateTime.UtcNow.AddSeconds(QueueSingleScanFilterUpdateCompleteMessageTimeoutInSeconds);
+
+                while (filterNodeContentEntity.Status != (int) FilterCountStatus.Ready && DateTime.UtcNow < exipreTime)
+                {
+                    Thread.Sleep(50);
+                    sqlAdapter.FetchEntity(filterNodeContentEntity);
+                }
+
+                if (filterNodeContentEntity.Status == (int) FilterCountStatus.Ready)
+                {
+                    long? orderId = GetMostRecentOrderID(filterNodeContentEntity.FilterNodeContentID);
+                    messenger.Send(new SingleScanFilterUpdateCompleteMessage(sender, filterNodeContentEntity, orderId));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the id of the most recent order based on order date
+        /// </summary>
+        public static long? GetMostRecentOrderID(long filterNodeContentId)
+        {
+            using (DbConnection sqlConnection = SqlSession.Current.OpenConnection())
+            {
+                using (DbCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = @"
+                        select top 1 ObjectID
+                        from FilterNodeContentDetail fnc, [Order] o
+                        where fnc.FilterNodeContentID = @filterNodeContentID
+                          and o.OrderID = fnc.ObjectID
+                        order by o.OrderDate desc";
+
+                    DbParameter filterNodeContentIdParam = cmd.CreateParameter();
+                    filterNodeContentIdParam.ParameterName = "@filterNodeContentID";
+                    filterNodeContentIdParam.Value = filterNodeContentId;
+
+                    cmd.Parameters.Add(filterNodeContentIdParam);
+
+                    return (long?) cmd.ExecuteScalar();
+                }
+            }
         }
     }
 }

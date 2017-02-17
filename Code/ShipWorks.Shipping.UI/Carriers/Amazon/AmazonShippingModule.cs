@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.ApplicationCode;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
@@ -33,10 +32,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<AmazonShipmentSetupWizard>()
-                .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
-                .InstancePerLifetimeScope();
-
             builder.RegisterType<AmazonSettingsControl>()
                 .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
@@ -51,10 +46,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .ExternallyOwned();
 
             builder.RegisterType<AmazonServiceViewModel>();
-
-            builder.RegisterType<AmazonShipmentProcessingSynchronizer>()
-                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Amazon)
-                .SingleInstance();
 
             builder.RegisterType<AmazonRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Amazon);
@@ -92,10 +83,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<NullAccountRepository>()
-                .Keyed<ICarrierAccountRetriever<ICarrierAccount>>(ShipmentTypeCode.Amazon)
-                .SingleInstance();
 
             builder.RegisterType<AmazonShipmentAdapter>()
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Amazon)

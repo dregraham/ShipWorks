@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.OnTrac.Net;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores;
-using ShipWorks.ApplicationCore.Licensing;
 using System.Diagnostics;
-using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Settings;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Net;
-using log4net;
-using Interapptive.Shared.Net;
-using System.Drawing;
-using System.Xml;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Net;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Insurance
 {
     /// <summary>
-    /// Used for helful insurance methods
+    /// Used for helpful insurance methods
     /// </summary>
     public static class InsuranceUtility
     {
@@ -293,7 +291,7 @@ namespace ShipWorks.Shipping.Insurance
             decimal adjustedValue = declaredValue;
             decimal rate;
 
-            ShipmentTypeCode shipmentType = (ShipmentTypeCode)shipment.ShipmentType;
+            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
 
             switch (shipmentType)
             {
@@ -361,7 +359,7 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             // Get increments of $100
-            int quantity = (int)Math.Ceiling(adjustedValue / 100m);
+            int quantity = (int) Math.Ceiling(adjustedValue / 100m);
 
             // Set the shipworks cost
             cost.ShipWorks = quantity * rate;
@@ -450,7 +448,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     {
-                        cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
+                        cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
                     }
                     break;
 
@@ -463,7 +461,7 @@ namespace ShipWorks.Shipping.Insurance
                         }
                         else
                         {
-                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
+                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
                         }
                     }
                     break;
@@ -472,7 +470,7 @@ namespace ShipWorks.Shipping.Insurance
                     {
                         cost.Carrier = UspsUtility.IsStampsInsuranceActive ?
                             null :
-                            CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
+                            CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
                     }
                     break;
 
@@ -520,7 +518,7 @@ namespace ShipWorks.Shipping.Insurance
             // Get how many increments of $100
             // This one is different from the other caclulations because the $100 increments
             // start at $101 instead of $100
-            int quantity = (int)Math.Floor((declaredValue - 101) / 100m) + 1;
+            int quantity = (int) Math.Floor((declaredValue - 101) / 100m) + 1;
 
             // It's rate per 100, but a minimum of 0
             return Math.Max(0m, quantity * onTracInsuranceRate);

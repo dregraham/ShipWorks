@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment
 {
     /// <summary>
     /// Validates that the credit card info on a Express1PaymentInfo is valid
     /// </summary>
+    [Component]
     public class Express1CreditCardPaymentValidator : IExpress1PaymentValidator
     {
         public const string InvalidPaymentTypeAch = "ShipWorks is unable to validate credit card payment info because the payment type is currently ACH.";
@@ -32,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment
         /// did not pass validation.</returns>
         public IEnumerable<Express1ValidationError> ValidatePaymentInfo(Express1PaymentInfo paymentInfo)
         {
-            
+
             List<Express1ValidationError> validationErrors = new List<Express1ValidationError>();
 
             if (paymentInfo.PaymentType == Express1PaymentType.Ach)
@@ -41,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment
                 return validationErrors;
             }
 
-            // Allow a credit card that expires at the end of the current month by comparing the expiration date 
+            // Allow a credit card that expires at the end of the current month by comparing the expiration date
             // with the first day of the current month (i.e. a credit card that expires this month should be
             // considered valid)
             DateTime minimumAllowedExpirationDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);

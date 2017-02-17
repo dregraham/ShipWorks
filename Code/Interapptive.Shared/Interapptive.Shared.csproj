@@ -162,6 +162,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="Business\Geography\CurrencyCode.cs" />
     <Compile Include="Collections\ListExtensions.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
@@ -250,6 +253,7 @@
     <Compile Include="Threading\ProgressItemStatus.cs" />
     <Compile Include="Threading\IExternalProcess.cs" />
     <Compile Include="UI\FileDialogType.cs" />
+    <Compile Include="UI\IForm.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialog.cs" />
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IFileDialog.cs" />
@@ -257,10 +261,12 @@
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
+    <Compile Include="Utility\ClrHelper.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\EnumResultExtensions.cs" />
+    <Compile Include="Utility\EnvironmentWrapper.cs" />
     <Compile Include="Utility\ExceptionExtensions.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
@@ -491,13 +497,16 @@
     <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
+    <Compile Include="Utility\IClrHelper.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
+    <Compile Include="Utility\IEnvironmentWrapper.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
     <Compile Include="Utility\MethodConditions.cs" />
     <Compile Include="Utility\PathUtility.cs" />
     <Compile Include="Utility\ResourceUtility.cs" />
     <Compile Include="Utility\ResourceUtilityException.cs" />
+    <Compile Include="Utility\Result.cs" />
     <Compile Include="Utility\SerializableObject.cs" />
     <Compile Include="Utility\SerializationUtility.cs" />
     <Compile Include="Utility\SortOrderAttribute.cs" />
@@ -512,14 +521,35 @@
     <Compile Include="Utility\XPathUtility.cs" />
     <Compile Include="Win32\ClipboardHelper.cs" />
     <Compile Include="Win32\ConsoleHelper.cs" />
+    <Compile Include="Win32\IUser32Devices.cs" />
+    <Compile Include="Win32\IUser32Input.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\EnumEntry.cs" />
     <Compile Include="Utility\EnumHelper.cs" />
     <Compile Include="Utility\ImageResourceAttribute.cs" />
     <Compile Include="Win32\NativeWindowHandle.cs" />
+    <Compile Include="Win32\Native\RawInput.cs" />
+    <Compile Include="Win32\Native\RawInputCommand.cs" />
+    <Compile Include="Win32\Native\RawInputDevice.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceConstants.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceInformationCommand.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceNotificationFlags.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceType.cs" />
+    <Compile Include="Win32\Native\RawInputHeader.cs" />
+    <Compile Include="Win32\Native\RawInputKeyboard.cs" />
+    <Compile Include="Win32\Native\RawKeyboardFlags.cs" />
+    <Compile Include="Win32\Native\VirtualKeys.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceHidInfo.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceInfo.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceKeyboardInfo.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceListItem.cs" />
+    <Compile Include="Win32\Native\RawInputDeviceMouseInfo.cs" />
+    <Compile Include="Win32\Native\WindowsMessage.cs" />
     <Compile Include="Win32\RegistryHelper.cs" />
     <Compile Include="Win32\SecurityUtility.cs" />
+    <Compile Include="Win32\User32Devices.cs" />
+    <Compile Include="Win32\User32Input.cs" />
     <Compile Include="Win32\WindowsExitType.cs" />
     <Compile Include="Win32\WindowsFirewallException.cs" />
     <Compile Include="Win32\WindowsFirewallUtility.cs" />
@@ -819,7 +849,6 @@
       <Name>ShipWorks.Res</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

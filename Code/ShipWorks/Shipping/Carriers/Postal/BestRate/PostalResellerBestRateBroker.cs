@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Autofac;
 using Interapptive.Shared.Utility;
@@ -7,7 +6,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
@@ -73,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             if (ShipmentTypeManager.IsPostal(rate.ShipmentType))
             {
-                rate.ProviderLogo = rate.IsCounterRate ? ShippingIcons.usps : EnumHelper.GetImage(rate.ShipmentType);
+                rate.ProviderLogo = EnumHelper.GetImage(rate.ShipmentType);
             }
         }
 

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
@@ -18,6 +19,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.SqlServerSetup;
+using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Email;
@@ -37,7 +39,7 @@ namespace ShipWorks.Data.Administration
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseUpdateWizard));
-
+        
         // Version of the database installed
         Version installed;
 
@@ -51,7 +53,7 @@ namespace ShipWorks.Data.Administration
         string logonAfterUsername;
         string logonAfterPassword;
 
-        SqlServerInstaller sqlInstaller;
+        SqlServerInstaller sqlServerInstaller;
         WizardDownloadHelper sqlDownloader;
 
         // Indicates if the firewall has been opened'
@@ -76,29 +78,33 @@ namespace ShipWorks.Data.Administration
                 return false;
             }
 
-            using (DatabaseUpdateWizard dlg = new DatabaseUpdateWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return dlg.ShowDialog(owner) == DialogResult.OK;
+                using (DatabaseUpdateWizard dlg = new DatabaseUpdateWizard(lifetimeScope))
+                {
+                    return dlg.ShowDialog(owner) == DialogResult.OK;
+                }
             }
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private DatabaseUpdateWizard()
+        private DatabaseUpdateWizard(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
             installed = SqlSchemaUpdater.GetInstalledSchemaVersion();
             showFirewallPage = installed < new Version(3, 0);
 
-            sqlInstaller = new SqlServerInstaller();
-            sqlInstaller.InitializeForCurrentSqlSession();
-            sqlInstaller.Exited += new EventHandler(OnUpgraderSqlServerExited);
+            sqlServerInstaller = lifetimeScope.Resolve<SqlServerInstaller>();
+            sqlServerInstaller.Exited += OnUpgraderSqlServerExited;
+
+            ISqlInstallerInfo sqlInstallerInfo = sqlServerInstaller.GetSqlInstaller(SqlServerInstallerPurpose.Upgrade);
 
             sqlDownloader = new WizardDownloadHelper(this,
-                sqlInstaller.GetInstallerLocalFilePath(SqlServerInstallerPurpose.Upgrade),
-                sqlInstaller.GetInstallerDownloadUri(SqlServerInstallerPurpose.Upgrade));
+                sqlServerInstaller.GetInstallerLocalFilePath(sqlInstallerInfo),
+                sqlInstallerInfo.DownloadUri);
 
             // Remove the placeholder...
             int placeholderIndex = Pages.IndexOf(wizardPagePrerequisitePlaceholder);
@@ -139,7 +145,6 @@ namespace ShipWorks.Data.Administration
                     // Since we installed it, we can do this without asking
                     using (DbConnection con = SqlSession.Current.OpenConnection())
                     {
-                        SqlUtility.SetSql2008CompatibilityLevel(con);
                         SqlUtility.EnableClr(con);
                     }
 
@@ -159,7 +164,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the upgrade info page
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnSteppingIntoUpgradeInfo(object sender, WizardSteppingIntoEventArgs e)
         {
             // If its 08, we move right on to the db upgrade
@@ -218,7 +222,6 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Stepping into the login page
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnSteppingIntoLogin(object sender, WizardSteppingIntoEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -421,7 +424,7 @@ namespace ShipWorks.Data.Administration
             Cursor.Current = Cursors.WaitCursor;
 
             // If the installer is already available, or we don't need to download, just skip over the download.
-            if (sqlInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || SqlSession.Current.IsSqlServer2008OrLater())
+            if (sqlServerInstaller.IsInstallerLocalFileValid(SqlServerInstallerPurpose.Upgrade) || SqlSession.Current.IsSqlServer2008OrLater())
             {
                 e.Skip = true;
                 return;
@@ -474,7 +477,7 @@ namespace ShipWorks.Data.Administration
         private void OnStepNextUpgradeSqlServer(object sender, WizardStepEventArgs e)
         {
             // If it was installed, but needs a reboot, move to the last page (which will now be the reboot page)
-            if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            if (sqlServerInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 e.NextPage = Pages[Pages.Count - 1];
                 return;
@@ -499,7 +502,7 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                sqlInstaller.UpgradeSqlServer();
+                sqlServerInstaller.UpgradeSqlServer();
             }
             catch (Win32Exception ex)
             {
@@ -532,21 +535,20 @@ namespace ShipWorks.Data.Administration
                 return;
             }
 
-            log.InfoFormat("SQL Server upgrade exited {0}", sqlInstaller.LastExitCode);
+            log.InfoFormat("SQL Server upgrade exited {0}", sqlServerInstaller.LastExitCode);
 
             // If it was successful, we should now be able to connect.
-            if (sqlInstaller.LastExitCode == 0 && SqlSession.Current.IsSqlServer2008OrLater())
+            if (sqlServerInstaller.LastExitCode == 0 && SqlSession.Current.IsSqlServer2008OrLater())
             {
                 // Since we installed it, we can do this without asking
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    SqlUtility.SetSql2008CompatibilityLevel(con);
                     SqlUtility.EnableClr(con);
                 }
 
                 MoveNext();
             }
-            else if (sqlInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
+            else if (sqlServerInstaller.LastExitCode == SqlServerInstaller.ExitCodeSuccessRebootRequired)
             {
                 Pages.Add(new RebootRequiredPage(
                     "SQL Server",
@@ -558,7 +560,7 @@ namespace ShipWorks.Data.Administration
             else
             {
                 MessageHelper.ShowError(this,
-                    "SQL Server was not upgraded.\n\n" + SqlServerInstaller.FormatReturnCode(sqlInstaller.LastExitCode));
+                    "SQL Server was not upgraded.\n\n" + SqlServerInstaller.FormatReturnCode(sqlServerInstaller.LastExitCode));
 
                 // Reset the gui
                 panelUpgradeSqlServer.BringToFront();

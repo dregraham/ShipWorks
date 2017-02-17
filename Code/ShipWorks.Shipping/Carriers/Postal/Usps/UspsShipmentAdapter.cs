@@ -49,9 +49,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return !Shipment.Postal.Usps.RateShop;
+                return true;
             }
         }
+
+        /// <summary>
+        /// Does this shipment support rate shopping?
+        /// </summary>
+        public override bool SupportsRateShopping => Shipment.Postal.Usps.RateShop;
 
         /// <summary>
         /// Does this shipment type support package Types?

@@ -19,7 +19,7 @@ namespace ShipWorks.Data.Connection
     /// <summary>
     /// A custom ShipWorks DataAccessAdapter
     /// </summary>
-    public sealed class SqlAdapter : DataAccessAdapter
+    public sealed class SqlAdapter : DataAccessAdapter, ISqlAdapter
     {
         private const int ForeignKeyReferentialIntegrityError = 547;
 

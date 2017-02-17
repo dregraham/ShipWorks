@@ -1105,7 +1105,7 @@ namespace ShipWorks.Data.Grid.Paging
         /// <summary>
         /// Get the EntityID represented by the given row, unless the row count is currently configured incorrectly
         /// </summary>
-        private long? GetRowEntityID(GridRow row)
+        public long? GetRowEntityID(GridRow row)
         {
             PagedEntityGridRow pagedRow = (PagedEntityGridRow) row;
             long? entityID = pagedRow.EntityID;

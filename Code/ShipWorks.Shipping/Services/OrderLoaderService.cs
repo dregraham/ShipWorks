@@ -98,15 +98,14 @@ namespace ShipWorks.Shipping.Services
             EndSession();
 
             subscription = messenger.OfType<OrderSelectionChangingMessage>()
-                .Throttle(TimeSpan.FromMilliseconds(100))
-                .Gate(messenger.OfType<OrderSelectionChangedMessage>())
+                .Throttle(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
+                .Gate(messenger.OfType<OrderSelectionChangedMessage>(), schedulerProvider.Default)
                 .Select(x => x.Last())
                 .SelectMany(x => Load(x.OrderIdList, shippingSettings.FetchReadOnly().AutoCreateShipments)
-                    .ToObservable()
-                    .Select(y => new { Orders = y, SelectedShipments = x.SelectedShipments }))
+                    .ToObservable().Select(result => new { Result = result, x.ShipmentSelector }))
                 .CatchAndContinue((Exception ex) => log.Error(ex))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x.Orders, x.SelectedShipments)));
+                .Subscribe(x => messenger.Send(new OrderSelectionChangedMessage(this, x.Result, x.ShipmentSelector)));
         }
 
         /// <summary>
