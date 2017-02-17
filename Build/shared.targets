@@ -34,7 +34,7 @@
       <Output TaskParameter="Build" PropertyName="VersionBuild" />
       <Output TaskParameter="Revision" PropertyName="VersionRevision" />
     </SplitVersion>
-    
+
   </Target>
 
   <!-- Update the AssemblyInfo.cs files-->
@@ -89,7 +89,7 @@
     <Exec Command='"$(SourceMonitorExe)" /C "@(SourceMonitorXml)" ' />
 
   </Target>
-  
+
   <!-- Update the label state files for CC.NET so we can sync the build numbers -->
   <Target Name="UpdateRevisionNumber" >
 
@@ -108,8 +108,8 @@
         Lines="$(NewRevision)"
         Overwrite="true"
         />
-    
+
   </Target>
 
-  
+
 </Project>

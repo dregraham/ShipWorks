@@ -121,6 +121,8 @@ namespace ShipWorks.ApplicationCore.Logging
         SparkPay,
         [ApiPrivateLogSource]
         FedExFims,
-        Odbc
+        Odbc,
+        SellerCloud,
+        InfiPlex
     }
 }
