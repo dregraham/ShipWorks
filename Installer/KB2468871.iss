@@ -17,7 +17,6 @@ EnableISX=true
 //----------------------------------------------------------------
 // Includes
 //----------------------------------------------------------------
-#include "Download.iss"
 #include "Win32.iss"
 #include "ErrorPage.iss"
 
@@ -61,8 +60,6 @@ end;
 // Returns true if we need to install the .NET Framework
 //----------------------------------------------------------------
 function IsKB2468871InstallRequired(): Boolean;
-var
-	DotNetRegValue: String;
 begin
 	// We will set this to false if we find out otherwise
 	Result := True;

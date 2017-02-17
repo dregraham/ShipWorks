@@ -103,7 +103,7 @@ namespace :build do
 	end
 
 	desc "Build an unsigned Debug installer for local testing"
-	task :debug_installer => :debug do
+	task :debug_installer do
 		print "Building unsigned debug installer package...\r\n\r\n"
 
 		print "\r\nCopying Native dlls to Artifacts... "
@@ -221,7 +221,7 @@ namespace :test do
 			# We need to filter the tests based on the categories provided
 			msbuild.parameters += " /p:IncludeTraits=\"Category=#{args.categoryFilter}\""
 			print "Category Parameter #{args.categoryFilter}"
-		
+
 		end
 
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
