@@ -21,13 +21,13 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>e:\jenkins-builds\delete-branch-workflow</customWorkspace>
+  <customWorkspace>c:\jenkins-builds\delete-branch-workflow</customWorkspace>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.2">
       <command>echo &quot;Deleting jobs for $env:FEATURE_NAME&quot;
 
 $listJobsUrl = &quot;http://intdev1201:8080/view/&quot; + $env:FEATURE_NAME + &quot;/api/xml?xpath=//job/name&amp;wrapper=jobs&quot;
-echo $listJobsUrl 
+echo $listJobsUrl
 
 # Make a request to obtain all of the jobs for the feature&apos;s view
 [net.httpWebRequest] $request = [net.webRequest]::create($listJobsUrl)
@@ -40,8 +40,8 @@ $streamReader = new-object IO.StreamReader($responseStream)
 
 # Read the job names from the XML ane make a request to Jenkins delete each job
 $jobNames = Select-Xml &quot;//jobs/name&quot; $jobXml
-$jobNames | ForEach-Object { 
-    echo &quot;Deleting job $_&quot; 
+$jobNames | ForEach-Object {
+    echo &quot;Deleting job $_&quot;
 
     $deleteJobUrl = &quot;http://intdev1201:8080/view/&quot; + $env:FEATURE_NAME + &quot;/job/$_/doDelete&quot;
     echo $deleteJobUrl
@@ -60,15 +60,58 @@ $request = [net.webRequest]::create($deleteViewUrl)
 $request.Method = &quot;POST&quot;
 $request.getResponse()
 
+# Delete the source code directory from disk for the common prefixes (feature, defect, spike)
 
-# Delete the source code directory from disk
-$jobSourceDirectory = "\\intdev1201\C$\jenkins-builds\" + $env:FEATURE_NAME
+# Try deleting for the feature- prefix
+$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\feature-&quot; + $env:FEATURE_NAME
+echo &quot;Trying to delete from $jobSourceDirectory&quot;
 if (Test-Path -Path $jobSourceDirectory)
 {
-    echo "Deleting source directory for $env:FEATURE_NAME..."
+    echo &quot;Deleting source directory for $env:FEATURE_NAME...&quot;
     rm -Force -Recurse $jobSourceDirectory
-    echo "Source directory for $env:FEATURE_NAME has been deleted"
+    echo &quot;Source directory for $env:FEATURE_NAME has been deleted&quot;
 }
+
+# Try deleting for the defect- prefix
+$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\defect-&quot; + $env:FEATURE_NAME
+echo &quot;Trying to delete from $jobSourceDirectory&quot;
+if (Test-Path -Path $jobSourceDirectory)
+{
+    echo &quot;Deleting source directory for $env:FEATURE_NAME...&quot;
+    rm -Force -Recurse $jobSourceDirectory
+    echo &quot;Source directory for $env:FEATURE_NAME has been deleted&quot;
+}
+
+# Try deleting for the spike- prefix
+$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\spike-&quot; + $env:FEATURE_NAME
+echo &quot;Trying to delete from $jobSourceDirectory&quot;
+if (Test-Path -Path $jobSourceDirectory)
+{
+    echo &quot;Deleting source directory for $env:FEATURE_NAME...&quot;
+    rm -Force -Recurse $jobSourceDirectory
+    echo &quot;Source directory for $env:FEATURE_NAME has been deleted&quot;
+}
+
+
+# Try deleting without any prefix
+$jobSourceDirectory = &quot;\\intdev1201\C$\jenkins-builds\&quot; + $env:FEATURE_NAME
+echo &quot;Trying to delete from $jobSourceDirectory&quot;
+if (Test-Path -Path $jobSourceDirectory)
+{
+    echo &quot;Deleting source directory for $env:FEATURE_NAME...&quot;
+    rm -Force -Recurse $jobSourceDirectory
+    echo &quot;Source directory for $env:FEATURE_NAME has been deleted&quot;
+}</command>
+    </hudson.plugins.powershell.PowerShell>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.2">
+      <command># Delete any database that the integration tests might have created for this branch
+
+$databasePrefix = $env:FEATURE_NAME.Split(&apos;-&apos;) | Select-Object -Last 1
+
+[Reflection.Assembly]::LoadWithPartialName(&quot;Microsoft.SqlServer.Smo&quot;)
+$databaseServer = New-Object &apos;Microsoft.SqlServer.Management.SMO.Server&apos; &quot;(localdb)\v11.0&quot;
+$databasesToDrop = $databaseServer.Databases | Where-Object {$_.name -like &quot;SW_&quot; + $databasePrefix + &quot;*&quot; }
+foreach ($database in $databasesToDrop) { $database.Drop() }
 </command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
