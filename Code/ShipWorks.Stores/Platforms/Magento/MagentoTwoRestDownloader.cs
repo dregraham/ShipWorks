@@ -238,7 +238,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                 return;
             }
 
-            foreach (Item item in items.Where(i => i.ProductType != "configurable"))
+            IEnumerable<Item> itemList = items as IList<Item> ?? items.ToList();
+            foreach (Item item in itemList.Where(i => i.ProductType != "configurable"))
             {
                 OrderItemEntity orderItem = InstantiateOrderItem(orderEntity);
 
@@ -247,6 +248,15 @@ namespace ShipWorks.Stores.Platforms.Magento
                 orderItem.Code = item.ItemId.ToString();
                 orderItem.SKU = item.Sku;
                 orderItem.UnitPrice = Convert.ToDecimal(item.ParentItem?.Price ?? item.Price);
+                if (orderItem.UnitPrice == 0m)
+                {
+                    Item configurableItemWithPrice = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU && (i.ParentItem?.Price ?? i.Price) > 0D);
+                    if (configurableItemWithPrice != null)
+                    {
+                        orderItem.UnitPrice = Convert.ToDecimal(configurableItemWithPrice.ParentItem?.Price ?? configurableItemWithPrice.Price);
+                    }
+                }
+
                 orderItem.Weight = item.Weight;
 
                 Item magentoOrderItem = webClient.GetItem(item.ItemId);
