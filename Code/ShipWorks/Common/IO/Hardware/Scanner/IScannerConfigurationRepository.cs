@@ -15,11 +15,6 @@ namespace ShipWorks.Common.IO.Hardware.Scanner
         GenericResult<string> SaveScannerName(string name);
 
         /// <summary>
-        /// Clears out the scanner name from scanner.xml
-        /// </summary>
-        GenericResult<string> ClearScannerName();
-
-        /// <summary>
         /// Get the name of the current scanner
         /// </summary>
         GenericResult<string> GetScannerName();

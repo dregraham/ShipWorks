@@ -26,7 +26,6 @@ namespace ShipWorks.ApplicationCore.Options
         private readonly ShipWorksOptionsData data;
         private readonly IWin32Window owner;
         private readonly IScannerConfigurationRepository scannerRepo;
-        private readonly IScannerIdentifier scannerIdentifier;
         private SingleScanSettings singleScanSettingsOnLoad;
 
         /// <summary>
@@ -40,9 +39,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.owner = owner;
 
             scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
-            scannerIdentifier = scope.Resolve<IScannerIdentifier>();
-
-            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
@@ -180,8 +176,6 @@ namespace ShipWorks.ApplicationCore.Options
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
             }
-
-            unregisterScannerButton.Enabled = !string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
         }
 
         /// <summary>
@@ -216,15 +210,6 @@ namespace ShipWorks.ApplicationCore.Options
 
                 UpdateSingleScanSettingsUI();
             }
-        }
-
-        /// <summary>
-        /// Called when [click unregister scanner].
-        /// </summary>
-        private void OnClickUnregisterScanner(object sender, EventArgs e)
-        {
-            scannerIdentifier.RemoveCurrentScanner();
-            UpdateSingleScanSettingsUI();
         }
     }
 }
