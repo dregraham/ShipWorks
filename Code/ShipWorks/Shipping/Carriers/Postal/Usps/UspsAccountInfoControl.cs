@@ -55,17 +55,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Open the account settings page
         /// </summary>
-        private void OnLinkAccountSettings(object sender, EventArgs e) => OpenUrl(UrlType.AccountSettingsPage);
+        private void OnAccountSettingsLinkClicked(object sender, EventArgs e) => OpenUrl(UrlType.AccountSettingsPage);
 
         /// <summary>
         /// Open the online reports page
         /// </summary>
-        private void OnLinkOnlineReports(object sender, EventArgs e) => OpenUrl(UrlType.OnlineReportsPage);
+        private void OnOnlineReportsLinkClicked(object sender, EventArgs e) => OpenUrl(UrlType.OnlineReportsPage);
 
         /// <summary>
         /// Opens the OnlineReportingHistory page
         /// </summary>
-        private void OnLinkShipmentHistory(object sender, EventArgs e) => OpenUrl(UrlType.OnlineReportingHistory);
+        private void OnShipmentHistoryLinkClicked(object sender, EventArgs e) => OpenUrl(UrlType.OnlineReportingHistory);
 
         /// <summary>
         /// Retrieves URL from UPS and opens it in a browser
