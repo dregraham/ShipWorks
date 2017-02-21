@@ -305,22 +305,22 @@ namespace ShipWorks.ApplicationCore.Options
             // autoWeigh
             // 
             this.autoWeigh.AutoSize = true;
-            this.autoWeigh.Location = new System.Drawing.Point(28, 425);
+            this.autoWeigh.Location = new System.Drawing.Point(66, 425);
             this.autoWeigh.Name = "autoWeigh";
-            this.autoWeigh.Size = new System.Drawing.Size(245, 17);
+            this.autoWeigh.Size = new System.Drawing.Size(251, 17);
             this.autoWeigh.TabIndex = 29;
-            this.autoWeigh.Text = "Automatically weigh packages placed on scale";
+            this.autoWeigh.Text = "Automatically weigh packages on barcode scan";
             this.autoWeigh.UseVisualStyleBackColor = true;
             // 
             // infoTipAutoWeigh
             // 
-            this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically.\r\n\r\nThe weight is imported if the" +
-    " scale registers a weight greater than 0.";
-            this.infoTipAutoWeigh.Location = new System.Drawing.Point(272, 427);
+            this.infoTipAutoWeigh.Caption = "Import the weight from your scale automatically on a barcode scan.\r\n\r\nThe weight " +
+    "is imported if the scale registers a weight greater than 0.";
+            this.infoTipAutoWeigh.Location = new System.Drawing.Point(316, 427);
             this.infoTipAutoWeigh.Name = "infoTipAutoWeigh";
-            this.infoTipAutoWeigh.Size = new System.Drawing.Size(12, 12);
+            this.infoTipAutoWeigh.Size = new System.Drawing.Size(13, 12);
             this.infoTipAutoWeigh.TabIndex = 30;
-            this.infoTipAutoWeigh.Title = "Automatically Weigh Packages Placed on Scale";
+            this.infoTipAutoWeigh.Title = "Automatically Weigh Packages on Barcode Scan";
             // 
             // infoTipAutoPrint
             // 
