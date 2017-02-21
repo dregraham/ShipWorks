@@ -1,0 +1,10 @@
+﻿SET NUMERIC_ROUNDABORT OFF
+GO
+SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
+GO
+PRINT N'Adding [AutoWeigh] to [dbo].[UserSettings]'
+IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name= N'AutoWeigh' AND Object_ID = Object_ID(N'UserSettings'))
+BEGIN
+   	ALTER TABLE [dbo].[UserSettings]	ADD [AutoWeigh] [bit] NOT NULL	CONSTRAINT [DF_AutoWeigh] DEFAULT 0
+	ALTER TABLE [dbo].[UserSettings]	DROP CONSTRAINT [DF_AutoWeigh]
+END

@@ -9542,6 +9542,8 @@ namespace ShipWorks.Data.Model
 		NextGlobalPostNotificationDate,
 		///<summary>SingleScanSettings. </summary>
 		SingleScanSettings,
+		///<summary>AutoWeigh. </summary>
+		AutoWeigh,
 		/// <summary></summary>
 		AmountOfFields
 	}
