@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
+using LibGit2Sharp;
 using Moq;
 using Respawn;
 using ShipWorks.ApplicationCore;
@@ -47,7 +49,29 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public DatabaseFixture()
         {
-            string databaseName = AppDomain.CurrentDomain
+            string databasePrefix = string.Empty;
+
+            try
+            {
+                string gitPath = Path.GetPathRoot(AppDomain.CurrentDomain.BaseDirectory) +
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Split('\\').Skip(1).TakeWhile(x => x != "Code").ToArray());
+
+                using (var repo = new Repository(gitPath))
+                {
+                    databasePrefix = repo.Branches.Where(x => !x.IsRemote)
+                        .Where(x => x.IsCurrentRepositoryHead)
+                        .Select(x => x.FriendlyName.Split('-').LastOrDefault() + "_")
+                        .FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Don't use a prefix if we can't find the git path
+                Console.WriteLine(ex.Message);
+            }
+
+            string databaseName = databasePrefix +
+                AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Select(x => x.GetName().Name)
                 .FirstOrDefault(x => x.Contains("Integration") && x.Contains("ShipWorks"))
