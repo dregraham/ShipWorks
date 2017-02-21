@@ -14,7 +14,8 @@ namespace ShipWorks.Stores.Platforms.Amosoft
         /// <summary>
         /// Initializes a new instance of the <see cref="AmosoftStoreType"/> class.
         /// </summary>
-        public AmosoftStoreType(StoreEntity store) : base(store)
+        public AmosoftStoreType(StoreEntity store) 
+            : base(store)
         {
         }
 
