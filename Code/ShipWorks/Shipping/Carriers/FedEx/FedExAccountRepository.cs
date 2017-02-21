@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// FedEx account repository
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.FedEx)]
     public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>,
         ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
