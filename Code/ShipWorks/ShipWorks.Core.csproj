@@ -10703,6 +10703,7 @@
     <Resource Include="Resources\box_closed_redo_16_16.png" />
     <Resource Include="Resources\box_void_32_32.png" />
     <Resource Include="Resources\document_gear_32_32.png" />
+    <None Include="Resources\amosoft.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\message32.png" />
