@@ -502,7 +502,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.ShipCity = address.CityName ?? "";
             order.ShipStateProvCode = address.StateOrProvince == null ? string.Empty : Geography.GetStateProvCode(address.StateOrProvince) ?? "";
             order.ShipPostalCode = address.PostalCode ?? "";
-            order.ShipCountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : "";
+            order.ShipCountryCode = GetCountry(address);
             order.ShipCompany = address.CompanyName ?? "";
             order.ShipPhone = address.Phone ?? "";
 
@@ -517,6 +517,22 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Fill in billing address from the shipping
             PersonAdapter.Copy(order, "Ship", order, "Bill");
+        }
+
+        /// <summary>
+        /// Get a ShipWorks country from an ebay country
+        /// </summary>
+        private string GetCountry(WebServices.AddressType address)
+        {
+            if (!address.CountrySpecified)
+            {
+                return string.Empty;
+            }
+
+            WebServices.CountryCodeType country = address.Country;
+
+            return Enum.GetName(typeof(WebServices.CountryCodeType),
+                country == WebServices.CountryCodeType.AA ? WebServices.CountryCodeType.US : country);
         }
 
         /// <summary>
