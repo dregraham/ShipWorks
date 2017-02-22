@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Fims
 
                 testObject.Process();
 
-                Assert.Equal(TrackingNumber, shipmentEntity.TrackingNumber);
+                Assert.Equal(ParcelID, shipmentEntity.TrackingNumber);
             }
         }
 
