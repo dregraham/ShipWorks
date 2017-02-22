@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         private MagentoOrderEntity orderEntity;
         private readonly AutoMock mock;
         private readonly string goodMagentoOrder;
+        private readonly string magentoOrderWithConfigurableProduct;
         private readonly string weirdMagentoOrder;
         private readonly string badMagentoOrder;
         private readonly string magentoOrderWithAttributes;
@@ -33,6 +34,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             goodMagentoOrder = EmbeddedResourceHelper.GetEmbeddedResourceString(
                 "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrder.json");
+
+            magentoOrderWithConfigurableProduct = EmbeddedResourceHelper.GetEmbeddedResourceString(
+                "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.MagentoOrderWithConfigurableProduct.json");
 
             weirdMagentoOrder = EmbeddedResourceHelper.GetEmbeddedResourceString(
                 "ShipWorks.Stores.Tests.Platforms.Magento.Artifacts.WeirdMagentoOrder.json");
@@ -191,6 +195,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             LoadOrder(goodMagentoOrder);
 
             Assert.Equal("here are some comments", orderEntity.Notes.FirstOrDefault().Text);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsPricesForSimpleItemsWithAssociatedConfigurableProduct()
+        {
+            LoadOrder(magentoOrderWithConfigurableProduct);
+
+            Assert.Equal(11.49M, orderEntity.OrderItems.Single().UnitPrice);
         }
 
         [Fact]

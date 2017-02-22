@@ -8,12 +8,9 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
         public string ProductSku { get; set; }
 
         [JsonProperty("option_id")]
-        public long OptionID { get; set; }
+        public string OptionID { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
-
-        [JsonProperty("price")]
-        public decimal Price { get; set; }
     }
 }
