@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Newegg.WizardPages;
+using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -22,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
     /// </summary>
     public class NeweggStoreType : StoreType
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(NeweggStoreType));
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         public NeweggStoreType(StoreEntity store)
             : base(store)
         { }
-               
+
         /// <summary>
         /// The numeric type code of the store.
         /// </summary>
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         public override StoreEntity CreateStoreInstance()
         {
             NeweggStoreEntity store = new NeweggStoreEntity();
-            
+
             InitializeStoreDefaults(store);
 
             store.StoreName = "My Newegg Store";
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             store.ExcludeFulfilledByNewegg = false;
             store.Channel = (int)NeweggChannelType.US;
 
-            
+
 
             return store;
         }
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 log.ErrorFormat(message);
                 throw new InvalidOperationException(message);
             }
-            
+
             return new Content.OrderNumberIdentifier(order.OrderNumber);
         }
 
@@ -107,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             return new NeweggOrderItemEntity();
         }
-                
+
         /// <summary>
         /// Create the downloader instance that is used to retrieve data from the store.
         /// </summary>
@@ -262,6 +263,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
             IEnumerable<NeweggOrderStatus> enums = Enum.GetValues(typeof(NeweggOrderStatus)).Cast<NeweggOrderStatus>();
 
             return enums.Select(s => Enum.GetName(typeof(NeweggOrderStatus), s)).ToList();
+        }
+
+        /// <summary>
+        /// Create the control for generating the online update shipment tasks
+        /// </summary>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
+        {
+            return new OnlineUpdateShipmentUpdateActionControl(typeof(NeweggShipmentUploadTask));
         }
     }
 }
