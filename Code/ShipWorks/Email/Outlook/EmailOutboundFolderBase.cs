@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Caching;
 using ShipWorks.Data.Grid;
-using ShipWorks.Data;
-using ShipWorks.Data.Utility;
+using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Data.Caching;
 
 namespace ShipWorks.Email.Outlook
 {
@@ -203,7 +196,7 @@ namespace ShipWorks.Email.Outlook
             }
 
             menuEdit.Available = hasEditPermission;
-            menuSep.Available = menuEdit.Available | menuDelete.Available;
+            menuSep.Available = menuEdit.Available || menuDelete.Available;
         }
     }
 }

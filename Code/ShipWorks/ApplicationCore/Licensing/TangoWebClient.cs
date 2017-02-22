@@ -1366,7 +1366,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             string error = XPathUtility.Evaluate(navigator, "//Error", string.Empty);
 
-            if (!error.Equals(string.Empty))
+            if (!string.IsNullOrEmpty(error))
             {
                 throw new TangoException(error);
             }

@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Loading
                     }
                     else
                     {
-                        return new ShipmentsLoadedEventArgs(new Exception("Could not load order. Please try again"), false, null, new List<ShipmentEntity>());
+                        return new ShipmentsLoadedEventArgs(new ArgumentException("Could not load order. Please try again"), false, null, new List<ShipmentEntity>());
                     }
                 }
             }

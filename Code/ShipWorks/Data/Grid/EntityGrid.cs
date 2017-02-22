@@ -565,7 +565,7 @@ namespace ShipWorks.Data.Grid
                 if (item.Tag != null)
                 {
                     // Disable it if no selected column
-                    item.Enabled = item.Enabled & contextMenuColumn != null;
+                    item.Enabled = item.Enabled && contextMenuColumn != null;
 
                     // Update the text
                     item.Text = string.Format((string) item.Tag, contextMenuColumn != null ? contextMenuColumn.HeaderText : "Column");

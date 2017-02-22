@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Interapptive.Shared.Net;
 using Newtonsoft.Json.Linq;
@@ -13,18 +14,21 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     {
         private const int itemsPerPage = 50;
         //LemonStand API endpoint
-        private static string lemonStandEndpoint;
-        private static string accessToken;
+        private readonly string lemonStandEndpoint;
+        private readonly string accessToken;
 
         /// <summary>
         ///     Constructor
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is only used for exception messages")]
         public LemonStandWebClient(LemonStandStoreEntity store)
         {
             if (store == null)
             {
-                throw new ArgumentNullException("store");
+                throw new ArgumentNullException(nameof(store));
             }
+
             lemonStandEndpoint = store.StoreURL + "/api/v2";
             accessToken = store.Token;
         }
@@ -170,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a get request.
         /// </summary>
-        private static HttpVariableRequestSubmitter CreateGetRequest(string operationName)
+        private HttpVariableRequestSubmitter CreateGetRequest(string operationName)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
@@ -183,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a post request
         /// </summary>
-        private static HttpVariableRequestSubmitter CreatePostRequest(string operationName,
+        private HttpVariableRequestSubmitter CreatePostRequest(string operationName,
             Dictionary<string, string> parameters)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
@@ -203,7 +207,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a patch request
         /// </summary>
-        private static HttpVariableRequestSubmitter CreatePatchRequest(string operationName,
+        private HttpVariableRequestSubmitter CreatePatchRequest(string operationName,
             Dictionary<string, string> parameters)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
