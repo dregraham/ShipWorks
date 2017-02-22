@@ -2913,12 +2913,13 @@ namespace ShipWorks
         {
             if (UserSession.IsLoggedOn)
             {
-                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
+                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid && dockableWindowCustomerFilters.DockSituation != DockSituation.None)
                 {
                     customerFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Customers);
                     gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
                 }
-                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
+
+                if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid && dockableWindowOrderFilters.DockSituation != DockSituation.None)
                 {
                     orderFilterTree.SelectInitialFilter(UserSession.User.Settings, FilterTarget.Orders);
                     gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
