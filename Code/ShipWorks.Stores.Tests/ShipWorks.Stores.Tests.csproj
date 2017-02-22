@@ -288,6 +288,7 @@
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithItemAttributes.json" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoItem.json" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoParentItem.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithConfigurableProduct.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

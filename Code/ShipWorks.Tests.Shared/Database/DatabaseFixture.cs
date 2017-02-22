@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shared.Database
                 {
                     databasePrefix = repo.Branches.Where(x => !x.IsRemote)
                         .Where(x => x.IsCurrentRepositoryHead)
-                        .Select(x => x.FriendlyName.Split('-').LastOrDefault() + "_")
+                        .Select(x => x.FriendlyName.Split('-').LastOrDefault())
                         .FirstOrDefault();
                 }
             }
@@ -70,11 +70,11 @@ namespace ShipWorks.Tests.Shared.Database
                 Console.WriteLine(ex.Message);
             }
 
-            string databaseName = databasePrefix +
-                AppDomain.CurrentDomain
+            string databaseName = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .Select(x => x.GetName().Name)
                 .FirstOrDefault(x => x.Contains("Integration") && x.Contains("ShipWorks"))
+                .Replace("ShipWorks", "SW_" + databasePrefix)
                 .Replace(".", "_");
 
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
