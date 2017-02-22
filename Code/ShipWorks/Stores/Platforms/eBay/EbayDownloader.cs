@@ -14,7 +14,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -43,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // The current time according to eBay
         DateTime eBayOfficialTime;
 
-        // WebClient to use for connetivity
+        // WebClient to use for connectivity
         EbayWebClient webClient;
 
         // Total number of orders expected during this download
@@ -107,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private bool DownloadOrders()
         {
-            // Controls wether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
+            // Controls whether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
             //bool usePagedDownload = true;
 
             // Get the date\time to start downloading from
@@ -190,13 +189,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void ProcessOrder(OrderType orderType)
         {
-            // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation
+            // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
             EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
 
-            // Special processing for cancelled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
+            // Special processing for canceled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
             {
-                log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's cancelled.", orderType.OrderID);
+                log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's canceled.", orderType.OrderID);
                 return;
             }
 
@@ -352,7 +351,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Go through each abandoned item and delete it
             foreach (OrderItemEntity item in abandonedItems)
             {
-                // Detatch it from the order
+                // Detach it from the order
                 // This is to get the appropriate orderitem instance
                 OrderItemEntity orderItem = affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.SingleOrDefault(i => i.OrderItemID == item.OrderItemID);
                 if (orderItem != null)
@@ -429,7 +428,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         abandonedItems.Add(orderItem);
 
-                        // This will force creating a brand new order item that will recreate this one fresh on this order.  The previous item will just be deleted, effectivly moving
+                        // This will force creating a brand new order item that will recreate this one fresh on this order.  The previous item will just be deleted, effectively moving
                         // the item from the old order to the new order
                         orderItem = null;
                     }
@@ -493,7 +492,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Update the address of the ebay order with the address infomration provided
+        /// Update the address of the ebay order with the address information provided
         /// </summary>
         private void UpdateOrderAddress(EbayOrderEntity order, WebServices.AddressType address)
         {
@@ -515,7 +514,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.ShipFirstName = personName.First;
             order.ShipMiddleName = personName.Middle;
             order.ShipLastName = personName.Last;
-            
+
             // Fill in billing address from the shipping
             PersonAdapter.Copy(order, "Ship", order, "Bill");
         }
@@ -851,7 +850,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateTransactionSKU(EbayOrderItemEntity orderItem, string sku)
         {
-            // Don't overwrite it if it's already there.  One important scenario is if the user applies their own SKUs and doesn't want eBay's to overrwrite, such as SKUVault
+            // Don't overwrite it if it's already there.  One important scenario is if the user applies their own SKUs and doesn't want eBay's to overwrite, such as SKUVault
             if (!string.IsNullOrWhiteSpace(orderItem.SKU) && !orderItem.IsNew)
             {
                 return;
@@ -907,7 +906,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 PictureDetailsType pictureDetails = eBayItem.PictureDetails;
 
-                // Teh first picture in PictureURL is the default
+                // The first picture in PictureURL is the default
                 if (pictureDetails != null && pictureDetails.PictureURL != null && pictureDetails.PictureURL.Length > 0)
                 {
                     orderItem.Image = eBayItem.PictureDetails.PictureURL[0] ?? "";
@@ -934,7 +933,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             catch (EbayException exception)
             {
                 // Check if we get error code 17 (the item has been deleted). eBay deletes items in certain
-                // situations where the items falls outside of their user agreeements (counterfeit, selling illegal/trademarked items, etc.)
+                // situations where the items falls outside of their user agreements (counterfeit, selling illegal/trademarked items, etc.)
                 if (exception.ErrorCode == "17" || exception.ErrorCode == "21917182")
                 {
                     // Just log this exception otherwise the download process will not complete
@@ -1006,7 +1005,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 // This is part of the global shipping program, so we need to pull out the address info
                 // of the international shipping provider but first make sure there aren't any null
-                // objects in the address heirarchy
+                // objects in the address hierarchy
                 if (gspDetails != null &&
                     gspDetails.SellerShipmentToLogisticsProvider != null &&
                     gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress != null)
@@ -1165,7 +1164,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // A single-auction will have an OrderID of zero
             if (identifier.EbayOrderID == 0)
             {
-                // doing a few joins, give llbl the information
+                // doing a few joins, give LLBLgen the information
                 RelationCollection relations = new RelationCollection(OrderEntity.Relations.OrderItemEntityUsingOrderID);
                 relations.Add(OrderItemEntity.Relations.GetSubTypeRelation("EbayOrderItemEntity"));
 
@@ -1322,7 +1321,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // single match, must be the one we're looking for
                 if (candidates.Count == 1)
                 {
-                    // single reuslt
+                    // single result
                     return candidates[0].TransactionID;
                 }
 
@@ -1390,7 +1389,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // 10007 means you didn't have permission to get the details of the transaction
                 if (ex.Errors.Any(e => e.Code == "10007"))
                 {
-                    log.ErrorFormat("eBay had a correct transaction ({0}) but insufficient PayPal priveleges to get data for it.", transactionID);
+                    log.ErrorFormat("eBay had a correct transaction ({0}) but insufficient PayPal privileges to get data for it.", transactionID);
 
                     return PayPalAddressStatus.None;
                 }
@@ -1433,7 +1432,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             int feedbackCount = 0;
 
-            // First download all feedback recieved
+            // First download all feedback received
             DateTime newestRecieved = DownloadFeedback(null, downloadThrough.Value, ref feedbackCount);
 
             // Check for user cancel
@@ -1451,7 +1450,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 return false;
             }
 
-            // Use the latest feedback recieived date as our ending point for next time. Since we queried it first, this is safe.
+            // Use the latest feedback received date as our ending point for next time. Since we queried it first, this is safe.
             SaveFeedbackCheckpoint(newestRecieved);
 
             return true;
@@ -1488,7 +1487,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         newestFeedback = feedbackDate;
                     }
 
-                    // If this goes back prior to when we want to look for feedback, or the user has cancelled, we are doing
+                    // If this goes back prior to when we want to look for feedback, or the user has canceled, we are doing
                     if (feedbackDate < downloadThrough || Progress.IsCancelRequested)
                     {
                         return newestFeedback;
@@ -1532,7 +1531,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
 
-                // Feedback we've recieved
+                // Feedback we've received
                 if (feedback.Role == TradingRoleCodeType.Seller)
                 {
                     item.FeedbackReceivedType = (int) feedback.CommentType;
