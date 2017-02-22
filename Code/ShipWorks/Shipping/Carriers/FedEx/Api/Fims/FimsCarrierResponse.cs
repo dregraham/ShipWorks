@@ -41,8 +41,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         public void Process()
         {
-            shipmentEntity.TrackingNumber = string.IsNullOrEmpty(fimsShipResponse.TrackingNumber) ? fimsShipResponse.ParcelID : fimsShipResponse.TrackingNumber;
-            shipmentEntity.FedEx.Packages[0].TrackingNumber = fimsShipResponse.ParcelID;
+            shipmentEntity.TrackingNumber = string.IsNullOrEmpty(fimsShipResponse.ParcelID) ? fimsShipResponse.TrackingNumber : fimsShipResponse.ParcelID;
+            shipmentEntity.FedEx.Packages[0].TrackingNumber = string.IsNullOrEmpty(fimsShipResponse.ParcelID) ? fimsShipResponse.TrackingNumber : fimsShipResponse.ParcelID;
             shipmentEntity.FedEx.MasterFormID = string.Empty;
             shipmentEntity.ShipmentCost = 0;
 
