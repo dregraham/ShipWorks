@@ -36,7 +36,7 @@ namespace ShipWorks.SingleScan
         private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
         public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
 
-        public const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
+        private const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
 
         /// <summary>
         /// Constructor
