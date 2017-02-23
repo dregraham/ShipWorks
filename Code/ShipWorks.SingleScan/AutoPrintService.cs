@@ -217,20 +217,32 @@ namespace ShipWorks.SingleScan
         /// </summary>
         protected virtual IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
         {
-            // Listen for ShipmentsProcessedMessages, but timeout if processing takes
-            // longer than ShipmentsProcessedMessageTimeoutInMinutes.
-            // We don't get an observable to start from, but we need one to use ContinueAfter, so using
-            // Observable.Return to get an observable to work with.
-            return Observable.Return(0)
-                .ContinueAfter(Messenger.OfType<ShipmentsProcessedMessage>(),
-                    TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
-                    SchedulerProvider.Default,
-                    ((i, message) => message))
-                .Do(message => Messenger.Send(
-                    new OrderSelectionChangingMessage(this,
-                    message.Shipments.Select(s => s.Shipment.OrderID).Distinct(),
-                    EntityGridRowSelector.SpecificEntities(message.Shipments.Select(s => s.Shipment.ShipmentID).Distinct()))))
-                .Select(f => genericResult);
+            IObservable<GenericResult<string>> returnResult;
+
+            if (genericResult.Success)
+            {
+                // Listen for ShipmentsProcessedMessages, but timeout if processing takes
+                // longer than ShipmentsProcessedMessageTimeoutInMinutes.
+                // We don't get an observable to start from, but we need one to use ContinueAfter, so using
+                // Observable.Return to get an observable to work with.
+                returnResult = Observable.Return(0)
+                    .ContinueAfter(Messenger.OfType<ShipmentsProcessedMessage>(),
+                        TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
+                        SchedulerProvider.Default,
+                        ((i, message) => message))
+                    .Do(message => Messenger.Send(
+                        new OrderSelectionChangingMessage(this,
+                        message.Shipments.Select(s => s.Shipment.OrderID).Distinct(),
+                        EntityGridRowSelector.SpecificEntities(message.Shipments.Select(s => s.Shipment.ShipmentID).Distinct()))))
+                    .Select(f => genericResult);
+
+            }
+            else
+            {
+                returnResult = Observable.Return(genericResult);
+            }
+
+            return returnResult;
         }
 
         /// <summary>

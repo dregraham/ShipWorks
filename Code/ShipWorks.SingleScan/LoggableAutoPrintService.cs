@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
@@ -88,19 +89,11 @@ namespace ShipWorks.SingleScan
         protected override IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(
             GenericResult<string> genericResult)
         {
-            IObservable<GenericResult<string>> returnResult;
+            IObservable<GenericResult<string>> returnResult = base.WaitForShipmentsProcessedMessage(genericResult);
 
-            if (genericResult.Success)
-            {
-                log.Info($"Waiting for ShipmentsProcessedMessage from scan {genericResult.Value}");
-                returnResult = base.WaitForShipmentsProcessedMessage(genericResult);
-                log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
-            }
-            else
-            {
-                log.Info("No Shipments, not waiting for ShipmentsProcessMessageScan");
-                returnResult = Observable.Return(genericResult);
-            }
+            log.Info(genericResult.Failure
+                ? "No Shipments, not waiting for ShipmentsProcessMessageScan"
+                : $"ShipmentsProcessedMessage received from scan {genericResult.Value}");
 
             return returnResult;
         }
