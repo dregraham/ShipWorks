@@ -58,7 +58,8 @@ namespace ShipWorks.Templates.Processing
             }
 
             // Find all images, we'll need to copy them to a local folder
-            foreach (HtmlNode imgNode in agilityDoc.DocumentNode.SelectNodes("//img"))
+            HtmlNodeCollection imageNodes = agilityDoc.DocumentNode.SelectNodes("//img");
+            foreach (HtmlNode imgNode in imageNodes ?? new HtmlNodeCollection(agilityDoc.DocumentNode))
             {
                 HtmlAttribute srcAttribute = imgNode.Attributes["src"];
                 Uri srcUri;
