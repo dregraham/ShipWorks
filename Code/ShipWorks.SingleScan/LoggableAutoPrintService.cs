@@ -70,17 +70,16 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        protected override Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
+        protected override async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
         {
-            long? orderID = GetOrderID(autoPrintServiceDto);
+            GenericResult<string> result = await base.HandleAutoPrintShipment(autoPrintServiceDto);
 
-            // Only auto print if an order was found
-            if (!orderID.HasValue)
+            if (result.Failure)
             {
-                log.Error("Order not found for scanned order.");
+                log.Error(result.Message);
             }
 
-            return base.HandleAutoPrintShipment(autoPrintServiceDto);
+            return result;
         }
 
         /// <summary>
