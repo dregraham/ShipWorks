@@ -14,9 +14,21 @@ namespace ShipWorks.Stores.Platforms.Amosoft
         /// <summary>
         /// Initializes a new instance of the <see cref="AmosoftStoreType"/> class.
         /// </summary>
-        public AmosoftStoreType(StoreEntity store) 
+        public AmosoftStoreType(StoreEntity store)
             : base(store)
         {
+        }
+
+        /// <summary>
+        /// Get the unique, store identifier
+        /// </summary>
+        protected override string InternalLicenseIdentifier
+        {
+            get
+            {
+                GenericModuleStoreEntity store = Store as GenericModuleStoreEntity;
+                return store.ModuleUsername;
+            }
         }
 
         /// <summary>
