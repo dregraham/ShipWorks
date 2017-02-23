@@ -147,6 +147,7 @@
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgViewModelTest.cs" />
     <Compile Include="AutoPrintConfirmationDlgFactoryTest.cs" />
     <Compile Include="AutoPrintServiceTest.cs" />
+    <Compile Include="AutoWeighServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterScannerControlViewModelTest.cs" />
     <Compile Include="ScannerIdentifierTest.cs" />
