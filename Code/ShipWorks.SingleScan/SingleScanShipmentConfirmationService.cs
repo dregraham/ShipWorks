@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,10 +28,15 @@ namespace ShipWorks.SingleScan
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
+        private readonly IAutoPrintPermissions autoPrintPermissions;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
+        private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
         public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
+
+        public const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
 
         /// <summary>
         /// Constructor
@@ -40,7 +46,9 @@ namespace ShipWorks.SingleScan
             IAutoPrintConfirmationDlgFactory dlgFactory,
             IShipmentFactory shipmentFactory,
             IMessageHelper messageHelper,
-            Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
+            Func<string, ITrackedDurationEvent> trackedDurationEventFactory, 
+            IAutoPrintPermissions autoPrintPermissions, 
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.orderLoader = orderLoader;
             this.securityContextRetriever = securityContextRetriever;
@@ -48,6 +56,8 @@ namespace ShipWorks.SingleScan
             this.shipmentFactory = shipmentFactory;
             this.messageHelper = messageHelper;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
+            this.autoPrintPermissions = autoPrintPermissions;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
         }
 
         /// <summary>
@@ -106,9 +116,45 @@ namespace ShipWorks.SingleScan
                         confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
                     }
                 }
+
+                if (autoPrintPermissions.AutoWeighOn() && confirmedShipments.IsCountEqualTo(1))
+                {
+                    ShipmentEntity confirmedShipment = confirmedShipments.SingleOrDefault();
+                    int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdapters().Count();
+
+                    if (packageCount > 1 && !ShouldPrintAndProcessShipmentWithMultiplePackages(packageCount, scannedBarcode))
+                    {
+                        confirmedShipments = new ShipmentEntity[0];
+                    }
+                }
             }
 
             return confirmedShipments;
+        }
+
+        private bool ShouldPrintAndProcessShipmentWithMultiplePackages(int packageCount, string scannedBarcode)
+        {
+            string buttonText = $"Print {packageCount} Labels";
+
+            MessagingText messaging = new MessagingText()
+            {
+                Title = "Multiple Packages",
+                Body = string.Format(AutoWeighMessage, string.Format(MultiplePackageMessage, buttonText), "package"),
+                Continue = buttonText
+            };
+
+            using (ITrackedDurationEvent telemetryEvent =
+                trackedDurationEventFactory("SingleScan.AutoPrint.Confirmation.MultiplePackages"))
+            {
+                DialogResult result = messageHelper.ShowDialog(() => dlgFactory.Create(scannedBarcode, messaging));
+
+                bool shouldPrint = result == DialogResult.OK;
+
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultiplePackages.Total", packageCount);
+                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultiplePackages.Action", shouldPrint ? "Continue" : "Cancel");
+
+                return shouldPrint;
+            }
         }
 
         /// <summary>
@@ -162,10 +208,16 @@ namespace ShipWorks.SingleScan
             string labels = shipments.Where(s => !s.Processed).IsCountGreaterThan(1) ? "Labels" : "Label";
             string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
 
+            string multipleShipmentsMessage = string.Format(MultipleShipmentsMessage, buttonText);
+            if (autoPrintPermissions.AutoWeighOn())
+            {
+                multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
+            }
+
             return new MessagingText
             {
                 Title = "Multiple Shipments",
-                Body = string.Format(MultipleShipmentsMessage, buttonText),
+                Body = multipleShipmentsMessage,
                 Continue = buttonText
             };
         }
