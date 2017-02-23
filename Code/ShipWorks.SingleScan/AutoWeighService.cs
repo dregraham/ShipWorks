@@ -19,13 +19,14 @@ namespace ShipWorks.SingleScan
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IMessageHelper messageHelper;
         private readonly IScaleReader scaleReader;
-        private ILog log;
+        private readonly ILog log;
 
         // .1 oz
         private const double weightDifferenceToIgnore = .00625; 
 
         // .05 oz
         private const double weightMinimum = 0.003125;
+        public const string TelemetryPropertyName = "SingleScan.AutoPrint.ShipmentsProcessed.AutoWeigh";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoWeighService"/> class.
@@ -77,9 +78,11 @@ namespace ShipWorks.SingleScan
 
                 foreach (IPackageAdapter packageAdapter in shipmentAdapter.GetPackageAdapters())
                 {
-                    if (Math.Abs(weighResult.Weight - packageAdapter.Weight) > weightDifferenceToIgnore || packageAdapter.Weight < weightMinimum)
+                    if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > weightDifferenceToIgnore || 
+                        packageAdapter.Weight < weightMinimum)
                     {
-                        log.Debug($"Weight applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
+                        log.Debug(
+                            $"Weight applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
                         packageAdapter.Weight = weighResult.Weight;
                     }
                 }
@@ -94,7 +97,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         private static void CollectTelemetryData(ITrackedDurationEvent trackedDurationEvent, string message)
         {
-            trackedDurationEvent.AddProperty("SingleScan.AutoPrint.ShipmentsProcessed.AutoWeigh", message);
+            trackedDurationEvent.AddProperty(TelemetryPropertyName, message);
         }
     }
 }
