@@ -30,7 +30,7 @@ namespace ShipWorks.SingleScan
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
-        public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
+        private const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
 
         /// <summary>
         /// Constructor

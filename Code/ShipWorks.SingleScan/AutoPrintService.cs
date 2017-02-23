@@ -30,12 +30,11 @@ namespace ShipWorks.SingleScan
     public class AutoPrintService : IInitializeForCurrentUISession
     {
         private readonly ILog log;
-        private readonly IMainForm mainForm;
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IAutoPrintPermissions autoPrintPermissions;
         private IDisposable filterCompletedMessageSubscription;
-        private readonly IUserSession userSession;
         private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
         private readonly ISingleScanOrderConfirmationService singleScanOrderConfirmationService;
         private readonly IConnectableObservable<ScanMessage> scanMessages;
@@ -48,17 +47,15 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public AutoPrintService(IMessenger messenger,
             ISchedulerProvider schedulerProvider,
-            IUserSession userSession,
+            IAutoPrintPermissions autoPrintPermissions,
             ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
             ISingleScanOrderConfirmationService singleScanOrderConfirmationService,
             Func<Type, ILog> logFactory,
-            IMainForm mainForm,
             Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
-            this.userSession = userSession;
-            this.mainForm = mainForm;
+            this.autoPrintPermissions = autoPrintPermissions;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
             this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
             this.singleScanOrderConfirmationService = singleScanOrderConfirmationService;
@@ -123,9 +120,7 @@ namespace ShipWorks.SingleScan
         private bool AllowAutoPrint(ScanMessage scanMessage)
         {
             // they scanned a barcode
-            return !scanMessage.ScannedText.IsNullOrWhiteSpace() &&
-                userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
-                           !mainForm.AdditionalFormsOpen();
+            return !scanMessage.ScannedText.IsNullOrWhiteSpace() && autoPrintPermissions.AutoPrintPermitted();
         }
 
         /// <summary>
