@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="AutoPrintServiceDto.cs" />
     <Compile Include="IAutoPrintPermissions.cs" />
+    <Compile Include="LoggableAutoPrintService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannerRegistrationDialog.cs">
       <SubType>Form</SubType>
