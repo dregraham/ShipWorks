@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgViewModelTest.cs" />
     <Compile Include="AutoPrintConfirmationDlgFactoryTest.cs" />
+    <Compile Include="AutoPrintServicePipelineTest.cs" />
     <Compile Include="AutoPrintServiceTest.cs" />
     <Compile Include="LoggableAutoPrintServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

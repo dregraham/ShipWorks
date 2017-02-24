@@ -52,6 +52,11 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is listening for scans.
+        /// </summary>
+        public bool IsListeningForScans => scanMessagesConnection != null;
+
+        /// <summary>
         /// Initialize auto print for the current session
         /// </summary>
         public void InitializeForCurrentSession()
