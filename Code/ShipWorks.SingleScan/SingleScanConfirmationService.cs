@@ -22,10 +22,8 @@ namespace ShipWorks.SingleScan
         /// </summary>
         /// <param name="orderConfirmationService">The order confirmation service.</param>
         /// <param name="shipmentConfirmationService">The shipment confirmation service.</param>
-        /// <param name="autoWeighService">The automatic weigh service.</param>
         public SingleScanConfirmationService(ISingleScanOrderConfirmationService orderConfirmationService,
-            ISingleScanShipmentConfirmationService shipmentConfirmationService,
-            IAutoWeighService autoWeighService)
+            ISingleScanShipmentConfirmationService shipmentConfirmationService)
         {
             this.orderConfirmationService = orderConfirmationService;
             this.shipmentConfirmationService = shipmentConfirmationService;
