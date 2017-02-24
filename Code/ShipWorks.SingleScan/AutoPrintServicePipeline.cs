@@ -24,12 +24,17 @@ namespace ShipWorks.SingleScan
     /// <seealso cref="ShipWorks.ApplicationCore.IInitializeForCurrentUISession" />
     public class AutoPrintServicePipeline : IInitializeForCurrentUISession
     {
-        private readonly IAutoPrintService autoPrintService;
-        public IDisposable FilterCompletedMessageSubscription;
         private const int FilterCountsUpdatedMessageTimeoutInSeconds = 25;
         private const int ShipmentsProcessedMessageTimeoutInMinutes = 5;
+
+        private readonly ILog log;
+        private readonly IConnectableObservable<ScanMessage> scanMessages;
+        private readonly IMessenger messenger;
+        private readonly ISchedulerProvider schedulerProvider;
+        private readonly IAutoPrintService autoPrintService;
+
         private IDisposable scanMessagesConnection;
-        private ILog log;
+        private IDisposable filterCompletedMessageSubscription;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPrintServicePipeline"/> class.
@@ -37,29 +42,14 @@ namespace ShipWorks.SingleScan
         public AutoPrintServicePipeline(IAutoPrintService autoPrintService, IMessenger messenger,
             ISchedulerProvider schedulerProvider, Func<Type, ILog> logFactory)
         {
-            Messenger = messenger;
-            SchedulerProvider = schedulerProvider;
+            this.messenger = messenger;
+            this.schedulerProvider = schedulerProvider;
 
-            ScanMessages = messenger.OfType<ScanMessage>().Publish();
-            scanMessagesConnection = ScanMessages.Connect();
+            scanMessages = messenger.OfType<ScanMessage>().Publish();
+            scanMessagesConnection = scanMessages.Connect();
             this.autoPrintService = autoPrintService;
             log = logFactory(typeof(AutoPrintServicePipeline));
         }
-
-        /// <summary>
-        /// Scan messages received by the auto print service
-        /// </summary>
-        public IConnectableObservable<ScanMessage> ScanMessages { get; set; }
-
-        /// <summary>
-        /// The messenger.
-        /// </summary>
-        public IMessenger Messenger { get; set; }
-
-        /// <summary>
-        /// The scheduler provider.
-        /// </summary>
-        public ISchedulerProvider SchedulerProvider { get; set; }
 
         /// <summary>
         /// Initialize auto print for the current session
@@ -71,15 +61,15 @@ namespace ShipWorks.SingleScan
             // This turns off the pipeline to ensure that another order isn't
             // picked up before we are finished with possessing the current order.
             // All exit points of the pipeline need to call ReconnectPipeline()
-            FilterCompletedMessageSubscription = ScanMessages
+            filterCompletedMessageSubscription = scanMessages
                 .Where(autoPrintService.AllowAutoPrint)
                 .Do(x => EndScanMessagesObservation())
-                .ContinueAfter(Messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),
+                .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),
                     TimeSpan.FromSeconds(FilterCountsUpdatedMessageTimeoutInSeconds),
-                    SchedulerProvider.Default,
+                    schedulerProvider.Default,
                     (scanMsg, filterCountsUpdatedMessage) =>
                         new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMsg))
-                .ObserveOn(SchedulerProvider.WindowsFormsEventLoop)
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .SelectMany(m => autoPrintService.HandleAutoPrintShipment(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
                 .CatchAndContinue((Exception ex) => HandleException(ex))
@@ -104,7 +94,7 @@ namespace ShipWorks.SingleScan
             log.Info("Starting scan message observation.");
             if (scanMessagesConnection == null)
             {
-                scanMessagesConnection = ScanMessages.Connect();
+                scanMessagesConnection = scanMessages.Connect();
             }
         }
 
@@ -131,11 +121,11 @@ namespace ShipWorks.SingleScan
                 // We don't get an observable to start from, but we need one to use ContinueAfter, so using
                 // Observable.Return to get an observable to work with.
                 returnResult = Observable.Return(0)
-                    .ContinueAfter(Messenger.OfType<ShipmentsProcessedMessage>(),
+                    .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
                         TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
-                        SchedulerProvider.Default,
+                        schedulerProvider.Default,
                         ((i, message) => message))
-                    .Do(message => Messenger.Send(
+                    .Do(message => messenger.Send(
                         new OrderSelectionChangingMessage(this,
                         message.Shipments.Select(s => s.Shipment.OrderID).Distinct(),
                         EntityGridRowSelector.SpecificEntities(message.Shipments.Select(s => s.Shipment.ShipmentID).Distinct()))))
@@ -159,7 +149,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public void EndSession()
         {
-            FilterCompletedMessageSubscription?.Dispose();
+            filterCompletedMessageSubscription?.Dispose();
         }
 
         /// <summary>
