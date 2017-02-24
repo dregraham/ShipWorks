@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Interapptive.Shared.Metrics;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Shipping.Services;
+using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {
@@ -16,64 +15,80 @@ namespace ShipWorks.SingleScan
     /// Log wrapper for AutoPrintService
     /// </summary>
     /// <seealso cref="ShipWorks.SingleScan.AutoPrintService" />
-    public class LoggableAutoPrintService : AutoPrintService, IInitializeForCurrentUISession
+    [KeyedComponent(typeof(IAutoPrintService), AutoPrintServiceType.Loggable)]
+    public class LoggableAutoPrintService : IAutoPrintService
     {
+        private readonly IAutoPrintService autoPrintService;
         private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoggableAutoPrintService"/> class.
         /// </summary>
-        /// <param name="messenger">The messenger.</param>
-        /// <param name="schedulerProvider">The scheduler provider.</param>
-        /// <param name="autoPrintPermissions">The automatic print permissions.</param>
-        /// <param name="singleScanShipmentConfirmationService">The single scan shipment confirmation service.</param>
-        /// <param name="singleScanOrderConfirmationService">The single scan order confirmation service.</param>
-        /// <param name="logFactory">The log factory.</param>
-        /// <param name="trackedDurationEventFactory">The tracked duration event factory.</param>
-        public LoggableAutoPrintService(IMessenger messenger, ISchedulerProvider schedulerProvider,
-            IAutoPrintPermissions autoPrintPermissions,
-            ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
-            ISingleScanOrderConfirmationService singleScanOrderConfirmationService, Func<Type, ILog> logFactory,
-            Func<string, ITrackedDurationEvent> trackedDurationEventFactory) :
-                base(messenger, schedulerProvider, autoPrintPermissions, singleScanShipmentConfirmationService,
-                    singleScanOrderConfirmationService, trackedDurationEventFactory)
+        public LoggableAutoPrintService(IIndex<AutoPrintServiceType, IAutoPrintService> autoPrintServiceFactory, Func<Type, ILog> logFactory)
         {
+            this.autoPrintService = autoPrintServiceFactory[AutoPrintServiceType.Default];
+            ScanMessages = autoPrintService.ScanMessages;
+            Messenger = autoPrintService.Messenger;
+            SchedulerProvider = autoPrintService.SchedulerProvider;
             log = logFactory(typeof(AutoPrintService));
         }
 
         /// <summary>
+        /// Scan messages received by the auto print service
+        /// </summary>
+        public IConnectableObservable<ScanMessage> ScanMessages { get; set; }
+
+        /// <summary>
+        /// The messenger.
+        /// </summary>
+        public IMessenger Messenger { get; set; }
+
+        /// <summary>
+        /// The scheduler provider.
+        /// </summary>
+        public ISchedulerProvider SchedulerProvider { get; set; }
+
+        /// <summary>
         /// Disconnect the scan messages observable
         /// </summary>
-        protected override void EndScanMessagesObservation()
+        public void EndScanMessagesObservation()
         {
             log.Info("Ending scan message observation.");
-            base.EndScanMessagesObservation();
+            autoPrintService.EndScanMessagesObservation();
         }
 
         /// <summary>
         /// Connect to the scan messages observable
         /// </summary>
-        protected override void StartScanMessagesObservation()
+        public void StartScanMessagesObservation()
         {
             log.Info("Starting scan message observation.");
-            base.StartScanMessagesObservation();
+            autoPrintService.StartScanMessagesObservation();
+        }
+
+        /// <summary>
+        /// Determines if the auto print message should be sent
+        /// </summary>
+        public bool AllowAutoPrint(ScanMessage scanMessage)
+        {
+            return autoPrintService.AllowAutoPrint(scanMessage);
         }
 
         /// <summary>
         /// Logs the exception and reconnect pipeline.
         /// </summary>
-        protected override void HandleException(Exception ex)
+        public void HandleException(Exception ex)
         {
             log.Error("Error occurred while attempting to auto print.", ex);
-            base.HandleException(ex);
+            autoPrintService.HandleException(ex);
         }
 
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        protected override async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
+        public async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
         {
-            GenericResult<string> result = await base.HandleAutoPrintShipment(autoPrintServiceDto);
+            GenericResult<string> result = await autoPrintService.HandleAutoPrintShipment(autoPrintServiceDto);
 
             if (result.Failure)
             {
@@ -86,14 +101,13 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Waits for shipments processed message.
         /// </summary>
-        protected override IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(
-            GenericResult<string> genericResult)
+        public IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
         {
-            IObservable<GenericResult<string>> returnResult = base.WaitForShipmentsProcessedMessage(genericResult);
+            IObservable<GenericResult<string>> returnResult = autoPrintService.WaitForShipmentsProcessedMessage(genericResult);
 
-            log.Info(genericResult.Failure
-                ? "No Shipments, not waiting for ShipmentsProcessMessageScan"
-                : $"ShipmentsProcessedMessage received from scan {genericResult.Value}");
+            log.Info(genericResult.Failure ?
+                "No Shipments, not waiting for ShipmentsProcessMessageScan" :
+                $"ShipmentsProcessedMessage received from scan {genericResult.Value}");
 
             return returnResult;
         }

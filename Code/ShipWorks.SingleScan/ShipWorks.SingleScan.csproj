@@ -130,7 +130,10 @@
       <DependentUpon>AutoPrintConfirmationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoPrintServiceDto.cs" />
+    <Compile Include="AutoPrintServiceType.cs" />
+    <Compile Include="AutoPrintSubscription.cs" />
     <Compile Include="IAutoPrintPermissions.cs" />
+    <Compile Include="IAutoPrintService.cs" />
     <Compile Include="LoggableAutoPrintService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannerRegistrationDialog.cs">

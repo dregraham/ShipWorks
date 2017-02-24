@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Shipping.Services;
@@ -23,19 +22,17 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Handles auto printing
     /// </summary>
-    public class AutoPrintService
+    [KeyedComponent(typeof(IAutoPrintService), AutoPrintServiceType.Default)]
+    public class AutoPrintService : IAutoPrintService
     {
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
-        protected readonly IMessenger Messenger;
-        protected readonly ISchedulerProvider SchedulerProvider;
+
         private readonly IAutoPrintPermissions autoPrintPermissions;
-        protected IDisposable FilterCompletedMessageSubscription;
         private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
         private readonly ISingleScanOrderConfirmationService singleScanOrderConfirmationService;
-        protected readonly IConnectableObservable<ScanMessage> ScanMessages;
+
         private IDisposable scanMessagesConnection;
         private const int ShipmentsProcessedMessageTimeoutInMinutes = 5;
-        private const int FilterCountsUpdatedMessageTimeoutInSeconds = 25;
 
         /// <summary>
         /// Constructor
@@ -59,34 +56,24 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Initialize auto print for the current session
+        /// Scan messages received by the auto print service
         /// </summary>
-        public void InitializeForCurrentSession()
-        {
-            // Wire up observable for auto printing
-            // note: One of the first things we do is dispose of scanMessagesConnection.
-            // This turns off the pipeline to ensure that another order isn't
-            // picked up before we are finished with possessing the current order.
-            // All exit points of the pipeline need to call ReconnectPipeline()
-            FilterCompletedMessageSubscription = ScanMessages
-                .Where(AllowAutoPrint)
-                .Do(x => EndScanMessagesObservation())
-                .ContinueAfter(Messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),
-                    TimeSpan.FromSeconds(FilterCountsUpdatedMessageTimeoutInSeconds),
-                    SchedulerProvider.Default,
-                    (scanMsg, filterCountsUpdatedMessage) =>
-                        new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMsg))
-                .ObserveOn(SchedulerProvider.WindowsFormsEventLoop)
-                .SelectMany(m => HandleAutoPrintShipment(m).ToObservable())
-                .SelectMany(WaitForShipmentsProcessedMessage)
-                .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe(x => StartScanMessagesObservation());
-        }
+        public IConnectableObservable<ScanMessage> ScanMessages { get; set; }
+
+        /// <summary>
+        /// The messenger.
+        /// </summary>
+        public IMessenger Messenger { get; set; }
+
+        /// <summary>
+        /// The scheduler provider.
+        /// </summary>
+        public ISchedulerProvider SchedulerProvider { get; set; }
 
         /// <summary>
         /// Disconnect the scan messages observable
         /// </summary>
-        protected virtual void EndScanMessagesObservation()
+        public void EndScanMessagesObservation()
         {
             scanMessagesConnection?.Dispose();
             scanMessagesConnection = null;
@@ -95,7 +82,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Connect to the scan messages observable
         /// </summary>
-        protected virtual void StartScanMessagesObservation()
+        public void StartScanMessagesObservation()
         {
             if (scanMessagesConnection == null)
             {
@@ -106,7 +93,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Determines if the auto print message should be sent
         /// </summary>
-        protected bool AllowAutoPrint(ScanMessage scanMessage)
+        public bool AllowAutoPrint(ScanMessage scanMessage)
         {
             // they scanned a barcode
             return !scanMessage.ScannedText.IsNullOrWhiteSpace() && autoPrintPermissions.AutoPrintPermitted();
@@ -115,7 +102,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        protected virtual async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
+        public async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
         {
             GenericResult<string> result;
             string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
@@ -173,7 +160,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Get the order ID of the order we intend to process
         /// </summary>
-        protected static long? GetOrderID(AutoPrintServiceDto autoPrintServiceDto)
+        private static long? GetOrderID(AutoPrintServiceDto autoPrintServiceDto)
         {
             bool orderNotFound = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
                    autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
@@ -207,7 +194,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Logs the exception and reconnect pipeline.
         /// </summary>
-        protected virtual void HandleException(Exception ex)
+        public void HandleException(Exception ex)
         {
             StartScanMessagesObservation();
         }
@@ -215,7 +202,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Waits for shipments processed message.
         /// </summary>
-        protected virtual IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
+        public IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
         {
             IObservable<GenericResult<string>> returnResult;
 
@@ -243,22 +230,6 @@ namespace ShipWorks.SingleScan
             }
 
             return returnResult;
-        }
-
-        /// <summary>
-        /// End the current session
-        /// </summary>
-        public void EndSession()
-        {
-            FilterCompletedMessageSubscription?.Dispose();
-        }
-
-        /// <summary>
-        /// Dispose the container
-        /// </summary>
-        public void Dispose()
-        {
-            EndSession();
         }
     }
 }
