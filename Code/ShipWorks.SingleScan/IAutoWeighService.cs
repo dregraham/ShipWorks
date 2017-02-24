@@ -14,6 +14,6 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Applies the weight on the scale to the specified shipments
         /// </summary>
-        Task<bool> Apply(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent);
+        Task<bool> ApplyWeights(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent);
     }
 }

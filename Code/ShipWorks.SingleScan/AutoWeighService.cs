@@ -47,7 +47,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Applies the weight on the scale to the specified shipments
         /// </summary>
-        public async Task<bool> Apply(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
+        public async Task<bool> ApplyWeights(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
         {
             if (!autoPrintPermissions.AutoWeighOn())
             {

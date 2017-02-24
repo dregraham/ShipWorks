@@ -40,7 +40,7 @@ namespace ShipWorks.SingleScan.Tests
 
             var shipments = new List<ShipmentEntity>() {uspsShipmentEntity};
             
-            await testObject.Apply(shipments, trackedDurationEvent);
+            await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             mock.Mock<IScaleReader>()
                 .Verify(s=>s.ReadScale(), Times.Never);
@@ -65,7 +65,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42));
 
-            await testObject.Apply(shipments, trackedDurationEvent);
+            await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             packageAdapter.VerifySet(package => package.Weight = 42, Times.Exactly(4));
         }
@@ -90,7 +90,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42.00625));
 
-            await testObject.Apply(shipments, trackedDurationEvent);
+            await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             packageAdapter.VerifySet(package => package.Weight = It.IsAny<double>(), Times.Never);
         }
@@ -114,7 +114,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42));
 
-            bool returnValue = await testObject.Apply(shipments, trackedDurationEvent);
+            bool returnValue = await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             Assert.True(returnValue);
         }
@@ -139,7 +139,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(.002));
 
-            await testObject.Apply(shipments, trackedDurationEvent);
+            await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             packageAdapter.VerifySet(package => package.Weight = It.IsAny<double>(), Times.Never);
         }
@@ -163,7 +163,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.ReadError("blah"));
 
-            bool returnValue = await testObject.Apply(shipments, trackedDurationEvent);
+            bool returnValue = await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             Assert.False(returnValue);
         }
@@ -187,7 +187,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42));
 
-            await testObject.Apply(shipments, trackedDurationEvent);
+            await testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             mock.Mock<ITrackedDurationEvent>()
                 .Verify(t => t.AddProperty(AutoWeighService.TelemetryPropertyName, "Yes"), Times.Once);

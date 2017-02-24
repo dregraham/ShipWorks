@@ -16,7 +16,6 @@ namespace ShipWorks.SingleScan
     {
         private readonly ISingleScanOrderConfirmationService orderConfirmationService;
         private readonly ISingleScanShipmentConfirmationService shipmentConfirmationService;
-        private readonly IAutoWeighService autoWeighService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleScanConfirmationService"/> class.
@@ -30,13 +29,12 @@ namespace ShipWorks.SingleScan
         {
             this.orderConfirmationService = orderConfirmationService;
             this.shipmentConfirmationService = shipmentConfirmationService;
-            this.autoWeighService = autoWeighService;
         }
 
         /// <summary>
         /// Confirms that the order with the given orderId should be printed.
         /// </summary>
-        public bool ConfirmOrders(long orderId, int numberOfMatchedOrders, string scanText)
+        public bool ConfirmOrder(long orderId, int numberOfMatchedOrders, string scanText)
             => orderConfirmationService.Confirm(orderId, numberOfMatchedOrders, scanText);
 
         /// <summary>
@@ -44,11 +42,5 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public Task<IEnumerable<ShipmentEntity>> GetShipments(long orderId, string scannedBarcode)
             => shipmentConfirmationService.GetShipments(orderId, scannedBarcode);
-
-        /// <summary>
-        /// Applies the weight on the scale to the specified shipments
-        /// </summary>
-        public Task<bool> Apply(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
-            => autoWeighService.Apply(shipments, trackedDurationEvent);
     }
 }
