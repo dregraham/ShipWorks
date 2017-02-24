@@ -21,6 +21,6 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto);
+        Task<GenericResult<string>> Print(AutoPrintServiceDto autoPrintServiceDto);
     }
 }

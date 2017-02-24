@@ -53,11 +53,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task<GenericResult<string>> HandleAutoPrintShipment(AutoPrintServiceDto autoPrintServiceDto)
+        public async Task<GenericResult<string>> Print(AutoPrintServiceDto autoPrintServiceDto)
         {
             GenericResult<string> result;
-            string scannedBarcode = autoPrintServiceDto.ScanMessage.ScannedText;
-            long? orderID = GetOrderID(autoPrintServiceDto);
+            string scannedBarcode = autoPrintServiceDto.ScannedBarcode;
+            long? orderID = autoPrintServiceDto.OrderID;
 
             // Only auto print if an order was found
             if (!orderID.HasValue)
@@ -69,7 +69,7 @@ namespace ShipWorks.SingleScan
                 using (ITrackedDurationEvent autoPrintTrackedDurationEvent =
                     trackedDurationEventFactory("SingleScan.AutoPrint.ShipmentsProcessed"))
                 {
-                    int matchedOrderCount = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count;
+                    int matchedOrderCount = autoPrintServiceDto.MatchedOrderCount;
 
                     // Confirm that the order found is the one the user wants to print
                     bool userCanceledPrint = !singleScanOrderConfirmationService.Confirm(orderID.Value, matchedOrderCount, scannedBarcode);
@@ -106,23 +106,6 @@ namespace ShipWorks.SingleScan
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Get the order ID of the order we intend to process
-        /// </summary>
-        private static long? GetOrderID(AutoPrintServiceDto autoPrintServiceDto)
-        {
-            bool orderNotFound = autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent == null ||
-                   autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.FilterNodeContent.Count < 1 ||
-                   autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId == null;
-
-            if (orderNotFound)
-            {
-                return null;
-            }
-
-            return autoPrintServiceDto.SingleScanFilterUpdateCompleteMessage.OrderId.Value;
         }
 
         /// <summary>

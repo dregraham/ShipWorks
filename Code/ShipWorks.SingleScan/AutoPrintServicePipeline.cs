@@ -70,7 +70,7 @@ namespace ShipWorks.SingleScan
                     (scanMsg, filterCountsUpdatedMessage) =>
                         new AutoPrintServiceDto(filterCountsUpdatedMessage, scanMsg))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .SelectMany(m => autoPrintService.HandleAutoPrintShipment(m).ToObservable())
+                .SelectMany(m => autoPrintService.Print(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(x => StartScanMessagesObservation());
