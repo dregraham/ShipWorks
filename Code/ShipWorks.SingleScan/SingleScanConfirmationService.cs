@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 
@@ -12,6 +13,7 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// A facade to all the single scan confirmation services
     /// </summary>
+    [Component]
     public class SingleScanConfirmationService : ISingleScanConfirmationService
     {
         private readonly ISingleScanOrderConfirmationService orderConfirmationService;
