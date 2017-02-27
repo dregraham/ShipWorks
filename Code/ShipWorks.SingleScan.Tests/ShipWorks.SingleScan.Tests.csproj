@@ -149,6 +149,7 @@
     <Compile Include="AutoPrintServicePipelineTest.cs" />
     <Compile Include="AutoPrintServiceTest.cs" />
     <Compile Include="LoggableAutoPrintServiceTest.cs" />
+    <Compile Include="AutoWeighServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterScannerControlViewModelTest.cs" />
     <Compile Include="ScannerIdentifierTest.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="ScannerServicePipelines\DisableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipelineTest.cs" />
     <Compile Include="ScannerServiceTest.cs" />
+    <Compile Include="SingleScanConfirmationServiceTest.cs" />
     <Compile Include="SingleScanOrderConfirmationServiceTest.cs" />
     <Compile Include="SingleScanOrderShortcutTest.cs" />
     <Compile Include="SingleScanShipmentConfirmationServiceTest.cs" />

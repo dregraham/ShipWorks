@@ -255,7 +255,6 @@
     <Compile Include="Services\CarrierShipmentAdapterFactory.cs" />
     <Compile Include="Services\Dialogs\ShippingProfileManagerDialogService.cs" />
     <Compile Include="Services\DimensionsManagerWrapper.cs" />
-    <Compile Include="Services\IAutoWeighService.cs" />
     <Compile Include="Services\IDimensionsManager.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="Rating\IRateSelectionFactory.cs" />

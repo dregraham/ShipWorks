@@ -31,5 +31,10 @@ namespace ShipWorks.SingleScan
             return userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
                    !mainForm.AdditionalFormsOpen();
         }
+
+        /// <summary>
+        /// Whether or not auto weigh is turned on
+        /// </summary>
+        public bool AutoWeighOn() => userSession.Settings?.AutoWeigh ?? false;
     }
 }

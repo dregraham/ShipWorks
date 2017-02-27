@@ -130,9 +130,12 @@
       <DependentUpon>AutoPrintConfirmationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoPrintServiceDto.cs" />
+    <Compile Include="AutoWeighService.cs" />
     <Compile Include="AutoPrintServicePipeline.cs" />
     <Compile Include="IAutoPrintPermissions.cs" />
+    <Compile Include="IAutoWeighService.cs" />
     <Compile Include="IAutoPrintService.cs" />
+    <Compile Include="ISingleScanConfirmationService.cs" />
     <Compile Include="LoggableAutoPrintService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannerRegistrationDialog.cs">
@@ -156,6 +159,7 @@
     <Compile Include="ScannerServicePipelines\DisableSingleScanInputFilterPipeline.cs" />
     <Compile Include="ScannerServicePipelines\EnableSingleScanInputFilterPipeline.cs" />
     <Compile Include="ScannerServicePipelines\IScannerServicePipeline.cs" />
+    <Compile Include="SingleScanConfirmationService.cs" />
     <Compile Include="SingleScanModule.cs" />
     <Compile Include="SingleScanOrderConfirmationService.cs" />
     <Compile Include="TelemetricSingleScanOrderConfirmationService.cs" />
