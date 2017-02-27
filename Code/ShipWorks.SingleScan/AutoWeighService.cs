@@ -22,7 +22,7 @@ namespace ShipWorks.SingleScan
         private readonly ILog log;
 
         // .1 oz
-        private const double weightDifferenceToIgnore = .00625; 
+        private const double weightDifferenceToIgnore = .00625;
 
         // .05 oz
         private const double weightMinimum = 0.003125;
@@ -71,14 +71,14 @@ namespace ShipWorks.SingleScan
                 CollectTelemetryData(trackedDurationEvent, "No");
                 return true;
             }
-            
+
             foreach (ShipmentEntity shipment in shipments)
             {
                 ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipment);
 
                 foreach (IPackageAdapter packageAdapter in shipmentAdapter.GetPackageAdapters())
                 {
-                    if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > weightDifferenceToIgnore || 
+                    if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > weightDifferenceToIgnore ||
                         packageAdapter.Weight < weightMinimum)
                     {
                         log.Debug(
@@ -86,6 +86,8 @@ namespace ShipWorks.SingleScan
                         packageAdapter.Weight = weighResult.Weight;
                     }
                 }
+
+                shipmentAdapter.SaveShipment(shipment);
             }
 
             CollectTelemetryData(trackedDurationEvent, "Yes");

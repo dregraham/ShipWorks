@@ -5,6 +5,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -346,6 +347,17 @@ namespace ShipWorks.Shipping.Services
 
             Shipment.CustomsItems.Remove(existingItem);
             UpdateDynamicData();
+        }
+
+        /// <summary>
+        /// Saves the shipment.
+        /// </summary>
+        public void SaveShipment(ShipmentEntity shipment)
+        {
+            using (ISqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                sqlAdapter.SaveAndRefetch(shipment);
+            }
         }
     }
 }
