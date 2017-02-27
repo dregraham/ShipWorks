@@ -8,7 +8,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
-using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
@@ -36,11 +35,11 @@ namespace ShipWorks.SingleScan.Tests
             messenger = new TestMessenger();
             mock.Provide<IMessenger>(messenger);
 
-            mock.Mock<ISingleScanOrderConfirmationService>()
-                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+            mock.Mock<ISingleScanConfirmationService>()
+                .Setup(service => service.ConfirmOrder(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(true);
 
-            mock.Mock<ISingleScanShipmentConfirmationService>()
+            mock.Mock<ISingleScanConfirmationService>()
                 .Setup(service => service.GetShipments(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(shipments);
 
@@ -73,8 +72,8 @@ namespace ShipWorks.SingleScan.Tests
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
             shipments.Add(new ShipmentEntity(1));
 
-            mock.Mock<ISingleScanOrderConfirmationService>()
-                .Setup(service => service.Confirm(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
+            mock.Mock<ISingleScanConfirmationService>()
+                .Setup(service => service.ConfirmOrder(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(false);
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
@@ -83,7 +82,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void OrderScanned_DelegatesScanInformationToOrderConfirmationService()
+        public async void OrderScanned_DelegatesScanInformationToConfirmationService()
         {
             testObject = mock.Create<AutoPrintService>();
 
@@ -99,8 +98,8 @@ namespace ShipWorks.SingleScan.Tests
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
 
-            mock.Mock<ISingleScanOrderConfirmationService>()
-                .Verify(service => service.Confirm(101L, 72, "A"));
+            mock.Mock<ISingleScanConfirmationService>()
+                .Verify(service => service.ConfirmOrder(101L, 72, "A"));
         }
 
         [Fact]
@@ -110,8 +109,8 @@ namespace ShipWorks.SingleScan.Tests
                 .SetupGet(node => node.Count)
                 .Returns(2);
 
-            mock.Mock<ISingleScanOrderConfirmationService>().
-                Setup(s => s.Confirm(It.IsAny<long>(), 2, "A")).
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.ConfirmOrder(It.IsAny<long>(), 2, "A")).
                 Returns(false);
 
             testObject = mock.Create<AutoPrintService>();
@@ -131,8 +130,8 @@ namespace ShipWorks.SingleScan.Tests
                 .SetupGet(node => node.Count)
                 .Returns(2);
 
-            mock.Mock<ISingleScanOrderConfirmationService>().
-                Setup(s => s.Confirm(It.IsAny<long>(), 2, "A")).
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.ConfirmOrder(It.IsAny<long>(), 2, "A")).
                 Returns(true);
 
             testObject = mock.Create<AutoPrintService>();
@@ -306,11 +305,11 @@ namespace ShipWorks.SingleScan.Tests
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
 
-            mock.Mock<ISingleScanOrderConfirmationService>().
-                Setup(s => s.Confirm(It.IsAny<long>(), 1, "A")).
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.ConfirmOrder(It.IsAny<long>(), 1, "A")).
                 Returns(true);
 
-            mock.Mock<ISingleScanShipmentConfirmationService>()
+            mock.Mock<ISingleScanConfirmationService>()
                 .Setup(s => s.GetShipments(1, "A"))
                 .ReturnsAsync(new List<ShipmentEntity>() { new ShipmentEntity(1) });
 
@@ -335,8 +334,8 @@ namespace ShipWorks.SingleScan.Tests
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
 
-            mock.Mock<ISingleScanOrderConfirmationService>().
-                Setup(s => s.Confirm(It.IsAny<long>(), 2, "A")).
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.ConfirmOrder(It.IsAny<long>(), 2, "A")).
                 Returns(false);
 
             testObject = mock.Create<AutoPrintService>();
@@ -356,11 +355,11 @@ namespace ShipWorks.SingleScan.Tests
             var trackedDurationEvent = mock.Mock<ITrackedDurationEvent>();
             mock.MockFunc<string, ITrackedDurationEvent>(trackedDurationEvent);
 
-            mock.Mock<ISingleScanOrderConfirmationService>().
-                Setup(s => s.Confirm(It.IsAny<long>(), 1, "A")).
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.ConfirmOrder(It.IsAny<long>(), 1, "A")).
                 Returns(true);
 
-            mock.Mock<ISingleScanShipmentConfirmationService>()
+            mock.Mock<ISingleScanConfirmationService>()
                 .Setup(s => s.GetShipments(1, "A"))
                 .ReturnsAsync(new List<ShipmentEntity>());
 

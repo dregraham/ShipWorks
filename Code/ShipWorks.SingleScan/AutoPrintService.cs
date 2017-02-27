@@ -21,8 +21,7 @@ namespace ShipWorks.SingleScan
     {
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
         private readonly IAutoPrintPermissions autoPrintPermissions;
-        private readonly ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService;
-        private readonly ISingleScanOrderConfirmationService singleScanOrderConfirmationService;
+        private readonly ISingleScanConfirmationService confirmationService;
         private readonly IMessenger messenger;
 
         /// <summary>
@@ -30,15 +29,13 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public AutoPrintService(IMessenger messenger,
             IAutoPrintPermissions autoPrintPermissions,
-            ISingleScanShipmentConfirmationService singleScanShipmentConfirmationService,
-            ISingleScanOrderConfirmationService singleScanOrderConfirmationService,
+            ISingleScanConfirmationService confirmationService,
             Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
         {
             this.messenger = messenger;
             this.autoPrintPermissions = autoPrintPermissions;
+            this.confirmationService = confirmationService;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
-            this.singleScanShipmentConfirmationService = singleScanShipmentConfirmationService;
-            this.singleScanOrderConfirmationService = singleScanOrderConfirmationService;
         }
 
         /// <summary>
@@ -72,7 +69,7 @@ namespace ShipWorks.SingleScan
                     int matchedOrderCount = autoPrintServiceDto.MatchedOrderCount;
 
                     // Confirm that the order found is the one the user wants to print
-                    bool userCanceledPrint = !singleScanOrderConfirmationService.Confirm(orderID.Value, matchedOrderCount, scannedBarcode);
+                    bool userCanceledPrint = !confirmationService.ConfirmOrder(orderID.Value, matchedOrderCount, scannedBarcode);
 
                     IEnumerable<ShipmentEntity> shipments = Enumerable.Empty<ShipmentEntity>();
 
@@ -84,7 +81,7 @@ namespace ShipWorks.SingleScan
                     else
                     {
                         // Get shipments to process (assumes GetShipments will not return voided shipments)
-                        shipments = await singleScanShipmentConfirmationService.GetShipments(orderID.Value, scannedBarcode);
+                        shipments = await confirmationService.GetShipments(orderID.Value, scannedBarcode);
 
                         userCanceledPrint = !shipments.Any();
 
