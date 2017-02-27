@@ -20,7 +20,7 @@ namespace ShipWorks.SingleScan
     public class AutoPrintService : IAutoPrintService
     {
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
-        private readonly IAutoPrintPermissions autoPrintPermissions;
+        private readonly IAutoPrintSettings autoPrintSettings;
         private readonly ISingleScanConfirmationService confirmationService;
         private readonly IAutoWeighService autoWeighService;
         private readonly IMessenger messenger;
@@ -29,13 +29,13 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public AutoPrintService(IMessenger messenger,
-            IAutoPrintPermissions autoPrintPermissions,
+            IAutoPrintSettings autoPrintSettings,
             ISingleScanConfirmationService confirmationService,
             IAutoWeighService autoWeighService,
             Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
         {
             this.messenger = messenger;
-            this.autoPrintPermissions = autoPrintPermissions;
+            this.autoPrintSettings = autoPrintSettings;
             this.confirmationService = confirmationService;
             this.autoWeighService = autoWeighService;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
@@ -47,7 +47,7 @@ namespace ShipWorks.SingleScan
         public bool AllowAutoPrint(ScanMessage scanMessage)
         {
             // they scanned a barcode
-            return !scanMessage.ScannedText.IsNullOrWhiteSpace() && autoPrintPermissions.AutoPrintPermitted();
+            return !scanMessage.ScannedText.IsNullOrWhiteSpace() && autoPrintSettings.IsAutoPrintEnabled();
         }
 
         /// <summary>

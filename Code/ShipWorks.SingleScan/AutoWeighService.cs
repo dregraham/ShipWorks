@@ -8,14 +8,13 @@ using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Users;
 
 namespace ShipWorks.SingleScan
 {
     [Component]
     public class AutoWeighService : IAutoWeighService
     {
-        private readonly IAutoPrintPermissions autoPrintPermissions;
+        private readonly IAutoPrintSettings autoPrintSettings;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IMessageHelper messageHelper;
         private readonly IScaleReader scaleReader;
@@ -34,13 +33,13 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoWeighService"/> class.
         /// </summary>
-        public AutoWeighService(IAutoPrintPermissions autoPrintPermissions,
+        public AutoWeighService(IAutoPrintSettings autoPrintSettings,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory,
             IMessageHelper messageHelper,
             IScaleReader scaleReader,
             Func<Type, ILog> logFactory)
         {
-            this.autoPrintPermissions = autoPrintPermissions;
+            this.autoPrintSettings = autoPrintSettings;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.messageHelper = messageHelper;
             this.scaleReader = scaleReader;
@@ -52,7 +51,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public bool ApplyWeights(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
         {
-            if (!autoPrintPermissions.AutoWeighOn())
+            if (!autoPrintSettings.IsAutoWeighEnabled())
             {
                 log.Debug("AutoWeigh is turned off");
                 CollectTelemetryData(trackedDurationEvent, "N/A");

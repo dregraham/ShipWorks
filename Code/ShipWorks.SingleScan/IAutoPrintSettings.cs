@@ -3,16 +3,16 @@
     /// <summary>
     /// Permissions for AutoPrint
     /// </summary>
-    public interface IAutoPrintPermissions
+    public interface IAutoPrintSettings
     {
         /// <summary>
         /// Whether or not auto print is permitted in the current state
         /// </summary>
-        bool AutoPrintPermitted();
+        bool IsAutoPrintEnabled();
 
         /// <summary>
         /// Whether or not auto weigh is turned on
         /// </summary>
-        bool AutoWeighOn();
+        bool IsAutoWeighEnabled();
     }
 }

@@ -298,8 +298,8 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_ReturnsNoShipments_WhenOrderLoaderReturnsAMultiPackageShipment_AndAutoWeighIsOn_AndUserDeclines()
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(w => w.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
                 .Returns(true);
 
             MockShipmentAdapterToReturnTwoPackages();
@@ -309,7 +309,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
                 .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
                     new List<ShipmentEntity>() {new ShipmentEntity() {Processed = false}}));
-            
+
             mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns(DialogResult.Cancel);
 
             mock.Mock<IShipmentFactory>()
@@ -324,8 +324,8 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_ReturnsShipment_WhenOrderLoaderReturnsAMultiPackageShipment_AndAutoWeighIsOn_AndUserAccepts()
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(w => w.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
                 .Returns(true);
 
             MockShipmentAdapterToReturnTwoPackages();
@@ -351,8 +351,8 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_ReturnsShipment_WhenOrderLoaderReturnsAMultiPackageShipment_AndAutoWeighIsOff()
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(w => w.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
                 .Returns(false);
 
             MockShipmentAdapterToReturnTwoPackages();
@@ -455,8 +455,8 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_DelegatesToDlgFactoryWithMultiplePackageMessaging_WhenOrderLoaderReturnsOneShipmentWithMultiplePackages()
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(w => w.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
                 .Returns(true);
 
             // Mock up the order loader to return one processed shipment
@@ -508,8 +508,8 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_DoesNotDelegateToDlgFactoryWithMultiplePackageMessaging_WhenOrderLoaderReturnsOneShipmentWithMultiplePackages_AndAutoWeighIsOff()
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(w => w.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
                 .Returns(false);
 
             // Mock up the order loader to return one processed shipment
@@ -588,8 +588,8 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public async void GetShipments_DelegatesToDlgFactoryWithAutoWeighMessage_WhenOrderLoaderReturnsMultipleUnprocessedShipment_AndAutoWeighIsOn()
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(w => w.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
                 .Returns(true);
 
             // Mock up the order loader to return one processed shipment

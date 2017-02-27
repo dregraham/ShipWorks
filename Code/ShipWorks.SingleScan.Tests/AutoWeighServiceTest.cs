@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -39,7 +36,7 @@ namespace ShipWorks.SingleScan.Tests
             var uspsShipmentEntity = Create.Shipment().AsPostal(x => x.AsUsps()).Build();
 
             var shipments = new List<ShipmentEntity>() {uspsShipmentEntity};
-            
+
             testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             mock.Mock<IScaleReader>()
@@ -53,7 +50,7 @@ namespace ShipWorks.SingleScan.Tests
             var shipments = new List<ShipmentEntity>() {shipment, shipment};
 
             var packageAdapter = mock.Mock<IPackageAdapter>();
-            
+
             var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
             shipmentAdapter.Setup(a => a.GetPackageAdapters())
                 .Returns(new List<IPackageAdapter> {packageAdapter.Object, packageAdapter.Object});
@@ -193,19 +190,16 @@ namespace ShipWorks.SingleScan.Tests
                 .Verify(t => t.AddProperty(AutoWeighService.TelemetryPropertyName, "Yes"), Times.Once);
         }
 
-
         private void SetAutoWeighSetting(bool allowAutoWeigh)
         {
-            mock.Mock<IAutoPrintPermissions>()
-                .Setup(p => p.AutoWeighOn())
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(p => p.IsAutoWeighEnabled())
                 .Returns(allowAutoWeigh);
         }
-
 
         public void Dispose()
         {
             mock.Dispose();
         }
-
     }
 }
