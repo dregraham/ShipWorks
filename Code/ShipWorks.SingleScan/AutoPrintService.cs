@@ -22,6 +22,7 @@ namespace ShipWorks.SingleScan
         private readonly Func<string, ITrackedDurationEvent> trackedDurationEventFactory;
         private readonly IAutoPrintPermissions autoPrintPermissions;
         private readonly ISingleScanConfirmationService confirmationService;
+        private readonly IAutoWeighService autoWeighService;
         private readonly IMessenger messenger;
 
         /// <summary>
@@ -30,11 +31,13 @@ namespace ShipWorks.SingleScan
         public AutoPrintService(IMessenger messenger,
             IAutoPrintPermissions autoPrintPermissions,
             ISingleScanConfirmationService confirmationService,
+            IAutoWeighService autoWeighService,
             Func<string, ITrackedDurationEvent> trackedDurationEventFactory)
         {
             this.messenger = messenger;
             this.autoPrintPermissions = autoPrintPermissions;
             this.confirmationService = confirmationService;
+            this.autoWeighService = autoWeighService;
             this.trackedDurationEventFactory = trackedDurationEventFactory;
         }
 
@@ -87,10 +90,18 @@ namespace ShipWorks.SingleScan
 
                         if (!userCanceledPrint)
                         {
-                            // All good, process the shipment
-                            messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
+                            bool weighSuccessful = await autoWeighService.ApplyWeights(shipments, autoPrintTrackedDurationEvent);
+                            if (!weighSuccessful)
+                            {
+                                result = GenericResult.FromError("Error reading scale", scannedBarcode);
+                            }
+                            else
+                            {
+                                // All good, process the shipment
+                                messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
 
-                            result = GenericResult.FromSuccess(scannedBarcode);
+                                result = GenericResult.FromSuccess(scannedBarcode);
+                            }
                         }
                         else
                         {
