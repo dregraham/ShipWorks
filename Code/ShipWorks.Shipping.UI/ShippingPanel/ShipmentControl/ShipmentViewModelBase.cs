@@ -159,8 +159,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             RefreshInsurance();
 
             messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter));
-
-            UpdateAddDeletePackageState();
         }
 
         /// <summary>
@@ -178,17 +176,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SelectedPackageAdapter = packageAdapter;
 
             messenger.Send(new ShipmentChangedMessage(this, shipmentAdapter));
-
-            UpdateAddDeletePackageState();
-        }
-
-        /// <summary>
-        /// Update the state of the add/delete buttons
-        /// </summary>
-        private void UpdateAddDeletePackageState()
-        {
-            DeletePackageCanExecute = SelectedPackageAdapter != null && PackageAdapters.Count > 1;
-            AddPackageCanExecute = PackageAdapters?.Count < 25;
         }
 
         /// <summary>
@@ -228,8 +215,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SelectedPackageAdapter = packageAdapter;
 
             LoadCustoms();
-
-            UpdateAddDeletePackageState();
         }
 
         /// <summary>

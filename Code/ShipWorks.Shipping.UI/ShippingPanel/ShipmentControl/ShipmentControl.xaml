@@ -83,11 +83,9 @@
 
                 <StackPanel Grid.Column="1">
                     <Button Style="{StaticResource Button.Add}" Margin="0, 0, 0, 4"
-                            Command="{Binding AddPackageCommand}" 
-                            IsEnabled="{Binding AddPackageCanExecute}"/>
+                            Command="{Binding AddPackageCommand}" />
                     <Button Style="{StaticResource Button.Delete}"
-                            Command="{Binding DeletePackageCommand}" 
-                            IsEnabled="{Binding DeletePackageCanExecute}"/>
+                            Command="{Binding DeletePackageCommand}" />
                 </StackPanel>
             </Grid>
         </Grid>

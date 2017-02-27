@@ -37,28 +37,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         private string weightErrorMessage;
         private IEnumerable<KeyValuePair<int, string>> packageTypes;
         private IEnumerable<KeyValuePair<int, string>> services;
-        private bool addPackageCanExecute;
-        private bool deletePackageCanExecute;
-
-        /// <summary>
-        /// The add package button can/cannot execute.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public virtual bool AddPackageCanExecute
-        {
-            get { return addPackageCanExecute; }
-            set { handler.Set(nameof(AddPackageCanExecute), ref addPackageCanExecute, value); }
-        }
-
-        /// <summary>
-        /// The delete package button can/cannot execute.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public virtual bool DeletePackageCanExecute
-        {
-            get { return deletePackageCanExecute; }
-            set { handler.Set(nameof(DeletePackageCanExecute), ref deletePackageCanExecute, value); }
-        }
 
         /// <summary>
         /// The insurance view model to use.
