@@ -92,13 +92,13 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(f => f.Create(It.IsAny<long>()))
-                .Returns(new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.None});
+                .Returns(new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.None });
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
             Assert.Empty(result);
             mock.Mock<IMessageHelper>()
-                .Verify(m=>m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+                .Verify(m => m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
         }
 
         [Fact]
@@ -198,7 +198,7 @@ namespace ShipWorks.SingleScan.Tests
 
             await testObject.GetShipments(123, "foobar");
 
-            mock.Mock<IMessageHelper>().Verify(h=>h.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+            mock.Mock<IMessageHelper>().Verify(h => h.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
         }
 
         [Fact]

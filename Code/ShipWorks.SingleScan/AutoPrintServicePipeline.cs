@@ -84,7 +84,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Disconnect the scan messages observable
         /// </summary>
-        public void EndScanMessagesObservation()
+        private void EndScanMessagesObservation()
         {
             log.Info("Ending scan message observation.");
             scanMessagesConnection?.Dispose();
@@ -94,7 +94,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Connect to the scan messages observable
         /// </summary>
-        public void StartScanMessagesObservation()
+        private void StartScanMessagesObservation()
         {
             log.Info("Starting scan message observation.");
             if (scanMessagesConnection == null)
@@ -106,7 +106,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Logs the exception and reconnect pipeline.
         /// </summary>
-        public void HandleException(Exception ex)
+        private void HandleException(Exception ex)
         {
             log.Error("Error occurred while attempting to auto print.", ex);
             StartScanMessagesObservation();
@@ -115,7 +115,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Waits for shipments processed message.
         /// </summary>
-        public IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
+        private IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
         {
             IObservable<GenericResult<string>> returnResult;
 

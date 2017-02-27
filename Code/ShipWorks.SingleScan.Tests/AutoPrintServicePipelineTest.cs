@@ -111,7 +111,7 @@ namespace ShipWorks.SingleScan.Tests
             windowsScheduler.Start();
 
             messenger.Send(new ShipmentsProcessedMessage(null, new ProcessShipmentResult[0]));
-            
+
             Assert.Equal(1, messenger.SentMessages.OfType<OrderSelectionChangingMessage>().Count());
         }
 
@@ -161,7 +161,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.AllowAutoPrint(It.IsAny<ScanMessage>()))
                 .Returns(allow);
         }
-        
+
         public void Dispose()
         {
             testObject.Dispose();
