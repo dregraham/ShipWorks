@@ -9,7 +9,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
-using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.SingleScan
 {

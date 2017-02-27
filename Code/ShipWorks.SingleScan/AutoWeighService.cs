@@ -21,12 +21,12 @@ namespace ShipWorks.SingleScan
         private readonly ILog log;
 
         // .1 oz
-        private const double weightDifferenceToIgnore = .00625;
+        private const double WeightDifferenceToIgnore = .00625;
 
         // .05 oz
-        private const double weightMinimum = 0.003125;
+        private const double MinimumWeight = 0.003125;
 
-        private const int scaleTimeoutInSeconds = 2;
+        private const int ScaleTimeoutInSeconds = 2;
 
         public const string TelemetryPropertyName = "SingleScan.AutoPrint.ShipmentsProcessed.AutoWeigh";
 
@@ -49,7 +49,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Applies the weight on the scale to the specified shipments
         /// </summary>
-        public bool ApplyWeights(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
+        public bool ApplyWeight(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
         {
             if (!autoPrintSettings.IsAutoWeighEnabled())
             {
@@ -59,7 +59,7 @@ namespace ShipWorks.SingleScan
             }
 
             Task<ScaleReadResult> scaleReaderTask = scaleReader.ReadScale();
-            bool scaleRead = scaleReaderTask.Wait(TimeSpan.FromSeconds(scaleTimeoutInSeconds));
+            bool scaleRead = scaleReaderTask.Wait(TimeSpan.FromSeconds(ScaleTimeoutInSeconds));
             if (!scaleRead)
             {
                 log.Error($"scaleReader timed out.");
@@ -77,7 +77,7 @@ namespace ShipWorks.SingleScan
                 return false;
             }
 
-            if (weighResult.Weight < weightMinimum)
+            if (weighResult.Weight < MinimumWeight)
             {
                 log.Info($"Weight not used because under weightMinimum = {weighResult.Weight}");
                 CollectTelemetryData(trackedDurationEvent, "No");
@@ -90,8 +90,8 @@ namespace ShipWorks.SingleScan
 
                 foreach (IPackageAdapter packageAdapter in shipmentAdapter.GetPackageAdapters())
                 {
-                    if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > weightDifferenceToIgnore ||
-                        packageAdapter.Weight < weightMinimum)
+                    if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > WeightDifferenceToIgnore ||
+                        packageAdapter.Weight < MinimumWeight)
                     {
                         log.Debug(
                             $"Weight applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
