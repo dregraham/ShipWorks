@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Interop;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
