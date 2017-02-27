@@ -32,7 +32,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void AutoWeighService_DoesNotReadScale_WhenAutoWeighIsOff()
+        public void AutoWeighService_DoesNotReadScale_WhenAutoWeighIsOff()
         {
             SetAutoWeighSetting(false);
 
@@ -40,14 +40,14 @@ namespace ShipWorks.SingleScan.Tests
 
             var shipments = new List<ShipmentEntity>() {uspsShipmentEntity};
             
-            await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             mock.Mock<IScaleReader>()
                 .Verify(s=>s.ReadScale(), Times.Never);
         }
 
         [Fact]
-        public async void AutoWeighService_SetsWeightOnAllPackages_WhenMultiplePackages_AndMultipleShipments()
+        public void AutoWeighService_SetsWeightOnAllPackages_WhenMultiplePackages_AndMultipleShipments()
         {
             var shipment = Create.Shipment().Build();
             var shipments = new List<ShipmentEntity>() {shipment, shipment};
@@ -65,13 +65,13 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42));
 
-            await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             packageAdapter.VerifySet(package => package.Weight = 42, Times.Exactly(4));
         }
 
         [Fact]
-        public async void AutoWeighService_DoesNotSetWeightOnAllPackages_WhenWeightIsWithinTenthOfAnOunceOfExistingWeight()
+        public void AutoWeighService_DoesNotSetWeightOnAllPackages_WhenWeightIsWithinTenthOfAnOunceOfExistingWeight()
         {
             var shipment = Create.Shipment().Build();
             var shipments = new List<ShipmentEntity>() { shipment, shipment };
@@ -90,13 +90,13 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42.00625));
 
-            await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             packageAdapter.VerifySet(package => package.Weight = It.IsAny<double>(), Times.Never);
         }
 
         [Fact]
-        public async void AutoWeighService_ReturnsTrue_WhenWeightIsApplied()
+        public void AutoWeighService_ReturnsTrue_WhenWeightIsApplied()
         {
             var shipment = Create.Shipment().Build();
             var shipments = new List<ShipmentEntity>() { shipment, shipment };
@@ -114,13 +114,13 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42));
 
-            bool returnValue = await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            bool returnValue = testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             Assert.True(returnValue);
         }
 
         [Fact]
-        public async void AutoWeighService_DoesNotSetWeightOnAllPackages_WhenWeightIsLessThanFiveHundredthsOfAnOunce()
+        public void AutoWeighService_DoesNotSetWeightOnAllPackages_WhenWeightIsLessThanFiveHundredthsOfAnOunce()
         {
             var shipment = Create.Shipment().Build();
             var shipments = new List<ShipmentEntity>() { shipment, shipment };
@@ -139,13 +139,13 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(.002));
 
-            await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             packageAdapter.VerifySet(package => package.Weight = It.IsAny<double>(), Times.Never);
         }
 
         [Fact]
-        public async void AutoWeighService_ReturnsFalse_WhenStatusFromScaleIsNotSuccess()
+        public void AutoWeighService_ReturnsFalse_WhenStatusFromScaleIsNotSuccess()
         {
             var shipment = Create.Shipment().Build();
             var shipments = new List<ShipmentEntity>() { shipment, shipment };
@@ -163,13 +163,13 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.ReadError("blah"));
 
-            bool returnValue = await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            bool returnValue = testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             Assert.False(returnValue);
         }
 
         [Fact]
-        public async void AutoWeighService_SendsYesTelemetry_WhenWeightIsApplied()
+        public void AutoWeighService_SendsYesTelemetry_WhenWeightIsApplied()
         {
             var shipment = Create.Shipment().Build();
             var shipments = new List<ShipmentEntity>() { shipment, shipment };
@@ -187,7 +187,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(s => s.ReadScale())
                 .ReturnsAsync(ScaleReadResult.Success(42));
 
-            await testObject.ApplyWeights(shipments, trackedDurationEvent);
+            testObject.ApplyWeights(shipments, trackedDurationEvent);
 
             mock.Mock<ITrackedDurationEvent>()
                 .Verify(t => t.AddProperty(AutoWeighService.TelemetryPropertyName, "Yes"), Times.Once);

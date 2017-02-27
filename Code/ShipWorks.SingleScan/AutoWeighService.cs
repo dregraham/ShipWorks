@@ -26,6 +26,9 @@ namespace ShipWorks.SingleScan
 
         // .05 oz
         private const double weightMinimum = 0.003125;
+
+        private const int scaleTimeoutInSeconds = 2;
+
         public const string TelemetryPropertyName = "SingleScan.AutoPrint.ShipmentsProcessed.AutoWeigh";
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Applies the weight on the scale to the specified shipments
         /// </summary>
-        public async Task<bool> ApplyWeights(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
+        public bool ApplyWeights(IEnumerable<ShipmentEntity> shipments, ITrackedDurationEvent trackedDurationEvent)
         {
             if (!autoPrintPermissions.AutoWeighOn())
             {
@@ -56,10 +59,20 @@ namespace ShipWorks.SingleScan
                 return true;
             }
 
-            ScaleReadResult weighResult = await scaleReader.ReadScale();
+            Task<ScaleReadResult> scaleReaderTask = scaleReader.ReadScale();
+            bool scaleRead = scaleReaderTask.Wait(TimeSpan.FromSeconds(scaleTimeoutInSeconds));
+            if (!scaleRead)
+            {
+                log.Error($"scaleReader timed out.");
+                messageHelper.ShowError("Scale not found. If you just plugged it in or just started ShipWorks, it may have yet to be detected.");
+                return false;
+            }
+
+            ScaleReadResult weighResult = scaleReaderTask.Result;
+
             if (weighResult.Status != ScaleReadStatus.Success)
             {
-                log.Info($"Error from scale: {weighResult.Message}");
+                log.Error($"Error from scale: {weighResult.Message}");
                 CollectTelemetryData(trackedDurationEvent, "No");
                 messageHelper.ShowError(weighResult.Message);
                 return false;

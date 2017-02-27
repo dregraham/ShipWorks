@@ -90,7 +90,7 @@ namespace ShipWorks.SingleScan
 
                         if (!userCanceledPrint)
                         {
-                            bool weighSuccessful = await autoWeighService.ApplyWeights(shipments, autoPrintTrackedDurationEvent);
+                            bool weighSuccessful = autoWeighService.ApplyWeights(shipments, autoPrintTrackedDurationEvent);
                             if (!weighSuccessful)
                             {
                                 result = GenericResult.FromError("Error reading scale", scannedBarcode);

@@ -33,7 +33,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         public static IObservable<ScaleReadResult> ReadEvents { get; }
 
         /// <summary>
-        /// Static constructor
+        /// Constructor
         /// </summary>
         static ScaleReader()
         {
@@ -55,6 +55,14 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             .Select(_ => ReadScale(true))
             .Do(_ => scaleObserver?.OnNext(true))
             .Publish().RefCount();
+        }
+
+        /// <summary>
+        /// Call Initialize to explicitly trigger static constructor
+        /// </summary>
+        public static void Initialize()
+        {
+            Log.Info("ScaleReader.Initialize called to explicitly trigger static constructor");
         }
 
         /// <summary>
