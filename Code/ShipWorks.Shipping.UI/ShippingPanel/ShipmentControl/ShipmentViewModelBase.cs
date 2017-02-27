@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
