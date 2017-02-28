@@ -348,16 +348,5 @@ namespace ShipWorks.Shipping.Services
             Shipment.CustomsItems.Remove(existingItem);
             UpdateDynamicData();
         }
-
-        /// <summary>
-        /// Saves the shipment.
-        /// </summary>
-        public void SaveShipment(ShipmentEntity shipment)
-        {
-            using (ISqlAdapter sqlAdapter = SqlAdapter.Create(false))
-            {
-                sqlAdapter.SaveAndRefetch(shipment);
-            }
-        }
     }
 }

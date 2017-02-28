@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -10,6 +11,8 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -31,6 +34,7 @@ namespace ShipWorks.SingleScan
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IAutoPrintService autoPrintService;
 
         private IDisposable scanMessagesConnection;
@@ -40,10 +44,11 @@ namespace ShipWorks.SingleScan
         /// Initializes a new instance of the <see cref="AutoPrintServicePipeline"/> class.
         /// </summary>
         public AutoPrintServicePipeline(IAutoPrintService autoPrintService, IMessenger messenger,
-            ISchedulerProvider schedulerProvider, Func<Type, ILog> logFactory)
+            ISchedulerProvider schedulerProvider, Func<Type, ILog> logFactory, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.messenger = messenger;
             this.schedulerProvider = schedulerProvider;
+            this.sqlAdapterFactory = sqlAdapterFactory;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
@@ -77,8 +82,61 @@ namespace ShipWorks.SingleScan
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .SelectMany(m => autoPrintService.Print(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
+                .Do(SaveUnprocessedShipments)
+                .Do(SendOrderSelectionChangingMessage)
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(x => StartScanMessagesObservation());
+        }
+
+        /// <summary>
+        /// Sends the order selection changing message for processed orders
+        /// </summary>
+        private void SendOrderSelectionChangingMessage(GenericResult<ShipmentsProcessedMessage> shipmentsProcessedMessageResult)
+        {
+            if (shipmentsProcessedMessageResult.Success)
+            {
+                List<ShipmentEntity> shipments = shipmentsProcessedMessageResult.Value.Shipments.Select(s => s.Shipment).ToList();
+                if (shipments.Any())
+                {
+                    messenger.Send(new OrderSelectionChangingMessage(this, shipments.Select(shipment => shipment.OrderID).Distinct(),
+                            EntityGridRowSelector.SpecificEntities(shipments.Select(shipment => shipment.ShipmentID).Distinct())));
+                }
+                else
+                {
+                    log.Info("No shipments found in SendOrderSelectionChangingMessage.");
+                }
+            }
+            else
+            {
+                log.Info("shipmentsProcessedMessageResult not success in SendOrderSelectionChangingMessage, skipping.");
+            }
+        }
+
+        /// <summary>
+        /// Saves any changed weights for shipments that failed to process
+        /// </summary>
+        private void SaveUnprocessedShipments(GenericResult<ShipmentsProcessedMessage> shipmentsProcessedMessage)
+        {
+            if (shipmentsProcessedMessage.Success)
+            {
+                List<ShipmentEntity> unprocessedShipments = shipmentsProcessedMessage.Value.Shipments.Where(s=>!s.IsSuccessful).Select(s=>s.Shipment).ToList();
+                if (unprocessedShipments.Any())
+                {
+                    log.Info($"Error processing {unprocessedShipments.Count}. Saving unprocessed shipments.");
+                    using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+                    {
+                        foreach (ShipmentEntity unprocessedShipment in unprocessedShipments)
+                        {
+                            sqlAdapter.SaveAndRefetch(unprocessedShipment);
+                        }
+                        sqlAdapter.Commit();
+                    }
+                }
+                else
+                {
+                    log.Info("All shipments successfully processed.");
+                }
+            }
         }
 
         /// <summary>
@@ -115,12 +173,13 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Waits for shipments processed message.
         /// </summary>
-        private IObservable<GenericResult<string>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
+        private IObservable<GenericResult<ShipmentsProcessedMessage>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
         {
-            IObservable<GenericResult<string>> returnResult;
+            IObservable<GenericResult<ShipmentsProcessedMessage>> returnResult;
 
             if (genericResult.Success)
             {
+                log.Info("Waiting for ShipmentsProcessedMessage");
                 // Listen for ShipmentsProcessedMessages, but timeout if processing takes
                 // longer than ShipmentsProcessedMessageTimeoutInMinutes.
                 // We don't get an observable to start from, but we need one to use ContinueAfter, so using
@@ -129,22 +188,26 @@ namespace ShipWorks.SingleScan
                     .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
                         TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
                         schedulerProvider.Default,
-                        ((i, message) => message))
-                    .Do(message => messenger.Send(
-                        new OrderSelectionChangingMessage(this,
-                        message.Shipments.Select(s => s.Shipment.OrderID).Distinct(),
-                        EntityGridRowSelector.SpecificEntities(message.Shipments.Select(s => s.Shipment.ShipmentID).Distinct()))))
-                    .Select(f => genericResult);
-
+                        (i, message) => message)
+                    .Select(message =>
+                    {
+                        if (EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(message,default(ShipmentsProcessedMessage)))
+                        {
+                            log.Info("Timeout waiting for ShipmentsProcessedMessage");
+                            return GenericResult.FromError<ShipmentsProcessedMessage>("Timeout waiting for ShipmentsProcessedMessage");
+                        }
+                        else
+                        {
+                            log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
+                            return GenericResult.FromSuccess(message);
+                        }
+                    });
             }
             else
             {
-                returnResult = Observable.Return(genericResult);
+                log.Info("No Shipments, not waiting for ShipmentsProcessMessageScan");
+                returnResult = Observable.Return(GenericResult.FromError<ShipmentsProcessedMessage>(genericResult.Message));
             }
-
-            log.Info(genericResult.Failure ?
-                "No Shipments, not waiting for ShipmentsProcessMessageScan" :
-                $"ShipmentsProcessedMessage received from scan {genericResult.Value}");
 
             return returnResult;
         }

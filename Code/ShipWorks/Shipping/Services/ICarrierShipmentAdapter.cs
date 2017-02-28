@@ -143,10 +143,5 @@ namespace ShipWorks.Shipping.Services
         /// For rates that are not selectable, find their first child that is.
         /// </summary>
         RateResult GetChildRateForRate(RateResult parentRate, IEnumerable<RateResult> rates);
-
-        /// <summary>
-        /// Saves the shipment.
-        /// </summary>
-        void SaveShipment(ShipmentEntity shipment);
     }
 }
