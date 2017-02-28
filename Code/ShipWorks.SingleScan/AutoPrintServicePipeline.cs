@@ -95,11 +95,14 @@ namespace ShipWorks.SingleScan
         {
             if (shipmentsProcessedMessageResult.Success)
             {
-                List<ShipmentEntity> shipments = shipmentsProcessedMessageResult.Value.Shipments.Select(s => s.Shipment).ToList();
+                List<ShipmentEntity> shipments = shipmentsProcessedMessageResult.Value.Shipments
+                    .Select(s => s.Shipment).ToList();
+
                 if (shipments.Any())
                 {
-                    messenger.Send(new OrderSelectionChangingMessage(this, shipments.Select(shipment => shipment.OrderID).Distinct(),
-                            EntityGridRowSelector.SpecificEntities(shipments.Select(shipment => shipment.ShipmentID).Distinct())));
+                    messenger.Send(new OrderSelectionChangingMessage(this,
+                        shipments.Select(shipment => shipment.OrderID).Distinct(),
+                        EntityGridRowSelector.SpecificEntities(shipments.Select(shipment => shipment.ShipmentID).Distinct())));
                 }
                 else
                 {
@@ -119,7 +122,11 @@ namespace ShipWorks.SingleScan
         {
             if (shipmentsProcessedMessage.Success)
             {
-                List<ShipmentEntity> unprocessedShipments = shipmentsProcessedMessage.Value.Shipments.Where(s=>!s.IsSuccessful).Select(s=>s.Shipment).ToList();
+                List<ShipmentEntity> unprocessedShipments =
+                    shipmentsProcessedMessage.Value.Shipments.Where(s => !s.IsSuccessful)
+                        .Select(s => s.Shipment)
+                        .ToList();
+
                 if (unprocessedShipments.Any())
                 {
                     log.Info($"Error processing {unprocessedShipments.Count}. Saving unprocessed shipments.");

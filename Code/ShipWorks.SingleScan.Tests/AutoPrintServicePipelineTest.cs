@@ -6,6 +6,8 @@ using Interapptive.Shared.Utility;
 using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
@@ -95,6 +97,42 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public void SavesShipmentsThatFailedToProcess()
+        {
+            Mock<ISqlAdapter> sqlAdapter = MockSqlAdapter();
+
+            SetAllowAutoPrint(true);
+
+            testObject.InitializeForCurrentSession();
+
+            mock.Mock<IAutoPrintService>()
+                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
+                .ReturnsAsync(GenericResult.FromSuccess("foo"));
+
+            messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(singleScanFilterUpdateCompleteMessage);
+
+            windowsScheduler.Start();
+
+            ProcessShipmentResult unprocessedShipment = new ProcessShipmentResult(new ShipmentEntity(), new Exception());
+            ProcessShipmentResult processedShipment = new ProcessShipmentResult(new ShipmentEntity());
+
+            messenger.Send(new ShipmentsProcessedMessage(null, new[] { unprocessedShipment, processedShipment, unprocessedShipment }));
+
+            sqlAdapter.Verify(a => a.SaveAndRefetch(unprocessedShipment.Shipment), Times.Exactly(2));
+            sqlAdapter.Verify(a => a.SaveAndRefetch(It.IsAny<ShipmentEntity>()), Times.Exactly(2));
+            sqlAdapter.Verify(a => a.Commit(), Times.Once);
+            mock.Mock<ISqlAdapterFactory>().Verify(f => f.CreateTransacted(), Times.Once);
+        }
+
+        private Mock<ISqlAdapter> MockSqlAdapter()
+        {
+            var sqlAdapter = mock.CreateMock<ISqlAdapter>();
+            mock.Mock<ISqlAdapterFactory>().Setup(f => f.CreateTransacted()).Returns(sqlAdapter.Object);
+            return sqlAdapter;
+        }
+
+        [Fact]
         public void SendsOrderSelectionChangingMessage_AfterDelegatingToAutoPrintService_AndShipmentsProcessedMessageReceived()
         {
             SetAllowAutoPrint(true);
@@ -110,7 +148,7 @@ namespace ShipWorks.SingleScan.Tests
 
             windowsScheduler.Start();
 
-            messenger.Send(new ShipmentsProcessedMessage(null, new ProcessShipmentResult[0]));
+            messenger.Send(new ShipmentsProcessedMessage(null, new ProcessShipmentResult[1] {new ProcessShipmentResult(new ShipmentEntity())}));
 
             Assert.Equal(1, messenger.SentMessages.OfType<OrderSelectionChangingMessage>().Count());
         }
@@ -134,6 +172,43 @@ namespace ShipWorks.SingleScan.Tests
             Assert.False(testObject.IsListeningForScans);
             messenger.Send(new ShipmentsProcessedMessage(null, new ProcessShipmentResult[0]));
             Assert.True(testObject.IsListeningForScans);
+        }
+
+        [Fact]
+        public void IsListeningForScans_ReturnsTrue_AfterAutoPrintServiceReturnsResultWithFalse()
+        {
+            SetAllowAutoPrint(true);
+
+            testObject.InitializeForCurrentSession();
+
+            mock.Mock<IAutoPrintService>()
+                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
+                .ReturnsAsync(GenericResult.FromError<string>("foo"));
+
+            messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(singleScanFilterUpdateCompleteMessage);
+
+            Assert.False(testObject.IsListeningForScans);
+            windowsScheduler.Start();
+            Assert.True(testObject.IsListeningForScans);
+        }
+
+        [Fact]
+        public void ShipmentsNotSaved_WhenAutoPrintServiceReturnsResultWithFalse()
+        {
+            SetAllowAutoPrint(true);
+
+            testObject.InitializeForCurrentSession();
+
+            mock.Mock<IAutoPrintService>()
+                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
+                .ReturnsAsync(GenericResult.FromError<string>("foo"));
+
+            messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
+            messenger.Send(singleScanFilterUpdateCompleteMessage);
+            windowsScheduler.Start();
+
+            mock.Mock<ISqlAdapterFactory>().Verify(f=>f.CreateTransacted(), Times.Never);
         }
 
         [Fact]
