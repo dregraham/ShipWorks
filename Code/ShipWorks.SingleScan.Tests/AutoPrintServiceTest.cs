@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Collections;
 using Moq;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
@@ -57,6 +58,8 @@ namespace ShipWorks.SingleScan.Tests
             testObject = mock.Create<AutoPrintService>();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(true);
+
             shipments.Add(new ShipmentEntity(1));
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
@@ -70,6 +73,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject = mock.Create<AutoPrintService>();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(true);
             shipments.Add(new ShipmentEntity(1));
 
             mock.Mock<ISingleScanConfirmationService>()
@@ -137,6 +141,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject = mock.Create<AutoPrintService>();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(true);
             shipments.Add(new ShipmentEntity(1));
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
@@ -150,6 +155,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject = mock.Create<AutoPrintService>();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(true);
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "FirstScan", IntPtr.Zero)));
 
@@ -159,12 +165,34 @@ namespace ShipWorks.SingleScan.Tests
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
         }
 
+        private void SetReturnValueOfApplyWeight(bool applyWeightResult)
+        {
+            mock.Mock<IAutoWeighService>()
+                .Setup(s => s.ApplyWeight(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ITrackedDurationEvent>()))
+                .Returns(applyWeightResult);
+        }
+
+        [Fact]
+        public async void OrderScanned_ShipmentNotProcessed_WhenApplyWeightReturnsFalse()
+        {
+            testObject = mock.Create<AutoPrintService>();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(false);
+            shipments.AddRange(Enumerable.Range(1, 3).Select(o => new ShipmentEntity(o)));
+
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
+
+            Assert.True(messenger.SentMessages.OfType<ProcessShipmentsMessage>().None());
+        }
+
         [Fact]
         public async void OrderScanned_AllUnprocessedShipmentsProcessed_WhenShipmentConfirmationServiceReturnsMultipleShipments()
         {
             testObject = mock.Create<AutoPrintService>();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(true);
             shipments.AddRange(Enumerable.Range(1, 3).Select(o => new ShipmentEntity(o)));
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
@@ -184,6 +212,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject = mock.Create<AutoPrintService>();
 
             SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+            SetReturnValueOfApplyWeight(true);
             shipments.Add(new ShipmentEntity(1));
 
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new ScanMessage(this, "A", IntPtr.Zero)));
