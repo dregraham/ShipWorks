@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,8 +45,8 @@ namespace ShipWorks.SingleScan
             IAutoPrintConfirmationDlgFactory dlgFactory,
             IShipmentFactory shipmentFactory,
             IMessageHelper messageHelper,
-            Func<string, ITrackedDurationEvent> trackedDurationEventFactory, 
-            IAutoPrintSettings autoPrintSettings, 
+            Func<string, ITrackedDurationEvent> trackedDurationEventFactory,
+            IAutoPrintSettings autoPrintSettings,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.orderLoader = orderLoader;
