@@ -1,4 +1,5 @@
 ﻿using Divelements.SandRibbon;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using TD.SandDock;
 
 namespace ShipWorks.ApplicationCore
@@ -6,6 +7,7 @@ namespace ShipWorks.ApplicationCore
     /// <summary>
     /// Allow controls and other elements to be registered with the main form
     /// </summary>
+    [Service(SingleInstance = true)]
     public interface IMainFormElementRegistration
     {
         /// <summary>

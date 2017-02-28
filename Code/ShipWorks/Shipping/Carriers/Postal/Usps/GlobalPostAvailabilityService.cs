@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -14,6 +15,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Service for returning GlobalPost services based on UspsAccounts in the database
     /// </summary>
+    [Order(Order.Unordered, typeof(IInitializeForCurrentSession))]
+    [Component]
     public class GlobalPostAvailabilityService : IInitializeForCurrentSession, IGlobalPostAvailabilityService
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepo;
@@ -97,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             if (account != null)
             {
-                IUspsWebClient webClient = uspsWebClientFactory((UspsResellerType)account.UspsReseller);
+                IUspsWebClient webClient = uspsWebClientFactory((UspsResellerType) account.UspsReseller);
 
                 object result;
                 try

@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
     /// <summary>
     /// Set ship phone if blank
     /// </summary>
-    [Order(Order.Unordered)]
+    [Order(Order.Unordered, typeof(ILabelRetrievalShipmentManipulator))]
     public class ShipmentPhoneManipulator : ILabelRetrievalShipmentManipulator
     {
         private readonly ILog log;

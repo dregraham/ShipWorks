@@ -4,7 +4,6 @@
 using System;
 using System.Linq;
 using Autofac.Builder;
-using Autofac.Features.Scanning;
 
 namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
 {
@@ -26,9 +25,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <param name="order">The order for which a service will be resolved</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, IComparable order)
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, string key, IComparable order)
         {
-            return registration.OrderBy(_ => order);
+            return registration.OrderBy(key, _ => order);
         }
 
         /// <summary>
@@ -41,26 +40,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <param name="keySelector">Selects an ordering based on a component's properties</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> OrderBy<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, Func<TLimit, IComparable> keySelector)
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registration, string key, Func<TLimit, IComparable> keySelector)
         {
-            return registration.WithMetadata(OrderedRegistrationSource.OrderingMetadataKey, keySelector);
-        }
-
-        /// <summary>
-        /// Configures that services will be resolved in the order in which they are registered.
-        /// </summary>
-        /// <typeparam name="TLimit">Registration limit type.</typeparam>
-        /// <typeparam name="TRegistrationStyle">Registration style.</typeparam>
-        /// <param name="registration">Registration to set parameter on.</param>
-        /// <param name="startingWith">An optional starting order</param>
-        /// <returns>A registration builder allowing further configuration of the component.</returns>
-        public static IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> OrderByRegistration<TLimit, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, ScanningActivatorData, TRegistrationStyle> registration, int startingWith = 1)
-        {
-            int order = startingWith;
-            registration.ActivatorData.ConfigurationActions.Add((type, builder) =>
-                builder.OrderBy(order++));
-            return registration;
+            return registration.WithMetadata(OrderedRegistrationSource.OrderingMetadataKey + key, keySelector);
         }
 
         /// <summary>
@@ -72,15 +54,16 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <param name="registration">Registration to set parameter on.</param>
         /// <returns>A registration builder allowing further configuration of the component.</returns>
         public static IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> OrderByMetadata<TLimit, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> registration)
+            this IRegistrationBuilder<TLimit, ReflectionActivatorData, TRegistrationStyle> registration, Type service)
         {
             OrderAttribute orderAttribute = registration.ActivatorData.ImplementationType
                 .GetCustomAttributes(typeof(OrderAttribute), false)
                 .OfType<OrderAttribute>()
+                .Where(x => x.ForType == service)
                 .FirstOrDefault();
 
             return orderAttribute != null ?
-                registration.OrderBy(orderAttribute.Order) :
+                registration.OrderBy(orderAttribute.ForType.Name, orderAttribute.Order) :
                 registration;
         }
     }

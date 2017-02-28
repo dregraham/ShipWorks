@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Builder;
 using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
@@ -188,14 +190,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<WeightConverter>()
                 .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(allAssemblies)
-                .Where(x => x.IsAssignableTo<IInitializeForCurrentSession>() ||
-                    x.IsAssignableTo<ICheckForChangesNeeded>() ||
-                    x.IsAssignableTo<IInitializeForCurrentDatabase>() ||
-                    x.IsAssignableTo<IMainFormElementRegistration>())
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ConfigurationDataWrapper>()
                 .As<IConfigurationData>();
 
@@ -209,10 +203,13 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterGeneric(typeof(CompositeValidator<,>))
                 .As(typeof(ICompositeValidator<,>));
 
-            ComponentAttribute.Register(builder, allAssemblies);
-            ServiceAttribute.Register(builder, allAssemblies);
-            KeyedComponentAttribute.Register(builder, allAssemblies);
-            NamedComponentAttribute.Register(builder, allAssemblies);
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache =
+                new Dictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>>();
+
+            ComponentAttribute.Register(builder, registrationCache, allAssemblies);
+            ServiceAttribute.Register(builder, registrationCache, allAssemblies);
+            KeyedComponentAttribute.Register(builder, registrationCache, allAssemblies);
+            NamedComponentAttribute.Register(builder, registrationCache, allAssemblies);
 
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()

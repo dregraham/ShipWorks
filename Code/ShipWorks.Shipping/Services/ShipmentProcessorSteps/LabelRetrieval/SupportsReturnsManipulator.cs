@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
     /// <summary>
     /// Reset return status if shipment type does not support returns
     /// </summary>
-    [Order(Order.Unordered)]
+    [Order(Order.Unordered, typeof(ILabelRetrievalShipmentManipulator))]
     public class SupportsReturnsManipulator : ILabelRetrievalShipmentManipulator
     {
         readonly IShipmentTypeManager shipmentTypeManager;

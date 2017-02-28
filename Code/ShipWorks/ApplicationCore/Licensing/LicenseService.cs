@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -16,6 +16,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// <summary>
     /// Service for license related tasks
     /// </summary>
+    [Component]
     public class LicenseService : ILicenseService, IInitializeForCurrentDatabase
     {
         private readonly Lazy<ICustomerLicenseReader> reader;

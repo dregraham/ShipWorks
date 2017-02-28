@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
@@ -11,6 +13,8 @@ namespace ShipWorks.Stores.Services
     /// Algorithms and functions for working with stores.
     /// </summary>
     /// <remarks>This is an instance that wraps the static StoreManager until we can replace that class</remarks>
+    [Order(Order.Unordered, typeof(IInitializeForCurrentSession))]
+    [Component]
     public class StoreManagerWrapper : IStoreManager, IInitializeForCurrentSession
     {
         readonly Func<ISecurityContext> getSecurityContext;

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -12,6 +14,8 @@ namespace ShipWorks.Shipping.Settings
     /// <summary>
     /// Manages and provides database access to the shipping provider rules.
     /// </summary>
+    [Order(Order.Unordered, typeof(IInitializeForCurrentSession))]
+    [Component]
     public class ShippingProviderRuleManager : IShippingProviderRuleManager, IInitializeForCurrentSession
     {
         TableSynchronizer<ShippingProviderRuleEntity> synchronizer;

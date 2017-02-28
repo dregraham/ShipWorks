@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,6 +16,7 @@ namespace ShipWorks.Shipping.Settings
     /// <remarks>
     /// Wraps the static ShippingSettings so that static dependencies can be broken
     /// </remarks>
+    [Component]
     public class ShippingSettingsWrapper : IShippingSettings, IInitializeForCurrentDatabase, ICheckForChangesNeeded
     {
         private readonly IMessenger messenger;
