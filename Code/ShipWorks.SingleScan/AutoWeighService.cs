@@ -98,6 +98,8 @@ namespace ShipWorks.SingleScan
                         packageAdapter.Weight = weighResult.Weight;
                     }
                 }
+
+                shipmentAdapter.UpdateDynamicData();
             }
 
             CollectTelemetryData(trackedDurationEvent, "Yes");
