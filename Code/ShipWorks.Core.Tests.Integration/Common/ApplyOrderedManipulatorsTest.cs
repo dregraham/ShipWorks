@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using ShipWorks.ApplicationCore.ComponentRegistration.Ordering;
 using ShipWorks.Common;
@@ -7,6 +8,8 @@ using Xunit;
 
 namespace ShipWorks.Core.Tests.Integration.Common
 {
+    [SuppressMessage("ShipWorks", "SW0002",
+        Justification = "Tests aren't obfuscated, so we don't need to worry about this")]
     [Trait("Category", "ContinuousIntegration")]
     public class ApplyOrderedManipulatorsTest : IDisposable
     {
