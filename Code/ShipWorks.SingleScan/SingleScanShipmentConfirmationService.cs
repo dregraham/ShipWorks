@@ -23,7 +23,7 @@ namespace ShipWorks.SingleScan
     public class SingleScanShipmentConfirmationService : ISingleScanShipmentConfirmationService
     {
         private readonly IOrderLoader orderLoader;
-        private readonly Func<ISecurityContext> securityContextRetriever;
+        private readonly Func<ISecurityContext> securityContext;
         private readonly IAutoPrintConfirmationDlgFactory dlgFactory;
         private readonly IShipmentFactory shipmentFactory;
         private readonly IMessageHelper messageHelper;
@@ -34,7 +34,7 @@ namespace ShipWorks.SingleScan
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
         private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
-        public const string CannotProcessNoneMessage = "Shipworks cannot automatically print shipments with a provider of \"None.\"";
+        public const string CannotProcessNoneMessage = "The resulting shipment has a carrier of \"None\".\r\n The carrier \"None\" does not support processing.";
 
         private const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
 
@@ -42,7 +42,7 @@ namespace ShipWorks.SingleScan
         /// Constructor
         /// </summary>
         public SingleScanShipmentConfirmationService(IOrderLoader orderLoader,
-            Func<ISecurityContext> securityContextRetriever,
+            Func<ISecurityContext> securityContext,
             IAutoPrintConfirmationDlgFactory dlgFactory,
             IShipmentFactory shipmentFactory,
             IMessageHelper messageHelper,
@@ -51,7 +51,7 @@ namespace ShipWorks.SingleScan
             ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             this.orderLoader = orderLoader;
-            this.securityContextRetriever = securityContextRetriever;
+            this.securityContext = securityContext;
             this.dlgFactory = dlgFactory;
             this.shipmentFactory = shipmentFactory;
             this.messageHelper = messageHelper;
@@ -65,7 +65,7 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public async Task<IEnumerable<ShipmentEntity>> GetShipments(long orderId, string scannedBarcode)
         {
-            if (!securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
+            if (!securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
             {
                 throw new ShippingException("Auto printing is not allowed for the scanned order.");
             }
@@ -86,8 +86,18 @@ namespace ShipWorks.SingleScan
         }
 
         /// <summary>
-        /// Gets the confirmed shipments.
+        /// Gets Confirmed Shipments
         /// </summary>
+        /// <remarks>
+        /// If the order has no shipments we create and return a shipment
+        /// If the order has a single unprocessed shipment, we return that shipment
+        /// If the order already has a processed shipment or there are multiple unprocessed shipments we prompt
+        /// the user to see if they want to proceed and only return shipments if they do.
+        /// If autoweigh is on and the above rules result in multiple packages being 
+        /// processed, we prompt the user to see if they want to proceed and only return shipments if they do.
+        /// After this method is called, we send the returned shipments to the AutoWeigh service. The AutoWeigh
+        /// service sets the weigh of each shipment and each package to the weight of the scale if that setting is turned on.
+        /// </remarks>
         private ShipmentEntity[] GetConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
         {
             ShipmentEntity[] confirmedShipments = new ShipmentEntity[0];
