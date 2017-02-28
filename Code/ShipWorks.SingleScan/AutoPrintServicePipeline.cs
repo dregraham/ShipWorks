@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -198,16 +197,14 @@ namespace ShipWorks.SingleScan
                         (i, message) => message)
                     .Select(message =>
                     {
-                        if (EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(message,default(ShipmentsProcessedMessage)))
+                        if (EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(message, default(ShipmentsProcessedMessage)))
                         {
                             log.Info("Timeout waiting for ShipmentsProcessedMessage");
                             return GenericResult.FromError<ShipmentsProcessedMessage>("Timeout waiting for ShipmentsProcessedMessage");
                         }
-                        else
-                        {
-                            log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
-                            return GenericResult.FromSuccess(message);
-                        }
+
+                        log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
+                        return GenericResult.FromSuccess(message);
                     });
             }
             else

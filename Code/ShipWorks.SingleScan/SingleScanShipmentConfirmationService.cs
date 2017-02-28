@@ -92,10 +92,10 @@ namespace ShipWorks.SingleScan
         /// If the order has a single unprocessed shipment, we return that shipment
         /// If the order already has a processed shipment or there are multiple unprocessed shipments we prompt
         /// the user to see if they want to proceed and only return shipments if they do.
-        /// If autoweigh is on and the above rules result in multiple packages being 
+        /// If AutoWeigh is on and the above rules result in multiple packages being
         /// processed, we prompt the user to see if they want to proceed and only return shipments if they do.
-        /// After this method is called, we send the returned shipments to the AutoWeigh service. The AutoWeigh
-        /// service sets the weigh of each shipment and each package to the weight of the scale if that setting is turned on.
+        /// After this method is called, we send the returned shipments to the AutoWeighService. The AutoWeighService
+        /// sets the weigh of each shipment and each package to the weight of the scale if that setting is turned on.
         /// </remarks>
         private ShipmentEntity[] GetConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
         {
