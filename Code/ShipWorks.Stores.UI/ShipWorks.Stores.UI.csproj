@@ -309,6 +309,11 @@
     </Compile>
     <Compile Include="Platforms\SparkPay\WizardPages\SparkPayAccountViewModel.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreModule.cs" />
+    <Compile Include="Platforms\Walmart\WizardPages\IWalmartStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControl.xaml.cs">
+      <DependentUpon>WalmartStoreSetupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
     </Compile>
@@ -483,6 +488,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\SparkPay\WizardPages\SparkPayAccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
