@@ -4,7 +4,6 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Insurance.InsureShip;
 
@@ -62,11 +61,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Send the user their username using the specified email address
         /// </summary>
         void SendAccountUsername(string email, string username);
-
-        /// <summary>
-        /// Sends Postal balances for postal services.
-        /// </summary>
-        void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier);
 
         /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer

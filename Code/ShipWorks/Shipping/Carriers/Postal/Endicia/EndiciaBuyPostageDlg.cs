@@ -23,16 +23,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         EndiciaAccountEntity account;
 
         private readonly bool purchaseRestricted;
-        private readonly ITangoWebClient tangoWebClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaBuyPostageDlg"/> class.
         /// </summary>
-        /// <param name="account">The account.</param>
-        public EndiciaBuyPostageDlg(ILicenseService licenseService, ITangoWebClient tangoWebClient)
+        public EndiciaBuyPostageDlg(ILicenseService licenseService)
         {
-            this.tangoWebClient = tangoWebClient;
-
             EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia);
 
             // If purchasing is restricted for Endicia, set the variable
@@ -83,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                current.Text = (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Value.ToString("c");
+                current.Text = (new PostageBalance(new EndiciaPostageWebClient(account))).Value.ToString("c");
             }
             catch (EndiciaException ex)
             {
@@ -104,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Purchase(postage.Amount);
+                (new PostageBalance(new EndiciaPostageWebClient(account))).Purchase(postage.Amount);
 
                 MessageHelper.ShowInformation(this,
                     String.Format("The purchase request has been submitted to {0}.", EndiciaAccountManager.GetResellerName((EndiciaReseller) account.EndiciaReseller)));

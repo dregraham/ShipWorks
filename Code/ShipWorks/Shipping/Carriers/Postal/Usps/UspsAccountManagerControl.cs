@@ -10,7 +10,6 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -122,12 +121,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
-                        PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient);
-                        result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
-                    }
+                    PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account));
+                    result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
                 }
                 catch (UspsException ex)
                 {
@@ -185,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 add.Hide();
 
-                // Adjust the location of the remove button based on the visiblity of the add button and
+                // Adjust the location of the remove button based on the visibility of the add button and
                 // make sure it's on top of the add button.
                 remove.Top = add.Top;
                 remove.BringToFront();

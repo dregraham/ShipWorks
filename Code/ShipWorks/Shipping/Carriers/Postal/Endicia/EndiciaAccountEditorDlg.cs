@@ -5,7 +5,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -15,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public partial class EndiciaAccountEditorDlg : Form
     {
-        private ITangoWebClient tangoWebClient;
         EndiciaAccountEntity account;
         private EndiciaApiClient endiciaApiClient;
 
@@ -26,9 +24,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaAccountEditorDlg(ITangoWebClient tangoWebClient, Func<EndiciaBuyPostageDlg> createBuyPostageDialog)
+        public EndiciaAccountEditorDlg(Func<EndiciaBuyPostageDlg> createBuyPostageDialog)
         {
-            this.tangoWebClient = tangoWebClient;
             this.createBuyPostageDialog = createBuyPostageDialog;
         }
 
@@ -47,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endiciaApiClient = new EndiciaApiClient();
             this.account = account;
 
-            EndiciaReseller reseller = (EndiciaReseller)account.EndiciaReseller;
+            EndiciaReseller reseller = (EndiciaReseller) account.EndiciaReseller;
 
             string resellerName = EndiciaAccountManager.GetResellerName(reseller);
             labelEndicia.Text = resellerName;
@@ -90,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             mailingPostalCode.Text = account.MailingPostalCode;
 
-            comboScanAddress.SelectedValue = (EndiciaScanFormAddressSource)account.ScanFormAddressSource;
+            comboScanAddress.SelectedValue = (EndiciaScanFormAddressSource) account.ScanFormAddressSource;
         }
 
         /// <summary>
@@ -112,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                balance.Text = (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Value.ToString("c");
+                balance.Text = (new PostageBalance(new EndiciaPostageWebClient(account))).Value.ToString("c");
             }
             catch (EndiciaException ex)
             {
@@ -193,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             account.MailingPostalCode = mailingPostalCode.Text.Trim();
-            account.ScanFormAddressSource = (int)comboScanAddress.SelectedValue;
+            account.ScanFormAddressSource = (int) comboScanAddress.SelectedValue;
 
             Cursor.Current = Cursors.WaitCursor;
 
