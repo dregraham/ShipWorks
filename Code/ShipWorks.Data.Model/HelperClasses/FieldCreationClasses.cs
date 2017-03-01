@@ -22814,6 +22814,181 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity WalmartStoreEntity</summary>
+	public partial class WalmartStoreFields
+	{
+		/// <summary>Creates a new WalmartStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ConsumerID field instance</summary>
+		public static EntityField2 ConsumerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ConsumerID);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.PrivateKey field instance</summary>
+		public static EntityField2 PrivateKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.PrivateKey);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.ChannelType field instance</summary>
+		public static EntityField2 ChannelType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ChannelType);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity WorldShipGoodsEntity</summary>
 	public partial class WorldShipGoodsFields
 	{

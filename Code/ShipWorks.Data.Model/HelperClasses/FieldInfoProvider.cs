@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (175 + 0));
+			this.InitClass( (176 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -217,6 +217,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitValidatedAddressEntityInfos();
 			InitVersionSignoffEntityInfos();
 			InitVolusionStoreEntityInfos();
+			InitWalmartStoreEntityInfos();
 			InitWorldShipGoodsEntityInfos();
 			InitWorldShipPackageEntityInfos();
 			InitWorldShipProcessedEntityInfos();
@@ -3051,6 +3052,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("VolusionStoreEntity", "DownloadOrderStatuses", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.DownloadOrderStatuses, 255, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZone", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZone, 30, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZoneDST", typeof(System.Boolean), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZoneDST, 0, 0, 0);
+		}
+		/// <summary>Inits WalmartStoreEntity's FieldInfo objects</summary>
+		private void InitWalmartStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(WalmartStoreFieldIndex), "WalmartStoreEntity");
+			this.AddElementFieldInfo("WalmartStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)WalmartStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("WalmartStoreEntity", "ConsumerID", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ConsumerID, 50, 0, 0);
+			this.AddElementFieldInfo("WalmartStoreEntity", "PrivateKey", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.PrivateKey, 1000, 0, 0);
+			this.AddElementFieldInfo("WalmartStoreEntity", "ChannelType", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ChannelType, 50, 0, 0);
 		}
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>
 		private void InitWorldShipGoodsEntityInfos()

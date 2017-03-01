@@ -2744,6 +2744,13 @@
           <Field Name="WebUserName" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="WalmartStore" ObjectID="066c7cc9-cbb0-4190-95cb-2f1203e59c92" InheritanceType="2">
+        <Fields>
+          <Field Name="ChannelType" Type="string" MaxLength="50" FieldIndex="2" />
+          <Field Name="ConsumerID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="PrivateKey" Type="string" MaxLength="1000" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="WorldShipGoods" ObjectID="8954f73c-1db2-46af-9da2-1388a7a46e40">
         <Fields>
           <Field Name="CountryOfOrigin" Type="string" MaxLength="50" FieldIndex="5" />
@@ -3533,6 +3540,7 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":ThreeDCartOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ThreeDCartStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":VolusionStore" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":WalmartStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":YahooOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":YahooOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":YahooStore" />
@@ -3573,7 +3581,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-01T16:43:08.3326599Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7676,6 +7684,15 @@
                     <Field Name="ServerTimeZoneDST" Ordinal="10" DbType="2" />
                   </Fields>
                 </Table>
+                <Table Name="WalmartStore">
+                  <PkConstraintName Name="PK_WalmartStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ConsumerID" Ordinal="2" DbType="24" Length="50" />
+                    <Field Name="PrivateKey" Ordinal="3" DbType="24" Length="1000" />
+                    <Field Name="ChannelType" Ordinal="4" DbType="24" Length="50" />
+                  </Fields>
+                </Table>
                 <Table Name="WorldShipGoods">
                   <PkConstraintName Name="PK_WorldShipGoods" />
                   <Fields>
@@ -8716,6 +8733,11 @@
             <ForeignKeyConstraint Name="dbo:VolusionStore:FK_VolusionStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:VolusionStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:WalmartStore:FK_WalmartStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:WalmartStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:WorldShipGoods:FK_WorldShipGoods_WorldShipShipment" DeleteRuleAction="1">
@@ -11415,6 +11437,14 @@
             <FieldMapping FieldName="StoreUrl" TargetFieldName="StoreUrl" />
             <FieldMapping FieldName="WebPassword" TargetFieldName="WebPassword" />
             <FieldMapping FieldName="WebUserName" TargetFieldName="WebUserName" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":WalmartStore" TargetName="ShipWorksLocal:dbo:WalmartStore">
+          <FieldMappings>
+            <FieldMapping FieldName="ChannelType" TargetFieldName="ChannelType" />
+            <FieldMapping FieldName="ConsumerID" TargetFieldName="ConsumerID" />
+            <FieldMapping FieldName="PrivateKey" TargetFieldName="PrivateKey" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":WorldShipGoods" TargetName="ShipWorksLocal:dbo:WorldShipGoods">

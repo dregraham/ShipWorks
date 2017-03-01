@@ -1108,6 +1108,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<VolusionStoreEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the WalmartStore entity</summary>
+		public EntityQuery<WalmartStoreEntity> WalmartStore
+		{
+			get { return Create<WalmartStoreEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the WorldShipGoods entity</summary>
 		public EntityQuery<WorldShipGoodsEntity> WorldShipGoods
 		{

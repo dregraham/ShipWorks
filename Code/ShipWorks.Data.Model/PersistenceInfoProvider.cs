@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(175);
+			this.InitClass(176);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -214,6 +214,7 @@ namespace ShipWorks.Data.Model
 			InitValidatedAddressEntityMappings();
 			InitVersionSignoffEntityMappings();
 			InitVolusionStoreEntityMappings();
+			InitWalmartStoreEntityMappings();
 			InitWorldShipGoodsEntityMappings();
 			InitWorldShipPackageEntityMappings();
 			InitWorldShipProcessedEntityMappings();
@@ -3212,6 +3213,16 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("VolusionStoreEntity", "DownloadOrderStatuses", "DownloadOrderStatuses", false, "VarChar", 255, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ServerTimeZone", "ServerTimeZone", false, "VarChar", 30, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ServerTimeZoneDST", "ServerTimeZoneDST", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
+		}
+
+		/// <summary>Inits WalmartStoreEntity's mappings</summary>
+		private void InitWalmartStoreEntityMappings()
+		{
+			this.AddElementMapping("WalmartStoreEntity", @"ShipWorksLocal", @"dbo", "WalmartStore", 4, 0);
+			this.AddElementFieldMapping("WalmartStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("WalmartStoreEntity", "ConsumerID", "ConsumerID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("WalmartStoreEntity", "PrivateKey", "PrivateKey", false, "VarChar", 1000, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("WalmartStoreEntity", "ChannelType", "ChannelType", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits WorldShipGoodsEntity's mappings</summary>
