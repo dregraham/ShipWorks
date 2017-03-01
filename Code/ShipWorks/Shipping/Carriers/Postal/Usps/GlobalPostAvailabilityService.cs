@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Service for returning GlobalPost services based on UspsAccounts in the database
     /// </summary>
-    [Order(Order.Unordered, typeof(IInitializeForCurrentSession))]
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     [Component]
     public class GlobalPostAvailabilityService : IInitializeForCurrentSession, IGlobalPostAvailabilityService
     {

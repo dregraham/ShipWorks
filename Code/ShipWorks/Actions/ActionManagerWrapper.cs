@@ -6,7 +6,7 @@ namespace ShipWorks.Actions
     /// <summary>
     /// Manages and provides access to the actions in the system
     /// </summary>
-    [Order(1, typeof(IInitializeForCurrentSession))]
+    [Order(typeof(IInitializeForCurrentSession), 1)]
     public class ActionManagerWrapper : IActionManager, IInitializeForCurrentSession, ICheckForChangesNeeded
     {
         /// <summary>

@@ -59,11 +59,11 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
             OrderAttribute orderAttribute = registration.ActivatorData.ImplementationType
                 .GetCustomAttributes(typeof(OrderAttribute), false)
                 .OfType<OrderAttribute>()
-                .Where(x => x.ForType == service)
+                .Where(x => x.Service == service)
                 .FirstOrDefault();
 
             return orderAttribute != null ?
-                registration.OrderBy(orderAttribute.ForType.Name, orderAttribute.Order) :
+                registration.OrderBy(orderAttribute.Service.Name, orderAttribute.Order) :
                 registration;
         }
     }

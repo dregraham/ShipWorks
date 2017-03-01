@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
     /// <summary>
     /// Ensure all relevant shipment data is loaded
     /// </summary>
-    [Order(1, typeof(ILabelRetrievalShipmentManipulator))]
+    [Order(typeof(ILabelRetrievalShipmentManipulator), 1)]
     public class EnsureLoadedManipulator : ILabelRetrievalShipmentManipulator
     {
         private readonly ILog log;

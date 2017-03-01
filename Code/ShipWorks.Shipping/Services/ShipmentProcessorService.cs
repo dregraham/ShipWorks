@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services
     /// <summary>
     /// Label processor
     /// </summary>
-    [Order(Order.Unordered, typeof(IInitializeForCurrentSession))]
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     public class ShipmentProcessorService : IInitializeForCurrentSession, IDisposable
     {
         private readonly IMessenger messenger;

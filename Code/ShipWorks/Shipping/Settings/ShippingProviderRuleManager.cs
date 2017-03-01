@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Settings
     /// <summary>
     /// Manages and provides database access to the shipping provider rules.
     /// </summary>
-    [Order(Order.Unordered, typeof(IInitializeForCurrentSession))]
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     [Component]
     public class ShippingProviderRuleManager : IShippingProviderRuleManager, IInitializeForCurrentSession
     {

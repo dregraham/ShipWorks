@@ -27,10 +27,10 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// Constructor
         /// </summary>
         /// <param name="order"></param>
-        public OrderAttribute(int order, Type forType)
+        public OrderAttribute(Type service, int order)
         {
             Order = order;
-            ForType = forType;
+            Service = service;
         }
 
         /// <summary>
@@ -41,6 +41,6 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// <summary>
         /// Type of registration for which to apply the order
         /// </summary>
-        public Type ForType { get; set; }
+        public Type Service { get; set; }
     }
 }
