@@ -35,13 +35,13 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task<GenericResult<string>> Print(AutoPrintServiceDto autoPrintServiceDto)
+        public async Task<AutoPrintResult> Print(AutoPrintServiceDto autoPrintServiceDto)
         {
-            GenericResult<string> result = await autoPrintService.Print(autoPrintServiceDto);
+            AutoPrintResult result = await autoPrintService.Print(autoPrintServiceDto);
 
-            if (result.Failure)
+            if (result.ProcessShipmentsMessageSent == false)
             {
-                log.Error(result.Message);
+                log.Error(result.ErrorMessage);
             }
 
             return result;

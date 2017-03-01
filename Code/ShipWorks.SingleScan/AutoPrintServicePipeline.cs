@@ -82,6 +82,9 @@ namespace ShipWorks.SingleScan
                 .SelectMany(m => autoPrintService.Print(m).ToObservable())
                 .SelectMany(WaitForShipmentsProcessedMessage)
                 .Do(SaveUnprocessedShipments)
+                // Currently, MapPanel (and possibly other consumers of this message) expect OrderSelectionChangingMessage to 
+                // be sent on the UI thread.
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendOrderSelectionChangingMessage)
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(x => StartScanMessagesObservation());
@@ -90,39 +93,35 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Sends the order selection changing message for processed orders
         /// </summary>
-        private void SendOrderSelectionChangingMessage(GenericResult<ShipmentsProcessedMessage> shipmentsProcessedMessageResult)
+        private void SendOrderSelectionChangingMessage(AutoPrintWaitForShipmentsProcessedResult shipmentsProcessedResult)
         {
-            if (shipmentsProcessedMessageResult.Success)
+            if (shipmentsProcessedResult.OrderID.HasValue)
             {
-                List<ShipmentEntity> shipments = shipmentsProcessedMessageResult.Value.Shipments
-                    .Select(s => s.Shipment).ToList();
+                IEntityGridRowSelector shipmentRowSelector = null;
 
-                if (shipments.Any())
+                if (shipmentsProcessedResult.ProcessShipmentResults != null)
                 {
-                    messenger.Send(new OrderSelectionChangingMessage(this,
-                        shipments.Select(shipment => shipment.OrderID).Distinct(),
-                        EntityGridRowSelector.SpecificEntities(shipments.Select(shipment => shipment.ShipmentID).Distinct())));
+                    shipmentRowSelector = EntityGridRowSelector
+                        .SpecificEntities(shipmentsProcessedResult.ProcessShipmentResults.Select(shipment => shipment.Shipment.ShipmentID).Distinct());
                 }
-                else
-                {
-                    log.Info("No shipments found in SendOrderSelectionChangingMessage.");
-                }
+
+                messenger.Send(new OrderSelectionChangingMessage(this, new[] {shipmentsProcessedResult.OrderID.Value}, shipmentRowSelector));
             }
             else
             {
-                log.Info("shipmentsProcessedMessageResult not success in SendOrderSelectionChangingMessage, skipping.");
+                log.Info("No shipments found in SendOrderSelectionChangingMessage.");
             }
         }
 
         /// <summary>
         /// Saves any changed weights for shipments that failed to process
         /// </summary>
-        private void SaveUnprocessedShipments(GenericResult<ShipmentsProcessedMessage> shipmentsProcessedMessage)
+        private void SaveUnprocessedShipments(AutoPrintWaitForShipmentsProcessedResult shipmentsProcessedResult)
         {
-            if (shipmentsProcessedMessage.Success)
+            if (shipmentsProcessedResult.ProcessShipmentResults != null)
             {
                 List<ShipmentEntity> unprocessedShipments =
-                    shipmentsProcessedMessage.Value.Shipments.Where(s => !s.IsSuccessful)
+                    shipmentsProcessedResult.ProcessShipmentResults.Where(s => !s.IsSuccessful)
                         .Select(s => s.Shipment)
                         .ToList();
 
@@ -179,11 +178,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Waits for shipments processed message.
         /// </summary>
-        private IObservable<GenericResult<ShipmentsProcessedMessage>> WaitForShipmentsProcessedMessage(GenericResult<string> genericResult)
+        private IObservable<AutoPrintWaitForShipmentsProcessedResult> WaitForShipmentsProcessedMessage(AutoPrintResult autoPrintResult)
         {
-            IObservable<GenericResult<ShipmentsProcessedMessage>> returnResult;
-
-            if (genericResult.Success)
+            IObservable<AutoPrintWaitForShipmentsProcessedResult> returnResult;
+            
+            if (autoPrintResult.ProcessShipmentsMessageSent)
             {
                 log.Info("Waiting for ShipmentsProcessedMessage");
                 // Listen for ShipmentsProcessedMessages, but timeout if processing takes
@@ -194,23 +193,23 @@ namespace ShipWorks.SingleScan
                     .ContinueAfter(messenger.OfType<ShipmentsProcessedMessage>(),
                         TimeSpan.FromMinutes(ShipmentsProcessedMessageTimeoutInMinutes),
                         schedulerProvider.Default,
-                        (i, message) => message)
-                    .Select(message =>
+                        (i, shipmentsProcessedMessage) => shipmentsProcessedMessage)
+                    .Select(shipmentsProcessedMessage =>
                     {
-                        if (EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(message, default(ShipmentsProcessedMessage)))
+                        if (EqualityComparer<ShipmentsProcessedMessage>.Default.Equals(shipmentsProcessedMessage, default(ShipmentsProcessedMessage)))
                         {
                             log.Info("Timeout waiting for ShipmentsProcessedMessage");
-                            return GenericResult.FromError<ShipmentsProcessedMessage>("Timeout waiting for ShipmentsProcessedMessage");
+                            return new AutoPrintWaitForShipmentsProcessedResult(autoPrintResult.OrderId);
                         }
 
-                        log.Info($"ShipmentsProcessedMessage received from scan {genericResult.Value}");
-                        return GenericResult.FromSuccess(message);
+                        log.Info($"ShipmentsProcessedMessage received from scan {autoPrintResult.ScannedBarcode}");
+                        return new AutoPrintWaitForShipmentsProcessedResult(autoPrintResult.OrderId, shipmentsProcessedMessage.Shipments);
                     });
             }
             else
             {
                 log.Info("No Shipments, not waiting for ShipmentsProcessMessageScan");
-                returnResult = Observable.Return(GenericResult.FromError<ShipmentsProcessedMessage>(genericResult.Message));
+                returnResult = Observable.Return(new AutoPrintWaitForShipmentsProcessedResult(autoPrintResult.OrderId));
             }
 
             return returnResult;

@@ -121,6 +121,7 @@
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDialog.cs" />
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
+    <Compile Include="AutoPrintResult.cs" />
     <Compile Include="AutoPrintSettings.cs" />
     <Compile Include="AutoPrintService.cs" />
     <Compile Include="AutoPrintConfirmation\AutoPrintConfirmationDialog.cs">
@@ -130,6 +131,7 @@
       <DependentUpon>AutoPrintConfirmationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoPrintServiceDto.cs" />
+    <Compile Include="AutoPrintWaitForShipmentsProcessedResult.cs" />
     <Compile Include="AutoWeighService.cs" />
     <Compile Include="AutoPrintServicePipeline.cs" />
     <Compile Include="IAutoPrintSettings.cs" />

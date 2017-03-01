@@ -52,16 +52,17 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task<GenericResult<string>> Print(AutoPrintServiceDto autoPrintServiceDto)
+        public async Task<AutoPrintResult> Print(AutoPrintServiceDto autoPrintServiceDto)
         {
-            GenericResult<string> result;
+            string errorMessage = null;
             string scannedBarcode = autoPrintServiceDto.ScannedBarcode;
             long? orderID = autoPrintServiceDto.OrderID;
+            bool processShipmentsMessageSent = false;
 
             // Only auto print if an order was found
             if (!orderID.HasValue)
             {
-                result = GenericResult.FromError("Order not found for scanned order.", scannedBarcode);
+                errorMessage = "Order not found for scanned order.";
             }
             else
             {
@@ -77,8 +78,7 @@ namespace ShipWorks.SingleScan
 
                     if (userCanceledPrint)
                     {
-                        result = GenericResult.FromError("Multiple orders selected, user chose not to process",
-                            scannedBarcode);
+                        errorMessage = "Multiple orders selected, user chose not to process";
                     }
                     else
                     {
@@ -92,19 +92,19 @@ namespace ShipWorks.SingleScan
                             bool weighSuccessful = autoWeighService.ApplyWeight(shipments, autoPrintTrackedDurationEvent);
                             if (!weighSuccessful)
                             {
-                                result = GenericResult.FromError("Error reading scale", scannedBarcode);
+                                errorMessage = "Error reading scale";
                             }
                             else
                             {
                                 // All good, process the shipment
                                 messenger.Send(new ProcessShipmentsMessage(this, shipments, shipments, null));
 
-                                result = GenericResult.FromSuccess(scannedBarcode);
+                                processShipmentsMessageSent = true;
                             }
                         }
                         else
                         {
-                            result = GenericResult.FromError("No shipments processed", scannedBarcode);
+                            errorMessage = "No shipments processed";
                         }
                     }
 
@@ -112,7 +112,7 @@ namespace ShipWorks.SingleScan
                 }
             }
 
-            return result;
+            return new AutoPrintResult(scannedBarcode, orderID, errorMessage, processShipmentsMessageSent);
         }
 
         /// <summary>

@@ -93,8 +93,7 @@ namespace ShipWorks.SingleScan
                     if (Math.Round(Math.Abs(weighResult.Weight - packageAdapter.Weight), 6) > WeightDifferenceToIgnore ||
                         packageAdapter.Weight < MinimumWeight)
                     {
-                        log.Debug(
-                            $"Weight applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
+                        log.Debug($"Weight {weighResult.Weight} applied to package {packageAdapter.PackageId} in shipment {shipment.ShipmentID}");
                         packageAdapter.Weight = weighResult.Weight;
                     }
                 }
