@@ -9,22 +9,22 @@ namespace ShipWorks.SingleScan
     /// <summary>
     /// Results from waiting for shipments processed message
     /// </summary>
-    public class AutoPrintWaitForShipmentsProcessedResult
+    public class AutoPrintCompletionResult
     {
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoPrintWaitForShipmentsProcessedResult"/> class.
+        /// Initializes a new instance of the <see cref="AutoPrintCompletionResult"/> class.
         /// </summary>
-        public AutoPrintWaitForShipmentsProcessedResult(long? orderID, IEnumerable<ProcessShipmentResult> processShipmentResults)
+        public AutoPrintCompletionResult(long? orderID, IEnumerable<ProcessShipmentResult> processShipmentResults)
         {
             ProcessShipmentResults = processShipmentResults;
             OrderID = orderID;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutoPrintWaitForShipmentsProcessedResult"/> class.
+        /// Initializes a new instance of the <see cref="AutoPrintCompletionResult"/> class.
         /// </summary>
-        public AutoPrintWaitForShipmentsProcessedResult(long? orderID): this(orderID, null)
+        public AutoPrintCompletionResult(long? orderID)
+            : this(orderID, new List<ProcessShipmentResult>())
         {
         }
 

@@ -105,9 +105,7 @@ namespace ShipWorks.SingleScan.Tests
 
             testObject.InitializeForCurrentSession();
 
-            mock.Mock<IAutoPrintService>()
-                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
-                .ReturnsAsync(new AutoPrintResult("foo", 42, string.Empty, true));
+            SetupAutoPrintService("foo", 42, string.Empty, true);
 
             messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
@@ -125,6 +123,17 @@ namespace ShipWorks.SingleScan.Tests
             mock.Mock<ISqlAdapterFactory>().Verify(f => f.CreateTransacted(), Times.Once);
         }
 
+        private void SetupAutoPrintService(string scannedBarcode, int orderID, string errorMessage, bool success)
+        {
+            var result = success ? 
+                GenericResult.FromSuccess(new AutoPrintResult(scannedBarcode, orderID)) :
+                GenericResult.FromError(errorMessage, new AutoPrintResult(scannedBarcode, orderID));
+
+            mock.Mock<IAutoPrintService>()
+                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
+                .ReturnsAsync(result);
+        }
+
         private Mock<ISqlAdapter> MockSqlAdapter()
         {
             var sqlAdapter = mock.CreateMock<ISqlAdapter>();
@@ -136,12 +145,9 @@ namespace ShipWorks.SingleScan.Tests
         public void SendsOrderSelectionChangingMessage_AfterDelegatingToAutoPrintService_AndShipmentsProcessedMessageReceived()
         {
             SetAllowAutoPrint(true);
+            SetupAutoPrintService("foo", 42, string.Empty, true);
 
             testObject.InitializeForCurrentSession();
-
-            mock.Mock<IAutoPrintService>()
-                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
-                .ReturnsAsync(new AutoPrintResult("foo", 42, string.Empty, true));
 
             messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
@@ -158,13 +164,10 @@ namespace ShipWorks.SingleScan.Tests
         public void IsListeningForScans_ReturnsTrue_AfterDelegatingToAutoPrintService_AndShipmentsProcessedMessageReceived()
         {
             SetAllowAutoPrint(true);
+            SetupAutoPrintService("foo", 42, string.Empty, true);
 
             testObject.InitializeForCurrentSession();
-
-            mock.Mock<IAutoPrintService>()
-                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
-                .ReturnsAsync(new AutoPrintResult("foo", 42, string.Empty, true));
-
+            
             messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
@@ -181,12 +184,9 @@ namespace ShipWorks.SingleScan.Tests
         public void IsListeningForScans_ReturnsTrue_AfterAutoPrintServiceReturnsResultWithFalse()
         {
             SetAllowAutoPrint(true);
+            SetupAutoPrintService("foo", 42, "oops", false);
 
             testObject.InitializeForCurrentSession();
-
-            mock.Mock<IAutoPrintService>()
-                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
-                .ReturnsAsync(new AutoPrintResult("foo", 42, "oops", false));
 
             messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
@@ -200,12 +200,9 @@ namespace ShipWorks.SingleScan.Tests
         public void ShipmentsNotSaved_WhenAutoPrintServiceReturnsResultWithFalse()
         {
             SetAllowAutoPrint(true);
+            SetupAutoPrintService("foo", 42, "oops", false);
 
             testObject.InitializeForCurrentSession();
-
-            mock.Mock<IAutoPrintService>()
-                 .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
-                 .ReturnsAsync(new AutoPrintResult("foo", 42, "oops", false));
 
             messenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
             messenger.Send(singleScanFilterUpdateCompleteMessage);

@@ -5,19 +5,28 @@ using System.Text;
 
 namespace ShipWorks.SingleScan
 {
+    /// <summary>
+    /// Result from AutoPrintService.Print()
+    /// </summary>
     public struct AutoPrintResult
     {
-        public AutoPrintResult(string scannedBarcode, long? orderId, string errorMessage, bool processShipmentsMessageSent)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoPrintResult"/> struct.
+        /// </summary>
+        public AutoPrintResult(string scannedBarcode, long? orderId)
         {
             ScannedBarcode = scannedBarcode;
             OrderId = orderId;
-            ErrorMessage = errorMessage;
-            ProcessShipmentsMessageSent = processShipmentsMessageSent;
         }
 
+        /// <summary>
+        /// Gets the scanned barcode.
+        /// </summary>
         public string ScannedBarcode { get; }
+
+        /// <summary>
+        /// Gets the order identifier.
+        /// </summary>
         public long? OrderId { get; }
-        public string ErrorMessage { get; }
-        public bool ProcessShipmentsMessageSent { get; }
     }
 }

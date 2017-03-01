@@ -52,7 +52,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Handles the request for auto printing an order.
         /// </summary>
-        public async Task<AutoPrintResult> Print(AutoPrintServiceDto autoPrintServiceDto)
+        public async Task<GenericResult<AutoPrintResult>> Print(AutoPrintServiceDto autoPrintServiceDto)
         {
             string errorMessage = null;
             string scannedBarcode = autoPrintServiceDto.ScannedBarcode;
@@ -112,7 +112,11 @@ namespace ShipWorks.SingleScan
                 }
             }
 
-            return new AutoPrintResult(scannedBarcode, orderID, errorMessage, processShipmentsMessageSent);
+            AutoPrintResult autoPrintResult = new AutoPrintResult(scannedBarcode, orderID);
+
+            return processShipmentsMessageSent ?
+                GenericResult.FromSuccess(autoPrintResult) :
+                GenericResult.FromError(errorMessage, autoPrintResult);
         }
 
         /// <summary>

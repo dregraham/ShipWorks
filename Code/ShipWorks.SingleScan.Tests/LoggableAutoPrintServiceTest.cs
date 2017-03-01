@@ -48,13 +48,22 @@ namespace ShipWorks.SingleScan.Tests
         public async void Print_LogsError_WhenAutoPrintServiceDoesNotSendProcessShipmentsMessage()
         {
             string error = "something went wrong";
-            autoPrintService
-                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
-                .ReturnsAsync(new AutoPrintResult("blah", 42, error, false));
-
+            SetupAutoPrintService("foo", 42, error, false);
+            
             await testObject.Print(new AutoPrintServiceDto());
 
             logger.Verify(l => l.Error(error));
+        }
+
+        private void SetupAutoPrintService(string scannedBarcode, int orderID, string errorMessage, bool success)
+        {
+            var result = success ?
+                GenericResult.FromSuccess(new AutoPrintResult(scannedBarcode, orderID)) :
+                GenericResult.FromError(errorMessage, new AutoPrintResult(scannedBarcode, orderID));
+
+            mock.Mock<IAutoPrintService>()
+                .Setup(a => a.Print(It.IsAny<AutoPrintServiceDto>()))
+                .ReturnsAsync(result);
         }
 
         public void Dispose()

@@ -131,7 +131,7 @@
       <DependentUpon>AutoPrintConfirmationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AutoPrintServiceDto.cs" />
-    <Compile Include="AutoPrintWaitForShipmentsProcessedResult.cs" />
+    <Compile Include="AutoPrintCompletionResult.cs" />
     <Compile Include="AutoWeighService.cs" />
     <Compile Include="AutoPrintServicePipeline.cs" />
     <Compile Include="IAutoPrintSettings.cs" />
