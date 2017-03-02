@@ -3220,9 +3220,9 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("WalmartStoreEntity", @"ShipWorksLocal", @"dbo", "WalmartStore", 4, 0);
 			this.AddElementFieldMapping("WalmartStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("WalmartStoreEntity", "ConsumerID", "ConsumerID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("WalmartStoreEntity", "PrivateKey", "PrivateKey", false, "VarChar", 1000, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("WalmartStoreEntity", "ChannelType", "ChannelType", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("WalmartStoreEntity", "ConsumerID", "ConsumerID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("WalmartStoreEntity", "PrivateKey", "PrivateKey", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("WalmartStoreEntity", "ChannelType", "ChannelType", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits WorldShipGoodsEntity's mappings</summary>

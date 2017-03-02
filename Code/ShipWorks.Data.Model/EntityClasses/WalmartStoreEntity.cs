@@ -25,19 +25,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'WalmartStore'.<br/><br/></summary>
 	[Serializable]
 	public partial class WalmartStoreEntity : StoreEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -113,7 +110,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 
@@ -252,7 +248,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -324,7 +319,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 
@@ -352,7 +346,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 
 		}
@@ -397,7 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ConsumerID property of the Entity WalmartStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WalmartStore"."ConsumerID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ConsumerID
 		{
@@ -407,7 +400,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The PrivateKey property of the Entity WalmartStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WalmartStore"."PrivateKey"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 1000<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String PrivateKey
 		{
@@ -417,7 +410,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ChannelType property of the Entity WalmartStore<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "WalmartStore"."ChannelType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ChannelType
 		{
@@ -451,7 +444,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

@@ -3,9 +3,9 @@ GO
 CREATE TABLE [dbo].[WalmartStore]
 (
     [StoreID] [bigint] NOT NULL,
-    [ConsumerID] [varchar](50) NOT NULL,
-    [PrivateKey] [varchar](1000) NOT NULL,
-    [ChannelType] [varchar](50) NOT NULL,
+    [ConsumerID] [nvarchar](50) NOT NULL,
+    [PrivateKey] [nvarchar](MAX) NOT NULL,
+    [ChannelType] [nvarchar](50) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_WalmartStore] on [dbo].[WalmartStore]'

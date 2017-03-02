@@ -2748,7 +2748,7 @@
         <Fields>
           <Field Name="ChannelType" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="ConsumerID" Type="string" MaxLength="50" FieldIndex="0" />
-          <Field Name="PrivateKey" Type="string" MaxLength="1000" FieldIndex="1" />
+          <Field Name="PrivateKey" Type="string" MaxLength="2147483647" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="WorldShipGoods" ObjectID="8954f73c-1db2-46af-9da2-1388a7a46e40">
@@ -3581,7 +3581,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-01T16:43:08.3326599Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-02T15:47:16.3496598Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7688,9 +7688,9 @@
                   <PkConstraintName Name="PK_WalmartStore" />
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ConsumerID" Ordinal="2" DbType="24" Length="50" />
-                    <Field Name="PrivateKey" Ordinal="3" DbType="24" Length="1000" />
-                    <Field Name="ChannelType" Ordinal="4" DbType="24" Length="50" />
+                    <Field Name="ConsumerID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="PrivateKey" Ordinal="3" DbType="12" Length="2147483647" />
+                    <Field Name="ChannelType" Ordinal="4" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipGoods">

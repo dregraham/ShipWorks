@@ -24,19 +24,19 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The ConsumerID property of the Entity WalmartStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "WalmartStore"."ConsumerID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String ConsumerID { get; }
         /// <summary> The PrivateKey property of the Entity WalmartStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "WalmartStore"."PrivateKey"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 1000<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String PrivateKey { get; }
         /// <summary> The ChannelType property of the Entity WalmartStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "WalmartStore"."ChannelType"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String ChannelType { get; }
         

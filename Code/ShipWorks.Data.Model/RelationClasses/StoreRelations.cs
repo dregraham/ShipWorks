@@ -362,17 +362,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between StoreEntity and YahooStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
-		internal IEntityRelation RelationToSubTypeYahooStoreEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-				relation.AddEntityFieldPair(StoreFields.StoreID, YahooStoreFields.StoreID);
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
 		/// <summary>Returns a new IEntityRelation object, between StoreEntity and WalmartStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeWalmartStoreEntity
 		{
@@ -380,6 +369,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
 				relation.AddEntityFieldPair(StoreFields.StoreID, WalmartStoreFields.StoreID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
+		/// <summary>Returns a new IEntityRelation object, between StoreEntity and YahooStoreEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeYahooStoreEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(StoreFields.StoreID, YahooStoreFields.StoreID);
 				relation.IsHierarchyRelation=true;
 				return relation;
 			}
@@ -442,10 +442,10 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeThreeDCartStoreEntity;
 				case "VolusionStoreEntity":
 					return this.RelationToSubTypeVolusionStoreEntity;
-				case "YahooStoreEntity":
-					return this.RelationToSubTypeYahooStoreEntity;
 				case "WalmartStoreEntity":
 					return this.RelationToSubTypeWalmartStoreEntity;
+				case "YahooStoreEntity":
+					return this.RelationToSubTypeYahooStoreEntity;
 				default:
 					return null;
 			}
