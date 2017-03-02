@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void TestConnection(WalmartStoreEntity store)
         {
-            string epoch = DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow).ToString(CultureInfo.InvariantCulture);
+            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow)*1000).ToString(CultureInfo.InvariantCulture);
             string signature = GetSignature(store.ConsumerID, store.PrivateKey, TestConnectionUrl, "GET", epoch);
 
             HttpXmlVariableRequestSubmitter requestSubmitter = new HttpXmlVariableRequestSubmitter();

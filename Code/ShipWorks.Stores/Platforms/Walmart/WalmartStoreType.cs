@@ -13,6 +13,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartStoreType : StoreType
     {
+        public WalmartStoreType(StoreEntity store) : base(store)
+        {
+        }
+
         /// <summary>
         /// The numeric type code of the store.
         /// </summary>
@@ -30,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             store.ConsumerID = "";
             store.PrivateKey = "";
             store.ChannelType = "";
-            store.StoreName = "My LemonStand Store";
+            store.StoreName = "My Walmart Store";
 
             return store;
         }

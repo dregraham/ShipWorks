@@ -112,9 +112,9 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
                 messageHelper.ShowError($"Please enter your{string.Join("\n\t-", invalidFields)}");
             }
 
-            store.ConsumerID = ConsumerID;
-            store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.ToInsecureString());
-            store.ChannelType = ChannelType;
+            store.ConsumerID = ConsumerID.Trim();
+            store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.ToInsecureString().Trim());
+            store.ChannelType = ChannelType.Trim();
 
             try
             {
