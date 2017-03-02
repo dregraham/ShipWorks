@@ -35,5 +35,10 @@
         /// </summary>
         /// <returns>An instance of AesStreamEncryptionProvider.</returns>
         IEncryptionProvider CreateAesStreamEncryptionProvider();
+
+        /// <summary>
+        /// Creates the walmart encryption provider.
+        /// </summary>
+        IEncryptionProvider CreateWalmartEncryptionProvider();
     }
 }

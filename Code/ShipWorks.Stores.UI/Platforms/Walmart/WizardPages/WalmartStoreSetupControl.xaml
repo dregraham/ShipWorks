@@ -4,11 +4,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              Background="{x:Static SystemColors.ControlBrush}"
              FontFamily="Tahoma"
              FontSize="11"
              d:DesignHeight="500"
              d:DesignWidth="500"
+             d:DataContext="WalmartStoreSetupControlViewModel"
              mc:Ignorable="d">
     <Grid Margin="20 10 10 10">
         <Grid.Resources>
@@ -51,10 +53,14 @@
                            Grid.Column="0"
                            HorizontalAlignment="Right"
                            Text="Private key:" />
-                <TextBox Grid.Row="1"
+                <PasswordBox Grid.Row="1"
                          Grid.Column="1"
-                         Text="{Binding PrivateKey,
-                                        UpdateSourceTrigger=PropertyChanged}" />
+                             Margin="3"
+                             Padding="2">
+                    <i:Interaction.Behaviors>
+                        <ui:PasswordBoxBindingBehavior Password="{Binding PrivateKey, UpdateSourceTrigger=PropertyChanged}" />
+                    </i:Interaction.Behaviors>
+                </PasswordBox>
                 <TextBlock Grid.Row="2"
                            Grid.Column="0"
                            HorizontalAlignment="Right"

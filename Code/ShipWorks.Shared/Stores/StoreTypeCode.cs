@@ -370,7 +370,7 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("AMOSOFT", "AMO")]
         [StoreTypeIcon("amosoft")]
         Amosoft = 71,
-		
+
 		[Description("SellerCloud")]
         [StoreTypeIdentity("SELLERCLOUD", "SCD")]
         [StoreTypeIcon("sellercloud")]
@@ -379,6 +379,11 @@ namespace ShipWorks.Stores
         [Description("InfiPlex")]
         [StoreTypeIdentity("INFIPLEX", "IPX")]
         [StoreTypeIcon("infiplex")]
-        InfiPlex = 74
+        InfiPlex = 74,
+
+        [Description("Walmart")]
+        [StoreTypeIdentity("WALMART", "WAL")]
+        [StoreTypeIcon("walmart")]
+        Walmart = 75
     }
 }

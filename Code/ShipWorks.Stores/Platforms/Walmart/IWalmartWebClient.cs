@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Walmart
+﻿using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.Stores.Platforms.Walmart
 {
     /// <summary>
     /// Web client for interacting with Walmart
@@ -8,6 +10,6 @@
         /// <summary>
         /// Tests the connection to Walmart
         /// </summary>
-        bool TestConnection();
+        void TestConnection(WalmartStoreEntity store);
     }
 }

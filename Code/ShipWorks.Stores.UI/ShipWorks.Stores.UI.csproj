@@ -313,6 +313,12 @@
     <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControl.xaml.cs">
       <DependentUpon>WalmartStoreSetupControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.Designer.cs">
+      <DependentUpon>WalmartStoreSetupControlHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPage.xaml.cs">
       <DependentUpon>YahooApiAccountPage.xaml</DependentUpon>
@@ -403,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\SparkPay\WizardPages\SparkPayAccountHost.resx">
       <DependentUpon>SparkPayAccountHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Walmart\WizardPages\WalmartStoreSetupControlHost.resx">
+      <DependentUpon>WalmartStoreSetupControlHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Yahoo\ApiIntegration\WizardPages\YahooApiAccountPageHost.resx">
       <DependentUpon>YahooApiAccountPageHost.cs</DependentUpon>

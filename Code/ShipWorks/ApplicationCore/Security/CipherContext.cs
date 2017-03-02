@@ -19,6 +19,9 @@ namespace ShipWorks.ApplicationCore.Security
         Stream,
 
         [Description("Odbc Store Type Context")]
-        Odbc
+        Odbc,
+
+        [Description("Walmart Context")]
+        Walmart
     }
 }
