@@ -49,7 +49,7 @@
                 <TextBlock Grid.Row="1"
                            Grid.Column="0"
                            HorizontalAlignment="Right"
-                           Text="Private key:" />
+                           Text="Private Key:" />
                 <PasswordBox Grid.Row="1"
                              Grid.Column="1"
                              Margin="3"
@@ -61,7 +61,7 @@
                 <TextBlock Grid.Row="2"
                            Grid.Column="0"
                            HorizontalAlignment="Right"
-                           Text="Channel type:" />
+                           Text="Channel Type:" />
                 <TextBox Grid.Row="2"
                          Grid.Column="1"
                          Text="{Binding ChannelType,
