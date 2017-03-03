@@ -305,6 +305,7 @@
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithItemAttributes.json" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoItem.json" />
     <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoParentItem.json" />
+    <EmbeddedResource Include="Platforms\Magento\Artifacts\MagentoOrderWithConfigurableProduct.json" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />

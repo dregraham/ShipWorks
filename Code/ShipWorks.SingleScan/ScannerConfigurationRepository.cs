@@ -30,7 +30,6 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Save the scanner name from scanner.xml
         /// </summary>
-        /// <exception cref="ScannerConfigurationRepositoryException">Throws when fails to write file to disk</exception>
         public GenericResult<string> SaveScannerName(string name)
         {
             MethodConditions.EnsureArgumentIsNotNull(name, nameof(name));
@@ -60,17 +59,22 @@ namespace ShipWorks.SingleScan
         /// </summary>
         public GenericResult<string> GetScannerName()
         {
-            try
-            {
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.LoadXml(ReadSettingsFile());
+            string scannerSettingsXML = ReadSettingsFile();
 
-                return
-                    GenericResult.FromSuccess(xmlDocument.SelectSingleNode("//Scanner/Name")?.InnerText ?? string.Empty);
-            }
-            catch (Exception ex) when(ex is XPathException || ex is XmlException)
+            if (!string.IsNullOrWhiteSpace(scannerSettingsXML))
             {
-                log.Error("An error occurred while trying to read scanner settings.", ex);
+                try
+                {
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.LoadXml(scannerSettingsXML);
+
+                    return
+                        GenericResult.FromSuccess(xmlDocument.SelectSingleNode("//Scanner/Name")?.InnerText ?? string.Empty);
+                }
+                catch (Exception ex) when (ex is XPathException || ex is XmlException)
+                {
+                    log.Error("An error occurred while trying to read scanner settings.", ex);
+                }
             }
 
             return GenericResult.FromSuccess(string.Empty);
@@ -84,7 +88,7 @@ namespace ShipWorks.SingleScan
         {
             try
             {
-                return File.ReadAllText(fullPath);
+                return File.Exists(fullPath) ? File.ReadAllText(fullPath) : string.Empty;
             }
             catch (Exception ex)
             {

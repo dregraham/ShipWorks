@@ -7,8 +7,5 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
     {
         [JsonProperty("shipping")]
         public Shipping Shipping { get; set; }
-
-        [JsonProperty("items")]
-        public IEnumerable<Item> Items { get; set; }
     }
 }

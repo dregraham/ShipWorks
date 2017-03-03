@@ -83,6 +83,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap amosoft {
+            get {
+                object obj = ResourceManager.GetObject("amosoft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bigcommerce {
             get {
                 object obj = ResourceManager.GetObject("bigcommerce", resourceCulture);

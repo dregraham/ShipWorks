@@ -1702,10 +1702,7 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceRequest.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\MagentoTwoRestUploadShipmentRequest.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\BillingAddress.cs" />
-    <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\BundleOption.cs" />
-    <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ConfigurableItemOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\CustomOption.cs" />
-    <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\DownloadableOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ExtensionAttributes.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\Item.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\Order.cs" />
@@ -1718,7 +1715,6 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ShippingAssignment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\StatusHistory.cs" />
-    <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\Total.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\OrdersResponse.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\ShipmentItem.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Track.cs" />
@@ -10703,6 +10699,7 @@
     <Resource Include="Resources\box_closed_redo_16_16.png" />
     <Resource Include="Resources\box_void_32_32.png" />
     <Resource Include="Resources\document_gear_32_32.png" />
+    <None Include="Resources\amosoft.png" />
     <None Include="Resources\infiplex.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
