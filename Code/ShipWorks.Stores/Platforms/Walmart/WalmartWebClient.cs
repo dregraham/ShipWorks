@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         ///     Executes a request
         /// </summary>
-        private static string ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private static void ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
@@ -96,8 +96,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 {
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
-
-                    return responseData;
                 }
             }
             catch (Exception ex)
