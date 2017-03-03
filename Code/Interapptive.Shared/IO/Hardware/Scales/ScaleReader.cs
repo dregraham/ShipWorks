@@ -133,7 +133,14 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             // in a task. If it were to lock indefinitely, we couldn't use the scale anyway
             lock (ThreadLock)
             {
-                return InternalReadScale(isPolling);
+                ScaleReadResult result =  InternalReadScale(isPolling);
+
+                if(result.Status == ScaleReadStatus.Success && result.Weight < 0)
+                {
+                    return ScaleReadResult.ReadError($"Weight measured less than zero ({result.Weight} lbs).");
+                }
+
+                return result;
             }
         }
 
