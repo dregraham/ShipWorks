@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[WalmartStore]
 (
     [StoreID] [bigint] NOT NULL,
     [ConsumerID] [nvarchar](50) NOT NULL,
-    [PrivateKey] [nvarchar](MAX) NOT NULL,
+    [PrivateKey] [nvarchar](2000) NOT NULL,
     [ChannelType] [nvarchar](50) NOT NULL,
 )
 GO

@@ -21,21 +21,27 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IEncryptionProvider encryptionProvider;
+        private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
 
-        public WalmartWebClient(IEncryptionProviderFactory encryptionProviderFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
+        /// </summary>
+        /// <param name="encryptionProviderFactory">The encryption provider factory.</param>
+        /// <param name="apiLogEntryFactory"></param>
+        public WalmartWebClient(IEncryptionProviderFactory encryptionProviderFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
+            this.apiLogEntryFactory = apiLogEntryFactory;
             encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
         }
-
-        private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
 
         /// <summary>
         /// Tests the connection to Walmart, throws if invalid credentials
         /// </summary>
         public void TestConnection(WalmartStoreEntity store)
         {
-            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow)*1000).ToString(CultureInfo.InvariantCulture);
+            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow) * 1000).ToString(CultureInfo.InvariantCulture);
             string signature = GetSignature(store.ConsumerID, store.PrivateKey, TestConnectionUrl, "GET", epoch);
 
             HttpXmlVariableRequestSubmitter requestSubmitter = new HttpXmlVariableRequestSubmitter();
@@ -83,19 +89,19 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
-        ///     Executes a request
+        /// Executes a request
         /// </summary>
-        private static void ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private void ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Walmart, action);
+                IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
                 logEntry.LogRequest(submitter);
 
                 using (IHttpResponseReader reader = submitter.GetResponse())
                 {
                     string responseData = reader.ReadResult();
-                    logEntry.LogResponse(responseData, "txt");
+                    logEntry.LogResponse(responseData, "xml");
                 }
             }
             catch (Exception ex)

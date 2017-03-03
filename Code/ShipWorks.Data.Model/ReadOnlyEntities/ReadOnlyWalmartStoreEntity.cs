@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The PrivateKey property of the Entity WalmartStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "WalmartStore"."PrivateKey"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2000<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String PrivateKey { get; }
         /// <summary> The ChannelType property of the Entity WalmartStore<br/><br/>

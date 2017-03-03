@@ -3059,7 +3059,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(WalmartStoreFieldIndex), "WalmartStoreEntity");
 			this.AddElementFieldInfo("WalmartStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)WalmartStoreFieldIndex.StoreID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartStoreEntity", "ConsumerID", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ConsumerID, 50, 0, 0);
-			this.AddElementFieldInfo("WalmartStoreEntity", "PrivateKey", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.PrivateKey, 2147483647, 0, 0);
+			this.AddElementFieldInfo("WalmartStoreEntity", "PrivateKey", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.PrivateKey, 2000, 0, 0);
 			this.AddElementFieldInfo("WalmartStoreEntity", "ChannelType", typeof(System.String), false, false, false, false,  (int)WalmartStoreFieldIndex.ChannelType, 50, 0, 0);
 		}
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>

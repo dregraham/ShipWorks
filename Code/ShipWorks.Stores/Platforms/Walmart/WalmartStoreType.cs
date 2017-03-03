@@ -13,7 +13,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartStoreType : StoreType
     {
-        public WalmartStoreType(StoreEntity store) : base(store)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalmartStoreType"/> class.
+        /// </summary>
+        /// <param name="store"></param>
+        public WalmartStoreType(StoreEntity store)
+            : base(store)
         {
         }
 
@@ -25,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates a store-specific instance of a StoreEntity
         /// </summary>
-        /// <returns></returns>
         public override StoreEntity CreateStoreInstance()
         {
             WalmartStoreEntity store = new WalmartStoreEntity();
@@ -66,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            return new List<string>() {"Created", "Acknowledged", "Shipped", "Cancelled"};
+            return new List<string>() {"Created", "Acknowledged", "Shipped", "Cancelled", "Refund"};
         }
     }
 }

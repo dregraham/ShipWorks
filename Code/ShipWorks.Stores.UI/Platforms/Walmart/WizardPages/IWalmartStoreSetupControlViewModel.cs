@@ -1,8 +1,10 @@
-﻿using System.Security;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
 {
+    /// <summary>
+    /// Logic for the WalmartStoreSetupControl
+    /// </summary>
     public interface IWalmartStoreSetupControlViewModel
     {
         /// <summary>
@@ -13,18 +15,13 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// <summary>
         /// Private key issued by Walmart
         /// </summary>
-        SecureString PrivateKey { get; set; }
+        string PrivateKey { get; set; }
 
         /// <summary>
         /// Channel Type issued by Walmart
         /// </summary>
         string ChannelType { get; set; }
-
-        /// <summary>
-        /// Loads the store credentials
-        /// </summary>
-        void Load(WalmartStoreEntity store);
-
+        
         /// <summary>
         /// Saves the store credentials
         /// </summary>

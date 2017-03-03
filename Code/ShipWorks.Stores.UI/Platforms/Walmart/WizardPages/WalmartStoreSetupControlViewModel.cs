@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Security;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -25,7 +22,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         private readonly IMessageHelper messageHelper;
         private readonly IEncryptionProvider encryptionProvider;
         private string consumerID;
-        private SecureString privateKey;
+        private string privateKey;
         private string channelType;
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -33,10 +30,8 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartStoreSetupControlViewModel"/> class.
         /// </summary>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="messageHelper">The message helper.</param>
-        /// <param name="encryptionProviderFactory"></param>
-        public WalmartStoreSetupControlViewModel(IWalmartWebClient webClient, IMessageHelper messageHelper, IEncryptionProviderFactory encryptionProviderFactory)
+        public WalmartStoreSetupControlViewModel(IWalmartWebClient webClient, IMessageHelper messageHelper, 
+            IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.webClient = webClient;
             this.messageHelper = messageHelper;
@@ -58,7 +53,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         /// Private key issued by Walmart
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public SecureString PrivateKey
+        public string PrivateKey
         {
             get { return privateKey; }
             set { handler.Set(nameof(PrivateKey), ref privateKey, value); }
@@ -75,16 +70,6 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
         }
 
         /// <summary>
-        /// Loads the store info
-        /// </summary>
-        public void Load(WalmartStoreEntity store)
-        {
-            ConsumerID = store.ConsumerID;
-            PrivateKey = encryptionProvider.Decrypt(store.PrivateKey).ToSecureString();
-            ChannelType = store.ChannelType;
-        }
-
-        /// <summary>
         /// Validates the credentials entered by the user and saves them if they are valid.
         /// </summary>
         public bool Save(WalmartStoreEntity store)
@@ -97,7 +82,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
                 invalidFields.Add("Consumer ID");
             }
 
-            if (string.IsNullOrWhiteSpace(PrivateKey.ToInsecureString()))
+            if (string.IsNullOrWhiteSpace(PrivateKey))
             {
                 invalidFields.Add("Private key");
             }
@@ -113,7 +98,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
             }
 
             store.ConsumerID = ConsumerID.Trim();
-            store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.ToInsecureString().Trim());
+            store.PrivateKey = encryptionProvider.Encrypt(PrivateKey.Trim());
             store.ChannelType = ChannelType.Trim();
 
             try
