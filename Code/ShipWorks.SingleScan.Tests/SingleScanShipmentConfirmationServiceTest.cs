@@ -92,13 +92,13 @@ namespace ShipWorks.SingleScan.Tests
 
             mock.Mock<IShipmentFactory>()
                 .Setup(f => f.Create(It.IsAny<long>()))
-                .Returns(new ShipmentEntity {ShipmentTypeCode = ShipmentTypeCode.None});
+                .Returns(new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.None });
 
             IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
 
             Assert.Empty(result);
             mock.Mock<IMessageHelper>()
-                .Verify(m=>m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+                .Verify(m => m.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
         }
 
         [Fact]
@@ -198,7 +198,7 @@ namespace ShipWorks.SingleScan.Tests
 
             await testObject.GetShipments(123, "foobar");
 
-            mock.Mock<IMessageHelper>().Verify(h=>h.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
+            mock.Mock<IMessageHelper>().Verify(h => h.ShowError(SingleScanShipmentConfirmationService.CannotProcessNoneMessage));
         }
 
         [Fact]
@@ -296,6 +296,80 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        public async void GetShipments_ReturnsNoShipments_WhenOrderLoaderReturnsAMultiPackageShipment_AndAutoWeighIsOn_AndUserDeclines()
+        {
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
+                .Returns(true);
+
+            MockShipmentAdapterToReturnTwoPackages();
+
+            // Mock up the order loader to return one processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>() {new ShipmentEntity() {Processed = false}}));
+
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns(DialogResult.Cancel);
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity { Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx });
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async void GetShipments_ReturnsShipment_WhenOrderLoaderReturnsAMultiPackageShipment_AndAutoWeighIsOn_AndUserAccepts()
+        {
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
+                .Returns(true);
+
+            MockShipmentAdapterToReturnTwoPackages();
+
+            // Mock up the order loader to return one processed shipment
+            var shipment = new ShipmentEntity() { Processed = false };
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>() { shipment }));
+
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns(DialogResult.OK);
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity { Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx });
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            Assert.Equal(shipment, result.Single());
+        }
+
+        [Fact]
+        public async void GetShipments_ReturnsShipment_WhenOrderLoaderReturnsAMultiPackageShipment_AndAutoWeighIsOff()
+        {
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
+                .Returns(false);
+
+            MockShipmentAdapterToReturnTwoPackages();
+
+            var shipment = new ShipmentEntity() { Processed = false };
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>() { shipment }));
+
+            IEnumerable<ShipmentEntity> result = await testObject.GetShipments(123, "foobar");
+
+            mock.Mock<IMessageHelper>().Verify((m=>m.ShowDialog(It.IsAny<Func<IForm>>())), Times.Never);
+            Assert.Equal(shipment, result.Single());
+        }
+
+        [Fact]
         public async void GetShipments_DelegatesToSecurityContextRetriever()
         {
             Mock<ISecurityContext> securityContext = mock.Mock<ISecurityContext>();
@@ -345,7 +419,7 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public async void GetShipments_DelegatesToDlgFactoryWithNewShipmentMessaging_WhenOrderLoaderReturnsOneprocessedShipment()
+        public async void GetShipments_DelegatesToDlgFactoryWithNewShipmentMessaging_WhenOrderLoaderReturnsOneProcessedShipment()
         {
             // Mock up the order loader to return one processed shipment
             mock.Mock<IOrderLoader>()
@@ -376,6 +450,98 @@ namespace ShipWorks.SingleScan.Tests
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        [Fact]
+        public async void GetShipments_DelegatesToDlgFactoryWithMultiplePackageMessaging_WhenOrderLoaderReturnsOneShipmentWithMultiplePackages()
+        {
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
+                .Returns(true);
+
+            // Mock up the order loader to return one processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = false } }));
+
+            MockShipmentAdapterToReturnTwoPackages();
+
+            Mock<IAutoPrintConfirmationDlgFactory> dlgFactory = mock.Mock<IAutoPrintConfirmationDlgFactory>();
+
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity { Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx });
+
+            await testObject.GetShipments(123, "foobar");
+
+            MessagingText continueText = new MessagingText()
+            {
+                Title = "Multiple Packages",
+                Body = "The resulting shipment has multiple packages. To create a label for each package, " +
+                       "scan the barcode again or click \'Print 2 Labels\'." +
+                       "\r\n\r\nNote: ShipWorks will update each package with the weight from the scale.",
+                Continue = "Print 2 Labels",
+            };
+
+            dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        private void MockShipmentAdapterToReturnTwoPackages()
+        {
+            var packageAdapter = mock.Mock<IPackageAdapter>();
+
+            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+                .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
+
+            mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentAdapter.Object);
+        }
+
+        [Fact]
+        public async void GetShipments_DoesNotDelegateToDlgFactoryWithMultiplePackageMessaging_WhenOrderLoaderReturnsOneShipmentWithMultiplePackages_AndAutoWeighIsOff()
+        {
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
+                .Returns(false);
+
+            // Mock up the order loader to return one processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "", new List<ShipmentEntity>() { new ShipmentEntity() { Processed = false } }));
+
+            var packageAdapter = mock.Mock<IPackageAdapter>();
+
+            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
+            shipmentAdapter.Setup(a => a.GetPackageAdapters())
+                .Returns(new List<IPackageAdapter> { packageAdapter.Object, packageAdapter.Object });
+
+            mock.Mock<ICarrierShipmentAdapterFactory>().Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentAdapter.Object);
+
+            Mock<IAutoPrintConfirmationDlgFactory> dlgFactory = mock.Mock<IAutoPrintConfirmationDlgFactory>();
+
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity { Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx });
+
+            await testObject.GetShipments(123, "foobar");
+
+            dlgFactory.Verify(f => f.Create("foobar", It.IsAny<MessagingText>()), Times.Never);
         }
 
         [Fact]
@@ -412,6 +578,52 @@ namespace ShipWorks.SingleScan.Tests
             {
                 Body =
                     "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'.",
+                Continue = "Create 3 Labels",
+                Title = "Multiple Shipments"
+            };
+
+            dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        [Fact]
+        public async void GetShipments_DelegatesToDlgFactoryWithAutoWeighMessage_WhenOrderLoaderReturnsMultipleUnprocessedShipment_AndAutoWeighIsOn()
+        {
+            mock.Mock<IAutoPrintSettings>()
+                .Setup(w => w.IsAutoWeighEnabled())
+                .Returns(true);
+
+            // Mock up the order loader to return one processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = true}
+                    }));
+
+            Mock<IAutoPrintConfirmationDlgFactory> dlgFactory = mock.Mock<IAutoPrintConfirmationDlgFactory>();
+
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
+
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<OrderEntity>()))
+                .Returns(new ShipmentEntity { Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx });
+
+            await testObject.GetShipments(123, "foobar");
+
+            MessagingText continueText = new MessagingText()
+            {
+                Body =
+                    "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'." +
+                    "\r\n\r\nNote: ShipWorks will update each shipment with the weight from the scale.",
                 Continue = "Create 3 Labels",
                 Title = "Multiple Shipments"
             };

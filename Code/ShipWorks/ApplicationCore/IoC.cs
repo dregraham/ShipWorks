@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Attributed;
 using Interapptive.Shared;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Security;
@@ -212,6 +213,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterGeneric(typeof(CompositeValidator<,>))
                 .As(typeof(ICompositeValidator<,>));
+
+            builder.RegisterType<ScaleReaderWrapper>()
+                .As<IScaleReader>();
 
             ComponentAttribute.Register(builder, allAssemblies);
             ServiceAttribute.Register(builder, allAssemblies);
