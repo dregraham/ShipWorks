@@ -335,6 +335,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PrivateKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ChannelType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
 		}
 		#endregion
 
@@ -416,6 +418,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WalmartStoreFieldIndex.ChannelType, true); }
 			set	{ SetValue((int)WalmartStoreFieldIndex.ChannelType, value); }
+		}
+
+		/// <summary> The DownloadModifiedNumberOfDaysBack property of the Entity WalmartStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartStore"."DownloadModifiedNumberOfDaysBack"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 DownloadModifiedNumberOfDaysBack
+		{
+			get { return (System.Int32)GetValue((int)WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
+			set	{ SetValue((int)WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

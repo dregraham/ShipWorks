@@ -2748,6 +2748,7 @@
         <Fields>
           <Field Name="ChannelType" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="ConsumerID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="PrivateKey" Type="string" MaxLength="2000" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
@@ -3581,7 +3582,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-03T15:12:39.3501318Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7684,6 +7685,23 @@
                     <Field Name="ServerTimeZoneDST" Ordinal="10" DbType="2" />
                   </Fields>
                 </Table>
+                <Table Name="WalmartOrder">
+                  <PkConstraintName Name="PK_WalmartOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="PurchaseOrderID" Ordinal="2" DbType="24" Length="32" />
+                    <Field Name="CustomerOrderID" Ordinal="3" DbType="24" Length="50" />
+                    <Field Name="EstimatedDeliveryDate" Ordinal="4" DbType="4" />
+                    <Field Name="EstimatedShipDate" Ordinal="5" DbType="4" />
+                  </Fields>
+                </Table>
+                <Table Name="WalmartOrderItem">
+                  <PkConstraintName Name="PK_WalmartOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="LineNumber" Ordinal="2" DbType="12" Length="20" />
+                  </Fields>
+                </Table>
                 <Table Name="WalmartStore">
                   <PkConstraintName Name="PK_WalmartStore" />
                   <Fields>
@@ -7691,6 +7709,7 @@
                     <Field Name="ConsumerID" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="PrivateKey" Ordinal="3" DbType="12" Length="2000" />
                     <Field Name="ChannelType" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="5" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="WorldShipGoods">
@@ -8733,6 +8752,16 @@
             <ForeignKeyConstraint Name="dbo:VolusionStore:FK_VolusionStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:VolusionStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:WalmartOrder:FK_WalmartOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:WalmartOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:WalmartOrderItem:FK_WalmartOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:WalmartOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:WalmartStore:FK_WalmartStore_Store">
@@ -11443,6 +11472,7 @@
           <FieldMappings>
             <FieldMapping FieldName="ChannelType" TargetFieldName="ChannelType" />
             <FieldMapping FieldName="ConsumerID" TargetFieldName="ConsumerID" />
+            <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
             <FieldMapping FieldName="PrivateKey" TargetFieldName="PrivateKey" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>

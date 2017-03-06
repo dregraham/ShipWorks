@@ -22987,6 +22987,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ChannelType);}
 		}
+		/// <summary>Creates a new WalmartStoreEntity.DownloadModifiedNumberOfDaysBack field instance</summary>
+		public static EntityField2 DownloadModifiedNumberOfDaysBack
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WorldShipGoodsEntity</summary>

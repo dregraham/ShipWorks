@@ -9870,6 +9870,8 @@ namespace ShipWorks.Data.Model
 		PrivateKey,
 		///<summary>ChannelType. </summary>
 		ChannelType,
+		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
+		DownloadModifiedNumberOfDaysBack,
 		/// <summary></summary>
 		AmountOfFields
 	}
