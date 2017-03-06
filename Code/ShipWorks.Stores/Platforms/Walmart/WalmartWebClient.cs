@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
-using System.Text;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -26,6 +23,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartRequestSigner requestSigner;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
+        private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
+        private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
@@ -51,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Executes a request
         /// </summary>
-        private void ProcessRequest(WalmartStoreEntity store, HttpRequestSubmitter submitter, string action)
+        private string ProcessRequest(WalmartStoreEntity store, HttpRequestSubmitter submitter, string action)
         {
             submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
             submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
@@ -71,6 +70,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 {
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "xml");
+                    return responseData;
                 }
             }
             catch (Exception ex)
@@ -79,12 +79,49 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
         }
 
-        public IEnumerable<Order> GetOrders(DateTime start)
+        private T ProcessRequest<T>(WalmartStoreEntity store, HttpRequestSubmitter submitter, string action)
         {
-            throw new NotImplementedException();
+            string response = ProcessRequest(store, submitter, action);
+
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlReader reader = XmlReader.Create(new StringReader(response));
+            return (T) serializer.Deserialize(reader);
         }
 
-        private void Acknowledge(string purchaseOrderId)
+        /// <summary>
+        /// Get orders from the given start date
+        /// </summary>
+        public ordersListType GetOrders(WalmartStoreEntity store, DateTime start)
+        {
+            HttpXmlVariableRequestSubmitter requestSubmitter = new HttpXmlVariableRequestSubmitter();
+            requestSubmitter.Uri = new Uri(GetOrdersUrl);
+            requestSubmitter.Verb = HttpVerb.Get;
+
+            requestSubmitter.Variables.Add("createdStartDate", start.ToString("s"));
+
+            ordersListType ordersResponse = ProcessRequest<ordersListType>(store, requestSubmitter, "GetOrders");
+
+            foreach (Order order in ordersResponse.elements)
+            {
+                AcknowledgeOrder(store, order.purchaseOrderId);
+            }
+
+            return ordersResponse;
+        }
+
+        /// <summary>
+        /// Acknowledge the given purchase order
+        /// </summary>
+        private void AcknowledgeOrder(WalmartStoreEntity store, string purchaseOrderId)
+        {
+            HttpXmlVariableRequestSubmitter requestSubmitter = new HttpXmlVariableRequestSubmitter();
+            requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, purchaseOrderId));
+            requestSubmitter.Verb = HttpVerb.Post;
+
+            ProcessRequest(store, requestSubmitter, "AcknowledgeOrder");
+        }
+
+        public ordersListType GetOrders(WalmartStoreEntity store, string nextCursor)
         {
             throw new NotImplementedException();
         }
