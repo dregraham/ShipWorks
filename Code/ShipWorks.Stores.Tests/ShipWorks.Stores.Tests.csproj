@@ -239,6 +239,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartProductCacheTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartRequestSignerTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiWebClientTest.cs" />

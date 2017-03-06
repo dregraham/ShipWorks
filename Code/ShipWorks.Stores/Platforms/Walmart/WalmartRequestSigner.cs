@@ -5,6 +5,7 @@ using Interapptive.Shared.Security;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Walmart
@@ -12,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// <summary>
     /// Signer for Walmart web requests
     /// </summary>
+    [Component]
     public class WalmartRequestSigner : IWalmartRequestSigner
     {
         private readonly IEncryptionProvider encryptionProvider;
