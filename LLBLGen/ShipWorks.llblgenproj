@@ -2622,6 +2622,7 @@
       </EntityDefinition>
       <EntityDefinition Name="UserSettings" ObjectID="0a760366-50e9-43c5-ac70-297e816a8038">
         <Fields>
+          <Field Name="AutoWeigh" Type="bool" FieldIndex="17" />
           <Field Name="CustomerFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="CustomerFilterLastActive" Type="long" FieldIndex="13" />
           <Field Name="DisplayColorScheme" Type="int" FieldIndex="1" />
@@ -3582,7 +3583,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2016-11-21T21:32:32.0606377Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-02-21T20:41:02.3719018Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7560,6 +7561,7 @@
                     <Field Name="CustomerFilterExpandedFolders" Ordinal="15" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="NextGlobalPostNotificationDate" Ordinal="16" DbType="4" />
                     <Field Name="SingleScanSettings" Ordinal="17" DbType="8" Precision="10" />
+                    <Field Name="AutoWeigh" Ordinal="18" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -11345,6 +11347,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":UserSettings" TargetName="ShipWorksLocal:dbo:UserSettings">
           <FieldMappings>
+            <FieldMapping FieldName="AutoWeigh" TargetFieldName="AutoWeigh" />
             <FieldMapping FieldName="CustomerFilterExpandedFolders" TargetFieldName="CustomerFilterExpandedFolders" />
             <FieldMapping FieldName="CustomerFilterLastActive" TargetFieldName="CustomerFilterLastActive" />
             <FieldMapping FieldName="DisplayColorScheme" TargetFieldName="DisplayColorScheme" />

@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
+using log4net;
 using ShipWorks.Shipping.Services;
 using Module = Autofac.Module;
 
@@ -18,6 +20,10 @@ namespace ShipWorks.SingleScan
             builder.RegisterDecorator<ISingleScanOrderConfirmationService>(
                 (c, inner) => new TelemetricSingleScanOrderConfirmationService(inner),
                 nameof(SingleScanOrderConfirmationService));
+
+            builder.RegisterDecorator<IAutoPrintService>(
+                (c, inner) => new LoggableAutoPrintService(inner, c.Resolve<Func<Type, ILog>>()),
+                nameof(AutoPrintService));
         }
     }
 }

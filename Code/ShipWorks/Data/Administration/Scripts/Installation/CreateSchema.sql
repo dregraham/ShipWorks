@@ -3966,7 +3966,8 @@ CREATE TABLE [dbo].[UserSettings]
 [CustomerFilterLastActive] [bigint] NOT NULL,
 [CustomerFilterExpandedFolders] [xml] NULL,
 [NextGlobalPostNotificationDate] [DateTime] NOT NULL,
-[SingleScanSettings] [int] NOT NULL
+[SingleScanSettings] [int] NOT NULL,
+[AutoWeigh] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

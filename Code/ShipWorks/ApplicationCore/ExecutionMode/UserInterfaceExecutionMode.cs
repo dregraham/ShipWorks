@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using ActiproSoftware.SyntaxEditor;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.IO.Hardware.Scales;
 using Interapptive.Shared.UI;
 using log4net;
 using NDesk.Options;
@@ -146,6 +147,10 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         {
             // First do base/common initialization
             base.Initialize();
+
+            // This kicks off scale detection when SW starts instead of waiting for the the scale to initialize the first time 
+            // it is used which can take upwards to 1 minute.
+            ScaleReader.Initialize();
 
             // Initialize window state
             WindowStateSaver.Initialize(Path.Combine(DataPath.WindowsUserSettings, "windows.xml"));

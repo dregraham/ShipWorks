@@ -22247,6 +22247,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.SingleScanSettings);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.AutoWeigh field instance</summary>
+		public static EntityField2 AutoWeigh
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoWeigh);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
