@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Signs the given request with the timestamp and generated signature
         /// </summary>
-        public void Sign(HttpRequestSubmitter requestSubmitter, WalmartStoreEntity store, string epoch)
+        public void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store, string epoch)
         {
             RsaKeyParameters rsaKeyParameter;
             try

@@ -182,6 +182,9 @@
     <Compile Include="Metrics\ITrackedDurationEvent.cs" />
     <Compile Include="Metrics\Telemetry.cs" />
     <Compile Include="Metrics\TrackedDurationEvent.cs" />
+    <Compile Include="Net\IHttpRequestSubmitter.cs" />
+    <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Net\IHttpXmlVariableRequestSubmitter.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
     <Compile Include="Security\EncryptionException.cs" />

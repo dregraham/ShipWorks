@@ -37,6 +37,11 @@ namespace Interapptive.Shared.Net
         void LogRequest(HttpRequestSubmitter request);
 
         /// <summary>
+        /// Log the contents of the given HttpRequestSubmitter
+        /// </summary>
+        void LogRequest(IHttpRequestSubmitter request);
+
+        /// <summary>
         /// Log the request as the given mail message
         /// </summary>
         void LogRequest(MailMessage mailMessage);

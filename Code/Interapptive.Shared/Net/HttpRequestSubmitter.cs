@@ -10,7 +10,7 @@ namespace Interapptive.Shared.Net
     /// <summary>
     /// Base for various types of post requests
     /// </summary>
-    public abstract class HttpRequestSubmitter
+    public abstract class HttpRequestSubmitter : IHttpRequestSubmitter
     {
         private Uri uri;
         private ICredentials credentials;
