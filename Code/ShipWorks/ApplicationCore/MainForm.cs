@@ -2886,16 +2886,24 @@ namespace ShipWorks
         #region View
 
         /// <summary>
+        /// Show the specified panel
+        /// </summary>
+        public void ShowPanel(DockControl dockControl)
+        {
+            dockControl.Open(WindowOpenMethod.OnScreenActivate);
+
+            Messenger.Current.Send(new PanelShownMessage(this, dockControl));
+        }
+
+        /// <summary>
         /// A panel should be shown
         /// </summary>
         private void OnShowPanel(object sender, EventArgs e)
         {
             SandMenuItem item = (SandMenuItem) sender;
-            DockControl dockControl = (DockControl) item.Tag;
+            //DockControl dockControl = (DockControl) item.Tag;
 
-            dockControl.Open(WindowOpenMethod.OnScreenActivate);
-
-            Messenger.Current.Send(new PanelShownMessage(this, dockControl));
+            ShowPanel((DockControl) item.Tag);
         }
 
         /// <summary>
