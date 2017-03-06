@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -11,6 +12,7 @@ using Org.BouncyCastle.Security;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -108,6 +110,16 @@ namespace ShipWorks.Stores.Platforms.Walmart
             {
                 throw WebHelper.TranslateWebException(ex, typeof(WalmartException));
             }
+        }
+
+        public IEnumerable<Order> GetOrders(DateTime start)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Acknowledge(string purchaseOrderId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

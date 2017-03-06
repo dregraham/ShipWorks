@@ -1,4 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using System;
+using System.Collections.Generic;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -11,5 +14,15 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Tests the connection to Walmart
         /// </summary>
         void TestConnection(WalmartStoreEntity store);
+
+        /// <summary>
+        /// Get orders created after the given start date
+        /// </summary>
+        IEnumerable<Order> GetOrders(DateTime start);
+
+        /// <summary>
+        /// Acknowledge the given purchase order
+        /// </summary>
+        void Acknowledge(string purchaseOrderId);
     }
 }
