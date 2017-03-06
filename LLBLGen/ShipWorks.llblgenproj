@@ -2745,6 +2745,19 @@
           <Field Name="WebUserName" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="WalmartOrder" ObjectID="bbf110b8-a01e-4fff-a8bc-4e134beed74c" InheritanceType="2">
+        <Fields>
+          <Field Name="CustomerOrderID" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="EstimatedDeliveryDate" Type="datetime" FieldIndex="2" />
+          <Field Name="EstimatedShipDate" Type="datetime" FieldIndex="3" />
+          <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="WalmartOrderItem" ObjectID="491bc8d2-7731-459c-99d4-240b98f2b58f" InheritanceType="2">
+        <Fields>
+          <Field Name="LineNumber" Type="string" MaxLength="20" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="WalmartStore" ObjectID="066c7cc9-cbb0-4190-95cb-2f1203e59c92" InheritanceType="2">
         <Fields>
           <Field Name="ChannelType" Type="string" MaxLength="50" FieldIndex="2" />
@@ -3542,6 +3555,8 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":ThreeDCartOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ThreeDCartStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":VolusionStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":WalmartOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":WalmartOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":WalmartStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":YahooOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":YahooOrderItem" />
@@ -3583,7 +3598,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-02-21T20:41:02.3719018Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-06T21:31:20.5982488Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -11469,6 +11484,21 @@
             <FieldMapping FieldName="StoreUrl" TargetFieldName="StoreUrl" />
             <FieldMapping FieldName="WebPassword" TargetFieldName="WebPassword" />
             <FieldMapping FieldName="WebUserName" TargetFieldName="WebUserName" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":WalmartOrder" TargetName="ShipWorksLocal:dbo:WalmartOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="CustomerOrderID" TargetFieldName="CustomerOrderID" />
+            <FieldMapping FieldName="EstimatedDeliveryDate" TargetFieldName="EstimatedDeliveryDate" />
+            <FieldMapping FieldName="EstimatedShipDate" TargetFieldName="EstimatedShipDate" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="PurchaseOrderID" TargetFieldName="PurchaseOrderID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":WalmartOrderItem" TargetName="ShipWorksLocal:dbo:WalmartOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="LineNumber" TargetFieldName="LineNumber" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":WalmartStore" TargetName="ShipWorksLocal:dbo:WalmartStore">

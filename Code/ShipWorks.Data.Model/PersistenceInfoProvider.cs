@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(176);
+			this.InitClass(178);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -214,6 +214,8 @@ namespace ShipWorks.Data.Model
 			InitValidatedAddressEntityMappings();
 			InitVersionSignoffEntityMappings();
 			InitVolusionStoreEntityMappings();
+			InitWalmartOrderEntityMappings();
+			InitWalmartOrderItemEntityMappings();
 			InitWalmartStoreEntityMappings();
 			InitWorldShipGoodsEntityMappings();
 			InitWorldShipPackageEntityMappings();
@@ -3214,6 +3216,25 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("VolusionStoreEntity", "DownloadOrderStatuses", "DownloadOrderStatuses", false, "VarChar", 255, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ServerTimeZone", "ServerTimeZone", false, "VarChar", 30, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("VolusionStoreEntity", "ServerTimeZoneDST", "ServerTimeZoneDST", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 9);
+		}
+
+		/// <summary>Inits WalmartOrderEntity's mappings</summary>
+		private void InitWalmartOrderEntityMappings()
+		{
+			this.AddElementMapping("WalmartOrderEntity", @"ShipWorksLocal", @"dbo", "WalmartOrder", 5, 0);
+			this.AddElementFieldMapping("WalmartOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("WalmartOrderEntity", "PurchaseOrderID", "PurchaseOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("WalmartOrderEntity", "CustomerOrderID", "CustomerOrderID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("WalmartOrderEntity", "EstimatedDeliveryDate", "EstimatedDeliveryDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
+			this.AddElementFieldMapping("WalmartOrderEntity", "EstimatedShipDate", "EstimatedShipDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
+		}
+
+		/// <summary>Inits WalmartOrderItemEntity's mappings</summary>
+		private void InitWalmartOrderItemEntityMappings()
+		{
+			this.AddElementMapping("WalmartOrderItemEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderItem", 2, 0);
+			this.AddElementFieldMapping("WalmartOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("WalmartOrderItemEntity", "LineNumber", "LineNumber", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 1);
 		}
 
 		/// <summary>Inits WalmartStoreEntity's mappings</summary>

@@ -22819,6 +22819,511 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity WalmartOrderEntity</summary>
+	public partial class WalmartOrderFields
+	{
+		/// <summary>Creates a new WalmartOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.ShipAddressType field instance</summary>
+		public static EntityField2 ShipAddressType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipAddressType);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.PurchaseOrderID field instance</summary>
+		public static EntityField2 PurchaseOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.PurchaseOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.CustomerOrderID field instance</summary>
+		public static EntityField2 CustomerOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.CustomerOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.EstimatedDeliveryDate field instance</summary>
+		public static EntityField2 EstimatedDeliveryDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.EstimatedDeliveryDate);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.EstimatedShipDate field instance</summary>
+		public static EntityField2 EstimatedShipDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.EstimatedShipDate);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity WalmartOrderItemEntity</summary>
+	public partial class WalmartOrderItemFields
+	{
+		/// <summary>Creates a new WalmartOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.LineNumber field instance</summary>
+		public static EntityField2 LineNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.LineNumber);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity WalmartStoreEntity</summary>
 	public partial class WalmartStoreFields
 	{

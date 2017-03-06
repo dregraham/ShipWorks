@@ -39,6 +39,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             store.PrivateKey = "";
             store.ChannelType = "";
             store.StoreName = "My Walmart Store";
+            store.DownloadModifiedNumberOfDaysBack = 7;
 
             return store;
         }

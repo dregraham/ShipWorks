@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (176 + 0));
+			this.InitClass( (178 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -217,6 +217,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitValidatedAddressEntityInfos();
 			InitVersionSignoffEntityInfos();
 			InitVolusionStoreEntityInfos();
+			InitWalmartOrderEntityInfos();
+			InitWalmartOrderItemEntityInfos();
 			InitWalmartStoreEntityInfos();
 			InitWorldShipGoodsEntityInfos();
 			InitWorldShipPackageEntityInfos();
@@ -3053,6 +3055,23 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("VolusionStoreEntity", "DownloadOrderStatuses", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.DownloadOrderStatuses, 255, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZone", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZone, 30, 0, 0);
 			this.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZoneDST", typeof(System.Boolean), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZoneDST, 0, 0, 0);
+		}
+		/// <summary>Inits WalmartOrderEntity's FieldInfo objects</summary>
+		private void InitWalmartOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(WalmartOrderFieldIndex), "WalmartOrderEntity");
+			this.AddElementFieldInfo("WalmartOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)WalmartOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("WalmartOrderEntity", "PurchaseOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderFieldIndex.PurchaseOrderID, 32, 0, 0);
+			this.AddElementFieldInfo("WalmartOrderEntity", "CustomerOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderFieldIndex.CustomerOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("WalmartOrderEntity", "EstimatedDeliveryDate", typeof(System.DateTime), false, false, false, false,  (int)WalmartOrderFieldIndex.EstimatedDeliveryDate, 0, 0, 0);
+			this.AddElementFieldInfo("WalmartOrderEntity", "EstimatedShipDate", typeof(System.DateTime), false, false, false, false,  (int)WalmartOrderFieldIndex.EstimatedShipDate, 0, 0, 0);
+		}
+		/// <summary>Inits WalmartOrderItemEntity's FieldInfo objects</summary>
+		private void InitWalmartOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(WalmartOrderItemFieldIndex), "WalmartOrderItemEntity");
+			this.AddElementFieldInfo("WalmartOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)WalmartOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("WalmartOrderItemEntity", "LineNumber", typeof(System.String), false, false, false, false,  (int)WalmartOrderItemFieldIndex.LineNumber, 20, 0, 0);
 		}
 		/// <summary>Inits WalmartStoreEntity's FieldInfo objects</summary>
 		private void InitWalmartStoreEntityInfos()

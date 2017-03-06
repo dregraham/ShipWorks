@@ -3439,6 +3439,48 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty WalmartOrderEntity objects.</summary>
+	[Serializable]
+	public partial class WalmartOrderEntityFactory : EntityFactoryBase2<WalmartOrderEntity> {
+		/// <summary>CTor</summary>
+		public WalmartOrderEntityFactory() : base("WalmartOrderEntity", ShipWorks.Data.Model.EntityType.WalmartOrderEntity, true) { }
+		
+		/// <summary>Creates a new WalmartOrderEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new WalmartOrderEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWalmartOrderUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty WalmartOrderItemEntity objects.</summary>
+	[Serializable]
+	public partial class WalmartOrderItemEntityFactory : EntityFactoryBase2<WalmartOrderItemEntity> {
+		/// <summary>CTor</summary>
+		public WalmartOrderItemEntityFactory() : base("WalmartOrderItemEntity", ShipWorks.Data.Model.EntityType.WalmartOrderItemEntity, true) { }
+		
+		/// <summary>Creates a new WalmartOrderItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new WalmartOrderItemEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWalmartOrderItemUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty WalmartStoreEntity objects.</summary>
 	[Serializable]
 	public partial class WalmartStoreEntityFactory : EntityFactoryBase2<WalmartStoreEntity> {
@@ -4131,6 +4173,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.VolusionStoreEntity:
 					factoryToUse = new VolusionStoreEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.WalmartOrderEntity:
+					factoryToUse = new WalmartOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.WalmartOrderItemEntity:
+					factoryToUse = new WalmartOrderItemEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.WalmartStoreEntity:
 					factoryToUse = new WalmartStoreEntityFactory();
