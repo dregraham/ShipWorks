@@ -19,10 +19,5 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Get orders created after the given start date
         /// </summary>
         IEnumerable<Order> GetOrders(DateTime start);
-
-        /// <summary>
-        /// Acknowledge the given purchase order
-        /// </summary>
-        void Acknowledge(string purchaseOrderId);
     }
 }

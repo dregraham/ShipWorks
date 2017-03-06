@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             throw new NotImplementedException();
         }
 
-        public void Acknowledge(string purchaseOrderId)
+        private void Acknowledge(string purchaseOrderId)
         {
             throw new NotImplementedException();
         }
