@@ -2901,7 +2901,6 @@ namespace ShipWorks
         private void OnShowPanel(object sender, EventArgs e)
         {
             SandMenuItem item = (SandMenuItem) sender;
-            //DockControl dockControl = (DockControl) item.Tag;
 
             ShowPanel((DockControl) item.Tag);
         }
