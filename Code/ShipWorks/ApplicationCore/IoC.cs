@@ -42,6 +42,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -226,6 +227,9 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<TemplateTokenProcessorWrapper>()
                 .As<ITemplateTokenProcessor>()
                 .SingleInstance();
+
+            builder.RegisterType<HttpXmlVariableRequestSubmitter>()
+                .As<IHttpXmlVariableRequestSubmitter>();
 
             builder.Update(container);
 

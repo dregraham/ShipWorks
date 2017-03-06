@@ -1,8 +1,13 @@
 ﻿using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
+    /// <summary>
+    /// Signer for Walmart web requests
+    /// </summary>
+    [Service]
     public interface IWalmartRequestSigner
     {
         /// <summary>
