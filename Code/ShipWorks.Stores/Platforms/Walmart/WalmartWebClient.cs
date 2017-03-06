@@ -23,19 +23,17 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [Component]
     public class WalmartWebClient : IWalmartWebClient
     {
+        private readonly IWalmartRequestSigner requestSigner;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly IEncryptionProvider encryptionProvider;
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartWebClient"/> class.
         /// </summary>
-        /// <param name="encryptionProviderFactory">The encryption provider factory.</param>
-        /// <param name="apiLogEntryFactory"></param>
-        public WalmartWebClient(IEncryptionProviderFactory encryptionProviderFactory, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+        public WalmartWebClient(IWalmartRequestSigner requestSigner, Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
+            this.requestSigner = requestSigner;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
         }
 
         /// <summary>
@@ -43,58 +41,27 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void TestConnection(WalmartStoreEntity store)
         {
-            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow) * 1000).ToString(CultureInfo.InvariantCulture);
-            string signature = GetSignature(store.ConsumerID, store.PrivateKey, TestConnectionUrl, "GET", epoch);
-
             HttpXmlVariableRequestSubmitter requestSubmitter = new HttpXmlVariableRequestSubmitter();
             requestSubmitter.Uri = new Uri(TestConnectionUrl);
             requestSubmitter.Verb = HttpVerb.Get;
 
-            requestSubmitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
-            requestSubmitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
-            requestSubmitter.Headers.Add("WM_SEC.TIMESTAMP", epoch);
-            requestSubmitter.Headers.Add("WM_SEC.AUTH_SIGNATURE", signature);
-            requestSubmitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
-            requestSubmitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-
-            ProcessRequest(requestSubmitter, "TestConnection");
-        }
-
-        /// <summary>
-        /// Get the Walmart auth signature
-        /// </summary>
-        private string GetSignature(string consumerId, string privateKey, string requestUrl, string requestMethod, string epoch)
-        {
-            string message = $"{consumerId}\n{requestUrl}\n{requestMethod.ToUpper()}\n{epoch}\n";
-
-            RsaKeyParameters rsaKeyParameter;
-            try
-            {
-                byte[] keyBytes = Convert.FromBase64String(encryptionProvider.Decrypt(privateKey));
-                AsymmetricKeyParameter asymmetricKeyParameter = PrivateKeyFactory.CreateKey(keyBytes);
-                rsaKeyParameter = (RsaKeyParameters)asymmetricKeyParameter;
-            }
-            catch (Exception)
-            {
-                throw new WalmartException("Unable to load Walmart private key");
-            }
-
-            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-
-            ISigner signer = SignerUtilities.GetSigner("SHA256withRSA");
-            signer.Init(true, rsaKeyParameter);
-            signer.BlockUpdate(messageBytes, 0, messageBytes.Length);
-
-            byte[] signed = signer.GenerateSignature();
-
-            return Convert.ToBase64String(signed);
+            ProcessRequest(store, requestSubmitter, "TestConnection");
         }
 
         /// <summary>
         /// Executes a request
         /// </summary>
-        private void ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private void ProcessRequest(WalmartStoreEntity store, HttpRequestSubmitter submitter, string action)
         {
+            submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
+            submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
+            submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
+            submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
+
+            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow) * 1000).ToString(CultureInfo.InvariantCulture);
+
+            requestSigner.Sign(submitter, store, epoch);
+
             try
             {
                 IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
