@@ -67,6 +67,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IUserSettingsEntity Settings { get; }
         
         
+        IEnumerable<IUserShortcutOverridesEntity> ShortcutOverrides { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -94,6 +95,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IUserSettingsEntity IUserEntity.Settings => Settings;
         
         
+        IEnumerable<IUserShortcutOverridesEntity> IUserEntity.ShortcutOverrides => ShortcutOverrides;
 
         /// <summary>
         /// Get a read only version of the entity

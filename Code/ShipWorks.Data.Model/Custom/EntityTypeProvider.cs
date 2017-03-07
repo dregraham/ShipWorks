@@ -180,6 +180,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "UserEntity": return EntityType.UserEntity;
 				case "UserColumnSettingsEntity": return EntityType.UserColumnSettingsEntity;
 				case "UserSettingsEntity": return EntityType.UserSettingsEntity;
+				case "UserShortcutOverridesEntity": return EntityType.UserShortcutOverridesEntity;
 				case "UspsAccountEntity": return EntityType.UspsAccountEntity;
 				case "UspsProfileEntity": return EntityType.UspsProfileEntity;
 				case "UspsScanFormEntity": return EntityType.UspsScanFormEntity;

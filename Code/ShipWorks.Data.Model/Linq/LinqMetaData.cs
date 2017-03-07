@@ -542,6 +542,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					toReturn = this.UserSettings;
 					break;
+				case ShipWorks.Data.Model.EntityType.UserShortcutOverridesEntity:
+					toReturn = this.UserShortcutOverrides;
+					break;
 				case ShipWorks.Data.Model.EntityType.UspsAccountEntity:
 					toReturn = this.UspsAccount;
 					break;
@@ -1561,6 +1564,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<UserSettingsEntity> UserSettings
 		{
 			get { return new DataSource2<UserSettingsEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UserShortcutOverridesEntity instances in the database.</summary>
+		public DataSource2<UserShortcutOverridesEntity> UserShortcutOverrides
+		{
+			get { return new DataSource2<UserShortcutOverridesEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting UspsAccountEntity instances in the database.</summary>

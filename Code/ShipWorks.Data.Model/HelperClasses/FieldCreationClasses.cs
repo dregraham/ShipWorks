@@ -22254,6 +22254,46 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity UserShortcutOverridesEntity</summary>
+	public partial class UserShortcutOverridesFields
+	{
+		/// <summary>Creates a new UserShortcutOverridesEntity.UserShortcutOverrideID field instance</summary>
+		public static EntityField2 UserShortcutOverrideID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.UserShortcutOverrideID);}
+		}
+		/// <summary>Creates a new UserShortcutOverridesEntity.UserID field instance</summary>
+		public static EntityField2 UserID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.UserID);}
+		}
+		/// <summary>Creates a new UserShortcutOverridesEntity.CommandType field instance</summary>
+		public static EntityField2 CommandType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.CommandType);}
+		}
+		/// <summary>Creates a new UserShortcutOverridesEntity.Alt field instance</summary>
+		public static EntityField2 Alt
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.Alt);}
+		}
+		/// <summary>Creates a new UserShortcutOverridesEntity.Ctrl field instance</summary>
+		public static EntityField2 Ctrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.Ctrl);}
+		}
+		/// <summary>Creates a new UserShortcutOverridesEntity.Shift field instance</summary>
+		public static EntityField2 Shift
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.Shift);}
+		}
+		/// <summary>Creates a new UserShortcutOverridesEntity.KeyValue field instance</summary>
+		public static EntityField2 KeyValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserShortcutOverridesFieldIndex.KeyValue);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
 	public partial class UspsAccountFields
 	{

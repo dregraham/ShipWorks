@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.ShipmentEntityUsingVoidedUserID);
 			toReturn.Add(this.TemplateUserSettingsEntityUsingUserID);
 			toReturn.Add(this.UserColumnSettingsEntityUsingUserID);
+			toReturn.Add(this.UserShortcutOverridesEntityUsingUserID);
 			toReturn.Add(this.UserSettingsEntityUsingUserID);
 			return toReturn;
 		}
@@ -212,6 +213,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between UserEntity and UserShortcutOverridesEntity over the 1:n relation they have, using the relation between the fields:
+		/// User.UserID - UserShortcutOverrides.UserID
+		/// </summary>
+		public virtual IEntityRelation UserShortcutOverridesEntityUsingUserID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ShortcutOverrides" , true);
+				relation.AddEntityFieldPair(UserFields.UserID, UserShortcutOverridesFields.UserID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UserShortcutOverridesEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between UserEntity and UserSettingsEntity over the 1:1 relation they have, using the relation between the fields:
 		/// User.UserID - UserSettings.UserID
 		/// </summary>
@@ -256,6 +272,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation ShipmentEntityUsingVoidedUserIDStatic = new UserRelations().ShipmentEntityUsingVoidedUserID;
 		internal static readonly IEntityRelation TemplateUserSettingsEntityUsingUserIDStatic = new UserRelations().TemplateUserSettingsEntityUsingUserID;
 		internal static readonly IEntityRelation UserColumnSettingsEntityUsingUserIDStatic = new UserRelations().UserColumnSettingsEntityUsingUserID;
+		internal static readonly IEntityRelation UserShortcutOverridesEntityUsingUserIDStatic = new UserRelations().UserShortcutOverridesEntityUsingUserID;
 		internal static readonly IEntityRelation UserSettingsEntityUsingUserIDStatic = new UserRelations().UserSettingsEntityUsingUserID;
 
 		/// <summary>CTor</summary>

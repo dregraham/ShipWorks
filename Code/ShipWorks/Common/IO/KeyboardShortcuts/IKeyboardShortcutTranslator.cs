@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Win32.Native;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
 {

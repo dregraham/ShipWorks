@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (175 + 0));
+			this.InitClass( (176 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -210,6 +210,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitUserEntityInfos();
 			InitUserColumnSettingsEntityInfos();
 			InitUserSettingsEntityInfos();
+			InitUserShortcutOverridesEntityInfos();
 			InitUspsAccountEntityInfos();
 			InitUspsProfileEntityInfos();
 			InitUspsScanFormEntityInfos();
@@ -2941,6 +2942,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "NextGlobalPostNotificationDate", typeof(System.DateTime), false, false, false, false,  (int)UserSettingsFieldIndex.NextGlobalPostNotificationDate, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "SingleScanSettings", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.SingleScanSettings, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoWeigh", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoWeigh, 0, 0, 0);
+		}
+		/// <summary>Inits UserShortcutOverridesEntity's FieldInfo objects</summary>
+		private void InitUserShortcutOverridesEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(UserShortcutOverridesFieldIndex), "UserShortcutOverridesEntity");
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "UserShortcutOverrideID", typeof(System.Int64), true, false, true, false,  (int)UserShortcutOverridesFieldIndex.UserShortcutOverrideID, 0, 0, 19);
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "UserID", typeof(System.Int64), false, true, false, false,  (int)UserShortcutOverridesFieldIndex.UserID, 0, 0, 19);
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "CommandType", typeof(ShipWorks.Shared.IO.KeyboardShortcuts.KeyboardShortcutCommand), false, false, false, false,  (int)UserShortcutOverridesFieldIndex.CommandType, 0, 0, 10);
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "Alt", typeof(System.Boolean), false, false, false, false,  (int)UserShortcutOverridesFieldIndex.Alt, 0, 0, 0);
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "Ctrl", typeof(System.Boolean), false, false, false, false,  (int)UserShortcutOverridesFieldIndex.Ctrl, 0, 0, 0);
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "Shift", typeof(System.Boolean), false, false, false, false,  (int)UserShortcutOverridesFieldIndex.Shift, 0, 0, 0);
+			this.AddElementFieldInfo("UserShortcutOverridesEntity", "KeyValue", typeof(System.String), false, false, false, false,  (int)UserShortcutOverridesFieldIndex.KeyValue, 3, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

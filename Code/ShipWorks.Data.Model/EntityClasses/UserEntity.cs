@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<UserShortcutOverridesEntity> _shortcutOverrides;
 		private UserSettingsEntity _settings;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -45,6 +46,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name ShortcutOverrides</summary>
+			public static readonly string ShortcutOverrides = "ShortcutOverrides";
 			/// <summary>Member name Settings</summary>
 			public static readonly string Settings = "Settings";
 		}
@@ -104,6 +107,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_shortcutOverrides = (EntityCollection<UserShortcutOverridesEntity>)info.GetValue("_shortcutOverrides", typeof(EntityCollection<UserShortcutOverridesEntity>));
 				_settings = (UserSettingsEntity)info.GetValue("_settings", typeof(UserSettingsEntity));
 				if(_settings!=null)
 				{
@@ -124,6 +128,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "ShortcutOverrides":
+					this.ShortcutOverrides.Add((UserShortcutOverridesEntity)entity);
+					break;
 				case "Settings":
 					this.Settings = (UserSettingsEntity)entity;
 					break;
@@ -149,6 +156,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "ShortcutOverrides":
+					toReturn.Add(Relations.UserShortcutOverridesEntityUsingUserID);
+					break;
 				case "Settings":
 					toReturn.Add(Relations.UserSettingsEntityUsingUserID);
 					break;
@@ -180,6 +190,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "ShortcutOverrides":
+					this.ShortcutOverrides.Add((UserShortcutOverridesEntity)relatedEntity);
+					break;
 				case "Settings":
 					SetupSyncSettings(relatedEntity);
 					break;
@@ -196,6 +209,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "ShortcutOverrides":
+					this.PerformRelatedEntityRemoval(this.ShortcutOverrides, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				case "Settings":
 					DesetupSyncSettings(false, true);
 					break;
@@ -233,6 +249,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.ShortcutOverrides);
 			return toReturn;
 		}
 
@@ -244,6 +261,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_shortcutOverrides", ((_shortcutOverrides!=null) && (_shortcutOverrides.Count>0) && !this.MarkedForDeletion)?_shortcutOverrides:null);
 				info.AddValue("_settings", (!this.MarkedForDeletion?_settings:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -258,6 +276,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityRelation> GetAllRelations()
 		{
 			return new UserRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'UserShortcutOverrides' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoShortcutOverrides()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UserShortcutOverridesFields.UserID, null, ComparisonOperator.Equal, this.UserID));
+			return bucket;
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'UserSettings' to this entity.</summary>
@@ -281,6 +308,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._shortcutOverrides);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -288,6 +316,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._shortcutOverrides = (EntityCollection<UserShortcutOverridesEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -296,6 +325,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._shortcutOverrides != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -305,6 +335,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<UserShortcutOverridesEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UserShortcutOverridesEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -312,6 +343,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("ShortcutOverrides", _shortcutOverrides);
 			toReturn.Add("Settings", _settings);
 			return toReturn;
 		}
@@ -415,6 +447,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return _customProperties;}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UserShortcutOverrides' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathShortcutOverrides
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<UserShortcutOverridesEntity>(EntityFactoryCache2.GetEntityFactory(typeof(UserShortcutOverridesEntityFactory))), (IEntityRelation)GetRelationsForField("ShortcutOverrides")[0], (int)ShipWorks.Data.Model.EntityType.UserEntity, (int)ShipWorks.Data.Model.EntityType.UserShortcutOverridesEntity, 0, null, null, null, null, "ShortcutOverrides", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UserSettings' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathSettings
@@ -514,6 +553,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserFieldIndex.IsDeleted, true); }
 			set	{ SetValue((int)UserFieldIndex.IsDeleted, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'UserShortcutOverridesEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(UserShortcutOverridesEntity))]
+		public virtual EntityCollection<UserShortcutOverridesEntity> ShortcutOverrides
+		{
+			get { return GetOrCreateEntityCollection<UserShortcutOverridesEntity, UserShortcutOverridesEntityFactory>("User", true, false, ref _shortcutOverrides);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserSettingsEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
