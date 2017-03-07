@@ -72,5 +72,11 @@ namespace Interapptive.Shared.Net
         /// Execute the request
         /// </summary>
         IHttpResponseReader GetResponse();
+
+
+        /// <summary>
+        /// Prepare the URI of the request
+        /// </summary>
+        Uri GetPreparedRequestUri();
     }
 }

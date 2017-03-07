@@ -65,6 +65,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         public override StoreDownloader CreateDownloader() => downloaderFactory[TypeCode](Store);
 
         /// <summary>
+        /// Creates a Walmart Order Entity
+        /// </summary>
+        protected override OrderEntity CreateOrderInstance() => new WalmartOrderEntity();
+
+        public override OrderItemEntity CreateOrderItemInstance() => new WalmartOrderItemEntity();
+
+        /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
         protected override string InternalLicenseIdentifier => ((WalmartStoreEntity) Store).ConsumerID;

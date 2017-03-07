@@ -118,7 +118,7 @@ namespace Interapptive.Shared.Net
         public virtual IHttpResponseReader GetResponse()
         {
             // Get the request Uri
-            Uri requestUri = PrepareRequestUri();
+            Uri requestUri = GetPreparedRequestUri();
 
             HttpWebRequest webRequest = null;
             try
@@ -289,7 +289,7 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Prepare the URI of the request
         /// </summary>
-        private Uri PrepareRequestUri()
+        public Uri GetPreparedRequestUri()
         {
             string query = GetQueryString();
 

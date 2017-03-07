@@ -1,4 +1,6 @@
-﻿namespace Interapptive.Shared.Net
+﻿using System;
+
+namespace Interapptive.Shared.Net
 {
     /// <summary>
     /// interface that represents an Http post request that posts name\value pairs.

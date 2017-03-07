@@ -46,7 +46,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
 
             string method = EnumHelper.GetDescription(requestSubmitter.Verb).ToUpper();
-            string message = $"{store.ConsumerID}\n{requestSubmitter.Uri.AbsoluteUri}\n{method}\n{epoch}\n";
+
+            Uri uri = requestSubmitter.GetPreparedRequestUri();
+
+            string message = $"{store.ConsumerID}\n{uri.AbsoluteUri}\n{method}\n{epoch}\n";
 
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
 

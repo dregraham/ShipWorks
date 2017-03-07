@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -10,13 +14,16 @@ using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
-    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Walmart, ExternallyOwned = true)]
+    /// <summary>
     /// Downloader for Walmart
     /// </summary>
+    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartDownloader : StoreDownloader
     {
         private readonly IWalmartWebClient walmartWebClient;
+        private readonly ISqlAdapterRetry sqlAdapter;
         private readonly WalmartStoreEntity walmartStore;
+        private int totalOrders;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
@@ -24,10 +31,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
-        public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient)
+        public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient, ISqlAdapterRetryFactory sqlAdapterRetryFactory)
             : base(store)
         {
             this.walmartWebClient = walmartWebClient;
+            this.sqlAdapter = sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download"); ;
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -38,13 +46,34 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
-            ordersListType ordersList = GetFirstBatch();
+            Progress.Detail = "Checking for orders...";
 
-            while (ordersList.elements?.Any() ?? false)
+            // Check if it has been canceled
+            if (Progress.IsCancelRequested)
             {
-                SaveOrders(ordersList);
+                return;
+            }
+
+            ordersListType ordersList = GetFirstBatch();
+            totalOrders = ordersList.meta.totalCount;
+
+            if (totalOrders == 0)
+            {
+                Progress.Detail = "No orders to download.";
+                return;
+            }
+
+            Progress.Detail = $"Downloading {totalOrders} orders...";
+
+            while (ordersList?.elements?.Any() ?? false)
+            {
+                LoadOrders(ordersList);
+
                 ordersList = GetNextBatch(ordersList);
             }
+
+            Progress.PercentComplete = 100;
+            Progress.Detail = "Done";
         }
 
         /// <summary>
@@ -62,6 +91,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private ordersListType GetNextBatch(ordersListType ordersList)
         {
             string nextCursor = ordersList.meta.nextCursor;
+            if (nextCursor.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             return walmartWebClient.GetOrders(walmartStore, nextCursor);
         }
 
@@ -69,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Saves the orders.
         /// </summary>
         /// <param name="ordersList">The orders list.</param>
-        private void SaveOrders(ordersListType ordersList)
+        private void LoadOrders(ordersListType ordersList)
         {
             foreach (Order downloadedOrder in ordersList.elements)
             {
@@ -82,6 +116,15 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void LoadOrder(Order downloadedOrder)
         {
+            // Check if it has been canceled
+            if (Progress.IsCancelRequested)
+            {
+                return;
+            }
+
+            // Update the status
+            Progress.Detail = $"Processing order {QuantitySaved + 1}...";
+
             long orderNumber;
             if (!long.TryParse(downloadedOrder.customerOrderId, out orderNumber))
             {
@@ -102,6 +145,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
             LoadItems(downloadedOrder.orderLines, orderToSave);
             LoadTax(downloadedOrder.orderLines, orderToSave);
             LoadRefunds(downloadedOrder.orderLines, orderToSave);
+
+            orderToSave.OrderTotal = OrderUtility.CalculateTotal(orderToSave, true);
+
+            // Save the downloaded order
+            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderToSave));
         }
 
         /// <summary>
