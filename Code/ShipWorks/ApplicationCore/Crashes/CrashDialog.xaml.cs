@@ -72,7 +72,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             }
 
             waitForOkButton = new TaskCompletionSource<bool>();
-            CreateLogTask = TaskEx.WhenAll(StartSubmissionTask(userEmail, logName), waitForOkButton.Task)
+            CreateLogTask = Task.WhenAll(StartSubmissionTask(userEmail, logName), waitForOkButton.Task)
                 .ContinueWith(ExitApplication);
 
             InitializeComponent();
@@ -91,7 +91,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         private Task<Task> StartSubmissionTask(string userEmail, string logName)
         {
-            return TaskEx.WhenAny(TaskEx.Run(() => SendReport(userEmail, logName)), TaskEx.Delay(TimeSpan.FromMinutes(10)));
+            return Task.WhenAny(Task.Run(() => SendReport(userEmail, logName)), Task.Delay(TimeSpan.FromMinutes(10)));
         }
 
         /// <summary>

@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.UI.Controls.TypeBasedTemplateSelector
 {
@@ -11,11 +14,11 @@ namespace ShipWorks.UI.Controls.TypeBasedTemplateSelector
     {
         /// <summary>
         /// Generic attached property specifying <see cref="Template"/>s
-        /// used by the <see cref="DynamicTemplateSelector"/>
+        /// used by the <see cref="TypeBasedTemplateSelector"/>
         /// </summary>
         /// <remarks>
         /// This attached property will allow you to set the templates you wish to be available whenever
-        /// a control's TemplateSelector is set to an instance of <see cref="DynamicTemplateSelector"/>
+        /// a control's TemplateSelector is set to an instance of <see cref="TypeBasedTemplateSelector"/>
         /// </remarks>
         public static readonly DependencyProperty TemplatesProperty =
             DependencyProperty.RegisterAttached("Templates", typeof(TemplateCollection), typeof(TypeBasedTemplateSelector),
@@ -26,7 +29,7 @@ namespace ShipWorks.UI.Controls.TypeBasedTemplateSelector
         /// </summary>
         /// <param name="element">The <see cref="UIElement"/> who's attached template's property you wish to retrieve</param>
         /// <returns>The templates used by the given <paramref name="element"/>
-        /// when using the <see cref="DynamicTemplateSelector"/></returns>
+        /// when using the <see cref="TypeBasedTemplateSelector"/></returns>
         public static TemplateCollection GetTemplates(UIElement element)
         {
             return (TemplateCollection) element.GetValue(TemplatesProperty);
@@ -63,8 +66,8 @@ namespace ShipWorks.UI.Controls.TypeBasedTemplateSelector
             }
 
             //First, we gather all the templates associated with the current control through our dependency property
-            TemplateCollection templates = GetTemplates(container as UIElement);
-            if (templates == null || templates.Count == 0)
+            IEnumerable<Template> templates = GetTemplates(container as UIElement) ?? Enumerable.Empty<Template>();
+            if (templates.None())
             {
                 base.SelectTemplate(item, container);
             }

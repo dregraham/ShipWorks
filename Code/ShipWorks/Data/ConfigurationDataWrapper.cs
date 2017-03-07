@@ -1,4 +1,5 @@
 ﻿using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Data
     /// <summary>
     /// Provides access to the global configuration object
     /// </summary>
+    [Component]
     public class ConfigurationDataWrapper : IInitializeForCurrentDatabase, IConfigurationData
     {
         /// <summary>

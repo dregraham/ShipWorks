@@ -1,6 +1,5 @@
 ﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -16,6 +15,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
@@ -431,7 +431,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             {
                 string optionHtml = splitDescription[i];
 
-                HtmlAgilityDocument htmlDoc = new HtmlAgilityDocument();
+                HtmlDocument htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(optionHtml);
 
                 // get optionName

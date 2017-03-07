@@ -1,9 +1,10 @@
-﻿using Autofac.Extras.Moq;
-using Moq;
-using ShipWorks.Stores.Platforms.Odbc;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
+using Autofac.Extras.Moq;
+using Moq;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using Xunit;
@@ -226,6 +227,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void Execute_RethrowsShipWorksOdbcException_WhenConnThrowsException()
         {
             Mock<DbDataReader> reader = mock.Mock<DbDataReader>();

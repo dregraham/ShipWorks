@@ -73,6 +73,7 @@ namespace ShipWorks.Shipping.Services.Dialogs
                 messenger.OfType<OpenShippingDialogWithOrdersMessage>()
                     .IntervalCountThrottle(TimeSpan.FromSeconds(2), schedulerProvider)
                     .SelectMany(x => Observable.FromAsync(() => LoadOrdersForShippingDialog(x)))
+                    .Where(x => x.Shipments != null) // If loading was cancelled, Shipments will be null, so don't continue.
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .Subscribe(x => OpenShippingDialog(x)),
                 messenger.OfType<ShipAgainMessage>()

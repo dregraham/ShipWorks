@@ -12,27 +12,27 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
     /// <summary>
     /// Register a component for implemented interfaces
     /// </summary>
-    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
     public class ServiceAttribute : Attribute
     {
         /// <summary>
         /// Register all components that use this attribute
         /// </summary>
-        public static void Register(ContainerBuilder builder, params Assembly[] assemblies)
+        public static void Register(ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
+            params Assembly[] assemblies)
         {
             List<Type> services = assemblies.SelectMany(x => x.GetTypes())
                 .Where(IsService)
                 .ToList();
 
-            foreach (Type component in assemblies.SelectMany(x => x.GetTypes()))
+            foreach (Type component in assemblies.SelectMany(x => x.GetTypes()).Where(x => !x.IsInterface))
             {
                 foreach (Type service in services.Where(ShouldRegister(component)))
                 {
-                    var registrationBuilder = builder.RegisterType(component)
-                        .As(service)
-                        .OrderByMetadata()
-                        .PreserveExistingDefaults();
+                    var registrationBuilder = ComponentAttribute.GetRegistrationBuilder(component, builder, registrationCache);
+
+                    registrationBuilder.As(service).OrderByMetadata(service);
 
                     if (GetAttributes(service).Any(s => s.SingleInstance))
                     {

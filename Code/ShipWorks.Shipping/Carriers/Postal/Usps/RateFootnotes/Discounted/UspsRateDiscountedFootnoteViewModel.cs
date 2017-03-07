@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted

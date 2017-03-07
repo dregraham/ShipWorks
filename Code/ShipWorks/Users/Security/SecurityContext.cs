@@ -34,8 +34,8 @@ namespace ShipWorks.Users.Security
         /// </summary>
         class PermissionIdentifier
         {
-            PermissionType permissionType;
-            long? objectID;
+            readonly PermissionType permissionType;
+            readonly long? objectID;
 
             /// <summary>
             /// Constructor
@@ -90,11 +90,13 @@ namespace ShipWorks.Users.Security
         /// <summary>
         /// Create a security context from the permissions in the database for the given user.
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is only used for exception messages")]
         public SecurityContext(UserEntity user)
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             this.isAdmin = user.IsAdmin;
@@ -234,7 +236,7 @@ namespace ShipWorks.Users.Security
             // See if the security depends not on the passed in object - but on the object's that it is related to
             if (PermissionHelper.GetScope(type) == PermissionScope.IndirectRelatedObject)
             {
-                hasPermission = HasIndirectRelatedObjectPermission(type, objectID.Value);
+                hasPermission = HasIndirectRelatedObjectPermission(type, objectID.GetValueOrDefault());
             }
             else
             {

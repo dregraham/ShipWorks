@@ -1,13 +1,14 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
+using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Data;
-using System.Data.Common;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
@@ -147,6 +148,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource.Schema
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void Load_ReThrowsShipWorksException_WhenGetSchemaThrowsException()
         {
             // Mock up the connection

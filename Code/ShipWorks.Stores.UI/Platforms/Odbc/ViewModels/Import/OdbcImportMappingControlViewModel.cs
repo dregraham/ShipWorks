@@ -1,3 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -9,14 +18,6 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -245,7 +246,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             LoadColumnSource(store);
             LoadMap(store);
-            LoadDownloadStrategy((OdbcImportStrategy)store.ImportStrategy);
+            LoadDownloadStrategy((OdbcImportStrategy) store.ImportStrategy);
         }
 
         /// <summary>
@@ -283,16 +284,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 storeFieldMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
             // First set IsSingleLineOrder based on store value
-            IsSingleLineOrder = store.ImportOrderItemStrategy == (int)OdbcImportOrderItemStrategy.SingleLine;
-            
+            IsSingleLineOrder = store.ImportOrderItemStrategy == (int) OdbcImportOrderItemStrategy.SingleLine;
+
             // The store value may not be correct because this was introduced in v5.5, so just in case, correct it
             // if, based on the map, it is not possibly a single line order (only 1 item per line and has a reccord identifier
             // that is not the order number).
-            int calculatedNumberOfEntries = storeFieldMap.Entries.Select(e=>e.Index).DefaultIfEmpty(0).Max() + 1;
+            int calculatedNumberOfEntries = storeFieldMap.Entries.Select(e => e.Index).DefaultIfEmpty(0).Max() + 1;
 
-            if (orderNumberEntry != null && 
-                calculatedNumberOfEntries == 1 && 
-                !string.IsNullOrEmpty(RecordIdentifier.Name) && 
+            if (orderNumberEntry != null &&
+                calculatedNumberOfEntries == 1 &&
+                !string.IsNullOrEmpty(RecordIdentifier.Name) &&
                 RecordIdentifier.Name != orderNumberEntry.ExternalField.Column.Name)
             {
                 IsSingleLineOrder = false;
@@ -328,7 +329,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 .Select(a => int.Parse(a.ShipWorksField.DisplayName.Substring("Attribute ".Length)))
                 .DefaultIfEmpty(0)
                 .Max();
-            
+
             handler.Set(nameof(NumberOfAttributesPerItem), ref numberOfAttributesPerItem, numberOfAttributesPerItem);
         }
 
@@ -373,7 +374,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
             columnSource.Load(selectedDataSource, store.ImportColumnSource,
-                (OdbcColumnSourceType)store.ImportColumnSourceType);
+                (OdbcColumnSourceType) store.ImportColumnSourceType);
 
             ColumnSource = columnSource;
             Columns = new ObservableCollection<OdbcColumn>(ColumnSource.Columns);
@@ -384,6 +385,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// Loads the download strategy.
         /// </summary>
         /// <param name="importStrategy">The download strategy.</param>
+        [SuppressMessage("SonarLint", "S2259: value is null on at least one execution path",
+            Justification = "The variable is only used for its name")]
         private void LoadDownloadStrategy(OdbcImportStrategy importStrategy)
         {
             IOdbcFieldMapEntry lastModifiedEntry = FindEntriesBy(Order, OrderFields.OnlineLastModified).FirstOrDefault();
@@ -392,6 +395,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             {
                 lastModifiedEntry.ShipWorksField.IsRequired = importStrategy == OdbcImportStrategy.ByModifiedTime;
             }
+
             handler.RaisePropertyChanged(nameof(lastModifiedEntry.ShipWorksField.IsRequired));
         }
 

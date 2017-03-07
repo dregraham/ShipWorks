@@ -40,7 +40,9 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
         /// <summary>
         /// Register all components that use this attribute
         /// </summary>
-        internal static void Register(ContainerBuilder builder, params Assembly[] assemblies)
+        internal static void Register(ContainerBuilder builder,
+            IDictionary<Type, IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle>> registrationCache,
+            params Assembly[] assemblies)
         {
             var keyedComponents = assemblies.SelectMany(x => x.GetTypes())
                 .Select(x => new
@@ -54,8 +56,8 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration
             {
                 foreach (KeyedComponentAttribute attribute in item.Attributes)
                 {
-                    IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> registration = 
-                        builder.RegisterType(item.Component).Keyed(attribute.Key, attribute.Service);
+                    var registration = ComponentAttribute.GetRegistrationBuilder(item.Component, builder, registrationCache)
+                        .Keyed(attribute.Key, attribute.Service);
 
                     if (attribute.ExternallyOwned)
                     {

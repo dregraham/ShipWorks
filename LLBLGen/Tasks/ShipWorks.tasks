@@ -3,7 +3,7 @@
 		name="ShipWorks Custom" isOptional ="false" 
 		description="General group of tasks which are used for ShipWorks templates.">
   <supportedPlatforms>
-    <platform name=".NET 4.0" />
+    <platform name=".NET 4.6" />
   </supportedPlatforms>
   <supportedTemplateGroups>
     <templateGroup name="Adapter" />

@@ -4,7 +4,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -21,16 +20,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         private UspsAccountEntity account;
         private PostageBalance postageBalance;
-        private readonly ITangoWebClient tangoWebClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsPurchasePostageDlg"/> class.
         /// </summary>
-        public UspsPurchasePostageDlg(ITangoWebClient tangoWebClient)
+        public UspsPurchasePostageDlg()
         {
             InitializeComponent();
-
-            this.tangoWebClient = tangoWebClient;
         }
 
         /// <summary>
@@ -50,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (account != null)
             {
-                postageBalance = new PostageBalance(new UspsPostageWebClient(account), tangoWebClient);
+                postageBalance = new PostageBalance(new UspsPostageWebClient(account));
 
                 postageBalance.GetValueAsync().ContinueWith(x =>
                 {

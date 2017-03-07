@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Loading
         {
             IProgressReporter workProgress = progressProvider.AddItem("Load Shipments");
 
-            return TaskEx.Run(() =>
+            return Task.Run(() =>
             {
                 workProgress.Starting();
 

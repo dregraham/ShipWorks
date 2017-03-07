@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// Change the content of the panel based on the given keys.
         /// </summary>
         /// <param name="selection"></param>
-        public Task ChangeContent(IGridSelection selection) => TaskEx.FromResult(true);
+        public Task ChangeContent(IGridSelection selection) => Task.FromResult(true);
 
         /// <summary>
         /// Gets the size of the picture - Since max size is 640, panelSize is over 640, the largest possible size of the same aspect ratio is returned.
@@ -368,7 +368,7 @@ namespace ShipWorks.Stores.Content.Panels
             return MapType == MapPanelType.Satellite ?
                 "http://maps.google.com/maps/api/staticmap?center={0}+{1}+{2}&zoom=18&size={3}x{4}&maptype=hybrid&sensor=false&markers=size:medium%7Ccolor:blue%7C{0}+{1}+{2}" :
                 "http://maps.googleapis.com/maps/api/streetview?size={3}x{4}&location={0}+{1}+{2}&fov=120&heading=235&pitch=10&sensor=false";
-            /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         }
 
         /// <summary>

@@ -312,7 +312,7 @@ namespace ShipWorks.Stores.Content.Panels
             menuEdit.Available = hasPermission;
             menuDelete.Available = UserSession.Security.HasPermission(PermissionType.ManageEmailAccounts);
 
-            menuSep.Available = menuEdit.Available | menuDelete.Available;
+            menuSep.Available = menuEdit.Available || menuDelete.Available;
         }
     }
 }

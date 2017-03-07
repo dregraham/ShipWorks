@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -53,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                     short rc = Odbc32.SQLFreeHandle(Odbc32.HandleType.SqlHandleEnv, sqlEnvHandle);
                     if (rc != Odbc32.SqlSuccess)
                     {
-                        throw new DataException("Could not free ODBC Environment handle");
+                        LogManager.GetLogger(GetType()).Error("Error getting data source names.  Could not free ODBC Environment handle");
                     }
 
                     sqlEnvHandle = IntPtr.Zero;
@@ -118,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
                 throw new DataException("Could not allocate ODBC Environment handle");
             }
 
-            rc = Odbc32.SQLSetEnvAttr(sqlEnvHandle, SqlAttrOdbcVersion, (IntPtr)SqlOvOdbc3, 0);
+            rc = Odbc32.SQLSetEnvAttr(sqlEnvHandle, SqlAttrOdbcVersion, (IntPtr) SqlOvOdbc3, 0);
             if (rc != Odbc32.SqlSuccess)
             {
                 throw new DataException("Could not setup ODBC Environment handle");

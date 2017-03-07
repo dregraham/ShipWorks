@@ -198,8 +198,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             else
             {
                 sqlInstallerInfo = sqlInstallerInfos.First(si => si.Edition == SqlServerEditionType.Express2016 ||
-                                                             si.Edition == SqlServerEditionType.Express2014 ||
-                                                             si.Edition == SqlServerEditionType.Express2008R2Sp2);
+                                                             si.Edition == SqlServerEditionType.Express2014);
             }
 
             ValidateInitialized(sqlInstallerInfo);

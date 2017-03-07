@@ -5,7 +5,7 @@ using System.Text;
 using Rebex.Mail;
 using Interapptive.Shared.Utility;
 using System.IO;
-using Interapptive.Shared.IO.Text.HtmlAgilityPack;
+using HtmlAgilityPack;
 using ShipWorks.Templates.Processing;
 using log4net;
 using ShipWorks.Data.Connection;

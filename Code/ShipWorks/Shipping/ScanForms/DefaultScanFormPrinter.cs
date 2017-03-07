@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data;
 using System.Drawing;
-using ShipWorks.Common.IO.Hardware.Printers;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
 
 namespace ShipWorks.Shipping.ScanForms
 {
@@ -48,6 +48,7 @@ namespace ShipWorks.Shipping.ScanForms
         public bool Print(IWin32Window owner, ScanFormBatch scanFormBatch)
         {
             List<Image> scanFormImages = new List<Image>();
+
             try
             {
                 foreach (ScanForm scanForm in scanFormBatch.ScanForms)
@@ -59,12 +60,7 @@ namespace ShipWorks.Shipping.ScanForms
             }
             finally
             {
-                scanFormImages.ForEach(i =>
-                { 
-                    i.Dispose();
-                    scanFormImages.Remove(i);
-                });
-                
+                scanFormImages.ForEach(i => i.Dispose());
             }
         }
     }

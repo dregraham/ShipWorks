@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Autofac.Extras.Attributed;
+using Autofac.Features.AttributeFilters;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -24,10 +24,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Constructor that allows easier testing of the factory
         /// </summary>
         public RegistrationPromotionFactory(
-            [WithKey(ShipmentTypeCode.Usps)] ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
-            [WithKey(ShipmentTypeCode.Express1Usps)] ICarrierAccountRetriever uspsExpress1AccountRepository,
-            [WithKey(ShipmentTypeCode.Endicia)] ICarrierAccountRetriever endiciaAccountRepository,
-            [WithKey(ShipmentTypeCode.Express1Endicia)] ICarrierAccountRetriever endiciaExpress1AccountRepository)
+            [KeyFilter(ShipmentTypeCode.Usps)] ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            [KeyFilter(ShipmentTypeCode.Express1Usps)] ICarrierAccountRetriever uspsExpress1AccountRepository,
+            [KeyFilter(ShipmentTypeCode.Endicia)] ICarrierAccountRetriever endiciaAccountRepository,
+            [KeyFilter(ShipmentTypeCode.Express1Endicia)] ICarrierAccountRetriever endiciaExpress1AccountRepository)
         {
             this.uspsAccountRepository = uspsAccountRepository;
 
