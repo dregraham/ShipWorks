@@ -307,5 +307,17 @@ namespace Interapptive.Shared.Collections
                 result > 0 ? ComparisonResult.More :
                 ComparisonResult.Equal;
         }
+
+        /// <summary>
+        /// Compare whether two sequences are equal, regardless of ordering
+        /// </summary>
+        public static bool UnorderedSequenceEquals<T>(this IEnumerable<T> list1, IEnumerable<T> list2)
+        {
+            ILookup<T, T> list1Lookup = list1.ToLookup(i => i);
+            ILookup<T, T> list2Lookup = list2.ToLookup(i => i);
+
+            return list1Lookup.Count == list2Lookup.Count &&
+                list1Lookup.All(g => g.Count() == list2Lookup[g.Key].Count());
+        }
     }
 }

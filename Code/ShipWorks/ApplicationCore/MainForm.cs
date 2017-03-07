@@ -43,6 +43,7 @@ using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.Threading;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
@@ -237,6 +238,8 @@ namespace ShipWorks
             ApplyDisplaySettings();
 
             ApplyEditingContext();
+
+            Application.AddMessageFilter(IoC.UnsafeGlobalLifetimeScope.Resolve<KeyboardShortcutKeyFilter>());
         }
 
         /// <summary>

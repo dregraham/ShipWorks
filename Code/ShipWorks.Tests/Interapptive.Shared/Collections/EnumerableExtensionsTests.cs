@@ -290,5 +290,47 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
             Assert.Equal(ComparisonResult.Equal, testObject.Object.CompareCountTo(3));
         }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1, 2)]
+        [InlineData(1, 2, 3)]
+        public void UnorderedSequenceEquals_ReturnsTrue_WhenCollectionsAreTheSame(params int[] items)
+        {
+            var list1 = items;
+            var list2 = items;
+
+            Assert.True(list1.UnorderedSequenceEquals(list2));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(1, 2)]
+        [InlineData(1, 2, 3)]
+        public void UnorderedSequenceEquals_ReturnsTrue_WhenCollectionsAreReversed(params int[] items)
+        {
+            var list1 = items;
+            var list2 = items.Reverse();
+
+            Assert.True(list1.UnorderedSequenceEquals(list2));
+        }
+
+        [Fact]
+        public void UnorderedSequenceEquals_ReturnsFalse_WhenCollectionsAreDifferent()
+        {
+            var list1 = new[] { 1, 2 };
+            var list2 = new[] { 3, 4 };
+
+            Assert.False(list1.UnorderedSequenceEquals(list2));
+        }
+
+        [Fact]
+        public void UnorderedSequenceEquals_ReturnsFalse_WhenCollectionsHaveDifferentItemCounts()
+        {
+            var list1 = new[] { 1 };
+            var list2 = new[] { 1, 2 };
+
+            Assert.False(list1.UnorderedSequenceEquals(list2));
+        }
     }
 }
