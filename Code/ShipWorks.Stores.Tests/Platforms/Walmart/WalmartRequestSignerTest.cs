@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void Sign_AddsSignatureToHeader()
         {
             string actualSignature =
-                "gzskHYn6gD9jtFuJ/9aLNuItpsgblBpn5RAqH5S9GP6QopcbJkz/7Hc4fVVKSgoGAyBSmgqwsnU1tNbENkyFtUfX8g8UNx070aTIdP09o2FGA2/TLQIXfxDxavx5JkdvxMOZ44n0fDzp9l7Xf9V/ycRBAJjxU6R8uvUt3nfq9eY=";
+                "cODckoc/JQjfd9gImVvpq0YAnjR2zzgXvk42pEXCEj7VvhfPBJLnmxKEcYCX6nWYjSWFMq/vxY8dhsDw2ziCB5fWft+2R6KLy4C20nwkiFWCxJVdCPdR/vRN3+4ym3WHLUiGQJO3z+gxMuHjIvPtLJM4G5jn95LmA9s+5EnW40g=";
 
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
