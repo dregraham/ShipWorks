@@ -2,6 +2,7 @@
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -9,17 +10,14 @@ using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
+    [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartDownloader : StoreDownloader
     {
         private readonly IWalmartWebClient walmartWebClient;
         private readonly WalmartStoreEntity walmartStore;
 
-        public WalmartDownloader(StoreEntity store) : base(store)
-        {
-        }
-
-        public WalmartDownloader(StoreEntity store, StoreType storeType, IWalmartWebClient walmartWebClient) 
-            : base(store, storeType)
+        public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient)
+            : base(store)
         {
             this.walmartWebClient = walmartWebClient;
             walmartStore = store as WalmartStoreEntity;

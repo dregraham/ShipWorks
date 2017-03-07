@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -10,7 +9,6 @@ using ShipWorks.Stores.Platforms.Walmart.DTO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
