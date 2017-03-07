@@ -11,11 +11,19 @@ using ShipWorks.Stores.Platforms.Walmart.DTO;
 namespace ShipWorks.Stores.Platforms.Walmart
 {
     [KeyedComponent(typeof(StoreDownloader), StoreTypeCode.Walmart, ExternallyOwned = true)]
+    /// Downloader for Walmart
+    /// </summary>
     public class WalmartDownloader : StoreDownloader
     {
         private readonly IWalmartWebClient walmartWebClient;
         private readonly WalmartStoreEntity walmartStore;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
+        /// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
+        /// </summary>
         public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient)
             : base(store)
         {
@@ -23,6 +31,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
             walmartStore = store as WalmartStoreEntity;
         }
 
+        /// <summary>
+        /// Must be implemented by derived types to do the actual download
+        /// </summary>
+        /// <param name="trackedDurationEvent">The telemetry event that can be used to
+        /// associate any store-specific download properties/metrics.</param>
         protected override void Download(TrackedDurationEvent trackedDurationEvent)
         {
             ordersListType ordersList = GetFirstBatch();
@@ -34,18 +47,28 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
         }
 
+        /// <summary>
+        /// Gets the first batch.
+        /// </summary>
         private ordersListType GetFirstBatch()
         {
-            DateTime startTime = GetDownloadStartingPoint();
+            DateTime startTime = GetOrderDateStartingPoint();
             return walmartWebClient.GetOrders(walmartStore, startTime);
         }
 
+        /// <summary>
+        /// Gets the next batch.
+        /// </summary>
         private ordersListType GetNextBatch(ordersListType ordersList)
         {
             string nextCursor = ordersList.meta.nextCursor;
             return walmartWebClient.GetOrders(walmartStore, nextCursor);
         }
 
+        /// <summary>
+        /// Saves the orders.
+        /// </summary>
+        /// <param name="ordersList">The orders list.</param>
         private void SaveOrders(ordersListType ordersList)
         {
             foreach (Order downloadedOrder in ordersList.elements)
@@ -54,6 +77,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
         }
 
+        /// <summary>
+        /// Loads the order.
+        /// </summary>
         private void LoadOrder(Order downloadedOrder)
         {
             long orderNumber;
@@ -78,6 +104,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             LoadRefunds(downloadedOrder.orderLines, orderToSave);
         }
 
+        /// <summary>
+        /// Loads the tax.
+        /// </summary>
         private void LoadTax(orderLineType[] orderLines, WalmartOrderEntity orderToSave)
         {
             var taxCharges = orderLines.SelectMany(orderLine => orderLine.charges)
@@ -91,6 +120,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
         }
 
+        /// <summary>
+        /// Loads the refunds.
+        /// </summary>
         private void LoadRefunds(orderLineType[] orderLines, WalmartOrderEntity orderToSave)
         {
             var refunds = orderLines.Select(orderLine => orderLine.refund)
@@ -106,6 +138,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
         }
 
+        /// <summary>
+        /// Loads the order items.
+        /// </summary>
         private void LoadItems(orderLineType[] downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
         {
             foreach (orderLineType orderLine in downloadedOrderOrderLines)
@@ -114,6 +149,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
         }
 
+        /// <summary>
+        /// Loads the order item.
+        /// </summary>
         private void LoadItem(orderLineType orderLine, WalmartOrderEntity orderToSave)
         {
             WalmartOrderItemEntity item = (WalmartOrderItemEntity) InstantiateOrderItem(orderToSave);
@@ -128,6 +166,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             item.LocalStatus = orderLineStatus?.status.ToString() ?? "Unknown";
         }
 
+        /// <summary>
+        /// Loads the address into the order
+        /// </summary>
         private static void LoadAddress(Order downloadedOrder, WalmartOrderEntity orderToSave)
         {
             postalAddressType downloadedAddress = downloadedOrder.shippingInfo.postalAddress;
@@ -154,9 +195,25 @@ namespace ShipWorks.Stores.Platforms.Walmart
             PersonAdapter.Copy(billAdapter, shipAdapter);
         }
 
-        private DateTime GetDownloadStartingPoint()
+        /// <summary>
+        /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
+        /// will be used to calculate the initial number of days back to. We then compare that with the 
+        /// date calculated from DownloadModifiedNumberOfDaysBack and send the earlier of the two dates.
+        /// </summary>
+        protected new DateTime GetOrderDateStartingPoint()
         {
-            throw new NotImplementedException();
+            DateTime? defaultStartingPoint = base.GetOrderDateStartingPoint();
+            DateTime modifiedDaysBack = DateTime.UtcNow.AddDays(-walmartStore.DownloadModifiedNumberOfDaysBack);
+
+            if (defaultStartingPoint == null || modifiedDaysBack < defaultStartingPoint.Value)
+            {
+                return modifiedDaysBack;
+            }
+            else
+            {
+                return defaultStartingPoint.Value;
+            }
+            
         }
     }
 }
