@@ -933,6 +933,7 @@
     <Compile Include="Common\IO\Hardware\Scanner\IScannerRegistrationListener.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\IKeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutCommand.cs" />
+    <Compile Include="Common\IO\KeyboardShortcuts\Messages\ApplyWeightMessage.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />
     <Compile Include="Common\CompositeValidator.cs" />
