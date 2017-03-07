@@ -305,6 +305,7 @@
     <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
     <Compile Include="Platforms\Walmart\WalmartCipherKey.cs" />
+    <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartException.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
