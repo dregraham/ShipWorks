@@ -231,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         [Obfuscation(Exclude = false)]
         [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
-            Justification = "General exception is just meant as a throwaway for testing")]
+            Justification = "General exception should most likely be changed to something else")]
         private static IEntityField2 GetField(string containingObjectName, string fieldName, OdbcFieldValueResolutionStrategy resolutionStrategy)
         {
             if (resolutionStrategy != OdbcFieldValueResolutionStrategy.Default)
