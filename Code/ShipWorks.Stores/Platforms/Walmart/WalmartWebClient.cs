@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -9,6 +10,8 @@ using ShipWorks.Stores.Platforms.Walmart.DTO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
+using ShipWorks.ApplicationCore;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -96,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
             catch (Exception ex) when (ex.GetType() != typeof(WalmartException))
             {
-                throw WebHelper.TranslateWebException(ex, typeof(WalmartException));
+                throw new WalmartException(ex.Message, ex);
             }
         }
 
@@ -107,13 +110,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
             requestSubmitter.Uri = new Uri(GetOrdersUrl);
-            requestSubmitter.Verb = HttpVerb.Get;
             requestSubmitter.Variables.Add("createdStartDate", start.ToString("s"));
 
-            ordersListType ordersResponse = ProcessRequest<ordersListType>(store, requestSubmitter, "GetOrders");
-            AcknowledgeOrders(store, ordersResponse);
-
-            return ordersResponse;
+            return GetOrders(store, requestSubmitter);
         }
 
         /// <summary>
@@ -123,6 +122,15 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
             requestSubmitter.Uri = new Uri($"{GetOrdersUrl}{nextCursor}");
+
+            return GetOrders(store, requestSubmitter);
+        }
+
+        /// <summary>
+        /// Gets orders using the given request submitter
+        /// </summary>
+        private ordersListType GetOrders(WalmartStoreEntity store, IHttpXmlVariableRequestSubmitter requestSubmitter)
+        {
             requestSubmitter.Verb = HttpVerb.Get;
 
             ordersListType ordersResponse = ProcessRequest<ordersListType>(store, requestSubmitter, "GetOrders");
@@ -136,7 +144,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void AcknowledgeOrders(WalmartStoreEntity store, ordersListType ordersResponse)
         {
-            foreach (Order order in ordersResponse.elements)
+            IEnumerable<Order> ordersToAcknowledge = ordersResponse.elements
+                .Where(o => o.orderLines.Any(oi => oi.orderLineStatuses.Any(ols => ols.status == orderLineStatusValueType.Created)));
+
+            foreach (Order order in ordersToAcknowledge)
             {
                 IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
                 requestSubmitter.Uri = new Uri(string.Format(AcknowledgeOrderUrl, order.purchaseOrderId));
