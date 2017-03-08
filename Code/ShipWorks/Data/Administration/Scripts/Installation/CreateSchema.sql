@@ -1005,7 +1005,7 @@ PRINT N'Altering [dbo].[User]'
 GO
 CREATE TABLE [dbo].[UserShortcutOverride]
 (
-[UserShortcutOverrideID] [bigint] NOT NULL IDENTITY(1000, 1099),
+[UserShortcutOverrideID] [bigint] NOT NULL IDENTITY(1099, 1000),
 [UserID] [bigint] NOT NULL,
 [CommandType] [int] NOT NULL,
 [Alt] [bit] NOT NULL CONSTRAINT [DF_UserShortcutOverride_Alt] DEFAULT ((0)),
