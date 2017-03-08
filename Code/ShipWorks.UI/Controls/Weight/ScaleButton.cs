@@ -9,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using Interapptive.Shared.IO.Hardware.Scales;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls.Weight
@@ -129,7 +130,8 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (visible)
             {
-                applyWeightSubscription = Messenger.Current.OfType<ApplyWeightMessage>()
+                applyWeightSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
+                    .Where(x => x.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
                     .ObserveOn(DispatcherScheduler.Current)
                     .Where(_ => AcceptApplyWeightKeyboardShortcut && Focusable && scaleButton.IsEnabled)
                     .Subscribe(_ => OnScaleButtonClick(this, new RoutedEventArgs()));

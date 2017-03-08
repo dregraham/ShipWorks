@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Win32.Native;
 using Moq;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using static ShipWorks.Common.IO.KeyboardShortcuts.KeyboardShortcutModifiers;
@@ -88,23 +89,22 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         [Fact]
         public void PreFilterMessage_SendsMessage_WhenCommandsAreReturned()
         {
-            var message = mock.Create<IShipWorksMessage>();
-
             mock.Mock<IKeyboardShortcutTranslator>().Setup(x => x.GetCommands(It.IsAny<VirtualKeys>(), It.IsAny<KeyboardShortcutModifiers>()))
-                .Returns(new Func<object, IShipWorksMessage>[] { x => message });
+                .Returns(new KeyboardShortcutCommand[] { KeyboardShortcutCommand.FocusQuickSearch });
 
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 
             SendKeyboardMessage(testObject, WindowsMessage.KEYFIRST, VirtualKeys.W);
 
-            mock.Mock<IMessenger>().Verify(x => x.Send(message, It.IsAny<string>()));
+            mock.Mock<IMessenger>().Verify(x =>
+                x.Send(It.Is<KeyboardShortcutMessage>(m => m.AppliesTo(KeyboardShortcutCommand.FocusQuickSearch)), It.IsAny<string>()));
         }
 
         [Fact]
         public void PreFilterMessage_ReturnsTrue_WhenKeyTriggersCommand()
         {
             mock.Mock<IKeyboardShortcutTranslator>().Setup(x => x.GetCommands(It.IsAny<VirtualKeys>(), It.IsAny<KeyboardShortcutModifiers>()))
-                .Returns(new Func<object, IShipWorksMessage>[] { x => mock.Create<IShipWorksMessage>() });
+                .Returns(new KeyboardShortcutCommand[] { KeyboardShortcutCommand.ApplyWeight });
 
             var testObject = mock.Create<KeyboardShortcutKeyFilter>();
 

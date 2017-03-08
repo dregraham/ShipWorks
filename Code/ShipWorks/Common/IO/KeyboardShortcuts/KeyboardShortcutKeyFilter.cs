@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Win32;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
 {
@@ -89,12 +89,8 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         private bool HandleActionKeyDown(VirtualKeys key)
         {
-            IEnumerable<Func<object, IShipWorksMessage>> commands = shortcutTranslator.GetCommands(key, modifiers);
-
-            foreach (Func<object, IShipWorksMessage> command in commands)
-            {
-                messenger.Send(command(this));
-            }
+            IEnumerable<KeyboardShortcutCommand> commands = shortcutTranslator.GetCommands(key, modifiers);
+            messenger.Send(new KeyboardShortcutMessage(this, commands));
 
             if (commands.Any())
             {

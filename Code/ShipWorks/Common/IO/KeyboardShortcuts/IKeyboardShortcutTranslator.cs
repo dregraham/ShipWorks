@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Interapptive.Shared.Messaging;
+﻿using System.Collections.Generic;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
 
@@ -14,7 +12,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get a list of commands for the given keys
         /// </summary>
-        IEnumerable<Func<object, IShipWorksMessage>> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers);
+        IEnumerable<KeyboardShortcutCommand> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers);
 
         /// <summary>
         /// Get a list of shortcuts for the given command

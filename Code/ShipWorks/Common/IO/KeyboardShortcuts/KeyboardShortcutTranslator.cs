@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32.Native;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.Users;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
 {
@@ -13,21 +14,82 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     /// Translate keyboard shortcut commands and keys
     /// </summary>
     [Component]
-    public class KeyboardShortcutTranslator : IKeyboardShortcutTranslator
+    public class KeyboardShortcutTranslator : IKeyboardShortcutTranslator, IInitializeForCurrentSession
     {
+        private readonly IUserSession userSession;
+
+        private IEnumerable<KeyboardShortcutData> defaultShortcuts = new List<KeyboardShortcutData>
+        {
+            new KeyboardShortcutData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl)
+        };
+
+        private Dictionary<VirtualKeys, Dictionary<KeyboardShortcutModifiers, ImmutableList<KeyboardShortcutCommand>>> shortcuts;
+        private Dictionary<KeyboardShortcutCommand, ImmutableList<string>> shortcutText;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public KeyboardShortcutTranslator(IUserSession userSession)
+        {
+            this.userSession = userSession;
+
+            SetCurrentKeyboardShortcuts(Enumerable.Empty<KeyboardShortcutData>());
+        }
+
+        /// <summary>
+        /// Initialize for the current session
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            List<KeyboardShortcutData> shortcutOverrides =
+                userSession.User.ShortcutOverrides.Select(x => new KeyboardShortcutData(x)).ToList();
+
+            SetCurrentKeyboardShortcuts(shortcutOverrides);
+        }
+
+        /// <summary>
+        /// Set the current list of shortcuts using the given overrides
+        /// </summary>
+        private void SetCurrentKeyboardShortcuts(IEnumerable<KeyboardShortcutData> shortcutOverrides)
+        {
+            var mergedShortcuts = defaultShortcuts
+                .Except(shortcutOverrides, GenericPropertyEqualityComparer.Create((KeyboardShortcutData x) => x.Command))
+                .Concat(shortcutOverrides);
+
+            shortcutText = mergedShortcuts.GroupBy(x => x.Command)
+                .ToDictionary(x => x.Key, x => x.Select(shortcut => shortcut.ShortcutText).ToImmutableList());
+
+            shortcuts = mergedShortcuts.GroupBy(x => x.ActionKey)
+                .ToDictionary(x => x.Key, CreateCommandsForModifiers);
+        }
+
+        /// <summary>
+        /// Create a list of commands for each modifier
+        /// </summary>
+        private Dictionary<KeyboardShortcutModifiers, ImmutableList<KeyboardShortcutCommand>> CreateCommandsForModifiers(IEnumerable<KeyboardShortcutData> shortcutList)
+        {
+            return shortcutList.GroupBy(x => x.Modifiers)
+                .ToDictionary(x => x.Key, x => x.Select(k => k.Command).ToImmutableList());
+        }
+
         /// <summary>
         /// Get a list of commands for the given keys
         /// </summary>
-        public IEnumerable<Func<object, IShipWorksMessage>> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers)
+        public IEnumerable<KeyboardShortcutCommand> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers)
         {
-            // Dummy implementation of the keyboard translation for testing
-            // TODO: Replace with actual implementation
-            if (actionKey == VirtualKeys.W && modifiers == KeyboardShortcutModifiers.Ctrl)
+            Dictionary<KeyboardShortcutModifiers, ImmutableList<KeyboardShortcutCommand>> modifierCommands = null;
+
+            if (shortcuts.TryGetValue(actionKey, out modifierCommands))
             {
-                return new Func<object, IShipWorksMessage>[] { x => new ApplyWeightMessage(x) };
+                ImmutableList<KeyboardShortcutCommand> commands;
+
+                if (modifierCommands.TryGetValue(modifiers, out commands))
+                {
+                    return commands;
+                }
             }
 
-            return Enumerable.Empty<Func<object, IShipWorksMessage>>();
+            return Enumerable.Empty<KeyboardShortcutCommand>();
         }
 
         /// <summary>
@@ -35,7 +97,9 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         public IEnumerable<string> GetShortcuts(KeyboardShortcutCommand command)
         {
-            return Enumerable.Empty<string>();
+            ImmutableList<string> text;
+
+            return shortcutText.TryGetValue(command, out text) ? text : Enumerable.Empty<string>();
         }
     }
 }
