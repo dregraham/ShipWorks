@@ -26,6 +26,10 @@ namespace ShipWorks.UI.Controls.Weight
             DependencyProperty.Register("MaxWeight", typeof(double), typeof(WeightControl),
                 new FrameworkPropertyMetadata(WeightInput.MaxWeightDefault));
 
+        public static readonly DependencyProperty AcceptApplyWeightKeyboardShortcutProperty =
+            DependencyProperty.Register("AcceptApplyWeightKeyboardShortcut", typeof(bool), typeof(WeightControl),
+                new FrameworkPropertyMetadata(ScaleButton.AcceptApplyWeightKeyboardShortcutDefault));
+
         public static readonly DependencyProperty ErrorMessageProperty =
             DependencyProperty.Register("ErrorMessage",
                 typeof(string),
@@ -74,6 +78,17 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
+        /// Maximum weight
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public bool AcceptApplyWeightKeyboardShortcut
+        {
+            get { return (bool) GetValue(AcceptApplyWeightKeyboardShortcutProperty); }
+            set { SetValue(AcceptApplyWeightKeyboardShortcutProperty, value); }
+        }
+
+        /// <summary>
         /// Apply the template
         /// </summary>
         public override void OnApplyTemplate()
@@ -93,11 +108,21 @@ namespace ShipWorks.UI.Controls.Weight
                 throw new InvalidOperationException("PART_ScaleButton is not available in the template");
             }
 
-            Binding textBinding = new Binding();
-            textBinding.Source = this;
-            textBinding.Path = new PropertyPath(nameof(Weight));
-            textBinding.Mode = BindingMode.TwoWay;
+            Binding textBinding = new Binding()
+            {
+                Source = this,
+                Path = new PropertyPath(nameof(Weight)),
+                Mode = BindingMode.TwoWay
+            };
             entry.SetBinding(WeightInput.WeightProperty, textBinding);
+
+            scaleButton.SetBinding(ScaleButton.AcceptApplyWeightKeyboardShortcutProperty,
+                new Binding()
+                {
+                    Source = this,
+                    Path = new PropertyPath(nameof(Weight)),
+                    Mode = BindingMode.OneWay
+                });
 
             AddErrorMessageValueChangedHandler(scaleButton);
             AddErrorMessageValueChangedHandler(entry);

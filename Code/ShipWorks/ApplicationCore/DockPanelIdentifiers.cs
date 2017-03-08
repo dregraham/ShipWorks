@@ -32,5 +32,10 @@ namespace ShipWorks.ApplicationCore
         /// Is the specified control the shipments panel
         /// </summary>
         public static bool IsShipmentsPanel(DockControl control) => control?.Guid == ShipmentsPanelGuid;
+
+        /// <summary>
+        /// Is the specified control the shipping panel
+        /// </summary>
+        public static bool IsShippingPanel(DockControl control) => control?.Guid == ShippingPanelGuid;
     }
 }

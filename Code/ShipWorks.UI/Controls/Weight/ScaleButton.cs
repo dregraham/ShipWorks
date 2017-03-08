@@ -1,10 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Interapptive.Shared.IO.Hardware.Scales;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
+using ShipWorks.Core.Messaging;
 using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls.Weight
@@ -16,6 +20,8 @@ namespace ShipWorks.UI.Controls.Weight
     [TemplatePart(Name = "PART_Display", Type = typeof(TextBlock))]
     public class ScaleButton : Control
     {
+        public const bool AcceptApplyWeightKeyboardShortcutDefault = false;
+
         public static readonly DependencyProperty WeightProperty =
             DependencyProperty.Register("Weight",
                 typeof(double),
@@ -27,7 +33,12 @@ namespace ShipWorks.UI.Controls.Weight
                 typeof(ScaleButton),
                 new PropertyMetadata(WeightDisplayFormat.FractionalPounds));
 
+        public static readonly DependencyProperty AcceptApplyWeightKeyboardShortcutProperty =
+            DependencyProperty.Register("AcceptApplyWeightKeyboardShortcut", typeof(bool), typeof(ScaleButton),
+                new FrameworkPropertyMetadata(AcceptApplyWeightKeyboardShortcutDefault));
+
         IDisposable weightSubscription;
+        IDisposable applyWeightSubscription;
         ButtonBase scaleButton;
         TextBlock display;
 
@@ -55,6 +66,17 @@ namespace ShipWorks.UI.Controls.Weight
         {
             get { return (double) GetValue(WeightProperty); }
             set { SetValue(WeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Will this control accept the apply weight keyboard shortcut
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public bool AcceptApplyWeightKeyboardShortcut
+        {
+            get { return (bool) GetValue(AcceptApplyWeightKeyboardShortcutProperty); }
+            set { SetValue(AcceptApplyWeightKeyboardShortcutProperty, value); }
         }
 
         /// <summary>
@@ -101,6 +123,16 @@ namespace ShipWorks.UI.Controls.Weight
                 weightSubscription = ScaleReader.ReadEvents
                     .ObserveOn(DispatcherScheduler.Current)
                     .Subscribe(DisplayWeight);
+            }
+
+            applyWeightSubscription?.Dispose();
+
+            if (visible)
+            {
+                applyWeightSubscription = Messenger.Current.OfType<ApplyWeightMessage>()
+                    .ObserveOn(DispatcherScheduler.Current)
+                    .Where(_ => AcceptApplyWeightKeyboardShortcut && Focusable && scaleButton.IsEnabled)
+                    .Subscribe(_ => OnScaleButtonClick(this, new RoutedEventArgs()));
             }
         }
 
