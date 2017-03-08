@@ -122,6 +122,11 @@ namespace ShipWorks.UI.Controls.Weight
         }
 
         /// <summary>
+        /// Focus the underlying text box
+        /// </summary>
+        public void FocusTextBox() => entry.Focus();
+
+        /// <summary>
         /// Coerce entered text into text that we expect for weight input
         /// </summary>
         private static object CoerceTextPropertyChanges(DependencyObject d, object baseValue)

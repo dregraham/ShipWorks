@@ -26,7 +26,7 @@
                                             MaxWeight="{TemplateBinding MaxWeight}">
                         </weight:WeightInput>
                         <weight:ScaleButton x:Name="PART_ScaleButton" Grid.Column="1"
-                               Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource}"/>
+                               Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource,NotifyOnSourceUpdated=True}"/>
                         <Image Grid.Column="2"
                                Margin="4,0,0,0"
                                ToolTip="{Binding Path=ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}"

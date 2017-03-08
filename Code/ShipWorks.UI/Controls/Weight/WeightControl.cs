@@ -108,25 +108,44 @@ namespace ShipWorks.UI.Controls.Weight
                 throw new InvalidOperationException("PART_ScaleButton is not available in the template");
             }
 
-            Binding textBinding = new Binding()
-            {
-                Source = this,
-                Path = new PropertyPath(nameof(Weight)),
-                Mode = BindingMode.TwoWay
-            };
-            entry.SetBinding(WeightInput.WeightProperty, textBinding);
+            scaleButton.SourceUpdated += OnScaleButtonSourceUpdated;
 
-            scaleButton.SetBinding(ScaleButton.AcceptApplyWeightKeyboardShortcutProperty,
-                new Binding()
-                {
-                    Source = this,
-                    Path = new PropertyPath(nameof(Weight)),
-                    Mode = BindingMode.OneWay
-                });
+            SetupWeightBinding();
+            SetupAcceptApplyWeightShortcutBinding();
 
             AddErrorMessageValueChangedHandler(scaleButton);
             AddErrorMessageValueChangedHandler(entry);
         }
+
+        /// <summary>
+        /// Setup the binding that will pass the AcceptApplyWeight property to the ScaleControl
+        /// </summary>
+        private void SetupAcceptApplyWeightShortcutBinding()
+        {
+            Binding scaleBinding = new Binding();
+            scaleBinding.Source = this;
+            scaleBinding.Path = new PropertyPath(nameof(Weight));
+            scaleBinding.Mode = BindingMode.OneWay;
+            scaleButton.SetBinding(ScaleButton.AcceptApplyWeightKeyboardShortcutProperty, scaleBinding);
+        }
+
+        /// <summary>
+        /// Setup the main weight binding between the entry box and the weight property
+        /// </summary>
+        private void SetupWeightBinding()
+        {
+            Binding textBinding = new Binding();
+            textBinding.Source = this;
+            textBinding.Path = new PropertyPath(nameof(Weight));
+            textBinding.Mode = BindingMode.TwoWay;
+            entry.SetBinding(WeightInput.WeightProperty, textBinding);
+        }
+
+        /// <summary>
+        /// Handle when the scale button has been pressed
+        /// </summary>
+        private void OnScaleButtonSourceUpdated(object sender, DataTransferEventArgs e) =>
+            entry.FocusTextBox();
 
         /// <summary>
         /// Add an error message value changed handler for a control
