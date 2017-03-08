@@ -34,13 +34,13 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                     DECLARE @productlevel NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('ProductLevel'));
                     DECLARE @dbName NVARCHAR(100) = DB_NAME();
 
-                    DECLARE @Sql NVARCHAR(500) =  'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' = ''RTM''
-									                    ALTER DATABASE [' + @dbName + ']
-										                    SET COMPATIBILITY_LEVEL = 110' +
+                    DECLARE @Sql NVARCHAR(500) = 'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' = ''RTM''
+						ALTER DATABASE [' + @dbName + ']
+							SET COMPATIBILITY_LEVEL = 110
 
-							                       'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' != ''RTM''
-									                    ALTER DATABASE [' + @dbName + ']
-										                    SET COMPATIBILITY_LEVEL = 120'
+					IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' != ''RTM''
+						ALTER DATABASE [' + @dbName + ']
+								SET COMPATIBILITY_LEVEL = 120'
                     EXECUTE sp_executesql @Sql;
                 ";
                 cmd.ExecuteNonQuery();
