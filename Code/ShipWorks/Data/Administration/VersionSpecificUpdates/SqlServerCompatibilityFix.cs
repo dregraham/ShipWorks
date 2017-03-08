@@ -35,7 +35,11 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 sqlVersion = cmd.ExecuteScalar().ToString();
             });
 
-            if(sqlVersion.StartsWith("12.", StringComparison.InvariantCulture))
+            // Only run the following query if we are on sql 2014 because THE FOLLOWING QUERY IS NOT SYNTACTICALLY CORRECT with any version lower than 2014
+            // if the following query is run on a version lower than 2014 it will error out even if the conditions to execute the alter statement are not met
+            // this is because SQL Server validates the query prior to executing it and COMPATIBILITY_LEVEL = 120 is not a valid compatibility level for any
+            // version lower than 2014
+            if (sqlVersion.StartsWith("12.", StringComparison.InvariantCulture))
             {
                 ExistingConnectionScope.ExecuteWithCommand(cmd =>
                 {
