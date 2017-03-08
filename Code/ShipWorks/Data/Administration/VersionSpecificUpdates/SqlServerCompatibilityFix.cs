@@ -27,9 +27,19 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// </remarks>
         public void Update()
         {
+            // Grab the Sql version, this query below is only compatible with SQL Server 2014 and newer
+            string sqlVersion = string.Empty;
             ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
-                cmd.CommandText = @"
+                cmd.CommandText = @"SELECT SERVERPROPERTY('productversion') as version;";
+                sqlVersion = cmd.ExecuteScalar().ToString();
+            });
+
+            if(sqlVersion.StartsWith("12.", StringComparison.InvariantCulture))
+            {
+                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                {
+                    cmd.CommandText = @"
                     DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversion'));
                     DECLARE @productlevel NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('ProductLevel'));
                     DECLARE @dbName NVARCHAR(100) = DB_NAME();
@@ -43,9 +53,9 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 								SET COMPATIBILITY_LEVEL = 120'
                     EXECUTE sp_executesql @Sql;
                 ";
-                cmd.ExecuteNonQuery();
-            });
-
+                    cmd.ExecuteNonQuery();
+                });
+            }
         }
     }
 }
