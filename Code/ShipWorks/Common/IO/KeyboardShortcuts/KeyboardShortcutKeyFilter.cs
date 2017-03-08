@@ -19,22 +19,17 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Command keys and their generic equivalents
         /// </summary>
-        private readonly Dictionary<VirtualKeys, VirtualKeys> commandKeys = new Dictionary<VirtualKeys, VirtualKeys> {
-            {VirtualKeys.LeftControl, VirtualKeys.Control },
-            {VirtualKeys.RightControl, VirtualKeys.Control },
-            {VirtualKeys.Control, VirtualKeys.Control },
-            {VirtualKeys.LeftShift, VirtualKeys.Shift },
-            {VirtualKeys.RightShift, VirtualKeys.Shift },
-            {VirtualKeys.Shift, VirtualKeys.Shift },
-            {VirtualKeys.LeftMenu, VirtualKeys.Menu },
-            {VirtualKeys.RightMenu, VirtualKeys.Menu },
-            {VirtualKeys.Menu, VirtualKeys.Menu }
-        };
+        private readonly Dictionary<VirtualKeys, KeyboardShortcutModifiers> commandKeys =
+            new Dictionary<VirtualKeys, KeyboardShortcutModifiers> {
+                {VirtualKeys.Control, KeyboardShortcutModifiers.Ctrl },
+                {VirtualKeys.Shift, KeyboardShortcutModifiers.Shift },
+                {VirtualKeys.Menu, KeyboardShortcutModifiers.Alt }
+            };
 
         private readonly IMessenger messenger;
         private readonly IKeyboardShortcutTranslator shortcutTranslator;
         private readonly IUser32Input user32Input;
-        private readonly HashSet<VirtualKeys> pressedCommandKeys = new HashSet<VirtualKeys>();
+        private KeyboardShortcutModifiers modifiers = KeyboardShortcutModifiers.None;
         private readonly HashSet<VirtualKeys> pressedActionKeys = new HashSet<VirtualKeys>();
 
         /// <summary>
@@ -81,7 +76,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         {
             if (commandKeys.ContainsKey(key))
             {
-                pressedCommandKeys.Add(key);
+                modifiers |= commandKeys[key];
 
                 return false;
             }
@@ -94,8 +89,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// </summary>
         private bool HandleActionKeyDown(VirtualKeys key)
         {
-            IEnumerable<Func<object, IShipWorksMessage>> commands =
-                shortcutTranslator.GetCommands(pressedCommandKeys.Select(NormalizeCommandKeys).Distinct().Concat(new[] { key }));
+            IEnumerable<Func<object, IShipWorksMessage>> commands = shortcutTranslator.GetCommands(key, modifiers);
 
             foreach (Func<object, IShipWorksMessage> command in commands)
             {
@@ -112,20 +106,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         }
 
         /// <summary>
-        /// Translate a command key to its side-independent version
-        /// </summary>
-        private VirtualKeys NormalizeCommandKeys(VirtualKeys key) =>
-            commandKeys.ContainsKey(key) ? commandKeys[key] : key;
-
-        /// <summary>
         /// Handle raw input message
         /// </summary>
         /// <returns>true to filter the message and stop it from being dispatched; false to allow the message to continue to the next filter or control.</returns>
         private void HandleKeyUp(VirtualKeys key)
         {
-            if (pressedCommandKeys.Contains(key))
+            if (commandKeys.ContainsKey(key))
             {
-                pressedCommandKeys.Remove(key);
+                modifiers &= ~commandKeys[key];
             }
             else if (pressedActionKeys.Contains(key))
             {

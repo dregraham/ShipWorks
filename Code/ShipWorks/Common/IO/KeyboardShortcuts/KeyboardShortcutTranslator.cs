@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Win32.Native;
 using ShipWorks.ApplicationCore.ComponentRegistration;
@@ -19,11 +18,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get a list of commands for the given keys
         /// </summary>
-        public IEnumerable<Func<object, IShipWorksMessage>> GetCommands(IEnumerable<VirtualKeys> keys)
+        public IEnumerable<Func<object, IShipWorksMessage>> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers)
         {
             // Dummy implementation of the keyboard translation for testing
             // TODO: Replace with actual implementation
-            if (keys.Contains(VirtualKeys.Control) && keys.Contains(VirtualKeys.W) && keys.IsCountEqualTo(2))
+            if (actionKey == VirtualKeys.W && modifiers == KeyboardShortcutModifiers.Ctrl)
             {
                 return new Func<object, IShipWorksMessage>[] { x => new ApplyWeightMessage(x) };
             }

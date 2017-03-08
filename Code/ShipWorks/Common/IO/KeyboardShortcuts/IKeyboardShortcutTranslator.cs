@@ -14,7 +14,7 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get a list of commands for the given keys
         /// </summary>
-        IEnumerable<Func<object, IShipWorksMessage>> GetCommands(IEnumerable<VirtualKeys> keys);
+        IEnumerable<Func<object, IShipWorksMessage>> GetCommands(VirtualKeys actionKey, KeyboardShortcutModifiers modifiers);
 
         /// <summary>
         /// Get a list of shortcuts for the given command

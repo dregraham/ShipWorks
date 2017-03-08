@@ -124,7 +124,7 @@ namespace ShipWorks.UI.Controls.Weight
         {
             Binding scaleBinding = new Binding();
             scaleBinding.Source = this;
-            scaleBinding.Path = new PropertyPath(nameof(Weight));
+            scaleBinding.Path = new PropertyPath(nameof(AcceptApplyWeightKeyboardShortcut));
             scaleBinding.Mode = BindingMode.OneWay;
             scaleButton.SetBinding(ScaleButton.AcceptApplyWeightKeyboardShortcutProperty, scaleBinding);
         }
