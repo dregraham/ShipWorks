@@ -1,4 +1,5 @@
 
+
 IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{DBNAME}')
     RAISERROR('The database {DBNAME} already exists on the server.', 16, 1)
 GO
@@ -107,10 +108,11 @@ DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversi
 DECLARE @productlevel NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('ProductLevel'));
 
 DECLARE @Sql NVARCHAR(500) =  'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' = ''RTM''
-									ALTER DATABASE [' + {DBNAME} + ']
+									ALTER DATABASE {DBNAME}
 										SET COMPATIBILITY_LEVEL = 110' +
 
 							   'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' != ''RTM''
-									ALTER DATABASE [' + {DBNAME} + ']
+									ALTER DATABASE {DBNAME}
 										SET COMPATIBILITY_LEVEL = 120'
 EXECUTE sp_executesql @Sql;
+GO
