@@ -1,17 +1,18 @@
-IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{DBNAME}') 
+
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'{DBNAME}')
     RAISERROR('The database {DBNAME} already exists on the server.', 16, 1)
 GO
 
-CREATE DATABASE {DBNAME}  
+CREATE DATABASE {DBNAME}
     ON (
-        NAME = N'ShipWorks_Data', 
-        FILENAME = N'{FILEPATH}{FILENAME}.mdf' , 
-        SIZE = 200, 
-        FILEGROWTH = 200MB) 
+        NAME = N'ShipWorks_Data',
+        FILENAME = N'{FILEPATH}{FILENAME}.mdf' ,
+        SIZE = 200,
+        FILEGROWTH = 200MB)
     LOG ON (
-        NAME = N'ShipWorks_Log', 
-        FILENAME = N'{FILEPATH}{FILENAME}_log.ldf' , 
-        SIZE = 200, 
+        NAME = N'ShipWorks_Log',
+        FILENAME = N'{FILEPATH}{FILENAME}_log.ldf' ,
+        SIZE = 200,
         FILEGROWTH = 200MB)
     COLLATE SQL_Latin1_General_CP1_CI_AS
 GO
@@ -72,11 +73,11 @@ ALTER DATABASE {DBNAME}
   (CHANGE_RETENTION = 1 DAYS, AUTO_CLEANUP = ON)
 GO
 
-DECLARE @logSize int 
-DECLARE @dataSize int 
-DECLARE @dataFileGrowth int 
+DECLARE @logSize int
+DECLARE @dataSize int
+DECLARE @dataFileGrowth int
 DECLARE @logFileGrowth int
-DECLARE @dataName nvarchar(100) 
+DECLARE @dataName nvarchar(100)
 DECLARE @logName nvarchar(100)
 
 SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
@@ -85,9 +86,9 @@ SELECT @dataSize = SUM(CASE WHEN type_desc = 'ROWS' THEN size END),
 	   @logSize = SUM(CASE WHEN type_desc = 'LOG' THEN size END),
 	   @logName = MAX(CASE WHEN type_desc = 'LOG' THEN name END),
 	   @logFileGrowth = SUM(CASE WHEN type_desc = 'LOG' AND is_percent_growth=1 THEN growth ELSE 0 END)
-FROM sys.master_files 
+FROM sys.master_files
 where DB_NAME(database_id) = 'tempdb'
-	 
+
 IF (@logSize < 25600)
     EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', SIZE = 200MB)' )
 
@@ -99,5 +100,17 @@ IF (@dataFileGrowth < 25600)
 
 IF (@logFileGrowth < 25600)
     EXECUTE ('ALTER DATABASE tempdb MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 200MB)' )
-    
+
 GO
+
+DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversion'));
+DECLARE @productlevel NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('ProductLevel'));
+
+DECLARE @Sql NVARCHAR(500) =  'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' = ''RTM''
+									ALTER DATABASE [' + {DBNAME} + ']
+										SET COMPATIBILITY_LEVEL = 110' +
+
+							   'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' != ''RTM''
+									ALTER DATABASE [' + {DBNAME} + ']
+										SET COMPATIBILITY_LEVEL = 120'
+EXECUTE sp_executesql @Sql;
