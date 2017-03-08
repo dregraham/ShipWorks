@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
@@ -36,6 +35,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Stores.Content.Panels.Selectors;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using TD.SandDock;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -58,6 +58,12 @@ namespace ShipWorks.Stores.Content.Panels
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Extra space at the bottom that can be used for other controls
+        /// </summary>
+        protected override int ExtraBottomSpace =>
+            rateMessagePanel.Visible ? 18 : 0;
 
         /// <summary>
         /// Gets all the entity keys from the grid
@@ -103,7 +109,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             messenger.OfType<OrderSelectionChangedMessage>()
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Do(x => ratesControl.Visible = !isRatingPanelVisible)
+                .Do(x => rateMessagePanel.Visible = !isRatingPanelVisible)
                 .Do(LoadSelectedOrder)
                 .Do(x => ReloadContent())
                 .Do(x => SelectShipmentRows(isThisPanelVisible ?
@@ -119,7 +125,7 @@ namespace ShipWorks.Stores.Content.Panels
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Subscribe(_ =>
                 {
-                    ratesControl.Visible = false;
+                    rateMessagePanel.Visible = false;
                     selectedShipments = entityGrid.Selection.Keys.ToReadOnly();
                 });
 
@@ -159,15 +165,14 @@ namespace ShipWorks.Stores.Content.Panels
             messenger.OfType<PanelShownMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
                 .Do(x => isRatingPanelVisible = true)
-                .Subscribe(_ => ratesControl.Visible = !isRatingPanelVisible);
+                .Subscribe(_ => rateMessagePanel.Visible = !isRatingPanelVisible);
 
             messenger.OfType<PanelHiddenMessage>()
                 .Where(x => DockPanelIdentifiers.IsRatingPanel(x.Panel))
                 .Do(x => isRatingPanelVisible = false)
                 .Subscribe(_ =>
                 {
-                    ratesControl.Visible = !isRatingPanelVisible;
-                    RefreshSelectedShipments();
+                    rateMessagePanel.Visible = !isRatingPanelVisible;
                 });
         }
 
@@ -244,34 +249,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             base.UpdateLayout();
 
-            // Update the top of the rates panel to be just under the add link
-            ratesControl.Top = addLink.Bottom + 5;
-        }
-
-        /// <summary>
-        /// When the content is called to be updated, we need to make sure our rates are up to date as well
-        /// </summary>
-        public override Task UpdateContent()
-        {
-            Task task = base.UpdateContent();
-
-            RefreshSelectedShipments();
-            return task;
-        }
-
-        /// <summary>
-        /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
-        /// </summary>
-        private void OnShipmentGridLoaded(object sender, EventArgs e)
-        {
-            if (EntityID == null || entityGrid.Rows.Count == 0)
-            {
-                ratesControl.ChangeShipment(null);
-            }
-            else
-            {
-                RefreshSelectedShipments();
-            }
+            rateMessagePanel.Top = addLink.Bottom + 5;
         }
 
         /// <summary>
@@ -279,41 +257,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnShipmentSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RefreshSelectedShipments();
-
             if (isThisPanelVisible)
             {
                 Messenger.Current.Send(new ShipmentSelectionChangedMessage(this, entityGrid.Selection.Keys));
-            }
-        }
-
-        /// <summary>
-        /// Refreshes the selected shipments - Updates the rate control
-        /// </summary>
-        private void RefreshSelectedShipments()
-        {
-            if (!ratesControl.Visible)
-            {
-                return;
-            }
-
-            int shipmentSelectionCount = entityGrid.Selection.Count;
-
-            if (entityGrid.Rows.Count == 1)
-            {
-                ratesControl.ChangeShipment(entityGrid.EntityGateway.GetKeyFromRow(0));
-            }
-            else if (shipmentSelectionCount == 1)
-            {
-                ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
-            }
-            else if (shipmentSelectionCount > 1)
-            {
-                ratesControl.ClearRates("Multiple shipments selected.");
-            }
-            else
-            {
-                ratesControl.ClearRates("No shipments are selected.");
             }
         }
 
@@ -478,18 +424,6 @@ namespace ShipWorks.Stores.Content.Panels
         }
 
         /// <summary>
-        /// Refresh the existing selected content by re-querying for the relevant keys to ensure an up-to-date related row
-        /// list with up-to-date displayed entity content.
-        /// </summary>
-        public override Task ReloadContent()
-        {
-            Task task = base.ReloadContent();
-
-            RefreshSelectedShipments();
-            return task;
-        }
-
-        /// <summary>
         /// Delete the given shipment
         /// </summary>
         private void DeleteShipment(long shipmentID)
@@ -559,6 +493,15 @@ namespace ShipWorks.Stores.Content.Panels
             menuEdit.Image = editImage;
 
             menuDelete.Visible = EntityID == null || UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, EntityID.Value);
+        }
+
+        /// <summary>
+        /// Show the rating panel
+        /// </summary>
+        private void OnRatesLinkLabelClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            DockControl ratingPanel = Program.MainForm.Panels.Where(DockPanelIdentifiers.IsRatingPanel).Single();
+            Program.MainForm.ShowPanel(ratingPanel);
         }
     }
 }
