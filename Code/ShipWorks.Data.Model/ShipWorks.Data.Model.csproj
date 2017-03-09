@@ -212,6 +212,7 @@
     <Compile Include="Custom\EntityClasses\UpsAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\UpsAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\UspsAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\WalmartOrderItemEntity.cs" />
     <Compile Include="Custom\EntityCollections.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>

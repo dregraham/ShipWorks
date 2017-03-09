@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -21,6 +22,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     public class WalmartDownloader : StoreDownloader
     {
         private readonly IWalmartWebClient walmartWebClient;
+        private readonly IWalmartOrderLoader walmartOrderLoader;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly WalmartStoreEntity walmartStore;
         private int totalOrders;
@@ -28,13 +30,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
-        /// </summary>
-        public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient, ISqlAdapterRetryFactory sqlAdapterRetryFactory)
+        public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient, ISqlAdapterRetryFactory sqlAdapterRetryFactory, IWalmartOrderLoader walmartOrderLoader)
             : base(store)
         {
             this.walmartWebClient = walmartWebClient;
+            this.walmartOrderLoader = walmartOrderLoader;
             this.sqlAdapter = sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download"); ;
             walmartStore = store as WalmartStoreEntity;
         }
@@ -134,113 +134,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
             WalmartOrderEntity orderToSave =
                 (WalmartOrderEntity) InstantiateOrder(new OrderNumberIdentifier(orderNumber));
 
-            orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
-            orderToSave.PurchaseOrderID = downloadedOrder.purchaseOrderId;
-            orderToSave.OrderDate = downloadedOrder.orderDate;
-            orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
-            orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate;
-            orderToSave.RequestedShipping = downloadedOrder.shippingInfo.methodCode.ToString();
-
-            LoadAddress(downloadedOrder, orderToSave);
-            LoadItems(downloadedOrder.orderLines, orderToSave);
-            LoadTax(downloadedOrder.orderLines, orderToSave);
-            LoadRefunds(downloadedOrder.orderLines, orderToSave);
-
-            orderToSave.OrderTotal = OrderUtility.CalculateTotal(orderToSave, true);
+            walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
             // Save the downloaded order
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderToSave));
-        }
-
-        /// <summary>
-        /// Loads the tax.
-        /// </summary>
-        private void LoadTax(orderLineType[] orderLines, WalmartOrderEntity orderToSave)
-        {
-            var taxCharges = orderLines.SelectMany(orderLine => orderLine.charges)
-                .Where(c => c.tax != null)
-                .GroupBy(c => c.tax.taxName, c => c.tax.taxAmount)
-                .Select(taxGroup => new {Name = taxGroup.Key, Value = taxGroup.Sum(g => g.amount)});
-
-            foreach (var taxCharge in taxCharges)
-            {
-                InstantiateOrderCharge(orderToSave, "Tax", taxCharge.Name, taxCharge.Value);
-            }
-        }
-
-        /// <summary>
-        /// Loads the refunds.
-        /// </summary>
-        private void LoadRefunds(orderLineType[] orderLines, WalmartOrderEntity orderToSave)
-        {
-            var refunds = orderLines.Select(orderLine => orderLine.refund)
-                .Where(refund => refund != null)
-                .SelectMany(refund=>refund.refundCharges)
-                .GroupBy(c => c.refundReason, c => new { c.charge.chargeAmount, c.charge.tax?.taxAmount.amount})
-                .Select(refundGroup => new { Name = refundGroup.Key, TotalRefund =  refundGroup.Sum(group=>group.chargeAmount.amount), TotalTaxRefund = refundGroup.Sum(group=>group.amount.GetValueOrDefault(0)) });
-
-            foreach (var refund in refunds)
-            {
-                InstantiateOrderCharge(orderToSave, "Refund", refund.Name.ToString(), refund.TotalRefund);
-                InstantiateOrderCharge(orderToSave, "Refunded Tax", refund.Name.ToString(), refund.TotalTaxRefund);
-            }
-        }
-
-        /// <summary>
-        /// Loads the order items.
-        /// </summary>
-        private void LoadItems(orderLineType[] downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
-        {
-            foreach (orderLineType orderLine in downloadedOrderOrderLines)
-            {
-                LoadItem(orderLine, orderToSave);
-            }
-        }
-
-        /// <summary>
-        /// Loads the order item.
-        /// </summary>
-        private void LoadItem(orderLineType orderLine, WalmartOrderEntity orderToSave)
-        {
-            WalmartOrderItemEntity item = (WalmartOrderItemEntity) InstantiateOrderItem(orderToSave);
-
-            item.LineNumber = orderLine.lineNumber;
-            item.Name = orderLine.item.productName;
-            item.SKU = orderLine.item.sku;
-            item.UnitPrice = orderLine.charges.Sum(c => c.chargeAmount.amount);
-            item.Quantity = double.Parse(orderLine.orderLineQuantity.amount);
-
-            orderLineStatusType orderLineStatus = orderLine.orderLineStatuses.SingleOrDefault();
-            item.LocalStatus = orderLineStatus?.status.ToString() ?? "Unknown";
-        }
-
-        /// <summary>
-        /// Loads the address into the order
-        /// </summary>
-        private static void LoadAddress(Order downloadedOrder, WalmartOrderEntity orderToSave)
-        {
-            postalAddressType downloadedAddress = downloadedOrder.shippingInfo.postalAddress;
-
-            PersonName name = PersonName.Parse(downloadedAddress.name);
-            orderToSave.BillFirstName = name.First;
-            orderToSave.BillLastName = name.LastWithSuffix;
-            orderToSave.BillMiddleName = name.Middle;
-            orderToSave.BillNameParseStatus = (int) name.ParseStatus;
-            orderToSave.BillUnparsedName = name.UnparsedName;
-
-            orderToSave.BillStreet1 = downloadedAddress.address1;
-            orderToSave.BillStreet2 = downloadedAddress.address2;
-            orderToSave.BillCity = downloadedAddress.city;
-            orderToSave.BillStateProvCode = downloadedAddress.state;
-            orderToSave.BillPostalCode = downloadedAddress.postalCode;
-            orderToSave.BillCountryCode = downloadedAddress.country;
-
-            orderToSave.BillPhone = downloadedOrder.shippingInfo.phone;
-            orderToSave.BillEmail = downloadedOrder.customerEmailId;
-
-            PersonAdapter billAdapter = new PersonAdapter(orderToSave, "Bill");
-            PersonAdapter shipAdapter = new PersonAdapter(orderToSave, "Ship");
-            PersonAdapter.Copy(billAdapter, shipAdapter);
         }
 
         /// <summary>
@@ -261,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             {
                 return defaultStartingPoint.Value;
             }
-            
+
         }
     }
 }

@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
+        private const int DownloadOrderCountLimit = 200;
 
 
         /// <summary>
@@ -111,6 +112,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
             requestSubmitter.Uri = new Uri(GetOrdersUrl);
             requestSubmitter.Variables.Add("createdStartDate", start.ToString("s"));
+            requestSubmitter.Variables.Add("limit", DownloadOrderCountLimit.ToString());
 
             return GetOrders(store, requestSubmitter);
         }
