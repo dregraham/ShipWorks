@@ -43,16 +43,16 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
             {
                 ExistingConnectionScope.ExecuteWithCommand(cmd =>
                 {
-                    cmd.CommandText = @"
-                    DECLARE @version NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('productversion'));
+                    cmd.CommandText = @"                    
                     DECLARE @productlevel NVARCHAR(20) = CONVERT(VARCHAR(20),SERVERPROPERTY('ProductLevel'));
                     DECLARE @dbName NVARCHAR(100) = DB_NAME();
 
-                    DECLARE @Sql NVARCHAR(500) = 'IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' = ''RTM''
+                    DECLARE @Sql NVARCHAR(500) = 
+                    'IF ''' + @productlevel + ''' = ''RTM''
 						ALTER DATABASE [' + @dbName + ']
-							SET COMPATIBILITY_LEVEL = 110
+							SET COMPATIBILITY_LEVEL = 100
 
-					IF '''+ @version + ''' LIKE ''12%'' AND ''' + @productlevel + ''' != ''RTM''
+					IF ''' + @productlevel + ''' != ''RTM''
 						ALTER DATABASE [' + @dbName + ']
 								SET COMPATIBILITY_LEVEL = 120'
                     EXECUTE sp_executesql @Sql;
