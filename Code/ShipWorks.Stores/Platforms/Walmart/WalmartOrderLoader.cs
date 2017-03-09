@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Text;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 
 namespace ShipWorks.Stores.Platforms.Walmart
@@ -135,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// Creates new items or updates existing items. This method assumes that
         /// a line item will not be deleted and that the price will go to 0 if
         /// the order is canceled.
-        /// </remarks>        
+        /// </remarks>
         private void LoadItems(orderLineType[] downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
         {
             foreach (orderLineType orderLine in downloadedOrderOrderLines)
