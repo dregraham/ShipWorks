@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
@@ -16,6 +17,9 @@ using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
+using ShipWorks.Core.Messaging;
+using ShipWorks.Shared.IO.KeyboardShortcuts;
 
 namespace ShipWorks.UI.Controls
 {
@@ -51,6 +55,7 @@ namespace ShipWorks.UI.Controls
         private IKeyboardShortcutTranslator keyboardShortcutTranslator = null;
         private IEnumerable<string> autoWeighShortcuts;
         private string applyWeightShortcutText = string.Empty;
+        private IDisposable keyboardShortcutSubscription;
 
         /// <summary>
         /// Constructor
@@ -90,6 +95,14 @@ namespace ShipWorks.UI.Controls
                 .TakeWhile(_ => !(Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashDialog.IsApplicationCrashed))
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(x => UpdateLiveWeight(x.Status == ScaleReadStatus.Success ? x.Weight : (double?) null));
+
+            keyboardShortcutSubscription?.Dispose();
+
+            keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
+                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) && 
+                            Visible && 
+                            AutoWeighShortCutsAllowed)
+                .Subscribe(_ => ApplyWeightFromScaleAsync());
         }
 
         /// <summary>
@@ -98,7 +111,7 @@ namespace ShipWorks.UI.Controls
         private void UpdateUiWithAutoWeighShortcuts()
         {
             // If we have shortcuts, display them
-            if (autoWeighShortcuts?.Any() == true && ShowWeighButton && !ReadOnly && ShowShortcutInfo)
+            if (AutoWeighShortCutsAllowed)
             {
                 // Only display the first shortcut.  The rest will be in a tool tip.
                 applyWeightShortcutText = autoWeighShortcuts.FirstOrDefault();
@@ -117,6 +130,11 @@ namespace ShipWorks.UI.Controls
                 }
             }
         }
+
+        /// <summary>
+        /// Should we concern ourselves with autoweigh shortcuts
+        /// </summary>
+        private bool AutoWeighShortCutsAllowed => autoWeighShortcuts?.Any() == true && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
 
         /// <summary>
         /// Get \ set the total weight
@@ -427,10 +445,17 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-
         /// Grab the weight from the scale
         /// </summary>
         private async void OnWeigh(object sender, EventArgs e)
+        {
+            await ApplyWeightFromScaleAsync();
+        }
+
+        /// <summary>
+        /// Grab the weight from the scale
+        /// </summary>
+        private async Task ApplyWeightFromScaleAsync()
         {
             Cursor.Current = Cursors.WaitCursor;
             weighButton.Enabled = false;
@@ -616,6 +641,7 @@ namespace ShipWorks.UI.Controls
                 scaleSubscription?.Dispose();
                 components?.Dispose();
                 keyboardShortcutTranslator = null;
+                keyboardShortcutSubscription?.Dispose();
             }
             base.Dispose(disposing);
         }
