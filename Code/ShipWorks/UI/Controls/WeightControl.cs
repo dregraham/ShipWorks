@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.IO.Hardware.Scales;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
 using ShipWorks.Users;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.UI.Controls
 {
@@ -40,6 +47,11 @@ namespace ShipWorks.UI.Controls
         // Raised whenever the value changes
         public event EventHandler WeightChanged;
 
+        private bool showShortcutInfo = false;
+        private IKeyboardShortcutTranslator keyboardShortcutTranslator = null;
+        private IEnumerable<string> autoWeighShortcuts;
+        private string applyWeightShortcutText = string.Empty;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -65,7 +77,11 @@ namespace ShipWorks.UI.Controls
                 displayFormat = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
             }
 
+            keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
+            autoWeighShortcuts = keyboardShortcutTranslator.GetShortcuts(Shared.IO.KeyboardShortcuts.KeyboardShortcutCommand.ApplyWeight);
+
             liveWeight.Visible = false;
+            UpdateUiWithAutoWeighShortcuts();
 
             scaleSubscription?.Dispose();
 
@@ -74,6 +90,32 @@ namespace ShipWorks.UI.Controls
                 .TakeWhile(_ => !(Program.MainForm.Disposing || Program.MainForm.IsDisposed || CrashDialog.IsApplicationCrashed))
                 .ObserveOn(SynchronizationContext.Current)
                 .Subscribe(x => UpdateLiveWeight(x.Status == ScaleReadStatus.Success ? x.Weight : (double?) null));
+        }
+
+        /// <summary>
+        /// Updates the UI to display any auto weigh shortcuts
+        /// </summary>
+        private void UpdateUiWithAutoWeighShortcuts()
+        {
+            // If we have shortcuts, display them
+            if (autoWeighShortcuts?.Any() == true && ShowWeighButton && !ReadOnly && ShowShortcutInfo)
+            {
+                // Only display the first shortcut.  The rest will be in a tool tip.
+                applyWeightShortcutText = autoWeighShortcuts.FirstOrDefault();
+                applyWeightShortcutText = applyWeightShortcutText.IsNullOrWhiteSpace() ? string.Empty : $@"<{applyWeightShortcutText}>";
+
+                // If there's more than 1 shortcut, put them in a tool tip.
+                if (autoWeighShortcuts.IsCountGreaterThan(1))
+                {
+                    ToolTip autoWeighShortcutsToolTip = new ToolTip
+                    {
+                        ToolTipIcon = ToolTipIcon.Info,
+                        ShowAlways = true,
+                        ToolTipTitle = "Keyboard shortcut keys for applying weight."
+                    };
+                    autoWeighShortcutsToolTip.SetToolTip(liveWeight, string.Join(Environment.NewLine, autoWeighShortcuts));
+                }
+            }
         }
 
         /// <summary>
@@ -198,6 +240,8 @@ namespace ShipWorks.UI.Controls
                 {
                     textBox.Width = Width - weightButtonArea;
                 }
+
+                UpdateUiWithAutoWeighShortcuts();
             }
         }
 
@@ -216,6 +260,26 @@ namespace ShipWorks.UI.Controls
                 textBox.ReadOnly = value;
 
                 weighButton.Enabled = !value;
+
+                UpdateUiWithAutoWeighShortcuts();
+            }
+        }
+
+        /// <summary>
+        /// Controls if the shortcut info is displayed
+        /// </summary>
+        [DefaultValue(false)]
+        public bool ShowShortcutInfo
+        {
+            get
+            {
+                return showShortcutInfo;
+            }
+            set
+            {
+                showShortcutInfo = value;
+
+                UpdateUiWithAutoWeighShortcuts();
             }
         }
 
@@ -488,7 +552,7 @@ namespace ShipWorks.UI.Controls
             {
                 if (weight != null)
                 {
-                    liveWeight.Text = string.Format("({0})", WeightConverter.Current.FormatWeight(weight.Value));
+                    liveWeight.Text = $@"({WeightConverter.Current.FormatWeight(weight.Value)}) {applyWeightShortcutText}";
                     liveWeight.Visible = true;
 
                     // Make sure the error is clear
@@ -539,6 +603,21 @@ namespace ShipWorks.UI.Controls
                 OnWeightChanged();
                 ignoreWeightChanges = false;
             }
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                scaleSubscription?.Dispose();
+                components?.Dispose();
+                keyboardShortcutTranslator = null;
+            }
+            base.Dispose(disposing);
         }
     }
 }

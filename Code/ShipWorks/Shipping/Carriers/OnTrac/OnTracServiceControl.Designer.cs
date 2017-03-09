@@ -487,6 +487,7 @@
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
+            this.weight.ShowShortcutInfo = true;
             // 
             // packagingType
             // 

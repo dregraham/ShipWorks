@@ -109,6 +109,7 @@
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += OnShipSenseFieldChanged;
+            this.weight.ShowShortcutInfo = true;
             // 
             // label1
             // 

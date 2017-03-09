@@ -13,13 +13,13 @@ namespace ShipWorks.Shared.IO.KeyboardShortcuts
         /// Apply the weight in a scale control
         /// </summary>
         [Description("Apply weight")]
-        ApplyWeight,
+        ApplyWeight = 0,
 
         /// <summary>
         /// Focus on the quick search box
         /// </summary>
         /// <remarks>This is only used for testing at the moment</remarks>
         [Description("Focus Quick search")]
-        FocusQuickSearch,
+        FocusQuickSearch = 1,
     }
 }
