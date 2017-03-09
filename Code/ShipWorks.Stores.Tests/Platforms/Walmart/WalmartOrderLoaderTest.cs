@@ -17,17 +17,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         private readonly AutoMock mock;
         private readonly IWalmartOrderLoader testObject;
 
+        private WalmartOrderEntity orderEntity;
+        private Order orderDto;
+
         public WalmartOrderLoaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<WalmartOrderLoader>();
-        }
 
-        [Fact]
-        public void LoadOrder_LoadsItemFromWalmartOrder()
-        {
-            Order orderDto = new Order();
-            WalmartOrderEntity orderEntity = new WalmartOrderEntity();
+            testObject = mock.Create<WalmartOrderLoader>();
+
+            orderDto = new Order();
+            orderEntity = new WalmartOrderEntity();
             orderLineType item = GenerateItem("item1", "name1", "sku1");
 
             orderDto.orderLines = new[] { item };
@@ -44,15 +44,108 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                     country = "US"
                 }
             };
+        }
 
+        [Fact]
+        public void LoadOrder_LoadsItemFromWalmartOrder()
+        {
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderDto.orderLines.First().lineNumber, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().LineNumber);
             Assert.Equal(orderDto.orderLines.First().item.productName, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Name);
             Assert.Equal(orderDto.orderLines.First().item.sku, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().SKU);
             Assert.Equal(orderDto.orderLines.First().orderLineStatuses.First().status.ToString(), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().LocalStatus);
-            Assert.Equal(double.Parse(orderDto.orderLines.First().orderLineStatuses.First().statusQuantity.amount), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Quantity);
+            Assert.Equal(double.Parse(orderDto.orderLines.First().orderLineQuantity.amount), orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().Quantity);
             Assert.Equal(orderDto.orderLines.First().charges.First().chargeAmount.amount, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().First().UnitPrice);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsCustomerOrderID_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.customerOrderId = "123abcd";
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.customerOrderId, orderEntity.CustomerOrderID);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsPurchaseOrderID_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.purchaseOrderId = "PO123abcd";
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.purchaseOrderId, orderEntity.PurchaseOrderID);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsOrderDate_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.orderDate = DateTime.UtcNow.AddDays(-12);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.orderDate, orderEntity.OrderDate);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsEstimatedDeliveryDate_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.shippingInfo.estimatedDeliveryDate = DateTime.UtcNow.AddDays(-12);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.shippingInfo.estimatedDeliveryDate, orderEntity.EstimatedDeliveryDate);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsEstimatedShipDate_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.shippingInfo.estimatedShipDate = DateTime.UtcNow.AddDays(-12);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.shippingInfo.estimatedShipDate, orderEntity.EstimatedShipDate);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsRequestedShipping_WhenOrderIsNew()
+        {
+            orderEntity.IsNew = true;
+            orderDto.shippingInfo.methodCode = shippingMethodCodeType.WhiteGlove;
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderDto.shippingInfo.methodCode.ToString(), orderEntity.RequestedShipping);
+        }
+
+        [Fact]
+        public void LoadOrder_DelegatesToOrderRepositoryPopulateOrderDetails_WhenOrderIsNotNew()
+        {
+            orderEntity.IsNew = false;
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            mock.Mock<IOrderRepository>().Verify(r => r.PopulateOrderDetails(orderEntity));
+        }
+
+        [Fact]
+        public void LoadOrder_ReloadsOrderCharges_WhenOrderIsNotNew()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderCharges.Add(new OrderChargeEntity()
+            {
+                Amount = 99
+            });
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.NotEqual(orderEntity.OrderCharges.FirstOrDefault().Amount, 99);
         }
 
         /// <summary>
