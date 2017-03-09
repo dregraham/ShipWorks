@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -44,7 +45,7 @@ namespace Interapptive.Shared.Metrics
             telemetryClient.Context.Session.Id = Guid.NewGuid().ToString("D");
             telemetryClient.Context.Component.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             telemetryClient.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
-            telemetryClient.Context.Device.ScreenResolution = $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}";
+            telemetryClient.Context.Properties.Add("ScreenResolution", $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}");
             telemetryClient.Context.Properties.Add("Build date", AssemblyDateAttribute.Read(Assembly.GetEntryAssembly()).ToString());
 
             // Bitness
@@ -194,6 +195,8 @@ namespace Interapptive.Shared.Metrics
         /// <summary>
         /// Gets a Dictionary of common properties to track.
         /// </summary>
+        [SuppressMessage("Recommendations", "RECS0022: Empty general catch clause suppresses any error",
+            Justification = "Exceptions for telemetry should not crash ShipWorks")]
         private static Dictionary<string, string> CommonProperties()
         {
             Dictionary<string, string> properties = new Dictionary<string, string>();

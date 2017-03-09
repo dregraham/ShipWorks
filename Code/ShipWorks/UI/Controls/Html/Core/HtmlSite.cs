@@ -1,13 +1,9 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
-using System.ComponentModel;
-using System.Drawing;
-using Interapptive.Shared;
 using System.Runtime.InteropServices.ComTypes;
+using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.UI.Controls.Html.Core
@@ -17,216 +13,216 @@ namespace ShipWorks.UI.Controls.Html.Core
     /// </summary>
     [NDependIgnore]
     [ComVisible(true), System.CLSCompliant(false)]
-	public sealed class HtmlSite : IDisposable, IOleClientSite, IOleContainer, IDocHostUIHandler,
-			IOleInPlaceFrame, IOleInPlaceSite, IOleInPlaceSiteEx, IOleDocumentSite, IAdviseSink,
-            HtmlApi.IHTMLEditDesigner, IComServiceProvider, IDocHostShowUI, IOleInPlaceUIWindow, IPropertyNotifySink 
+    public sealed class HtmlSite : IDisposable, IOleClientSite, IOleContainer, IDocHostUIHandler,
+            IOleInPlaceFrame, IOleInPlaceSite, IOleInPlaceSiteEx, IOleDocumentSite, IAdviseSink,
+            HtmlApi.IHTMLEditDesigner, IComServiceProvider, IDocHostShowUI, IOleInPlaceUIWindow, IPropertyNotifySink
     {
-		HtmlControl htmlControl;
+        HtmlControl htmlControl;
 
         HtmlEditHost htmlEditHost = null;
 
-		IOleObject htmlDocumentClass;
-		IOleDocumentView view;
-		IOleInPlaceActiveObject activeObject;
+        IOleObject htmlDocumentClass;
+        IOleDocumentView view;
+        IOleInPlaceActiveObject activeObject;
 
-		IntPtr documentHwnd = IntPtr.Zero;
+        IntPtr documentHwnd = IntPtr.Zero;
 
-		bool fullyActive = false;
+        bool fullyActive = false;
 
-		ConnectionPointCookie propNotifyCookie;
-		int adviseSinkCookie;
-		int adviseCookie = 0;
+        ConnectionPointCookie propNotifyCookie;
+        int adviseSinkCookie;
+        int adviseCookie = 0;
 
         public event ElementSnapRectEventHandler ElementMoving;
         public event ElementSnapRectEventHandler ElementSizing;
 
         #region Document \ Activation
 
-		/// <summary>
-		/// Creates the document.
-		/// </summary>
-		public HtmlSite(HtmlControl htmlControl) 
+        /// <summary>
+        /// Creates the document.
+        /// </summary>
+        public HtmlSite(HtmlControl htmlControl)
         {
-            if ((htmlControl == null) || (htmlControl.IsHandleCreated == false)) 
+            if ((htmlControl == null) || (htmlControl.IsHandleCreated == false))
             {
                 throw new ArgumentException();
             }
 
-			this.htmlControl = htmlControl;
-		}
+            this.htmlControl = htmlControl;
+        }
 
-		/// <summary>
-		/// Disposes the document.
-		/// </summary>
-		public void Dispose() 
+        /// <summary>
+        /// Disposes the document.
+        /// </summary>
+        public void Dispose()
         {
-			CloseDocument();
-		}
+            CloseDocument();
+        }
 
-		/// <summary>
-		/// This determines which features are enabled in the editor
-		/// </summary>
-		/// <returns>The common flags that are implimented</returns>
-		[DispId(-5512)]
-		public int setFlags() 
+        /// <summary>
+        /// This determines which features are enabled in the editor
+        /// </summary>
+        /// <returns>The common flags that are implimented</returns>
+        [DispId(-5512)]
+        public int setFlags()
         {
-			int flags = 0;
+            int flags = 0;
 
             if (htmlControl.ShowImages)
             {
                 flags |= HtmlApi.DLCTL_DLIMAGES;
             }
 
-		    if (htmlControl.AllowActiveContent) 
+            if (htmlControl.AllowActiveContent)
             {
-				return flags |
-                    HtmlApi.DLCTL_VIDEOS | 
+                return flags |
+                    HtmlApi.DLCTL_VIDEOS |
                     HtmlApi.DLCTL_BGSOUNDS;
-			} 
-            else 
+            }
+            else
             {
-				return flags | 
-                    HtmlApi.DLCTL_NO_SCRIPTS | 
-                    HtmlApi.DLCTL_NO_JAVA | 
+                return flags |
+                    HtmlApi.DLCTL_NO_SCRIPTS |
+                    HtmlApi.DLCTL_NO_JAVA |
                     HtmlApi.DLCTL_NO_DLACTIVEXCTLS |
-                    HtmlApi.DLCTL_NO_RUNACTIVEXCTLS | 
+                    HtmlApi.DLCTL_NO_RUNACTIVEXCTLS |
                     HtmlApi.DLCTL_SILENT;
-			}
-		}
+            }
+        }
 
 
-		/// <summary>
-		/// Returns the document so that other calls can be made.
-		/// </summary>
-		public HtmlApi.HTMLDocument Document 
+        /// <summary>
+        /// Returns the document so that other calls can be made.
+        /// </summary>
+        public HtmlApi.HTMLDocument Document
         {
-			get 
-            { 
+            get
+            {
                 return (HtmlApi.HTMLDocument) htmlDocumentClass;
             }
-		}
+        }
 
-		/// <summary>
-		/// Returns the Handle to the Document
-		/// </summary>
-		internal IntPtr DocumentHandle 
+        /// <summary>
+        /// Returns the Handle to the Document
+        /// </summary>
+        internal IntPtr DocumentHandle
         {
-			get 
+            get
             {
-                return documentHwnd; 
+                return documentHwnd;
             }
-			set 
+            set
             {
                 documentHwnd = value;
             }
-		}
+        }
 
-		/// <summary>
-		/// Creates the document one control creation
-		/// </summary>
-		public void CreateDocument() 
+        /// <summary>
+        /// Creates the document one control creation
+        /// </summary>
+        public void CreateDocument()
         {
-			Debug.Assert(htmlDocumentClass == null, "Must call Close before recreating.");
+            Debug.Assert(htmlDocumentClass == null, "Must call Close before recreating.");
 
-			bool created = false;
+            bool created = false;
 
-			try 
+            try
             {
-				htmlDocumentClass = (IOleObject) new HtmlApi.HTMLDocument();
+                htmlDocumentClass = (IOleObject) new HtmlApi.HTMLDocument();
 
                 OleApi.OleRun(htmlDocumentClass);
 
                 // Set the client site
-				htmlDocumentClass.SetClientSite(this);
-		
-				// Lock the object in memory
-                OleApi.OleLockRunning(htmlDocumentClass, true, false);
-		
-				htmlDocumentClass.SetHostNames("HtmlControl", "HtmlControl");
-				htmlDocumentClass.Advise(this, out adviseCookie);
+                htmlDocumentClass.SetClientSite(this);
 
-				propNotifyCookie = new ConnectionPointCookie(htmlDocumentClass, this, typeof(IPropertyNotifySink), false);
-				htmlDocumentClass.Advise((IAdviseSink) this, out adviseSinkCookie);
-				
-				created = true;
-			} 
-            finally 
+                // Lock the object in memory
+                OleApi.OleLockRunning(htmlDocumentClass, true, false);
+
+                htmlDocumentClass.SetHostNames("HtmlControl", "HtmlControl");
+                htmlDocumentClass.Advise(this, out adviseCookie);
+
+                propNotifyCookie = new ConnectionPointCookie(htmlDocumentClass, this, typeof(IPropertyNotifySink), false);
+                htmlDocumentClass.Advise((IAdviseSink) this, out adviseSinkCookie);
+
+                created = true;
+            }
+            finally
             {
                 if (!created)
                 {
                     htmlDocumentClass = null;
                 }
-			}
-		}
+            }
+        }
 
         /// <summary>
         /// Show the document in the window
         /// </summary>
-		public void ShowDocument() 
+		public void ShowDocument()
         {
-			if (htmlDocumentClass == null) return;
-			if (!htmlControl.Visible) return;
-			if (DocumentHandle != IntPtr.Zero) return;
-			
-			try 
+            if (htmlDocumentClass == null) return;
+            if (!htmlControl.Visible) return;
+            if (DocumentHandle != IntPtr.Zero) return;
+
+            try
             {
-				htmlDocumentClass.DoVerb(
-                    OleApi.OLEIVERB_SHOW, 
-                    IntPtr.Zero, 
-                    this, 
+                htmlDocumentClass.DoVerb(
+                    OleApi.OLEIVERB_SHOW,
+                    IntPtr.Zero,
+                    this,
                     0,
-					htmlControl.Handle, 
+                    htmlControl.Handle,
                     new NativeMethods.RECT(ReturnSiteRect()));
-			} 
-            catch {}
-		}
+            }
+            catch { }
+        }
 
         /// <summary>
         /// Hide the document
         /// </summary>
-		public void HideDocument() 
+		public void HideDocument()
         {
-			if (htmlDocumentClass == null) return;
-			if (!htmlControl.Visible) return;
-			if (DocumentHandle != IntPtr.Zero) return;
-		}
+            if (htmlDocumentClass == null) return;
+            if (!htmlControl.Visible) return;
+            if (DocumentHandle != IntPtr.Zero) return;
+        }
 
-		/// <summary>
-		/// Activates the document when the user clicks in the control etc.
-		/// </summary>
-		public void ActivateDocument() 
+        /// <summary>
+        /// Activates the document when the user clicks in the control etc.
+        /// </summary>
+        public void ActivateDocument()
         {
-            if (view == null) 
+            if (view == null)
             {
                 return;
             }
 
-			htmlDocumentClass.DoVerb(
-                OleApi.OLEIVERB_UIACTIVATE, 
-                IntPtr.Zero, 
-                this, 
+            htmlDocumentClass.DoVerb(
+                OleApi.OLEIVERB_UIACTIVATE,
+                IntPtr.Zero,
+                this,
                 0,
-				htmlControl.Handle, 
+                htmlControl.Handle,
                 new NativeMethods.RECT(ReturnSiteRect()));
-		}
+        }
 
         /// <summary>
         /// Deactivate the document view
         /// </summary>
-		public void DeactivateDocument() 
+		public void DeactivateDocument()
         {
-			if (htmlDocumentClass == null) return;
-			if (!htmlControl.Visible) return;
-			
-			try 
+            if (htmlDocumentClass == null) return;
+            if (!htmlControl.Visible) return;
+
+            try
             {
                 if (view != null)
                 {
                     view.UIActivate(false);
                 }
-			} 
-            catch {}
-		}
+            }
+            catch { }
+        }
 
         /// <summary>
         /// this is a workaround for a problem calling Caret.SetLocation before it
@@ -242,49 +238,49 @@ namespace ShipWorks.UI.Controls.Html.Core
         /// Closes the document. Use this to clean up the control.
         /// </summary>
         [NDependIgnoreLongMethod]
-        public void CloseDocument() 
+        public void CloseDocument()
         {
-			try	
+            try
             {
-				//ReleaseWndProc always called in the SetActiveObject function don't need to call it here.
+                //ReleaseWndProc always called in the SetActiveObject function don't need to call it here.
 
-                if (htmlDocumentClass == null) 
+                if (htmlDocumentClass == null)
                 {
                     return;
                 }
-		
-				if (propNotifyCookie != null) 
-                {
-					propNotifyCookie.Disconnect();
-					propNotifyCookie = null;
-				}
 
-				if (adviseSinkCookie != 0) 
+                if (propNotifyCookie != null)
                 {
-					htmlDocumentClass.Unadvise(adviseSinkCookie);
-					adviseSinkCookie = 0;
-				}
+                    propNotifyCookie.Disconnect();
+                    propNotifyCookie = null;
+                }
 
-				try	
+                if (adviseSinkCookie != 0)
                 {
-					//this may raise an exception, however it does work and must
-					//be called
-					if (view != null) 
+                    htmlDocumentClass.Unadvise(adviseSinkCookie);
+                    adviseSinkCookie = 0;
+                }
+
+                try
+                {
+                    //this may raise an exception, however it does work and must
+                    //be called
+                    if (view != null)
                     {
-						view.Show(false);
-						view.UIActivate(false);
-						view.SetInPlaceSite(null);
-						view.Close(0);
-					}
-				} 
-                catch (Exception e) 
+                        view.Show(false);
+                        view.UIActivate(false);
+                        view.SetInPlaceSite(null);
+                        view.Close(0);
+                    }
+                }
+                catch (Exception e)
                 {
-					Debug.WriteLine("CloseView raised exception: " + e.Message);
-				}
-	
+                    Debug.WriteLine("CloseView raised exception: " + e.Message);
+                }
+
                 // Clear the client site
-				htmlDocumentClass.SetClientSite(null);
-	
+                htmlDocumentClass.SetClientSite(null);
+
                 // Unlock
                 OleApi.OleLockRunning(htmlDocumentClass, false, false);
 
@@ -294,130 +290,133 @@ namespace ShipWorks.UI.Controls.Html.Core
                 }
 
 
-				//release COM objects
-				int refCount = 0;
+                //release COM objects
+                int refCount = 0;
 
-				if (htmlDocumentClass != null) 
+                if (htmlDocumentClass != null)
                 {
-					//this could raise an exception too, but it must be called
-					try	
+                    //this could raise an exception too, but it must be called
+                    try
                     {
-						this.DeactivateAndUndo();
-						htmlDocumentClass.Close(OleApi.OLECLOSE_NOSAVE);
-					} 
-                    catch (Exception e) 
+                        this.DeactivateAndUndo();
+                        htmlDocumentClass.Close(OleApi.OLECLOSE_NOSAVE);
+                    }
+                    catch (Exception e)
                     {
-						Debug.WriteLine("Close document raised exception: " + e.Message);
-					}
+                        Debug.WriteLine("Close document raised exception: " + e.Message);
+                    }
 
-					do 
+                    do
                     {
-						refCount = Marshal.ReleaseComObject(htmlDocumentClass);
-					} while (refCount > 0);
-				}
+                        refCount = Marshal.ReleaseComObject(htmlDocumentClass);
+                    } while (refCount > 0);
+                }
 
                 if (view != null)
                 {
-                    do 
+                    do
                     {
                         refCount = Marshal.ReleaseComObject(view);
                     } while (refCount > 0);
                 }
 
-                if (activeObject != null) 
+                if (activeObject != null)
                 {
-                    do 
+                    do
                     {
                         refCount = Marshal.ReleaseComObject(activeObject);
                     } while (refCount > 0);
                 }
-	
-				htmlDocumentClass = null;
-				view = null;
-				activeObject = null;
-				htmlControl.htmlDocumentClass = null;
-	
-			} 
-            catch (Exception e) 
+
+                htmlDocumentClass = null;
+                view = null;
+                activeObject = null;
+                htmlControl.htmlDocumentClass = null;
+
+            }
+            catch (Exception e)
             {
-				Debug.WriteLine("Close document raised exception: " + e.Message);
-			}
-		}
+                Debug.WriteLine("Close document raised exception: " + e.Message);
+            }
+        }
 
         /// <summary>
         /// Return the area that the document should be placed
         /// </summary>
-		internal NativeMethods.RECT ReturnSiteRect() 
+		internal NativeMethods.RECT ReturnSiteRect()
         {
-			NativeMethods.RECT rect = new NativeMethods.RECT(htmlControl.ClientRectangle);
+            NativeMethods.RECT rect = new NativeMethods.RECT(htmlControl.ClientRectangle);
 
-			if (htmlControl.BorderStyle == BorderStyle.FixedSingle) {
-				rect.left += 1;
-				rect.right -= 2;
-				rect.top += 2;
-				rect.bottom -= 1;				
-			} else if (htmlControl.BorderStyle == BorderStyle.Fixed3D) {
-				rect.left += SystemInformation.Border3DSize.Width;
-				rect.right -= SystemInformation.Border3DSize.Width;
-				rect.top += SystemInformation.Border3DSize.Height;
-				rect.bottom -= SystemInformation.Border3DSize.Height;
-			}
+            if (htmlControl.BorderStyle == BorderStyle.FixedSingle)
+            {
+                rect.left += 1;
+                rect.right -= 2;
+                rect.top += 2;
+                rect.bottom -= 1;
+            }
+            else if (htmlControl.BorderStyle == BorderStyle.Fixed3D)
+            {
+                rect.left += SystemInformation.Border3DSize.Width;
+                rect.right -= SystemInformation.Border3DSize.Width;
+                rect.top += SystemInformation.Border3DSize.Height;
+                rect.bottom -= SystemInformation.Border3DSize.Height;
+            }
 
-			if (rect.left < 0)
-				rect.left = 0;
-			if (rect.left > htmlControl.ClientRectangle.Right)
-				rect.left = htmlControl.ClientRectangle.Right;
+            if (rect.left < 0)
+                rect.left = 0;
+            if (rect.left > htmlControl.ClientRectangle.Right)
+                rect.left = htmlControl.ClientRectangle.Right;
 
-			if (rect.right < rect.left)
-				rect.right = rect.left;
-			if (rect.right > htmlControl.ClientRectangle.Right)
-				rect.right = htmlControl.ClientRectangle.Right;
+            if (rect.right < rect.left)
+                rect.right = rect.left;
+            if (rect.right > htmlControl.ClientRectangle.Right)
+                rect.right = htmlControl.ClientRectangle.Right;
 
-			if (rect.top < 0)
-				rect.top = 0;
-			if (rect.top > htmlControl.ClientRectangle.Bottom)
-				rect.top = htmlControl.ClientRectangle.Bottom;
-			if (rect.bottom < rect.top)
-				rect.bottom = rect.top;
-			if (rect.bottom > htmlControl.ClientRectangle.Bottom)
-				rect.bottom = htmlControl.ClientRectangle.Bottom;
+            if (rect.top < 0)
+                rect.top = 0;
+            if (rect.top > htmlControl.ClientRectangle.Bottom)
+                rect.top = htmlControl.ClientRectangle.Bottom;
+            if (rect.bottom < rect.top)
+                rect.bottom = rect.top;
+            if (rect.bottom > htmlControl.ClientRectangle.Bottom)
+                rect.bottom = htmlControl.ClientRectangle.Bottom;
 
-			return rect;
-		}
+            return rect;
+        }
 
         /// <summary>
         /// Our containing control is being resized
         /// </summary>
 		public void ResizeSite()
         {
-			try 
+            try
             {
-                if (view == null || ((HtmlApi.HTMLDocument) view) == null) 
+                if (view == null || ((HtmlApi.HTMLDocument) view) == null)
                 {
                     return;
                 }
 
-				NativeMethods.RECT rect = ReturnSiteRect();
+                NativeMethods.RECT rect = ReturnSiteRect();
                 view.SetRect(ref rect);
-			} 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
-				Debug.WriteLine(ex.Message);
-			}
-		}
+                Debug.WriteLine(ex.Message);
+            }
+        }
 
         /// <summary>
         /// TranslateAccelarator implementation
         /// </summary>
-		public int TranslateAccelarator(NativeMethods.MSG msg) 
+		public int TranslateAccelarator(NativeMethods.MSG msg)
         {
             if (activeObject != null)
             {
                 return activeObject.TranslateAccelerator(msg);
             }
 
-			return NativeMethods.S_FALSE;
-		}
+            return NativeMethods.S_FALSE;
+        }
 
         #endregion
 
@@ -467,283 +466,285 @@ namespace ShipWorks.UI.Controls.Html.Core
 
         #endregion
 
-		#region Implimented functions for all of the IOle stuff.
+        #region Implimented functions for all of the IOle stuff.
 
-		public int SaveObject() 
+        public int SaveObject()
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int GetMoniker(uint dwAssign, uint dwWhichMoniker, out IMoniker ppmk) {
-			ppmk = null;
-			return NativeMethods.E_NOTIMPL;
-		}
-
-		public int GetContainer(out IOleContainer pphtmlControl) 
+        public int GetMoniker(uint dwAssign, uint dwWhichMoniker, out IMoniker ppmk)
         {
-			pphtmlControl = (IOleContainer) this;
-			return NativeMethods.S_OK;
-		}
+            ppmk = null;
+            return NativeMethods.E_NOTIMPL;
+        }
 
-		public int ShowObject() 
+        public int GetContainer(out IOleContainer pphtmlControl)
         {
-			return NativeMethods.S_OK;
-		}
+            pphtmlControl = (IOleContainer) this;
+            return NativeMethods.S_OK;
+        }
 
-		public int OnShowWindow(bool fShow) 
+        public int ShowObject()
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int RequestNewObjectLayout() 
+        public int OnShowWindow(bool fShow)
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int ParseDisplayName(Object pbc, String pszDisplayName, int[] pchEaten, Object[] ppmkOut) 
+        public int RequestNewObjectLayout()
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int EnumObjects(uint grfFlags, Object[] ppenum) 
+        public int ParseDisplayName(Object pbc, String pszDisplayName, int[] pchEaten, Object[] ppmkOut)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int LockContainer(bool fLock) 
+        public int EnumObjects(uint grfFlags, Object[] ppenum)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
+
+        public int LockContainer(bool fLock)
+        {
+            return NativeMethods.S_OK;
+        }
 
         /// <summary>
         /// Activate the document in the given view
         /// </summary>
-		public int ActivateMe(IOleDocumentView pViewToActivate)	
+		public int ActivateMe(IOleDocumentView pViewToActivate)
         {
-			if (pViewToActivate == null) 
-				return NativeMethods.E_INVALIDARG;
+            if (pViewToActivate == null)
+                return NativeMethods.E_INVALIDARG;
 
-            if (this == null || htmlControl == null) 
+            if (this == null || htmlControl == null)
             {
                 return NativeMethods.S_OK;
             }
 
-			if (view == pViewToActivate) 
+            if (view == pViewToActivate)
             {
-				pViewToActivate.UIActivate(true);
-			} 
-            else 
+                pViewToActivate.UIActivate(true);
+            }
+            else
             {
                 NativeMethods.RECT siteRect = ReturnSiteRect();
 
-				view = pViewToActivate;
-				pViewToActivate.SetInPlaceSite((IOleInPlaceSite)this);
+                view = pViewToActivate;
+                pViewToActivate.SetInPlaceSite((IOleInPlaceSite) this);
                 pViewToActivate.SetRect(ref siteRect);
-				pViewToActivate.Show(true);
-			}
+                pViewToActivate.Show(true);
+            }
 
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
         /// <summary>
         /// Return the handle the container's window
         /// </summary>
-		public int GetWindow(out IntPtr hWindow) 
+		public int GetWindow(out IntPtr hWindow)
         {
-			if (this.htmlControl != null) 
+            if (this.htmlControl != null)
             {
-				hWindow = htmlControl.Handle;
-			} 
-            else 
+                hWindow = htmlControl.Handle;
+            }
+            else
             {
-				hWindow = IntPtr.Zero;
-			}
+                hWindow = IntPtr.Zero;
+            }
 
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int ContextSensitiveHelp(bool fEnterMode) 
+        public int ContextSensitiveHelp(bool fEnterMode)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int EnableModeless(bool fEnableMode) 
+        public int EnableModeless(bool fEnableMode)
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int GetBorder(out NativeMethods.RECT lprectBorder) 
+        public int GetBorder(out NativeMethods.RECT lprectBorder)
         {
-			lprectBorder = new NativeMethods.RECT(ReturnSiteRect());
-			return NativeMethods.S_OK;	
-		}
+            lprectBorder = new NativeMethods.RECT(ReturnSiteRect());
+            return NativeMethods.S_OK;
+        }
 
-		public int RequestBorderSpace(NativeMethods.RECT pborderwidths) 
+        public int RequestBorderSpace(NativeMethods.RECT pborderwidths)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int SetBorderSpace(NativeMethods.RECT pborderwidths) 
+        public int SetBorderSpace(NativeMethods.RECT pborderwidths)
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
         /// <summary>
         /// Set the active object for the container
         /// </summary>
-		public int SetActiveObject(IOleInPlaceActiveObject pActiveObject, String pszObjName) 
+		public int SetActiveObject(IOleInPlaceActiveObject pActiveObject, String pszObjName)
         {
-			try 
+            try
             {
                 // Cleanup
-				if (pActiveObject == null) 
+                if (pActiveObject == null)
                 {
-					htmlControl.ReleaseWndProc();
-                    if (activeObject != null) 
+                    htmlControl.ReleaseWndProc();
+                    if (activeObject != null)
                     {
                         Marshal.ReleaseComObject(this.activeObject);
                     }
-					this.activeObject  = null;
-					this.documentHwnd = IntPtr.Zero;
-					this.fullyActive = false;
-				} 
+                    this.activeObject = null;
+                    this.documentHwnd = IntPtr.Zero;
+                    this.fullyActive = false;
+                }
                 // Set the active object
-                else 
+                else
                 {
-					this.activeObject = pActiveObject;
-					this.documentHwnd = new IntPtr();
-					pActiveObject.GetWindow(out this.documentHwnd);
-					pActiveObject.EnableModeless(true);
-					this.fullyActive = true;
+                    this.activeObject = pActiveObject;
+                    this.documentHwnd = new IntPtr();
+                    pActiveObject.GetWindow(out this.documentHwnd);
+                    pActiveObject.EnableModeless(true);
+                    this.fullyActive = true;
 
-					//we have the handle to the doc so set up WndProc override
-					htmlControl.SetupWndProc(documentHwnd);
-				}
+                    //we have the handle to the doc so set up WndProc override
+                    htmlControl.SetupWndProc(documentHwnd);
+                }
 
-				return NativeMethods.S_OK;
-			} 
-            catch (Exception e) 
+                return NativeMethods.S_OK;
+            }
+            catch (Exception e)
             {
-				Debug.WriteLine("Exception in SetActiveObject: " + e.Message + e.StackTrace);
-				return NativeMethods.S_FALSE;
-			}
-		}
+                Debug.WriteLine("Exception in SetActiveObject: " + e.Message + e.StackTrace);
+                return NativeMethods.S_FALSE;
+            }
+        }
 
-		public int InsertMenus(IntPtr hmenuShared, OleApi.OleMenuGroupWidths lpMenuWidths) 
+        public int InsertMenus(IntPtr hmenuShared, OleApi.OleMenuGroupWidths lpMenuWidths)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject) 
+        public int SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int RemoveMenus(IntPtr hmenuShared) 
+        public int RemoveMenus(IntPtr hmenuShared)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int SetStatusText(String pszStatusText) 
+        public int SetStatusText(String pszStatusText)
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int TranslateAccelerator(NativeMethods.MSG lpmsg, short wID) 
+        public int TranslateAccelerator(NativeMethods.MSG lpmsg, short wID)
         {
-			return NativeMethods.S_FALSE;
-		}
+            return NativeMethods.S_FALSE;
+        }
 
-		public int CanInPlaceActivate() 
+        public int CanInPlaceActivate()
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int OnInPlaceActivate() 
+        public int OnInPlaceActivate()
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int OnUIActivate() {
-			return NativeMethods.S_OK;
-		}
-
-		public int GetWindowContext(out IOleInPlaceFrame ppFrame, out IOleInPlaceUIWindow
-            ppDoc, out NativeMethods.RECT lprcPosRect, out NativeMethods.RECT lprcClipRect, OleApi.OIFI lpFrameInfo) 
+        public int OnUIActivate()
         {
-	
-			ppDoc = null; //set to null because same as Frame window
-			ppFrame = (IOleInPlaceFrame) this;
-			NativeMethods.GetClientRect(htmlControl.Handle, out lprcPosRect);
+            return NativeMethods.S_OK;
+        }
 
-			NativeMethods.GetClientRect(htmlControl.Handle, out lprcClipRect);
-			
-			//lpFrameInfo.cb = Marshal.SizeOf(typeof(tagOIFI));
-			//This value is set by the caller
-			if (lpFrameInfo != null) 
+        public int GetWindowContext(out IOleInPlaceFrame ppFrame, out IOleInPlaceUIWindow
+            ppDoc, out NativeMethods.RECT lprcPosRect, out NativeMethods.RECT lprcClipRect, OleApi.OIFI lpFrameInfo)
+        {
+
+            ppDoc = null; //set to null because same as Frame window
+            ppFrame = (IOleInPlaceFrame) this;
+            NativeMethods.GetClientRect(htmlControl.Handle, out lprcPosRect);
+
+            NativeMethods.GetClientRect(htmlControl.Handle, out lprcClipRect);
+
+            //lpFrameInfo.cb = Marshal.SizeOf(typeof(tagOIFI));
+            //This value is set by the caller
+            if (lpFrameInfo != null)
             {
-				lpFrameInfo.fMDIApp = 0;
-				lpFrameInfo.hwndFrame = htmlControl.Handle;
-				lpFrameInfo.hAccel = IntPtr.Zero;
-				lpFrameInfo.cAccelEntries = 0;
-			}
+                lpFrameInfo.fMDIApp = 0;
+                lpFrameInfo.hwndFrame = htmlControl.Handle;
+                lpFrameInfo.hAccel = IntPtr.Zero;
+                lpFrameInfo.cAccelEntries = 0;
+            }
 
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int Scroll(NativeMethods.SIZE scrollExtant) 
+        public int Scroll(NativeMethods.SIZE scrollExtant)
         {
-			return NativeMethods.E_NOTIMPL;
-		}
+            return NativeMethods.E_NOTIMPL;
+        }
 
-		public int OnUIDeactivate(bool fUndoable) 
+        public int OnUIDeactivate(bool fUndoable)
         {
-			return NativeMethods.S_OK;		
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int OnInPlaceDeactivate() 
+        public int OnInPlaceDeactivate()
         {
-			activeObject = null;
-			return NativeMethods.S_OK;
-		}
+            activeObject = null;
+            return NativeMethods.S_OK;
+        }
 
-		public int DiscardUndoState() 
+        public int DiscardUndoState()
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int DeactivateAndUndo() 
+        public int DeactivateAndUndo()
         {
-			return NativeMethods.S_OK;	
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int OnPosRectChange(NativeMethods.RECT lprcPosRect) 
+        public int OnPosRectChange(NativeMethods.RECT lprcPosRect)
         {
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int OnInPlaceActivateEx(out bool pfNoRedraw, uint dwFlags) 
+        public int OnInPlaceActivateEx(out bool pfNoRedraw, uint dwFlags)
         {
-			pfNoRedraw = true; //false means object needs to redraw
+            pfNoRedraw = true; //false means object needs to redraw
 
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int OnInPlaceDeactivateEx(bool fNoRedraw) 
+        public int OnInPlaceDeactivateEx(bool fNoRedraw)
         {
-			try 
+            try
             {
                 if (!fNoRedraw && htmlControl != null)
                 {
                     htmlControl.Invalidate();
                 }
-			} 
-            catch {}
+            }
+            catch { }
 
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int RequestUIActivate() 
+        public int RequestUIActivate()
         {
             if (htmlControl.AllowActivation)
             {
@@ -755,42 +756,44 @@ namespace ShipWorks.UI.Controls.Html.Core
             }
         }
 
-		#endregion
+        #endregion
 
-		#region IDocHostUIHandler
+        #region IDocHostUIHandler
 
-		public int ShowContextMenu(uint dwID, ref NativeMethods.POINT ppt, object pcmdtReserved, object pdispReserved) {
+        public int ShowContextMenu(uint dwID, ref NativeMethods.POINT ppt, object pcmdtReserved, object pdispReserved)
+        {
 
             if (htmlControl == null)
             {
                 return NativeMethods.S_FALSE;
             }
 
-			if (htmlControl.AllowContextMenu) 
+            if (htmlControl.AllowContextMenu)
             {
-				if (htmlControl.ContextMenu != null || htmlControl.ContextMenuStrip != null) 
+                if (htmlControl.ContextMenu != null || htmlControl.ContextMenuStrip != null)
                 {
-					return NativeMethods.S_OK;
-				} 
-                else 
+                    return NativeMethods.S_OK;
+                }
+                else
                 {
-					//show the default IE ContextMenu
-					return NativeMethods.S_FALSE;
-				}
-			} else 
+                    //show the default IE ContextMenu
+                    return NativeMethods.S_FALSE;
+                }
+            }
+            else
             {
-				return NativeMethods.S_OK;
-			}
-		}
+                return NativeMethods.S_OK;
+            }
+        }
 
         public int GetHostInfo(OleApi.DOCHOSTUIINFO info)
         {
-			if (info != null) 
+            if (info != null)
             {
                 info.cbSize = Marshal.SizeOf(typeof(OleApi.DOCHOSTUIINFO));
-				info.dwDoubleClick = OleApi.DOCHOSTUIDBLCLK_DEFAULT;
-				info.dwFlags = 
-                    (int)(
+                info.dwDoubleClick = OleApi.DOCHOSTUIDBLCLK_DEFAULT;
+                info.dwFlags =
+                    (int) (
                     OleApi.DOCHOSTUIFLAG.NO3DBORDER |
                     OleApi.DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE |
                     OleApi.DOCHOSTUIFLAG.OPENNEWWIN |
@@ -802,96 +805,108 @@ namespace ShipWorks.UI.Controls.Html.Core
                     info.dwFlags |= (int) OleApi.DOCHOSTUIFLAG.DIALOG;
                 }
 
-				info.dwReserved1 = 0;
-				info.dwReserved2 = 0;
+                info.dwReserved1 = 0;
+                info.dwReserved2 = 0;
 
-				return NativeMethods.S_OK;
-			} 
-            else 
+                return NativeMethods.S_OK;
+            }
+            else
             {
-				return NativeMethods.S_FALSE;
-			}
-		}
+                return NativeMethods.S_FALSE;
+            }
+        }
 
-		public int ShowUI(int dwID, IOleInPlaceActiveObject activeObject, IOleCommandTarget commandTarget, IOleInPlaceFrame frame, IOleInPlaceUIWindow doc) {
-			return NativeMethods.S_OK;
-		}
-
-		public int HideUI() {
-			return NativeMethods.S_OK;
-		}
-
-		public int UpdateUI() 
+        public int ShowUI(int dwID, IOleInPlaceActiveObject activeObject, IOleCommandTarget commandTarget, IOleInPlaceFrame frame, IOleInPlaceUIWindow doc)
         {
-			//Note the UpdateUI code was moved to it's own function.
-			//This function is called in the OnSelectionChange event handler for the HTMLDocumentEvents2 interface.
-			//The reason for this is to work around a bug in IE 6 that will cause a crash using UpdateUI that is very hard to find 
-			//and debug because it's actually a bug in MSHTML.dll in the system32 directory not anything to do with .net or the interop module.
+            return NativeMethods.S_OK;
+        }
 
-			if (this.htmlControl != null && this.fullyActive && 
-				this.htmlDocumentClass != null && this.htmlControl.EditMode) {
-				try {
+        public int HideUI()
+        {
+            return NativeMethods.S_OK;
+        }
+
+        public int UpdateUI()
+        {
+            //Note the UpdateUI code was moved to it's own function.
+            //This function is called in the OnSelectionChange event handler for the HTMLDocumentEvents2 interface.
+            //The reason for this is to work around a bug in IE 6 that will cause a crash using UpdateUI that is very hard to find 
+            //and debug because it's actually a bug in MSHTML.dll in the system32 directory not anything to do with .net or the interop module.
+
+            if (this.htmlControl != null && this.fullyActive &&
+                this.htmlDocumentClass != null && this.htmlControl.EditMode)
+            {
+                try
+                {
 
                     htmlControl.OnUpdateUI();
 
-				} catch (Exception e) {
-					Debug.WriteLine(e.Message + e.StackTrace);
-					return NativeMethods.S_FALSE;
-				}
-			}
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message + e.StackTrace);
+                    return NativeMethods.S_FALSE;
+                }
+            }
 
-			//should always return S_OK unless error
-			return NativeMethods.S_OK;
-		}
+            //should always return S_OK unless error
+            return NativeMethods.S_OK;
+        }
 
-		public int OnDocWindowActivate(Boolean fActivate) {
-			return NativeMethods.E_NOTIMPL;
-		}
-
-		public int OnFrameWindowActivate(Boolean fActivate) {
-			return NativeMethods.E_NOTIMPL;
-		}
-
-		public int ResizeBorder(NativeMethods.RECT rect, IntPtr doc, Boolean FrameWindow) {
-			return NativeMethods.E_NOTIMPL;
-		}
-
-		public int GetOptionKeyPath(out IntPtr pbstrKey, uint dw) {
-			//use this to set your own app-specific preferences
-
-			//eg pbstrKey = Marshal.StringToBSTR("Software\\myapp\\mysettings\\mshtml");
-			pbstrKey = IntPtr.Zero;
-			return NativeMethods.S_OK;
-		}
-
-		public int GetDropTarget(IOleDropTarget pDropTarget, out IOleDropTarget ppDropTarget) {
-			ppDropTarget = null;
-			return NativeMethods.E_NOTIMPL;
-		}
-
-
-		public int GetExternal(out object ppDispatch) 
+        public int OnDocWindowActivate(Boolean fActivate)
         {
-			ppDispatch = null;
+            return NativeMethods.E_NOTIMPL;
+        }
 
-			//Note from Jamie on this function:
-			//Gotta handle the cases where the htmlControl is dead and the htmlControl's parent is null.
-			//Wasn't handled before and was causing an error.
-			if (htmlControl == null) 
+        public int OnFrameWindowActivate(Boolean fActivate)
+        {
+            return NativeMethods.E_NOTIMPL;
+        }
+
+        public int ResizeBorder(NativeMethods.RECT rect, IntPtr doc, Boolean FrameWindow)
+        {
+            return NativeMethods.E_NOTIMPL;
+        }
+
+        public int GetOptionKeyPath(out IntPtr pbstrKey, uint dw)
+        {
+            //use this to set your own app-specific preferences
+
+            //eg pbstrKey = Marshal.StringToBSTR("Software\\myapp\\mysettings\\mshtml");
+            pbstrKey = IntPtr.Zero;
+            return NativeMethods.S_OK;
+        }
+
+        public int GetDropTarget(IOleDropTarget pDropTarget, out IOleDropTarget ppDropTarget)
+        {
+            ppDropTarget = null;
+            return NativeMethods.E_NOTIMPL;
+        }
+
+
+        public int GetExternal(out object ppDispatch)
+        {
+            ppDispatch = null;
+
+            //Note from Jamie on this function:
+            //Gotta handle the cases where the htmlControl is dead and the htmlControl's parent is null.
+            //Wasn't handled before and was causing an error.
+            if (htmlControl == null)
             {
-				return NativeMethods.S_FALSE;
-			}
+                return NativeMethods.S_FALSE;
+            }
 
             ppDispatch = htmlControl.ExternalObject;
 
-			return NativeMethods.S_OK;
-		}
+            return NativeMethods.S_OK;
+        }
 
-		public int TranslateAccelerator(NativeMethods.MSG msg, ref Guid group, int nCmdID) {
-			return NativeMethods.S_FALSE;
-		}
+        public int TranslateAccelerator(NativeMethods.MSG msg, ref Guid group, int nCmdID)
+        {
+            return NativeMethods.S_FALSE;
+        }
 
-		public int TranslateUrl(int dwTranslate, String strURLIn, out String pstrURLOut) 
+        public int TranslateUrl(int dwTranslate, String strURLIn, out String pstrURLOut)
         {
             pstrURLOut = null;
 
@@ -925,7 +940,7 @@ namespace ShipWorks.UI.Controls.Html.Core
             }
 
             //if scripts are disabled we can't navigate to javascript links
-            else if ((e.Target.StartsWith("javascript")) & (!htmlControl.AllowActiveContent))
+            else if ((e.Target.StartsWith("javascript")) && (!htmlControl.AllowActiveContent))
             {
                 pstrURLOut = null;
                 translated = true;
@@ -958,158 +973,182 @@ namespace ShipWorks.UI.Controls.Html.Core
             {
                 return NativeMethods.S_FALSE; //False = not translated.
             }
-		}
+        }
 
-		public int FilterDataObject(IOleDataObject pDO, out IOleDataObject ppDORet) {
-			ppDORet = null;
-			return NativeMethods.E_NOTIMPL;
-		}
-		#endregion
+        public int FilterDataObject(IOleDataObject pDO, out IOleDataObject ppDORet)
+        {
+            ppDORet = null;
+            return NativeMethods.E_NOTIMPL;
+        }
+        #endregion
 
-		#region IDocHostShowUI
-		/*
+        #region IDocHostShowUI
+        /*
 		* A host can supply mechanisms that will 
 		* show message boxes and Help 
 		* by implementing the IDocHostShowUI interface
 		*/
-		int IDocHostShowUI.ShowMessage(IntPtr hwnd,String lpStrText,
-				String lpstrCaption,uint dwType,String lpHelpFile,
-				uint dwHelpContext,IntPtr lpresult) {
-			return NativeMethods.E_NOTIMPL; 
-		}
+        int IDocHostShowUI.ShowMessage(IntPtr hwnd, String lpStrText,
+                String lpstrCaption, uint dwType, String lpHelpFile,
+                uint dwHelpContext, IntPtr lpresult)
+        {
+            return NativeMethods.E_NOTIMPL;
+        }
 
-		int IDocHostShowUI.ShowHelp(IntPtr hwnd,String lpHelpFile,
-				uint uCommand,uint dwData, NativeMethods.POINT ptMouse,
-				Object pDispatchObjectHit) {
-			return NativeMethods.E_NOTIMPL;
-		}
-		#endregion
+        int IDocHostShowUI.ShowHelp(IntPtr hwnd, String lpHelpFile,
+                uint uCommand, uint dwData, NativeMethods.POINT ptMouse,
+                Object pDispatchObjectHit)
+        {
+            return NativeMethods.E_NOTIMPL;
+        }
+        #endregion
 
-		#region IOleServiceProvider
+        #region IOleServiceProvider
 
-		/*
+        /*
 		* Defines a mechanism for retrieving a service object; 
 		* that is, an object that provides custom support to other objects
 		*/
-		public int QueryService(ref Guid sid, ref Guid iid, out IntPtr ppvObject) {
-			int hr = NativeMethods.E_NOINTERFACE;
-			System.Guid iid_htmledithost = new System.Guid("3050f6a0-98b5-11cf-bb82-00aa00bdce0b");
-			System.Guid sid_shtmledithost = new System.Guid("3050F6A0-98B5-11CF-BB82-00AA00BDCE0B");
-				
+        public int QueryService(ref Guid sid, ref Guid iid, out IntPtr ppvObject)
+        {
+            int hr = NativeMethods.E_NOINTERFACE;
+            System.Guid iid_htmledithost = new System.Guid("3050f6a0-98b5-11cf-bb82-00aa00bdce0b");
+            System.Guid sid_shtmledithost = new System.Guid("3050F6A0-98B5-11CF-BB82-00AA00BDCE0B");
 
-			if ((sid == sid_shtmledithost) & (iid == iid_htmledithost)) 
+
+            if ((sid == sid_shtmledithost) && (iid == iid_htmledithost))
             {
-				ppvObject = Marshal.GetComInterfaceForObject(CreateHtmlEditHost(), typeof(HtmlApi.IHTMLEditHost));
-				if (ppvObject != IntPtr.Zero ) {
-					hr = NativeMethods.S_OK;
-				}
+                ppvObject = Marshal.GetComInterfaceForObject(CreateHtmlEditHost(), typeof(HtmlApi.IHTMLEditHost));
+                if (ppvObject != IntPtr.Zero)
+                {
+                    hr = NativeMethods.S_OK;
+                }
 
-			}
-			else {
-				ppvObject = IntPtr.Zero;
-			}
+            }
+            else
+            {
+                ppvObject = IntPtr.Zero;
+            }
 
-			return hr;
+            return hr;
 
 
-//			int hr = NativeMethods.E_NOINTERFACE;
-//			ppvObject = IntPtr.Zero;
+            //			int hr = NativeMethods.E_NOINTERFACE;
+            //			ppvObject = IntPtr.Zero;
 
-//			object service = htmlControl.GetService(ref sid);
-//			if (service != null) {
-//			    if (iid.Equals(Interop.IID_IUnknown)) {
-//			        ppvObject = Marshal.GetIUnknownForObject(service);
-//			    }
-//			    else {
-//			        IntPtr pUnk = Marshal.GetIUnknownForObject(service);
-//
-//			        hr = Marshal.QueryInterface(pUnk, ref iid, out ppvObject);
-//			        Marshal.Release(pUnk);
-//			    }
-//			}
+            //			object service = htmlControl.GetService(ref sid);
+            //			if (service != null) {
+            //			    if (iid.Equals(Interop.IID_IUnknown)) {
+            //			        ppvObject = Marshal.GetIUnknownForObject(service);
+            //			    }
+            //			    else {
+            //			        IntPtr pUnk = Marshal.GetIUnknownForObject(service);
+            //
+            //			        hr = Marshal.QueryInterface(pUnk, ref iid, out ppvObject);
+            //			        Marshal.Release(pUnk);
+            //			    }
+            //			}
 
-//			return hr;
-		}
-		#endregion
+            //			return hr;
+        }
+        #endregion
 
-		#region IHTMLEditDesigner change the IE editor's default behavior
-		// IHTMLEditDesigner
-		/*
+        #region IHTMLEditDesigner change the IE editor's default behavior
+        // IHTMLEditDesigner
+        /*
 			 * This custom interface provides methods that enable clients using the editor 
 			 * to intercept Microsoft® Internet Explorer events 
 			 * so that they can change the editor's default behavior
 			 * */
-		int HtmlApi.IHTMLEditDesigner.PreHandleEvent(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj) {			
-            if (Document != null) {
-				HtmlApi.IHTMLDocument2 doc = (HtmlApi.IHTMLDocument2) Document;
-
-
-				switch (inEvtDispID) {
-					case HtmlApi.DISPID_KEYDOWN:
-						//Need to trap Del here
-						if (pIEventObj.KeyCode == 9) {
-							htmlControl.InvokeTab();
-							return NativeMethods.S_OK;
-						} else if (pIEventObj.KeyCode == 46) {
-							doc.ExecCommand("Delete", false, null);
-							return NativeMethods.S_OK;
-						} else if (pIEventObj.CtrlKey) {
-							System.Diagnostics.Debug.WriteLine(pIEventObj.KeyCode);
-							if (pIEventObj.KeyCode >= 48 && pIEventObj.KeyCode <=57)
-								htmlControl.DoShortCut((Keys) pIEventObj.KeyCode);
-						}
-						break;
-				}
-			}
-				
-			return NativeMethods.S_FALSE;
-		}
-
-		int HtmlApi.IHTMLEditDesigner.PostHandleEvent(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj) {
-			return NativeMethods.S_FALSE;
-		}
-
-		int HtmlApi.IHTMLEditDesigner.TranslateAccelerator(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj) {		
-			return NativeMethods.S_FALSE;
-		}
-
-		int HtmlApi.IHTMLEditDesigner.PostEditorEventNotify(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj) {
-			return NativeMethods.S_FALSE;
-		}
-		#endregion IHTMLEditDesigner ================
-
-		#region IAdviseSink Members
-        public void OnDataChange(OleApi.FORMATETC pFormatetc, OleApi.STGMEDIUM pStgmed)
+        int HtmlApi.IHTMLEditDesigner.PreHandleEvent(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj)
         {
-			// TODO:  Add HtmlSite.OnDataChange implementation
-		}
+            if (Document != null)
+            {
+                HtmlApi.IHTMLDocument2 doc = (HtmlApi.IHTMLDocument2) Document;
 
-		public void OnViewChange(int dwAspect, int lindex) {
-			// TODO:  Add HtmlSite.OnViewChange implementation
-		}
 
-		public void OnRename(IMoniker pmk) {
-			// TODO:  Add HtmlSite.OnRename implementation
-		}
+                switch (inEvtDispID)
+                {
+                    case HtmlApi.DISPID_KEYDOWN:
+                        //Need to trap Del here
+                        if (pIEventObj.KeyCode == 9)
+                        {
+                            htmlControl.InvokeTab();
+                            return NativeMethods.S_OK;
+                        }
+                        else if (pIEventObj.KeyCode == 46)
+                        {
+                            doc.ExecCommand("Delete", false, null);
+                            return NativeMethods.S_OK;
+                        }
+                        else if (pIEventObj.CtrlKey)
+                        {
+                            System.Diagnostics.Debug.WriteLine(pIEventObj.KeyCode);
+                            if (pIEventObj.KeyCode >= 48 && pIEventObj.KeyCode <= 57)
+                                htmlControl.DoShortCut((Keys) pIEventObj.KeyCode);
+                        }
+                        break;
+                }
+            }
 
-		public void OnSave() {
-			// TODO:  Add HtmlSite.OnSave implementation
-		}
-
-		public void OnClose() {
-			// TODO:  Add HtmlSite.OnClose implementation
-		}
-		#endregion
-
-		#region IPropertyNotifySink Members
-
-		public void OnChanged(int dispID) {
-			if (dispID == HtmlApi.DISPID_READYSTATE) {
-				htmlControl.OnReadyStateChanged();
-			}
+            return NativeMethods.S_FALSE;
         }
 
-		public void OnRequestEdit(int dispID) {
+        int HtmlApi.IHTMLEditDesigner.PostHandleEvent(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj)
+        {
+            return NativeMethods.S_FALSE;
+        }
+
+        int HtmlApi.IHTMLEditDesigner.TranslateAccelerator(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj)
+        {
+            return NativeMethods.S_FALSE;
+        }
+
+        int HtmlApi.IHTMLEditDesigner.PostEditorEventNotify(int inEvtDispID, HtmlApi.IHTMLEventObj pIEventObj)
+        {
+            return NativeMethods.S_FALSE;
+        }
+        #endregion IHTMLEditDesigner ================
+
+        #region IAdviseSink Members
+        public void OnDataChange(OleApi.FORMATETC pFormatetc, OleApi.STGMEDIUM pStgmed)
+        {
+            // TODO:  Add HtmlSite.OnDataChange implementation
+        }
+
+        public void OnViewChange(int dwAspect, int lindex)
+        {
+            // TODO:  Add HtmlSite.OnViewChange implementation
+        }
+
+        public void OnRename(IMoniker pmk)
+        {
+            // TODO:  Add HtmlSite.OnRename implementation
+        }
+
+        public void OnSave()
+        {
+            // TODO:  Add HtmlSite.OnSave implementation
+        }
+
+        public void OnClose()
+        {
+            // TODO:  Add HtmlSite.OnClose implementation
+        }
+        #endregion
+
+        #region IPropertyNotifySink Members
+
+        public void OnChanged(int dispID)
+        {
+            if (dispID == HtmlApi.DISPID_READYSTATE)
+            {
+                htmlControl.OnReadyStateChanged();
+            }
+        }
+
+        public void OnRequestEdit(int dispID)
+        {
 
         }
 

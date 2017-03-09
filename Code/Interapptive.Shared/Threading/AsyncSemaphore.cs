@@ -14,7 +14,7 @@ namespace Interapptive.Shared.Threading
     /// we can use when we upgrade eventually.</remarks>
     public class AsyncSemaphore
     {
-        private readonly static Task<bool> completedTask = TaskEx.FromResult(true);
+        private readonly static Task<bool> completedTask = Task.FromResult(true);
         private readonly Queue<TaskCompletionSource<bool>> waiters = new Queue<TaskCompletionSource<bool>>();
         private int currentCount;
 
@@ -67,9 +67,9 @@ namespace Interapptive.Shared.Threading
         /// </summary>
         private Task<bool> CreateTimeoutTask(int timeout, Task<bool> waiter)
         {
-            var delayer = TaskEx.Delay(timeout).ContinueWith(x => false);
+            var delayer = Task.Delay(timeout).ContinueWith(x => false);
 
-            return TaskEx.WhenAny(waiter, delayer)
+            return Task.WhenAny(waiter, delayer)
                 .ContinueWith(x => x.Result.Result);
         }
 

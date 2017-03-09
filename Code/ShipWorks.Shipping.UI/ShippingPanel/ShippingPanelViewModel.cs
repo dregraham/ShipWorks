@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;

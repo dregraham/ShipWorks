@@ -1,12 +1,12 @@
-﻿using Autofac.Features.Indexed;
+﻿using System;
+using System.Collections.Generic;
+using Autofac.Features.Indexed;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
-using System;
-using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
             ) : base(store)
         {
 
-            sparkPayStore = (SparkPayStoreEntity)store;
+            sparkPayStore = (SparkPayStoreEntity) store;
 
             this.downloaderFactory = downloaderFactory;
             this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 SetupComplete = false,
                 Edition = "",
 
-                TypeCode = (int)StoreTypeCode.SparkPay,
+                TypeCode = (int) StoreTypeCode.SparkPay,
                 CountryCode = "US",
 
                 AutoDownload = false,
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
                 DefaultEmailAccountID = -1,
 
-                AddressValidationSetting = (int)AddressValidationStoreSettingType.ValidateAndApply,
+                AddressValidationSetting = (int) AddressValidationStoreSettingType.ValidateAndApply,
 
                 Token = "",
                 StoreUrl = "",
@@ -102,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         {
             if (sparkPayStore == null)
             {
-                throw new NullReferenceException("Non SparkPay store passed to SparkPay license identifier");
+                throw new InvalidOperationException("Non SparkPay store passed to SparkPay license identifier");
             }
 
             return onlineUpdateInstanceCommandsFactory(sparkPayStore).Create();
@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Get a list of supported online SparkPay statuses
         /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices() => statusCodeProviderFactory((SparkPayStoreEntity)store).CodeNames;
+        public override ICollection<string> GetOnlineStatusChoices() => statusCodeProviderFactory((SparkPayStoreEntity) store).CodeNames;
 
         /// <summary>
         /// Indicates if the StoreType supports the display of the given "Online" column.

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericModule;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
-using ShipWorks.Stores.Platforms.Magento.WebServices;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.ComponentRegistration;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Magento.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
     /// <summary>
     /// Class for communicating with MagentoConnect module
     /// </summary>
-    [Component]
+    [Component(RegisterAs = RegistrationType.Self)]
     public class MagentoConnectWebClient : MagentoWebClient
     {
         // SOAP proxy

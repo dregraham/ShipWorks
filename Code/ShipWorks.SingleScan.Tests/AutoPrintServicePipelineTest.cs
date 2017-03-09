@@ -15,6 +15,7 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.SingleScan.Tests
 {
@@ -54,8 +55,7 @@ namespace ShipWorks.SingleScan.Tests
 
             Assert.True(testObject.IsListeningForScans);
         }
-
-
+        
         [Fact]
         public void IsListeningForScans_ReturnsFalse_WhenScanReceivedAndAutoPrintIsOn()
         {
@@ -97,6 +97,8 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S112: Exception should not be thrown by user code",
+            Justification = "General exception is just meant as a throwaway for testing")]
         public void SavesShipmentsThatFailedToProcess()
         {
             Mock<ISqlAdapter> sqlAdapter = MockSqlAdapter();

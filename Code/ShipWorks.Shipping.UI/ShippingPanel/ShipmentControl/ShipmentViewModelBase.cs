@@ -8,7 +8,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -51,6 +51,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Constructor
         /// </summary>
+        [SuppressMessage("Microsoft", "RECS0021: Virtual member call in constructor",
+            Justification = "This existed before upgrading to .NET 4.6. It should be addressed eventually")]
         public ShipmentViewModelBase(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory,
             IShipmentPackageTypesBuilderFactory shipmentPackageTypesBuilderFactory, IMessenger messenger,
             IDimensionsManager dimensionsManager,
@@ -436,12 +438,12 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             CustomsAllowed = shipmentAdapter?.CustomsAllowed == true;
 
-            if (!CustomsAllowed)
+            if (!CustomsAllowed || shipmentAdapter == null)
             {
                 return;
             }
 
-            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter.GetCustomsItemAdapters());
+            CustomsItems = new ObservableCollection<IShipmentCustomsItemAdapter>(shipmentAdapter?.GetCustomsItemAdapters());
 
             TotalCustomsValue = shipmentAdapter.Shipment.CustomsValue;
 

@@ -27,14 +27,20 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// Constructor
         /// </summary>
         /// <param name="order"></param>
-        public OrderAttribute(int order)
+        public OrderAttribute(Type service, int order)
         {
             Order = order;
+            Service = service;
         }
 
         /// <summary>
         /// Order of registration
         /// </summary>
         public int Order { get; set; }
+
+        /// <summary>
+        /// Type of registration for which to apply the order
+        /// </summary>
+        public Type Service { get; set; }
     }
 }

@@ -63,14 +63,14 @@ namespace ShipWorks.ApplicationCore.ComponentRegistration.Ordering
         /// Check if the instance has ordering metadata
         /// </summary>
         private static bool HasOrderingMetadata<TService>(Meta<TService> instance) =>
-            instance.Metadata.ContainsKey(OrderedRegistrationSource.OrderingMetadataKey);
+            instance.Metadata.ContainsKey(OrderedRegistrationSource.OrderingMetadataKey + typeof(TService).Name);
 
         /// <summary>
         /// Get the component order from metadata
         /// </summary>
         private static object GetOrderFromMetadata<TService>(Meta<TService> instance)
         {
-            object orderingFunction = instance.Metadata[OrderedRegistrationSource.OrderingMetadataKey];
+            object orderingFunction = instance.Metadata[OrderedRegistrationSource.OrderingMetadataKey + typeof(TService).Name];
             return ((Delegate) orderingFunction).DynamicInvoke(UnwrapValue(instance.Value));
         }
 

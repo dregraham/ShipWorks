@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Services;

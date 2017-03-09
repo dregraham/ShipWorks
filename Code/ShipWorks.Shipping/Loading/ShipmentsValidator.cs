@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Loading
             bool shouldValidate = storeManager.DoAnyStoresHaveAutomaticValidationEnabled();
             if (!shouldValidate)
             {
-                return TaskEx.FromResult(false);
+                return Task.FromResult(false);
             }
 
             IProgressReporter validationProgress = progressProvider.AddItem("Validate Shipment Addresses");
@@ -110,9 +110,9 @@ namespace ShipWorks.Shipping.Loading
                 log.Info($"Validating {itemCount} items on {ValidateAddressesTaskCount} thread(s)...");
 
                 // Start a number of tasks to do address validation.
-                await TaskEx
+                await Task
                     .WhenAll(Enumerable.Range(1, ValidateAddressesTaskCount)
-                        .Select(_ => TaskEx.Run(() => ValidateShipments(workProgress, shipmentsQueue, updateProgress)))
+                        .Select(_ => Task.Run(() => ValidateShipments(workProgress, shipmentsQueue, updateProgress)))
                     ).ConfigureAwait(false);
 
                 stopwatch.Stop();

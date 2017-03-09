@@ -298,7 +298,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             XPathNavigator xpath = xmlResponse.CreateNavigator();
             string error = XPathUtility.Evaluate(xpath, "//Error", string.Empty);
 
-            if (!error.Equals(string.Empty))
+            if (!string.IsNullOrEmpty(error))
             {
                 throw new ShipWorksLicenseException(error);
             }

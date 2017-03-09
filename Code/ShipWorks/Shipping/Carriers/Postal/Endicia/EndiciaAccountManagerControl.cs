@@ -8,7 +8,6 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ComponentRegistration;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -101,18 +100,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (account.Fields.State == EntityState.Fetched)
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                try
                 {
-                    ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClient>();
-
-                    try
-                    {
-                        result = (new PostageBalance(new EndiciaPostageWebClient(account), tangoWebClient)).Value.ToString("c");
-                    }
-                    catch (EndiciaException ex)
-                    {
-                        log.Error("Error updating grid with endicia account balance.", ex);
-                    }
+                    result = (new PostageBalance(new EndiciaPostageWebClient(account))).Value.ToString("c");
+                }
+                catch (EndiciaException ex)
+                {
+                    log.Error("Error updating grid with endicia account balance.", ex);
                 }
             }
 
@@ -154,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 add.Hide();
 
-                // Adjust the location of the remove button based on the visiblity of the add button and
+                // Adjust the location of the remove button based on the visibility of the add button and
                 // make sure it's on top of the add button.
                 remove.Top = add.Top;
                 remove.BringToFront();
@@ -217,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Remvoe the selected account
+        /// Remove the selected account
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {

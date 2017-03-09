@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Settings;
 
@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingAccountRequiredForRatingFootnoteViewModel(IWin32Window owner) 
+        public ShippingAccountRequiredForRatingFootnoteViewModel(IWin32Window owner)
         {
             this.owner = owner;
             ViewShippingSettings = new RelayCommand(ViewShippingSettingsAction);

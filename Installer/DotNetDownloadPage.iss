@@ -126,7 +126,7 @@ begin
     Caption :=
       'ShipWorks requires the Microsoft .NET Framework ' + GetSupportedDotNetVersion() + ', which is not installed on your computer.' + #13 +
       '' + #13 +
-      'Click Next to download it now (0.9 MB).';
+      'Click Next to download it now (62.4 MB).';
     Left := ScaleX(0);
     Top := ScaleY(0);
     Width := ScaleX(415);

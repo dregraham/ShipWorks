@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <preset name="SD.Presets.Adapter.ShipWorks" lastModifiedOn="2016-08-02T12:50:11.2047368-05:00" createdBy="" isSealed="false" xmlns="http://sd/llblgen/pro/presetElementDefinitions.xsd">
   <supportedPlatforms>
-    <platform name=".NET 3.5" />
-    <platform name=".NET 4.0" />
-    <platform name=".NET 4.5" />
-    <platform name=".NET 4.5.1" />
-    <platform name=".NET 4.5.2" />
     <platform name=".NET 4.6" />
     <platform name=".NET 4.6.1" />
   </supportedPlatforms>

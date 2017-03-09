@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;

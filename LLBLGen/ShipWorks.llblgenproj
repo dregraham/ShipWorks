@@ -92,7 +92,7 @@
         <DestinationRootFolder Value="..\Code\ShipWorks.Data.Model" />
         <FrameworkName Value="LLBLGen Pro Runtime Framework" />
         <LanguageName Value="C#" />
-        <PlatformName Value=".NET 4.0" />
+        <PlatformName Value=".NET 4.6" />
         <PresetName Value="SD.Presets.Adapter.ShipWorks" />
         <RootNamespace Value="ShipWorks.Data.Model" />
         <TemplateGroup Value="Adapter" />
@@ -100,7 +100,7 @@
           <Binding Name="SD.TemplateBindings.SharedTemplates" />
           <Binding Name="SD.TemplateBindings.SqlServerSpecific" />
           <Binding Name="ShipWorks" />
-          <Binding Name="SD.TemplateBindings.SharedTemplates.NET40" />
+          <Binding Name="SD.TemplateBindings.SharedTemplates.NET45x" />
           <Binding Name="SD.TemplateBindings.SharedTemplates.Deprecated" />
           <Binding Name="SD.TemplateBindings.General" />
         </TemplateBindings>

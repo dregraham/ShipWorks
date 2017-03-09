@@ -5,6 +5,9 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -168,6 +171,65 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
             testObject.ShipDate = testObject.ShipDate.AddDays(1);
 
             Assert.Equal(shipment.ShipDate, testObject.ShipDate);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateShipmentTypeDoesNotMatch()
+        {
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(false);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.BestRate);
+            });
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
+            var rate = new RateResult("Foo", "1", 0, 1) { ShipmentType = ShipmentTypeCode.None };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Signature)]
+        [InlineData(PostalServiceType.AsendiaGeneric, PostalConfirmationType.Delivery)]
+        [InlineData(PostalServiceType.FirstClass, PostalConfirmationType.Signature)]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenServiceAndConfirmationDoNotMatch(PostalServiceType serviceType, PostalConfirmationType confirmation)
+        {
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(false);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.BestRate);
+            });
+
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
+            var rate = new RateResult("Foo", "1", 0, new PostalRateSelection(serviceType, confirmation))
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void DoesRateMatchSelectedService_ReturnsFalse_WhenRateTagIsOtherObject()
+        {
+            mock.WithShipmentTypeFromShipmentManager(x =>
+            {
+                x.Setup(b => b.SupportsGetRates).Returns(false);
+                x.Setup(b => b.ShipmentTypeCode).Returns(ShipmentTypeCode.BestRate);
+            });
+
+            var testObject = mock.Create<BestRateShipmentAdapter>(TypedParameter.From(shipment));
+            var rate = new RateResult("Foo", "1", 0, "NOT A RATE")
+            {
+                ShipmentType = ShipmentTypeCode.Usps
+            };
+
+            var result = testObject.DoesRateMatchSelectedService(rate);
+
+            Assert.False(result);
         }
     }
 }

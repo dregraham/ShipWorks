@@ -202,7 +202,9 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
                 .As<Control>()
                 .As<IWin32Window>()
                 .ExternallyOwned();
+#pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(mock.Container);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>

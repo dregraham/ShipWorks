@@ -733,7 +733,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             EnumHelper.BindComboBox<FedExPayorType>(payorTransport, t => anyGround || t != FedExPayorType.Collect);
 
-            payorTransport.SelectedIndex = (oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
+            payorTransport.SelectedIndex = (oldIndex >= 0 && oldIndex < payorTransport.Items.Count) ? oldIndex : 0;
 
             updatingPayorChoices = false;
         }
