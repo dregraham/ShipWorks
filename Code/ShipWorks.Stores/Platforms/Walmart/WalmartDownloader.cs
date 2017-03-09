@@ -25,8 +25,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartOrderLoader walmartOrderLoader;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly WalmartStoreEntity walmartStore;
-        private int totalOrders;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
@@ -35,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             this.walmartWebClient = walmartWebClient;
             this.walmartOrderLoader = walmartOrderLoader;
-            this.sqlAdapter = sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download"); ;
+            this.sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download"); ;
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -55,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             }
 
             ordersListType ordersList = GetFirstBatch();
-            totalOrders = ordersList.meta.totalCount;
+            int totalOrders = ordersList.meta.totalCount;
 
             if (totalOrders == 0)
             {
@@ -158,7 +157,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
             {
                 return defaultStartingPoint.Value;
             }
-
         }
     }
 }
