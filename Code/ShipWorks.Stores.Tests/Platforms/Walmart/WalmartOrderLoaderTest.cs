@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void LoadOrder_ReloadsOrderCharges_WhenOrderIsNotNew()
+        public void LoadOrder_ResetsOrderCharges_WhenOrderIsNotNew()
         {
             orderEntity.IsNew = false;
             orderEntity.OrderCharges.Add(new OrderChargeEntity()
@@ -146,6 +146,40 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.NotEqual(orderEntity.OrderCharges.FirstOrDefault().Amount, 99);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsOrderCharges()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderCharges.Add(new OrderChargeEntity()
+            {
+                Amount = 99
+            });
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Random Charge").Amount, 123.121M);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsTax()
+        {
+            orderEntity.IsNew = false;
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Tax").Amount, 4.99M);
+        }
+
+        [Fact]
+        public void LoadOrder_LoadsRefunds()
+        {
+            orderEntity.IsNew = false;
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Refund").Amount, -7M);
         }
 
         /// <summary>
@@ -168,6 +202,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                         status = status
                     }
                 },
+                refund = new refundType
+                {
+                    refundCharges = new []
+                    {
+                        new refundChargeType
+                        {
+                            refundReason = reasonCodesType.BillingError,
+                            charge = new chargeType
+                            {
+                                chargeType1 = "refund",
+                                chargeAmount = new moneyType
+                                {
+                                    currency = currencyType.USD,
+                                    amount = -7M
+                                }
+                            }
+                        }
+                    }
+                },
                 charges = new[]
                 {
                     new chargeType
@@ -177,6 +230,33 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                         {
                             currency = currencyType.USD,
                             amount = 3.95M
+                        }
+                    },
+                    new chargeType
+                    {
+                        chargeType1 = "Random Charge",
+                        chargeAmount = new moneyType
+                        {
+                            currency = currencyType.USD,
+                            amount = 123.121M
+                        }
+                    },
+                    new chargeType
+                    {
+                        chargeType1 = "Random Tax",
+                        chargeAmount = new moneyType
+                        {
+                            currency = currencyType.USD,
+                            amount = 123.121M
+                        },
+                        tax = new taxType
+                        {
+                            taxName = "tax blah blah",
+                            taxAmount = new moneyType
+                            {
+                                currency = currencyType.USD,
+                                amount = 4.99M
+                            }
                         }
                     }
                 },
