@@ -23,18 +23,25 @@ namespace ShipWorks.Stores.Platforms.Walmart
     {
         private readonly IWalmartWebClient walmartWebClient;
         private readonly IWalmartOrderLoader walmartOrderLoader;
+        private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlAdapterRetry sqlAdapter;
         private readonly WalmartStoreEntity walmartStore;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
-        public WalmartDownloader(StoreEntity store, IWalmartWebClient walmartWebClient, ISqlAdapterRetryFactory sqlAdapterRetryFactory, IWalmartOrderLoader walmartOrderLoader)
+        public WalmartDownloader(StoreEntity store,
+            IWalmartWebClient walmartWebClient,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
+            IWalmartOrderLoader walmartOrderLoader,
+            IDateTimeProvider dateTimeProvider)
             : base(store)
         {
             this.walmartWebClient = walmartWebClient;
             this.walmartOrderLoader = walmartOrderLoader;
-            this.sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download"); ;
+            this.dateTimeProvider = dateTimeProvider;
+            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
+            
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -147,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         protected new DateTime GetOrderDateStartingPoint()
         {
             DateTime? defaultStartingPoint = base.GetOrderDateStartingPoint();
-            DateTime modifiedDaysBack = DateTime.UtcNow.AddDays(-walmartStore.DownloadModifiedNumberOfDaysBack);
+            DateTime modifiedDaysBack = dateTimeProvider.UtcNow.AddDays(-walmartStore.DownloadModifiedNumberOfDaysBack);
 
             if (defaultStartingPoint == null || modifiedDaysBack < defaultStartingPoint.Value)
             {

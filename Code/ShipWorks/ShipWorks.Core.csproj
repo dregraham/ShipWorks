@@ -8483,9 +8483,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ApplicationCore\Licensing\WSDL\Activation_v1.wsdl" />
-    <None Include="job_scheduling_data_2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
