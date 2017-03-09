@@ -92,6 +92,7 @@
                         <local:KeyboardShortcutDisplay Grid.Column="3" 
                                                        Visibility="{Binding AcceptApplyWeightKeyboardShortcut,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource BooleanToVisibility}}"
                                                        Margin="4,0,0,0" 
+                                                       VerticalAlignment="Center"
                                                        ShortcutCommand="ApplyWeight" />
                     </StackPanel>
                 </ControlTemplate>

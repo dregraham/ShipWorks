@@ -68,9 +68,9 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         {
             get
             {
-                return (Modifiers.HasFlag(KeyboardShortcutModifiers.Ctrl) ? "Ctrl-" : string.Empty) +
-                    (Modifiers.HasFlag(KeyboardShortcutModifiers.Alt) ? "Alt-" : string.Empty) +
-                    (Modifiers.HasFlag(KeyboardShortcutModifiers.Shift) ? "Shift-" : string.Empty) +
+                return (Modifiers.HasFlag(KeyboardShortcutModifiers.Ctrl) ? "Ctrl+" : string.Empty) +
+                    (Modifiers.HasFlag(KeyboardShortcutModifiers.Alt) ? "Alt+" : string.Empty) +
+                    (Modifiers.HasFlag(KeyboardShortcutModifiers.Shift) ? "Shift+" : string.Empty) +
                     ActionKey.ToString();
             }
         }

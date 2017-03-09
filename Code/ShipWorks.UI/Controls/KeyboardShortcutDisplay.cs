@@ -9,6 +9,7 @@ using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.UI.Controls
 {
@@ -57,6 +58,13 @@ namespace ShipWorks.UI.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                SetCurrentValue(DefaultShortcutProperty, "Ctrl+W");
+                SetCurrentValue(HasShortcutsProperty, true);
+                return;
+            }
 
             var translator = IoC.BeginLifetimeScope().Resolve<IKeyboardShortcutTranslator>();
             IEnumerable<string> shortcuts = translator.GetShortcuts(ShortcutCommand);

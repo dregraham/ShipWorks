@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         }
 
         [Theory]
-        [InlineData(KeyboardShortcutCommand.ApplyWeight, "Ctrl-W")]
+        [InlineData(KeyboardShortcutCommand.ApplyWeight, "Ctrl+W")]
         public void GetShortcuts_ReturnsText_ForDefaultShortcuts(KeyboardShortcutCommand command, string expected)
         {
             var testObject = mock.Create<KeyboardShortcutTranslator>();
@@ -147,14 +147,14 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
 
         [Theory]
         [InlineData("K", None, "K")]
-        [InlineData("K", Alt, "Alt-K")]
-        [InlineData("K", Ctrl, "Ctrl-K")]
-        [InlineData("K", Shift, "Shift-K")]
-        [InlineData("K", Alt | Ctrl, "Ctrl-Alt-K")]
-        [InlineData("K", Alt | Shift, "Alt-Shift-K")]
-        [InlineData("K", Ctrl | Shift, "Ctrl-Shift-K")]
-        [InlineData("K", Alt | Ctrl | Shift, "Ctrl-Alt-Shift-K")]
-        [InlineData("F2", Ctrl, "Ctrl-F2")]
+        [InlineData("K", Alt, "Alt+K")]
+        [InlineData("K", Ctrl, "Ctrl+K")]
+        [InlineData("K", Shift, "Shift+K")]
+        [InlineData("K", Alt | Ctrl, "Ctrl+Alt+K")]
+        [InlineData("K", Alt | Shift, "Alt+Shift+K")]
+        [InlineData("K", Ctrl | Shift, "Ctrl+Shift+K")]
+        [InlineData("K", Alt | Ctrl | Shift, "Ctrl+Alt+Shift+K")]
+        [InlineData("F2", Ctrl, "Ctrl+F2")]
         public void GetShortcuts_DisplaysShortcutAsExptected_ForVariousCombinations(string actionKey,
             KeyboardShortcutModifiers modifiers, string expected)
         {
