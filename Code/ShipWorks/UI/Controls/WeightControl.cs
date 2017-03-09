@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
@@ -102,7 +103,13 @@ namespace ShipWorks.UI.Controls
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) && 
                             Visible && 
                             AutoWeighShortCutsAllowed)
-                .Subscribe(_ => ApplyWeightFromScaleAsync());
+                .Subscribe(async _ =>
+                {
+                    if (await ApplyWeightFromScaleAsync())
+                    {
+                        textBox.FlashBackground(250, Color.LightGray, 7);
+                    }
+                });
         }
 
         /// <summary>
@@ -115,7 +122,7 @@ namespace ShipWorks.UI.Controls
             {
                 // Only display the first shortcut.  The rest will be in a tool tip.
                 applyWeightShortcutText = autoWeighShortcuts.FirstOrDefault();
-                applyWeightShortcutText = applyWeightShortcutText.IsNullOrWhiteSpace() ? string.Empty : $@"<{applyWeightShortcutText}>";
+                applyWeightShortcutText = applyWeightShortcutText.IsNullOrWhiteSpace() ? string.Empty : $@"({applyWeightShortcutText})";
 
                 // If there's more than 1 shortcut, put them in a tool tip.
                 if (autoWeighShortcuts.IsCountGreaterThan(1))
@@ -455,10 +462,11 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Grab the weight from the scale
         /// </summary>
-        private async Task ApplyWeightFromScaleAsync()
+        private async Task<bool> ApplyWeightFromScaleAsync()
         {
             Cursor.Current = Cursors.WaitCursor;
             weighButton.Enabled = false;
+            bool appliedWeight = false;
 
             ScaleReadResult result = await ScaleReader.ReadScale();
 
@@ -474,6 +482,7 @@ namespace ShipWorks.UI.Controls
                     FormatWeightText(newWeight);
                     SetCurrentWeight(newWeight);
                     ClearError();
+                    appliedWeight = true;
                 }
                 else
                 {
@@ -486,6 +495,7 @@ namespace ShipWorks.UI.Controls
             }
 
             weighButton.Enabled = true;
+            return appliedWeight;
         }
 
         /// <summary>

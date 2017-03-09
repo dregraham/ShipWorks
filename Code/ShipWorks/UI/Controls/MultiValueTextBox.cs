@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
-using Interapptive.Shared;
+using System.Threading;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.UI.Controls
@@ -13,6 +13,7 @@ namespace ShipWorks.UI.Controls
     public class MultiValueTextBox : TextBox
     {
         private bool isMultiValued = false;
+        private bool currentlyFlashing = false;
 
         /// <summary>
         /// Constructor
@@ -135,6 +136,44 @@ namespace ShipWorks.UI.Controls
             base.OnLeave(e);
 
             Invalidate();
+        }
+
+        /// <summary>
+        /// Flashes the text box background color to signal the user that something happened.
+        /// </summary>
+        /// <param name="textBox">This text box.</param>
+        /// <param name="interval">Cycle time, measured in milliseconds </param>
+        /// <param name="flashBackgroundColor">Color to change the background during the flashing</param>
+        /// <param name="flashes">Number of flashes</param>
+        public void FlashBackground(int interval, Color flashBackgroundColor, int flashes)
+        {
+            if (currentlyFlashing)
+            {
+                return;
+            }
+
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => FlashBackground(interval, flashBackgroundColor, flashes)));
+                return;
+            }
+
+            currentlyFlashing = true;
+            Color original = BackColor;
+
+            for (int i = 0; i < flashes; i++)
+            {
+                BackColor = flashBackgroundColor;
+                Application.DoEvents();
+                Thread.Sleep(interval / 2);
+
+                BackColor = original;
+                Application.DoEvents();
+                Thread.Sleep(interval / 2);
+            }
+
+            currentlyFlashing = false;
+            BackColor = original;
         }
     }
 }
