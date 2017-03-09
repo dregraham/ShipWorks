@@ -160,7 +160,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private static void OnMaxWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            double existingWeight = (double) d.GetValue(WeightProperty); ;
+            double existingWeight = (double) d.GetValue(WeightProperty);
             double newValue = (double) e.NewValue;
 
             if (newValue < existingWeight)
