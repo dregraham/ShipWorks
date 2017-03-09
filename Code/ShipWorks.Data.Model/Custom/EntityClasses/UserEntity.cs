@@ -61,12 +61,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Create the pre-fetch path used to load user related table(s)
         /// </summary>
-        public static IPrefetchPath2 FullPrefetchPath
-        {
-            get
-            {
-                return fullPrefetchPath.Value;
-            }
-        }
+        public static IPrefetchPath2 FullPrefetchPath => fullPrefetchPath.Value;
     }
 }
