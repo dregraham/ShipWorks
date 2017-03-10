@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             testObject.GetOrders(store, "nextCursorValue");
 
-            mock.Mock<IWalmartRequestSigner>().Verify(s => s.Sign(requestSubmitter.Object, store, It.IsAny<string>()));
+            mock.Mock<IWalmartRequestSigner>().Verify(s => s.Sign(requestSubmitter.Object, store));
         }
 
         [Fact]

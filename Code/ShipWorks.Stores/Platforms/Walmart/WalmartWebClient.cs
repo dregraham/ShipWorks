@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +8,6 @@ using ShipWorks.Stores.Platforms.Walmart.DTO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
-using ShipWorks.ApplicationCore;
 using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Walmart
@@ -64,10 +61,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
             submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
             submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", store.ChannelType);
             submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-
-            string epoch = (DateTimeUtility.ToUnixTimestamp(DateTime.UtcNow) * 1000).ToString(CultureInfo.InvariantCulture);
-
-            requestSigner.Sign(submitter, store, epoch);
+            
+            requestSigner.Sign(submitter, store);
 
             try
             {

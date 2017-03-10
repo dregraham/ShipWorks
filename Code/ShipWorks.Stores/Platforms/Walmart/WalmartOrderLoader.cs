@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
@@ -70,58 +72,55 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Loads the other charges.
         /// </summary>
-        private void LoadOtherCharges(orderLineType[] downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
+        private void LoadOtherCharges(IEnumerable<orderLineType> downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
         {
-            var otherCharges = downloadedOrderOrderLines.SelectMany(orderLine => orderLine.charges)
+            // Get all the non-zero charges where the type is not "PRODUCT" and create an
+            // order charge for each charge type.
+            downloadedOrderOrderLines.SelectMany(orderLine => orderLine.charges)
                 .Where(charge => charge.chargeType1 != "PRODUCT" && charge.chargeAmount.amount != 0)
-                .GroupBy(charge => new { charge.chargeType1, charge.chargeName }, charge => charge.chargeAmount.amount)
-                .Select(chargeGroup => new { Type = chargeGroup.Key.chargeType1, Name = chargeGroup.Key.chargeName, Amount = chargeGroup.Sum() });
-
-            foreach (var otherCharge in otherCharges)
-            {
-                InstantiateOrderCharge(orderToSave, otherCharge.Type, otherCharge.Name, otherCharge.Amount);
-            }
+                .GroupBy(charge => new {charge.chargeType1, charge.chargeName}, charge => charge.chargeAmount.amount)
+                .ForEach(group => InstantiateOrderCharge(orderToSave, group.Key.chargeType1, group.Key.chargeName, group.Sum()));
         }
 
         /// <summary>
         /// Loads the tax.
         /// </summary>
-        private void LoadTax(orderLineType[] orderLines, WalmartOrderEntity orderToSave)
+        private void LoadTax(IEnumerable<orderLineType> orderLines, WalmartOrderEntity orderToSave)
         {
-            var taxCharges = orderLines.SelectMany(orderLine => orderLine.charges)
+            // Get all the charges with tax and create an order charge for the total tax of each taxName.
+            orderLines.SelectMany(orderLine => orderLine.charges)
                 .Where(c => c.tax != null && c.tax.taxAmount.amount != 0)
                 .GroupBy(c => c.tax.taxName, c => c.tax.taxAmount.amount)
-                .Select(taxGroup => new { Name = taxGroup.Key, Value = taxGroup.Sum() });
-
-            foreach (var taxCharge in taxCharges)
-            {
-                InstantiateOrderCharge(orderToSave, "Tax", taxCharge.Name, taxCharge.Value);
-            }
+                .ForEach(taxGroup=>InstantiateOrderCharge(orderToSave, "Tax", taxGroup.Key, taxGroup.Sum()));
         }
 
         /// <summary>
         /// Loads the refunds.
         /// </summary>
-        private void LoadRefunds(orderLineType[] orderLines, WalmartOrderEntity orderToSave)
+        private void LoadRefunds(IEnumerable<orderLineType> orderLines, WalmartOrderEntity orderToSave)
         {
-            var refunds = orderLines.Select(orderLine => orderLine.refund)
+            // Get all refunds, group by reason. 
+            // Create order charges for the total chargeAmount and tax for each refund reason.
+            orderLines.Select(orderLine => orderLine.refund)
                 .Where(refund => refund != null)
                 .SelectMany(refund => refund.refundCharges)
-                .GroupBy(c => c.refundReason, c => new { c.charge.chargeAmount, c.charge.tax?.taxAmount.amount })
-                .Select(refundGroup => new { Name = refundGroup.Key, TotalRefund = refundGroup.Sum(group => group.chargeAmount.amount), TotalTaxRefund = refundGroup.Sum(group => group.amount.GetValueOrDefault(0)) });
-
-            foreach (var refund in refunds)
-            {
-                if (refund.TotalRefund < 0)
+                .GroupBy(c => c.refundReason, c => new {c.charge.chargeAmount, c.charge.tax?.taxAmount.amount})
+                .ForEach(refundGroup =>
                 {
-                    InstantiateOrderCharge(orderToSave, "Refund", refund.Name.ToString(), refund.TotalRefund);
-                }
+                    string name = refundGroup.Key.ToString();
+                    decimal totalRefund = refundGroup.Sum(group => group.chargeAmount.amount);
+                    decimal totalTaxRefund = refundGroup.Sum(group => group.amount.GetValueOrDefault(0));
 
-                if (refund.TotalTaxRefund < 0)
-                {
-                    InstantiateOrderCharge(orderToSave, "Refunded Tax", refund.Name.ToString(), refund.TotalTaxRefund);
-                }
-            }
+                    if (totalRefund < 0)
+                    {
+                        InstantiateOrderCharge(orderToSave, "Refund", name.ToString(), totalRefund);
+                    }
+
+                    if (totalTaxRefund < 0)
+                    {
+                        InstantiateOrderCharge(orderToSave, "Refunded Tax", name.ToString(), totalTaxRefund);
+                    }
+                });
         }
 
         /// <summary>

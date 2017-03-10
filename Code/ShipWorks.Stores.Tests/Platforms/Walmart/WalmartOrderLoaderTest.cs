@@ -2,10 +2,8 @@
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Moq;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,9 +14,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
     {
         private readonly AutoMock mock;
         private readonly IWalmartOrderLoader testObject;
-
-        private WalmartOrderEntity orderEntity;
-        private Order orderDto;
+        private readonly WalmartOrderEntity orderEntity;
+        private readonly Order orderDto;
 
         public WalmartOrderLoaderTest()
         {
@@ -180,6 +177,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(orderEntity.OrderCharges.FirstOrDefault(c => c.Type == "Refund").Amount, -7M);
+        }
+
+        [Fact]
+        public void LoadOrder_DelegatesToCalculateTotal()
+        {
+            orderEntity.IsNew = false;
+            mock.Mock<IOrderChargeCalculator>()
+                .Setup(c => c.CalculateTotal(orderEntity))
+                .Returns(3.50M);
+            orderEntity.OrderTotal = 0;
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            mock.Mock<IOrderChargeCalculator>()
+                .Verify(c => c.CalculateTotal(orderEntity), Times.Once);
+
+            Assert.Equal(3.50M, orderEntity.OrderTotal);
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using Org.BouncyCastle.Security;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using System.Globalization;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -18,21 +19,24 @@ namespace ShipWorks.Stores.Platforms.Walmart
     public class WalmartRequestSigner : IWalmartRequestSigner
     {
         private readonly IEncryptionProvider encryptionProvider;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartRequestSigner"/> class.
         /// </summary>
         /// <param name="encryptionProviderFactory">The encryption provider factory.</param>
-        public WalmartRequestSigner(IEncryptionProviderFactory encryptionProviderFactory)
+        public WalmartRequestSigner(IEncryptionProviderFactory encryptionProviderFactory, IDateTimeProvider dateTimeProvider)
         {
             encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
         /// Signs the given request with the timestamp and generated signature
         /// </summary>
-        public void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store, string epoch)
+        public void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store)
         {
+            string epoch = (dateTimeProvider.Epoc * 1000).ToString(CultureInfo.InvariantCulture);
             RsaKeyParameters rsaKeyParameter;
             try
             {

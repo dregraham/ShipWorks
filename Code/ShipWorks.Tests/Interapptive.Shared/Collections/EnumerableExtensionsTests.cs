@@ -290,5 +290,18 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             testObject.Setup(x => x.GetEnumerator()).Throws<InvalidOperationException>();
             Assert.Equal(ComparisonResult.Equal, testObject.Object.CompareCountTo(3));
         }
+
+        [Fact]
+        public void ForEach_CallsActionForEachItem()
+        {
+            var enumerable = Enumerable.Range(0, 3);
+            List<int> numbersInEnumerable = new List<int>();
+            enumerable.ForEach(i=>numbersInEnumerable.Add(i));
+
+            Assert.Equal(3, numbersInEnumerable.Count);
+            Assert.Contains(0, numbersInEnumerable);
+            Assert.Contains(1, numbersInEnumerable);
+            Assert.Contains(2, numbersInEnumerable);
+        }
     }
 }
