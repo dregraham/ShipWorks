@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Autofac;
-using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
@@ -21,17 +18,9 @@ namespace ShipWorks.UI.Controls
         public static readonly DependencyProperty ShortcutCommandProperty =
             DependencyProperty.Register("ShortcutCommand", typeof(KeyboardShortcutCommand), typeof(KeyboardShortcutDisplay));
 
-        public static readonly DependencyProperty DefaultShortcutProperty =
-            DependencyProperty.Register("DefaultShortcut", typeof(string), typeof(KeyboardShortcutDisplay));
-
-        public static readonly DependencyProperty AllShortcutsProperty =
-            DependencyProperty.Register("AllShortcuts", typeof(IEnumerable<string>), typeof(KeyboardShortcutDisplay));
-
-        public static readonly DependencyProperty HasShortcutsProperty =
-            DependencyProperty.Register("HasShortcuts", typeof(bool), typeof(KeyboardShortcutDisplay));
-
-        public static readonly DependencyProperty HasAdditionalShortcutsProperty =
-            DependencyProperty.Register("HasAdditionalShortcuts", typeof(bool), typeof(KeyboardShortcutDisplay));
+        public static readonly DependencyProperty ShortcutSummaryProperty =
+            DependencyProperty.Register("ShortcutSummary", typeof(KeyboardShortcutCommandSummary),
+                typeof(KeyboardShortcutDisplay));
 
         /// <summary>
         /// Constructor
@@ -61,18 +50,12 @@ namespace ShipWorks.UI.Controls
 
             if (DesignModeDetector.IsDesignerHosted())
             {
-                SetCurrentValue(DefaultShortcutProperty, "Ctrl+W");
-                SetCurrentValue(HasShortcutsProperty, true);
+                SetCurrentValue(ShortcutSummaryProperty, new KeyboardShortcutCommandSummary(KeyboardShortcutCommand.ApplyWeight, new[] { "Ctrl-W" }));
                 return;
             }
 
             var translator = IoC.BeginLifetimeScope().Resolve<IKeyboardShortcutTranslator>();
-            IEnumerable<string> shortcuts = translator.GetShortcuts(ShortcutCommand);
-
-            SetCurrentValue(DefaultShortcutProperty, shortcuts.FirstOrDefault());
-            SetCurrentValue(HasShortcutsProperty, shortcuts.Any());
-            SetCurrentValue(AllShortcutsProperty, shortcuts);
-            SetCurrentValue(HasAdditionalShortcutsProperty, shortcuts.IsCountGreaterThan(1));
+            SetCurrentValue(ShortcutSummaryProperty, translator.GetShortcuts(ShortcutCommand));
         }
     }
 }

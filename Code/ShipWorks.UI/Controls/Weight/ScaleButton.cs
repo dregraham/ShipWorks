@@ -118,7 +118,8 @@ namespace ShipWorks.UI.Controls.Weight
 
             if (AcceptApplyWeightKeyboardShortcut)
             {
-                ToolTip = string.Join(" or ", IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>().GetShortcuts(KeyboardShortcutCommand.ApplyWeight).ToArray());
+                ToolTip = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>()
+                    .GetShortcuts(KeyboardShortcutCommand.ApplyWeight).FormattedShortcutList;
             }
         }
 

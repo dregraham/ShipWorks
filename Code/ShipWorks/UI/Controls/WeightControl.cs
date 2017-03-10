@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -9,9 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.IO.Hardware.Scales;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.IO.KeyboardShortcuts;
@@ -54,7 +51,7 @@ namespace ShipWorks.UI.Controls
 
         private bool showShortcutInfo = false;
         private IKeyboardShortcutTranslator keyboardShortcutTranslator = null;
-        private IEnumerable<string> autoWeighShortcuts;
+        private KeyboardShortcutCommandSummary autoWeighShortcuts;
         private string applyWeightShortcutText = string.Empty;
         private IDisposable keyboardShortcutSubscription;
 
@@ -121,29 +118,24 @@ namespace ShipWorks.UI.Controls
             if (AutoWeighShortCutsAllowed)
             {
                 // Only display the first shortcut.  The rest will be in a tool tip.
-                applyWeightShortcutText = autoWeighShortcuts.FirstOrDefault();
-                applyWeightShortcutText = applyWeightShortcutText.IsNullOrWhiteSpace() ? string.Empty : $@"({applyWeightShortcutText})";
+                applyWeightShortcutText = autoWeighShortcuts.Shortcuts.Any() ? $"({autoWeighShortcuts.DefaultShortcut})" : string.Empty;
 
-                // If there's more than 1 shortcut, put them in a tool tip.
-                if (autoWeighShortcuts.IsCountGreaterThan(1))
+                ToolTip autoWeighShortcutsToolTip = new ToolTip
                 {
-                    ToolTip autoWeighShortcutsToolTip = new ToolTip
-                    {
-                        ToolTipIcon = ToolTipIcon.Info,
-                        ShowAlways = true,
-                        ToolTipTitle = "Keyboard shortcut keys for applying weight."
-                    };
-                    autoWeighShortcutsToolTip.SetToolTip(liveWeight, string.Join(Environment.NewLine, autoWeighShortcuts));
-                }
+                    ToolTipIcon = ToolTipIcon.Info,
+                    ShowAlways = true,
+                    ToolTipTitle = $"{autoWeighShortcuts.Description}:"
+                };
+                autoWeighShortcutsToolTip.SetToolTip(liveWeight, autoWeighShortcuts.FormattedShortcutList);
 
-                weighButton.ToolTipText = string.Join(" or ", autoWeighShortcuts.ToArray());
+                weighButton.ToolTipText = autoWeighShortcuts.FormattedShortcutList;
             }
         }
 
         /// <summary>
         /// Should we concern ourselves with autoweigh shortcuts
         /// </summary>
-        private bool AutoWeighShortCutsAllowed => autoWeighShortcuts?.Any() == true && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
+        private bool AutoWeighShortCutsAllowed => autoWeighShortcuts?.HasShortcuts == true && ShowWeighButton && !ReadOnly && ShowShortcutInfo;
 
         /// <summary>
         /// Get \ set the total weight

@@ -97,11 +97,12 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get a list of shortcuts for the given command
         /// </summary>
-        public IEnumerable<string> GetShortcuts(KeyboardShortcutCommand command)
+        public KeyboardShortcutCommandSummary GetShortcuts(KeyboardShortcutCommand command)
         {
             ImmutableList<string> text;
 
-            return shortcutText.TryGetValue(command, out text) ? text : Enumerable.Empty<string>();
+            return new KeyboardShortcutCommandSummary(command,
+                shortcutText.TryGetValue(command, out text) ? text : Enumerable.Empty<string>());
         }
     }
 }

@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
         public void GetShortcuts_ReturnsText_ForDefaultShortcuts(KeyboardShortcutCommand command, string expected)
         {
             var testObject = mock.Create<KeyboardShortcutTranslator>();
-            var shortcut = testObject.GetShortcuts(command).Single();
+            var shortcut = testObject.GetShortcuts(command).Shortcuts.Single();
             Assert.Equal(expected, shortcut);
         }
 
@@ -141,8 +141,8 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             testObject.InitializeForCurrentSession();
 
             var shortcuts = testObject.GetShortcuts(KeyboardShortcutCommand.ApplyWeight);
-            Assert.Contains(shortcuts, x => x == "J");
-            Assert.Contains(shortcuts, x => x == "H");
+            Assert.Contains(shortcuts.Shortcuts, x => x == "J");
+            Assert.Contains(shortcuts.Shortcuts, x => x == "H");
         }
 
         [Theory]
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             var testObject = mock.Create<KeyboardShortcutTranslator>();
             testObject.InitializeForCurrentSession();
 
-            var shortcutText = testObject.GetShortcuts(KeyboardShortcutCommand.ApplyWeight).Single();
+            var shortcutText = testObject.GetShortcuts(KeyboardShortcutCommand.ApplyWeight).Shortcuts.Single();
             Assert.Equal(expected, shortcutText);
         }
 

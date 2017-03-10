@@ -17,6 +17,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// <summary>
         /// Get a list of shortcuts for the given command
         /// </summary>
-        IEnumerable<string> GetShortcuts(KeyboardShortcutCommand command);
+        KeyboardShortcutCommandSummary GetShortcuts(KeyboardShortcutCommand command);
     }
 }
