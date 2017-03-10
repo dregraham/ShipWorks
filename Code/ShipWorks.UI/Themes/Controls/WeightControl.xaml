@@ -23,10 +23,12 @@
                         <weight:WeightInput x:Name="PART_Entry"
                                             Grid.Column="0"
                                             VerticalAlignment="Center"
+                                            Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"
                                             MaxWeight="{TemplateBinding MaxWeight}">
                         </weight:WeightInput>
                         <weight:ScaleButton x:Name="PART_ScaleButton" Grid.Column="1"
-                               Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource,NotifyOnSourceUpdated=True}"/>
+                                            AcceptApplyWeightKeyboardShortcut="{Binding AcceptApplyWeightKeyboardShortcut,RelativeSource={RelativeSource TemplatedParent}}"
+                                            Weight="{Binding Weight,RelativeSource={RelativeSource TemplatedParent},Mode=OneWayToSource,NotifyOnSourceUpdated=True}"/>
                         <Image Grid.Column="2"
                                Margin="4,0,0,0"
                                ToolTip="{Binding Path=ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}"

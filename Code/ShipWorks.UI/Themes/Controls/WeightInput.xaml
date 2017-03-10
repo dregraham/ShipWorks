@@ -11,8 +11,25 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type weight:WeightInput}">
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="weight:ScaleButton.ScaleRead">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="7x">
+                                    <ColorAnimation Duration="0:0:0" To="LightGray"
+                                                    Storyboard.TargetName="PART_Entry"
+                                                    Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)"/>
+                                    <ColorAnimation Duration="0:0:0.250" To="White"
+                                                    Storyboard.TargetName="PART_Entry"
+                                                    Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+
                     <TextBox Name="PART_Entry"
+                             Text="{Binding Path=Text,RelativeSource={RelativeSource TemplatedParent},NotifyOnSourceUpdated=True}"
                              Style="{StaticResource Grid.TextBox.Number}"
+                             Background="White"
                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                              VerticalContentAlignment="Center" />
                 </ControlTemplate>

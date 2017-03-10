@@ -23,6 +23,9 @@ namespace ShipWorks.UI.Controls.Weight
     {
         public const bool AcceptApplyWeightKeyboardShortcutDefault = false;
 
+        public static readonly RoutedEvent ScaleReadEvent = EventManager.RegisterRoutedEvent(
+            "ScaleRead", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ScaleButton));
+
         public static readonly DependencyProperty WeightProperty =
             DependencyProperty.Register("Weight",
                 typeof(double),
@@ -78,6 +81,15 @@ namespace ShipWorks.UI.Controls.Weight
         {
             get { return (bool) GetValue(AcceptApplyWeightKeyboardShortcutProperty); }
             set { SetValue(AcceptApplyWeightKeyboardShortcutProperty, value); }
+        }
+
+        /// <summary>
+        /// The scale was read
+        /// </summary>
+        public event RoutedEventHandler ScaleRead
+        {
+            add { AddHandler(ScaleReadEvent, value); }
+            remove { RemoveHandler(ScaleReadEvent, value); }
         }
 
         /// <summary>
@@ -199,6 +211,8 @@ namespace ShipWorks.UI.Controls.Weight
             }
 
             SetCurrentValue(WeightProperty, result.Weight);
+
+            RaiseEvent(new RoutedEventArgs(ScaleReadEvent, this));
         }
 
         /// <summary>

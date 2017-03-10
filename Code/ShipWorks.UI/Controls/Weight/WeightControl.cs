@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace ShipWorks.UI.Controls.Weight
 {
@@ -108,44 +107,19 @@ namespace ShipWorks.UI.Controls.Weight
                 throw new InvalidOperationException("PART_ScaleButton is not available in the template");
             }
 
-            scaleButton.SourceUpdated += OnScaleButtonSourceUpdated;
-
-            SetupWeightBinding();
-            SetupAcceptApplyWeightShortcutBinding();
+            // Remove any existing handlers before adding another
+            scaleButton.ScaleRead -= OnScaleButtonScaleRead;
+            scaleButton.ScaleRead += OnScaleButtonScaleRead;
 
             AddErrorMessageValueChangedHandler(scaleButton);
             AddErrorMessageValueChangedHandler(entry);
         }
 
         /// <summary>
-        /// Setup the binding that will pass the AcceptApplyWeight property to the ScaleControl
+        /// The scale was read
         /// </summary>
-        private void SetupAcceptApplyWeightShortcutBinding()
-        {
-            Binding scaleBinding = new Binding();
-            scaleBinding.Source = this;
-            scaleBinding.Path = new PropertyPath(nameof(AcceptApplyWeightKeyboardShortcut));
-            scaleBinding.Mode = BindingMode.OneWay;
-            scaleButton.SetBinding(ScaleButton.AcceptApplyWeightKeyboardShortcutProperty, scaleBinding);
-        }
-
-        /// <summary>
-        /// Setup the main weight binding between the entry box and the weight property
-        /// </summary>
-        private void SetupWeightBinding()
-        {
-            Binding textBinding = new Binding();
-            textBinding.Source = this;
-            textBinding.Path = new PropertyPath(nameof(Weight));
-            textBinding.Mode = BindingMode.TwoWay;
-            entry.SetBinding(WeightInput.WeightProperty, textBinding);
-        }
-
-        /// <summary>
-        /// Handle when the scale button has been pressed
-        /// </summary>
-        private void OnScaleButtonSourceUpdated(object sender, DataTransferEventArgs e) =>
-            entry.FocusTextBox();
+        private void OnScaleButtonScaleRead(object sender, RoutedEventArgs e) =>
+            entry.RaiseEvent(e);
 
         /// <summary>
         /// Add an error message value changed handler for a control
@@ -153,7 +127,7 @@ namespace ShipWorks.UI.Controls.Weight
         private void AddErrorMessageValueChangedHandler(DependencyObject control)
         {
             DependencyPropertyDescriptor descriptor =
-                                DependencyPropertyDescriptor.FromProperty(ErrorMessageProperty, control.GetType());
+                DependencyPropertyDescriptor.FromProperty(ErrorMessageProperty, control.GetType());
             descriptor.AddValueChanged(control, new EventHandler(OnErrorChanged));
         }
 

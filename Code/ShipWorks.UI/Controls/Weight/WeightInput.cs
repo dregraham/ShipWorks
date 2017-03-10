@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.UI.Controls.Design;
 
@@ -52,6 +51,14 @@ namespace ShipWorks.UI.Controls.Weight
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WeightInput), new FrameworkPropertyMetadata(typeof(WeightInput)));
             WeightControl.ErrorMessageProperty.AddOwner(typeof(WeightInput));
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public WeightInput()
+        {
+            AddHandler(ScaleButton.ScaleReadEvent, new RoutedEventHandler(OnScaleRead));
         }
 
         /// <summary>
@@ -109,22 +116,11 @@ namespace ShipWorks.UI.Controls.Weight
                 throw new InvalidOperationException("PART_Entry is not available in the template");
             }
 
-            Binding textBinding = new Binding();
-            textBinding.Source = this;
-            textBinding.Path = new PropertyPath(nameof(Text));
-            textBinding.Mode = BindingMode.TwoWay;
-            entry.SetBinding(TextBox.TextProperty, textBinding);
-
             if (!DesignModeDetector.IsDesignerHosted())
             {
                 SetEntryWeightValue(this, 0D);
             }
         }
-
-        /// <summary>
-        /// Focus the underlying text box
-        /// </summary>
-        public void FocusTextBox() => entry.Focus();
 
         /// <summary>
         /// Coerce entered text into text that we expect for weight input
@@ -178,6 +174,15 @@ namespace ShipWorks.UI.Controls.Weight
             {
                 input.entry.Text = WeightConverter.Current.FormatWeight(weight);
             }
+        }
+
+        /// <summary>
+        /// Handle the scale read event
+        /// </summary>
+        private void OnScaleRead(object sender, RoutedEventArgs e)
+        {
+            entry.Focus();
+            entry.Select(entry.Text.Length, 0);
         }
     }
 }
