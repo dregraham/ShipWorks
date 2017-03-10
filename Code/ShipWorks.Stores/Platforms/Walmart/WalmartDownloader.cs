@@ -54,32 +54,43 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             Progress.Detail = "Checking for orders...";
 
-            // Check if it has been canceled
-            if (Progress.IsCancelRequested)
+            try
             {
-                return;
+                // Check if it has been canceled
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
+                ordersListType ordersList = GetFirstBatch();
+                int totalOrders = ordersList.meta.totalCount;
+
+                if (totalOrders == 0)
+                {
+                    Progress.Detail = "No orders to download.";
+                    return;
+                }
+
+                Progress.Detail = $"Downloading {totalOrders} orders...";
+
+                while (ordersList?.elements?.Any() ?? false)
+                {
+                    LoadOrders(ordersList);
+
+                    ordersList = GetNextBatch(ordersList);
+                }
+
+                Progress.PercentComplete = 100;
+                Progress.Detail = "Done";
             }
-
-            ordersListType ordersList = GetFirstBatch();
-            int totalOrders = ordersList.meta.totalCount;
-
-            if (totalOrders == 0)
+            catch (WalmartException ex)
             {
-                Progress.Detail = "No orders to download.";
-                return;
+                throw new DownloadException(ex.Message);
             }
-
-            Progress.Detail = $"Downloading {totalOrders} orders...";
-
-            while (ordersList?.elements?.Any() ?? false)
+            catch (SqlForeignKeyException ex)
             {
-                LoadOrders(ordersList);
-
-                ordersList = GetNextBatch(ordersList);
+                throw new DownloadException(ex.Message, ex);
             }
-
-            Progress.PercentComplete = 100;
-            Progress.Detail = "Done";
         }
 
         /// <summary>

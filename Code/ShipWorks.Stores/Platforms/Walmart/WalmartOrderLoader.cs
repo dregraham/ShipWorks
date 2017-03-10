@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
@@ -194,9 +195,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
             orderToSave.BillStreet1 = downloadedAddress.address1;
             orderToSave.BillStreet2 = downloadedAddress.address2;
             orderToSave.BillCity = downloadedAddress.city;
-            orderToSave.BillStateProvCode = downloadedAddress.state;
+            orderToSave.BillStateProvCode = Geography.GetStateProvCode(downloadedAddress.state);
             orderToSave.BillPostalCode = downloadedAddress.postalCode;
-            orderToSave.BillCountryCode = downloadedAddress.country;
+            orderToSave.BillCountryCode = Geography.GetCountryCode(downloadedAddress.country);
 
             orderToSave.BillPhone = downloadedOrder.shippingInfo.phone;
             orderToSave.BillEmail = downloadedOrder.customerEmailId;
