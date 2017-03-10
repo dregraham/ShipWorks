@@ -280,6 +280,7 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
