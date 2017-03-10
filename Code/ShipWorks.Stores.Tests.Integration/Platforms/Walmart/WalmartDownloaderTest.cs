@@ -4,24 +4,19 @@ using System.Data.Common;
 using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Moq;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using ShipWorks.Users;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
@@ -264,8 +259,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
 
         public void Dispose()
         {
-            dbConnection.Dispose();
-            context.Dispose();
+            mock?.Dispose();
+            context?.Dispose();
+            dbConnection?.Dispose();
         }
     }
 }
