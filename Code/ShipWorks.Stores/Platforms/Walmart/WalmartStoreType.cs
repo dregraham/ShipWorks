@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
         private readonly Func<WalmartStoreEntity, WalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
-        private WalmartStoreEntity walmartStore;
+        private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartStoreType"/> class.
