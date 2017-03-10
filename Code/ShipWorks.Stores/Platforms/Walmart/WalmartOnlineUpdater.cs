@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
@@ -13,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// <summary>
     /// Online updater for Walmart
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class WalmartOnlineUpdater
     {
         private readonly IWalmartWebClient webClient;

@@ -40,6 +40,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate;
                 orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate;
                 orderToSave.RequestedShipping = downloadedOrder.shippingInfo.methodCode.ToString();
+                orderToSave.RequestedShippingMethodCode = orderToSave.RequestedShipping;
 
                 LoadAddress(downloadedOrder, orderToSave);
             }
@@ -55,7 +56,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
             orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
         }
-
 
         /// <summary>
         /// Clears the existing charges.
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void LoadRefunds(IEnumerable<orderLineType> orderLines, WalmartOrderEntity orderToSave)
         {
-            // Get all refunds, group by reason. 
+            // Get all refunds, group by reason.
             // Create order charges for the total chargeAmount and tax for each refund reason.
             orderLines.Select(orderLine => orderLine.refund)
                 .Where(refund => refund != null)
