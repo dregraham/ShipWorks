@@ -84,7 +84,7 @@ namespace ShipWorks.UI.Controls
             }
 
             keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
-            autoWeighShortcuts = keyboardShortcutTranslator.GetShortcuts(Shared.IO.KeyboardShortcuts.KeyboardShortcutCommand.ApplyWeight);
+            autoWeighShortcuts = keyboardShortcutTranslator.GetShortcuts(KeyboardShortcutCommand.ApplyWeight);
 
             liveWeight.Visible = false;
             UpdateUiWithAutoWeighShortcuts();
