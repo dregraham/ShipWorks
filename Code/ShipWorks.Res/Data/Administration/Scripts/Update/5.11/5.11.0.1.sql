@@ -10,7 +10,8 @@ CREATE TABLE [dbo].[WalmartOrder]
 [PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomerOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EstimatedDeliveryDate] [datetime] NOT NULL,
-[EstimatedShipDate] [datetime] NOT NULL
+[EstimatedShipDate] [datetime] NOT NULL,
+[RequestedShippingMethodCode] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrder] on [dbo].[WalmartOrder]'
@@ -32,6 +33,10 @@ GO
 PRINT N'Creating index [IX_Auto_EstimatedShipDate] on [dbo].[WalmartOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_EstimatedShipDate] ON [dbo].[WalmartOrder] ([EstimatedShipDate])
+GO
+PRINT N'Creating index [IX_Auto_RequestedShippingMethodCode] on [dbo].[WalmartOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShippingMethodCode] ON [dbo].[WalmartOrder] ([RequestedShippingMethodCode])
 GO
 PRINT N'Creating [dbo].[WalmartOrderItem]'
 GO

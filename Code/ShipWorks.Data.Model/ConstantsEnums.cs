@@ -9962,6 +9962,8 @@ namespace ShipWorks.Data.Model
 		EstimatedDeliveryDate,
 		///<summary>EstimatedShipDate. </summary>
 		EstimatedShipDate,
+		///<summary>RequestedShippingMethodCode. </summary>
+		RequestedShippingMethodCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -3221,12 +3221,13 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits WalmartOrderEntity's mappings</summary>
 		private void InitWalmartOrderEntityMappings()
 		{
-			this.AddElementMapping("WalmartOrderEntity", @"ShipWorksLocal", @"dbo", "WalmartOrder", 5, 0);
+			this.AddElementMapping("WalmartOrderEntity", @"ShipWorksLocal", @"dbo", "WalmartOrder", 6, 0);
 			this.AddElementFieldMapping("WalmartOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("WalmartOrderEntity", "PurchaseOrderID", "PurchaseOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("WalmartOrderEntity", "CustomerOrderID", "CustomerOrderID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("WalmartOrderEntity", "EstimatedDeliveryDate", "EstimatedDeliveryDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 3);
 			this.AddElementFieldMapping("WalmartOrderEntity", "EstimatedShipDate", "EstimatedShipDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
+			this.AddElementFieldMapping("WalmartOrderEntity", "RequestedShippingMethodCode", "RequestedShippingMethodCode", false, "VarChar", 12, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits WalmartOrderItemEntity's mappings</summary>

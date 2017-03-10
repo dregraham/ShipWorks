@@ -23217,6 +23217,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.EstimatedShipDate);}
 		}
+		/// <summary>Creates a new WalmartOrderEntity.RequestedShippingMethodCode field instance</summary>
+		public static EntityField2 RequestedShippingMethodCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.RequestedShippingMethodCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WalmartOrderItemEntity</summary>

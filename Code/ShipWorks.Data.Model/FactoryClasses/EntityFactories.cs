@@ -3452,7 +3452,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new WalmartOrderEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWalmartOrderUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -3473,7 +3472,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new WalmartOrderItemEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewWalmartOrderItemUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code

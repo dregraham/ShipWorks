@@ -3065,6 +3065,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartOrderEntity", "CustomerOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderFieldIndex.CustomerOrderID, 50, 0, 0);
 			this.AddElementFieldInfo("WalmartOrderEntity", "EstimatedDeliveryDate", typeof(System.DateTime), false, false, false, false,  (int)WalmartOrderFieldIndex.EstimatedDeliveryDate, 0, 0, 0);
 			this.AddElementFieldInfo("WalmartOrderEntity", "EstimatedShipDate", typeof(System.DateTime), false, false, false, false,  (int)WalmartOrderFieldIndex.EstimatedShipDate, 0, 0, 0);
+			this.AddElementFieldInfo("WalmartOrderEntity", "RequestedShippingMethodCode", typeof(System.String), false, false, false, false,  (int)WalmartOrderFieldIndex.RequestedShippingMethodCode, 12, 0, 0);
 		}
 		/// <summary>Inits WalmartOrderItemEntity's FieldInfo objects</summary>
 		private void InitWalmartOrderItemEntityInfos()

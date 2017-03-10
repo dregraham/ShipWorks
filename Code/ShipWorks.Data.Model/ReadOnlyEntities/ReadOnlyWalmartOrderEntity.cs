@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CustomerOrderID = source.CustomerOrderID;
             EstimatedDeliveryDate = source.EstimatedDeliveryDate;
             EstimatedShipDate = source.EstimatedShipDate;
+            RequestedShippingMethodCode = source.RequestedShippingMethodCode;
             
             
             
@@ -72,6 +73,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.DateTime EstimatedShipDate { get; }
+        /// <summary> The RequestedShippingMethodCode property of the Entity WalmartOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartOrder"."RequestedShippingMethodCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 12<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String RequestedShippingMethodCode { get; }
         
         
         

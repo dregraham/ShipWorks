@@ -2751,6 +2751,7 @@
           <Field Name="EstimatedDeliveryDate" Type="datetime" FieldIndex="2" />
           <Field Name="EstimatedShipDate" Type="datetime" FieldIndex="3" />
           <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="0" />
+          <Field Name="RequestedShippingMethodCode" Type="string" MaxLength="12" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="WalmartOrderItem" ObjectID="491bc8d2-7731-459c-99d4-240b98f2b58f" InheritanceType="2">
@@ -3598,7 +3599,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-06T21:31:20.5982488Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-10T15:28:51.1298967Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7710,6 +7711,7 @@
                     <Field Name="CustomerOrderID" Ordinal="3" DbType="24" Length="50" />
                     <Field Name="EstimatedDeliveryDate" Ordinal="4" DbType="4" />
                     <Field Name="EstimatedShipDate" Ordinal="5" DbType="4" />
+                    <Field Name="RequestedShippingMethodCode" Ordinal="6" DbType="24" Length="12" />
                   </Fields>
                 </Table>
                 <Table Name="WalmartOrderItem">
@@ -11493,6 +11495,7 @@
             <FieldMapping FieldName="EstimatedShipDate" TargetFieldName="EstimatedShipDate" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="PurchaseOrderID" TargetFieldName="PurchaseOrderID" />
+            <FieldMapping FieldName="RequestedShippingMethodCode" TargetFieldName="RequestedShippingMethodCode" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":WalmartOrderItem" TargetName="ShipWorksLocal:dbo:WalmartOrderItem">

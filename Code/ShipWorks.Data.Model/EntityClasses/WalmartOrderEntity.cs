@@ -25,19 +25,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'WalmartOrder'.<br/><br/></summary>
 	[Serializable]
 	public partial class WalmartOrderEntity : OrderEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -131,7 +128,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 
@@ -270,7 +266,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -342,7 +337,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 
@@ -361,6 +355,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EstimatedDeliveryDate", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EstimatedShipDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RequestedShippingMethodCode", fieldHashtable);
 		}
 		#endregion
 
@@ -372,7 +368,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 
 		}
@@ -454,6 +449,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return (System.DateTime)GetValue((int)WalmartOrderFieldIndex.EstimatedShipDate, true); }
 			set	{ SetValue((int)WalmartOrderFieldIndex.EstimatedShipDate, value); }
 		}
+
+		/// <summary> The RequestedShippingMethodCode property of the Entity WalmartOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartOrder"."RequestedShippingMethodCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 12<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String RequestedShippingMethodCode
+		{
+			get { return (System.String)GetValue((int)WalmartOrderFieldIndex.RequestedShippingMethodCode, true); }
+			set	{ SetValue((int)WalmartOrderFieldIndex.RequestedShippingMethodCode, value); }
+		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
@@ -481,7 +486,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code
