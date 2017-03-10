@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
+        public void UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
         {
             IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
             requestSubmitter.Uri = new Uri(string.Format(UpdateShipmentUrl, purchaseOrderID));
