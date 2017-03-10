@@ -29,6 +29,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
         private const int DownloadOrderCountLimit = 200;
+        private const string UpdateShipmentUrl =
+            "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
 
 
         /// <summary>
@@ -141,6 +143,17 @@ namespace ShipWorks.Stores.Platforms.Walmart
             return ordersResponse;
         }
 
+        /// <summary>
+        /// Uploads the shipment details.
+        /// </summary>
+        public void UploadShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
+        {
+            IHttpXmlVariableRequestSubmitter requestSubmitter = requestSubmitterFactory();
+            requestSubmitter.Uri = new Uri(string.Format(UpdateShipmentUrl, purchaseOrderID));
+            requestSubmitter.Verb = HttpVerb.Post;
+
+            ProcessRequest(store, requestSubmitter, "UploadShipmentDetails");
+        }
         /// <summary>
         /// Acknowledge the given purchase order
         /// </summary>
