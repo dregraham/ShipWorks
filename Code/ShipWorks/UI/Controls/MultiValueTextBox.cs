@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.ComponentModel;
-using System.Threading;
+using System.Drawing;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.UI.Controls
@@ -13,14 +14,26 @@ namespace ShipWorks.UI.Controls
     public class MultiValueTextBox : TextBox
     {
         private bool isMultiValued = false;
-        private bool currentlyFlashing = false;
+        private Color originalBackground;
+        private bool animating;
+        private IDisposable flashAnimation;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MultiValueTextBox()
         {
+            BackColorChanged += OnMultiValueTextBoxBackColorChanged;
+        }
 
+        /// <summary>
+        /// Save the original background color
+        /// </summary>
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+
+            originalBackground = BackColor;
         }
 
         /// <summary>
@@ -79,12 +92,23 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected override void OnTextChanged(EventArgs e)
         {
- 	        base.OnTextChanged(e);
+            base.OnTextChanged(e);
 
             if (isMultiValued)
             {
                 isMultiValued = false;
                 Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Keep the original background color up to date if it gets changed somewhere else
+        /// </summary>
+        private void OnMultiValueTextBoxBackColorChanged(object sender, EventArgs e)
+        {
+            if (!animating)
+            {
+                originalBackground = BackColor;
             }
         }
 
@@ -110,7 +134,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void DrawMultiValuePrompt(Graphics g)
         {
-            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top | TextFormatFlags.EndEllipsis| TextFormatFlags.Left;
+            TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top | TextFormatFlags.EndEllipsis | TextFormatFlags.Left;
             Rectangle rect = this.ClientRectangle;
             rect.Offset(1, 1);
 
@@ -141,39 +165,31 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Flashes the text box background color to signal the user that something happened.
         /// </summary>
-        /// <param name="textBox">This text box.</param>
         /// <param name="interval">Cycle time, measured in milliseconds </param>
         /// <param name="flashBackgroundColor">Color to change the background during the flashing</param>
         /// <param name="flashes">Number of flashes</param>
         public void FlashBackground(int interval, Color flashBackgroundColor, int flashes)
         {
-            if (currentlyFlashing)
-            {
-                return;
-            }
+            animating = true;
 
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => FlashBackground(interval, flashBackgroundColor, flashes)));
-                return;
-            }
+            flashAnimation?.Dispose();
+            flashAnimation = Observable.Interval(TimeSpan.FromMilliseconds(interval))
+                .Take(flashes * 2)
+                .ObserveOn(new ControlScheduler(this))
+                .Subscribe(
+                    x => BackColor = x % 2 == 0 ? flashBackgroundColor : originalBackground,
+                    () => animating = false
+                );
+        }
 
-            currentlyFlashing = true;
-            Color original = BackColor;
+        /// <summary>
+        /// Dispose resources
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            flashAnimation?.Dispose();
 
-            for (int i = 0; i < flashes; i++)
-            {
-                BackColor = flashBackgroundColor;
-                Application.DoEvents();
-                Thread.Sleep(interval / 2);
-
-                BackColor = original;
-                Application.DoEvents();
-                Thread.Sleep(interval / 2);
-            }
-
-            currentlyFlashing = false;
-            BackColor = original;
+            base.Dispose(disposing);
         }
     }
 }

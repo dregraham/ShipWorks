@@ -15,12 +15,12 @@
                         <EventTrigger RoutedEvent="weight:ScaleButton.ScaleRead">
                             <BeginStoryboard>
                                 <Storyboard RepeatBehavior="7x">
-                                    <ColorAnimation Duration="0:0:0" To="LightGray"
-                                                    Storyboard.TargetName="PART_Entry"
-                                                    Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)"/>
-                                    <ColorAnimation Duration="0:0:0.250" To="White"
-                                                    Storyboard.TargetName="PART_Entry"
-                                                    Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)"/>
+                                    <ColorAnimationUsingKeyFrames Duration="0:0:0.5"
+                                            Storyboard.TargetName="PART_Entry"
+                                            Storyboard.TargetProperty="(TextBox.Background).(SolidColorBrush.Color)">
+                                        <DiscreteColorKeyFrame KeyTime="0:0:0" Value="LightGray" />
+                                        <DiscreteColorKeyFrame KeyTime="0:0:0.25" Value="White" />
+                                    </ColorAnimationUsingKeyFrames>
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>

@@ -11,16 +11,16 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.IO.Hardware.Scales;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.UI.Controls.Design;
-using ShipWorks.UI.Utility;
-using ShipWorks.Users;
-using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
+using ShipWorks.UI.Controls.Design;
+using ShipWorks.UI.Utility;
+using ShipWorks.Users;
 
 namespace ShipWorks.UI.Controls
 {
@@ -100,8 +100,8 @@ namespace ShipWorks.UI.Controls
             keyboardShortcutSubscription?.Dispose();
 
             keyboardShortcutSubscription = Messenger.Current.OfType<KeyboardShortcutMessage>()
-                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) && 
-                            Visible && 
+                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ApplyWeight) &&
+                            Visible &&
                             AutoWeighShortCutsAllowed)
                 .Subscribe(async _ =>
                 {
@@ -587,7 +587,7 @@ namespace ShipWorks.UI.Controls
             {
                 if (weight != null)
                 {
-                    liveWeight.Text = $@"({WeightConverter.Current.FormatWeight(weight.Value)}) {applyWeightShortcutText}";
+                    liveWeight.Text = $@"{WeightConverter.Current.FormatWeight(weight.Value)}  {applyWeightShortcutText}";
                     liveWeight.Visible = true;
 
                     // Make sure the error is clear
