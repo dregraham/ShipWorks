@@ -13,6 +13,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Signs the given request with the timestamp and generated signature
         /// </summary>
-        void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store, string epoch);
+        void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store);
     }
 }
