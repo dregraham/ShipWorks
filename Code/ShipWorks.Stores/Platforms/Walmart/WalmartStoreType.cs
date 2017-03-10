@@ -5,6 +5,8 @@ using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -69,6 +71,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         protected override OrderEntity CreateOrderInstance() => new WalmartOrderEntity();
 
+        /// <summary>
+        /// Creates a Walmart Order Item Entity
+        /// </summary>
+        /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance() => new WalmartOrderItemEntity();
 
         /// <summary>
@@ -84,5 +90,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
         {
             return new List<string>() {"Created", "Acknowledged", "Shipped", "Cancelled", "Refund"};
         }
+
+        /// <summary>
+        /// Creates the add store wizard online update action control for walmart
+        /// </summary>
+        /// <returns></returns>
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() => new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
     }
 }
