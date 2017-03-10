@@ -1,12 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using Autofac;
 using Interapptive.Shared.IO.Hardware.Scales;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shared.IO.KeyboardShortcuts;
@@ -111,6 +115,11 @@ namespace ShipWorks.UI.Controls.Weight
 
             display = GetTemplateChild("PART_Display") as TextBlock;
             SetupWeightEventStream(IsVisible);
+
+            if (AcceptApplyWeightKeyboardShortcut)
+            {
+                ToolTip = string.Join(" or ", IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>().GetShortcuts(KeyboardShortcutCommand.ApplyWeight).ToArray());
+            }
         }
 
         /// <summary>

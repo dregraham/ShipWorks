@@ -135,6 +135,8 @@ namespace ShipWorks.UI.Controls
                     };
                     autoWeighShortcutsToolTip.SetToolTip(liveWeight, string.Join(Environment.NewLine, autoWeighShortcuts));
                 }
+
+                weighButton.ToolTipText = string.Join(" or ", autoWeighShortcuts.ToArray());
             }
         }
 
