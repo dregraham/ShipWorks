@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32.Native;
