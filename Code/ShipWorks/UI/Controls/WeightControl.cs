@@ -31,6 +31,8 @@ namespace ShipWorks.UI.Controls
     {
         public const string KeyboardShortcutTelemetryKey = "KeyboardShortcut";
         public const string ButtonTelemetryKey = "Button";
+        public const string ShipmentQuantityTelemetryKey = "Shipment.Scale.Weight.Applied.ShipmentQuantity";
+        public const string PackageQuantityTelemetryKey = "Shipment.Scale.Weight.Applied.PackageQuantity";
 
         // Display formatting
         WeightDisplayFormat displayFormat = WeightDisplayFormat.FractionalPounds;
@@ -88,7 +90,7 @@ namespace ShipWorks.UI.Controls
             }
 
             keyboardShortcutTranslator = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>();
-            autoWeighShortcut = keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight);
+            autoWeighShortcut = "(" + keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) + ")";
             startDurationEvent = IoC.UnsafeGlobalLifetimeScope.Resolve<Func<string, ITrackedDurationEvent>>();
 
             liveWeight.Visible = false;
@@ -145,7 +147,7 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                // Always return the currrent weight rather than the parsed weight since
+                // Always return the current weight rather than the parsed weight since
                 // the current weight will be the most precise (i.e. it is not impacted
                 // by rounding for display purposes).
                 return currentWeight;
@@ -337,6 +339,11 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Configure entity counts for telemetry
+        /// </summary>
+        public Action<ITrackedDurationEvent> ConfigureTelemetryEntityCounts { get; set; }
+
+        /// <summary>
         /// Cut
         /// </summary>
         private void OnCut(object sender, EventArgs e)
@@ -510,8 +517,6 @@ namespace ShipWorks.UI.Controls
         private void SetTelemetryProperties(ITrackedDurationEvent telemetryEvent, ScaleReadResult result, string invocationMethod)
         {
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.Source", ParentForm?.Name);
-            telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShipmentQuantity", 1);
-            telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.PackageQuantity", 1);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.InvocationMethod", invocationMethod);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
@@ -519,6 +524,7 @@ namespace ShipWorks.UI.Controls
                     keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) :
                     "N/A");
             telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShortcutKey.ConfiguredQuantity", 1);
+            ConfigureTelemetryEntityCounts?.Invoke(telemetryEvent);
         }
 
         /// <summary>
@@ -593,7 +599,6 @@ namespace ShipWorks.UI.Controls
             FlushChanges();
 
             base.OnLeave(e);
-
         }
 
         /// <summary>

@@ -2,12 +2,12 @@
 {
     partial class UpsPackageControl
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,8 +22,8 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -46,10 +46,10 @@
             this.packageCountCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.panelPackage.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // panelPackage
-            // 
-            this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPackage.Controls.Add(this.insuranceControl);
             this.panelPackage.Controls.Add(this.packagingType);
@@ -62,9 +62,9 @@
             this.panelPackage.Name = "panelPackage";
             this.panelPackage.Size = new System.Drawing.Size(357, 185);
             this.panelPackage.TabIndex = 3;
-            // 
+            //
             // insuranceControl
-            // 
+            //
             this.insuranceControl.BackColor = System.Drawing.Color.White;
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(21, 137);
@@ -72,9 +72,9 @@
             this.insuranceControl.Size = new System.Drawing.Size(416, 46);
             this.insuranceControl.TabIndex = 6;
             this.insuranceControl.InsuranceOptionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
+            //
             // packagingType
-            // 
+            //
             this.packagingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.packagingType.FormattingEnabled = true;
             this.packagingType.Location = new System.Drawing.Point(90, 5);
@@ -83,9 +83,9 @@
             this.packagingType.Size = new System.Drawing.Size(144, 21);
             this.packagingType.TabIndex = 1;
             this.packagingType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
+            //
             // labelPackaging
-            // 
+            //
             this.labelPackaging.AutoSize = true;
             this.labelPackaging.BackColor = System.Drawing.Color.Transparent;
             this.labelPackaging.Location = new System.Drawing.Point(26, 8);
@@ -93,24 +93,24 @@
             this.labelPackaging.Size = new System.Drawing.Size(59, 13);
             this.labelPackaging.TabIndex = 0;
             this.labelPackaging.Text = "Packaging:";
-            // 
+            //
             // weight
-            // 
+            //
             this.weight.BackColor = System.Drawing.Color.Transparent;
             this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(90, 33);
             this.weight.Name = "weight";
             this.weight.RangeMax = 1000D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(218, 21);
+            this.weight.Size = new System.Drawing.Size(238, 21);
             this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
             this.weight.ShowShortcutInfo = true;
-            // 
+            //
             // labelWeight
-            // 
+            //
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
             this.labelWeight.Location = new System.Drawing.Point(39, 36);
@@ -118,9 +118,9 @@
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 2;
             this.labelWeight.Text = "Weight:";
-            // 
+            //
             // labelDimensions
-            // 
+            //
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
             this.labelDimensions.Location = new System.Drawing.Point(20, 66);
@@ -128,9 +128,9 @@
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 4;
             this.labelDimensions.Text = "Dimensions:";
-            // 
+            //
             // dimensionsControl
-            // 
+            //
             this.dimensionsControl.BackColor = System.Drawing.Color.White;
             this.dimensionsControl.Cleared = false;
             this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -140,9 +140,9 @@
             this.dimensionsControl.TabIndex = 5;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
-            // 
+            //
             // packagesGrid
-            // 
+            //
             this.packagesGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.packagesGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumn});
@@ -157,16 +157,16 @@
             this.packagesGrid.Size = new System.Drawing.Size(207, 60);
             this.packagesGrid.TabIndex = 2;
             this.packagesGrid.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
-            // 
+            //
             // gridColumn
-            // 
+            //
             this.gridColumn.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumn.Clickable = false;
             this.gridColumn.HeaderText = "Packages (Select to Edit)";
             this.gridColumn.Width = 203;
-            // 
+            //
             // labelPackages
-            // 
+            //
             this.labelPackages.AutoSize = true;
             this.labelPackages.BackColor = System.Drawing.Color.Transparent;
             this.labelPackages.Location = new System.Drawing.Point(34, 7);
@@ -174,9 +174,9 @@
             this.labelPackages.Size = new System.Drawing.Size(56, 13);
             this.labelPackages.TabIndex = 0;
             this.labelPackages.Text = "Packages:";
-            // 
+            //
             // kryptonBorderEdge
-            // 
+            //
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(5, 13);
@@ -184,9 +184,9 @@
             this.kryptonBorderEdge.Size = new System.Drawing.Size(26, 1);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge.Visible = false;
-            // 
+            //
             // kryptonBorderEdge1
-            // 
+            //
             this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -195,10 +195,10 @@
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(26, 1);
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Visible = false;
-            // 
+            //
             // kryptonBorderEdge3
-            // 
-            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            //
+            this.kryptonBorderEdge3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge3.AutoSize = false;
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -207,9 +207,9 @@
             this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 260);
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge3.Visible = false;
-            // 
+            //
             // packageCountCombo
-            // 
+            //
             this.packageCountCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.packageCountCombo.FormattingEnabled = true;
             this.packageCountCombo.Items.AddRange(new object[] {
@@ -228,9 +228,9 @@
             this.packageCountCombo.PromptText = "(Multiple Values)";
             this.packageCountCombo.Size = new System.Drawing.Size(106, 21);
             this.packageCountCombo.TabIndex = 1;
-            // 
+            //
             // UpsPackageControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

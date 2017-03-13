@@ -272,8 +272,8 @@ namespace ShipWorks.UI.Controls.Weight
         private void SetTelemetryProperties(ITrackedDurationEvent telemetryEvent, ScaleReadResult result, string invocationMethod)
         {
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.Source", TelemetrySource);
-            telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShipmentQuantity", 1);
-            telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.PackageQuantity", 1);
+            telemetryEvent.AddMetric(ShipWorks.UI.Controls.WeightControl.ShipmentQuantityTelemetryKey, 1);
+            telemetryEvent.AddMetric(ShipWorks.UI.Controls.WeightControl.PackageQuantityTelemetryKey, 1);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.InvocationMethod", invocationMethod);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
