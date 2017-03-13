@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 context.Complete(e.Issues, MenuCommandResult.Error);
             };
 
-            executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys, context.SelectedKeys);
+            executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys);
         }
 
         /// <summary>
@@ -74,25 +74,17 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private void UploadShipmentDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
         {
-            List<long> orders = userState as List<long>;
-
             try
             {
-                onlineUpdater.UpdateShipmentDetails(orders);
+                onlineUpdater.UpdateShipmentDetails(orderID);
             }
             catch (WalmartException ex)
             {
                 // log it
                 log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
 
-                if (orders != null)
-                {
-                    foreach (long order in orders)
-                    {
-                        // add the error to issues for the user
-                        issueAdder.Add(order, ex);
-                    }
-                }
+                // add the error to issues for the user
+                issueAdder.Add(orderID, ex);
             }
         }
     }

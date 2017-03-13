@@ -171,7 +171,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult()).Returns(OrdersResponse);
 
-            Mock<IHttpXmlVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpXmlVariableRequestSubmitter>();
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
             requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult()).Returns(OrdersResponse);
 
-            Mock<IHttpXmlVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpXmlVariableRequestSubmitter>();
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
             requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();

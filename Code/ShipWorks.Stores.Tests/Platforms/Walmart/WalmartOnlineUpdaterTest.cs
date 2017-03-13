@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var webClient = mock.Mock<IWalmartWebClient>();
 
             var testObject = mock.Create<WalmartOnlineUpdater>(new TypedParameter(typeof(WalmartStoreEntity), new WalmartStoreEntity()));
-            testObject.UpdateShipmentDetails(new List<long> {1});
+            testObject.UpdateShipmentDetails(1);
 
             webClient.Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Never);
         }
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var webClient = mock.Mock<IWalmartWebClient>();
 
             var testObject = mock.Create<WalmartOnlineUpdater>(new TypedParameter(typeof(WalmartStoreEntity), new WalmartStoreEntity()));
-            testObject.UpdateShipmentDetails(new List<long> { 1 });
+            testObject.UpdateShipmentDetails(1);
 
             webClient.Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Never);
         }
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var webClient = mock.Mock<IWalmartWebClient>();
 
             var testObject = mock.Create<WalmartOnlineUpdater>(new TypedParameter(typeof(WalmartStoreEntity), new WalmartStoreEntity()));
-            testObject.UpdateShipmentDetails(new List<long> { 1 });
+            testObject.UpdateShipmentDetails(1);
 
             webClient.Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Once);
         }

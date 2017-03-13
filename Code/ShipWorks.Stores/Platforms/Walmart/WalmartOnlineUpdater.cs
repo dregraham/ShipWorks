@@ -40,18 +40,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Upload carrier and tracking information for the given orders
         /// </summary>
-        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
+        public void UpdateShipmentDetails(long orderKey)
         {
-            foreach (long orderKey in orderKeys)
+            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderKey);
+
+            // Check to see if shipment exists
+            if (shipment != null)
             {
-                ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderKey);
-
-                // Check to see if shipment exists
-                if (shipment == null)
-                {
-                    continue;
-                }
-
                 UpdateShipmentDetails(shipment);
             }
         }
@@ -84,12 +79,23 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
             orderShipment orderShipment = new orderShipment
             {
-                orderLines =
-                    shipment.Order.OrderItems.Cast<WalmartOrderItemEntity>().Select(item => new shippingLineType
-                    {
-                        lineNumber = item.LineNumber,
-                        orderLineStatuses = new[]
-                        {
+                orderLines = shipment.Order.OrderItems.Cast<WalmartOrderItemEntity>()
+                    .Select(item => CreateShippingLineType(shipment, item, methodCode)).ToArray()
+            };
+
+            return orderShipment;
+        }
+
+        /// <summary>
+        /// Create a new Shipping Line Type.
+        /// </summary>
+        private shippingLineType CreateShippingLineType(ShipmentEntity shipment, WalmartOrderItemEntity item, shippingMethodCodeType methodCode)
+        {
+            return new shippingLineType
+            {
+                lineNumber = item.LineNumber,
+                orderLineStatuses = new[]
+                                    {
                             new shipLineStatusType
                             {
                                 status = orderLineStatusValueType.Shipped,
@@ -106,10 +112,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                                 }
                             }
                         }
-                    }).ToArray()
             };
-
-            return orderShipment;
         }
 
         /// <summary>

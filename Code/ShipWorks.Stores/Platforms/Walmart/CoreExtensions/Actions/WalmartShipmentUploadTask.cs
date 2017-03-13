@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
                     throw new ActionTaskRunException("A store has not been configured for the task.");
                 }
 
-                WalmartStoreEntity store = scope.Resolve<StoreManagerWrapper>().GetStore(StoreID) as WalmartStoreEntity;
+                WalmartStoreEntity store = scope.Resolve<IStoreManager>().GetStore(StoreID) as WalmartStoreEntity;
                 if (store == null)
                 {
                     throw new ActionTaskRunException("The store configured for the task has been deleted.");

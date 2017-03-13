@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
                 XmlReader reader = XmlReader.Create(new StringReader(response));
-                return (T)serializer.Deserialize(reader);
+                return (T) serializer.Deserialize(reader);
             }
             catch (Exception ex) when (ex.GetType() != typeof(WalmartException))
             {
@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void UpdateShipmentDetails(WalmartStoreEntity store, orderShipment shipment, string purchaseOrderID)
         {
-            string serializedShipment = SerializationUtility.SerializeToXml(shipment, false);
+            string serializedShipment = SerializationUtility.SerializeToXml(shipment, true);
 
             IHttpRequestSubmitter requestSubmitter =
                 httpRequestSubmitterFactory.GetHttpTextPostRequestSubmitter(serializedShipment, @"application/xml");
