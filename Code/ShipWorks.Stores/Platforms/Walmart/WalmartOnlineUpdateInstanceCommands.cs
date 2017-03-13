@@ -12,30 +12,30 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// Factory for creating the online update instance commands for Walmart
     /// </summary>
     [Component]
-    public class WalmartOnlineUpdateInstanceCommandsFactory : IWalmartOnlineUpdateInstanceCommandsFactory
+    public class WalmartOnlineUpdateInstanceCommands : IWalmartOnlineUpdateInstanceCommands
     {
         private readonly WalmartStoreEntity store;
         private readonly WalmartOnlineUpdater onlineUpdater;
         private readonly ILog log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WalmartOnlineUpdateInstanceCommandsFactory"/> class.
+        /// Initializes a new instance of the <see cref="WalmartOnlineUpdateInstanceCommands"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="onlineUpdaterFactory">The online updater.</param>
         /// <param name="logFactory">The log factory.</param>
-        public WalmartOnlineUpdateInstanceCommandsFactory(WalmartStoreEntity store,
+        public WalmartOnlineUpdateInstanceCommands(WalmartStoreEntity store,
             Func<WalmartStoreEntity, WalmartOnlineUpdater> onlineUpdaterFactory, Func<Type, ILog> logFactory)
         {
             this.store = store;
             onlineUpdater = onlineUpdaterFactory(store);
-            log = logFactory(typeof(WalmartOnlineUpdateInstanceCommandsFactory));
+            log = logFactory(typeof(WalmartOnlineUpdateInstanceCommands));
         }
 
         /// <summary>
         /// Creates the online update instance commands.
         /// </summary>
-        public List<MenuCommand> CreateCommands()
+        public IEnumerable<MenuCommand> Create()
         {
             if (store == null)
             {

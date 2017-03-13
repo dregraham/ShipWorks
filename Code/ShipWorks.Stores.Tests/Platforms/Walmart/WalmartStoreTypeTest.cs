@@ -56,14 +56,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             WalmartStoreEntity store = new WalmartStoreEntity();
             store.TypeCode = (int)StoreTypeCode.Walmart;
 
-            var commandFactory = mock.Mock<IWalmartOnlineUpdateInstanceCommandsFactory>();
-            mock.MockFunc<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommandsFactory>(commandFactory);
+            var commandFactory = mock.Mock<IWalmartOnlineUpdateInstanceCommands>();
+            mock.MockFunc<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands>(commandFactory);
 
             WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
 
             testObject.CreateOnlineUpdateInstanceCommands();
 
-            commandFactory.Verify(x => x.CreateCommands(), Times.Once);
+            commandFactory.Verify(x => x.Create(), Times.Once);
         }
     }
 }

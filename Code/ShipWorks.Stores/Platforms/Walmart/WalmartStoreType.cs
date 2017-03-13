@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Features.Indexed;
 using ShipWorks.ApplicationCore.ComponentRegistration;
 using ShipWorks.ApplicationCore.Interaction;
@@ -19,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
     public class WalmartStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
-        private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
+        private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
         private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <param name="onlineUpdateInstanceCommandsFactory"></param>
         public WalmartStoreType(StoreEntity store,
             IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory,
-            Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory)
+            Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
             : base(store)
         {
             this.downloaderFactory = downloaderFactory;
@@ -101,13 +102,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates the add store wizard online update action control for Walmart
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() => 
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
 
         /// <summary>
         /// Create the online update instance commands for Walmart
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() => 
-            onlineUpdateInstanceCommandsFactory(walmartStore).CreateCommands();
+        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() =>
+            onlineUpdateInstanceCommandsFactory(walmartStore).Create().ToList();
     }
 }

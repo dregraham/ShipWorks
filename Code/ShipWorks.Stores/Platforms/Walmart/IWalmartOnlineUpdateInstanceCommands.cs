@@ -6,11 +6,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// <summary>
     /// Factory for creating Walmart online update instance commands
     /// </summary>
-    public interface IWalmartOnlineUpdateInstanceCommandsFactory
+    public interface IWalmartOnlineUpdateInstanceCommands
     {
         /// <summary>
         /// Creates the online update instance commands.
         /// </summary>
-        List<MenuCommand> CreateCommands();
+        IEnumerable<MenuCommand> Create();
     }
 }

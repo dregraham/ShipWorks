@@ -294,14 +294,14 @@
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
-    <Compile Include="Platforms\Walmart\IWalmartOnlineUpdateInstanceCommandsFactory.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartOnlineUpdateInstanceCommands.cs" />
     <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
     <Compile Include="Platforms\Walmart\WalmartCipherKey.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartException.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommandsFactory.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommands.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\WalmartOnlineUpdater.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />

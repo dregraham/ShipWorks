@@ -5846,7 +5846,7 @@ CREATE TABLE [dbo].[WalmartOrder]
 [CustomerOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EstimatedDeliveryDate] [datetime] NOT NULL,
 [EstimatedShipDate] [datetime] NOT NULL,
-[RequestedShippingMethodCode] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[RequestedShippingMethodCode] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrder] on [dbo].[WalmartOrder]'
