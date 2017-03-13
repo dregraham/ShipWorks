@@ -161,7 +161,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 // Let anyone who cares know that enabled carriers may have changed.
                 messenger.Send(new EnabledCarriersChangedMessage(this, new List<ShipmentTypeCode>(), new List<ShipmentTypeCode>()));
             }
-            catch (TangoException ex)
+            catch (Exception ex) when (ex.GetType() == typeof(TangoException) || ex.GetType() == typeof(ShipWorksLicenseException))
             {
                 LicenseCapabilities = null; // may want to use a null object pattern here...
                 DisabledReason = ex.Message;
@@ -376,6 +376,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         public EnumResult<EditionRestrictionLevel> CheckRestriction(EditionFeature feature, object data)
         {
             Refresh();
+
+            if (IsDisabled)
+            {
+                return EditionRestrictionLevel.Hidden.AsEnumResult();
+            }
 
             IFeatureRestriction restriction = featureRestrictions.SingleOrDefault(r => r.EditionFeature == feature);
             return restriction?.CheckWithReason(LicenseCapabilities, data) ?? EditionRestrictionLevel.None.AsEnumResult();
