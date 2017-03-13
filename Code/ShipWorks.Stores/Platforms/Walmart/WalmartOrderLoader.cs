@@ -150,11 +150,13 @@ namespace ShipWorks.Stores.Platforms.Walmart
             WalmartOrderItemEntity item = FindOrCreateOrderItem(orderLine, orderToSave);
 
             orderLineStatusType orderLineStatus = orderLine.orderLineStatuses.SingleOrDefault();
-            item.LocalStatus = orderLineStatus?.status.ToString() ?? "Unknown";
+            item.OnlineStatus = orderLineStatus?.status.ToString() ?? "Unknown";
 
             item.UnitPrice = orderLine.charges.Where(c => c.chargeType1 == "PRODUCT").Sum(c => c.chargeAmount.amount);
             // Walmart spelled "Canceled" wrong, so I added the correct spelling in case they fix it...
-            item.Quantity = (item.LocalStatus == "Cancelled" || item.LocalStatus == "Canceled") ? 0 : double.Parse(orderLine.orderLineQuantity.amount);
+            item.Quantity = (item.OnlineStatus == orderLineStatusValueType.Cancelled.ToString()) 
+                ? 0 
+                : double.Parse(orderLine.orderLineQuantity.amount);
         }
 
         /// <summary>
