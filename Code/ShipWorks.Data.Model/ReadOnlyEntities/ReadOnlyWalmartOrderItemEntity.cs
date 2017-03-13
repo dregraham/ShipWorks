@@ -37,6 +37,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             LineNumber = source.LineNumber;
+            OnlineStatus = source.OnlineStatus;
             
             
             
@@ -51,6 +52,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String LineNumber { get; }
+        /// <summary> The OnlineStatus property of the Entity WalmartOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartOrderItem"."OnlineStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String OnlineStatus { get; }
         
         
         

@@ -10010,6 +10010,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>LineNumber. </summary>
 		LineNumber,
+		///<summary>OnlineStatus. </summary>
+		OnlineStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -43,7 +43,8 @@ GO
 CREATE TABLE [dbo].[WalmartOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[LineNumber] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[LineNumber] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OnlineStatus] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrderItem] on [dbo].[WalmartOrderItem]'

@@ -23327,6 +23327,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.LineNumber);}
 		}
+		/// <summary>Creates a new WalmartOrderItemEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OnlineStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WalmartStoreEntity</summary>
