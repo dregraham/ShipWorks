@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
         private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
         private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
+        private const string GetOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}";
         private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
         private const int DownloadOrderCountLimit = 200;
         private const string UpdateShipmentUrl =
@@ -102,6 +103,17 @@ namespace ShipWorks.Stores.Platforms.Walmart
             {
                 throw new WalmartException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Get the given PurchaseOrderId
+        /// </summary>
+        public Order GetOrder(WalmartStoreEntity store, string purchaseOrderId)
+        {
+            IHttpVariableRequestSubmitter requestSubmitter = httpRequestSubmitterFactory.GetHttpVariableRequestSubmitter();
+            requestSubmitter.Uri = new Uri(string.Format(GetOrderUrl, purchaseOrderId));
+
+            return ProcessRequest<Order>(store, requestSubmitter, $"GetOrder {purchaseOrderId}");
         }
 
         /// <summary>
