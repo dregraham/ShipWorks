@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
         {
             RunSuccessfullRequestTracking();
 
-            mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
+            mockedLogger.Verify(x => x.LogRequest(It.IsAny<IHttpRequestSubmitter>()), Times.Once());
         }
 
         [Fact]

@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         {
             SuccessfullyValidateUser();
 
-            mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
+            mockedLogger.Verify(x => x.LogRequest(It.IsAny<IHttpRequestSubmitter>()), Times.Once());
         }
         [Fact]
         public void IsValidUser_ResponseIsLogged_ReceiveValidResponseFromOnTrac()

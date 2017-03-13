@@ -19,16 +19,18 @@ namespace ShipWorks.Stores.Platforms.Walmart
     {
         private readonly IWalmartWebClient webClient;
         private readonly WalmartStoreEntity store;
+        private readonly IOrderRepository orderRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartOnlineUpdater"/> class.
         /// </summary>
-        /// <param name="webClient">The web client.</param>
-        /// <param name="store">The store.</param>
-        public WalmartOnlineUpdater(IWalmartWebClient webClient, WalmartStoreEntity store)
+        public WalmartOnlineUpdater(IWalmartWebClient webClient,
+            WalmartStoreEntity store,
+            IOrderRepository orderRepository)
         {
             this.webClient = webClient;
             this.store = store;
+            this.orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -72,6 +74,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private orderShipment CreateShipment(ShipmentEntity shipment)
         {
             WalmartOrderEntity order = shipment.Order as WalmartOrderEntity;
+            orderRepository.PopulateOrderDetails(order);
 
             shippingMethodCodeType methodCode =
                 (shippingMethodCodeType)

@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
             byte[] shipmentRequestListBytes = Encoding.UTF8.GetBytes(shipmentRequestListString);
 
             //Create HttpRequest
-            HttpRequestSubmitter shipmentRequestSubmitter = httpRequestSubmitterFactory.GetHttpBinaryPostRequestSubmitter(shipmentRequestListBytes);
+            IHttpRequestSubmitter shipmentRequestSubmitter = httpRequestSubmitterFactory.GetHttpBinaryPostRequestSubmitter(shipmentRequestListBytes);
 
             //base string
             string url = string.Format(
