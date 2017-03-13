@@ -18,9 +18,8 @@ namespace ShipWorks.UI.Controls
         public static readonly DependencyProperty ShortcutCommandProperty =
             DependencyProperty.Register("ShortcutCommand", typeof(KeyboardShortcutCommand), typeof(KeyboardShortcutDisplay));
 
-        public static readonly DependencyProperty ShortcutSummaryProperty =
-            DependencyProperty.Register("ShortcutSummary", typeof(KeyboardShortcutCommandSummary),
-                typeof(KeyboardShortcutDisplay));
+        public static readonly DependencyProperty ShortcutTextProperty =
+            DependencyProperty.Register("ShortcutText", typeof(string), typeof(KeyboardShortcutDisplay));
 
         /// <summary>
         /// Constructor
@@ -50,12 +49,12 @@ namespace ShipWorks.UI.Controls
 
             if (DesignModeDetector.IsDesignerHosted())
             {
-                SetCurrentValue(ShortcutSummaryProperty, new KeyboardShortcutCommandSummary(KeyboardShortcutCommand.ApplyWeight, new[] { "Ctrl-W" }));
+                SetCurrentValue(ShortcutTextProperty, "Ctrl-W");
                 return;
             }
 
             var translator = IoC.BeginLifetimeScope().Resolve<IKeyboardShortcutTranslator>();
-            SetCurrentValue(ShortcutSummaryProperty, translator.GetShortcuts(ShortcutCommand));
+            SetCurrentValue(ShortcutTextProperty, translator.GetShortcut(ShortcutCommand));
         }
     }
 }

@@ -9,24 +9,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:KeyboardShortcutDisplay}">
-                    <!--<Border Padding="2,0" CornerRadius="3" BorderBrush="Gray" BorderThickness="1,0">-->
-                    <TextBlock Visibility="{Binding ShortcutSummary.HasShortcuts,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource BooleanToVisibility}}"
-                                   VerticalAlignment="Center"
-                                   Margin="4,0,0,0"
-                                   Foreground="Gray">
-                        <TextBlock.ToolTip>
-                            <ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontWeight="Bold">
-                                        <Run Text="{Binding ShortcutSummary.Description,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />:
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding ShortcutSummary.FormattedShortcutList,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />
-                                </StackPanel>
-                            </ToolTip>
-                        </TextBlock.ToolTip>
-                            (<Run Text="{Binding ShortcutSummary.DefaultShortcut,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />)
+                    <TextBlock VerticalAlignment="Center"
+                                Margin="4,0,0,0"
+                                Foreground="Gray">
+                            (<Run Text="{Binding ShortcutText,RelativeSource={RelativeSource TemplatedParent},Mode=OneWay}" />)
                         </TextBlock>
-                    <!--</Border>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

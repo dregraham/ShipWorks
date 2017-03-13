@@ -115,12 +115,6 @@ namespace ShipWorks.UI.Controls.Weight
 
             display = GetTemplateChild("PART_Display") as TextBlock;
             SetupWeightEventStream(IsVisible);
-
-            if (AcceptApplyWeightKeyboardShortcut)
-            {
-                ToolTip = IoC.UnsafeGlobalLifetimeScope.Resolve<IKeyboardShortcutTranslator>()
-                    .GetShortcuts(KeyboardShortcutCommand.ApplyWeight).FormattedShortcutList;
-            }
         }
 
         /// <summary>
