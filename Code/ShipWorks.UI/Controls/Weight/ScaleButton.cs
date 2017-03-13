@@ -60,8 +60,6 @@ namespace ShipWorks.UI.Controls.Weight
         TextBlock display;
         private readonly IKeyboardShortcutTranslator keyboardShortcutTranslator;
         private readonly Func<string, ITrackedDurationEvent> startDurationEvent;
-        private const string keyboardShortcutTelemetryKey = "KeyboardShortcut";
-        private const string buttonTelemetryKey = "Button";
 
         /// <summary>
         /// Static constructor
@@ -177,7 +175,7 @@ namespace ShipWorks.UI.Controls.Weight
                     .Where(x => x.AppliesTo(KeyboardShortcutCommand.ApplyWeight))
                     .ObserveOn(DispatcherScheduler.Current)
                     .Where(_ => AcceptApplyWeightKeyboardShortcut && Focusable && scaleButton.IsEnabled)
-                    .Subscribe(_ => ApplyWeight(keyboardShortcutTelemetryKey));
+                    .Subscribe(_ => ApplyWeight(ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey));
             }
         }
 
@@ -228,7 +226,7 @@ namespace ShipWorks.UI.Controls.Weight
         /// </summary>
         private async void OnScaleButtonClick(object sender, RoutedEventArgs e)
         {
-            ApplyWeight(buttonTelemetryKey);
+            ApplyWeight(ShipWorks.UI.Controls.WeightControl.ButtonTelemetryKey);
         }
 
         /// <summary>
@@ -279,7 +277,7 @@ namespace ShipWorks.UI.Controls.Weight
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.InvocationMethod", invocationMethod);
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ScaleType", result.ScaleType.ToString());
             telemetryEvent.AddProperty("Shipment.Scale.Weight.Applied.ShortcutKey.Used",
-                invocationMethod == keyboardShortcutTelemetryKey ?
+                invocationMethod == ShipWorks.UI.Controls.WeightControl.KeyboardShortcutTelemetryKey ?
                     keyboardShortcutTranslator.GetShortcut(KeyboardShortcutCommand.ApplyWeight) :
                     "N/A");
             telemetryEvent.AddMetric("Shipment.Scale.Weight.Applied.ShortcutKey.ConfiguredQuantity", 1);
