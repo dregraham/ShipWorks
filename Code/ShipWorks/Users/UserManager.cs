@@ -9,7 +9,6 @@ using ShipWorks.Data.Model;
 using System.ComponentModel;
 using ShipWorks.Users.Security;
 using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Users
 {
@@ -29,7 +28,7 @@ namespace ShipWorks.Users
         /// </summary>
         public static void InitializeForCurrentUser()
         {
-            synchronizer = new TableSynchronizer<UserEntity>(UserEntity.FullPrefetchPath);
+            synchronizer = new TableSynchronizer<UserEntity>();
             InternalCheckForChanges();
         }
 

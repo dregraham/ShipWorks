@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(176);
+			this.InitClass(175);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -207,7 +207,6 @@ namespace ShipWorks.Data.Model
 			InitUserEntityMappings();
 			InitUserColumnSettingsEntityMappings();
 			InitUserSettingsEntityMappings();
-			InitUserShortcutOverridesEntityMappings();
 			InitUspsAccountEntityMappings();
 			InitUspsProfileEntityMappings();
 			InitUspsScanFormEntityMappings();
@@ -3096,19 +3095,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "NextGlobalPostNotificationDate", "NextGlobalPostNotificationDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 15);
 			this.AddElementFieldMapping("UserSettingsEntity", "SingleScanSettings", "SingleScanSettings", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
 			this.AddElementFieldMapping("UserSettingsEntity", "AutoWeigh", "AutoWeigh", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
-		}
-
-		/// <summary>Inits UserShortcutOverridesEntity's mappings</summary>
-		private void InitUserShortcutOverridesEntityMappings()
-		{
-			this.AddElementMapping("UserShortcutOverridesEntity", @"ShipWorksLocal", @"dbo", "UserShortcutOverride", 7, 0);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "UserShortcutOverrideID", "UserShortcutOverrideID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "CommandType", "CommandType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "Alt", "Alt", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "Ctrl", "Ctrl", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "Shift", "Shift", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
-			this.AddElementFieldMapping("UserShortcutOverridesEntity", "KeyValue", "KeyValue", false, "NVarChar", 3, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>

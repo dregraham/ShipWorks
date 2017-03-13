@@ -6,7 +6,7 @@
     <Property Name="AdditionalTaskPerformerFolder" Value="" />
     <Property Name="AdditionalTasksFolder" Value=".\Tasks" />
     <Property Name="AdditionalTemplatesFolder" Value=".\Templates" />
-    <Property Name="AdditionalTypeConverterFolder" Value=".\TypeConverter" />
+    <Property Name="AdditionalTypeConverterFolder" Value="" />
     <Property Name="AddNewElementsAfterRefresh_v5" Value="false" />
     <Property Name="AddNewElementsAfterRelationalModelDataSync_v5" Value="false" />
     <Property Name="AddNewFieldsAfterRefresh_v5" Value="true" />
@@ -83,9 +83,7 @@
     <Property Name="UpdateCustomPropertiesAfterRelationalModelDataSync_v5" Value="false" />
     <Property Name="UseCustomFieldOrderingOnNewElements" Value="true" />
   </Properties>
-  <TypeShortcuts>
-    <TypeShortcut Shortcut="KeyboardShortcutCommand" Type="ShipWorks.Shared.IO.KeyboardShortcuts.KeyboardShortcutCommand, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-  </TypeShortcuts>
+  <TypeShortcuts />
   <IgnoredWarnings />
   <SavedSearchQueries />
   <CodeGenerationCyclePreferences>
@@ -2644,17 +2642,6 @@
           <Field Name="WindowLayout" Type="byte[]" MaxLength="2147483647" FieldIndex="3" />
         </Fields>
       </EntityDefinition>
-      <EntityDefinition Name="UserShortcutOverrides" ObjectID="8b563928-5a19-490f-b59a-9aa6b1cd7aa3">
-        <Fields>
-          <Field Name="Alt" Type="bool" FieldIndex="3" />
-          <Field Name="CommandType" Type="KeyboardShortcutCommand" FieldIndex="2" />
-          <Field Name="Ctrl" Type="bool" FieldIndex="4" />
-          <Field Name="KeyValue" Type="string" MaxLength="3" FieldIndex="6" />
-          <Field Name="Shift" Type="bool" FieldIndex="5" />
-          <Field Name="UserID" Type="long" FieldIndex="1" />
-          <Field Name="UserShortcutOverrideID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
-        </Fields>
-      </EntityDefinition>
       <EntityDefinition Name="UspsAccount" ObjectID="942b6875-502d-46af-8aa9-59f014378ab9">
         <Fields>
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="12" />
@@ -3396,11 +3383,6 @@
           <FieldFieldRelationship FkField="UserID" PkField="UserID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="UserShortcutOverrides.User-User.ShortcutOverrides" Start=":UserShortcutOverrides" End=":User" StartNavigator="User" EndNavigator="ShortcutOverrides" Type="4" DeleteRuleAction="1">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="UserID" PkField="UserID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="UspsProfile.PostalProfile-PostalProfile.Usps" Start=":UspsProfile" End=":PostalProfile" StartNavigator="PostalProfile" EndNavigator="Usps" Type="1" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
@@ -3592,7 +3574,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-03-07T19:41:01.2073402Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-02-21T20:41:02.3719018Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7573,18 +7555,6 @@
                     <Field Name="AutoWeigh" Ordinal="18" DbType="2" />
                   </Fields>
                 </Table>
-                <Table Name="UserShortcutOverride">
-                  <PkConstraintName Name="PK_UserShortcutOverride" />
-                  <Fields>
-                    <Field Name="UserShortcutOverrideID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="UserID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="CommandType" Ordinal="3" DbType="8" Precision="10" />
-                    <Field Name="Alt" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="Ctrl" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="Shift" Ordinal="6" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="KeyValue" Ordinal="7" DbType="12" Length="3" />
-                  </Fields>
-                </Table>
                 <Table Name="UspsAccount">
                   <PkConstraintName Name="PK_PostalUspsAccount" />
                   <Fields>
@@ -8718,11 +8688,6 @@
             <ForeignKeyConstraint Name="dbo:UserSettings:FK_UserSetting_User">
               <FieldPairs>
                 <FieldPair PkField="dbo:User:UserID" FkField="dbo:UserSettings:UserID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:UserShortcutOverride:FK_UserShortcutOverride_User">
-              <FieldPairs>
-                <FieldPair PkField="dbo:User:UserID" FkField="dbo:UserShortcutOverride:UserID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:UspsProfile:FK_UspsProfile_PostalProfile" DeleteRuleAction="1">
@@ -11349,17 +11314,6 @@
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />
             <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
             <FieldMapping FieldName="WindowLayout" TargetFieldName="WindowLayout" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":UserShortcutOverrides" TargetName="ShipWorksLocal:dbo:UserShortcutOverride">
-          <FieldMappings>
-            <FieldMapping FieldName="Alt" TargetFieldName="Alt" />
-            <FieldMapping FieldName="CommandType" TargetFieldName="CommandType" />
-            <FieldMapping FieldName="Ctrl" TargetFieldName="Ctrl" />
-            <FieldMapping FieldName="KeyValue" TargetFieldName="KeyValue" />
-            <FieldMapping FieldName="Shift" TargetFieldName="Shift" />
-            <FieldMapping FieldName="UserID" TargetFieldName="UserID" />
-            <FieldMapping FieldName="UserShortcutOverrideID" TargetFieldName="UserShortcutOverrideID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":UspsAccount" TargetName="ShipWorksLocal:dbo:UspsAccount">

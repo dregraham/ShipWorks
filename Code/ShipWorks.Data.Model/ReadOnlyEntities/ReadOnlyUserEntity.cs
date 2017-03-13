@@ -47,8 +47,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Settings = source.Settings?.AsReadOnly(objectMap);
             
             
-            ShortcutOverrides = source.ShortcutOverrides?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
-                Enumerable.Empty<IUserShortcutOverridesEntity>();
 
             CopyCustomUserData(source);
         }
@@ -100,8 +98,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IUserSettingsEntity Settings { get; }
         
         
-        
-        public IEnumerable<IUserShortcutOverridesEntity> ShortcutOverrides { get; }
         
         /// <summary>
         /// Get a read only version of the entity

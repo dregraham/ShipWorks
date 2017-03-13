@@ -1066,12 +1066,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<UserSettingsEntity>(); }
 		}
 
-		/// <summary>Creates and returns a new EntityQuery for the UserShortcutOverrides entity</summary>
-		public EntityQuery<UserShortcutOverridesEntity> UserShortcutOverrides
-		{
-			get { return Create<UserShortcutOverridesEntity>(); }
-		}
-
 		/// <summary>Creates and returns a new EntityQuery for the UspsAccount entity</summary>
 		public EntityQuery<UspsAccountEntity> UspsAccount
 		{

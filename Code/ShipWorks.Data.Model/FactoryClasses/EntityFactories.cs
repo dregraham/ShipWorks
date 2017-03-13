@@ -3299,26 +3299,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty UserShortcutOverridesEntity objects.</summary>
-	[Serializable]
-	public partial class UserShortcutOverridesEntityFactory : EntityFactoryBase2<UserShortcutOverridesEntity> {
-		/// <summary>CTor</summary>
-		public UserShortcutOverridesEntityFactory() : base("UserShortcutOverridesEntity", ShipWorks.Data.Model.EntityType.UserShortcutOverridesEntity, false) { }
-		
-		/// <summary>Creates a new UserShortcutOverridesEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new UserShortcutOverridesEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUserShortcutOverridesUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
 	/// <summary>Factory to create new, empty UspsAccountEntity objects.</summary>
 	[Serializable]
 	public partial class UspsAccountEntityFactory : EntityFactoryBase2<UspsAccountEntity> {
@@ -4110,9 +4090,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					factoryToUse = new UserSettingsEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.UserShortcutOverridesEntity:
-					factoryToUse = new UserShortcutOverridesEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.UspsAccountEntity:
 					factoryToUse = new UspsAccountEntityFactory();

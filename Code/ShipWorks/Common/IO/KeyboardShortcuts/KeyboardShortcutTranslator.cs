@@ -16,11 +16,11 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     /// </summary>
     [Component]
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
-    public class KeyboardShortcutTranslator : IKeyboardShortcutTranslator, IInitializeForCurrentSession
+    public class KeyboardShortcutTranslator : IKeyboardShortcutTranslator
     {
         private readonly IUserSession userSession;
 
-        private IEnumerable<KeyboardShortcutData> defaultShortcuts = new List<KeyboardShortcutData>
+        private readonly IEnumerable<KeyboardShortcutData> defaultShortcuts = new List<KeyboardShortcutData>
         {
             new KeyboardShortcutData(KeyboardShortcutCommand.ApplyWeight, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl)
         };
@@ -35,33 +35,18 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         {
             this.userSession = userSession;
 
-            SetCurrentKeyboardShortcuts(Enumerable.Empty<KeyboardShortcutData>());
+            SetCurrentKeyboardShortcuts();
         }
 
         /// <summary>
-        /// Initialize for the current session
+        /// Set the current list of shortcuts
         /// </summary>
-        public void InitializeForCurrentSession()
+        private void SetCurrentKeyboardShortcuts()
         {
-            List<KeyboardShortcutData> shortcutOverrides =
-                userSession.User.ShortcutOverrides.Select(x => new KeyboardShortcutData(x)).ToList();
-
-            SetCurrentKeyboardShortcuts(shortcutOverrides);
-        }
-
-        /// <summary>
-        /// Set the current list of shortcuts using the given overrides
-        /// </summary>
-        private void SetCurrentKeyboardShortcuts(IEnumerable<KeyboardShortcutData> shortcutOverrides)
-        {
-            var mergedShortcuts = defaultShortcuts
-                .Except(shortcutOverrides, GenericPropertyEqualityComparer.Create((KeyboardShortcutData x) => x.Command))
-                .Concat(shortcutOverrides);
-
-            shortcutText = mergedShortcuts.GroupBy(x => x.Command)
+            shortcutText = defaultShortcuts.GroupBy(x => x.Command)
                 .ToDictionary(x => x.Key, x => x.Select(shortcut => shortcut.ShortcutText).ToImmutableList());
 
-            shortcuts = mergedShortcuts.GroupBy(x => x.ActionKey)
+            shortcuts = defaultShortcuts.GroupBy(x => x.ActionKey)
                 .ToDictionary(x => x.Key, CreateCommandsForModifiers);
         }
 

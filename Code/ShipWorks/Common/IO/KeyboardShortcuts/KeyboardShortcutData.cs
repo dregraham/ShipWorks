@@ -22,31 +22,6 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         }
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public KeyboardShortcutData(UserShortcutOverridesEntity shortcutOverride)
-        {
-            Command = shortcutOverride.CommandType;
-            ActionKey = (VirtualKeys) Enum.Parse(typeof(VirtualKeys), shortcutOverride.KeyValue);
-            Modifiers = KeyboardShortcutModifiers.None;
-
-            if (shortcutOverride.Alt)
-            {
-                Modifiers |= KeyboardShortcutModifiers.Alt;
-            }
-
-            if (shortcutOverride.Ctrl)
-            {
-                Modifiers |= KeyboardShortcutModifiers.Ctrl;
-            }
-
-            if (shortcutOverride.Shift)
-            {
-                Modifiers |= KeyboardShortcutModifiers.Shift;
-            }
-        }
-
-        /// <summary>
         /// Keyboard shortcut command
         /// </summary>
         public KeyboardShortcutCommand Command { get; }

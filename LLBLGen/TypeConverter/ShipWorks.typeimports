@@ -1,3 +1,0 @@
-<typeImports>
-    <typeImport typeName="ShipWorks.Shared.IO.KeyboardShortcuts.KeyboardShortcutCommand" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/> 
-</typeImports>

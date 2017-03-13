@@ -9547,26 +9547,6 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UserShortcutOverrides.</summary>
-	public enum UserShortcutOverridesFieldIndex
-	{
-		///<summary>UserShortcutOverrideID. </summary>
-		UserShortcutOverrideID,
-		///<summary>UserID. </summary>
-		UserID,
-		///<summary>CommandType. </summary>
-		CommandType,
-		///<summary>Alt. </summary>
-		Alt,
-		///<summary>Ctrl. </summary>
-		Ctrl,
-		///<summary>Shift. </summary>
-		Shift,
-		///<summary>KeyValue. </summary>
-		KeyValue,
-		/// <summary></summary>
-		AmountOfFields
-	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsAccount.</summary>
 	public enum UspsAccountFieldIndex
 	{
@@ -10743,8 +10723,6 @@ namespace ShipWorks.Data.Model
 		UserColumnSettingsEntity,
 		///<summary>UserSettings</summary>
 		UserSettingsEntity,
-		///<summary>UserShortcutOverrides</summary>
-		UserShortcutOverridesEntity,
 		///<summary>UspsAccount</summary>
 		UspsAccountEntity,
 		///<summary>UspsProfile</summary>

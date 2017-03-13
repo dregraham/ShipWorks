@@ -53,66 +53,6 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             Assert.Empty(commands);
         }
 
-        [Fact]
-        public void GetCommands_ReturnsApplyWeightMessage_WithOverriddenShortcut()
-        {
-            var user = new UserEntity();
-            var shortcut = user.ShortcutOverrides.AddNew();
-            shortcut.Alt = true;
-            shortcut.Shift = true;
-            shortcut.KeyValue = "J";
-            shortcut.CommandType = KeyboardShortcutCommand.ApplyWeight;
-            mock.Mock<IUserSession>().Setup(x => x.User).Returns(user);
-
-            var testObject = mock.Create<KeyboardShortcutTranslator>();
-            testObject.InitializeForCurrentSession();
-
-            var commands = testObject.GetCommands(VirtualKeys.J, Alt | Shift);
-            var message = commands.Single();
-            Assert.Equal(KeyboardShortcutCommand.ApplyWeight, message);
-        }
-
-        [Fact]
-        public void GetCommands_ReturnsEmptyCollection_WithOriginalShortcut()
-        {
-            var user = new UserEntity();
-            var shortcut = user.ShortcutOverrides.AddNew();
-            shortcut.Alt = true;
-            shortcut.Shift = true;
-            shortcut.KeyValue = "J";
-            shortcut.CommandType = KeyboardShortcutCommand.ApplyWeight;
-            mock.Mock<IUserSession>().Setup(x => x.User).Returns(user);
-
-            var testObject = mock.Create<KeyboardShortcutTranslator>();
-            testObject.InitializeForCurrentSession();
-
-            var commands = testObject.GetCommands(VirtualKeys.W, Ctrl);
-            Assert.Empty(commands);
-        }
-
-        [Fact]
-        public void GetCommands_ReturnsMultipleCommands_WhenShortcutHasMultipleCommands()
-        {
-            var user = new UserEntity();
-
-            var shortcut = user.ShortcutOverrides.AddNew();
-            shortcut.KeyValue = "J";
-            shortcut.CommandType = KeyboardShortcutCommand.ApplyWeight;
-
-            var shortcut2 = user.ShortcutOverrides.AddNew();
-            shortcut2.KeyValue = "J";
-            shortcut2.CommandType = KeyboardShortcutCommand.FocusQuickSearch;
-
-            mock.Mock<IUserSession>().Setup(x => x.User).Returns(user);
-
-            var testObject = mock.Create<KeyboardShortcutTranslator>();
-            testObject.InitializeForCurrentSession();
-
-            var commands = testObject.GetCommands(VirtualKeys.J, None);
-            Assert.Contains(commands, x => x == KeyboardShortcutCommand.ApplyWeight);
-            Assert.Contains(commands, x => x == KeyboardShortcutCommand.FocusQuickSearch);
-        }
-
         [Theory]
         [InlineData(KeyboardShortcutCommand.ApplyWeight, "Ctrl+W")]
         public void GetShortcuts_ReturnsText_ForDefaultShortcuts(KeyboardShortcutCommand command, string expected)
@@ -120,60 +60,6 @@ namespace ShipWorks.Tests.Common.KeyboardShortcuts
             var testObject = mock.Create<KeyboardShortcutTranslator>();
             var shortcut = testObject.GetShortcuts(command).Shortcuts.Single();
             Assert.Equal(expected, shortcut);
-        }
-
-        [Fact]
-        public void GetShortcuts_ReturnsMultipleShortcuts_WhenMultipleShortcutsExistForCommand()
-        {
-            var user = new UserEntity();
-
-            var shortcut = user.ShortcutOverrides.AddNew();
-            shortcut.KeyValue = "J";
-            shortcut.CommandType = KeyboardShortcutCommand.ApplyWeight;
-
-            var shortcut2 = user.ShortcutOverrides.AddNew();
-            shortcut2.KeyValue = "H";
-            shortcut2.CommandType = KeyboardShortcutCommand.ApplyWeight;
-
-            mock.Mock<IUserSession>().Setup(x => x.User).Returns(user);
-
-            var testObject = mock.Create<KeyboardShortcutTranslator>();
-            testObject.InitializeForCurrentSession();
-
-            var shortcuts = testObject.GetShortcuts(KeyboardShortcutCommand.ApplyWeight);
-            Assert.Contains(shortcuts.Shortcuts, x => x == "J");
-            Assert.Contains(shortcuts.Shortcuts, x => x == "H");
-        }
-
-        [Theory]
-        [InlineData("K", None, "K")]
-        [InlineData("K", Alt, "Alt+K")]
-        [InlineData("K", Ctrl, "Ctrl+K")]
-        [InlineData("K", Shift, "Shift+K")]
-        [InlineData("K", Alt | Ctrl, "Ctrl+Alt+K")]
-        [InlineData("K", Alt | Shift, "Alt+Shift+K")]
-        [InlineData("K", Ctrl | Shift, "Ctrl+Shift+K")]
-        [InlineData("K", Alt | Ctrl | Shift, "Ctrl+Alt+Shift+K")]
-        [InlineData("F2", Ctrl, "Ctrl+F2")]
-        public void GetShortcuts_DisplaysShortcutAsExptected_ForVariousCombinations(string actionKey,
-            KeyboardShortcutModifiers modifiers, string expected)
-        {
-            var user = new UserEntity();
-
-            var shortcut = user.ShortcutOverrides.AddNew();
-            shortcut.Alt = modifiers.HasFlag(Alt);
-            shortcut.Ctrl = modifiers.HasFlag(Ctrl);
-            shortcut.Shift = modifiers.HasFlag(Shift);
-            shortcut.KeyValue = actionKey;
-            shortcut.CommandType = KeyboardShortcutCommand.ApplyWeight;
-
-            mock.Mock<IUserSession>().Setup(x => x.User).Returns(user);
-
-            var testObject = mock.Create<KeyboardShortcutTranslator>();
-            testObject.InitializeForCurrentSession();
-
-            var shortcutText = testObject.GetShortcuts(KeyboardShortcutCommand.ApplyWeight).Shortcuts.Single();
-            Assert.Equal(expected, shortcutText);
         }
 
         public void Dispose()

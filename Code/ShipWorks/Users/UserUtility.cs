@@ -228,9 +228,11 @@ namespace ShipWorks.Users
         /// </summary>
         public static UserEntity GetShipWorksUser(string username, string password)
         {
+            PrefetchPath2 settingsPrefetch = new PrefetchPath2(EntityType.UserEntity) { UserEntity.PrefetchPathSettings };
+
             UserCollection users = UserCollection.Fetch(SqlAdapter.Default,
                 UserFields.Username == username & UserFields.Password == HashPassword(password) &
-                UserFields.IsDeleted == false, UserEntity.FullPrefetchPath);
+                UserFields.IsDeleted == false, settingsPrefetch);
 
             // If we got a user, its the one we need.
             if (users.Count == 1)

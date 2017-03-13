@@ -1,5 +1,4 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using System;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -44,23 +43,5 @@ namespace ShipWorks.Data.Model.EntityClasses
                 valueToReturn = SuperUserDisplayName;
             }
         }
-
-        /// <summary>
-        /// Create the pre-fetch path used to load user related table(s)
-        /// </summary>
-        private static readonly Lazy<IPrefetchPath2> fullPrefetchPath = new Lazy<IPrefetchPath2>(() =>
-        {
-            IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.UserEntity);
-
-            prefetchPath.Add(UserEntity.PrefetchPathShortcutOverrides);
-            prefetchPath.Add(UserEntity.PrefetchPathSettings);
-
-            return prefetchPath;
-        });
-
-        /// <summary>
-        /// Create the pre-fetch path used to load user related table(s)
-        /// </summary>
-        public static IPrefetchPath2 FullPrefetchPath => fullPrefetchPath.Value;
     }
 }

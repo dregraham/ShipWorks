@@ -1003,23 +1003,6 @@ ALTER TABLE [dbo].[User] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[User]'
 GO
-CREATE TABLE [dbo].[UserShortcutOverride]
-(
-[UserShortcutOverrideID] [bigint] NOT NULL IDENTITY(1099, 1000),
-[UserID] [bigint] NOT NULL,
-[CommandType] [int] NOT NULL,
-[Alt] [bit] NOT NULL CONSTRAINT [DF_UserShortcutOverride_Alt] DEFAULT ((0)),
-[Ctrl] [bit] NOT NULL CONSTRAINT [DF_UserShortcutOverride_Ctrl] DEFAULT ((0)),
-[Shift] [bit] NOT NULL CONSTRAINT [DF_UserShortcutOverride_Shift] DEFAULT ((0)),
-[KeyValue] [nvarchar] (3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-ALTER TABLE [dbo].[UserShortcutOverride] ADD CONSTRAINT [PK_UserShortcutOverride] PRIMARY KEY CLUSTERED  ([UserShortcutOverrideID])
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_UniqueKeys] ON [dbo].[UserShortcutOverride] ([KeyValue], [Alt], [Ctrl], [Shift], [CommandType])
-GO
-ALTER TABLE [dbo].[UserShortcutOverride] ADD CONSTRAINT [FK_UserShortcutOverride_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
-GO
 PRINT N'Creating [dbo].[AuditChange]'
 GO
 CREATE TABLE [dbo].[AuditChange]

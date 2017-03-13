@@ -31,22 +31,12 @@ namespace ShipWorks.Data.Utility
         // Allow overwriting of edited entities
         bool allowOverwriteOfEdited = false;
 
-        IPrefetchPath2 prefetchPath = null;
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        public TableSynchronizer() : this(null)
+        public TableSynchronizer()
         {
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public TableSynchronizer(IPrefetchPath2 prefetchPath)
-        {
-            primaryKeyField = (EntityField2)collection.EntityFactoryToUse.CreateFields()[0];
-            this.prefetchPath = prefetchPath;
+            primaryKeyField = (EntityField2) collection.EntityFactoryToUse.CreateFields()[0];
         }
 
         /// <summary>
@@ -88,7 +78,7 @@ namespace ShipWorks.Data.Utility
 
                 using (SqlAdapter adapter = SqlAdapter.Create(false))
                 {
-                    adapter.FetchEntityCollection(collection, null, prefetchPath);
+                    adapter.FetchEntityCollection(collection, null);
 
                     if (added != null)
                     {
@@ -109,7 +99,7 @@ namespace ShipWorks.Data.Utility
                     {
                         collection.Clear();
 
-                        adapter.FetchEntityCollection(collection, null, prefetchPath);
+                        adapter.FetchEntityCollection(collection, null);
 
                         if (added != null)
                         {
@@ -134,7 +124,7 @@ namespace ShipWorks.Data.Utility
                     EntityCollection<TEntity> changeCollection = new EntityCollection<TEntity>();
                     using (SqlAdapter adapter = SqlAdapter.Create(false))
                     {
-                        adapter.FetchEntityCollection(changeCollection, bucket, prefetchPath);
+                        adapter.FetchEntityCollection(changeCollection, bucket);
                     }
 
                     // Go through each entity that changed
